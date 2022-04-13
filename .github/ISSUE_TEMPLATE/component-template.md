@@ -1,6 +1,6 @@
 ---
 name: Component Template
-about: Describe this issue template's purpose here.
+about: This is the definition for how material components are instantiated.
 title: 'Component Template: Name'
 labels: Component Template
 assignees: ''
