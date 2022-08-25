@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addFilter } from "./filterSlice";
+import Button from '@mui/material/Button';
+
 const AddFilterForm = () => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
@@ -31,13 +33,15 @@ const AddFilterForm = () => {
                 >
                 </input>
             </form>
-            <button onClick={() => {
-                dispatch(addFilter({
-                    id: filters[filters.length - 1].id + 1, 
-                    title: title, 
-                    content: content
-                }))
-            }}>Submit</button>
+            <Button 
+                variant="contained"
+                onClick={() => {
+                    dispatch(addFilter({
+                        id: filters[filters.length - 1].id + 1, 
+                        title: title, 
+                        content: content
+                    }))
+            }}>Submit</Button>
         </section>
     )
 }

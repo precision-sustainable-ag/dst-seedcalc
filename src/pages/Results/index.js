@@ -1,12 +1,12 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import './filterList.css';
-import { deleteFilter, getPosts } from "./filterSlice";
+import './results.css';
+import { deleteFilter, getPosts } from "./../../features/filter/filterSlice";
 
-const FilterList = () => {
+const Results = () => {
     const dispatch = useDispatch();
     const filters = useSelector(state => state.filter.value);
-
+    console.log('filters', filters)
     useEffect(() => {
         dispatch(getPosts())
       }, [])
@@ -37,4 +37,4 @@ const FilterList = () => {
     )
 }
 
-export default FilterList;
+export default Results;

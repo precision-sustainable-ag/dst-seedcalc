@@ -5,11 +5,12 @@ const initialState = {
     value: [
         {id: '1', title: 'title 1', content: 'test'},
         {id: '2', title: 'title 2', content: 'test'},
-    ]
+    ],
+    etc: {}
 }
 export const getPosts = createAsyncThunk(
     //action type string
-    'posts/getPosts',
+    'filter/getPosts',
     // callback function
     async (thunkAPI) => {
       const res = await fetch('https://datausa.io/api/data?drilldowns=Nation&measures=Population').then(
@@ -17,6 +18,7 @@ export const getPosts = createAsyncThunk(
     )
     return res
 })
+
 export const filterSlice = createSlice({
     name: 'filter',
     initialState,
@@ -34,10 +36,12 @@ export const filterSlice = createSlice({
         },
         [getPosts.fulfilled]: (state, { payload }) => {
           state.loading = false
-          state.entities = payload
+          state.etc = payload
         },
         [getPosts.rejected]: (state) => {
-          state.loading = false
+          state.loading = false;
+          state.error = true;
+          state.errormessage = '';
         },
     }
 })
