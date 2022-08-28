@@ -1,15 +1,3 @@
-.dst-header {
-    font-size: 28px;
-    /* font-family: 'SF Pro Text'; */
-    color: #4F5F30;
-    font-weight: 800;
-    line-height: 33.41px;
-    text-align: center;
-    border-bottom: 1px solid #4F5F30;
-}
-.dst-header p {
-    margin: 18px 0px;
-}
 .home-container {
     background-color: #FFFFF2;
 }
@@ -18,31 +6,6 @@
 }
 .dst-divider-color {
     color: #c4c4c4;
-}
-
-/* Button */
-
-.dst-button {
-    background-color: #4F5F30;
-    width: 280px;
-    height: 36px;
-}
-
-.dst-button a {
-    color: white; 
-    /* font-family: 'Roboto'; */
-    font-weight: 500;
-    font-size: 15px;
-    line-height: 23.44px;
-    text-decoration: none;
-}
-
-.dst-import-button button {
-    margin-top: 87px;
-    border: solid 1px #4F5F30;
-    background-color: white !important;
-    color: #4F5F30;
-    font-weight: 500;
 }
 
 /* dst image */

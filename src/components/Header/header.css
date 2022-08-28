@@ -1,0 +1,24 @@
+.dst-header {
+    font-size: 28px;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    color: #4F5F30;
+    font-weight: 800;
+    line-height: 33.41px;
+    text-align: center;
+    border-bottom: 1px solid #C7C7C7;
+}
+.dst-header p {
+    margin: 18px 0px;
+}
+.dst-header-home {
+    font-size: 28px;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    color: #4F5F30;
+    font-weight: 800;
+    line-height: 33.41px;
+    text-align: center;
+    border-bottom: 1px solid #C7C7C7;
+}
+.dst-header-home p {
+    margin: 18px 0px;
+}

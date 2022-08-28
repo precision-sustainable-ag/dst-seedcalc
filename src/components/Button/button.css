@@ -1,0 +1,25 @@
+
+/* Button */
+
+.dst-button {
+    background-color: #4F5F30;
+    width: 280px;
+    height: 36px;
+}
+
+.dst-button a {
+    color: white; 
+    /* font-family: 'Roboto'; */
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 23.44px;
+    text-decoration: none;
+}
+
+.dst-import-button button {
+    margin-top: 87px;
+    border: solid 1px #4F5F30;
+    background-color: white !important;
+    color: #4F5F30;
+    font-weight: 500;
+}
