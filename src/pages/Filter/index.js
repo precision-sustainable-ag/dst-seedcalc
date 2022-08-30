@@ -1,9 +1,11 @@
 import { useState } from "react";
+import Grid from "@mui/material/Grid"; 
 import { useSelector, useDispatch } from "react-redux";
-import { addFilter } from "./filterSlice";
+import { Header } from "./../../components/Header";
+import { addFilter } from "./../../features/filter/filterSlice";
 import Button from '@mui/material/Button';
 
-const AddFilterForm = () => {
+const Filter = () => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const filters = useSelector(state => state.filter.value);
@@ -11,7 +13,13 @@ const AddFilterForm = () => {
     const onContentChanged = e => setContent(e.target.value);
     const dispatch = useDispatch()
     return (
-        <section>
+        <Grid>
+            <Header 
+                type="home"
+                headerClass="dst-header-home"
+                text="Seeding Rate Calculator"
+                size={12}
+            />     
             <h2>Add a new post</h2>
             <form>
                 <label htmlFor="postTitle">Post title:</label>
@@ -42,7 +50,7 @@ const AddFilterForm = () => {
                         content: content
                     }))
             }}>Submit</Button>
-        </section>
+        </Grid>
     )
 }
-export default AddFilterForm;
+export default Filter;
