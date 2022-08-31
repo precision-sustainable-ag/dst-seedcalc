@@ -1,6 +1,5 @@
 
 import { useEffect } from "react";
-import { Link } from "react-router-dom"; 
 import Grid from "@mui/material/Grid"; 
 import { DSTButton } from "./../../components/Button";
 import { Header } from "./../../components/Header";
@@ -25,27 +24,19 @@ const Home = () => {
                     <img src="./neccc-logo.png"/>
                 </Grid>
                 <DSTButton 
-                    text="Import previous calculation"
+                    text="Start a new calculation"
                     buttonClass="dst-button"
                     size={12}
                     theme="dstTheme"
-                    path={type: 'local', path: 'filter', url: ''}
+                    path={{type: 'local', url: '/filter'}}
                 />
-                <Grid xs={12}>
-                    
-                    <Button 
-                        className="dst-button"
-                        variant="contained"
-                        theme={dstTheme}
-                    ><Link
-                        to={'filter'}>Start a new calculation</Link></Button>
-                </Grid>
                 <DSTButton 
+                    className="import-button"
                     text="Import previous calculation"
-                    buttonClass="dst-button-import"
+                    buttonClass="dst-import-button"
                     size={12}
                     theme="dstTheme2"
-                    path="results"
+                    path={{type: 'local', url: '/filter'}}
                 />
 
             </Grid>

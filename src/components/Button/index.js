@@ -1,15 +1,29 @@
+import { Link } from "react-router-dom"; 
 import Grid from "@mui/material/Grid"; 
 import Button from "@mui/material/Button";
 import { dstTheme, dstTheme2 } from "../../shared/themes";
+import "./button.css";
 
-export const DSTButton = ({text, buttonClass, type, size, theme}) => {
-    let themeType = theme === 'dstTheme' ? dstTheme : dstTheme2;
-    return (
+/* 
+Re-usable Button component
+params: {
+    text: Button text
+    buttonClass: Class of button
+    size: Size of the Grid container
+    theme: Theme of the button
+    path: Formatted as {type: 'url/local', url: 'www.example.com'}
+        type: specify whether this is a URL or local path
+        url: URL path
+}
+*/
+export const DSTButton = ({text, buttonClass, size, theme, path}) => {
+    return ( 
         <Grid xs={size} className={buttonClass}>
             <Button 
                 variant="contained"
                 theme={dstTheme2}
-            ><span>{text}</span></Button>                     
+            ><Link
+            to={path.url}>{text}</Link></Button>                     
         </Grid>    
     )
 }
