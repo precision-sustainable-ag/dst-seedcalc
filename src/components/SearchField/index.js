@@ -7,6 +7,14 @@ import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import DirectionsIcon from "@mui/icons-material/Directions";
 
+/* 
+{
+    name: SearchField,
+    description: Re-usable Search Field component,
+    params: {}
+}
+*/
+
 export const SearchField = () => {
   return (
     <Paper

@@ -9,6 +9,7 @@ import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 
 /* 
 {
+    name: DatePicker
     description: Re-usable Date Picker component,
     params: {
         value: Date value
