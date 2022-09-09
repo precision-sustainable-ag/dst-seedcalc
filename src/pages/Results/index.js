@@ -6,7 +6,6 @@ import { deleteFilter, getPosts } from "./../../features/filter/filterSlice";
 const Results = () => {
   const dispatch = useDispatch();
   const filters = useSelector((state) => state.filter.value);
-  console.log("filters", filters);
   useEffect(() => {
     dispatch(getPosts());
   }, []);

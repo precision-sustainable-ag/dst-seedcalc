@@ -37,8 +37,6 @@ const Filter = () => {
   const dispatch = useDispatch();
 
   const renderFilter = (step) => {
-    console.log("handle route ", step);
-    console.log("active step list", activeStep);
     switch (step) {
       case "Site Condition":
         return <SiteCondition />;
