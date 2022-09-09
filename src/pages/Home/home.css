@@ -1,21 +1,21 @@
 .home-container {
-    background-color: #FFFFF2;
+  background-color: #fffff2;
 }
 .dst-alt-text {
-    color: #D84727;
+  color: #d84727;
 }
 .dst-divider-color {
-    color: #c4c4c4;
+  color: #c4c4c4;
 }
 
 /* dst image */
 
 .dst-neccc-logo img {
-    width: 167px;
-    height: 180px;
-    margin: 59px 0px;
+  width: 167px;
+  height: 180px;
+  margin: 59px 0px;
 }
 
 .import-button {
-    margin-top: 79px;
+  margin-top: 79px;
 }
