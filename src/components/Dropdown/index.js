@@ -33,7 +33,7 @@ export const Dropdown = ({
   });
 
   return (
-    <Box sx={{ minWidth: 120 }}>
+    <Box className="dropdown-container" sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
         <InputLabel>{label}</InputLabel>
         <Select value={value} label={label} onChange={handleChange}>
