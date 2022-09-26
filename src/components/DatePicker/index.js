@@ -10,25 +10,19 @@ import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
     name: DatePicker
     description: Re-usable Date Picker component,
     params: {
+        label: Date Label
         value: Date value
         handleChange: Function when user selects a date
     }
 }
 */
 
-export const DatePicker = ({ value, handleChange }) => {
+export const DatePicker = ({ label, value, handleChange }) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Stack spacing={3}>
         <DesktopDatePicker
-          label="Date desktop"
-          inputFormat="MM/DD/YYYY"
-          value={value}
-          onChange={handleChange}
-          renderInput={(params) => <TextField {...params} />}
-        />
-        <MobileDatePicker
-          label="Date mobile"
+          label={label}
           inputFormat="MM/DD/YYYY"
           value={value}
           onChange={handleChange}

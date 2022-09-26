@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import "./results.css";
-import { deleteFilter, getPosts } from "./../../features/filter/filterSlice";
+import { deleteFilter, getPosts } from "./../../features/filterSlice";
 
 const Results = () => {
   const dispatch = useDispatch();

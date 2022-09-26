@@ -5,6 +5,7 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import "./stepsList.css";
 
 /*
@@ -60,7 +61,9 @@ export const StepsList = ({
           }
           return (
             <Step key={label} sx={{ color: "#4f5f30" }} {...stepProps}>
-              <StepLabel {...labelProps}>{label}</StepLabel>
+              <StepLabel className="steps-label" {...labelProps}>
+                {label}
+              </StepLabel>
             </Step>
           );
         })}
