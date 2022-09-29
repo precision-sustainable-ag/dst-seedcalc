@@ -35,14 +35,3 @@ export const dstTheme = createTheme({
     },
   },
 });
-
-export const dstTheme2 = createTheme({
-  palette: {
-    primary: {
-      main: "#FFFFFF",
-    },
-    text: {
-      primary: "#4F5F30",
-    },
-  },
-});

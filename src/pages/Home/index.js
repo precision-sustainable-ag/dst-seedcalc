@@ -36,7 +36,7 @@ const Home = () => {
           text="Import previous calculation"
           buttonClass="dst-import-button"
           size={12}
-          theme="dstTheme2"
+          theme="dstTheme"
           path={{ type: "local", url: "/calculator" }}
         />
       </Grid>

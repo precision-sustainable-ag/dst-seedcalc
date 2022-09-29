@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
-import { dstTheme, dstTheme2 } from "../../shared/themes";
+import { dstTheme } from "../../shared/themes";
 import "./button.css";
 
 /* 
@@ -22,7 +22,7 @@ import "./button.css";
 export const DSTButton = ({ text, buttonClass, size, theme, path }) => {
   return (
     <Grid xs={size} className={buttonClass}>
-      <Button variant="contained" theme={dstTheme2}>
+      <Button variant="contained" theme={dstTheme}>
         <Link to={path.url}>{text}</Link>
       </Button>
     </Grid>
