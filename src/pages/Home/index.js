@@ -3,7 +3,6 @@ import Grid from "@mui/material/Grid";
 import { Fragment } from "react";
 import { DSTButton } from "./../../components/Button";
 import { Header } from "./../../components/Header";
-import { dstTheme } from "./../../shared/themes";
 import "./home.css";
 
 const Home = () => {
@@ -15,7 +14,6 @@ const Home = () => {
       <Grid container spacing={2}>
         <Header
           className="header-container"
-          theme={dstTheme}
           headerVariant="dstHeaderHome"
           text="Seeding Rate Calculator"
           size={12}

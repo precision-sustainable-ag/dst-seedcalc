@@ -1,14 +1,11 @@
 import Grid from "@mui/material/Grid";
-import { Typography, ThemeProvider } from "@mui/material";
-import { dstTheme } from "../../../shared/themes";
+import { Typography } from "@mui/material";
 
 const ConfirmPlan = () => {
   return (
-    <ThemeProvider theme={dstTheme}>
-      <Grid container justifyContent="center" alignItems="center">
-        <Typography variant="h2">Confirm Plan</Typography>
-      </Grid>
-    </ThemeProvider>
+    <Grid container justifyContent="center" alignItems="center">
+      <Typography variant="h2">Confirm Plan</Typography>
+    </Grid>
   );
 };
 export default ConfirmPlan;

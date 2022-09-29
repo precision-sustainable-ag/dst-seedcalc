@@ -1,14 +1,11 @@
 import Grid from "@mui/material/Grid";
-import { Typography, ThemeProvider } from "@mui/material";
-import { dstTheme } from "./../../../shared/themes";
+import { Typography } from "@mui/material";
 
 const SpeciesSelection = () => {
   return (
-    <ThemeProvider theme={dstTheme}>
-      <Grid container justifyContent="center" alignItems="center">
-        <Typography variant="h2">Species Selection</Typography>
-      </Grid>
-    </ThemeProvider>
+    <Grid size={12} container justifyContent="center" alignItems="center">
+      <Typography variant="h2">Species Selection</Typography>
+    </Grid>
   );
 };
 export default SpeciesSelection;

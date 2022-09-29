@@ -1,5 +1,5 @@
 import Grid from "@mui/material/Grid";
-import { Typography, createTheme, ThemeProvider } from "@mui/material";
+import { Typography } from "@mui/material";
 import "./header.css";
 /* 
 {
@@ -15,12 +15,10 @@ import "./header.css";
 }
 */
 
-export const Header = ({ text, size, style, theme, headerVariant }) => {
+export const Header = ({ text, size, style, headerVariant }) => {
   return (
-    <ThemeProvider theme={theme}>
-      <Grid p xs={size} sx={style}>
-        <Typography variant={headerVariant}>{text}</Typography>
-      </Grid>
-    </ThemeProvider>
+    <Grid p xs={size} sx={style}>
+      <Typography variant={headerVariant}>{text}</Typography>
+    </Grid>
   );
 };

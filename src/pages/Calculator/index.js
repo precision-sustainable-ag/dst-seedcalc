@@ -12,7 +12,6 @@ import {
 import { calculatorList } from "../../shared/data/dropdown";
 import { Header } from "../../components/Header";
 import { StepsList } from "../../components/StepsList";
-import { dstTheme } from "../../shared/themes";
 import "./calculator.css";
 
 const Calculator = () => {
@@ -85,7 +84,6 @@ const Calculator = () => {
   return (
     <Grid container justifyContent="center" alignItems="center">
       <Header
-        theme={dstTheme}
         headerVariant="dstHeader"
         text="Seeding Rate Calculator"
         size={12}
