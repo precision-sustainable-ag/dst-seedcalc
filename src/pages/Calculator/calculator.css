@@ -1,5 +1,7 @@
 .header-container {
     width: 100% !important;
+    margin-top: 15px;
+    margin-bottom: 25px;
 }
 .steps-container {
     margin-bottom: 40px;

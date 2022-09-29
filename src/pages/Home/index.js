@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
+import { Fragment } from "react";
 import { DSTButton } from "./../../components/Button";
 import { Header } from "./../../components/Header";
+import { dstTheme } from "./../../shared/themes";
 import "./home.css";
 
 const Home = () => {
@@ -9,13 +11,15 @@ const Home = () => {
   useEffect(() => {}, []);
 
   return (
-    <div className="home-container">
+    <Fragment>
       <Grid container spacing={2}>
         <Header
-          type="home"
-          headerClass="dst-header-home"
+          className="header-container"
+          theme={dstTheme}
+          headerVariant="dstHeaderHome"
           text="Seeding Rate Calculator"
           size={12}
+          style={{ mt: 5 }}
         />
         <Grid xs={12} className="dst-neccc-logo">
           <img alt="neccc" src={imgPath} />
@@ -25,7 +29,7 @@ const Home = () => {
           buttonClass="dst-button"
           size={12}
           theme="dstTheme"
-          path={{ type: "local", url: "/filter" }}
+          path={{ type: "local", url: "/calculator" }}
         />
         <DSTButton
           className="import-button"
@@ -33,10 +37,10 @@ const Home = () => {
           buttonClass="dst-import-button"
           size={12}
           theme="dstTheme2"
-          path={{ type: "local", url: "/filter" }}
+          path={{ type: "local", url: "/calculator" }}
         />
       </Grid>
-    </div>
+    </Fragment>
   );
 };
 

@@ -1,10 +1,11 @@
 import "./footer.css";
-
+import { Typography } from "@mui/material";
+import { Fragment } from "react";
 const Footer = () => {
   return (
-    <div>
-      <p>Footer Container Copyright etc.</p>
-    </div>
+    <Fragment>
+      <Typography>Footer Container Copyright etc.</Typography>
+    </Fragment>
   );
 };
 

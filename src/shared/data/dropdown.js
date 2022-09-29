@@ -8,7 +8,7 @@ export const plantHardinessZone = [
   "Zone 7",
 ];
 
-export const filterList = [
+export const calculatorList = [
   "Site Condition",
   "Species Selection",
   "Mix Ratios",
