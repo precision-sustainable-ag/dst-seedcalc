@@ -9,15 +9,16 @@ import {
   ReviewMix,
   ConfirmPlan,
 } from "./Steps";
-import { filterList } from "./../../shared/data/dropdown";
-import { Header } from "./../../components/Header";
-import { StepsList } from "./../../components/StepsList";
+import { calculatorList } from "../../shared/data/dropdown";
+import { Header } from "../../components/Header";
+import { StepsList } from "../../components/StepsList";
+import "./calculator.css";
 
-const Filter = () => {
+const Calculator = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
 
-  const renderFilter = (step) => {
+  const renderCalculator = (step) => {
     switch (step) {
       case "Site Condition":
         return <SiteCondition />;
@@ -83,13 +84,13 @@ const Filter = () => {
   return (
     <Grid container justifyContent="center" alignItems="center">
       <Header
-        type="filter"
-        headerClass="dst-header"
+        headerVariant="dstHeader"
         text="Seeding Rate Calculator"
         size={12}
+        style={{ mt: 1, mb: 1.5 }}
       />
       <StepsList
-        steps={filterList}
+        steps={calculatorList}
         activeStep={activeStep}
         skipped={skipped}
         handleNext={handleNext}
@@ -98,8 +99,8 @@ const Filter = () => {
         handleReset={handleReset}
         className="steps-container"
       />
-      {renderFilter(filterList[activeStep])}
+      {renderCalculator(calculatorList[activeStep])}
     </Grid>
   );
 };
-export default Filter;
+export default Calculator;

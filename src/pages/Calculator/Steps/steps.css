@@ -4,11 +4,9 @@
 .site-condition-container {
     padding: 15px 13% !important;
 }
-h2 {
+site-condition-header {
     color: #4f5f30 !important;
     margin-bottom: 45px;
     margin-top: 25px;
-}
-.site-condition-header {
     margin-bottom: 30px;
 }

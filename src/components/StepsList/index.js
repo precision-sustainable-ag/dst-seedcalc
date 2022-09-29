@@ -6,6 +6,8 @@ import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import "./stepsList.css";
 
 /*
@@ -33,6 +35,9 @@ export const StepsList = ({
   handleSkip,
   handleReset,
 }) => {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("sm"));
+
   const isStepOptional = (step) => {
     return step === 1;
   };
@@ -53,7 +58,7 @@ export const StepsList = ({
           const labelProps = {};
           if (isStepOptional(index)) {
             labelProps.optional = (
-              <Typography variant="caption">Optional</Typography>
+              <Typography variant="caption">{matches && "Optional"}</Typography>
             );
           }
           if (isStepSkipped(index)) {
@@ -62,7 +67,7 @@ export const StepsList = ({
           return (
             <Step key={label} sx={{ color: "#4f5f30" }} {...stepProps}>
               <StepLabel className="steps-label" {...labelProps}>
-                {label}
+                {matches && label}
               </StepLabel>
             </Step>
           );

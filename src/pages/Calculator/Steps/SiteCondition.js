@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { DatePicker } from "../../../components/DatePicker";
 import { Dropdown } from "../../../components/Dropdown";
-import { DSTButton } from "../../../components/Button";
-import { SearchField } from "../../../components/SearchField";
 import { NumberTextField } from "../../../components/NumberTextField";
 import { DSTSwitch } from "../../../components/Switch";
 import { updateSteps } from "../../../features/stepSlice";
-import states from "./../../../shared/data/states.json";
-import counties from "./../../../shared/data/countiesAndStates.json";
-import { soilDrainage } from "./../../../shared/data/dropdown";
+import states from "../../../shared/data/states.json";
+import counties from "../../../shared/data/countiesAndStates.json";
+import { soilDrainage } from "../../../shared/data/dropdown";
 import "./steps.css";
+
 const SiteCondition = () => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps);
@@ -52,7 +52,9 @@ const SiteCondition = () => {
   return (
     <Grid container justifyContent="center" alignItems="center" size={12}>
       <Grid item xs={12} className="site-condition-header">
-        <h2>Tell us about your planting site</h2>
+        <Typography variant="h2" className="site-condition-header">
+          Tell us about your planting site
+        </Typography>
       </Grid>
       <Grid item xs={12} padding={15} className="site-condition-container">
         <Dropdown
@@ -83,7 +85,6 @@ const SiteCondition = () => {
           label={"Planned Planting Date: "}
           value={siteCondition.plannedPlantingDate}
           handleChange={(e) => {
-            console.log("date picka", e["$d"]);
             handleUpdateSteps("plannedPlantingDate", e["$d"]);
           }}
         />
@@ -93,13 +94,12 @@ const SiteCondition = () => {
           value={siteCondition.acres}
           label={"Acres"}
           handleChange={(e) => {
-            console.log("eeee", e);
             handleUpdateSteps("acres", e.target.value);
           }}
         />
       </Grid>
       <Grid item xs={12} padding={15} className="site-condition-container">
-        <h3>Check NRCS Standards: </h3>
+        <Typography variant="nrcsStandard">Check NRCS Standards: </Typography>
         <DSTSwitch checked={checked} handleChange={handleSwitch} />
       </Grid>
     </Grid>
