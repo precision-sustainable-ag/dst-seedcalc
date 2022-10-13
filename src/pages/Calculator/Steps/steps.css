@@ -10,3 +10,38 @@ site-condition-header {
     margin-top: 25px;
     margin-bottom: 30px;
 }
+.panel-img {
+    border-radius: 25px;
+}
+.left-panel-img {
+    border-radius: 50%;
+    width: 80%;
+}
+.left-panel-text {
+    font-size: 12px !important;
+}
+.img-text:hover {
+    cursor: pointer
+}
+.accordian-container {
+    width: 100%;
+}
+.progress-bar {
+    width: 80%;
+    height: 10px;
+    background-color: white;
+    border: #E5E5E5 1px solid;
+    margin-top: 15px;
+    margin-bottom: 4px;
+    border-radius: 20px;
+}
+.progress-bar-item {
+    height: 10px;
+    border-radius: 20px;
+    background-color: #5992E6;
+}
+.progress-bar-text {
+    font-size: 12px !important;
+    color: #8D9774;
+}
+

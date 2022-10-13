@@ -27,8 +27,9 @@ export const dstTheme = createTheme({
     h2: {
       fontSize: 25,
       fontWeight: 500,
-      marginTop: 25,
-      marginBottom: 30,
+      paddingTop: 25,
+      paddingBottom: 20,
+      backgroundColor: "rgba(79, 95, 48, 0.09)",
     },
     nrcsStandard: {
       fontSize: 20,
