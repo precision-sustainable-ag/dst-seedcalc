@@ -1,7 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import dayjs from "dayjs";
 const initialState = {
   loading: false,
+  error: false,
+  errorMessage: "",
   value: {
     siteCondition: {
       state: "",
@@ -14,6 +16,8 @@ const initialState = {
     speciesSelection: {
       queryString: "",
       queryResults: [],
+      diversitySelected: [],
+      seedsSelected: [],
     },
     mixRatios: {
       poundsOfSeed: 0,
@@ -23,9 +27,24 @@ const initialState = {
     seedTagInfo: {},
     reviewMix: {},
     confirmPlan: {},
+    crops: [],
   },
   etc: {},
 };
+
+export const getCrops = createAsyncThunk(
+  //action type string
+  "steps/getCrops",
+  // callback function
+  async (thunkAPI) => {
+    const res = await fetch("https://develop.covercrop-data.org/crops").then(
+      (data) => data.json()
+    );
+    console.log("data..", res, res.data);
+    return res;
+  }
+);
+
 export const stepSlice = createSlice({
   name: "steps",
   initialState,
@@ -35,6 +54,22 @@ export const stepSlice = createSlice({
       const existingState = JSON.parse(JSON.stringify(state));
       existingState.value[payload.type][payload.key] = payload.value;
       return { ...existingState };
+    },
+  },
+  extraReducers: {
+    [getCrops.pending]: (state) => {
+      state.loading = true;
+    },
+    [getCrops.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      console.log("success", payload.data);
+      state.value.crops = payload.data;
+    },
+    [getCrops.rejected]: (state) => {
+      state.loading = false;
+      state.error = true;
+      console.log("error..", state);
+      state.errorMessage = "";
     },
   },
 });

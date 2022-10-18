@@ -15,7 +15,15 @@ site-condition-header {
 }
 .left-panel-img {
     border-radius: 50%;
-    width: 80%;
+    width: 75px;
+    height: 75px;
+    margin-top: 12px;
+}
+.left-panel-img-sm {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    margin-top: 12px;
 }
 .left-panel-text {
     font-size: 12px !important;

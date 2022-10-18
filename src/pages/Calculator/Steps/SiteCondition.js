@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
@@ -10,6 +10,7 @@ import { updateSteps } from "../../../features/stepSlice";
 import states from "../../../shared/data/states.json";
 import counties from "../../../shared/data/countiesAndStates.json";
 import { soilDrainage } from "../../../shared/data/dropdown";
+import { getCrops } from "../../../features/stepSlice";
 import "./steps.css";
 
 const SiteCondition = () => {
@@ -49,6 +50,10 @@ const SiteCondition = () => {
       );
     }
   };
+
+  useEffect(() => {
+    dispatch(getCrops());
+  }, []);
   return (
     <Grid container justifyContent="center" alignItems="center" size={12}>
       <Grid item xs={12} className="site-condition-header">
