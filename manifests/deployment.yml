@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: dstseedcalc 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dstseedcalc
+  template:
+    metadata:
+      labels:
+        app: dstseedcalc 
+    spec:
+      containers:
+        - name: dstseedcalc 
+          image: containerregistry4pd7i.azurecr.io/dstseedcalc
+          ports:
+          - containerPort: 80
