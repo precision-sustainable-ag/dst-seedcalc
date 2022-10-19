@@ -40,7 +40,6 @@ export const getCrops = createAsyncThunk(
     const res = await fetch("https://develop.covercrop-data.org/crops").then(
       (data) => data.json()
     );
-    console.log("data..", res, res.data);
     return res;
   }
 );
@@ -62,13 +61,11 @@ export const stepSlice = createSlice({
     },
     [getCrops.fulfilled]: (state, { payload }) => {
       state.loading = false;
-      console.log("success", payload.data);
       state.value.crops = payload.data;
     },
     [getCrops.rejected]: (state) => {
       state.loading = false;
       state.error = true;
-      console.log("error..", state);
       state.errorMessage = "";
     },
   },
