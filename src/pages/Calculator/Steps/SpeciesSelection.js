@@ -52,26 +52,31 @@ const SpeciesSelection = () => {
     setFilteredSeeds(filter);
     handleUpdateSteps("queryResults", filter);
   };
-
+  const checkSeedSelected = (seed) => {
+    const seedSelected =
+      seedsSelected.length > 0 ? seedsSelected[0].label === seed.label : false;
+    return seedSelected;
+  };
   const updateSeeds = (seed, species) => {
     if (seedsSelected.length === 0) {
       handleUpdateSteps("seedsSelected", [...seedsSelected, seed]);
       handleUpdateSteps("diversitySelected", [...diversitySelected, species]);
     } else {
-      const seedsExist = seedsSelected.indexOf(seed);
-      if (seedsExist > -1) {
+      const seedsExist = seedsSelected.find((f) => seed.label === f.label);
+      if (typeof seedsExist !== "undefined") {
         handleUpdateSteps(
           "seedsSelected",
-          seedsSelected.filter((item) => item !== seed)
+          seedsSelected.filter((item) => item.label !== seed.label)
         );
         const seedResult = seedsSelected.filter((i) => {
           return i.group.label === species;
         }).length;
-        if (seedResult <= 1)
+        if (seedResult <= 1) {
           handleUpdateSteps(
             "diversitySelected",
             diversitySelected.filter((d) => d !== species)
           );
+        }
       } else {
         handleUpdateSteps("seedsSelected", [...seedsSelected, seed]);
         if (!diversitySelected.includes(species)) {
@@ -152,7 +157,7 @@ const SpeciesSelection = () => {
                 diversitySelected.length > 0 &&
                 diversitySelected.map((d, i) => {
                   return (
-                    <Fade in={d}>
+                    <Fade in={true}>
                       <Grid
                         item
                         xs={calculateSize()}
@@ -175,7 +180,7 @@ const SpeciesSelection = () => {
               diversitySelected.length > 0 &&
               diversitySelected.map((d, i) => {
                 return (
-                  <Fade in={d}>
+                  <Fade in={true}>
                     <Grid item xs={calculateSize()}>
                       <Typography className="progress-bar-text">
                         {seedsLabel[d]}
@@ -207,7 +212,6 @@ const SpeciesSelection = () => {
                       <ImageList
                         sx={{ maxWidth: 300, maxHeight: 300 }}
                         cols={2}
-                        rowHeight="100%"
                       >
                         {filteredSeeds
                           .filter((seeds, i) => seeds.group.label === s)
@@ -233,7 +237,7 @@ const SpeciesSelection = () => {
                                   updateSeeds(seeds, s);
                                 }}
                               >
-                                {seeds.label}
+                                {seeds.label}{" "}
                               </Link>
                             </ImageListItem>
                           ))}
