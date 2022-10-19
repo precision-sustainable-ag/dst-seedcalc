@@ -219,7 +219,9 @@ const SpeciesSelection = () => {
                               key={seeds.thumbnail.src + Math.random()}
                             >
                               <img
-                                className="panel-img"
+                                className={
+                                  matches ? "panel-img" : "panel-img-sm"
+                                }
                                 src={
                                   seeds.thumbnail.src +
                                   "?w=300&h=300&fit=crop&auto=format"
