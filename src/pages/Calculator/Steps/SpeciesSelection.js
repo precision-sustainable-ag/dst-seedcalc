@@ -21,6 +21,7 @@ const SpeciesSelection = () => {
   const dispatch = useDispatch();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
+  const matchesMd = useMediaQuery(theme.breakpoints.up("md"));
   const data = useSelector((state) => state.steps.value);
   const crops = data.crops;
   const speciesSelection = data.speciesSelection;
@@ -209,8 +210,8 @@ const SpeciesSelection = () => {
                     </AccordionSummary>
                     <AccordionDetails>
                       <ImageList
-                        sx={{ maxWidth: "100%", maxHeight: 500 }}
-                        cols={matches ? 7 : 2}
+                        sx={{ maxWidth: "100%" }}
+                        cols={matches ? 6 : 2}
                       >
                         {filteredSeeds
                           .filter((seeds, i) => seeds.group.label === s)
