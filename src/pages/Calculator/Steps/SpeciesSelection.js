@@ -24,12 +24,8 @@ const SpeciesSelection = () => {
   const data = useSelector((state) => state.steps.value);
   const crops = data.crops;
   const speciesSelection = data.speciesSelection;
-  const [seedsSelected, setSeedsSelected] = useState(
-    speciesSelection.seedsSelected
-  );
-  const [diversitySelected, setDiversitySelected] = useState(
-    speciesSelection.diversitySelected
-  );
+  const seedsSelected = speciesSelection.seedsSelected;
+  const diversitySelected = speciesSelection.diversitySelected;
   const [filteredSeeds, setFilteredSeeds] = useState(crops);
   const [query, setQuery] = useState("");
 
@@ -45,13 +41,6 @@ const SpeciesSelection = () => {
     };
     dispatch(updateSteps(data));
   };
-  const updateDiversity = (diversity) => {
-    setDiversitySelected([...diversitySelected, diversity]);
-    handleUpdateSteps("diversitySelected", [
-      ...speciesSelection.diversitySelected,
-      diversitySelected,
-    ]);
-  };
 
   const filterSeeds = (query) => {
     const filter =
@@ -66,20 +55,11 @@ const SpeciesSelection = () => {
 
   const updateSeeds = (seed, species) => {
     if (seedsSelected.length === 0) {
-      setSeedsSelected([...seedsSelected, seed]);
-      updateDiversity(species);
-      handleUpdateSteps("seedsSelected", [
-        ...speciesSelection.seedsSelected,
-        seed,
-      ]);
-      handleUpdateSteps("diversitySelected", [
-        ...speciesSelection.diversitySelected,
-        species,
-      ]);
+      handleUpdateSteps("seedsSelected", [...seedsSelected, seed]);
+      handleUpdateSteps("diversitySelected", [...diversitySelected, species]);
     } else {
       const seedsExist = seedsSelected.indexOf(seed);
       if (seedsExist > -1) {
-        setSeedsSelected(seedsSelected.filter((item) => item !== seed));
         handleUpdateSteps(
           "seedsSelected",
           seedsSelected.filter((item) => item !== seed)
@@ -88,21 +68,15 @@ const SpeciesSelection = () => {
           return i.group.label === species;
         }).length;
         if (seedResult <= 1)
-          setDiversitySelected(diversitySelected.filter((d) => d !== species));
-        handleUpdateSteps(
-          "diversitySelected",
-          diversitySelected.filter((d) => d !== species)
-        );
+          handleUpdateSteps(
+            "diversitySelected",
+            diversitySelected.filter((d) => d !== species)
+          );
       } else {
-        setSeedsSelected([...seedsSelected, seed]);
-        handleUpdateSteps("seedsSelected", [
-          ...speciesSelection.seedsSelected,
-          seed,
-        ]);
+        handleUpdateSteps("seedsSelected", [...seedsSelected, seed]);
         if (!diversitySelected.includes(species)) {
-          updateDiversity(species);
           handleUpdateSteps("diversitySelected", [
-            ...speciesSelection.diversitySelected,
+            ...diversitySelected,
             species,
           ]);
         }
@@ -118,9 +92,8 @@ const SpeciesSelection = () => {
       ? 4
       : 3;
   };
-
-  return (
-    <Grid xs={12} container>
+  const renderSeedsSelected = () => {
+    return (
       <Grid item xs={2} md={1}>
         <Box
           sx={{
@@ -131,23 +104,33 @@ const SpeciesSelection = () => {
             border: "#C7C7C7 solid 1px",
           }}
         >
-          {seedsSelected.length > 0 &&
-            seedsSelected.map((s, idx) => {
-              return (
-                <Fragment>
-                  <img
-                    className={matches ? "left-panel-img" : "left-panel-img-sm"}
-                    src={s.thumbnail.src}
-                    alt={s.label}
-                    loading="lazy"
-                  />
-                  <Typography className="left-panel-text">{s.label}</Typography>
-                </Fragment>
-              );
-            })}
+          {seedsSelected.map((s, idx) => {
+            return (
+              <Fragment>
+                <img
+                  className={matches ? "left-panel-img" : "left-panel-img-sm"}
+                  src={s.thumbnail.src}
+                  alt={s.label}
+                  loading="lazy"
+                />
+                <Typography className="left-panel-text">{s.label}</Typography>
+              </Fragment>
+            );
+          })}
         </Box>
       </Grid>
-      <Grid xs={10} md={11} item justifyContent="center" alignItems="center">
+    );
+  };
+  return (
+    <Grid xs={12} container>
+      {seedsSelected.length > 0 && renderSeedsSelected()}
+      <Grid
+        xs={seedsSelected.length > 0 ? 10 : 12}
+        md={seedsSelected.length > 0 ? 11 : 12}
+        item
+        justifyContent="center"
+        alignItems="center"
+      >
         <Grid item xs={12}>
           <Typography variant="h2">Pick species for the mix.</Typography>
         </Grid>
@@ -239,6 +222,9 @@ const SpeciesSelection = () => {
                                   "?w=300&h=300&fit=crop&auto=format"
                                 }
                                 alt={seeds.label}
+                                onClick={(e) => {
+                                  updateSeeds(seeds, s);
+                                }}
                                 loading="lazy"
                               />
                               <Link

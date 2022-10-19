@@ -29,7 +29,10 @@ site-condition-header {
     font-size: 12px !important;
 }
 .img-text:hover {
-    cursor: pointer
+    cursor: pointer;
+}
+.panel-img:hover {
+    cursor: pointer;
 }
 .accordian-container {
     width: 100%;
