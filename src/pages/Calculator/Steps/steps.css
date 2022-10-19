@@ -12,6 +12,8 @@ site-condition-header {
 }
 .panel-img {
     border-radius: 25px;
+    width: 100%;
+    height: 190px !important;
 }
 .left-panel-img {
     border-radius: 50%;

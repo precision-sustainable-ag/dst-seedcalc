@@ -53,9 +53,8 @@ const SpeciesSelection = () => {
     handleUpdateSteps("queryResults", filter);
   };
   const checkSeedSelected = (seed) => {
-    const seedSelected =
-      seedsSelected.length > 0 ? seedsSelected[0].label === seed.label : false;
-    return seedSelected;
+    const seedSelected = seedsSelected.find((f) => seed.label === f.label);
+    return typeof seedSelected !== "undefined" ? false : true;
   };
   const updateSeeds = (seed, species) => {
     if (seedsSelected.length === 0) {
@@ -210,8 +209,8 @@ const SpeciesSelection = () => {
                     </AccordionSummary>
                     <AccordionDetails>
                       <ImageList
-                        sx={{ maxWidth: 300, maxHeight: 300 }}
-                        cols={2}
+                        sx={{ maxWidth: "100%", maxHeight: 500 }}
+                        cols={matches ? 7 : 2}
                       >
                         {filteredSeeds
                           .filter((seeds, i) => seeds.group.label === s)
