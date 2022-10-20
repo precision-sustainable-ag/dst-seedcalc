@@ -18,13 +18,19 @@ site-condition-header {
 .panel-img-sm {
     border-radius: 25px;
     width: 100%;
-    height: 154px !important;
+    height: 80px !important;
 }
 .left-panel-img {
     border-radius: 50%;
-    width: 75px;
-    height: 75px;
+    width: 60px;
+    height: 60px;
     margin-top: 12px;
+}
+.left-panel-img-xs {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    margin-top: 12px;   
 }
 .left-panel-img-sm {
     border-radius: 50%;
@@ -32,6 +38,13 @@ site-condition-header {
     height: 53px;
     margin-top: 12px;
 }
+.left-panel-img-md {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    margin-top: 12px;
+}
+
 .left-panel-text {
     font-size: 12px !important;
 }

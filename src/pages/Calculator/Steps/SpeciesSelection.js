@@ -20,8 +20,9 @@ import "./steps.css";
 const SpeciesSelection = () => {
   const dispatch = useDispatch();
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up("sm"));
-  const matchesMd = useMediaQuery(theme.breakpoints.up("md"));
+  const matchesXs = useMediaQuery(theme.breakpoints.down("xs"));
+  const matchesSm = useMediaQuery(theme.breakpoints.down("sm"));
+  const matchesMd = useMediaQuery(theme.breakpoints.down("md"));
   const data = useSelector((state) => state.steps.value);
   const crops = data.crops;
   const speciesSelection = data.speciesSelection;
@@ -99,7 +100,7 @@ const SpeciesSelection = () => {
   };
   const renderSeedsSelected = () => {
     return (
-      <Grid item xs={2} md={1}>
+      <Grid item xs={3} md={1}>
         <Box
           sx={{
             width: "100%",
@@ -113,7 +114,15 @@ const SpeciesSelection = () => {
             return (
               <Fragment>
                 <img
-                  className={matches ? "left-panel-img" : "left-panel-img-sm"}
+                  className={
+                    matchesXs
+                      ? "left-panel-img-xs"
+                      : matchesSm
+                      ? "left-panel-img-sm"
+                      : matchesMd
+                      ? "left-panel-img-md"
+                      : "left-panel-img"
+                  }
                   src={s.thumbnail.src}
                   alt={s.label}
                   loading="lazy"
@@ -130,7 +139,7 @@ const SpeciesSelection = () => {
     <Grid xs={12} container>
       {seedsSelected.length > 0 && renderSeedsSelected()}
       <Grid
-        xs={seedsSelected.length > 0 ? 10 : 12}
+        xs={seedsSelected.length > 0 ? 9 : 12}
         md={seedsSelected.length > 0 ? 11 : 12}
         item
         justifyContent="center"
@@ -211,7 +220,7 @@ const SpeciesSelection = () => {
                     <AccordionDetails>
                       <ImageList
                         sx={{ maxWidth: "100%" }}
-                        cols={matches ? 6 : 2}
+                        cols={matchesSm ? 2 : 6}
                       >
                         {filteredSeeds
                           .filter((seeds, i) => seeds.group.label === s)
@@ -221,7 +230,7 @@ const SpeciesSelection = () => {
                             >
                               <img
                                 className={
-                                  matches ? "panel-img" : "panel-img-sm"
+                                  matchesSm ? "panel-img-sm" : "panel-img"
                                 }
                                 src={
                                   seeds.thumbnail.src +

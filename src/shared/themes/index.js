@@ -6,6 +6,15 @@ export const dstTheme = createTheme({
       main: "#4F5F30",
     },
   },
+  breakpoints: {
+    values: {
+      xs: 280,
+      sm: 600,
+      md: 912,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
   typography: {
     dstHeader: {
       fontSize: 20,
