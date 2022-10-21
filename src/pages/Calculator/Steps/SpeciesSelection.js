@@ -18,23 +18,29 @@ import { seedsList, seedsLabel } from "../../../shared/data/species";
 import "./steps.css";
 
 const SpeciesSelection = () => {
-  const dispatch = useDispatch();
+  // themes
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down("xs"));
   const matchesSm = useMediaQuery(theme.breakpoints.down("sm"));
   const matchesMd = useMediaQuery(theme.breakpoints.down("md"));
+
+  // useSelector for crops reducer data
+  const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
   const crops = data.crops;
   const speciesSelection = data.speciesSelection;
   const seedsSelected = speciesSelection.seedsSelected;
   const diversitySelected = speciesSelection.diversitySelected;
+
   const [filteredSeeds, setFilteredSeeds] = useState(crops);
   const [query, setQuery] = useState("");
 
+  // Filter query logic
   const updateQuery = (e) => {
     setQuery(e.target.value);
     filterSeeds(e.target.value);
   };
+
   const handleUpdateSteps = (key, val) => {
     const data = {
       type: "speciesSelection",
@@ -54,11 +60,16 @@ const SpeciesSelection = () => {
     setFilteredSeeds(filter);
     handleUpdateSteps("queryResults", filter);
   };
+
+  // Update Seed/Diversities select logic
   const checkSeedSelected = (seed) => {
     const seedSelected = seedsSelected.find((f) => seed.label === f.label);
     return typeof seedSelected !== "undefined" ? false : true;
   };
+
   const updateSeeds = (seed, species) => {
+    // Check if seed length is greater than 0, if not, check for seed existing in seedsSelected[] array.
+    // Update diversity based on whether diversity exists or not.
     if (seedsSelected.length === 0) {
       handleUpdateSteps("seedsSelected", [...seedsSelected, seed]);
       handleUpdateSteps("diversitySelected", [...diversitySelected, species]);
@@ -97,6 +108,55 @@ const SpeciesSelection = () => {
       : diversitySelected.length >= 2 && diversitySelected.length < 4
       ? 4
       : 3;
+  };
+  const renderDiversityProgress = () => {
+    return (
+      <Grid container justify="space-between" alignItems="stretch">
+        <Grid
+          container
+          xs={12}
+          className="progress-bar"
+          justify="space-between"
+          alignItems="stretch"
+        >
+          {diversitySelected &&
+            diversitySelected.length > 0 &&
+            diversitySelected.map((d, i) => {
+              return (
+                <Fade in={true}>
+                  <Grid
+                    item
+                    xs={calculateSize()}
+                    className="progress-bar-item"
+                  ></Grid>
+                </Fade>
+              );
+            })}
+        </Grid>
+        {diversitySelected &&
+          diversitySelected.length > 0 &&
+          diversitySelected.length === 0 && (
+            <Grid item xs={12}>
+              <Typography className="progress-bar-text">
+                Select a species
+              </Typography>
+            </Grid>
+          )}
+        {diversitySelected &&
+          diversitySelected.length > 0 &&
+          diversitySelected.map((d, i) => {
+            return (
+              <Fade in={true}>
+                <Grid item xs={calculateSize()}>
+                  <Typography className="progress-bar-text">
+                    {seedsLabel[d]}
+                  </Typography>
+                </Grid>
+              </Fade>
+            );
+          })}
+      </Grid>
+    );
   };
   const renderSeedsSelected = () => {
     return (
@@ -154,51 +214,7 @@ const SpeciesSelection = () => {
             value={query}
             handleFilter={filterSeeds}
           />
-          <Grid container justify="space-between" alignItems="stretch">
-            <Grid
-              container
-              xs={12}
-              className="progress-bar"
-              justify="space-between"
-              alignItems="stretch"
-            >
-              {diversitySelected &&
-                diversitySelected.length > 0 &&
-                diversitySelected.map((d, i) => {
-                  return (
-                    <Fade in={true}>
-                      <Grid
-                        item
-                        xs={calculateSize()}
-                        className="progress-bar-item"
-                      ></Grid>
-                    </Fade>
-                  );
-                })}
-            </Grid>
-            {diversitySelected &&
-              diversitySelected.length > 0 &&
-              diversitySelected.length === 0 && (
-                <Grid item xs={12}>
-                  <Typography className="progress-bar-text">
-                    Select a species
-                  </Typography>
-                </Grid>
-              )}
-            {diversitySelected &&
-              diversitySelected.length > 0 &&
-              diversitySelected.map((d, i) => {
-                return (
-                  <Fade in={true}>
-                    <Grid item xs={calculateSize()}>
-                      <Typography className="progress-bar-text">
-                        {seedsLabel[d]}
-                      </Typography>
-                    </Grid>
-                  </Fade>
-                );
-              })}
-          </Grid>
+          {renderDiversityProgress()}
         </Grid>
         <Grid item xs={12}>
           <Grid item xs={12}>
