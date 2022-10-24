@@ -6,6 +6,15 @@ export const dstTheme = createTheme({
       main: "#4F5F30",
     },
   },
+  breakpoints: {
+    values: {
+      xs: 280,
+      sm: 600,
+      md: 912,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
   typography: {
     dstHeader: {
       fontSize: 20,
@@ -27,8 +36,9 @@ export const dstTheme = createTheme({
     h2: {
       fontSize: 25,
       fontWeight: 500,
-      marginTop: 25,
-      marginBottom: 30,
+      paddingTop: 25,
+      paddingBottom: 20,
+      backgroundColor: "rgba(79, 95, 48, 0.09)",
     },
     nrcsStandard: {
       fontSize: 20,
