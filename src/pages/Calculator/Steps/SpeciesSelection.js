@@ -70,8 +70,33 @@ const SpeciesSelection = () => {
   const updateSeeds = (seed, species) => {
     // Check if seed length is greater than 0, if not, check for seed existing in seedsSelected[] array.
     // Update diversity based on whether diversity exists or not.
+    const newSeed = {
+      ...seed,
+      seedsPerAcre: 0,
+      poundsOfSeed: 0,
+      plantsPerAcre: 0,
+      mixSeedingRate: 0,
+      aproxPlantsSqFt: 0,
+      step1: {
+        singleSpeciesSeedingRatePLS: 0,
+        percentOfSingleSpeciesRate: 0,
+      },
+      step2: {
+        seedsPound: 0,
+        mixSeedingRate: 0,
+      },
+      step3: {
+        seedsAcre: 0,
+        percentSurvival: 0,
+      },
+      step4: {
+        plantsAcre: 0,
+        sqFtAcre: 0,
+      },
+    };
+    console.log("new seed.", newSeed);
     if (seedsSelected.length === 0) {
-      handleUpdateSteps("seedsSelected", [...seedsSelected, seed]);
+      handleUpdateSteps("seedsSelected", [...seedsSelected, newSeed]);
       handleUpdateSteps("diversitySelected", [...diversitySelected, species]);
     } else {
       const seedsExist = seedsSelected.find((f) => seed.label === f.label);
@@ -90,7 +115,7 @@ const SpeciesSelection = () => {
           );
         }
       } else {
-        handleUpdateSteps("seedsSelected", [...seedsSelected, seed]);
+        handleUpdateSteps("seedsSelected", [...seedsSelected, newSeed]);
         if (!diversitySelected.includes(species)) {
           handleUpdateSteps("diversitySelected", [
             ...diversitySelected,
@@ -195,6 +220,56 @@ const SpeciesSelection = () => {
       </Grid>
     );
   };
+  const imgSrc = (imgUrl) => {
+    return imgUrl !== null ? imgUrl + "?w=300&h=300&fit=crop&auto=format" : "";
+  };
+  const renderImageList = (data) => {
+    return (
+      <ImageList sx={{ maxWidth: "100%" }} cols={matchesSm ? 2 : 6}>
+        {filteredSeeds
+          .filter((seeds, i) => seeds.group.label === data)
+          .map((seeds, idx) => (
+            <ImageListItem key={imgSrc(seeds.thumbnail.src) + Math.random()}>
+              <img
+                className={matchesSm ? "panel-img-sm" : "panel-img"}
+                src={imgSrc(seeds.thumbnail.src)}
+                alt={seeds.label}
+                onClick={(e) => {
+                  updateSeeds(seeds, data);
+                }}
+                loading="lazy"
+              />
+              <Link
+                className="img-text"
+                onClick={(e) => {
+                  updateSeeds(seeds, data);
+                }}
+              >
+                {seeds.label}{" "}
+              </Link>
+            </ImageListItem>
+          ))}
+      </ImageList>
+    );
+  };
+  const renderAccordian = (data) => {
+    console.log("data: ", data, seedsLabel[data]);
+    return (
+      <Accordion xs={12} className="accordian-container">
+        <AccordionSummary
+          xs={12}
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>{seedsLabel[data]}</Typography>
+        </AccordionSummary>
+        <AccordionDetails className="accordian-details">
+          {renderImageList(data)}
+        </AccordionDetails>
+      </Accordion>
+    );
+  };
   return (
     <Grid xs={12} container>
       {seedsSelected.length > 0 && renderSeedsSelected()}
@@ -223,55 +298,7 @@ const SpeciesSelection = () => {
           {seedsList.map((s, i) => {
             return (
               <Grid xs={12}>
-                <Grid item>
-                  <Accordion xs={12} className="accordian-container">
-                    <AccordionSummary
-                      xs={12}
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel1a-content"
-                      id="panel1a-header"
-                    >
-                      <Typography>{seedsLabel[s]}</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <ImageList
-                        sx={{ maxWidth: "100%" }}
-                        cols={matchesSm ? 2 : 6}
-                      >
-                        {filteredSeeds
-                          .filter((seeds, i) => seeds.group.label === s)
-                          .map((seeds, idx) => (
-                            <ImageListItem
-                              key={seeds.thumbnail.src + Math.random()}
-                            >
-                              <img
-                                className={
-                                  matchesSm ? "panel-img-sm" : "panel-img"
-                                }
-                                src={
-                                  seeds.thumbnail.src +
-                                  "?w=300&h=300&fit=crop&auto=format"
-                                }
-                                alt={seeds.label}
-                                onClick={(e) => {
-                                  updateSeeds(seeds, s);
-                                }}
-                                loading="lazy"
-                              />
-                              <Link
-                                className="img-text"
-                                onClick={(e) => {
-                                  updateSeeds(seeds, s);
-                                }}
-                              >
-                                {seeds.label}{" "}
-                              </Link>
-                            </ImageListItem>
-                          ))}
-                      </ImageList>
-                    </AccordionDetails>
-                  </Accordion>
-                </Grid>
+                <Grid item>{renderAccordian(s)}</Grid>
               </Grid>
             );
           })}
