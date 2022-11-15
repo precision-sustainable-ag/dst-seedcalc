@@ -3,7 +3,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-- develop
+- main
 
 resources:
 - repo: self
@@ -11,12 +11,12 @@ resources:
 variables:
 
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: 'd346365d-a05e-4364-9d95-c2553be885b2'
+  dockerRegistryServiceConnection: '5e85b4ae-ebfb-427b-8d72-4d4dd3bc8bfa'
   imageRepository: 'dstseedcalc'
   containerRegistry: 'containerregistry4pd7i.azurecr.io'
   dockerfilePath: '**/Dockerfile'
   tag: '$(Build.BuildId)'
-  imagePullSecret: 'containerregistry4pd7idab5-auth'
+  imagePullSecret: 'containerregistry4pd7i288655c4-auth'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -56,7 +56,7 @@ stages:
     displayName: Deploy
     pool:
       vmImage: $(vmImageName)
-    environment: 'precisionsustainableagdstseedcalc.develop'
+    environment: 'precisionsustainableagdstseedcalc-1744.production'
     strategy:
       runOnce:
         deploy:
@@ -86,12 +86,12 @@ stages:
     pool:
       vmImage: $(vmImageName)
 
-    environment: 'precisionsustainableagdstseedcalc.$(k8sNamespaceForPR)'
+    environment: 'precisionsustainableagdstseedcalc-1744.$(k8sNamespaceForPR)'
     strategy:
       runOnce:
         deploy:
           steps:
-          - reviewApp: develop
+          - reviewApp: production
 
           - task: Kubernetes@1
             displayName: 'Create a new namespace for the pull request'

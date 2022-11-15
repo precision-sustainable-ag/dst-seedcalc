@@ -1,0 +1,78 @@
+.site-condition-container h3 {
+    margin-bottom: 20px;
+}
+.site-condition-container {
+    padding: 15px 13% !important;
+}
+site-condition-header {
+    color: #4f5f30 !important;
+    margin-bottom: 45px;
+    margin-top: 25px;
+    margin-bottom: 30px;
+}
+.panel-img {
+    border-radius: 25px;
+    width: 100%;
+    height: 190px !important;
+}
+.panel-img-sm {
+    border-radius: 25px;
+    width: 100%;
+    height: 80px !important;
+}
+.left-panel-img {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    margin-top: 12px;
+}
+.left-panel-img-xs {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    margin-top: 12px;   
+}
+.left-panel-img-sm {
+    border-radius: 50%;
+    width: 53px;
+    height: 53px;
+    margin-top: 12px;
+}
+.left-panel-img-md {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    margin-top: 12px;
+}
+
+.left-panel-text {
+    font-size: 12px !important;
+}
+.img-text:hover {
+    cursor: pointer;
+}
+.panel-img:hover {
+    cursor: pointer;
+}
+.accordian-container {
+    width: 100%;
+}
+.progress-bar {
+    width: 80%;
+    height: 10px;
+    background-color: white;
+    border: #E5E5E5 1px solid;
+    margin-top: 15px;
+    margin-bottom: 4px;
+    border-radius: 20px;
+}
+.progress-bar-item {
+    height: 10px;
+    border-radius: 20px;
+    background-color: #5992E6;
+}
+.progress-bar-text {
+    font-size: 12px !important;
+    color: #8D9774;
+}
+

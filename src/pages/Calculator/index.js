@@ -1,7 +1,5 @@
 import { useState } from "react";
 import Grid from "@mui/material/Grid";
-import { useSelector, useDispatch } from "react-redux";
-import Button from "@mui/material/Button";
 import {
   SiteCondition,
   SpeciesSelection,
@@ -11,31 +9,16 @@ import {
   ReviewMix,
   ConfirmPlan,
 } from "./Steps";
-import { Header } from "./../../components/Header";
-import { StepsList } from "./../../components/StepsList";
-import { addFilter } from "./../../features/filter/filterSlice";
+import { calculatorList } from "../../shared/data/dropdown";
+import { Header } from "../../components/Header";
+import { StepsList } from "../../components/StepsList";
+import "./calculator.css";
 
-const stepsList = [
-  "Site Condition",
-  "Species Selection",
-  "Mix Ratios",
-  "Mix Seeding Rate",
-  "Seed Tag Info",
-  "Review Mix",
-  "Confirm Plan",
-];
-const Filter = () => {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+const Calculator = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
 
-  const filters = useSelector((state) => state.filter.value);
-  const onTitleChanged = (e) => setTitle(e.target.value);
-  const onContentChanged = (e) => setContent(e.target.value);
-  const dispatch = useDispatch();
-
-  const renderFilter = (step) => {
+  const renderCalculator = (step) => {
     switch (step) {
       case "Site Condition":
         return <SiteCondition />;
@@ -101,13 +84,13 @@ const Filter = () => {
   return (
     <Grid container justifyContent="center" alignItems="center">
       <Header
-        type="filter"
-        headerClass="dst-header"
+        headerVariant="dstHeader"
         text="Seeding Rate Calculator"
         size={12}
+        style={{ mt: 1, mb: 1.5 }}
       />
       <StepsList
-        steps={stepsList}
+        steps={calculatorList}
         activeStep={activeStep}
         skipped={skipped}
         handleNext={handleNext}
@@ -116,42 +99,8 @@ const Filter = () => {
         handleReset={handleReset}
         className="steps-container"
       />
-      {renderFilter(stepsList[activeStep])}
-      <h2 style={{ display: "none" }}>Add a new post</h2>
-      <form style={{ display: "none" }}>
-        <label htmlFor="postTitle">Post title:</label>
-        <input
-          type="text"
-          id="postTitle"
-          name="postTitle"
-          value={title}
-          onChange={onTitleChanged}
-        ></input>
-        <label htmlFor="postContent">Post content:</label>
-        <input
-          type="text"
-          id="postContent"
-          name="postContent"
-          value={content}
-          onChange={onContentChanged}
-        ></input>
-      </form>
-      <Button
-        style={{ display: "none" }}
-        variant="contained"
-        onClick={() => {
-          dispatch(
-            addFilter({
-              id: filters[filters.length - 1].id + 1,
-              title: title,
-              content: content,
-            })
-          );
-        }}
-      >
-        Submit
-      </Button>
+      {renderCalculator(calculatorList[activeStep])}
     </Grid>
   );
 };
-export default Filter;
+export default Calculator;

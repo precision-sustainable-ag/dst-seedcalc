@@ -1,9 +1,10 @@
 import Grid from "@mui/material/Grid";
+import { Typography } from "@mui/material";
 
 const MixRatio = () => {
   return (
     <Grid container justifyContent="center" alignItems="center">
-      <h2>Mix Ratios</h2>
+      <Typography variant="h2">Mix Ratios</Typography>
     </Grid>
   );
 };

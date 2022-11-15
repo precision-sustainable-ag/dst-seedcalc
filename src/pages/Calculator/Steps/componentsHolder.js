@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import dayjs from "dayjs";
 import { DatePicker } from "../../../components/DatePicker";
@@ -23,15 +24,15 @@ const SiteCondition = () => {
   return (
     <Grid container justifyContent="center" alignItems="center" size={12}>
       <Grid item xs={12}>
-        <h2>Site Condition</h2>
+        <Typography variant="h2">Site Condition</Typography>
       </Grid>
 
       <Grid item xs={12} padding={15} className="site-condition-container">
-        <h3>Date Picker Component: </h3>
+        <Typography variant="h3">Date Picker Component: </Typography>
         <DatePicker value={date} handleChange={handleDatePicker} />
       </Grid>
       <Grid item xs={12} padding={15} className="site-condition-container">
-        <h3>Dropdown Component: </h3>
+        <Typography variant="h3">Dropdown Component: </Typography>
         <Dropdown
           value={dropdownValue}
           label={"Select item: "}
@@ -41,21 +42,21 @@ const SiteCondition = () => {
         />
       </Grid>
       <Grid item xs={12} padding={15} className="site-condition-container">
-        <h3>Button Component: </h3>
+        <Typography variant="h3">Button Component: </Typography>
         <DSTButton
           text="Button test"
           buttonClass="dst-button"
           size={12}
           theme="dstTheme"
-          path={{ type: "local", url: "/filter" }}
+          path={{ type: "local", url: "/calculator" }}
         />
       </Grid>
       <Grid item xs={12} padding={15} className="site-condition-container">
-        <h3>Search Field Component: </h3>
+        <Typography variant="h3">Search Field Component: </Typography>
         <SearchField />
       </Grid>
       <Grid item xs={12} padding={15} className="site-condition-container">
-        <h3>Switch: </h3>
+        <Typography variant="h3">Switch: </Typography>
         <DSTSwitch checked={checked} handleChange={handleSwitch} />
       </Grid>
     </Grid>

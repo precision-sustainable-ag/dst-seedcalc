@@ -8,6 +8,16 @@ export const plantHardinessZone = [
   "Zone 7",
 ];
 
+export const calculatorList = [
+  "Site Condition",
+  "Species Selection",
+  "Mix Ratios",
+  "Mix Seeding Rate",
+  "Seed Tag Info",
+  "Review Mix",
+  "Confirm Plan",
+];
+
 export const soilDrainage = [
   "Very Poorly Drained",
   "Poorly Drained",

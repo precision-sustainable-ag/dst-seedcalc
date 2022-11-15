@@ -11,3 +11,7 @@
 .stepper-container .MuiStepLabel-iconContainer .Mui-completed {
     color: #77b400 !important;
 }
+
+.steps-label {
+    color: red !important;
+}
