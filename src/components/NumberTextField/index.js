@@ -1,7 +1,7 @@
 import React from "react";
 import TextField from "@mui/material/TextField";
 
-export const NumberTextField = ({ value, label, handleChange }) => {
+export const NumberTextField = ({ value, label, handleChange, disabled }) => {
   return (
     <TextField
       fullWidth
@@ -14,6 +14,7 @@ export const NumberTextField = ({ value, label, handleChange }) => {
       InputLabelProps={{
         shrink: true,
       }}
+      InputProps={{ inputProps: { min: 0 }, disabled: disabled }}
     />
   );
 };

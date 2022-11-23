@@ -43,15 +43,33 @@ export const getCrops = createAsyncThunk(
     return res;
   }
 );
+/* 
 
+Reducer Documentation: 
+
+{
+    name: updateSteps
+    description: Update individual values in a step.
+    params: {
+        type: Specified step page to update (ex: speciesSelection)
+        key: key value of the specific step object (ex: "d")
+        value: new value for the key (ex: [{}]])
+    }
+}
+*/
 export const stepSlice = createSlice({
   name: "steps",
   initialState,
   reducers: {
     updateSteps: (state, action) => {
+      // update individual steps of specific seeds.
+      // payload format: {type, key, value}
+      // type:
       const payload = action.payload;
       const existingState = JSON.parse(JSON.stringify(state));
       existingState.value[payload.type][payload.key] = payload.value;
+      console.log("payload", action.payload);
+      console.log("existing state", existingState.value);
       return { ...existingState };
     },
   },

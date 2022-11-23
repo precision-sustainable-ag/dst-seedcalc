@@ -129,8 +129,24 @@ site-condition-header {
     color: #4f5f30 !important;
 }
 .mix-ratio-form-container {
-    padding: 25px;
+    padding: 0px;
 }
+.mix-ratio-form-label {
+    margin-bottom: 20px !important;
+    text-align: justify;
+    font-size: 12px;
+
+}
+.mix-label-md {
+    margin-top: 5px !important;
+    margin-left: 15px !important;
+    font-size: 10px !important;
+}
+/* .mix-label-xs {
+    margin-top: 5px;
+    margin-left: 15px;
+    font-size: 10px;
+} */
 .MuiAccordionDetails-root {
     background: #fffff2 !important;
     padding: 3% !important;
@@ -138,6 +154,13 @@ site-condition-header {
 .text-field-100 {
     width: 100%;
 }
+.text-field-30 {
+    width: 30%;
+}
 .no-display {
     opacity: 0%;
+}
+.math-icon {
+    margin-top: 15px !important;
+    font-weight: 600 !important;
 }

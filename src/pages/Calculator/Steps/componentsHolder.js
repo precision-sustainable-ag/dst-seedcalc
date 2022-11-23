@@ -8,6 +8,7 @@ import { DSTButton } from "../../../components/Button";
 import { SearchField } from "../../../components/SearchField";
 import { DSTSwitch } from "../../../components/Switch";
 import "./steps.css";
+
 const SiteCondition = () => {
   const [date, setDate] = useState(dayjs("2014-08-18T21:11:54"));
   const [dropdownValue, setDropdownValue] = useState("test");
@@ -15,6 +16,11 @@ const SiteCondition = () => {
   const handleDatePicker = (newDate) => {
     setDate(newDate);
   };
+        seedsPerAcre: 0,
+      poundsOfSeed: 0,
+      plantsPerAcre: 0,
+      mixSeedingRate: 0,
+      aproxPlantsSqFt: 0,
   const handleDropdown = (e) => {
     setDropdownValue(e.target.value);
   };

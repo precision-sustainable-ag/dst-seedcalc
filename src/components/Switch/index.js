@@ -19,13 +19,13 @@ import { Fragment } from "react";
 const label = { inputProps: { "aria-label": "Switch" } };
 export const DSTSwitch = ({ checked, handleChange }) => {
   return (
-    <div>
+    <Fragment>
       <Switch
         {...label}
         checked={checked}
         onChange={handleChange}
         color="default"
       />
-    </div>
+    </Fragment>
   );
 };
