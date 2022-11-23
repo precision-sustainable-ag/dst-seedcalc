@@ -1,5 +1,4 @@
 export const calculateInt = (nums, type) => {
-  console.log("MULTY: ", nums, parseFloat(nums[0]) * parseFloat(nums[1]));
   switch (type) {
     case "add":
       return parseFloat(nums[0]) + parseFloat(nums[1]);
@@ -18,17 +17,13 @@ export const calculateInt = (nums, type) => {
 
 export const calculateAllSteps = (prevSeed) => {
   let seed = { ...prevSeed };
-  console.log("seeed calc all", seed);
   seed.mixSeedingRate = calculateSeeds("step1", seed).val;
   seed.seedsPerAcre = calculateSeeds("step2", seed).val;
   seed.plantsPerAcre = calculateSeeds("step3", seed).val;
   seed.aproxPlantsSqFt = calculateSeeds("step4", seed).val;
-  console.log("prev seed", seed);
-  console.log("new seed", seed);
   return seed;
 };
 export const calculateSeeds = (step, seed) => {
-  console.log("step see", step, seed);
   switch (step) {
     case "step1":
       return {

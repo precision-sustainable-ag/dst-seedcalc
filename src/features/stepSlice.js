@@ -68,8 +68,6 @@ export const stepSlice = createSlice({
       const payload = action.payload;
       const existingState = JSON.parse(JSON.stringify(state));
       existingState.value[payload.type][payload.key] = payload.value;
-      console.log("payload", action.payload);
-      console.log("existing state", existingState.value);
       return { ...existingState };
     },
   },

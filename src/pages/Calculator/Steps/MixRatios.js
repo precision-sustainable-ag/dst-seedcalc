@@ -30,9 +30,6 @@ const MixRatio = () => {
 
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
-  console.log("current global state", data);
-  const crops = data.crops;
-  const mixRatioData = data.mixRatio;
   const speciesSelection = data.speciesSelection;
   const plantsPerAcreSum = speciesSelection.seedsSelected.reduce(
     (sum, a) => sum + a.plantsPerAcre,
@@ -42,7 +39,6 @@ const MixRatio = () => {
     (sum, a) => sum + a.poundsOfSeed,
     0
   );
-  const array = [];
   const poundsOfSeedArray = [];
   const plantsPerAcreArray = [];
   speciesSelection.seedsSelected.map((s, i) => {
@@ -70,7 +66,6 @@ const MixRatio = () => {
   };
   const handleUpdateAllSteps = (prevData, index) => {
     let data = [...prevData];
-    console.log("handling all steps", data, index);
     data[index] = calculateAllSteps(data[index]);
     handleUpdateSteps("seedsSelected", data);
   };
@@ -88,14 +83,10 @@ const MixRatio = () => {
       // after single value is updated properly, we calculate & update all the other values.
       data[index][key1][key2] = val;
       const calculateVal = calculateSeeds(key1, data[index]);
-      console.log("test", key1, key2);
       data[index][calculateVal["key"]] = calculateVal["val"];
-      console.log("key: ", calculateVal, data[index][calculateVal["key"]]);
       handleUpdateSteps("seedsSelected", data);
       let newData = [...data];
-      console.log("LA", data, newData);
       newData[index] = calculateAllSteps(data[index]);
-      console.log("new DAta", newData);
       handleUpdateAllSteps(newData, index);
     }
   };
@@ -126,7 +117,6 @@ const MixRatio = () => {
   };
 
   const renderPieChart = (type) => {
-    console.log("render pie chart", plantsPerAcreArray, poundsOfSeedArray);
     const chartData =
       type === "plantsPerAcre" ? plantsPerAcreArray : poundsOfSeedArray;
 
@@ -155,7 +145,6 @@ const MixRatio = () => {
     );
   };
   const renderSeedsSelected = () => {
-    console.log("Species selection", speciesSelection.seedsSelected);
     return (
       <Grid item xs={3} md={1}>
         <Box

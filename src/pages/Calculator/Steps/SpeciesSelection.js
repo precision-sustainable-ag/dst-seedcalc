@@ -37,11 +37,9 @@ const SpeciesSelection = () => {
   const speciesSelection = data.speciesSelection;
   const seedsSelected = speciesSelection.seedsSelected;
   const diversitySelected = speciesSelection.diversitySelected;
-
   const [filteredSeeds, setFilteredSeeds] = useState(crops);
   const [query, setQuery] = useState("");
 
-  console.log("airtable", airtable);
   // Filter query logic
   const updateQuery = (e) => {
     setQuery(e.target.value);
@@ -108,7 +106,6 @@ const SpeciesSelection = () => {
         };
       }
     });
-    console.log("ext data..", extData);
     let newSeed = {
       ...seed,
       step1: {
@@ -136,7 +133,6 @@ const SpeciesSelection = () => {
     };
     // edit logic in mix ratio => remove step2.seedsPound
     newSeed = calculateAllSteps(newSeed);
-    console.log("new seed.", newSeed);
     if (seedsSelected.length === 0) {
       handleUpdateSteps("seedsSelected", [...seedsSelected, newSeed]);
       handleUpdateSteps("diversitySelected", [...diversitySelected, species]);
@@ -295,7 +291,6 @@ const SpeciesSelection = () => {
     );
   };
   const renderAccordian = (data) => {
-    console.log("data: ", data, seedsLabel[data]);
     return (
       <Accordion xs={12} className="accordian-container">
         <AccordionSummary
