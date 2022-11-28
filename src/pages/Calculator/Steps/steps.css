@@ -57,6 +57,30 @@ site-condition-header {
 .accordian-container {
     width: 100%;
 }
+.accordian-header {
+    background-color: #EFF1E1 !important;
+    color: #4F5F30 !important;
+    font-weight: bold !important;
+}
+.accordian-header p {
+    font-weight: 550 !important;
+}
+.MuiAccordionSummary-root {
+    background-color: #EFF1E1 !important;
+    color: #4F5F30 !important;
+    font-weight: bold !important;
+    font-size: 20px !important;
+    font-weight: 600 !important;
+    text-align: justify !important;
+    color: #4f5f30 !important;
+}
+.MuiAccordionSummary-root p {
+    font-weight: bold !important;
+    font-size: 20px !important;
+    font-weight: 600 !important;
+    text-align: justify !important;
+    color: #4f5f30 !important;
+}
 .progress-bar {
     width: 80%;
     height: 10px;
@@ -76,3 +100,67 @@ site-condition-header {
     color: #8D9774;
 }
 
+.mix-ratio-chart-container {
+    text-align: justify;
+    margin: 0 auto;
+}
+.mix-ratio-chart-header {
+    font-weight: 600;
+    text-align: center
+}
+.mix-ratio-chart-list-50 {
+    margin: 0 auto !important;
+    width: 50% !important;
+    margin-top: 34px !important;
+}
+.mix-ratio-chart-list-100 {
+    margin: 0 auto !important;
+    width: 100% !important;
+    margin-top: 34px !important;
+}
+.mix-ratio-step-header {
+    padding: 16px;
+    text-align: justify;
+    background: #e5e7d5;
+    margin: 30px 0px !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    text-align: justify !important;
+    color: #4f5f30 !important;
+}
+.mix-ratio-form-container {
+    padding: 0px;
+}
+.mix-ratio-form-label {
+    margin-bottom: 20px !important;
+    text-align: justify;
+    font-size: 12px;
+
+}
+.mix-label-md {
+    margin-top: 5px !important;
+    margin-left: 15px !important;
+    font-size: 10px !important;
+}
+/* .mix-label-xs {
+    margin-top: 5px;
+    margin-left: 15px;
+    font-size: 10px;
+} */
+.MuiAccordionDetails-root {
+    background: #fffff2 !important;
+    padding: 3% !important;
+}
+.text-field-100 {
+    width: 100%;
+}
+.text-field-30 {
+    width: 30%;
+}
+.no-display {
+    opacity: 0%;
+}
+.math-icon {
+    margin-top: 15px !important;
+    font-weight: 600 !important;
+}

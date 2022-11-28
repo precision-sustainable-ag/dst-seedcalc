@@ -1,10 +1,8 @@
+import * as React from "react";
 import Grid from "@mui/material/Grid";
 import { useSelector, useDispatch } from "react-redux";
 import { Typography, Box, Link } from "@mui/material";
 import { useState, useEffect, Fragment } from "react";
-import { SearchField } from "../../../components/SearchField";
-import { updateSteps } from "./../../../features/stepSlice";
-import * as React from "react";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -14,7 +12,15 @@ import ImageListItem from "@mui/material/ImageListItem";
 import Fade from "@mui/material/Fade";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+
+import { SearchField } from "../../../components/SearchField";
+import { updateSteps } from "./../../../features/stepSlice";
 import { seedsList, seedsLabel } from "../../../shared/data/species";
+import airtable from "../../../shared/data/airtable.json";
+import {
+  calculateAllSteps,
+  calculateSeeds,
+} from "../../../shared/utils/calculate";
 import "./steps.css";
 
 const SpeciesSelection = () => {
@@ -31,7 +37,6 @@ const SpeciesSelection = () => {
   const speciesSelection = data.speciesSelection;
   const seedsSelected = speciesSelection.seedsSelected;
   const diversitySelected = speciesSelection.diversitySelected;
-
   const [filteredSeeds, setFilteredSeeds] = useState(crops);
   const [query, setQuery] = useState("");
 
@@ -70,8 +75,66 @@ const SpeciesSelection = () => {
   const updateSeeds = (seed, species) => {
     // Check if seed length is greater than 0, if not, check for seed existing in seedsSelected[] array.
     // Update diversity based on whether diversity exists or not.
+    // extData is temporary until API updated.
+    // data not avail in json: mixSeedingRate, percentOfSingleSpeciesRate,
+    let extData = {
+      poundsOfSeed: 13200,
+      percentSurvival: 30,
+      singleSpeciesSeedingRatePLS: 57,
+      mixSeedingRate: 15,
+      percentOfSingleSpeciesRate: 20,
+      seedsPound: 1840,
+    };
+    airtable.map((a, i) => {
+      if (a.Name === seed.label) {
+        extData = {
+          ...extData,
+          singleSpeciesSeedingRatePLS:
+            a["Max Drilled Seeding Rate (lbs/acre)"] !== ""
+              ? a["Max Drilled Seeding Rate (lbs/acre)"]
+              : 57,
+          poundsOfSeed:
+            a["Seed Count (per pound)"] !== ""
+              ? a["Seed Count (per pound)"]
+              : 13200,
+          percentSurvival:
+            a["% Chance of Winter Survival"] !== ""
+              ? parseInt(
+                  a["% Chance of Winter Survial"].replace(/[^a-zA-Z0-9 ]/g, "")
+                )
+              : 30,
+        };
+      }
+    });
+    let newSeed = {
+      ...seed,
+      step1: {
+        singleSpeciesSeedingRatePLS: extData["singleSpeciesSeedingRatePLS"],
+        percentOfSingleSpeciesRate: extData["percentOfSingleSpeciesRate"],
+      },
+      step2: {
+        seedsPound: extData["seedsPound"],
+        mixSeedingRate: 0,
+      },
+      step3: {
+        seedsAcre: 0,
+        percentSurvival: extData["percentSurvival"],
+      },
+      step4: {
+        plantsAcre: 0,
+        sqFtAcre: 43560,
+      },
+      seedsPerAcre: 0,
+      poundsOfSeed: extData["poundsOfSeed"],
+      plantsPerAcre: 0,
+      mixSeedingRate: 0,
+      aproxPlantsSqFt: 0,
+      showSteps: false,
+    };
+    // edit logic in mix ratio => remove step2.seedsPound
+    newSeed = calculateAllSteps(newSeed);
     if (seedsSelected.length === 0) {
-      handleUpdateSteps("seedsSelected", [...seedsSelected, seed]);
+      handleUpdateSteps("seedsSelected", [...seedsSelected, newSeed]);
       handleUpdateSteps("diversitySelected", [...diversitySelected, species]);
     } else {
       const seedsExist = seedsSelected.find((f) => seed.label === f.label);
@@ -90,7 +153,7 @@ const SpeciesSelection = () => {
           );
         }
       } else {
-        handleUpdateSteps("seedsSelected", [...seedsSelected, seed]);
+        handleUpdateSteps("seedsSelected", [...seedsSelected, newSeed]);
         if (!diversitySelected.includes(species)) {
           handleUpdateSteps("diversitySelected", [
             ...diversitySelected,
@@ -195,6 +258,55 @@ const SpeciesSelection = () => {
       </Grid>
     );
   };
+  const imgSrc = (imgUrl) => {
+    return imgUrl !== null ? imgUrl + "?w=300&h=300&fit=crop&auto=format" : "";
+  };
+  const renderImageList = (data) => {
+    return (
+      <ImageList sx={{ maxWidth: "100%" }} cols={matchesSm ? 2 : 6}>
+        {filteredSeeds
+          .filter((seeds, i) => seeds.group.label === data)
+          .map((seeds, idx) => (
+            <ImageListItem key={imgSrc(seeds.thumbnail.src) + Math.random()}>
+              <img
+                className={matchesSm ? "panel-img-sm" : "panel-img"}
+                src={imgSrc(seeds.thumbnail.src)}
+                alt={seeds.label}
+                onClick={(e) => {
+                  updateSeeds(seeds, data);
+                }}
+                loading="lazy"
+              />
+              <Link
+                className="img-text"
+                onClick={(e) => {
+                  updateSeeds(seeds, data);
+                }}
+              >
+                {seeds.label}{" "}
+              </Link>
+            </ImageListItem>
+          ))}
+      </ImageList>
+    );
+  };
+  const renderAccordian = (data) => {
+    return (
+      <Accordion xs={12} className="accordian-container">
+        <AccordionSummary
+          xs={12}
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>{seedsLabel[data]}</Typography>
+        </AccordionSummary>
+        <AccordionDetails className="accordian-details">
+          {renderImageList(data)}
+        </AccordionDetails>
+      </Accordion>
+    );
+  };
   return (
     <Grid xs={12} container>
       {seedsSelected.length > 0 && renderSeedsSelected()}
@@ -223,55 +335,7 @@ const SpeciesSelection = () => {
           {seedsList.map((s, i) => {
             return (
               <Grid xs={12}>
-                <Grid item>
-                  <Accordion xs={12} className="accordian-container">
-                    <AccordionSummary
-                      xs={12}
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel1a-content"
-                      id="panel1a-header"
-                    >
-                      <Typography>{seedsLabel[s]}</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <ImageList
-                        sx={{ maxWidth: "100%" }}
-                        cols={matchesSm ? 2 : 6}
-                      >
-                        {filteredSeeds
-                          .filter((seeds, i) => seeds.group.label === s)
-                          .map((seeds, idx) => (
-                            <ImageListItem
-                              key={seeds.thumbnail.src + Math.random()}
-                            >
-                              <img
-                                className={
-                                  matchesSm ? "panel-img-sm" : "panel-img"
-                                }
-                                src={
-                                  seeds.thumbnail.src +
-                                  "?w=300&h=300&fit=crop&auto=format"
-                                }
-                                alt={seeds.label}
-                                onClick={(e) => {
-                                  updateSeeds(seeds, s);
-                                }}
-                                loading="lazy"
-                              />
-                              <Link
-                                className="img-text"
-                                onClick={(e) => {
-                                  updateSeeds(seeds, s);
-                                }}
-                              >
-                                {seeds.label}{" "}
-                              </Link>
-                            </ImageListItem>
-                          ))}
-                      </ImageList>
-                    </AccordionDetails>
-                  </Accordion>
-                </Grid>
+                <Grid item>{renderAccordian(s)}</Grid>
               </Grid>
             );
           })}

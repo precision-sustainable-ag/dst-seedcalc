@@ -98,6 +98,7 @@ const SiteCondition = () => {
         <NumberTextField
           value={siteCondition.acres}
           label={"Acres"}
+          disabled={false}
           handleChange={(e) => {
             handleUpdateSteps("acres", e.target.value);
           }}

@@ -1,6 +1,7 @@
 import "./footer.css";
 import { Typography } from "@mui/material";
 import { Fragment } from "react";
+
 const Footer = () => {
   return (
     <Fragment>
