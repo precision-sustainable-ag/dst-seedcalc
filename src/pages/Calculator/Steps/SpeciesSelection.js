@@ -309,7 +309,7 @@ const SpeciesSelection = () => {
     <Grid xs={12} container>
       {seedsSelected.length > 0 && renderSeedsSelected()}
       <Grid
-        xs={seedsSelected.length > 0 ? 12 : 12}
+        xs={12}
         md={seedsSelected.length > 0 ? 11 : 12}
         item
         justifyContent="center"

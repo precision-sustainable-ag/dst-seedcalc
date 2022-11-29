@@ -532,7 +532,7 @@ const MixRatio = () => {
     <Grid xs={12} container>
       {renderSeedsSelected()}
       <Grid
-        xs={speciesSelection.seedsSelected.length > 0 ? 12 : 12}
+        xs={12}
         md={speciesSelection.seedsSelected.length > 0 ? 11 : 12}
         item
         justifyContent="center"
