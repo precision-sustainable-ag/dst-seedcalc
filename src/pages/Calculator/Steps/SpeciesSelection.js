@@ -84,6 +84,7 @@ const SpeciesSelection = () => {
       mixSeedingRate: 15,
       percentOfSingleSpeciesRate: 20,
       seedsPound: 1840,
+      precisionRowUnitPlanter: 0.75,
     };
     airtable.map((a, i) => {
       if (a.Name === seed.label) {
@@ -129,6 +130,9 @@ const SpeciesSelection = () => {
       plantsPerAcre: 0,
       mixSeedingRate: 0,
       aproxPlantsSqFt: 0,
+      precisionRowUnitPlanter: extData["precisionRowUnitPlanter"],
+      broadcast: 0,
+      drilled: 0,
       showSteps: false,
     };
     // edit logic in mix ratio => remove step2.seedsPound

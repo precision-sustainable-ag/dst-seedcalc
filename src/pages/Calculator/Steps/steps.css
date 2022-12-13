@@ -151,6 +151,23 @@ site-condition-header {
     font-size: 12px;
 
 }
+.mix-seeding-rate-grid-left {
+    height: 150px;
+    padding-top: 60px;
+    border: 1px solid #C7C7C7;
+    border-left: none;
+    font-weight: bold;
+}
+.mix-seeding-rate-grid-left p {
+    font-weight: bold !important;
+}
+.mix-seeding-rate-grid-right {
+    height: 150px;
+    padding-top: 30px;
+    border: 1px solid #C7C7C7;
+    border-right: none;
+    font-weight: bold;
+}
 .mix-label-md {
     margin-top: 5px !important;
     margin-left: 15px !important;
@@ -177,4 +194,7 @@ site-condition-header {
 .math-icon {
     margin-top: 15px !important;
     font-weight: 600 !important;
+}
+.red-text {
+color: red;
 }
