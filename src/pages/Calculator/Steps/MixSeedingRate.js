@@ -103,8 +103,12 @@ const MixSeedingRate = () => {
             </Grid>
             {renderRightAccordian(3)}
             <Grid item xs={6} className="mix-seeding-rate-grid-left">
+              <Typography>Broadcast(with Light Incorporation </Typography>
+            </Grid>
+            {renderRightAccordian(3)}
+            <Grid item xs={6} className="mix-seeding-rate-grid-left">
               <Typography>
-                Aerial(with Light Incorporation{" "}
+                Aerial(or broadcast with no Light Incorporation{" "}
                 <span className="red-text">Not Recommended</span>):{" "}
               </Typography>
             </Grid>
