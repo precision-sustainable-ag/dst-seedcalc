@@ -84,6 +84,7 @@ const SpeciesSelection = () => {
       mixSeedingRate: 15,
       percentOfSingleSpeciesRate: 20,
       seedsPound: 1840,
+      precisionRowUnitPlanter: 0.75,
     };
     airtable.map((a, i) => {
       if (a.Name === seed.label) {
@@ -129,6 +130,9 @@ const SpeciesSelection = () => {
       plantsPerAcre: 0,
       mixSeedingRate: 0,
       aproxPlantsSqFt: 0,
+      precisionRowUnitPlanter: extData["precisionRowUnitPlanter"],
+      broadcast: 0,
+      drilled: 0,
       showSteps: false,
     };
     // edit logic in mix ratio => remove step2.seedsPound
@@ -223,37 +227,35 @@ const SpeciesSelection = () => {
   };
   const renderSeedsSelected = () => {
     return (
-      <Grid item xs={3} md={1}>
-        <Box
-          sx={{
-            width: "100%",
-            height: "100%",
-            padding: 1,
-            backgroundColor: "#E5E7D5",
-            border: "#C7C7C7 solid 1px",
-          }}
-        >
-          {seedsSelected.map((s, idx) => {
-            return (
-              <Fragment>
-                <img
-                  className={
-                    matchesXs
-                      ? "left-panel-img-xs"
-                      : matchesSm
-                      ? "left-panel-img-sm"
-                      : matchesMd
-                      ? "left-panel-img-md"
-                      : "left-panel-img"
-                  }
-                  src={s.thumbnail.src}
-                  alt={s.label}
-                  loading="lazy"
-                />
-                <Typography className="left-panel-text">{s.label}</Typography>
-              </Fragment>
-            );
-          })}
+      <Grid item xs={matchesMd ? 12 : 1}>
+        <Box className="selected-seeds-box">
+          <Grid
+            className="selected-seeds-container"
+            container
+            flexDirection={matchesMd ? "row" : "column"}
+          >
+            {speciesSelection.seedsSelected.map((s, idx) => {
+              return (
+                <Grid item className="selected-seeds-item">
+                  <img
+                    className={
+                      matchesXs
+                        ? "left-panel-img-xs"
+                        : matchesSm
+                        ? "left-panel-img-sm"
+                        : matchesMd
+                        ? "left-panel-img-md"
+                        : "left-panel-img"
+                    }
+                    src={s.thumbnail.src}
+                    alt={s.label}
+                    loading="lazy"
+                  />
+                  <Typography className="left-panel-text">{s.label}</Typography>
+                </Grid>
+              );
+            })}{" "}
+          </Grid>
         </Box>
       </Grid>
     );
@@ -311,7 +313,7 @@ const SpeciesSelection = () => {
     <Grid xs={12} container>
       {seedsSelected.length > 0 && renderSeedsSelected()}
       <Grid
-        xs={seedsSelected.length > 0 ? 9 : 12}
+        xs={12}
         md={seedsSelected.length > 0 ? 11 : 12}
         item
         justifyContent="center"
