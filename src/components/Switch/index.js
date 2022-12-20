@@ -5,13 +5,8 @@ import { Fragment } from "react";
   name: DSTSwitch,
   description: Re-usable Switch component.
   params: {
-    steps: An array of steps as str value
-    activeStep: Current active step
-    skipped: A set of steps  that are skipped
-    handleNext: Function when user clicks "Next"
-    handleBack: Function when user clicks "Back"
-    handleSkip: Function when user clicks "Skip"
-    handleReset: Function when user clicks "Reset"
+    checked: check boolean value to pass in,
+    handleChange: handle logic for DSTSwitch
   }
 }
 */
