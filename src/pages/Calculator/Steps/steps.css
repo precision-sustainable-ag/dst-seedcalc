@@ -151,6 +151,9 @@ site-condition-header {
     font-size: 12px;
 
 }
+
+/* mix seeding rate */
+
 .mix-seeding-rate-grid-left {
     height: 150px;
     padding-top: 60px;
@@ -168,16 +171,28 @@ site-condition-header {
     border-right: none;
     font-weight: bold;
 }
+
+/* Seed Tag Info */
+
+.seed-tag-info-grid-left {
+    height: 80px;
+    padding-top: 15px;
+    font-weight: bold;
+}
+.seed-tag-info-grid-left p {
+    font-weight: bold !important;
+}
+.seed-tag-info-grid-right {
+    height: 80px;
+    font-weight: bold;
+}
+
+
 .mix-label-md {
     margin-top: 5px !important;
     margin-left: 15px !important;
     font-size: 10px !important;
 }
-/* .mix-label-xs {
-    margin-top: 5px;
-    margin-left: 15px;
-    font-size: 10px;
-} */
 .MuiAccordionDetails-root {
     background: #fffff2 !important;
     padding: 3% !important;
@@ -187,6 +202,9 @@ site-condition-header {
 }
 .text-field-30 {
     width: 30%;
+}
+.text-field-50 {
+    width: 50% !important;
 }
 .no-display {
     opacity: 0%;

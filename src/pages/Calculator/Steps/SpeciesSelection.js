@@ -85,6 +85,8 @@ const SpeciesSelection = () => {
       percentOfSingleSpeciesRate: 20,
       seedsPound: 1840,
       precisionRowUnitPlanter: 0.75,
+      germinationPercentage: 85,
+      purityPercentage: 95,
     };
     airtable.map((a, i) => {
       if (a.Name === seed.label) {
@@ -125,6 +127,8 @@ const SpeciesSelection = () => {
         plantsAcre: 0,
         sqFtAcre: 43560,
       },
+      germinationPercentage: extData["germinationPercentage"],
+      purityPercentage: extData["purityPercentage"],
       seedsPerAcre: 0,
       poundsOfSeed: extData["poundsOfSeed"],
       plantsPerAcre: 0,

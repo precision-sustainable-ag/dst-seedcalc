@@ -1,11 +1,17 @@
 import React from "react";
 import TextField from "@mui/material/TextField";
 
-export const NumberTextField = ({ value, label, handleChange, disabled }) => {
+export const NumberTextField = ({
+  value,
+  label,
+  handleChange,
+  className,
+  disabled,
+}) => {
   return (
     <TextField
       fullWidth
-      className="number-text-container"
+      className={className !== "" ? className : "number-text-container"}
       value={value}
       label={label}
       onChange={handleChange}
