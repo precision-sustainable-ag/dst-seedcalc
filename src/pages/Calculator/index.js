@@ -8,6 +8,7 @@ import {
   SeedTagInfo,
   ReviewMix,
   ConfirmPlan,
+  SeedingMethod,
 } from "./Steps";
 import { calculatorList } from "../../shared/data/dropdown";
 import { Header } from "../../components/Header";
@@ -28,6 +29,8 @@ const Calculator = () => {
         return <MixRatio />;
       case "Mix Seeding Rate":
         return <MixSeedingRate />;
+      case "Seeding Method":
+        return <SeedingMethod />;
       case "Seed Tag Info":
         return <SeedTagInfo />;
       case "Review Mix":
