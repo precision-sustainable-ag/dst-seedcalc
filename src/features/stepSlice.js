@@ -25,6 +25,7 @@ const initialState = {
     },
     mixSeedingRate: {},
     seedTagInfo: {},
+    seedingMethod: { seedingRate: 11 },
     reviewMix: {},
     confirmPlan: {},
     crops: [],
