@@ -10,7 +10,7 @@ import { Square } from "@mui/icons-material";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import {
-  calculateAllSteps,
+  calculateAllValues,
   calculateSeeds,
 } from "../../../shared/utils/calculate";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -66,29 +66,21 @@ const MixRatio = () => {
   };
   const handleUpdateAllSteps = (prevData, index) => {
     let data = [...prevData];
-    data[index] = calculateAllSteps(data[index]);
+    data[index] = calculateAllValues(data[index]);
     handleUpdateSteps("seedsSelected", data);
   };
-  const updateSeed = (val, key1, key2, seed) => {
+  const updateSeed = (val, key, seed) => {
     // find index of seed, parse a copy, update proper values, & send to Redux
     const index = speciesSelection.seedsSelected.findIndex(
       (s) => s.id === seed.id
     );
     let data = JSON.parse(JSON.stringify(speciesSelection.seedsSelected));
-    if (key2 === "") {
-      data[index][key1] = val;
-      handleUpdateSteps("seedsSelected", data);
-    } else {
-      // update deep values (ex: data[0].step1.percentOfSingleSpeciesRate)
-      // after single value is updated properly, we calculate & update all the other values.
-      data[index][key1][key2] = val;
-      const calculateVal = calculateSeeds(key1, data[index]);
-      data[index][calculateVal["key"]] = calculateVal["val"];
-      handleUpdateSteps("seedsSelected", data);
-      let newData = [...data];
-      newData[index] = calculateAllSteps(data[index]);
-      handleUpdateAllSteps(newData, index);
-    }
+    data[index][key] = val;
+    handleUpdateSteps("seedsSelected", data);
+    // create new copy of recently updated Redux state, calculate & update all seed's step data.
+    let newData = [...data];
+    newData[index] = calculateAllValues(data[index]);
+    handleUpdateAllSteps(newData, index);
   };
   const renderCustomizedLabel = ({
     cx,
@@ -212,7 +204,7 @@ const MixRatio = () => {
             }}
           >
             <Typography>
-              {Math.floor(data.step1.singleSpeciesSeedingRatePLS)}
+              {Math.floor(data.singleSpeciesSeedingRatePLS)}
             </Typography>
           </Box>
           <Typography>Lbs / Acre</Typography>
@@ -232,7 +224,7 @@ const MixRatio = () => {
           >
             <Typography>{Math.floor(data.mixSeedingRate)}</Typography>
           </Box>
-          <Typography>Lbs / Acre</Typography>
+          <Typography className="font-15">Lbs / Acre</Typography>
         </Grid>
         <Grid item xs={6}>
           <Box
@@ -275,7 +267,7 @@ const MixRatio = () => {
         <Grid item xs={12}>
           <Button
             onClick={(e) => {
-              updateSeed(!data.showSteps, "showSteps", "", data);
+              updateSeed(!data.showSteps, "showSteps", data);
             }}
             variant="outlined"
           >
@@ -288,7 +280,7 @@ const MixRatio = () => {
       </Grid>
     );
   };
-  const renderMixRatioFormLabel = (label1, label2, label3) => {
+  const renderFormLabel = (label1, label2, label3) => {
     return (
       <Grid container xs={12} className="mix-ratio-form-container">
         <Grid item xs={3}>
@@ -317,13 +309,16 @@ const MixRatio = () => {
       </Grid>
     );
   };
+  const renderFormInput = (data) => {
+    return <Grid xs={12} className="mix-ratio-form-container"></Grid>;
+  };
   const renderMixRateSteps = (data) => {
     return (
       <Grid container xs={12}>
         <Grid item xs={12}>
           <Typography className="mix-ratio-step-header">Step 1:</Typography>
         </Grid>
-        {renderMixRatioFormLabel(
+        {renderFormLabel(
           "Single Species Seeding Rate PLS",
           "% of Single Species Rate",
           "Mix Seeding Rate"
@@ -337,14 +332,9 @@ const MixRatio = () => {
               label="Single Species Seeding Rate PLS"
               variant="filled"
               handleChange={(e) => {
-                updateSeed(
-                  e.target.value,
-                  "step1",
-                  "singleSpeciesSeedingRatePLS",
-                  data
-                );
+                updateSeed(e.target.value, "singleSpeciesSeedingRatePLS", data);
               }}
-              value={data.step1.singleSpeciesSeedingRatePLS}
+              value={data.singleSpeciesSeedingRatePLS}
             />
             <Typography>Lbs / Acre</Typography>
           </Grid>
@@ -359,14 +349,9 @@ const MixRatio = () => {
               variant="filled"
               disabled={false}
               handleChange={(e) => {
-                updateSeed(
-                  e.target.value,
-                  "step1",
-                  "percentOfSingleSpeciesRate",
-                  data
-                );
+                updateSeed(e.target.value, "percentOfSingleSpeciesRate", data);
               }}
-              value={data.step1.percentOfSingleSpeciesRate}
+              value={data.percentOfSingleSpeciesRate}
             />
             <Typography>MCCC</Typography>
           </Grid>
@@ -389,7 +374,7 @@ const MixRatio = () => {
         <Grid item xs={12}>
           <Typography className="mix-ratio-step-header">Step 2: </Typography>
         </Grid>
-        {renderMixRatioFormLabel(
+        {renderFormLabel(
           "Single Species Seeding Rate PLS",
           "% of Single Species Rate",
           "Mix Seeding Rate"
@@ -402,9 +387,9 @@ const MixRatio = () => {
             label="Seeds / Pound"
             variant="filled"
             handleChange={(e) => {
-              updateSeed(e.target.value, "step2", "seedsPound", data);
+              updateSeed(e.target.value, "seedsPound", data);
             }}
-            value={data.step2.seedsPound}
+            value={data.seedsPound}
           />
         </Grid>
         <Grid item xs={1}>
@@ -437,7 +422,7 @@ const MixRatio = () => {
         <Grid item xs={12}>
           <Typography className="mix-ratio-step-header">Step 3: </Typography>
         </Grid>
-        {renderMixRatioFormLabel("Seeds/Acre", "% Survival", "Plants/Acre")}
+        {renderFormLabel("Seeds/Acre", "% Survival", "Plants/Acre")}
         <Grid item xs={3}>
           <NumberTextField
             className="text-field-100"
@@ -459,9 +444,9 @@ const MixRatio = () => {
             variant="filled"
             disabled={false}
             handleChange={(e) => {
-              updateSeed(e.target.value, "step3", "percentSurvival", data);
+              updateSeed(e.target.value, "percentSurvival", data);
             }}
-            value={data.step3.percentSurvival}
+            value={data.percentSurvival}
           />
         </Grid>
         <Grid item xs={1}>
@@ -480,7 +465,7 @@ const MixRatio = () => {
         <Grid item xs={12}>
           <Typography className="mix-ratio-step-header">Step 4: </Typography>
         </Grid>
-        {renderMixRatioFormLabel(
+        {renderFormLabel(
           "Plants/Acre",
           "Sq.Ft./Acre",
           "Aproximate Plants/Sq.Ft."
@@ -506,9 +491,9 @@ const MixRatio = () => {
             variant="filled"
             disabled={false}
             handleChange={(e) => {
-              updateSeed(e.target.value, "step4", "sqFtAcre", data);
+              updateSeed(e.target.value, "sqFtAcre", data);
             }}
-            value={data.step4.sqFtAcre}
+            value={data.sqFtAcre}
           />
         </Grid>
         <Grid item xs={1}>

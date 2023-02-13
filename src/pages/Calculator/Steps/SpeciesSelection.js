@@ -18,7 +18,7 @@ import { updateSteps } from "./../../../features/stepSlice";
 import { seedsList, seedsLabel } from "../../../shared/data/species";
 import airtable from "../../../shared/data/airtable.json";
 import {
-  calculateAllSteps,
+  calculateAllValues,
   calculateSeeds,
 } from "../../../shared/utils/calculate";
 import "./steps.css";
@@ -109,38 +109,62 @@ const SpeciesSelection = () => {
         };
       }
     });
+    // default key values per new seed
     let newSeed = {
       ...seed,
-      step1: {
-        singleSpeciesSeedingRatePLS: extData["singleSpeciesSeedingRatePLS"],
-        percentOfSingleSpeciesRate: extData["percentOfSingleSpeciesRate"],
-      },
-      step2: {
-        seedsPound: extData["seedsPound"],
-        mixSeedingRate: 0,
-      },
-      step3: {
-        seedsAcre: 0,
-        percentSurvival: extData["percentSurvival"],
-      },
-      step4: {
-        plantsAcre: 0,
-        sqFtAcre: 43560,
-      },
+      // step1: {
+      //   singleSpeciesSeedingRatePLS: extData["singleSpeciesSeedingRatePLS"],
+      //   percentOfSingleSpeciesRate: extData["percentOfSingleSpeciesRate"],
+      // },
+      // step2: {
+      //   seedsPound: extData["seedsPound"],
+      //   mixSeedingRate: 0,
+      // },
+      // step3: {
+      //   seedsAcre: 0,
+      //   percentSurvival: extData["percentSurvival"],
+      // },
+      // step4: {
+      //   plantsAcre: 0,
+      //   sqFtAcre: 43560,
+      // },
+      singleSpeciesSeedingRatePLS: extData["singleSpeciesSeedingRatePLS"],
+      percentOfSingleSpeciesRate: extData["percentOfSingleSpeciesRate"],
+      seedsPound: extData["seedsPound"],
+      mixSeedingRate: 0,
+      seedsAcre: 0,
+      percentSurvival: extData["percentSurvival"],
+      plantsAcre: 0,
+      sqFtAcre: 43560,
       germinationPercentage: extData["germinationPercentage"],
       purityPercentage: extData["purityPercentage"],
       seedsPerAcre: 0,
       poundsOfSeed: extData["poundsOfSeed"],
       plantsPerAcre: 0,
-      mixSeedingRate: 0,
       aproxPlantsSqFt: 0,
       precisionRowUnitPlanter: extData["precisionRowUnitPlanter"],
       broadcast: 0,
       drilled: 0,
       showSteps: false,
+      // Review your Mix new values
+      plantingMethod: 1,
+      managementImpactOnMix: 57,
+      mixSeedingRatePLS: 0,
+      bulkGerminationAndPurity: 0,
+      bulkSeedingRate: 0,
+      addedToMix: 0,
+      step1MixSeedingRate: 0,
+      step2MixSeedingRatePLS: 0,
+      step2Result: 0,
+      step3MixSeedingRatePLS: 0,
+      step3Result: 0,
+      step4MixSeedingRatePLS: 0,
+      step4Result: 0,
+      acres: 0,
+      poundsForPurchase: 0,
     };
     // edit logic in mix ratio => remove step2.seedsPound
-    newSeed = calculateAllSteps(newSeed);
+    newSeed = calculateAllValues(newSeed);
     if (seedsSelected.length === 0) {
       handleUpdateSteps("seedsSelected", [...seedsSelected, newSeed]);
       handleUpdateSteps("diversitySelected", [...diversitySelected, species]);

@@ -225,6 +225,9 @@ site-condition-header {
 .text-field-50 {
     width: 50% !important;
 }
+.font-15 {
+    font-size: 15px;
+}
 .no-display {
     opacity: 0%;
 }
@@ -237,4 +240,10 @@ color: red;
 }
 .vertical-slider {
     margin-top: 70px
+}
+
+/* Steps */
+
+.steps-row-2 {
+    margin-top: 20px;
 }
