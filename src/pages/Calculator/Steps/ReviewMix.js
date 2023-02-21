@@ -267,7 +267,7 @@ const ReviewMix = () => {
               <YAxis type="number" dataKey="y" name="weight" unit="lb" />
               <ZAxis dataKey="z" range={[1000, 1449]} name="score" unit="km" />
               <Tooltip cursor={{ strokeDasharray: "50 50" }} />
-              <Scatter name="A school" data={data} fill="#8884d8">
+              <Scatter name="A school" data={data} fill="#E7885F">
                 <LabelList dataKey="x" />
               </Scatter>
             </ScatterChart>
