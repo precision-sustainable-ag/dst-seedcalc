@@ -387,7 +387,7 @@ const ConfirmPlan = () => {
         </Grid>
         <Grid container xs={12} className="steps-row-2">
           <Grid item xs={3}>
-            <Typography>Cost / Pound</Typography>
+            {/* <Typography>Cost / Pound</Typography> */}
           </Grid>
           <Grid item xs={1}></Grid>
           <Grid item xs={3}>
@@ -466,22 +466,52 @@ const ConfirmPlan = () => {
       >
         <Grid item xs={12}>
           <Typography variant="h2">Confirm your plan</Typography>
-          <Grid container xs={12}>
-            <Grid item xs={6}>
-              <Typography>Amount of mix for 50 acres</Typography>
+          <Grid container xs={12} sx={{ padding: "20px" }}>
+            <Grid
+              item
+              xs={6}
+              sx={{
+                borderRight: "1px solid #CCCCCC",
+                borderBottom: "1px solid #CCCCCC",
+                padding: "10px",
+              }}
+            >
+              <Typography className="data-circle-label">
+                Amount of mix for 50 acres
+              </Typography>
               <Box className="data-circle">
                 <Typography>3,425</Typography>
               </Box>
             </Grid>
-            <Grid item xs={6}>
-              <Typography>Price/Acre</Typography>
+            <Grid
+              item
+              xs={6}
+              sx={{
+                borderBottom: "1px solid #CCCCCC",
+                padding: "10px",
+              }}
+            >
+              <Typography className="data-circle-label">Price/Acre</Typography>
               <Box className="data-circle">
                 <Typography>$35.33</Typography>
               </Box>
             </Grid>
-            <Grid item xs={6} md={6} className="mix-ratio-chart-container">
+            <Grid
+              item
+              xs={6}
+              md={6}
+              className="mix-ratio-chart-container"
+              sx={{
+                borderRight: "1px solid #CCCCCC",
+                borderBottom: "1px solid #CCCCCC",
+                padding: "10px",
+              }}
+            >
               {renderPieChart("poundsOfSeed")}
-              <Typography className="mix-ratio-chart-header">
+              <Typography
+                className="mix-ratio-chart-header"
+                sx={{ fontWeight: 600 }}
+              >
                 Pounds of Seed / Acre{" "}
               </Typography>
               <Grid item className="mix-ratio-chart-list-50">
@@ -501,9 +531,21 @@ const ConfirmPlan = () => {
                 })}
               </Grid>
             </Grid>
-            <Grid item xs={6} md={6} className="mix-ratio-chart-container">
+            <Grid
+              item
+              xs={6}
+              md={6}
+              className="mix-ratio-chart-container"
+              sx={{
+                borderBottom: "1px solid #CCCCCC",
+                padding: "10px",
+              }}
+            >
               {renderPieChart("plantsPerAcre")}
-              <Typography className="mix-ratio-chart-header">
+              <Typography
+                className="mix-ratio-chart-header"
+                sx={{ fontWeight: 600 }}
+              >
                 Plants Per Acre{" "}
               </Typography>
               <Grid item className="mix-ratio-chart-list-50">
@@ -526,37 +568,49 @@ const ConfirmPlan = () => {
           </Grid>
           <Grid container xs={12}>
             <Grid item xs={12}>
-              <Typography>Indiana NRCS Standards</Typography>
+              <Typography
+                sx={{ fontWeight: 600, fontSize: "20px", margin: "20px" }}
+              >
+                Indiana NRCS Standards
+              </Typography>
             </Grid>
             <Grid item xs={4}>
               <Box className="data-circle">
                 <CheckIcon className="data-circle-icon" />
               </Box>
-              <Typography>Seeding Rate</Typography>
+              <Typography className="data-circle-label">
+                Seeding Rate
+              </Typography>
             </Grid>
             <Grid item xs={4}>
               <Box className="data-circle">
                 <ClearIcon className="data-circle-icon" />
               </Box>
-              <Typography>Planting Date</Typography>
+              <Typography className="data-circle-label">
+                Planting Date
+              </Typography>
             </Grid>
             <Grid item xs={4}>
               <Box className="data-circle">
                 <CheckIcon className="data-circle-icon" />
               </Box>
-              <Typography>Ratio</Typography>
+              <Typography className="data-circle-label">Ratio</Typography>
             </Grid>
             <Grid item xs={6}>
               <Box className="data-circle">
                 <CheckIcon className="data-circle-icon" />
               </Box>
-              <Typography>Soil Drainage</Typography>
+              <Typography className="data-circle-label">
+                Soil Drainage
+              </Typography>
             </Grid>
             <Grid item xs={6}>
               <Box className="data-circle">
                 <Typography>67%</Typography>
               </Box>
-              <Typography>Expected Winter Survival</Typography>
+              <Typography className="data-circle-label">
+                Expected Winter Survival
+              </Typography>
             </Grid>
             <Grid item xs={12}>
               {" "}

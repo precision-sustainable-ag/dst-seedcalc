@@ -264,14 +264,19 @@ color: red;
     background-color: #E7885F;
     color: white;
     border-radius: 50%;
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     margin: 0 auto;
 }
 .data-circle p {
-    padding-top: 35px;
+    padding-top: 30px;
 }
 .data-circle-icon {
-    margin-top: 25px;
-    font-size: 50px !important;
+    margin-top: 15px;
+    font-size: 45px !important;
+}
+.data-circle-label {
+    font-size: 15px !important;
+    margin: 10px !important;
+    font-weight: 600 !important;
 }
