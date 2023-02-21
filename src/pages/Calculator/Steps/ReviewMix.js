@@ -261,14 +261,15 @@ const ReviewMix = () => {
       <Grid container xs={12}>
         <Grid item xs={12}>
           <ResponsiveContainer width="100%" height={200}>
-            <ScatterChart width={400} height={400}>
+            <ScatterChart width={400} height={400} position="center">
               <CartesianGrid strokeDasharray="4" />
               <XAxis type="number" dataKey="x" name="stature" unit="acre" />
               <YAxis type="number" dataKey="y" name="weight" unit="lb" />
               <ZAxis dataKey="z" range={[1000, 1449]} name="score" unit="km" />
               <Tooltip cursor={{ strokeDasharray: "50 50" }} />
               <Scatter name="A school" data={data} fill="#E7885F">
-                <LabelList dataKey="x" />
+                {/* <LabelList dataKey="x" content={renderCustomizedScatterLabel} /> */}
+                <LabelList dataKey="x" fill="#fff" position="center" />
               </Scatter>
             </ScatterChart>
           </ResponsiveContainer>
@@ -276,6 +277,26 @@ const ReviewMix = () => {
       </Grid>
     );
   };
+  const renderCustomizedScatterLabel = (props) => {
+    const { x, y, width, height, value } = props;
+    const radius = 10;
+
+    return (
+      <g>
+        <circle cx={x + 20} cy={y + 25} r={radius} fill="#E7885F" />
+        <text
+          x={x + 20}
+          y={y + 25}
+          fill="#fff"
+          textAnchor="middle"
+          dominantBaseline="middle"
+        >
+          {value}
+        </text>
+      </g>
+    );
+  };
+
   const renderAccordian = (data) => {
     return (
       <Accordion xs={12} className="accordian-container">
