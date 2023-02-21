@@ -242,8 +242,36 @@ color: red;
     margin-top: 70px
 }
 
+/* Confirm Plan start */ 
+
+.confirm-plan-form-container {
+    padding: 0px;
+    margin: 10px 0px !important;
+}
+.Mui-expanded {
+    margin: 0px !important;
+}
+
+/* Confirm Plan end */
+
 /* Steps */
 
 .steps-row-2 {
     margin-top: 20px;
+}
+
+.data-circle {
+    background-color: #E7885F;
+    color: white;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+}
+.data-circle p {
+    padding-top: 35px;
+}
+.data-circle-icon {
+    margin-top: 25px;
+    font-size: 50px !important;
 }
