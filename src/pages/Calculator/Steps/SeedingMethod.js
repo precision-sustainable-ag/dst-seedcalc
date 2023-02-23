@@ -200,12 +200,12 @@ const SeedingMethod = () => {
                 className="seeding-method-label-container"
                 sx={{ marginBottom: "270px" }}
               >
-                <Typography>Low limit of Mix Seeding Rate</Typography>
+                <Typography>High limit of Mix Seeding Rate</Typography>
               </Box>
             </Grid>
             <Grid item xs={12} justifyContent="flex-end">
               <Box className="seeding-method-label-container">
-                <Typography>High limit of Mix Seeding Rate</Typography>
+                <Typography>Low limit of Mix Seeding Rate</Typography>
               </Box>
             </Grid>
           </Grid>
