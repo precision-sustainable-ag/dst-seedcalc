@@ -162,6 +162,11 @@ const SpeciesSelection = () => {
       step4Result: 0,
       acres: 0,
       poundsForPurchase: 0,
+      // Confirm Plan
+      bulkLbsPerAcre: 36,
+      totalPounds: 0,
+      costPerPound: .43,
+      totalCost: 0,
     };
     // edit logic in mix ratio => remove step2.seedsPound
     newSeed = calculateAllValues(newSeed);
