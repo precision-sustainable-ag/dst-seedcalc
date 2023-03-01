@@ -162,7 +162,11 @@ const ConfirmPlan = () => {
                         ? "left-panel-img-md"
                         : "left-panel-img"
                     }
-                    src={s.thumbnail.src}
+                    src={
+                      s.thumbnail !== null
+                        ? s.thumbnail.src
+                        : "https://www.gardeningknowhow.com/wp-content/uploads/2020/04/spinach.jpg"
+                    }
                     alt={s.label}
                     loading="lazy"
                   />
@@ -175,25 +179,12 @@ const ConfirmPlan = () => {
       </Grid>
     );
   };
-  const renderAccordian = (data) => {
-    return (
-      <Accordion xs={12} className="accordian-container">
-        <AccordionSummary
-          className="accordian-header"
-          xs={12}
-          expanded={true}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography>{data.label}</Typography>
-        </AccordionSummary>
-        <AccordionDetails>{renderAccordianDetail(data)}</AccordionDetails>
-      </Accordion>
-    );
-  };
-  const renderAccordianDetail = (data) => {
+  const renderSeedData = (data) => {
     return (
       <Grid container xs={12}>
+        <Grid item xs={12}>
+          <Typography className="confirm-plan-header">{data.label}</Typography>
+        </Grid>
         <Grid item xs={12}>
           {renderConfirmPlanForm(data)}
         </Grid>
@@ -270,70 +261,61 @@ const ConfirmPlan = () => {
       0
     );
     return (
-      <Accordion xs={12} className="accordian-container">
-        <AccordionSummary
-          className="accordian-header"
-          xs={12}
-          expanded={true}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography>Total Cost of Mix</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          {" "}
-          <Grid container xs={12}>
-            <Grid item xs={3} className="confirm-plan-form-container">
-              <NumberTextField
-                className="text-field-100"
-                id="filled-basic"
-                label={`${data.speciesSelection.seedsSelected[0].label}`}
-                variant="filled"
-                disabled={true}
-                value={data.speciesSelection.seedsSelected[0].totalCost}
-              />{" "}
-            </Grid>
-            <Grid item xs={1} className="confirm-plan-form-container">
-              <Typography className="math-icon">+</Typography>
-            </Grid>
-            {data.speciesSelection.seedsSelected.map((s, i) => {
-              if (i !== 0) {
-                return (
-                  <>
-                    <Grid item xs={3} className="confirm-plan-form-container">
-                      <NumberTextField
-                        className="text-field-100"
-                        id="filled-basic"
-                        label={`${s.label}`}
-                        variant="filled"
-                        disabled={true}
-                        value={s.totalCost}
-                      />{" "}
-                    </Grid>
-                    <Grid item xs={1} className="confirm-plan-form-container">
-                      <Typography className="math-icon">
-                        {i !== data.speciesSelection.seedsSelected.length - 1
-                          ? "+"
-                          : "="}
-                      </Typography>
-                    </Grid>
-                  </>
-                );
-              }
-            })}
-            <Grid item xs={3} className="confirm-plan-form-container">
-              <NumberTextField
-                className="text-field-100"
-                id="filled-basic"
-                label={"Total Cost of Mix"}
-                variant="filled"
-                disabled={true}
-                value={totalCostOfMix}
-              />{" "}
-            </Grid>
-          </Grid>
-        </AccordionDetails>
-      </Accordion>
+      <Grid container xs={12}>
+        <Grid item xs={12}>
+          <Typography className="confirm-plan-header">
+            Total Cost of mix:
+          </Typography>
+        </Grid>
+        <Grid item xs={3} className="confirm-plan-form-container">
+          <NumberTextField
+            className="text-field-100"
+            id="filled-basic"
+            label={`${data.speciesSelection.seedsSelected[0].label}`}
+            variant="filled"
+            disabled={true}
+            value={data.speciesSelection.seedsSelected[0].totalCost}
+          />{" "}
+        </Grid>
+        <Grid item xs={1} className="confirm-plan-form-container">
+          <Typography className="math-icon">+</Typography>
+        </Grid>
+        {data.speciesSelection.seedsSelected.map((s, i) => {
+          if (i !== 0) {
+            return (
+              <>
+                <Grid item xs={3} className="confirm-plan-form-container">
+                  <NumberTextField
+                    className="text-field-100"
+                    id="filled-basic"
+                    label={`${s.label}`}
+                    variant="filled"
+                    disabled={true}
+                    value={s.totalCost}
+                  />{" "}
+                </Grid>
+                <Grid item xs={1} className="confirm-plan-form-container">
+                  <Typography className="math-icon">
+                    {i !== data.speciesSelection.seedsSelected.length - 1
+                      ? "+"
+                      : "="}
+                  </Typography>
+                </Grid>
+              </>
+            );
+          }
+        })}
+        <Grid item xs={3} className="confirm-plan-form-container">
+          <NumberTextField
+            className="text-field-100"
+            id="filled-basic"
+            label={"Total Cost of Mix"}
+            variant="filled"
+            disabled={true}
+            value={totalCostOfMix}
+          />{" "}
+        </Grid>
+      </Grid>
     );
   };
   const renderConfirmPlanForm = (data) => {
@@ -416,7 +398,7 @@ const ConfirmPlan = () => {
           <NumberTextField
             className="text-field-100"
             id="filled-basic"
-            disabled={false}
+            disabled={true}
             label="Cost/Pound"
             variant="filled"
             handleChange={(e) => {
@@ -615,7 +597,7 @@ const ConfirmPlan = () => {
             <Grid item xs={12}>
               {" "}
               {speciesSelection.seedsSelected.map((s, i) => {
-                return <> {renderAccordian(s)}</>;
+                return <> {renderSeedData(s)}</>;
               })}
               {renderTotalCostOfMix(data)}
             </Grid>

@@ -252,6 +252,17 @@ color: red;
     margin: 0px !important;
 }
 
+.confirm-plan-header {
+    padding: 16px;
+    text-align: justify;
+    background: #e5e7d5;
+    margin: 30px 0px !important;
+    margin-bottom: 0px !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    text-align: justify !important;
+    color: #4f5f30 !important;
+}
 /* Confirm Plan end */
 
 /* Steps */
@@ -280,3 +291,22 @@ color: red;
     margin: 10px !important;
     font-weight: 600 !important;
 }
+
+/* Completed Page start */
+
+.logo-img-50 {
+    width: 50%;
+}
+.logo-img-80 {
+    width: 80%;
+}
+
+.cp-empty-block {
+    width: 100%;
+    height: 150px;
+}
+.cp-empty-block-50 {
+    width: 100%;
+    height: 50px;
+}
+/* Completed Page end */

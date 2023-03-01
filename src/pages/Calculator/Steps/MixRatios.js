@@ -158,7 +158,11 @@ const MixRatio = () => {
                         ? "left-panel-img-md"
                         : "left-panel-img"
                     }
-                    src={s.thumbnail.src}
+                    src={
+                      s.thumbnail !== null
+                        ? s.thumbnail.src
+                        : "https://www.gardeningknowhow.com/wp-content/uploads/2020/04/spinach.jpg"
+                    }
                     alt={s.label}
                     loading="lazy"
                   />

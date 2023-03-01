@@ -234,7 +234,11 @@ const ReviewMix = () => {
                         ? "left-panel-img-md"
                         : "left-panel-img"
                     }
-                    src={s.thumbnail.src}
+                    src={
+                      s.thumbnail !== null
+                        ? s.thumbnail.src
+                        : "https://www.gardeningknowhow.com/wp-content/uploads/2020/04/spinach.jpg"
+                    }
                     alt={s.label}
                     loading="lazy"
                   />
@@ -635,11 +639,12 @@ const ReviewMix = () => {
         <Grid item xs={1}>
           <Typography className="math-icon">)</Typography>
         </Grid>
+        <Grid item xs={1}></Grid>
         <Grid container className="steps-row-2" xs={12}>
           <Grid item xs={4}>
             <Typography className="math-icon">=</Typography>
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={7}>
             <NumberTextField
               className="text-field-100"
               id="filled-basic"
@@ -650,6 +655,7 @@ const ReviewMix = () => {
             />
           </Grid>
         </Grid>
+        <Grid item xs={1}></Grid>
         <Grid item xs={12}>
           <Typography className="mix-ratio-step-header">Step 4: </Typography>
         </Grid>
@@ -700,7 +706,7 @@ const ReviewMix = () => {
           <Grid item xs={4}>
             <Typography className="math-icon">=</Typography>
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={7}>
             <NumberTextField
               className="text-field-100"
               id="filled-basic"
@@ -710,6 +716,7 @@ const ReviewMix = () => {
               value={data.bulkSeedingRate}
             />
           </Grid>
+          <Grid item xs={1}></Grid>
         </Grid>
         <Grid item xs={12}>
           <Typography className="mix-ratio-step-header">Step 5: </Typography>
