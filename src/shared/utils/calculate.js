@@ -128,6 +128,22 @@ export const calculateReviewMix = (step, seed) => {
 
 /* Review mix end */
 
+/* Confirm plan start */
+
+export const calculateAllConfirmPlan = (prevSeed) => {
+  const seed = { ...prevSeed };
+  seed.totalPounds = calculateInt(
+    [seed.bulkLbsPerAcre, seed.acres],
+    "multiply"
+  );
+  seed.totalCost = calculateInt(
+    [seed.costPerPound, seed.totalPounds],
+    "multiply"
+  );
+  return seed;
+};
+/* Confirm plan end */
+
 export const isNumeric = (str) => {
   if (typeof str != "string") return false;
   return !isNaN(str) && !isNaN(parseFloat(str));
