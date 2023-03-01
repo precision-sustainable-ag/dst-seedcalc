@@ -165,7 +165,7 @@ const SpeciesSelection = () => {
       // Confirm Plan
       bulkLbsPerAcre: 36,
       totalPounds: 0,
-      costPerPound: .43,
+      costPerPound: 0.43,
       totalCost: 0,
     };
     // edit logic in mix ratio => remove step2.seedsPound
@@ -280,7 +280,11 @@ const SpeciesSelection = () => {
                         ? "left-panel-img-md"
                         : "left-panel-img"
                     }
-                    src={s.thumbnail.src}
+                    src={
+                      s.thumbnail !== null
+                        ? s.thumbnail.src
+                        : "https://www.gardeningknowhow.com/wp-content/uploads/2020/04/spinach.jpg"
+                    }
                     alt={s.label}
                     loading="lazy"
                   />
@@ -302,10 +306,22 @@ const SpeciesSelection = () => {
         {filteredSeeds
           .filter((seeds, i) => seeds.group.label === data)
           .map((seeds, idx) => (
-            <ImageListItem key={imgSrc(seeds.thumbnail.src) + Math.random()}>
+            <ImageListItem
+              key={
+                imgSrc(
+                  seeds.thumbnail !== null
+                    ? seeds.thumbnail.src
+                    : "https://www.gardeningknowhow.com/wp-content/uploads/2020/04/spinach.jpg"
+                ) + Math.random()
+              }
+            >
               <img
                 className={matchesSm ? "panel-img-sm" : "panel-img"}
-                src={imgSrc(seeds.thumbnail.src)}
+                src={imgSrc(
+                  seeds.thumbnail !== null
+                    ? seeds.thumbnail.src
+                    : "https://www.gardeningknowhow.com/wp-content/uploads/2020/04/spinach.jpg"
+                )}
                 alt={seeds.label}
                 onClick={(e) => {
                   updateSeeds(seeds, data);
