@@ -28,101 +28,15 @@ import {
   calculateAllValues,
   calculateSeeds,
   calculateAllMixValues,
-} from "../../../shared/utils/calculate";
+} from "../../../../shared/utils/calculate";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { updateSteps } from "../../../features/stepSlice";
-import { NumberTextField } from "../../../components/NumberTextField";
-import { DSTSwitch } from "../../../components/Switch";
+import { updateSteps } from "../../../../features/stepSlice";
+import { NumberTextField } from "../../../../components/NumberTextField";
+import { DSTSwitch } from "../../../../components/Switch";
 
-import "./steps.css";
+import "./../steps.css";
 
-const ReviewMix = () => {
-  // themes
-  const theme = useTheme();
-  const matchesXs = useMediaQuery(theme.breakpoints.down("xs"));
-  const matchesSm = useMediaQuery(theme.breakpoints.down("sm"));
-  const matchesMd = useMediaQuery(theme.breakpoints.down("md"));
-  const matchesUpMd = useMediaQuery(theme.breakpoints.up("md"));
-  // useSelector for crops & mixRaxio reducer
-
-  const dispatch = useDispatch();
-  const data = useSelector((state) => state.steps.value);
-  const speciesSelection = data.speciesSelection;
-  const plantsPerAcreSum = speciesSelection.seedsSelected.reduce(
-    (sum, a) => sum + a.plantsPerAcre,
-    0
-  );
-  const poundsOfSeedSum = speciesSelection.seedsSelected.reduce(
-    (sum, a) => sum + a.poundsOfSeed,
-    0
-  );
-  const poundsOfSeedArray = [];
-  const plantsPerAcreArray = [];
-  speciesSelection.seedsSelected.map((s, i) => {
-    plantsPerAcreArray.push({
-      name: s.label,
-      value: s.plantsPerAcre / plantsPerAcreSum,
-    });
-    poundsOfSeedArray.push({
-      name: s.label,
-      value: s.poundsOfSeed / poundsOfSeedSum,
-    });
-  });
-
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
-
-  const RADIAN = Math.PI / 180;
-
-  const handleUpdateSteps = (key, val) => {
-    const data = {
-      type: "speciesSelection",
-      key: key,
-      value: val,
-    };
-    dispatch(updateSteps(data));
-  };
-  const handleUpdateAllSteps = (prevData, index) => {
-    let data = [...prevData];
-    data[index] = calculateAllMixValues(data[index]);
-    handleUpdateSteps("seedsSelected", data);
-  };
-  const updateSeed = (val, key, seed) => {
-    // find index of seed, parse a copy, update proper values, & send to Redux
-    const index = speciesSelection.seedsSelected.findIndex(
-      (s) => s.id === seed.id
-    );
-    let data = JSON.parse(JSON.stringify(speciesSelection.seedsSelected));
-    data[index][key] = val;
-    handleUpdateSteps("seedsSelected", data);
-    let newData = [...data];
-    newData[index] = calculateAllMixValues(data[index]);
-    handleUpdateAllSteps(newData, index);
-  };
-  const renderCustomizedLabel = ({
-    cx,
-    cy,
-    midAngle,
-    innerRadius,
-    outerRadius,
-    percent,
-    index,
-  }) => {
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-    return (
-      <text
-        x={x}
-        y={y}
-        fill="white"
-        textAnchor={x > cx ? "start" : "end"}
-        dominantBaseline="central"
-      >
-        {`${(percent * 100).toFixed(0)}%`}
-      </text>
-    );
-  };
+const ConfirmPlanAccordian = (data) => {
   const calculateSeedsSelectedSum = (key) => {
     return data.speciesSelection.seedsSelected.reduce(
       (sum, a) => sum + parseFloat(a[key]),
@@ -181,143 +95,6 @@ const ReviewMix = () => {
           );
         })}
       </>
-    );
-  };
-
-  const renderPieChart = (type) => {
-    const chartData =
-      type === "plantsPerAcre" ? plantsPerAcreArray : poundsOfSeedArray;
-
-    return (
-      <ResponsiveContainer width="100%" height={200}>
-        <PieChart width={400} height={400}>
-          <Pie
-            data={chartData}
-            cx="50%"
-            cy="50%"
-            labelLine={false}
-            label={renderCustomizedLabel}
-            outerRadius={80}
-            fill="#8884d8"
-            dataKey="value"
-          >
-            {chartData.map((entry, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={COLORS[index % COLORS.length]}
-              />
-            ))}
-          </Pie>
-        </PieChart>
-      </ResponsiveContainer>
-    );
-  };
-  const renderSeedsSelected = () => {
-    return (
-      <Grid item xs={matchesMd ? 12 : 1}>
-        <Box className="selected-seeds-box">
-          <Grid
-            className="selected-seeds-container"
-            container
-            flexDirection={matchesMd ? "row" : "column"}
-          >
-            {speciesSelection.seedsSelected.map((s, idx) => {
-              return (
-                <Grid item className="selected-seeds-item">
-                  <img
-                    className={
-                      matchesXs
-                        ? "left-panel-img-xs"
-                        : matchesSm
-                        ? "left-panel-img-sm"
-                        : matchesMd
-                        ? "left-panel-img-md"
-                        : "left-panel-img"
-                    }
-                    src={
-                      s.thumbnail !== null
-                        ? s.thumbnail.src
-                        : "https://www.gardeningknowhow.com/wp-content/uploads/2020/04/spinach.jpg"
-                    }
-                    alt={s.label}
-                    loading="lazy"
-                  />
-                  <Typography className="left-panel-text">{s.label}</Typography>
-                </Grid>
-              );
-            })}{" "}
-          </Grid>
-        </Box>
-      </Grid>
-    );
-  };
-  const renderAccordianChart = (obj) => {
-    const data = [
-      { x: 100, y: 700, z: 600 },
-      { x: 120, y: 100, z: 260 },
-      { x: 170, y: 300, z: 400 },
-      { x: 140, y: 250, z: 280 },
-      { x: 150, y: 400, z: 500 },
-      { x: 110, y: 280, z: 200 },
-    ];
-
-    return (
-      <Grid container xs={12}>
-        <Grid item xs={12}>
-          <ResponsiveContainer width="100%" height={200}>
-            <ScatterChart width={400} height={400} position="center">
-              <CartesianGrid strokeDasharray="4" />
-              <XAxis type="number" dataKey="x" name="stature" unit="acre" />
-              <YAxis type="number" dataKey="y" name="weight" unit="lb" />
-              <ZAxis dataKey="z" range={[1000, 1449]} name="score" unit="km" />
-              <Tooltip cursor={{ strokeDasharray: "50 50" }} />
-              <Scatter name="A school" data={data} fill="#E7885F">
-                {/* <LabelList dataKey="x" content={renderCustomizedScatterLabel} /> */}
-                <LabelList dataKey="x" fill="#fff" position="center" />
-              </Scatter>
-            </ScatterChart>
-          </ResponsiveContainer>
-        </Grid>
-      </Grid>
-    );
-  };
-  const renderCustomizedScatterLabel = (props) => {
-    const { x, y, width, height, value } = props;
-    const radius = 10;
-
-    return (
-      <g>
-        <circle cx={x + 20} cy={y + 25} r={radius} fill="#E7885F" />
-        <text
-          x={x + 20}
-          y={y + 25}
-          fill="#fff"
-          textAnchor="middle"
-          dominantBaseline="middle"
-        >
-          {value}
-        </text>
-      </g>
-    );
-  };
-
-  const renderAccordian = (data) => {
-    return (
-      <Accordion xs={12} className="accordian-container">
-        <AccordionSummary
-          className="accordian-header"
-          xs={12}
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography>{data.label}</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          {renderAccordianChart(data)}
-          {renderAccordianDetail(data)}
-        </AccordionDetails>
-      </Accordion>
     );
   };
   const renderAccordianDetail = (data) => {
@@ -397,6 +174,9 @@ const ReviewMix = () => {
           {"   "}
           <Button variant="outlined">Acres</Button>
         </Grid>
+        <Grid item xs={12}>
+          <Typography>Indiana NRCS Standards</Typography>
+        </Grid>
         {renderStripedLabels()}
         <Grid item xs={12}>
           <Button
@@ -414,70 +194,67 @@ const ReviewMix = () => {
       </Grid>
     );
   };
-  const renderStepsForm = (label1, label2, label3) => {
-    if (Array.isArray(label2)) {
-      return (
-        <Grid container xs={12} className="mix-ratio-form-container">
-          <Grid item xs={3}>
-            <Typography
-              className={matchesMd ? "mix-ratio-form-label" : "no-display"}
-            >
-              {label1}
-            </Typography>
-          </Grid>
-          <Grid item xs={1}></Grid>
-          <Grid item xs={3}>
-            <Typography
-              className={matchesMd ? "mix-ratio-form-label" : "no-display"}
-            >
-              {label2[0]}
-            </Typography>
-          </Grid>
-          <Grid item xs={1}></Grid>
-          <Grid item xs={3}>
-            <Typography
-              className={matchesMd ? "mix-ratio-form-label" : "no-display"}
-            >
-              {label2[1]}
-            </Typography>
-          </Grid>
-          <Grid container xs={12} className="mix-ratio-form-container">
-            <Grid item xs={3}>
-              {label3}
-            </Grid>
-          </Grid>
-        </Grid>
-      );
-    } else {
-      return (
-        <Grid container xs={12} className="mix-ratio-form-container">
-          <Grid item xs={3}>
-            <Typography
-              className={matchesMd ? "mix-ratio-form-label" : "no-display"}
-            >
-              {label1}
-            </Typography>
-          </Grid>
-          <Grid item xs={1}></Grid>
-          <Grid item xs={3}>
-            <Typography
-              className={matchesMd ? "mix-ratio-form-label" : "no-display"}
-            >
-              {label2}
-            </Typography>
-          </Grid>
-          <Grid item xs={1}></Grid>
-          <Grid item xs={3}>
-            <Typography
-              className={matchesMd ? "mix-ratio-form-label" : "no-display"}
-            >
-              {label3}
-            </Typography>
-          </Grid>
-        </Grid>
-      );
-    }
+  const calculateSeedsSelectedSum = (key) => {
+    return data.speciesSelection.seedsSelected.reduce(
+      (sum, a) => sum + parseFloat(a[key]),
+      0
+    );
   };
+  const renderStripedLabels = () => {
+    const labels = [
+      {
+        label: "Single Species Seeding Rate",
+        key: "singleSpeciesSeedingRatePLS",
+        val: calculateSeedsSelectedSum("singleSpeciesSeedingRatePLS"),
+      },
+      {
+        label: "Added to Mix",
+        key: "addedToMix",
+        val: calculateSeedsSelectedSum("addedToMix"),
+      },
+      {
+        label: "Drilled or Broadcast with Cultipack",
+        key: "drilled",
+        val: calculateSeedsSelectedSum("drilled"),
+      },
+      {
+        label: "Management Impacts on Mix (+57%)",
+        key: "managementImpactOnMix",
+        val: calculateSeedsSelectedSum("managementImpactOnMix"),
+      },
+      {
+        label: "Bulk Germination and Purity",
+        key: "bulkGerminationAndPurity",
+        val: calculateSeedsSelectedSum("bulkGerminationAndPurity"),
+      },
+    ];
+    const labels2 = [
+      { label: "Species Modifications" },
+      { label: "Species Review" },
+      { label: "Pounds for Purchase" },
+    ];
+    return (
+      <>
+        {labels.map((l, i) => {
+          return (
+            <Grid
+              container
+              sx={{ backgroundColor: !(i % 2) && "#e3e5d3" }}
+              xs={12}
+            >
+              <Grid item sx={{ textAlign: "justify" }} xs={10}>
+                {l.label}
+              </Grid>
+              <Grid item xs={2}>
+                {l.val}
+              </Grid>
+            </Grid>
+          );
+        })}
+      </>
+    );
+  };
+
   const renderMixRateSteps = (data) => {
     return (
       <Grid container xs={12}>
@@ -639,12 +416,11 @@ const ReviewMix = () => {
         <Grid item xs={1}>
           <Typography className="math-icon">)</Typography>
         </Grid>
-        <Grid item xs={1}></Grid>
         <Grid container className="steps-row-2" xs={12}>
           <Grid item xs={4}>
             <Typography className="math-icon">=</Typography>
           </Grid>
-          <Grid item xs={7}>
+          <Grid item xs={8}>
             <NumberTextField
               className="text-field-100"
               id="filled-basic"
@@ -655,7 +431,6 @@ const ReviewMix = () => {
             />
           </Grid>
         </Grid>
-        <Grid item xs={1}></Grid>
         <Grid item xs={12}>
           <Typography className="mix-ratio-step-header">Step 4: </Typography>
         </Grid>
@@ -706,7 +481,7 @@ const ReviewMix = () => {
           <Grid item xs={4}>
             <Typography className="math-icon">=</Typography>
           </Grid>
-          <Grid item xs={7}>
+          <Grid item xs={8}>
             <NumberTextField
               className="text-field-100"
               id="filled-basic"
@@ -716,7 +491,6 @@ const ReviewMix = () => {
               value={data.bulkSeedingRate}
             />
           </Grid>
-          <Grid item xs={1}></Grid>
         </Grid>
         <Grid item xs={12}>
           <Typography className="mix-ratio-step-header">Step 5: </Typography>
@@ -767,75 +541,19 @@ const ReviewMix = () => {
     );
   };
   return (
-    <Grid xs={12} container>
-      {renderSeedsSelected()}
-      <Grid
+    <Accordion xs={12} className="accordian-container">
+      <AccordionSummary
+        className="accordian-header"
         xs={12}
-        md={speciesSelection.seedsSelected.length > 0 ? 11 : 12}
-        item
-        justifyContent="center"
-        alignItems="center"
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls="panel1a-content"
+        id="panel1a-header"
       >
-        <Grid item xs={12}>
-          <Typography variant="h2">Review your mix</Typography>
-          <Grid container xs={12}>
-            <Grid item xs={6} md={6} className="mix-ratio-chart-container">
-              {renderPieChart("poundsOfSeed")}
-              <Typography className="mix-ratio-chart-header">
-                Pounds of Seed / Acre{" "}
-              </Typography>
-              <Grid item className="mix-ratio-chart-list-50">
-                {speciesSelection.seedsSelected.map((s, i) => {
-                  return (
-                    <Grid container xs={12}>
-                      <Grid item xs={2}>
-                        <Square sx={{ color: COLORS[i] }}></Square>
-                      </Grid>
-                      <Grid item xs={10}>
-                        <Typography className={matchesMd ? "mix-label-md" : ""}>
-                          {s.label}
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                  );
-                })}
-              </Grid>
-            </Grid>
-            <Grid item xs={6} md={6} className="mix-ratio-chart-container">
-              {renderPieChart("plantsPerAcre")}
-              <Typography className="mix-ratio-chart-header">
-                Plants Per Acre{" "}
-              </Typography>
-              <Grid item className="mix-ratio-chart-list-50">
-                {speciesSelection.seedsSelected.map((s, i) => {
-                  return (
-                    <Grid container xs={12}>
-                      <Grid item xs={2}>
-                        <Square sx={{ color: COLORS[i] }}></Square>
-                      </Grid>
-                      <Grid item xs={10}>
-                        <Typography className={matchesMd ? "mix-label-md" : ""}>
-                          {s.label}
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                  );
-                })}
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid container xs={12}>
-            {speciesSelection.seedsSelected.map((s, i) => {
-              return (
-                <Grid item xs={12}>
-                  {renderAccordian(s)}
-                </Grid>
-              );
-            })}
-          </Grid>
-        </Grid>
-      </Grid>
-    </Grid>
+        <Typography>{data.label}</Typography>
+      </AccordionSummary>
+      <AccordionDetails>{renderAccordianDetail(data)}</AccordionDetails>
+    </Accordion>
   );
 };
-export default ReviewMix;
+
+export default ConfirmPlanAccordian;

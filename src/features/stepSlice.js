@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import dayjs from "dayjs";
+
 const initialState = {
   loading: false,
   error: false,
@@ -25,6 +26,7 @@ const initialState = {
     },
     mixSeedingRate: {},
     seedTagInfo: {},
+    seedingMethod: { seedingRate: 11 },
     reviewMix: {},
     confirmPlan: {},
     crops: [],

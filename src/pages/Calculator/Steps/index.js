@@ -5,3 +5,5 @@ export { default as MixSeedingRate } from "./MixSeedingRate";
 export { default as SeedTagInfo } from "./SeedTagInfo";
 export { default as ReviewMix } from "./ReviewMix";
 export { default as ConfirmPlan } from "./ConfirmPlan";
+export { default as SeedingMethod } from "./SeedingMethod";
+export { default as CompletedPage } from "./CompletedPage";

@@ -8,6 +8,8 @@ import {
   SeedTagInfo,
   ReviewMix,
   ConfirmPlan,
+  SeedingMethod,
+  CompletedPage,
 } from "./Steps";
 import { calculatorList } from "../../shared/data/dropdown";
 import { Header } from "../../components/Header";
@@ -28,12 +30,16 @@ const Calculator = () => {
         return <MixRatio />;
       case "Mix Seeding Rate":
         return <MixSeedingRate />;
+      case "Seeding Method":
+        return <SeedingMethod />;
       case "Seed Tag Info":
         return <SeedTagInfo />;
       case "Review Mix":
         return <ReviewMix />;
       case "Confirm Plan":
         return <ConfirmPlan />;
+      case "Finish":
+        return <CompletedPage />;
       default:
         return;
     }
@@ -99,7 +105,11 @@ const Calculator = () => {
         handleReset={handleReset}
         className="steps-container"
       />
-      {renderCalculator(calculatorList[activeStep])}
+      {renderCalculator(
+        activeStep === calculatorList.length
+          ? "Finish"
+          : calculatorList[activeStep]
+      )}
     </Grid>
   );
 };

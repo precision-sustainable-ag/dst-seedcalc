@@ -13,6 +13,7 @@ export const calculatorList = [
   "Species Selection",
   "Mix Ratios",
   "Mix Seeding Rate",
+  "Seeding Method",
   "Seed Tag Info",
   "Review Mix",
   "Confirm Plan",

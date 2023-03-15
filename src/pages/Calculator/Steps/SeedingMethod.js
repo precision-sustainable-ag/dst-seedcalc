@@ -9,10 +9,11 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
+import { VerticalSlider } from "../../../components/VerticalSlider";
 import { seedsList, seedsLabel } from "../../../shared/data/species";
 import "./steps.css";
 
-const MixSeedingRate = () => {
+const SeedingMethod = () => {
   // themes
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down("xs"));
@@ -22,8 +23,23 @@ const MixSeedingRate = () => {
   // useSelector for crops reducer data
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
+  const seedingMethod = data.seedingMethod;
   const speciesSelection = data.speciesSelection;
   const seedsSelected = speciesSelection.seedsSelected;
+
+  const handleUpdateSteps = (key, val) => {
+    const data = {
+      type: "seedingMethod",
+      key: key,
+      value: val,
+    };
+    dispatch(updateSteps(data));
+  };
+
+  const updateSteps = (val, key1, key2, seed) => {
+    let data = { seedingRate: val };
+    handleUpdateSteps("seedingRate", val);
+  };
 
   const renderSeedsSelected = () => {
     return (
@@ -123,29 +139,83 @@ const MixSeedingRate = () => {
     );
   };
   return (
-    <Grid xs={12} container>
+    <Grid xs={12} justify="center" container>
       {seedsSelected.length > 0 && renderSeedsSelected()}
       <Grid
         xs={seedsSelected.length > 0 ? 12 : 12}
         md={seedsSelected.length > 0 ? 11 : 12}
         item
-        justifyContent="center"
-        alignItems="center"
       >
         <Grid item xs={12}>
-          <Typography variant="h2">Mix Seeding Rate</Typography>
+          <Typography variant="h2">Seeding Method</Typography>
         </Grid>
-        <Grid item xs={12}>
-          {seedsList.map((s, i) => {
-            return (
-              <Grid xs={12}>
-                <Grid item>{renderAccordian(s)}</Grid>
-              </Grid>
-            );
-          })}
+        <Grid
+          sx={{ paddingTop: 5 }}
+          container
+          xs={12}
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Grid
+            container
+            xs={4}
+            justifyContent="flex-end"
+            alignItems="flex-end"
+          >
+            <Grid item xs={12}>
+              <Typography>
+                <Box
+                  className="seeding-method-detail-container"
+                  sx={{ marginBottom: "40px" }}
+                >
+                  <Typography>Factors that lower Seeding Rate:</Typography>
+                  <Typography>- Cost Saving</Typography>
+                  <Typography>- Low Biomass</Typography>
+                  <Typography>- Planting Green</Typography>
+                </Box>
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Box
+                className="seeding-method-label-container"
+                sx={{ marginBottom: "40px" }}
+              >
+                <Typography>Calculated Mix Seeding Rate</Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={12}>
+              <Box className="seeding-method-detail-container">
+                <Typography>Factors that may raise Seeding Rate: </Typography>
+                <Typography>- Erosion Control</Typography>
+                <Typography>- Weed Supression</Typography>
+                <Typography>- Grazing</Typography>
+              </Box>
+            </Grid>
+          </Grid>
+          <Grid xs={3} container justifyContent="center" alignItems="center">
+            <VerticalSlider
+              value={seedingMethod.seedingRate}
+              handleChange={handleUpdateSteps}
+            />
+          </Grid>
+          <Grid container xs={5} sx={{ height: "400px" }}>
+            <Grid item xs={12} justifyContent="flex-start">
+              <Box
+                className="seeding-method-label-container"
+                sx={{ marginBottom: "270px" }}
+              >
+                <Typography>High limit of Mix Seeding Rate</Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={12} justifyContent="flex-end">
+              <Box className="seeding-method-label-container">
+                <Typography>Low limit of Mix Seeding Rate</Typography>
+              </Box>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </Grid>
   );
 };
-export default MixSeedingRate;
+export default SeedingMethod;

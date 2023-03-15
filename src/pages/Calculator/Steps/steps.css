@@ -187,7 +187,26 @@ site-condition-header {
     font-weight: bold;
 }
 
+/* Seeding Method */
 
+.seeding-method-label-container {
+    background: white;
+    width: 150px;
+    color: #4f5f30;
+    padding: 9px;
+    border: 2px solid #4f5f30;
+    border-radius: 12px;
+    height: 75px;
+}
+.seeding-method-detail-container {
+    color: #4f5f30;
+    padding: 9px;
+    border: 2px solid #4f5f30;
+    border-radius: 12px;
+    width: 180px;
+    height: 150px;
+    background: none;
+}
 .mix-label-md {
     margin-top: 5px !important;
     margin-left: 15px !important;
@@ -206,6 +225,9 @@ site-condition-header {
 .text-field-50 {
     width: 50% !important;
 }
+.font-15 {
+    font-size: 15px;
+}
 .no-display {
     opacity: 0%;
 }
@@ -216,3 +238,84 @@ site-condition-header {
 .red-text {
 color: red;
 }
+.vertical-slider {
+    margin-top: 70px
+}
+
+/* Confirm Plan start */ 
+
+.confirm-plan-form-container {
+    padding: 0px;
+    margin: 10px 0px !important;
+}
+.Mui-expanded {
+    margin: 0px !important;
+}
+
+.confirm-plan-header {
+    padding: 16px;
+    text-align: justify;
+    background: #e5e7d5;
+    margin: 30px 0px !important;
+    margin-bottom: 0px !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    text-align: justify !important;
+    color: #4f5f30 !important;
+}
+.export-button {
+    background-color: #E7885F !important;
+    color: white !important;
+    padding: 7px !important;
+    width: 83px !important;
+    margin: 3px !important;
+    font-size: 12px !important;
+    border-radius: 26px !important;
+}
+/* Confirm Plan end */
+
+/* Steps */
+
+.steps-row-2 {
+    margin-top: 20px;
+}
+
+.data-circle {
+    background-color: #E7885F;
+    color: white;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+}
+.data-circle p {
+    padding-top: 30px;
+}
+.data-circle-icon {
+    margin-top: 15px;
+    font-size: 45px !important;
+}
+.data-circle-label {
+    font-size: 15px !important;
+    margin: 10px !important;
+    font-weight: 600 !important;
+}
+
+/* Completed Page start */
+
+.logo-img-50 {
+    width: 50%;
+}
+.logo-img-80 {
+    width: 80%;
+}
+
+.cp-empty-block {
+    width: 100%;
+    height: 150px;
+}
+.cp-empty-block-50 {
+    width: 100%;
+    height: 50px;
+}
+/* Completed Page end */
