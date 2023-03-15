@@ -263,6 +263,15 @@ color: red;
     text-align: justify !important;
     color: #4f5f30 !important;
 }
+.export-button {
+    background-color: #E7885F !important;
+    color: white !important;
+    padding: 7px !important;
+    width: 83px !important;
+    margin: 3px !important;
+    font-size: 12px !important;
+    border-radius: 26px !important;
+}
 /* Confirm Plan end */
 
 /* Steps */

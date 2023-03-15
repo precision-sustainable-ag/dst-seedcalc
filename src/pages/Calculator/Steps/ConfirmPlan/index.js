@@ -11,6 +11,7 @@ import { Square } from "@mui/icons-material";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import { calculateAllConfirmPlan } from "../../../../shared/utils/calculate";
+import { handleDownload } from "./../../../../shared/utils/exportExcel";
 import { updateSteps } from "../../../../features/stepSlice";
 import { NumberTextField } from "../../../../components/NumberTextField";
 import { DSTSwitch } from "../../../../components/Switch";
@@ -448,6 +449,19 @@ const ConfirmPlan = () => {
       >
         <Grid item xs={12}>
           <Typography variant="h2">Confirm your plan</Typography>
+          <Grid container sx={{ marginTop: "5px" }} xs={12}>
+            <Grid item xs={matchesUpMd ? 11 : 10}></Grid>
+            <Grid item xs={matchesUpMd ? 1 : 2}>
+              <Button
+                className="export-button"
+                onClick={() => {
+                  handleDownload(speciesSelection.seedsSelected);
+                }}
+              >
+                Export
+              </Button>
+            </Grid>
+          </Grid>
           <Grid container xs={12} sx={{ padding: "20px" }}>
             <Grid
               item
