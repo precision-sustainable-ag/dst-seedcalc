@@ -26,9 +26,6 @@ const Home = () => {
   const seedsSelected = speciesSelection.seedsSelected;
 
   // Import logic start
-  const updateImportCSV = (data) => {
-    setCSVImport(data);
-  };
   const handleFileUpload = (event) => {
     Papa.parse(event.target.files[0], {
       header: true,
@@ -37,65 +34,12 @@ const Home = () => {
         const extDataObject = JSON.parse(
           results.data[results.data.length - 1].extData
         );
+
         setCSVImport(extDataObject);
       },
     });
   };
-  // const handleFileUpload = (event) => {
-  //   event.preventDefault();
-  //   const file = event.target.files[0];
-  //   const reader = new FileReader();
-  //   reader.onload = handleFileRead;
-  //   reader.onloadend = console.log("load ENd", reader.result);
 
-  //   reader.readAsText(file);
-  // };
-
-  // const handleFileRead = (event) => {
-  //   const csv = event.target.result;
-  //   //split
-  //   console.log("EVENT TARGET RESULT", csv);
-  //   const lines = csv.split("\n", 45);
-  //   const headers = lines[0].split(",");
-  //   const result = [];
-  //   console.log("lines", lines);
-  //   for (let i = 1; i < lines.length; i++) {
-  //     const obj = {};
-  //     const currentline = lines[i].split(",");
-  //     for (let j = 0; j < headers.length; j++) {
-  //       console.log("headers", headers, j);
-  //       obj[headers[j]] = currentline[j];
-  //     }
-  //     result.push(obj);
-  //   }
-  //   const json = JSON.stringify(result);
-  //   console.log("RESULT:    ", result);
-  //   setCSVImport(result);
-  // };
-
-  const handleUpdateSteps = (key, val) => {
-    const data = {
-      type: "speciesSelection",
-      key: key,
-      value: val,
-    };
-    dispatch(updateSteps(data));
-  };
-  const updateSeedsSelected = (seeds) => {
-    const diversityList = [];
-    // run through CSV list, & update Redux's diversitySelected
-    handleUpdateSteps("seedsSelected", [...seedsSelected, seeds]);
-    seeds.map((s, i) => {
-      if (diversityList.length === 0) {
-        diversityList.push(s.diversity);
-      } else {
-        if (!diversityList.includes(s.diveristy)) {
-          diversityList.push(s.diversity);
-        }
-      }
-    });
-    handleUpdateSteps("diversitySelected", diversityList);
-  };
   const handleImportCSV = () => {
     dispatch(updateAllSteps({ value: CSVImport }));
     navigate("/calculator");
