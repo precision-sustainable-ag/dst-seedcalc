@@ -1,11 +1,19 @@
+import { fabClasses } from "@mui/material";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import dayjs from "dayjs";
 
 const initialState = {
-  loading: false,
-  error: false,
-  errorMessage: "",
   value: {
+    modal: {
+      loading: false,
+      error: false,
+      success: false,
+      errorTitle: "",
+      errorMessage: "",
+      successTitle: "",
+      successMessage: "",
+      isOpen: false,
+    },
     siteCondition: {
       state: "",
       county: "",
@@ -63,26 +71,41 @@ export const stepSlice = createSlice({
   name: "steps",
   initialState,
   reducers: {
-    updateSteps: (state, action) => {
+    updateSteps: (state, { payload }) => {
       // Update individual steps of specific seeds.
       // Payload format: {type, key, value}
       // ExistingState is a clone of the state, which you change the value and return as updated state
-      const payload = action.payload;
-      console.log("payload: ", action.payload);
       const existingState = JSON.parse(JSON.stringify(state));
-      console.log("existingState", existingState);
       existingState.value[payload.type][payload.key] = payload.value;
       return { ...existingState };
     },
-    updateAllSteps: (state, action) => {
+    updateAllSteps: (state, { payload }) => {
       // Update ALL reducer values.
       // Only current scenario for this is when importing previous calculation
       // Payload format: {data}
-      const payload = action.payload;
-      console.log("Update ALL Payload: ", action.payload);
       const existingState = JSON.parse(JSON.stringify(state));
-      console.log("existing state", existingState);
       existingState.value = payload.value;
+      return { ...existingState };
+    },
+    updateModal: (state, { payload }) => {
+      const existingState = JSON.parse(JSON.stringify(state));
+      existingState.value.modal = payload.value;
+      console.log("pval", payload.value);
+      console.log("existstate", existingState.value.modal);
+      return { ...existingState };
+    },
+    clearModal: (state) => {
+      const existingState = JSON.parse(JSON.stringify(state));
+      existingState.value.modal = {
+        loading: false,
+        error: false,
+        success: false,
+        errorTitle: "",
+        errorMessage: "",
+        successTitle: "",
+        successMessage: "",
+        isOpen: false,
+      };
       return { ...existingState };
     },
   },
@@ -102,5 +125,6 @@ export const stepSlice = createSlice({
   },
 });
 
-export const { updateSteps, updateAllSteps } = stepSlice.actions;
+export const { updateModal, clearModal, updateSteps, updateAllSteps } =
+  stepSlice.actions;
 export default stepSlice.reducer;

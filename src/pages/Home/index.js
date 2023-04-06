@@ -9,7 +9,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import Papa from "papaparse";
-import { updateAllSteps, updateSteps } from "../../features/stepSlice";
+import {
+  updateAllSteps,
+  updateSteps,
+  updateModal,
+} from "../../features/stepSlice";
 import { DSTButton } from "./../../components/Button";
 import { Header } from "./../../components/Header";
 import { CSVModal } from "./CSVModal";
@@ -24,18 +28,56 @@ const Home = () => {
   const data = useSelector((state) => state.steps.value);
   const speciesSelection = data.speciesSelection;
   const seedsSelected = speciesSelection.seedsSelected;
-
+  const handleModal = (type, title, description) => {
+    var payload = {};
+    if (type === "error") {
+      payload = {
+        value: {
+          loading: false,
+          error: true,
+          success: false,
+          errorTitle: title,
+          errorMessage: description,
+          successTitle: "",
+          successMessage: "",
+          isOpen: true,
+        },
+      };
+    } else {
+      payload = {
+        value: {
+          loading: false,
+          error: true,
+          success: true,
+          errorTitle: "",
+          errorMessage: "",
+          successTitle: title,
+          successMessage: description,
+          isOpen: true,
+        },
+      };
+    }
+    dispatch(updateModal(payload));
+  };
   // Import logic start
   const handleFileUpload = (event) => {
     Papa.parse(event.target.files[0], {
       header: true,
       skipEmptyLines: true,
       complete: function (results) {
-        const extDataObject = JSON.parse(
-          results.data[results.data.length - 1].extData
-        );
-
-        setCSVImport(extDataObject);
+        const lastItem = results.data[results.data.length - 1];
+        if (lastItem.label !== "EXT-DATA-OBJECT") {
+          handleModal(
+            "error",
+            "Invalid Format",
+            "CSV format invalid. Please try again."
+          );
+        } else {
+          const extDataObject = JSON.parse(
+            results.data[results.data.length - 1].extData
+          );
+          setCSVImport(extDataObject);
+        }
       },
     });
   };
