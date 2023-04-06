@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
+import { Typography } from "@mui/material";
 import { dstTheme } from "../../shared/themes";
 import "./button.css";
 
@@ -16,14 +17,30 @@ import "./button.css";
       path: Formatted as {type: 'url/local', url: 'www.example.com'}
           type: specify whether this is a URL or local path
           url: URL path
+      handleClick: Logic when user clicks on button
   }
 }
 */
-export const DSTButton = ({ text, buttonClass, size, theme, path }) => {
+export const DSTButton = ({
+  text,
+  buttonClass,
+  size,
+  theme,
+  path,
+  handleClick,
+}) => {
   return (
     <Grid xs={size} className={buttonClass}>
-      <Button variant="contained" theme={dstTheme}>
-        <Link to={path.url}>{text}</Link>
+      <Button
+        variant="contained"
+        theme={dstTheme}
+        {...(handleClick && { onClick: handleClick })}
+      >
+        {path ? (
+          <Link to={path.url}>{text}</Link>
+        ) : (
+          <Typography>{text}</Typography>
+        )}
       </Button>
     </Grid>
   );

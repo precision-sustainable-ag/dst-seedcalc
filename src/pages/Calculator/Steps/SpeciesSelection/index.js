@@ -13,15 +13,15 @@ import Fade from "@mui/material/Fade";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-import { SearchField } from "../../../components/SearchField";
-import { updateSteps } from "./../../../features/stepSlice";
-import { seedsList, seedsLabel } from "../../../shared/data/species";
-import airtable from "../../../shared/data/airtable.json";
+import { SearchField } from "../../../../components/SearchField";
+import { updateSteps } from "./../../../../features/stepSlice";
+import { seedsList, seedsLabel } from "../../../../shared/data/species";
+import airtable from "../../../../shared/data/airtable.json";
 import {
   calculateAllValues,
   calculateSeeds,
-} from "../../../shared/utils/calculate";
-import "./steps.css";
+} from "../../../../shared/utils/calculate";
+import "./../steps.css";
 
 const SpeciesSelection = () => {
   // themes
@@ -46,6 +46,7 @@ const SpeciesSelection = () => {
     filterSeeds(e.target.value);
   };
 
+  // create a data object that specifies the type(data layer 1), the key(data layer 2), & the value for the key.
   const handleUpdateSteps = (key, val) => {
     const data = {
       type: "speciesSelection",
@@ -112,22 +113,6 @@ const SpeciesSelection = () => {
     // default key values per new seed
     let newSeed = {
       ...seed,
-      // step1: {
-      //   singleSpeciesSeedingRatePLS: extData["singleSpeciesSeedingRatePLS"],
-      //   percentOfSingleSpeciesRate: extData["percentOfSingleSpeciesRate"],
-      // },
-      // step2: {
-      //   seedsPound: extData["seedsPound"],
-      //   mixSeedingRate: 0,
-      // },
-      // step3: {
-      //   seedsAcre: 0,
-      //   percentSurvival: extData["percentSurvival"],
-      // },
-      // step4: {
-      //   plantsAcre: 0,
-      //   sqFtAcre: 43560,
-      // },
       singleSpeciesSeedingRatePLS: extData["singleSpeciesSeedingRatePLS"],
       percentOfSingleSpeciesRate: extData["percentOfSingleSpeciesRate"],
       seedsPound: extData["seedsPound"],
@@ -168,7 +153,6 @@ const SpeciesSelection = () => {
       costPerPound: 0.43,
       totalCost: 0,
     };
-    // edit logic in mix ratio => remove step2.seedsPound
     newSeed = calculateAllValues(newSeed);
     if (seedsSelected.length === 0) {
       handleUpdateSteps("seedsSelected", [...seedsSelected, newSeed]);

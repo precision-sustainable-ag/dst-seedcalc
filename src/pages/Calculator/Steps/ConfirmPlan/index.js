@@ -11,6 +11,7 @@ import { Square } from "@mui/icons-material";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import { calculateAllConfirmPlan } from "../../../../shared/utils/calculate";
+import { generateNullSeed } from "../../../../shared/utils/seeds";
 import { handleDownload } from "./../../../../shared/utils/exportExcel";
 import { updateSteps } from "../../../../features/stepSlice";
 import { NumberTextField } from "../../../../components/NumberTextField";
@@ -455,7 +456,14 @@ const ConfirmPlan = () => {
               <Button
                 className="export-button"
                 onClick={() => {
-                  handleDownload(speciesSelection.seedsSelected);
+                  handleDownload([
+                    ...speciesSelection.seedsSelected,
+                    {
+                      ...generateNullSeed(),
+                      label: "EXT-DATA-OBJECT",
+                      extData: JSON.stringify(data),
+                    },
+                  ]);
                 }}
               >
                 Export
