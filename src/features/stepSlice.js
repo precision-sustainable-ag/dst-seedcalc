@@ -12,7 +12,7 @@ const initialState = {
       soilDrainage: "",
       plannedPlantingDate: dayjs(new Date()),
       acres: 0,
-      checkNRCSStandareds: false,
+      checkNRCSStandards: false,
     },
     speciesSelection: {
       queryString: "",
@@ -64,12 +64,25 @@ export const stepSlice = createSlice({
   initialState,
   reducers: {
     updateSteps: (state, action) => {
-      // update individual steps of specific seeds.
-      // payload format: {type, key, value}
-      // type:
+      // Update individual steps of specific seeds.
+      // Payload format: {type, key, value}
+      // ExistingState is a clone of the state, which you change the value and return as updated state
       const payload = action.payload;
+      console.log("payload: ", action.payload);
       const existingState = JSON.parse(JSON.stringify(state));
+      console.log("existingState", existingState);
       existingState.value[payload.type][payload.key] = payload.value;
+      return { ...existingState };
+    },
+    updateAllSteps: (state, action) => {
+      // Update ALL reducer values.
+      // Only current scenario for this is when importing previous calculation
+      // Payload format: {data}
+      const payload = action.payload;
+      console.log("Update ALL Payload: ", action.payload);
+      const existingState = JSON.parse(JSON.stringify(state));
+      console.log("existing state", existingState);
+      existingState.value = payload.value;
       return { ...existingState };
     },
   },
@@ -89,5 +102,5 @@ export const stepSlice = createSlice({
   },
 });
 
-export const { updateSteps } = stepSlice.actions;
+export const { updateSteps, updateAllSteps } = stepSlice.actions;
 export default stepSlice.reducer;
