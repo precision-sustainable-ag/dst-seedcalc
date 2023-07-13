@@ -7,11 +7,13 @@ export const DSTModal = ({
   handleClose,
   title,
   description,
+  style,
 }) => {
   return (
     <Modal
       open={isOpen}
       onClose={setModal}
+      style={style}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >

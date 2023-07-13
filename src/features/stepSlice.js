@@ -32,6 +32,10 @@ const initialState = {
       poundsOfSeed: 0,
       plantsPerAcre: 0,
     },
+    NRCS: {
+      enabled: false,
+      seedsSelected: [],
+    },
     mixSeedingRate: {},
     seedTagInfo: {},
     seedingMethod: { seedingRate: 11 },
@@ -42,14 +46,42 @@ const initialState = {
   etc: {},
 };
 
-export const getCrops = createAsyncThunk(
-  //action type string
-  "steps/getCrops",
-  // callback function
-  async (thunkAPI) => {
-    const res = await fetch("https://develop.covercrop-data.org/crops").then(
-      (data) => data.json()
-    );
+// export const getCrops = createAsyncThunk(
+//   //action type string
+//   "steps/getCrops",
+//   // callback function
+//   async (thunkAPI) => {
+//     const res = await fetch("https://develop.covercrop-data.org/crops").then(
+//       (data) => data.json()
+//     );
+//     console.log("get crop", res);
+//     return res;
+//   }
+// );
+
+export const getCrops = createAsyncThunk("steps/getCrops", async (thunkAPI) => {
+  const res = await fetch(
+    "https://developapi.covercrop-selector.org/v2/crops/"
+  ).then((data) => data.json());
+  console.log("get crop v2", res);
+  return res;
+});
+
+export const getCropsById = createAsyncThunk(
+  "steps/getCropsById",
+  async ({ cropId, regionId, countyId }, thunkAPI) => {
+    const url = `https://developapi.covercrop-selector.org/v2/crops/${cropId}?regions=${regionId}&context=seed_calc&regions=${countyId}`;
+    const res = await fetch(url).then((data) => data.json());
+    console.log("get crops by id", res);
+    return res;
+  }
+);
+
+export const getLocality = createAsyncThunk(
+  "steps/getLocality",
+  async ({ cropId, regionId, countyId }, thunkAPI) => {
+    const url = `https://developapi.covercrop-selector.org/v2/crops/${cropId}?regions=${regionId}&context=seed_calc&regions=${countyId}`;
+    const res = await fetch(url).then((data) => data.json());
     return res;
   }
 );
@@ -90,8 +122,6 @@ export const stepSlice = createSlice({
     updateModal: (state, { payload }) => {
       const existingState = JSON.parse(JSON.stringify(state));
       existingState.value.modal = payload.value;
-      console.log("pval", payload.value);
-      console.log("existstate", existingState.value.modal);
       return { ...existingState };
     },
     clearModal: (state) => {
@@ -110,17 +140,47 @@ export const stepSlice = createSlice({
     },
   },
   extraReducers: {
-    [getCrops.pending]: (state) => {
+    // [getCrops.pending]: (state) => {
+    //   state.loading = true;
+    // },
+    // [getCrops.fulfilled]: (state, { payload }) => {
+    //   state.loading = false;
+    // },
+    // [getCrops.rejected]: (state) => {
+    //   state.loading = false;
+    //   state.error = true;
+    //   state.errorMessage = "";
+    // },
+    [getCropsById.pending]: (state) => {
       state.loading = true;
+    },
+    [getCropsById.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      console.log("Get Crops By Id fulfilled: ", payload.data);
+    },
+    [getCropsById.rejected]: (state) => {
+      state.loading = false;
+      state.error = true;
+      state.errorMessage = "";
+    },
+    [getCrops.pending]: (state) => {
+      state.loading = false;
     },
     [getCrops.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.value.crops = payload.data;
+      console.log("getCrops V2 fulfilled: ", payload.data);
     },
     [getCrops.rejected]: (state) => {
       state.loading = false;
       state.error = true;
-      state.errorMessage = "";
+    },
+    [getLocality.pending]: (state) => {
+      state.loading = true;
+    },
+    [getLocality.fulfilled]: (state, { payload }) => {},
+    [getLocality.rejected]: (state) => {
+      state.loading = false;
     },
   },
 });

@@ -9,8 +9,9 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-import { seedsList, seedsLabel } from "../../../shared/data/species";
-import "./steps.css";
+import { seedsList, seedsLabel } from "./../../../../shared/data/species";
+import "./../steps.css";
+import SeedsSelectedList from "../../../../components/SeedsSelectedList";
 
 const MixSeedingRate = () => {
   // themes
@@ -26,43 +27,7 @@ const MixSeedingRate = () => {
   const seedsSelected = speciesSelection.seedsSelected;
 
   const renderSeedsSelected = () => {
-    return (
-      <Grid item xs={matchesMd ? 12 : 1}>
-        <Box className="selected-seeds-box">
-          <Grid
-            className="selected-seeds-container"
-            container
-            flexDirection={matchesMd ? "row" : "column"}
-          >
-            {speciesSelection.seedsSelected.map((s, idx) => {
-              return (
-                <Grid item className="selected-seeds-item">
-                  <img
-                    className={
-                      matchesXs
-                        ? "left-panel-img-xs"
-                        : matchesSm
-                        ? "left-panel-img-sm"
-                        : matchesMd
-                        ? "left-panel-img-md"
-                        : "left-panel-img"
-                    }
-                    src={
-                      s.thumbnail !== null
-                        ? s.thumbnail.src
-                        : "https://www.gardeningknowhow.com/wp-content/uploads/2020/04/spinach.jpg"
-                    }
-                    alt={s.label}
-                    loading="lazy"
-                  />
-                  <Typography className="left-panel-text">{s.label}</Typography>
-                </Grid>
-              );
-            })}{" "}
-          </Grid>
-        </Box>
-      </Grid>
-    );
+    return <SeedsSelectedList list={seedsSelected} />;
   };
   const renderRightAccordian = (val) => {
     return (

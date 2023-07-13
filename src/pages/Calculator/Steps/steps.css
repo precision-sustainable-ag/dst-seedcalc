@@ -272,6 +272,21 @@ color: red;
     font-size: 12px !important;
     border-radius: 26px !important;
 }
+.confirm-plan-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 80%;
+    background-color: #fff;
+    border: 2px solid #000;
+    box-shadow: 0px 11px 15px -7px rgb(0 0 0 / 20%), 0px 24px 38px 3px rgb(0 0 0 / 14%), 0px 9px 46px 8px rgb(0 0 0 / 12%);
+    padding: 32px;
+}
 /* Confirm Plan end */
 
 /* Steps */
@@ -299,6 +314,15 @@ color: red;
     font-size: 15px !important;
     margin: 10px !important;
     font-weight: 600 !important;
+}
+.NRCS-result-container  {
+    border-radius: 25px;
+    background: white;
+    padding: 4px 15px; 
+    padding-bottom: 30px;
+    width: 100%;
+    border: 1px solid #ececec; 
+    height: 10px;  
 }
 
 /* Completed Page start */

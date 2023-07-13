@@ -14,7 +14,6 @@ import { clearModal } from "./features/stepSlice";
 function App() {
   const dispatch = useDispatch();
   const modalState = useSelector((state) => state.steps.value.modal);
-  console.log("MODAL STATE", modalState);
   const handleModal = () => {
     modalState.error ? window.location.reload(false) : clearModal();
   };
@@ -33,6 +32,7 @@ function App() {
               ? modalState.errorMessage
               : modalState.successMessage
           }
+          style={{}}
         />
         <BrowserRouter>
           <Routes>

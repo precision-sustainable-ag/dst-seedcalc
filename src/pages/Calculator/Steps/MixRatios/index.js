@@ -9,15 +9,18 @@ import Accordion from "@mui/material/Accordion";
 import { Square } from "@mui/icons-material";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
 import {
   calculateAllValues,
   calculateSeeds,
-} from "../../../shared/utils/calculate";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { updateSteps } from "../../../features/stepSlice";
-import { NumberTextField } from "../../../components/NumberTextField";
+} from "./../../../../shared/utils/calculate";
 
-import "./steps.css";
+import { updateSteps } from "./../../../../features/stepSlice";
+import { NumberTextField } from "./../../../../components/NumberTextField";
+
+import "./../steps.css";
+import SeedsSelectedList from "../../../../components/SeedsSelectedList";
 
 const MixRatio = () => {
   // themes
@@ -77,6 +80,7 @@ const MixRatio = () => {
     let data = JSON.parse(JSON.stringify(speciesSelection.seedsSelected));
     data[index][key] = val;
     handleUpdateSteps("seedsSelected", data);
+
     // create new copy of recently updated Redux state, calculate & update all seed's step data.
     let newData = [...data];
     newData[index] = calculateAllValues(data[index]);
@@ -137,43 +141,7 @@ const MixRatio = () => {
     );
   };
   const renderSeedsSelected = () => {
-    return (
-      <Grid item xs={matchesMd ? 12 : 1}>
-        <Box className="selected-seeds-box">
-          <Grid
-            className="selected-seeds-container"
-            container
-            flexDirection={matchesMd ? "row" : "column"}
-          >
-            {speciesSelection.seedsSelected.map((s, idx) => {
-              return (
-                <Grid item className="selected-seeds-item">
-                  <img
-                    className={
-                      matchesXs
-                        ? "left-panel-img-xs"
-                        : matchesSm
-                        ? "left-panel-img-sm"
-                        : matchesMd
-                        ? "left-panel-img-md"
-                        : "left-panel-img"
-                    }
-                    src={
-                      s.thumbnail !== null
-                        ? s.thumbnail.src
-                        : "https://www.gardeningknowhow.com/wp-content/uploads/2020/04/spinach.jpg"
-                    }
-                    alt={s.label}
-                    loading="lazy"
-                  />
-                  <Typography className="left-panel-text">{s.label}</Typography>
-                </Grid>
-              );
-            })}{" "}
-          </Grid>
-        </Box>
-      </Grid>
-    );
+    return <SeedsSelectedList list={speciesSelection.seedsSelected} />;
   };
   const renderAccordian = (data) => {
     return (
@@ -387,13 +355,13 @@ const MixRatio = () => {
           <NumberTextField
             className="text-field-100"
             id="filled-basic"
-            disabled={false}
+            disabled={true}
             label="Seeds / Pound"
             variant="filled"
             handleChange={(e) => {
-              updateSeed(e.target.value, "seedsPound", data);
+              updateSeed(e.target.value, "seedsPerPound", data);
             }}
-            value={data.seedsPound}
+            value={data.seedsPerPound}
           />
         </Grid>
         <Grid item xs={1}>

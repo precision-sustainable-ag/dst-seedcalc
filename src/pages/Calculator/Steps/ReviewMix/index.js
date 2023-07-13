@@ -28,13 +28,14 @@ import {
   calculateAllValues,
   calculateSeeds,
   calculateAllMixValues,
-} from "../../../shared/utils/calculate";
+} from "./../../../../shared/utils/calculate";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { updateSteps } from "../../../features/stepSlice";
-import { NumberTextField } from "../../../components/NumberTextField";
-import { DSTSwitch } from "../../../components/Switch";
+import { updateSteps } from "./../../../../features/stepSlice";
+import { NumberTextField } from "./../../../../components/NumberTextField";
+import { DSTSwitch } from "./../../../../components/Switch";
 
-import "./steps.css";
+import "./../steps.css";
+import SeedsSelectedList from "../../../../components/SeedsSelectedList";
 
 const ReviewMix = () => {
   // themes
@@ -47,6 +48,7 @@ const ReviewMix = () => {
 
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
+  const siteCondition = data.siteCondition;
   const speciesSelection = data.speciesSelection;
   const plantsPerAcreSum = speciesSelection.seedsSelected.reduce(
     (sum, a) => sum + a.plantsPerAcre,
@@ -83,7 +85,7 @@ const ReviewMix = () => {
   };
   const handleUpdateAllSteps = (prevData, index) => {
     let data = [...prevData];
-    data[index] = calculateAllMixValues(data[index]);
+    data[index] = calculateAllMixValues(data[index], siteCondition);
     handleUpdateSteps("seedsSelected", data);
   };
   const updateSeed = (val, key, seed) => {
@@ -95,7 +97,7 @@ const ReviewMix = () => {
     data[index][key] = val;
     handleUpdateSteps("seedsSelected", data);
     let newData = [...data];
-    newData[index] = calculateAllMixValues(data[index]);
+    newData[index] = calculateAllMixValues(data[index], siteCondition);
     handleUpdateAllSteps(newData, index);
   };
   const renderCustomizedLabel = ({
@@ -213,43 +215,7 @@ const ReviewMix = () => {
     );
   };
   const renderSeedsSelected = () => {
-    return (
-      <Grid item xs={matchesMd ? 12 : 1}>
-        <Box className="selected-seeds-box">
-          <Grid
-            className="selected-seeds-container"
-            container
-            flexDirection={matchesMd ? "row" : "column"}
-          >
-            {speciesSelection.seedsSelected.map((s, idx) => {
-              return (
-                <Grid item className="selected-seeds-item">
-                  <img
-                    className={
-                      matchesXs
-                        ? "left-panel-img-xs"
-                        : matchesSm
-                        ? "left-panel-img-sm"
-                        : matchesMd
-                        ? "left-panel-img-md"
-                        : "left-panel-img"
-                    }
-                    src={
-                      s.thumbnail !== null
-                        ? s.thumbnail.src
-                        : "https://www.gardeningknowhow.com/wp-content/uploads/2020/04/spinach.jpg"
-                    }
-                    alt={s.label}
-                    loading="lazy"
-                  />
-                  <Typography className="left-panel-text">{s.label}</Typography>
-                </Grid>
-              );
-            })}{" "}
-          </Grid>
-        </Box>
-      </Grid>
-    );
+    return <SeedsSelectedList list={speciesSelection.seedsSelected} />;
   };
   const renderAccordianChart = (obj) => {
     const data = [
@@ -498,9 +464,9 @@ const ReviewMix = () => {
               label="Single Species Seeding Rate PLS"
               variant="filled"
               handleChange={(e) => {
-                updateSeed(e.target.value, "singleSpeciesSeedingRatePLS", data);
+                updateSeed(e.target.value, "singleSpeciesSeedingRate", data);
               }}
-              value={data.seedsPerAcre}
+              value={data.singleSpeciesSeedingRate}
             />
             <Typography className="font-15">Lbs / Acre</Typography>
           </Grid>
@@ -531,7 +497,7 @@ const ReviewMix = () => {
               label="Mix Seeding Rate"
               disabled={true}
               variant="filled"
-              value={data.mixSeedingRate}
+              value={data.step1Result}
             />
             <Typography className="font-15">Lbs / Acre</Typography>
           </Grid>
@@ -549,13 +515,13 @@ const ReviewMix = () => {
           <NumberTextField
             className="text-field-100"
             id="filled-basic"
-            disabled={false}
+            disabled={true}
             label="Mix Seeding Rate PLS"
             variant="filled"
-            handleChange={(e) => {
-              updateSeed(e.target.value, "step2MixSeedingRatePLS", data);
-            }}
-            value={data.step2MixSeedingRatePLS}
+            // handleChange={(e) => {
+            //   updateSeed(e.target.value, "step2MixSeedingRatePLS", data);
+            // }}
+            value={data.step1Result}
           />
           <Typography className="font-15">Lbs / Acre</Typography>
         </Grid>
@@ -566,7 +532,7 @@ const ReviewMix = () => {
           <NumberTextField
             className="text-field-100"
             id="filled-basic"
-            disabled={true}
+            disabled={false}
             label="Planting Method"
             variant="filled"
             value={data.plantingMethod}
@@ -616,11 +582,11 @@ const ReviewMix = () => {
             id="filled-basic"
             label="Mix Seeding Rate PLS"
             variant="filled"
-            disabled={false}
+            disabled={true}
             handleChange={(e) => {
-              updateSeed(e.target.value, "step3MixSeedingRatePLS", data);
+              updateSeed(e.target.value, "step2Result", data);
             }}
-            value={data.step3MixSeedingRatePLS}
+            value={data.step2Result}
           />
         </Grid>
         <Grid item xs={1}>
@@ -632,7 +598,7 @@ const ReviewMix = () => {
             id="filled-basic"
             label="Management Impact on Mix"
             variant="filled"
-            disabled={true}
+            disabled={false}
             value={data.managementImpactOnMix}
           />
         </Grid>
@@ -734,7 +700,7 @@ const ReviewMix = () => {
           <Typography className="font-15">Lbs / Acre</Typography>
         </Grid>
         <Grid item xs={1}>
-          <Typography className="math-icon">÷</Typography>
+          <Typography className="math-icon">x</Typography>
         </Grid>
         <Grid item xs={3}>
           <NumberTextField
@@ -742,11 +708,11 @@ const ReviewMix = () => {
             id="filled-basic"
             label="Acres"
             variant="filled"
-            disabled={false}
+            disabled={true}
             handleChange={(e) => {
               updateSeed(e.target.value, "acres", data);
             }}
-            value={data.acres}
+            value={siteCondition.acres}
           />
         </Grid>
         <Grid item xs={1}>

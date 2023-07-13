@@ -14,7 +14,7 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import { SearchField } from "../../../../components/SearchField";
-import { updateSteps, getCropsById } from "./../../../../features/stepSlice";
+import { updateSteps } from "./../../../../features/stepSlice";
 import { seedsList, seedsLabel } from "../../../../shared/data/species";
 import airtable from "../../../../shared/data/airtable.json";
 import {
@@ -23,7 +23,6 @@ import {
 } from "../../../../shared/utils/calculate";
 import "./../steps.css";
 import SeedsSelectedList from "./../../../../components/SeedsSelectedList";
-import { DataArray } from "@mui/icons-material";
 
 const SpeciesSelection = () => {
   // themes
@@ -73,134 +72,112 @@ const SpeciesSelection = () => {
     const seedSelected = seedsSelected.find((f) => seed.label === f.label);
     return typeof seedSelected !== "undefined" ? false : true;
   };
-  const retrieveCropDetails = async (id) => {
-    const response = await dispatch(
-      getCropsById({
-        cropId: `${id}`,
-        regionId: "18",
-        countyId: "180",
-        url: "https://developapi.covercrop-selector.org/v2/crops/148?regions=18&context=seed_calc&regions=180",
-      })
-    );
-    return response.payload.data;
-  };
 
-  const updateSeeds = async (seed, species) => {
+  const updateSeeds = (seed, species) => {
     // Check if seed length is greater than 0, if not, check for seed existing in seedsSelected[] array.
     // Update diversity based on whether diversity exists or not.
     // extData is temporary until API updated.
     // data not avail in json: mixSeedingRate, percentOfSingleSpeciesRate,
-
+    let extData = {
+      firstReliableEstablishmentStart: "",
+      firstReliableEstablishmentEnd: "",
+      secondReliableEstablishmentStart: "",
+      secondReliableEstablishmentEnd: "",
+      earlySeedingDateStart: "",
+      earlySeedingDateEnd: "",
+      lateSeedingDateStart: "",
+      lateSeedingDateEnd: "",
+      poundsOfSeed: 13200,
+      percentSurvival: 30,
+      singleSpeciesSeedingRatePLS: 57,
+      mixSeedingRate: 15,
+      percentOfSingleSpeciesRate: (1 / (seedsSelected.length + 1)) * 100,
+      seedsPound: 1840,
+      precisionRowUnitPlanter: 0.75,
+      germinationPercentage: 85,
+      purityPercentage: 95,
+    };
+    airtable.map((a, i) => {
+      if (a.Name === seed.label) {
+        extData = {
+          ...extData,
+          ...a,
+          firstReliableEstablishmentStart:
+            a.plantingDates["firstReliableEstablishmentStart"],
+          firstReliableEstablishmentEnd:
+            a.plantingDates["firstReliableEstablishmentStart"],
+          secondReliableEstablishmentStart:
+            a.plantingDates["secondReliableEstablishmentStart"],
+          secondReliableEstablishmentEnd:
+            a.plantingDates["secondReliableEstablishmentEnd"],
+          earlySeedingDateStart: a.plantingDates["earlySeedingDateStart"],
+          earlySeedingDateEnd: a.plantingDates["earlySeedingDateEnd"],
+          lateSeedingDateStart: a.plantingDates["lateSeedingDateStart"],
+          lateSeedingDateEnd: a.plantingDates["lateSeedingDateEnd"],
+          singleSpeciesSeedingRatePLS:
+            a["singleSpeciesSeedingRate"] !== ""
+              ? a["singleSpeciesSeedingRate"]
+              : 57,
+          poundsOfSeed: a["seedsPerPound"] !== "" ? a["seedsPerPound"] : 13200,
+          nrcs: {
+            singleSpeciesSeedingRate: a.nrcs.singleSpeciesSeedingRate,
+            seedsPerPound: a.nrcs.seedsPerPound,
+            maxPercentAllowedInMix: a.nrcs.maxPercentAllowedInMix,
+            soilDrainage: a.nrcs.soilDrainage,
+          },
+          percentSurvival: a["percentChanceOfWinterSurvival"],
+        };
+      }
+    });
     // default key values per new seed
-    const cropDetails = await retrieveCropDetails(seed.id);
-    console.log("crop details", cropDetails);
+    console.log("extdata", extData);
+    console.log("seed", seed);
     let newSeed = {
       ...seed,
-      ...cropDetails,
+      ...extData,
       plantingDates: {
         firstReliableEstablishmentStart:
-          cropDetails.attributes["Planting and Growth Windows"][
-            "Reliable Establishment"
-          ]["values"][0].split(" - ")[0],
-        firstReliableEstablishmentEnd:
-          cropDetails.attributes["Planting and Growth Windows"][
-            "Reliable Establishment"
-          ]["values"][0].split(" - ")[1],
+          extData["firstReliableEstablishmentStart"],
+        firstReliableEstablishmentEnd: extData["firstReliableEstablishmentEnd"],
         secondReliableEstablishmentStart:
-          cropDetails.attributes["Planting and Growth Windows"][
-            "Reliable Establishment"
-          ]["values"][0].split(" - ")[0],
+          extData["secondReliableEstablishmentStart"],
         secondReliableEstablishmentEnd:
-          cropDetails.attributes["Planting and Growth Windows"][
-            "Reliable Establishment"
-          ]["values"][0].split(" - ")[1],
-        earlySeedingDateStart:
-          cropDetails.attributes["Planting and Growth Windows"][
-            "Reliable Establishment"
-          ]["values"][0].split(" - ")[0],
-        earlySeedingDateEnd:
-          cropDetails.attributes["Planting and Growth Windows"][
-            "Reliable Establishment"
-          ]["values"][0].split(" - ")[1],
-        lateSeedingDateStart:
-          cropDetails.attributes["Planting and Growth Windows"][
-            "Reliable Establishment"
-          ]["values"][0].split(" - ")[0],
-        lateSeedingDateEnd:
-          cropDetails.attributes["Planting and Growth Windows"][
-            "Reliable Establishment"
-          ]["values"][0].split(" - ")[1],
+          extData["secondReliableEstablishmentEnd"],
+        earlySeedingDateStart: extData["earlySeedingDateStart"],
+        earlySeedingDateEnd: extData["earlySeedingDateEnd"],
+        lateSeedingDateStart: extData["lateSeedingDateStart"],
+        lateSeedingDateEnd: extData["lateSeedingDateEnd"],
+      },
+      thumbnail: {
+        src: seed.thumbnail.src,
       },
       siteConditionPlantingDate: data.siteCondition.plannedPlantingDate,
-      soilDrainage: data.siteCondition.soilDrainage,
-      singleSpeciesSeedingRatePLS: parseFloat(
-        cropDetails.attributes.Coefficients["Single Species Seeding Rate"]
-          .values[0]
-      ),
-      percentOfSingleSpeciesRate: (1 / (seedsSelected.length + 1)) * 100,
-      seedsPound: parseFloat(
-        cropDetails.attributes["Planting Information"]["Seed Count"][
-          "values"
-        ][0]
-      ),
+      siteConditionSoilDrainage: data.siteCondition.soilDrainage,
+      singleSpeciesSeedingRatePLS: extData["singleSpeciesSeedingRatePLS"],
+      percentOfSingleSpeciesRate: extData["percentOfSingleSpeciesRate"],
+      seedsPound: extData["seedsPound"],
       mixSeedingRate: 0,
-      percentSurvival: parseFloat(
-        cropDetails.attributes.Coefficients["% Chance of Winter Survial"][
-          "values"
-        ][0]
-      ), // There is a typo in value in API
+      seedsAcre: 0,
+      percentSurvival: extData["percentSurvival"],
+      plantsAcre: 0,
       sqFtAcre: 43560,
-      germinationPercentage: parseFloat(
-        cropDetails.attributes.Coefficients["% Live Seed to Emergence"][
-          "values"
-        ][0]
-      ), // TBD
-      purityPercentage: parseFloat(
-        cropDetails.attributes.Coefficients["Precision Coefficient"][
-          "values"
-        ][0]
-      ), // TBD
-      seedsPerAcre: parseFloat(
-        cropDetails.attributes["Planting Information"]["Seed Count"][
-          "values"
-        ][0]
-      ),
-      poundsOfSeed: parseFloat(
-        cropDetails.attributes["Planting Information"]["Seed Count"][
-          "values"
-        ][0]
-      ), // TBD
-      seedsPerPound: parseFloat(
-        cropDetails.attributes["Planting Information"]["Seed Count"][
-          "values"
-        ][0]
-      ),
+      germinationPercentage: extData["germinationPercentage"],
+      purityPercentage: extData["purityPercentage"],
+      seedsPerAcre: 0,
+      poundsOfSeed: extData["poundsOfSeed"],
       plantsPerAcre: 0,
       aproxPlantsSqFt: 0,
-      broadcast: parseFloat(
-        cropDetails.attributes.Coefficients["Broadcast Coefficient"][
-          "values"
-        ][0]
-      ),
-      precision: parseFloat(
-        cropDetails.attributes.Coefficients["Precision Coefficient"][
-          "values"
-        ][0]
-      ),
-      drilled: 0, // TBD
+      precisionRowUnitPlanter: extData["precisionRowUnitPlanter"],
+      broadcast: 0,
+      drilled: 0,
       showSteps: false,
-      // Review your mix values'
+      // Review your Mix new values
       plantingMethod: 1,
-      plantingMethods:
-        cropDetails.attributes["Planting Information"]["Planting Methods"][
-          "values"
-        ],
-      soilDrainages:
-        cropDetails.attributes["Soil Conditions"]["Soil Drainage"]["values"],
-      managementImpactOnMix: 1, // TBD
-      mixSeedingRatePLS: 0, // TBD
+      managementImpactOnMix: 57,
+      mixSeedingRatePLS: 0,
       bulkGerminationAndPurity: 0,
       bulkSeedingRate: 0,
+      addedToMix: 0,
       step1MixSeedingRate: 0,
       step1Result: 0,
       step2MixSeedingRatePLS: 0,
@@ -212,11 +189,10 @@ const SpeciesSelection = () => {
       acres: 0,
       poundsForPurchase: 0,
       // Confirm Plan
-      bulkLbsPerAcre: 36, // TBD
+      bulkLbsPerAcre: 36,
       totalPounds: 0,
-      costPerPound: 0.43, // TBD
+      costPerPound: 0.43,
       totalCost: 0,
-
       // NRCS Standards
       NRCSSeedingRate: {
         limit: 0,
@@ -239,8 +215,6 @@ const SpeciesSelection = () => {
         result: 0,
       },
     };
-    console.log("seed before calculate", newSeed);
-
     newSeed = calculateAllValues(newSeed);
     console.log("new see", newSeed);
     // three checks:
@@ -386,20 +360,16 @@ const SpeciesSelection = () => {
     return imgUrl !== null ? imgUrl + "?w=300&h=300&fit=crop&auto=format" : "";
   };
   const renderImageList = (data) => {
-    console.log("data..", filteredSeeds);
     return (
       <ImageList sx={{ maxWidth: "100%" }} cols={matchesSm ? 2 : 6}>
         {filteredSeeds
-          .filter((seeds, i) => {
-            console.log("seeds", seeds);
-            return seeds.group !== null && seeds.group.label === data;
-          })
+          .filter((seeds, i) => seeds.group.label === data)
           .map((seeds, idx) => (
             <ImageListItem
               key={
                 imgSrc(
-                  seeds.thumbnail !== null && seeds.thumbnail !== ""
-                    ? seeds.thumbnail
+                  seeds.thumbnail !== null
+                    ? seeds.thumbnail.src
                     : "https://www.gardeningknowhow.com/wp-content/uploads/2020/04/spinach.jpg"
                 ) + Math.random()
               }
@@ -407,8 +377,8 @@ const SpeciesSelection = () => {
               <img
                 className={matchesSm ? "panel-img-sm" : "panel-img"}
                 src={imgSrc(
-                  seeds.thumbnail !== null && seeds.thumbnail !== ""
-                    ? seeds.thumbnail
+                  seeds.thumbnail !== null
+                    ? seeds.thumbnail.src
                     : "https://www.gardeningknowhow.com/wp-content/uploads/2020/04/spinach.jpg"
                 )}
                 alt={seeds.label}
@@ -431,7 +401,6 @@ const SpeciesSelection = () => {
     );
   };
   const renderAccordian = (data) => {
-    console.log("accordiaan data", data);
     return (
       <Accordion xs={12} className="accordian-container">
         <AccordionSummary

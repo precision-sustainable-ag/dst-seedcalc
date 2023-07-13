@@ -9,9 +9,11 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-import { VerticalSlider } from "../../../components/VerticalSlider";
-import { seedsList, seedsLabel } from "../../../shared/data/species";
-import "./steps.css";
+import { VerticalSlider } from "../../../../components/VerticalSlider";
+import { seedsList, seedsLabel } from "../../../../shared/data/species";
+import "./../steps.css";
+import { LocalConvenienceStoreOutlined } from "@mui/icons-material";
+import SeedsSelectedList from "../../../../components/SeedsSelectedList";
 
 const SeedingMethod = () => {
   // themes
@@ -42,43 +44,7 @@ const SeedingMethod = () => {
   };
 
   const renderSeedsSelected = () => {
-    return (
-      <Grid item xs={matchesMd ? 12 : 1}>
-        <Box className="selected-seeds-box">
-          <Grid
-            className="selected-seeds-container"
-            container
-            flexDirection={matchesMd ? "row" : "column"}
-          >
-            {speciesSelection.seedsSelected.map((s, idx) => {
-              return (
-                <Grid item className="selected-seeds-item">
-                  <img
-                    className={
-                      matchesXs
-                        ? "left-panel-img-xs"
-                        : matchesSm
-                        ? "left-panel-img-sm"
-                        : matchesMd
-                        ? "left-panel-img-md"
-                        : "left-panel-img"
-                    }
-                    src={
-                      s.thumbnail !== null
-                        ? s.thumbnail.src
-                        : "https://www.gardeningknowhow.com/wp-content/uploads/2020/04/spinach.jpg"
-                    }
-                    alt={s.label}
-                    loading="lazy"
-                  />
-                  <Typography className="left-panel-text">{s.label}</Typography>
-                </Grid>
-              );
-            })}{" "}
-          </Grid>
-        </Box>
-      </Grid>
-    );
+    return <SeedsSelectedList list={speciesSelection.seedsSelected} />;
   };
   const renderRightAccordian = (val) => {
     return (
@@ -138,6 +104,24 @@ const SeedingMethod = () => {
       </Accordion>
     );
   };
+  const renderVerticalSlider = (seedingRate, handleUpdateSteps) => {
+    const marks = [];
+    const max = seedingRate + seedingRate / 2;
+    const min = seedingRate - seedingRate / 2;
+    marks.push({ value: min, label: `${min}` });
+    marks.push({ value: seedingRate, label: `${seedingRate}` });
+    marks.push({ value: max, label: `${max}` });
+
+    return (
+      <Grid xs={3} container justifyContent="center" alignItems="center">
+        <VerticalSlider
+          marks={marks}
+          value={seedingRate}
+          handleChange={handleUpdateSteps}
+        />
+      </Grid>
+    );
+  };
   return (
     <Grid xs={12} justify="center" container>
       {seedsSelected.length > 0 && renderSeedsSelected()}
@@ -192,12 +176,7 @@ const SeedingMethod = () => {
               </Box>
             </Grid>
           </Grid>
-          <Grid xs={3} container justifyContent="center" alignItems="center">
-            <VerticalSlider
-              value={seedingMethod.seedingRate}
-              handleChange={handleUpdateSteps}
-            />
-          </Grid>
+          {renderVerticalSlider(seedingMethod.seedingRate, handleUpdateSteps)}
           <Grid container xs={5} sx={{ height: "400px" }}>
             <Grid item xs={12} justifyContent="flex-start">
               <Box
