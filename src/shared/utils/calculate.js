@@ -55,8 +55,8 @@ export const calculateSeeds = (step, seed) => {
       return {
         key: "plantsPerAcre",
         val: calculateInt(
-          [seed.seedsPerAcre, seed.percentSurvival],
-          "percentage"
+          [seed.seedsPerAcre, seed.percentChanceOfWinterSurvival],
+          "multiply"
         ),
       };
     case "step4":

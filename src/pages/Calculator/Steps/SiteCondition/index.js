@@ -8,17 +8,21 @@ import { Dropdown } from "./../../../../components/Dropdown";
 import { NumberTextField } from "./../../../../components/NumberTextField";
 import { DSTSwitch } from "./../../../../components/Switch";
 import { updateSteps } from "./../../../../features/stepSlice";
-import states from "./../../../../shared/data/states.json";
-import counties from "./../../../../shared/data/countiesAndStates.json";
 import { soilDrainage } from "./../../../../shared/data/dropdown";
-import { getCrops, getCropsById } from "./../../../../features/stepSlice";
+import {
+  getCrops,
+  getCropsById,
+  getLocality,
+  getRegion,
+} from "./../../../../features/stepSlice";
 import "./../steps.css";
 
 const SiteCondition = () => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps);
   const siteCondition = data.value.siteCondition;
-
+  const states = data.value.states;
+  const counties = data.value.counties;
   const [checked, setChecked] = useState(data.value.NRCS.enabled);
 
   const handleUpdateSteps = (key, type, val) => {
@@ -35,28 +39,49 @@ const SiteCondition = () => {
     handleUpdateSteps("enabled", "NRCS", !checked);
   };
   const renderCountyList = () => {
-    const countyFilter = counties
-      .filter((a, i) => a.State === siteCondition.state)
-      .map((b, i) => b.County);
-    if (siteCondition.state !== "") {
-      return (
-        <Grid item xs={12} padding={15} className="site-condition-container">
-          <Dropdown
-            value={siteCondition.county}
-            label={"County: "}
-            handleChange={(e) => {
-              handleUpdateSteps("county", "siteCondition", e.target.value);
-            }}
-            size={12}
-            items={countyFilter}
-          />
-        </Grid>
-      );
+    if (counties.length > 0) {
+      const countyFilter = counties.map((b, i) => b.County);
+      if (siteCondition.state !== "") {
+        return (
+          <Grid item xs={12} padding={15} className="site-condition-container">
+            <Dropdown
+              value={siteCondition.county}
+              label={"County: "}
+              handleChange={handleRegion}
+              size={12}
+              items={counties}
+            />
+          </Grid>
+        );
+      }
     }
+  };
+  const handleStates = (e) => {
+    const state = states.filter((s, i) => s.label === e.target.value);
+    handleUpdateSteps("state", "siteCondition", e.target.value);
+    handleUpdateSteps("stateId", "siteCondition", state[0].id);
+    handleUpdateSteps("county", "siteCondition", "");
+    handleUpdateSteps("countyId", "siteCondition", "");
+    dispatch(getRegion({ regionId: state[0].id })).then((res) => {});
+  };
+  const handleRegion = (e) => {
+    const countyId = counties.filter((c, i) => c.label === e.target.value)[0]
+      .id;
+
+    console.log("state id, county id", countyId, e.target.value);
+    handleUpdateSteps("county", "siteCondition", e.target.value);
+    handleUpdateSteps("countyId", "siteCondition", countyId);
+
+    dispatch(
+      getCrops({
+        regionId: countyId,
+      })
+    );
   };
 
   useEffect(() => {
-    dispatch(getCrops());
+    // dispatch(getCrops());
+    dispatch(getLocality({ type: "MCCC" }));
     dispatch(
       getCropsById({
         cropId: "148",
@@ -77,10 +102,7 @@ const SiteCondition = () => {
         <Dropdown
           value={siteCondition.state}
           label={"State: "}
-          handleChange={(e) => {
-            handleUpdateSteps("state", "siteCondition", e.target.value);
-            handleUpdateSteps("county", "siteCondition", "");
-          }}
+          handleChange={handleStates}
           size={12}
           items={states}
         />
@@ -102,9 +124,7 @@ const SiteCondition = () => {
           label={"Planned Planting Date: "}
           value={siteCondition.plannedPlantingDate}
           handleChange={(e) => {
-            console.log("e", e);
             const formattedDate = `${e["$M"] + 1}/${e["$D"]}/${e["$y"]}`;
-            console.log("formatted date", formattedDate);
             handleUpdateSteps(
               "plannedPlantingDate",
               "siteCondition",

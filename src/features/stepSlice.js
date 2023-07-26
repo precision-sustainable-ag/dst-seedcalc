@@ -16,7 +16,9 @@ const initialState = {
     },
     siteCondition: {
       state: "",
+      stateId: "",
       county: "",
+      countyId: "",
       soilDrainage: "",
       plannedPlantingDate: dayjs(new Date()),
       acres: 0,
@@ -34,53 +36,73 @@ const initialState = {
     },
     NRCS: {
       enabled: false,
-      seedsSelected: [],
+      results: {
+        seedingRate: {
+          value: true,
+          seeds: [],
+        },
+        plantingDate: {
+          value: true,
+          seeds: [],
+        },
+        ratio: {
+          value: true,
+          seeds: [],
+        },
+        soilDrainage: {
+          value: true,
+          seeds: [],
+        },
+        expectedWinterSurvival: {
+          value: 0,
+          seeds: [],
+        },
+      },
     },
     mixSeedingRate: {},
     seedTagInfo: {},
     seedingMethod: { seedingRate: 11 },
     reviewMix: {},
     confirmPlan: {},
+    states: [],
+    counties: [],
     crops: [],
   },
   etc: {},
 };
 
-// export const getCrops = createAsyncThunk(
-//   //action type string
-//   "steps/getCrops",
-//   // callback function
-//   async (thunkAPI) => {
-//     const res = await fetch("https://develop.covercrop-data.org/crops").then(
-//       (data) => data.json()
-//     );
-//     console.log("get crop", res);
-//     return res;
-//   }
-// );
-
-export const getCrops = createAsyncThunk("steps/getCrops", async (thunkAPI) => {
-  const res = await fetch(
-    "https://developapi.covercrop-selector.org/v2/crops/"
-  ).then((data) => data.json());
-  console.log("get crop v2", res);
-  return res;
-});
+export const getCrops = createAsyncThunk(
+  "steps/getCrops",
+  async ({ regionId }, thunkAPI) => {
+    const res = await fetch(
+      `https://developapi.covercrop-selector.org/v2/crops/?regions=${regionId}&context=seed_calc`
+    ).then((data) => data.json());
+    return res;
+  }
+);
 
 export const getCropsById = createAsyncThunk(
   "steps/getCropsById",
   async ({ cropId, regionId, countyId }, thunkAPI) => {
     const url = `https://developapi.covercrop-selector.org/v2/crops/${cropId}?regions=${regionId}&context=seed_calc&regions=${countyId}`;
     const res = await fetch(url).then((data) => data.json());
-    console.log("get crops by id", res);
     return res;
   }
 );
 
 export const getLocality = createAsyncThunk(
   "steps/getLocality",
-  async ({ cropId, regionId, countyId }, thunkAPI) => {
-    const url = `https://developapi.covercrop-selector.org/v2/crops/${cropId}?regions=${regionId}&context=seed_calc&regions=${countyId}`;
+  async ({ type }, thunkAPI) => {
+    const url = `https://developapi.covercrop-selector.org/v2/regions?locality=state&context=seed_calc&council=MCCC`;
+    const res = await fetch(url).then((data) => data.json());
+    return res.data.filter((x) => x.parents[0].shorthand === type);
+  }
+);
+
+export const getRegion = createAsyncThunk(
+  "steps/getRegion",
+  async ({ regionId }, thunkAPI) => {
+    const url = `https://developapi.covercrop-selector.org/v2/regions/${regionId}`;
     const res = await fetch(url).then((data) => data.json());
     return res;
   }
@@ -140,29 +162,6 @@ export const stepSlice = createSlice({
     },
   },
   extraReducers: {
-    // [getCrops.pending]: (state) => {
-    //   state.loading = true;
-    // },
-    // [getCrops.fulfilled]: (state, { payload }) => {
-    //   state.loading = false;
-    // },
-    // [getCrops.rejected]: (state) => {
-    //   state.loading = false;
-    //   state.error = true;
-    //   state.errorMessage = "";
-    // },
-    [getCropsById.pending]: (state) => {
-      state.loading = true;
-    },
-    [getCropsById.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      console.log("Get Crops By Id fulfilled: ", payload.data);
-    },
-    [getCropsById.rejected]: (state) => {
-      state.loading = false;
-      state.error = true;
-      state.errorMessage = "";
-    },
     [getCrops.pending]: (state) => {
       state.loading = false;
     },
@@ -175,11 +174,42 @@ export const stepSlice = createSlice({
       state.loading = false;
       state.error = true;
     },
+    [getCropsById.pending]: (state) => {
+      state.loading = true;
+    },
+    [getCropsById.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      console.log("Get Crops By Id fulfilled: ", payload.data);
+    },
+    [getCropsById.rejected]: (state) => {
+      state.loading = false;
+      state.error = true;
+      state.errorMessage = "";
+    },
+
     [getLocality.pending]: (state) => {
       state.loading = true;
     },
-    [getLocality.fulfilled]: (state, { payload }) => {},
+    [getLocality.fulfilled]: (state, { payload }) => {
+      state.value.states = payload;
+      console.log("fulfilled locality", payload.data);
+    },
     [getLocality.rejected]: (state) => {
+      state.loading = false;
+    },
+    [getRegion.pending]: (state) => {
+      state.loading = true;
+    },
+    [getRegion.fulfilled]: (state, { payload }) => {
+      state.value.counties =
+        payload.data.kids.Zones !== undefined
+          ? payload.data.kids.Zones
+          : payload.data.kids.Counties !== undefined
+          ? payload.data.kids.Counties
+          : [];
+      console.log("fulfilled counties", payload.data.kids.Zones);
+    },
+    [getRegion.rejected]: (state) => {
       state.loading = false;
     },
   },

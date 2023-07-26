@@ -281,9 +281,6 @@ const MixRatio = () => {
       </Grid>
     );
   };
-  const renderFormInput = (data) => {
-    return <Grid xs={12} className="mix-ratio-form-container"></Grid>;
-  };
   const renderMixRateSteps = (data) => {
     return (
       <Grid container xs={12}>
@@ -416,9 +413,9 @@ const MixRatio = () => {
             variant="filled"
             disabled={false}
             handleChange={(e) => {
-              updateSeed(e.target.value, "percentSurvival", data);
+              updateSeed(e.target.value, "percentChanceOfWinterSurvival", data);
             }}
-            value={data.percentSurvival}
+            value={data.percentChanceOfWinterSurvival}
           />
         </Grid>
         <Grid item xs={1}>

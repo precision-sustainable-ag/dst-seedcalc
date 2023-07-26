@@ -77,8 +77,8 @@ const SpeciesSelection = () => {
     const response = await dispatch(
       getCropsById({
         cropId: `${id}`,
-        regionId: "18",
-        countyId: "180",
+        regionId: data.siteCondition.stateId,
+        countyId: data.siteCondition.countyId,
         url: "https://developapi.covercrop-selector.org/v2/crops/148?regions=18&context=seed_calc&regions=180",
       })
     );
@@ -93,7 +93,6 @@ const SpeciesSelection = () => {
 
     // default key values per new seed
     const cropDetails = await retrieveCropDetails(seed.id);
-    console.log("crop details", cropDetails);
     let newSeed = {
       ...seed,
       ...cropDetails,
@@ -101,11 +100,19 @@ const SpeciesSelection = () => {
         firstReliableEstablishmentStart:
           cropDetails.attributes["Planting and Growth Windows"][
             "Reliable Establishment"
-          ]["values"][0].split(" - ")[0],
+          ]["values"][0] !== undefined
+            ? cropDetails.attributes["Planting and Growth Windows"][
+                "Reliable Establishment"
+              ]["values"][0].split(" - ")[0]
+            : "",
         firstReliableEstablishmentEnd:
           cropDetails.attributes["Planting and Growth Windows"][
             "Reliable Establishment"
-          ]["values"][0].split(" - ")[1],
+          ]["values"][0] !== undefined
+            ? cropDetails.attributes["Planting and Growth Windows"][
+                "Reliable Establishment"
+              ]["values"][0].split(" - ")[1]
+            : "",
         secondReliableEstablishmentStart:
           cropDetails.attributes["Planting and Growth Windows"][
             "Reliable Establishment"
@@ -133,68 +140,110 @@ const SpeciesSelection = () => {
       },
       siteConditionPlantingDate: data.siteCondition.plannedPlantingDate,
       soilDrainage: data.siteCondition.soilDrainage,
+      singleSpeciesSeedingRate: parseFloat(
+        cropDetails.attributes.Coefficients["Single Species Seeding Rate"]
+          .values[0]
+      ),
       singleSpeciesSeedingRatePLS: parseFloat(
         cropDetails.attributes.Coefficients["Single Species Seeding Rate"]
           .values[0]
       ),
       percentOfSingleSpeciesRate: (1 / (seedsSelected.length + 1)) * 100,
       seedsPound: parseFloat(
-        cropDetails.attributes["Planting Information"]["Seed Count"][
-          "values"
-        ][0]
+        cropDetails.attributes["Planting"]
+          ? cropDetails.attributes["Planting"]["Seeds Per lb"]["values"][0]
+          : cropDetails.attributes["Planting Information"]["Seed Count"][
+              "values"
+            ][0] // TBD
       ),
       mixSeedingRate: 0,
-      percentSurvival: parseFloat(
-        cropDetails.attributes.Coefficients["% Chance of Winter Survial"][
+      maxPercentAllowedInMix:
+        cropDetails.attributes.Coefficients["Max % Allowed in Mix"][
           "values"
-        ][0]
-      ), // There is a typo in value in API
+        ][0],
+      percentChanceOfWinterSurvival: cropDetails.attributes.Coefficients[
+        "% Chance of Winter Survial"
+      ]
+        ? parseFloat(
+            cropDetails.attributes.Coefficients["% Chance of Winter Survial"][
+              "values"
+            ][0]
+          )
+        : 0, // There is a typo in value in API
       sqFtAcre: 43560,
-      germinationPercentage: parseFloat(
-        cropDetails.attributes.Coefficients["% Live Seed to Emergence"][
-          "values"
-        ][0]
-      ), // TBD
-      purityPercentage: parseFloat(
-        cropDetails.attributes.Coefficients["Precision Coefficient"][
-          "values"
-        ][0]
-      ), // TBD
+      germinationPercentage:
+        cropDetails.attributes.Coefficients["% Live Seed to Emergence"] !==
+        undefined
+          ? parseFloat(
+              cropDetails.attributes.Coefficients["% Live Seed to Emergence"][
+                "values"
+              ][0]
+            )
+          : 0, // TBD
+      purityPercentage:
+        cropDetails.attributes.Coefficients["Precision Coefficient"] !==
+        undefined
+          ? parseFloat(
+              cropDetails.attributes.Coefficients["Precision Coefficient"][
+                "values"
+              ][0]
+            )
+          : 0, // TBD
       seedsPerAcre: parseFloat(
-        cropDetails.attributes["Planting Information"]["Seed Count"][
-          "values"
-        ][0]
+        cropDetails.attributes["Planting"]
+          ? cropDetails.attributes["Planting"]["Seeds Per lb"]["values"][0]
+          : cropDetails.attributes["Planting Information"]["Seed Count"][
+              "values"
+            ][0] // TBD
       ),
       poundsOfSeed: parseFloat(
-        cropDetails.attributes["Planting Information"]["Seed Count"][
-          "values"
-        ][0]
+        cropDetails.attributes["Planting"]
+          ? cropDetails.attributes["Planting"]["Seeds Per lb"]["values"][0]
+          : cropDetails.attributes["Planting Information"]["Seed Count"][
+              "values"
+            ][0] // TBD
       ), // TBD
       seedsPerPound: parseFloat(
-        cropDetails.attributes["Planting Information"]["Seed Count"][
-          "values"
-        ][0]
+        cropDetails.attributes["Planting"]
+          ? cropDetails.attributes["Planting"]["Seeds Per lb"]["values"][0]
+          : cropDetails.attributes["Planting Information"]["Seed Count"][
+              "values"
+            ][0] // TBD
       ),
       plantsPerAcre: 0,
       aproxPlantsSqFt: 0,
       broadcast: parseFloat(
-        cropDetails.attributes.Coefficients["Broadcast Coefficient"][
-          "values"
-        ][0]
+        cropDetails.attributes.Coefficients["Broadcast Coefficient"] !==
+          undefined
+          ? cropDetails.attributes.Coefficients["Broadcast Coefficient"][
+              "values"
+            ][0]
+          : 0
       ),
       precision: parseFloat(
-        cropDetails.attributes.Coefficients["Precision Coefficient"][
-          "values"
-        ][0]
+        cropDetails.attributes.Coefficients["Precision Coefficient"] !==
+          undefined
+          ? cropDetails.attributes.Coefficients["Precision Coefficient"][
+              "values"
+            ][0]
+          : 0
+      ),
+      aerial: parseFloat(
+        cropDetails.attributes.Coefficients["Aerial Coefficient"] !== undefined
+          ? cropDetails.attributes.Coefficients["Aerial Coefficient"][
+              "values"
+            ][0]
+          : 0
       ),
       drilled: 0, // TBD
       showSteps: false,
       // Review your mix values'
       plantingMethod: 1,
-      plantingMethods:
-        cropDetails.attributes["Planting Information"]["Planting Methods"][
-          "values"
-        ],
+      plantingMethods: cropDetails.attributes["Planting Information"]
+        ? cropDetails.attributes["Planting Information"]["Planting Methods"][
+            "values"
+          ]
+        : [], // TBD
       soilDrainages:
         cropDetails.attributes["Soil Conditions"]["Soil Drainage"]["values"],
       managementImpactOnMix: 1, // TBD
@@ -209,14 +258,14 @@ const SpeciesSelection = () => {
       step3Result: 0,
       step4MixSeedingRatePLS: 0,
       step4Result: 0,
-      acres: 0,
+      acres: data.siteCondition.acres,
       poundsForPurchase: 0,
       // Confirm Plan
       bulkLbsPerAcre: 36, // TBD
       totalPounds: 0,
       costPerPound: 0.43, // TBD
       totalCost: 0,
-
+      addedToMix: 0,
       // NRCS Standards
       NRCSSeedingRate: {
         limit: 0,
@@ -239,10 +288,8 @@ const SpeciesSelection = () => {
         result: 0,
       },
     };
-    console.log("seed before calculate", newSeed);
 
     newSeed = calculateAllValues(newSeed);
-    console.log("new see", newSeed);
     // three checks:
     // * seedlength is 0
     // * seed already exists
@@ -256,10 +303,6 @@ const SpeciesSelection = () => {
       });
       handleUpdateStore("speciesSelection", "seedsSelected", [
         ...newList,
-        newSeed,
-      ]);
-      handleUpdateStore("NRCS", "seedsSelected", [
-        ...data.NRCS.seedsSelected,
         newSeed,
       ]);
       handleUpdateStore("speciesSelection", "diversitySelected", [
@@ -278,7 +321,7 @@ const SpeciesSelection = () => {
         const newList = filterList.map((n, i) => {
           return {
             ...n,
-            percentOfSingleSpeciesRate: (1 / (newList.length + 1)) * 100,
+            percentOfSingleSpeciesRate: (1 / (seedsSelected.length + 1)) * 100,
           };
         });
         handleUpdateStore("speciesSelection", "seedsSelected", newList);
@@ -300,10 +343,6 @@ const SpeciesSelection = () => {
             percentOfSingleSpeciesRate: (1 / (seedsSelected.length + 1)) * 100,
           };
         });
-        handleUpdateStore("NRCS", "seedsSelected", [
-          ...data.NRCS.seedsSelected,
-          newSeed,
-        ]);
         handleUpdateStore("speciesSelection", "seedsSelected", [
           ...newList,
           newSeed,

@@ -83,7 +83,8 @@ export const checkPlantingDate = (crop) => {
  * If it is, the formula returns 0; otherwise, it returns 1.
  */
 
-export const checkPercentMix = ({ percentInMix, crop }) => {
+export const checkPercentMix = (percentInMix, crop) => {
+  console.log("percent", percentInMix, crop);
   const maxPercentAllowedInMix = crop.maxPercentAllowedInMix;
 
   return percentInMix > maxPercentAllowedInMix ? false : true;
@@ -102,7 +103,7 @@ export const checkPercentMix = ({ percentInMix, crop }) => {
     Check soil drainage returns the soil drainage. check if the soil drainage exists in the crop.
     
 */
-export const checkSoilDrainage = ({ soilDrainage, crop }) => {
+export const checkSoilDrainage = (soilDrainage, crop) => {
   const soilDrainages = crop.soilDrainages;
 
   return soilDrainages.indexOf(soilDrainage) > -1;
@@ -113,10 +114,13 @@ export const checkAllNRCSStandards = (seedSelected, seeds) => {
    * @ the specific seed, run specific check for NRCS values
    * Afterwards, go
    */
+  console.log("check seed", seedSelected, seeds);
+
   const NRCSResults = {
-    mixSeedingRate: checkMixSeedingRate(seedSelected, seeds),
-    percentMix: checkPercentMix(seedSelected, seeds),
-    soilDrainage: checkSoilDrainage(seedSelected, seeds),
+    mixSeedingRate: checkMixSeedingRate(seedSelected.mixSeedingRate, seeds),
+    percentMix: checkPercentMix(1 / seeds.length, seedSelected),
+    soilDrainage: checkSoilDrainage(seedSelected.soilDrainage, seedSelected),
     plantingDate: checkPlantingDate(seedSelected, seeds),
   };
+  return NRCSResults;
 };

@@ -19,21 +19,21 @@ import {
   LabelList,
   ZAxis,
 } from "recharts";
-
 import Accordion from "@mui/material/Accordion";
 import { Square } from "@mui/icons-material";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
+import { updateSteps } from "./../../../../features/stepSlice";
+import { NumberTextField } from "./../../../../components/NumberTextField";
 import {
   calculateAllValues,
   calculateSeeds,
   calculateAllMixValues,
 } from "./../../../../shared/utils/calculate";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { updateSteps } from "./../../../../features/stepSlice";
-import { NumberTextField } from "./../../../../components/NumberTextField";
-import { DSTSwitch } from "./../../../../components/Switch";
-
+import { checkAllNRCSStandards } from "../../../../shared/utils/NRCS/checkNRCS";
+import { generateNRCSStandards } from "../../../../shared/utils/NRCS/calculateNRCS";
 import "./../steps.css";
 import SeedsSelectedList from "../../../../components/SeedsSelectedList";
 
@@ -82,6 +82,24 @@ const ReviewMix = () => {
       value: val,
     };
     dispatch(updateSteps(data));
+  };
+  const handleUpdateNRCS = (key, val) => {
+    const data = {
+      type: "NRCS",
+      key: key,
+      value: val,
+    };
+    dispatch(updateSteps(data));
+  };
+  const initialDataLoad = () => {
+    let data = JSON.parse(JSON.stringify(speciesSelection.seedsSelected));
+    let newData = [...data];
+
+    newData.map((s, i) => {
+      const index = i;
+      newData[index] = calculateAllMixValues(s, siteCondition);
+      handleUpdateAllSteps(newData, index);
+    });
   };
   const handleUpdateAllSteps = (prevData, index) => {
     let data = [...prevData];
@@ -599,6 +617,9 @@ const ReviewMix = () => {
             label="Management Impact on Mix"
             variant="filled"
             disabled={false}
+            handleChange={(e) => {
+              updateSeed(e.target.value, "managementImpactOnMix", data);
+            }}
             value={data.managementImpactOnMix}
           />
         </Grid>
@@ -732,6 +753,38 @@ const ReviewMix = () => {
       </Grid>
     );
   };
+  const updateNRCS = async () => {
+    const NRCSData = await generateNRCSStandards(
+      speciesSelection.seedsSelected
+    );
+    const validationList = await speciesSelection.seedsSelected.map((s, i) => {
+      return checkAllNRCSStandards(s, speciesSelection.seedsSelected);
+    });
+    validationList.map((v, i) => {
+      if (!v.mixSeedingRate) {
+        NRCSData.seedingRate.value = false;
+      }
+      if (!v.percentMix) {
+        NRCSData.ratio.value = false;
+      }
+      if (!v.plantingDate) {
+        NRCSData.plantingDate.value = false;
+      }
+      if (!v.soilDrainage) {
+        NRCSData.soilDrainage.value = false;
+      }
+    });
+    const NRCSResults = NRCSData;
+    console.log("NRCS RESULTS", NRCSResults);
+
+    await handleUpdateNRCS("results", NRCSData);
+  };
+  useEffect(() => {
+    initialDataLoad();
+    return () => {
+      updateNRCS();
+    };
+  }, []);
   return (
     <Grid xs={12} container>
       {renderSeedsSelected()}

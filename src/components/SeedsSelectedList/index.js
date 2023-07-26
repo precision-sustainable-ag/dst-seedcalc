@@ -5,7 +5,6 @@ import { useState, useEffect, Fragment } from "react";
 import { Typography, Box, Link, useMediaQuery } from "@mui/material";
 
 const SeedsSelectedList = ({ list }) => {
-  console.log("list...", list);
   // themes
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down("xs"));

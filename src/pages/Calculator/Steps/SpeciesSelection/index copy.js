@@ -130,8 +130,6 @@ const SpeciesSelection = () => {
       }
     });
     // default key values per new seed
-    console.log("extdata", extData);
-    console.log("seed", seed);
     let newSeed = {
       ...seed,
       ...extData,
@@ -252,7 +250,7 @@ const SpeciesSelection = () => {
         const newList = filterList.map((n, i) => {
           return {
             ...n,
-            percentOfSingleSpeciesRate: (1 / (newList.length + 1)) * 100,
+            percentOfSingleSpeciesRate: (1 / (seedsSelected.length + 1)) * 100,
           };
         });
         handleUpdateStore("speciesSelection", "seedsSelected", newList);

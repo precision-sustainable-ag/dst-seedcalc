@@ -32,6 +32,7 @@ const ConfirmPlan = () => {
   const matchesUpMd = useMediaQuery(theme.breakpoints.up("md"));
   // useSelector for crops &  reducer
   const [modalOpen, setModalOpen] = useState(false);
+  const [currentModal, setCurrentModal] = useState({ value: false, seeds: [] });
   const dispatch = useDispatch();
 
   const data = useSelector((state) => state.steps.value);
@@ -66,7 +67,8 @@ const ConfirmPlan = () => {
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
   const RADIAN = Math.PI / 180;
-  const handleModalOpen = () => {
+  const handleModalOpen = (data) => {
+    !modalOpen && setCurrentModal(data);
     setModalOpen(!modalOpen);
   };
   const handleUpdateSteps = (key, val) => {
@@ -82,7 +84,14 @@ const ConfirmPlan = () => {
     data[index] = calculateAllConfirmPlan(data[index]);
     handleUpdateSteps("seedsSelected", data);
   };
-
+  const initialDataLoad = () => {
+    let data = JSON.parse(JSON.stringify(speciesSelection.seedsSelected));
+    let newData = [...data];
+    speciesSelection.seedsSelected.map((s, i) => {
+      newData[i] = calculateAllConfirmPlan(s);
+      handleUpdateAllSteps(newData, i);
+    });
+  };
   const updateSeed = (val, key, seed) => {
     // find index of seed, parse a copy, update proper values, & send to Redux
     const index = speciesSelection.seedsSelected.findIndex(
@@ -416,12 +425,19 @@ const ConfirmPlan = () => {
       </Grid>
     );
   };
+
+  useEffect(() => {
+    initialDataLoad();
+  }, []);
   return (
     <Grid xs={12} container>
-      <NRCSDetailModal
-        modalOpen={modalOpen}
-        handleModalOpen={handleModalOpen}
-      />
+      {currentModal !== null && (
+        <NRCSDetailModal
+          modalOpen={modalOpen}
+          handleModalOpen={handleModalOpen}
+          data={currentModal}
+        />
+      )}
       {renderSeedsSelected()}
       <Grid
         xs={12}
@@ -577,10 +593,14 @@ const ConfirmPlan = () => {
                   <Box className="NRCS-result-container">
                     <Typography sx={{ float: "left" }}>
                       {" "}
-                      <CheckIcon sx={{ color: "green" }}></CheckIcon>
+                      {NRCS.results.seedingRate.value ? (
+                        <CheckIcon sx={{ color: "green" }}></CheckIcon>
+                      ) : (
+                        <ClearIcon sx={{ color: "red" }}></ClearIcon>
+                      )}
                     </Typography>
                     <Typography sx={{ float: "left", marginLeft: "5px" }}>
-                      passed
+                      {NRCS.results.seedingRate.value ? "passed" : "failed"}
                     </Typography>
                     <Link
                       sx={{
@@ -589,7 +609,7 @@ const ConfirmPlan = () => {
                         marginTop: "2px",
                       }}
                       onClick={() => {
-                        handleModalOpen();
+                        handleModalOpen(NRCS.results.seedingRate);
                       }}
                     >
                       Show Details
@@ -612,10 +632,14 @@ const ConfirmPlan = () => {
                   <Box className="NRCS-result-container">
                     <Typography sx={{ float: "left" }}>
                       {" "}
-                      <CheckIcon sx={{ color: "green" }}></CheckIcon>
+                      {NRCS.results.plantingDate.value ? (
+                        <CheckIcon sx={{ color: "green" }}></CheckIcon>
+                      ) : (
+                        <ClearIcon sx={{ color: "red" }}></ClearIcon>
+                      )}
                     </Typography>
                     <Typography sx={{ float: "left", marginLeft: "5px" }}>
-                      passed
+                      {NRCS.results.plantingDate.value ? "passed" : "failed"}
                     </Typography>
                     <Link
                       sx={{
@@ -624,7 +648,7 @@ const ConfirmPlan = () => {
                         marginTop: "2px",
                       }}
                       onClick={() => {
-                        handleModalOpen();
+                        handleModalOpen(NRCS.results.plantingDate);
                       }}
                     >
                       Show Details
@@ -647,10 +671,14 @@ const ConfirmPlan = () => {
                   <Box className="NRCS-result-container">
                     <Typography sx={{ float: "left" }}>
                       {" "}
-                      <ClearIcon sx={{ color: "red" }}></ClearIcon>
+                      {NRCS.results.ratio.value ? (
+                        <CheckIcon sx={{ color: "green" }}></CheckIcon>
+                      ) : (
+                        <ClearIcon sx={{ color: "red" }}></ClearIcon>
+                      )}
                     </Typography>
                     <Typography sx={{ float: "left", marginLeft: "10px" }}>
-                      failed
+                      {NRCS.results.ratio.value ? "passed" : "failed"}
                     </Typography>
                     <Link
                       sx={{
@@ -659,7 +687,7 @@ const ConfirmPlan = () => {
                         marginTop: "2px",
                       }}
                       onClick={() => {
-                        handleModalOpen();
+                        handleModalOpen(NRCS.results.ratio);
                       }}
                     >
                       Show Details
@@ -681,10 +709,14 @@ const ConfirmPlan = () => {
                 <Grid xs={10}>
                   <Box className="NRCS-result-container">
                     <Typography sx={{ float: "left" }}>
-                      <CheckIcon sx={{ color: "green" }}></CheckIcon>
+                      {NRCS.results.soilDrainage.value ? (
+                        <CheckIcon sx={{ color: "green" }}></CheckIcon>
+                      ) : (
+                        <ClearIcon sx={{ color: "red" }}></ClearIcon>
+                      )}
                     </Typography>
                     <Typography sx={{ float: "left", marginLeft: "5px" }}>
-                      passed
+                      {NRCS.results.soilDrainage.value ? "passed" : "failed"}
                     </Typography>
                     <Link
                       sx={{
@@ -693,7 +725,7 @@ const ConfirmPlan = () => {
                         marginTop: "2px",
                       }}
                       onClick={() => {
-                        handleModalOpen();
+                        handleModalOpen(NRCS.results.soilDrainage);
                       }}
                     >
                       Show Details
@@ -714,12 +746,8 @@ const ConfirmPlan = () => {
                 <Grid xs={1}></Grid>
                 <Grid xs={10}>
                   <Box className="NRCS-result-container">
-                    <Typography sx={{ float: "left" }}>
-                      <ClearIcon sx={{ color: "red" }}></ClearIcon>
-                    </Typography>
                     <Typography sx={{ float: "left", marginLeft: "5px" }}>
-                      {" "}
-                      failed
+                      {NRCS.results.expectedWinterSurvival.value}
                     </Typography>
                     <Link
                       sx={{
@@ -728,7 +756,7 @@ const ConfirmPlan = () => {
                         marginTop: "2px",
                       }}
                       onClick={() => {
-                        handleModalOpen();
+                        handleModalOpen(NRCS.results.expectedWinterSurvival);
                       }}
                     >
                       Show Details

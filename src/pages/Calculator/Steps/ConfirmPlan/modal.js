@@ -9,17 +9,18 @@ import DSTTable from "../../../../components/DSTTable";
 
 export const NRCSDetailModal = ({ type, data, modalOpen, handleModalOpen }) => {
   const renderTable = () => {
-    const createData = (label, expected, result, pass) => {
-      return { label, expected, result, pass };
+    const createData = (label, expect, result, pass) => {
+      return { label, expect, result, pass };
     };
 
-    const rows = [
-      createData("Brassicas", 0.5, 24, true),
-      createData("Kale", 237, 9.0, false),
-      createData("Spinach", 262, 16.0, true),
-      createData("Forage", 305, 3.7, true),
-      createData("Oats, Winter", 356, 16.0, false),
-    ];
+    const rows = data.seeds.map((d, i) => {
+      return createData(
+        d.label,
+        JSON.stringify(d.expect),
+        d.result,
+        d.pass ? "passed" : "failed"
+      );
+    });
 
     const cells = ["label", "expected", "result", "pass"];
     return <DSTTable rows={rows} createData={createData} cells={cells} />;
