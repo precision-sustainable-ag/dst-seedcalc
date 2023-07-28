@@ -50,6 +50,8 @@ const ReviewMix = () => {
   const data = useSelector((state) => state.steps.value);
   const siteCondition = data.siteCondition;
   const speciesSelection = data.speciesSelection;
+  const seedingMethod = data.seedingMethod;
+
   const plantsPerAcreSum = speciesSelection.seedsSelected.reduce(
     (sum, a) => sum + a.plantsPerAcre,
     0
@@ -149,32 +151,32 @@ const ReviewMix = () => {
       0
     );
   };
-  const renderStripedLabels = () => {
+  const renderStripedLabels = (seed) => {
     const labels = [
       {
         label: "Single Species Seeding Rate",
         key: "singleSpeciesSeedingRatePLS",
-        val: calculateSeedsSelectedSum("singleSpeciesSeedingRatePLS"),
+        val: seed["singleSpeciesSeedingRatePLS"],
       },
       {
         label: "Added to Mix",
         key: "addedToMix",
-        val: calculateSeedsSelectedSum("addedToMix"),
+        val: seed["addedToMix"],
       },
       {
         label: "Drilled or Broadcast with Cultipack",
         key: "drilled",
-        val: calculateSeedsSelectedSum("drilled"),
+        val: seed["addedToMix"],
       },
       {
         label: "Management Impacts on Mix (+57%)",
         key: "managementImpactOnMix",
-        val: calculateSeedsSelectedSum("managementImpactOnMix"),
+        val: data["seedingMethod"]["managementImpactOnMix"],
       },
       {
         label: "Bulk Germination and Purity",
         key: "bulkGerminationAndPurity",
-        val: calculateSeedsSelectedSum("bulkGerminationAndPurity"),
+        val: data["bulkGerminationAndPurity"],
       },
     ];
     const labels2 = [
@@ -307,8 +309,9 @@ const ReviewMix = () => {
   const renderAccordianDetail = (data) => {
     return (
       <Grid container xs={12}>
+        {renderStripedLabels(data)}
         <Grid item xs={6}>
-          <Typography>Default Single Species Seeding Rate PLS</Typography>
+          <Typography>Mix Seeding Rate PLS</Typography>
           <Box
             sx={{
               width: "50px",
@@ -327,7 +330,7 @@ const ReviewMix = () => {
           <Typography>Lbs / Acre</Typography>
         </Grid>
         <Grid item xs={6}>
-          <Typography>Default Mix Seeding Rate PLS</Typography>
+          <Typography>Bulk Seeding Rate</Typography>
           <Box
             sx={{
               width: "50px",
@@ -339,7 +342,7 @@ const ReviewMix = () => {
               borderRadius: "50%",
             }}
           >
-            <Typography>{Math.floor(data.mixSeedingRate)}</Typography>
+            <Typography>{Math.floor(data.bulkSeedingRate)}</Typography>
           </Box>
           <Typography>Lbs / Acre</Typography>
         </Grid>
@@ -381,7 +384,7 @@ const ReviewMix = () => {
           {"   "}
           <Button variant="outlined">Acres</Button>
         </Grid>
-        {renderStripedLabels()}
+
         <Grid item xs={12}>
           <Button
             onClick={(e) => {
@@ -616,11 +619,11 @@ const ReviewMix = () => {
             id="filled-basic"
             label="Management Impact on Mix"
             variant="filled"
-            disabled={false}
+            disabled={true}
             handleChange={(e) => {
               updateSeed(e.target.value, "managementImpactOnMix", data);
             }}
-            value={data.managementImpactOnMix}
+            value={seedingMethod.managementImpactOnMix}
           />
         </Grid>
         <Grid item xs={1}>

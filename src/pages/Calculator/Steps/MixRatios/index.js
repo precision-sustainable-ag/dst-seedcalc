@@ -194,7 +194,7 @@ const MixRatio = () => {
               borderRadius: "50%",
             }}
           >
-            <Typography>{Math.floor(data.mixSeedingRate)}</Typography>
+            <Typography>{Math.round(data.mixSeedingRate)}</Typography>
           </Box>
           <Typography className="font-15">Lbs / Acre</Typography>
         </Grid>

@@ -6,52 +6,6 @@ function valuetext(value) {
   return `${value}°C`;
 }
 
-const marks = [
-  {
-    value: 0,
-    label: "0",
-  },
-  {
-    value: 10,
-    label: "10",
-  },
-  {
-    value: 20,
-    label: "20",
-  },
-  {
-    value: 30,
-    label: "30",
-  },
-  {
-    value: 40,
-    label: "40",
-  },
-  {
-    value: 50,
-    label: "50",
-  },
-  {
-    value: 60,
-    label: "60",
-  },
-  {
-    value: 70,
-    label: "70",
-  },
-  {
-    value: 80,
-    label: "80",
-  },
-  {
-    value: 90,
-    label: "90",
-  },
-  {
-    value: 100,
-    label: "100",
-  },
-];
 /* 
   marks are as follows:
   take val, set that to default value, 
@@ -66,7 +20,8 @@ export const VerticalSlider = ({ value, marks, handleChange }) => {
         orientation="vertical"
         getAriaValueText={valuetext}
         defaultValue={marks[1].value}
-        steps={20}
+        steps={10}
+        onChange={handleChange}
         valueLabelDisplay="auto"
         min={marks[0].value}
         max={marks[2].value}
