@@ -36,6 +36,7 @@ import { checkAllNRCSStandards } from "../../../../shared/utils/NRCS/checkNRCS";
 import { generateNRCSStandards } from "../../../../shared/utils/NRCS/calculateNRCS";
 import "./../steps.css";
 import SeedsSelectedList from "../../../../components/SeedsSelectedList";
+import { validateNRCS } from "../../../../shared/utils/NRCS/calculateNRCS";
 
 const ReviewMix = () => {
   // themes
@@ -758,27 +759,10 @@ const ReviewMix = () => {
   };
   const updateNRCS = async () => {
     const NRCSData = await generateNRCSStandards(
-      speciesSelection.seedsSelected
+      speciesSelection.seedsSelected,
+      data.siteCondition
     );
-    const validationList = await speciesSelection.seedsSelected.map((s, i) => {
-      return checkAllNRCSStandards(s, speciesSelection.seedsSelected);
-    });
-    validationList.map((v, i) => {
-      if (!v.mixSeedingRate) {
-        NRCSData.seedingRate.value = false;
-      }
-      if (!v.percentMix) {
-        NRCSData.ratio.value = false;
-      }
-      if (!v.plantingDate) {
-        NRCSData.plantingDate.value = false;
-      }
-      if (!v.soilDrainage) {
-        NRCSData.soilDrainage.value = false;
-      }
-    });
     const NRCSResults = NRCSData;
-    console.log("NRCS RESULTS", NRCSResults);
 
     await handleUpdateNRCS("results", NRCSData);
   };

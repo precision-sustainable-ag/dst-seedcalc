@@ -26,7 +26,6 @@ export const checkMixSeedingRate = ({
 
 export const checkPlantingDate = (crop) => {
   var plantingDate = crop.siteConditionPlantingDate;
-  console.log("check planting datae:", plantingDate, crop);
   if (!(plantingDate instanceof Date)) plantingDate = new Date(plantingDate);
 
   const firstReliableEstablishmentStart = new Date(

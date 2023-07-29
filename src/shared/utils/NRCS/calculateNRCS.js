@@ -1,3 +1,4 @@
+import { SiteCondition } from "../../../pages/Calculator/Steps";
 import airtable from "../../data/airtable.json";
 import { soilDrainage } from "../../data/dropdown";
 import { calculateInt } from "../calculate";
@@ -31,30 +32,37 @@ export const calculateExpectedWinterSurvival = (crop, seedsSelected) => {
     pass: false,
   };
 };
-export const calculatePlantingDate = (seed) => {
+export const calculatePlantingDate = (seed, siteDate) => {
   // take planting date from first page, then the seed data's stuff
-  const data = checkPlantingDate(seed);
+  const startDate = new Date(
+    seed.plantingDates.firstReliableEstablishmentStart
+  ).getTime();
+  const endDate = new Date(
+    seed.plantingDates.firstReliableEstablishmentEnd
+  ).getTime();
+  const plannedDate = new Date(siteDate.slice(0, -5)).getTime();
+  const pass = plannedDate >= startDate && plannedDate <= endDate;
   return {
     label: seed.label,
-    expect: data.expect,
-    result: data.result,
-    pass: false,
+    expect: `${seed.plantingDates.firstReliableEstablishmentStart} - ${seed.plantingDates.firstReliableEstablishmentEnd}`,
+    result: siteDate.slice(0, -5),
+    pass: pass,
   };
 };
 
 export const calculateSeedingRate = (crop, seedsSelected) => {
   // multiply the crop by the plantMethodModifier,
   // then c
-  const seedingRateNRCS = {
-    value: calculateInt(crop.mixSeedingRate, crop.plantingMethod, "multiply"),
-    seeds: [],
-  };
-  const seedingRateResult = calculateInt(
-    crop.singleSpeciesSeedingRate,
-    seedsSelected.length,
-    "divide"
+  const seedingRateNRCS = calculateInt(
+    [crop.mixSeedingRate, crop.plantingMethod],
+    "multiply"
   );
 
+  const seedingRateResult = calculateInt(
+    [crop.singleSpeciesSeedingRate, seedsSelected.length],
+    "divide"
+  );
+  console.log("seed nrcs", seedingRateNRCS, seedingRateResult, crop);
   return {
     label: crop.label,
     expect: seedingRateNRCS,
@@ -77,7 +85,7 @@ export const calculateSoilDrainage = (crop, seedsSelected) => {
   };
 };
 
-export const generateNRCSStandards = (seedsSelected) => {
+export const generateNRCSStandards = (seedsSelected, siteCondition) => {
   const result = {
     seedingRate: {
       value: false,
@@ -102,14 +110,16 @@ export const generateNRCSStandards = (seedsSelected) => {
   };
   seedsSelected.map((s, i) => {
     const seedingRateResult = calculateSeedingRate(s, seedsSelected);
-    const plantingDateResult = calculatePlantingDate(s);
+    const plantingDateResult = calculatePlantingDate(
+      s,
+      siteCondition.plannedPlantingDate
+    );
     const ratioResult = calculateRatio(s, seedsSelected);
     const soilDrainageResult = calculateSoilDrainage(s, seedsSelected);
     const expectedWinterSurvivalResult = calculateExpectedWinterSurvival(
       s,
       seedsSelected
     );
-
     if (!seedingRateResult.pass) result.seedingRate.value = false;
     if (!plantingDateResult.pass) result.plantingDate.value = false;
     if (!ratioResult.pass) result.ratio.value = false;
@@ -125,8 +135,18 @@ export const generateNRCSStandards = (seedsSelected) => {
       calculateExpectedWinterSurvival(s, seedsSelected)
     );
   });
-  console.log("results generate", result);
+
+  result.seedingRate.value = validateNRCS(result.seedingRate.seeds);
+  result.ratio.value = validateNRCS(result.ratio.seeds);
+  result.plantingDate.value = validateNRCS(result.plantingDate.seeds);
+  result.soilDrainage.value = validateNRCS(result.soilDrainage.seeds);
   return result;
+};
+export const validateNRCS = (arr) => {
+  const pass = arr.every((n) => {
+    return n.pass === true;
+  });
+  return pass;
 };
 
 /*

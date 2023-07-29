@@ -68,7 +68,6 @@ const SiteCondition = () => {
     const countyId = counties.filter((c, i) => c.label === e.target.value)[0]
       .id;
 
-    console.log("state id, county id", countyId, e.target.value);
     handleUpdateSteps("county", "siteCondition", e.target.value);
     handleUpdateSteps("countyId", "siteCondition", countyId);
 

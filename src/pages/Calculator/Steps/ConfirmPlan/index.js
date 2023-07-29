@@ -40,7 +40,7 @@ const ConfirmPlan = () => {
   const NRCS = data.NRCS;
 
   useEffect(() => {
-    generateNRCSStandards(speciesSelection.seedsSelected);
+    generateNRCSStandards(speciesSelection.seedsSelected, data.siteCondition);
   }, []);
 
   const plantsPerAcreSum = speciesSelection.seedsSelected.reduce(

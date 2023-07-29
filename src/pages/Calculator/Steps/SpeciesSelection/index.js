@@ -103,7 +103,9 @@ const SpeciesSelection = () => {
           ]["values"][0] !== undefined
             ? cropDetails.attributes["Planting and Growth Windows"][
                 "Reliable Establishment"
-              ]["values"][0].split(" - ")[0]
+              ]["values"][0]
+                .split(" - ")[0]
+                .slice(0, -5)
             : "",
         firstReliableEstablishmentEnd:
           cropDetails.attributes["Planting and Growth Windows"][
@@ -111,32 +113,40 @@ const SpeciesSelection = () => {
           ]["values"][0] !== undefined
             ? cropDetails.attributes["Planting and Growth Windows"][
                 "Reliable Establishment"
-              ]["values"][0].split(" - ")[1]
+              ]["values"][0]
+                .split(" - ")[1]
+                .slice(0, -5)
             : "",
-        secondReliableEstablishmentStart:
-          cropDetails.attributes["Planting and Growth Windows"][
-            "Reliable Establishment"
-          ]["values"][0].split(" - ")[0],
-        secondReliableEstablishmentEnd:
-          cropDetails.attributes["Planting and Growth Windows"][
-            "Reliable Establishment"
-          ]["values"][0].split(" - ")[1],
-        earlySeedingDateStart:
-          cropDetails.attributes["Planting and Growth Windows"][
-            "Reliable Establishment"
-          ]["values"][0].split(" - ")[0],
-        earlySeedingDateEnd:
-          cropDetails.attributes["Planting and Growth Windows"][
-            "Reliable Establishment"
-          ]["values"][0].split(" - ")[1],
-        lateSeedingDateStart:
-          cropDetails.attributes["Planting and Growth Windows"][
-            "Reliable Establishment"
-          ]["values"][0].split(" - ")[0],
-        lateSeedingDateEnd:
-          cropDetails.attributes["Planting and Growth Windows"][
-            "Reliable Establishment"
-          ]["values"][0].split(" - ")[1],
+        secondReliableEstablishmentStart: cropDetails.attributes[
+          "Planting and Growth Windows"
+        ]["Reliable Establishment"]["values"][0]
+          .split(" - ")[0]
+          .slice(0, -5),
+        secondReliableEstablishmentEnd: cropDetails.attributes[
+          "Planting and Growth Windows"
+        ]["Reliable Establishment"]["values"][0]
+          .split(" - ")[1]
+          .slice(0, -5),
+        earlySeedingDateStart: cropDetails.attributes[
+          "Planting and Growth Windows"
+        ]["Reliable Establishment"]["values"][0]
+          .split(" - ")[0]
+          .slice(0, -5),
+        earlySeedingDateEnd: cropDetails.attributes[
+          "Planting and Growth Windows"
+        ]["Reliable Establishment"]["values"][0]
+          .split(" - ")[1]
+          .slice(0, -5),
+        lateSeedingDateStart: cropDetails.attributes[
+          "Planting and Growth Windows"
+        ]["Reliable Establishment"]["values"][0]
+          .split(" - ")[0]
+          .slice(0, -5),
+        lateSeedingDateEnd: cropDetails.attributes[
+          "Planting and Growth Windows"
+        ]["Reliable Establishment"]["values"][0]
+          .split(" - ")[1]
+          .slice(0, -5),
       },
       siteConditionPlantingDate: data.siteCondition.plannedPlantingDate,
       soilDrainage: data.siteCondition.soilDrainage,
@@ -425,12 +435,10 @@ const SpeciesSelection = () => {
     return imgUrl !== null ? imgUrl + "?w=300&h=300&fit=crop&auto=format" : "";
   };
   const renderImageList = (data) => {
-    console.log("data..", filteredSeeds);
     return (
       <ImageList sx={{ maxWidth: "100%" }} cols={matchesSm ? 2 : 6}>
         {filteredSeeds
           .filter((seeds, i) => {
-            console.log("seeds", seeds);
             return seeds.group !== null && seeds.group.label === data;
           })
           .map((seeds, idx) => (

@@ -16,13 +16,13 @@ export const NRCSDetailModal = ({ type, data, modalOpen, handleModalOpen }) => {
     const rows = data.seeds.map((d, i) => {
       return createData(
         d.label,
-        JSON.stringify(d.expect),
+        d.expect,
         d.result,
         d.pass ? "passed" : "failed"
       );
     });
 
-    const cells = ["label", "expected", "result", "pass"];
+    const cells = ["label", "expect", "result", "pass"];
     return <DSTTable rows={rows} createData={createData} cells={cells} />;
   };
   return (
