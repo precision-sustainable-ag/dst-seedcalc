@@ -16,7 +16,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { SearchField } from "../../../../components/SearchField";
 import { updateSteps, getCropsById } from "./../../../../features/stepSlice";
 import { seedsList, seedsLabel } from "../../../../shared/data/species";
-import airtable from "../../../../shared/data/airtable.json";
+
 import {
   calculateAllValues,
   calculateSeeds,

@@ -1,5 +1,4 @@
 import { SiteCondition } from "../../../pages/Calculator/Steps";
-import airtable from "../../data/airtable.json";
 import { soilDrainage } from "../../data/dropdown";
 import { calculateInt } from "../calculate";
 import { checkPlantingDate } from "./checkNRCS";
