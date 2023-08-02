@@ -9,8 +9,9 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-import { seedsList, seedsLabel } from "../../../shared/data/species";
-import "./steps.css";
+import { seedsList, seedsLabel } from "./../../../../shared/data/species";
+import "./../steps.css";
+import SeedsSelectedList from "../../../../components/SeedsSelectedList";
 
 const MixSeedingRate = () => {
   // themes
@@ -26,43 +27,7 @@ const MixSeedingRate = () => {
   const seedsSelected = speciesSelection.seedsSelected;
 
   const renderSeedsSelected = () => {
-    return (
-      <Grid item xs={matchesMd ? 12 : 1}>
-        <Box className="selected-seeds-box">
-          <Grid
-            className="selected-seeds-container"
-            container
-            flexDirection={matchesMd ? "row" : "column"}
-          >
-            {speciesSelection.seedsSelected.map((s, idx) => {
-              return (
-                <Grid item className="selected-seeds-item">
-                  <img
-                    className={
-                      matchesXs
-                        ? "left-panel-img-xs"
-                        : matchesSm
-                        ? "left-panel-img-sm"
-                        : matchesMd
-                        ? "left-panel-img-md"
-                        : "left-panel-img"
-                    }
-                    src={
-                      s.thumbnail !== null
-                        ? s.thumbnail.src
-                        : "https://www.gardeningknowhow.com/wp-content/uploads/2020/04/spinach.jpg"
-                    }
-                    alt={s.label}
-                    loading="lazy"
-                  />
-                  <Typography className="left-panel-text">{s.label}</Typography>
-                </Grid>
-              );
-            })}{" "}
-          </Grid>
-        </Box>
-      </Grid>
-    );
+    return <SeedsSelectedList list={seedsSelected} />;
   };
   const renderRightAccordian = (val) => {
     return (
@@ -78,14 +43,14 @@ const MixSeedingRate = () => {
             borderRadius: "50%",
           }}
         >
-          <Typography>{Math.floor(val)}</Typography>
+          <Typography>{val}</Typography>
         </Box>
         <Typography>Lbs / Acre</Typography>
       </Grid>
     );
   };
 
-  const renderAccordian = (data) => {
+  const renderAccordian = (seed) => {
     return (
       <Accordion xs={12} className="accordian-container">
         <AccordionSummary
@@ -94,29 +59,29 @@ const MixSeedingRate = () => {
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography>{seedsLabel[data]}</Typography>
+          <Typography>{seed.label}</Typography>
         </AccordionSummary>
         <AccordionDetails className="accordian-details">
           <Grid xs={12} container>
             <Grid item xs={6} className="mix-seeding-rate-grid-left">
               <Typography>Precision: </Typography>
             </Grid>
-            {renderRightAccordian(35)}
-            <Grid item xs={6} className="mix-seeding-rate-grid-left">
+            {renderRightAccordian(seed.precision)}
+            {/* <Grid item xs={6} className="mix-seeding-rate-grid-left">
               <Typography>Drilled: </Typography>
             </Grid>
-            {renderRightAccordian(3)}
+            {renderRightAccordian(3)} */}
             <Grid item xs={6} className="mix-seeding-rate-grid-left">
               <Typography>Broadcast(with Light Incorporation): </Typography>
             </Grid>
-            {renderRightAccordian(3)}
+            {renderRightAccordian(seed.broadcast)}
             <Grid item xs={6} className="mix-seeding-rate-grid-left">
               <Typography>
                 Aerial(or broadcast with no Light Incorporation{" "}
                 <span className="red-text">Not Recommended</span>):{" "}
               </Typography>
             </Grid>
-            {renderRightAccordian(0)}
+            {renderRightAccordian(seed.aerial)}
           </Grid>
         </AccordionDetails>
       </Accordion>
@@ -136,7 +101,7 @@ const MixSeedingRate = () => {
           <Typography variant="h2">Mix Seeding Rate</Typography>
         </Grid>
         <Grid item xs={12}>
-          {seedsList.map((s, i) => {
+          {seedsSelected.map((s, i) => {
             return (
               <Grid xs={12}>
                 <Grid item>{renderAccordian(s)}</Grid>

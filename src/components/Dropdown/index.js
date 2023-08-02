@@ -26,8 +26,8 @@ export const Dropdown = ({
 }) => {
   const renderedItems = items.map((item, i) => {
     return (
-      <MenuItem key={item + "" + i} value={item}>
-        {item}
+      <MenuItem key={item + "" + i} value={item.label}>
+        {item.label}
       </MenuItem>
     );
   });
