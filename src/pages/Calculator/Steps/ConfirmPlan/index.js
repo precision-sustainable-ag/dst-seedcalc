@@ -1,7 +1,8 @@
 import Grid from "@mui/material/Grid";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { Typography, Box, Link, Button } from "@mui/material";
+import { Typography, Box, Link, Button, Modal } from "@mui/material";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import CheckIcon from "@mui/icons-material/Check";
@@ -11,12 +12,16 @@ import { Square } from "@mui/icons-material";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import { calculateAllConfirmPlan } from "../../../../shared/utils/calculate";
+import { generateNullSeed } from "../../../../shared/utils/seeds";
 import { handleDownload } from "./../../../../shared/utils/exportExcel";
 import { updateSteps } from "../../../../features/stepSlice";
 import { NumberTextField } from "../../../../components/NumberTextField";
 import { DSTSwitch } from "../../../../components/Switch";
+import NRCSDetailModal from "./modal";
+import { generateNRCSStandards } from "./../../../../shared/utils/NRCS/calculateNRCS";
 
 import "./../steps.css";
+import SeedsSelectedList from "../../../../components/SeedsSelectedList";
 
 const ConfirmPlan = () => {
   // themes
@@ -26,10 +31,18 @@ const ConfirmPlan = () => {
   const matchesMd = useMediaQuery(theme.breakpoints.down("md"));
   const matchesUpMd = useMediaQuery(theme.breakpoints.up("md"));
   // useSelector for crops &  reducer
-
+  const [modalOpen, setModalOpen] = useState(false);
+  const [currentModal, setCurrentModal] = useState({ value: false, seeds: [] });
   const dispatch = useDispatch();
+
   const data = useSelector((state) => state.steps.value);
   const speciesSelection = data.speciesSelection;
+  const NRCS = data.NRCS;
+
+  useEffect(() => {
+    generateNRCSStandards(speciesSelection.seedsSelected, data.siteCondition);
+  }, []);
+
   const plantsPerAcreSum = speciesSelection.seedsSelected.reduce(
     (sum, a) => sum + a.plantsPerAcre,
     0
@@ -54,7 +67,10 @@ const ConfirmPlan = () => {
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
   const RADIAN = Math.PI / 180;
-
+  const handleModalOpen = (data) => {
+    !modalOpen && setCurrentModal(data);
+    setModalOpen(!modalOpen);
+  };
   const handleUpdateSteps = (key, val) => {
     const data = {
       type: "speciesSelection",
@@ -68,7 +84,14 @@ const ConfirmPlan = () => {
     data[index] = calculateAllConfirmPlan(data[index]);
     handleUpdateSteps("seedsSelected", data);
   };
-
+  const initialDataLoad = () => {
+    let data = JSON.parse(JSON.stringify(speciesSelection.seedsSelected));
+    let newData = [...data];
+    speciesSelection.seedsSelected.map((s, i) => {
+      newData[i] = calculateAllConfirmPlan(s);
+      handleUpdateAllSteps(newData, i);
+    });
+  };
   const updateSeed = (val, key, seed) => {
     // find index of seed, parse a copy, update proper values, & send to Redux
     const index = speciesSelection.seedsSelected.findIndex(
@@ -141,44 +164,9 @@ const ConfirmPlan = () => {
       </ResponsiveContainer>
     );
   };
-  const renderSeedsSelected = () => {
-    return (
-      <Grid item xs={matchesMd ? 12 : 1}>
-        <Box className="selected-seeds-box">
-          <Grid
-            className="selected-seeds-container"
-            container
-            flexDirection={matchesMd ? "row" : "column"}
-          >
-            {speciesSelection.seedsSelected.map((s, idx) => {
-              return (
-                <Grid item className="selected-seeds-item">
-                  <img
-                    className={
-                      matchesXs
-                        ? "left-panel-img-xs"
-                        : matchesSm
-                        ? "left-panel-img-sm"
-                        : matchesMd
-                        ? "left-panel-img-md"
-                        : "left-panel-img"
-                    }
-                    src={
-                      s.thumbnail !== null
-                        ? s.thumbnail.src
-                        : "https://www.gardeningknowhow.com/wp-content/uploads/2020/04/spinach.jpg"
-                    }
-                    alt={s.label}
-                    loading="lazy"
-                  />
-                  <Typography className="left-panel-text">{s.label}</Typography>
-                </Grid>
-              );
-            })}{" "}
-          </Grid>
-        </Box>
-      </Grid>
-    );
+
+  const renderSeedsSelected = (seed) => {
+    return <SeedsSelectedList list={speciesSelection.seedsSelected} />;
   };
   const renderSeedData = (data) => {
     return (
@@ -437,8 +425,19 @@ const ConfirmPlan = () => {
       </Grid>
     );
   };
+
+  useEffect(() => {
+    initialDataLoad();
+  }, []);
   return (
     <Grid xs={12} container>
+      {currentModal !== null && (
+        <NRCSDetailModal
+          modalOpen={modalOpen}
+          handleModalOpen={handleModalOpen}
+          data={currentModal}
+        />
+      )}
       {renderSeedsSelected()}
       <Grid
         xs={12}
@@ -455,7 +454,14 @@ const ConfirmPlan = () => {
               <Button
                 className="export-button"
                 onClick={() => {
-                  handleDownload(speciesSelection.seedsSelected);
+                  handleDownload([
+                    ...speciesSelection.seedsSelected,
+                    {
+                      ...generateNullSeed(),
+                      label: "EXT-DATA-OBJECT",
+                      extData: JSON.stringify(data),
+                    },
+                  ]);
                 }}
               >
                 Export
@@ -562,52 +568,204 @@ const ConfirmPlan = () => {
               </Grid>
             </Grid>
           </Grid>
+
           <Grid container xs={12}>
-            <Grid item xs={12}>
-              <Typography
-                sx={{ fontWeight: 600, fontSize: "20px", margin: "20px" }}
-              >
-                Indiana NRCS Standards
-              </Typography>
-            </Grid>
-            <Grid item xs={4}>
-              <Box className="data-circle">
-                <CheckIcon className="data-circle-icon" />
-              </Box>
-              <Typography className="data-circle-label">
-                Seeding Rate
-              </Typography>
-            </Grid>
-            <Grid item xs={4}>
-              <Box className="data-circle">
-                <ClearIcon className="data-circle-icon" />
-              </Box>
-              <Typography className="data-circle-label">
-                Planting Date
-              </Typography>
-            </Grid>
-            <Grid item xs={4}>
-              <Box className="data-circle">
-                <CheckIcon className="data-circle-icon" />
-              </Box>
-              <Typography className="data-circle-label">Ratio</Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <Box className="data-circle">
-                <CheckIcon className="data-circle-icon" />
-              </Box>
-              <Typography className="data-circle-label">
-                Soil Drainage
-              </Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <Box className="data-circle">
-                <Typography>67%</Typography>
-              </Box>
-              <Typography className="data-circle-label">
-                Expected Winter Survival
-              </Typography>
-            </Grid>
+            {NRCS.enabled && (
+              <>
+                <Grid item xs={12}>
+                  <Typography
+                    sx={{ fontWeight: 600, fontSize: "20px", margin: "20px" }}
+                  >
+                    Indiana NRCS Standards
+                  </Typography>
+                </Grid>
+                <Grid xs={1}></Grid>
+                <Grid xs={10}>
+                  <Typography
+                    sx={{ fontSize: "20px", fontWeight: 600, float: "left" }}
+                  >
+                    Seeding Rate
+                  </Typography>
+                </Grid>
+                <Grid xs={1}></Grid>
+                <Grid xs={1}></Grid>
+                <Grid xs={10}>
+                  <Box className="NRCS-result-container">
+                    <Typography sx={{ float: "left" }}>
+                      {" "}
+                      {NRCS.results.seedingRate.value ? (
+                        <CheckIcon sx={{ color: "green" }}></CheckIcon>
+                      ) : (
+                        <ClearIcon sx={{ color: "red" }}></ClearIcon>
+                      )}
+                    </Typography>
+                    <Typography sx={{ float: "left", marginLeft: "5px" }}>
+                      {NRCS.results.seedingRate.value ? "passed" : "failed"}
+                    </Typography>
+                    <Link
+                      sx={{
+                        float: "right",
+                        cursor: "pointer",
+                        marginTop: "2px",
+                      }}
+                      onClick={() => {
+                        handleModalOpen(NRCS.results.seedingRate);
+                      }}
+                    >
+                      Show Details
+                    </Link>
+                  </Box>
+                </Grid>
+                <Grid xs={1}></Grid>
+                <Grid xs={1}></Grid>
+                <Grid xs={10}>
+                  <Typography
+                    sx={{ fontSize: "20px", fontWeight: 600, float: "left" }}
+                  >
+                    Planting Date
+                  </Typography>
+                </Grid>
+                <Grid xs={1}></Grid>
+
+                <Grid xs={1}></Grid>
+                <Grid xs={10}>
+                  <Box className="NRCS-result-container">
+                    <Typography sx={{ float: "left" }}>
+                      {" "}
+                      {NRCS.results.plantingDate.value ? (
+                        <CheckIcon sx={{ color: "green" }}></CheckIcon>
+                      ) : (
+                        <ClearIcon sx={{ color: "red" }}></ClearIcon>
+                      )}
+                    </Typography>
+                    <Typography sx={{ float: "left", marginLeft: "5px" }}>
+                      {NRCS.results.plantingDate.value ? "passed" : "failed"}
+                    </Typography>
+                    <Link
+                      sx={{
+                        float: "right",
+                        cursor: "pointer",
+                        marginTop: "2px",
+                      }}
+                      onClick={() => {
+                        handleModalOpen(NRCS.results.plantingDate);
+                      }}
+                    >
+                      Show Details
+                    </Link>
+                  </Box>
+                </Grid>
+                <Grid xs={1}></Grid>
+
+                <Grid xs={1}></Grid>
+                <Grid xs={10}>
+                  <Typography
+                    sx={{ fontSize: "20px", fontWeight: 600, float: "left" }}
+                  >
+                    Ratio
+                  </Typography>
+                </Grid>
+                <Grid xs={1}></Grid>
+                <Grid xs={1}></Grid>
+                <Grid xs={10}>
+                  <Box className="NRCS-result-container">
+                    <Typography sx={{ float: "left" }}>
+                      {" "}
+                      {NRCS.results.ratio.value ? (
+                        <CheckIcon sx={{ color: "green" }}></CheckIcon>
+                      ) : (
+                        <ClearIcon sx={{ color: "red" }}></ClearIcon>
+                      )}
+                    </Typography>
+                    <Typography sx={{ float: "left", marginLeft: "10px" }}>
+                      {NRCS.results.ratio.value ? "passed" : "failed"}
+                    </Typography>
+                    <Link
+                      sx={{
+                        float: "right",
+                        cursor: "pointer",
+                        marginTop: "2px",
+                      }}
+                      onClick={() => {
+                        handleModalOpen(NRCS.results.ratio);
+                      }}
+                    >
+                      Show Details
+                    </Link>
+                  </Box>
+                </Grid>
+                <Grid xs={1}></Grid>
+
+                <Grid xs={1}></Grid>
+                <Grid xs={10}>
+                  <Typography
+                    sx={{ fontSize: "20px", fontWeight: 600, float: "left" }}
+                  >
+                    Soil Drainage
+                  </Typography>
+                </Grid>
+                <Grid xs={1}></Grid>
+                <Grid xs={1}></Grid>
+                <Grid xs={10}>
+                  <Box className="NRCS-result-container">
+                    <Typography sx={{ float: "left" }}>
+                      {NRCS.results.soilDrainage.value ? (
+                        <CheckIcon sx={{ color: "green" }}></CheckIcon>
+                      ) : (
+                        <ClearIcon sx={{ color: "red" }}></ClearIcon>
+                      )}
+                    </Typography>
+                    <Typography sx={{ float: "left", marginLeft: "5px" }}>
+                      {NRCS.results.soilDrainage.value ? "passed" : "failed"}
+                    </Typography>
+                    <Link
+                      sx={{
+                        float: "right",
+                        cursor: "pointer",
+                        marginTop: "2px",
+                      }}
+                      onClick={() => {
+                        handleModalOpen(NRCS.results.soilDrainage);
+                      }}
+                    >
+                      Show Details
+                    </Link>
+                  </Box>
+                </Grid>
+                <Grid xs={1}></Grid>
+
+                <Grid xs={1}></Grid>
+                <Grid xs={10}>
+                  <Typography
+                    sx={{ fontSize: "20px", fontWeight: 600, float: "left" }}
+                  >
+                    Expected Winter Survival
+                  </Typography>
+                </Grid>
+                <Grid xs={1}></Grid>
+                <Grid xs={1}></Grid>
+                <Grid xs={10}>
+                  <Box className="NRCS-result-container">
+                    <Typography sx={{ float: "left", marginLeft: "5px" }}>
+                      {NRCS.results.expectedWinterSurvival.value}
+                    </Typography>
+                    <Link
+                      sx={{
+                        float: "right",
+                        cursor: "pointer",
+                        marginTop: "2px",
+                      }}
+                      onClick={() => {
+                        handleModalOpen(NRCS.results.expectedWinterSurvival);
+                      }}
+                    >
+                      Show Details
+                    </Link>
+                  </Box>
+                </Grid>
+                <Grid xs={1}></Grid>
+              </>
+            )}
             <Grid item xs={12}>
               {" "}
               {speciesSelection.seedsSelected.map((s, i) => {

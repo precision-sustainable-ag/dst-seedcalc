@@ -1,11 +1,11 @@
 export const plantHardinessZone = [
-  "Zone 1",
-  "Zone 2",
-  "Zone 3",
-  "Zone 4",
-  "Zone 5",
-  "Zone 6",
-  "Zone 7",
+  { label: "Zone 1" },
+  { label: "Zone 2" },
+  { label: "Zone 3" },
+  { label: "Zone 4" },
+  { label: "Zone 5" },
+  { label: "Zone 6" },
+  { label: "Zone 7" },
 ];
 
 export const calculatorList = [
@@ -20,15 +20,15 @@ export const calculatorList = [
 ];
 
 export const soilDrainage = [
-  "Very Poorly Drained",
-  "Poorly Drained",
-  "Somewhat Poorly Drained",
-  "Moderately Poorly Drained",
-  "Well Drained",
-  "Somewhat Excessively Drained",
-  "Excessively Drained",
-  "Saturated Muck",
-  "Well Drained Muck",
+  { label: "Very Poorly Drained" },
+  { label: "Poorly Drained" },
+  { label: "Somewhat Poorly Drained" },
+  { label: "Moderately Poorly Drained" },
+  { label: "Well Drained" },
+  { label: "Somewhat Excessively Drained" },
+  { label: "Excessively Drained" },
+  { label: "Saturated Muck" },
+  { label: "Well Drained Muck" },
 ];
 
 export const soilFertility = ["Low-Medium", "High"];
