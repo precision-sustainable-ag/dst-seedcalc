@@ -11,12 +11,12 @@ resources:
 variables:
 
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: 'd346365d-a05e-4364-9d95-c2553be885b2'
+  dockerRegistryServiceConnection: 'ee72a7a3-fb77-4107-8b81-18039b0f0fa0'
   imageRepository: 'dstseedcalc'
   containerRegistry: 'containerregistry4pd7i.azurecr.io'
   dockerfilePath: '**/Dockerfile'
   tag: '$(Build.BuildId)'
-  imagePullSecret: 'containerregistry4pd7idab5-auth'
+  imagePullSecret: 'containerregistry4pd7i21104072-auth'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -42,6 +42,7 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
+
     - upload: manifests
       artifact: manifests
 
@@ -55,7 +56,7 @@ stages:
     displayName: Deploy
     pool:
       vmImage: $(vmImageName)
-    environment: 'precisionsustainableagdstseedcalc.develop'
+    environment: 'precisionsustainableagdstseedcalc-2145.develop'
     strategy:
       runOnce:
         deploy:
@@ -78,13 +79,14 @@ stages:
                 $(imagePullSecret)
               containers: |
                 $(containerRegistry)/$(imageRepository):$(tag)
+
   - deployment: DeployPullRequest
     displayName: Deploy Pull request
     condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/pull/'))
     pool:
       vmImage: $(vmImageName)
 
-    environment: 'precisionsustainableagdstseedcalc.$(k8sNamespaceForPR)'
+    environment: 'precisionsustainableagdstseedcalc-2145.$(k8sNamespaceForPR)'
     strategy:
       runOnce:
         deploy:
@@ -118,6 +120,7 @@ stages:
                 $(imagePullSecret)
               containers: |
                 $(containerRegistry)/$(imageRepository):$(tag)
+
           - task: Kubernetes@1
             name: get
             displayName: 'Get services in the new namespace'
