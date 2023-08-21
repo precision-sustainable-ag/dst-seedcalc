@@ -32,10 +32,10 @@ export const calculateAllValues = (prevSeed, data) => {
     data.speciesSelection.seedsSelected
   );
   console.log("percentingroup", percentInGroup);
-  seed.mixSeedingRate = Math.round(calculateSeeds("step1", seed).val);
-  seed.seedsPerAcre = Math.round(calculateSeeds("step2", seed).val);
-  seed.plantsPerAcre = Math.round(calculateSeeds("step3", seed).val);
-  seed.aproxPlantsSqFt = Math.round(calculateSeeds("step4", seed).val);
+  seed.mixSeedingRate = calculateSeeds("step1", seed).val.toFixed(2);
+  seed.seedsPerAcre = calculateSeeds("step2", seed).val.toFixed(2);
+  seed.plantsPerAcre = calculateSeeds("step3", seed).val.toFixed(2);
+  seed.aproxPlantsSqFt = calculateSeeds("step4", seed).val.toFixed(2);
   return seed;
 };
 export const calculateAllValuesNECCC = (prevSeed, data) => {
@@ -46,12 +46,10 @@ export const calculateAllValuesNECCC = (prevSeed, data) => {
     data.speciesSelection.seedsSelected
   );
   console.log("percentingroup", percentInGroup);
-  seed.mixSeedingRate = Math.round(
-    calculateSeedsNECCC("step1", seed, data).val
-  );
-  seed.seedsPerAcre = Math.round(calculateSeedsNECCC("step2", seed, data).val);
-  seed.aproxPlantsSqFt = Math.round(
-    calculateSeedsNECCC("step3", seed, data).val
+  seed.mixSeedingRate = calculateSeedsNECCC("step1", seed, data).val.toFixed(2);
+  seed.seedsPerAcre = calculateSeedsNECCC("step2", seed, data).val.toFixed(2);
+  seed.aproxPlantsSqFt = calculateSeedsNECCC("step3", seed, data).val.toFixed(
+    2
   );
   return seed;
 };
@@ -61,7 +59,10 @@ export const calculateSeeds = (step, seed) => {
       return {
         key: "mixSeedingRate",
         val: calculateInt(
-          [seed.singleSpeciesSeedingRatePLS, seed.percentOfSingleSpeciesRate],
+          [
+            seed.singleSpeciesSeedingRatePLS,
+            convertToDecimal(seed.percentOfSingleSpeciesRate),
+          ],
           "multiply"
         ),
       };
@@ -134,14 +135,12 @@ export const calculateAllMixValues = (prevSeed, data) => {
   console.log("data", data);
   generatePercentInGroup(prevSeed, data.speciesSelection.seedsSelected);
   let seed = { ...prevSeed };
-  seed.step1Result = Math.round(calculateReviewMix("step1", seed, data).val);
-  seed.step2Result = Math.round(calculateReviewMix("step2", seed, data).val);
-  seed.step3Result = Math.round(calculateReviewMix("step3", seed, data).val);
-  seed.bulkSeedingRate = Math.round(
-    calculateReviewMix("step4", seed, data).val
-  );
-  seed.poundsForPurchase = Math.round(
-    calculateReviewMix("step5", seed, data).val
+  seed.step1Result = calculateReviewMix("step1", seed, data).val.toFixed(2);
+  seed.step2Result = calculateReviewMix("step2", seed, data).val.toFixed(2);
+  seed.step3Result = calculateReviewMix("step3", seed, data).val.toFixed(2);
+  seed.bulkSeedingRate = calculateReviewMix("step4", seed, data).val.toFixed(2);
+  seed.poundsForPurchase = calculateReviewMix("step5", seed, data).val.toFixed(
+    2
   );
   return seed;
 };
@@ -158,21 +157,25 @@ export const calculateAllMixValuesNECCC = (prevSeed, data) => {
   console.log("data", data);
   generatePercentInGroup(prevSeed, data.speciesSelection.seedsSelected);
   let seed = { ...prevSeed };
-  seed.step1Result = Math.round(
-    calculateReviewMixNECCC("step1", seed, data).val
+  seed.step1Result = calculateReviewMixNECCC("step1", seed, data).val.toFixed(
+    2
   );
-  seed.step2Result = Math.round(
-    calculateReviewMixNECCC("step2", seed, data).val
+  seed.step2Result = calculateReviewMixNECCC("step2", seed, data).val.toFixed(
+    2
   );
-  seed.step3Result = Math.round(
-    calculateReviewMixNECCC("step3", seed, data).val
+  seed.step3Result = calculateReviewMixNECCC("step3", seed, data).val.toFixed(
+    2
   );
-  seed.bulkSeedingRate = Math.round(
-    calculateReviewMixNECCC("step4", seed, data).val
-  );
-  seed.poundsForPurchase = Math.round(
-    calculateReviewMixNECCC("step5", seed, data).val
-  );
+  seed.bulkSeedingRate = calculateReviewMixNECCC(
+    "step4",
+    seed,
+    data
+  ).val.toFixed(2);
+  seed.poundsForPurchase = calculateReviewMixNECCC(
+    "step5",
+    seed,
+    data
+  ).val.toFixed(2);
   return seed;
 };
 
@@ -370,4 +373,14 @@ const convertToFormat = () => {
     style: "currency",
     currency: "USD",
   });
+};
+const setAll = (obj, val) => {
+  Object.keys(obj).forEach((k) => (obj[k] = val));
+  return obj;
+};
+const setNull = (obj) => setAll(obj, null);
+export const emptyValues = (data) => {
+  const emptyObj = setNull(data);
+  console.log("emptyObj", emptyObj);
+  return emptyObj;
 };

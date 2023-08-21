@@ -19,6 +19,7 @@ import { seedsList, seedsLabel } from "../../../../shared/data/species";
 import { calculateAllValues } from "../../../../shared/utils/calculate";
 import "./../steps.css";
 import SeedsSelectedList from "./../../../../components/SeedsSelectedList";
+import { emptyValues } from "../../../../shared/utils/calculate";
 
 const SpeciesSelection = ({ council }) => {
   // themes
@@ -290,29 +291,7 @@ const SpeciesSelection = ({ council }) => {
       costPerPound: 0.43, // TBD
       totalCost: 0,
       addedToMix: 0,
-      // NRCS Standards
-      NRCSSeedingRate: {
-        limit: 0,
-        result: 0,
-      },
-      NRCSPlantingDate: {
-        limit: 0,
-        result: 0,
-      },
-      NRCSRatio: {
-        limit: 0,
-        result: 0,
-      },
-      NRCSSoilDrainage: {
-        limit: 0,
-        result: 0,
-      },
-      NRCSExpectedWinterSurvival: {
-        limit: 0,
-        result: 0,
-      },
     };
-
     newSeed = calculateAllValues(newSeed, data);
     // three checks:
     // * seedlength is 0

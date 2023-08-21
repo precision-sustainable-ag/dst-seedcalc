@@ -351,7 +351,7 @@ const MixRatio = ({ council }) => {
                 label="% in Group"
                 variant="filled"
                 disabled={true}
-                value={convertToPercent(percentInGroup)}
+                value={Math.round(convertToPercent(percentInGroup))}
               />
             </Grid>
             <Grid item xs={1}>
@@ -371,7 +371,7 @@ const MixRatio = ({ council }) => {
                     seed
                   );
                 }}
-                value={seed.percentOfSingleSpeciesRate}
+                value={Math.round(seed.percentOfSingleSpeciesRate)}
               />
               <Typography>{council === "MCCC" ? "MCCC" : "NECCC"}</Typography>
             </Grid>

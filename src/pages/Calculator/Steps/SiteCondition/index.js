@@ -46,7 +46,9 @@ const SiteCondition = ({ council }) => {
           <Grid item xs={12} padding={15} className="site-condition-container">
             <Dropdown
               value={siteCondition.county}
-              label={"County: "}
+              label={
+                council === "MCCC" ? "County: " : "USDA Plant Hardiness Zone: "
+              }
               handleChange={handleRegion}
               size={12}
               items={counties}

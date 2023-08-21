@@ -22,6 +22,7 @@ import ConfirmPlanCharts from "./ConfirmPlanCharts";
 import NRCSStandards from "./NRCSStandards";
 import "./../steps.css";
 import SeedsSelectedList from "../../../../components/SeedsSelectedList";
+import { emptyValues } from "../../../../shared/utils/calculate";
 
 const ConfirmPlan = ({ council }) => {
   // themes
@@ -431,7 +432,11 @@ const ConfirmPlan = ({ council }) => {
       </Grid>
     );
   };
-
+  const generateSeedNull = () => {
+    const seed = { ...speciesSelection.seedsSelected[1] };
+    console.log("generateSeedNull", emptyValues(seed));
+    return emptyValues(seed);
+  };
   useEffect(() => {
     initialDataLoad();
   }, []);
@@ -463,14 +468,17 @@ const ConfirmPlan = ({ council }) => {
               <Button
                 className="export-button"
                 onClick={() => {
-                  handleDownload([
-                    ...speciesSelection.seedsSelected,
-                    {
-                      ...generateNullSeed(),
-                      label: "EXT-DATA-OBJECT",
-                      extData: JSON.stringify(data),
-                    },
-                  ]);
+                  handleDownload(
+                    [
+                      ...speciesSelection.seedsSelected,
+                      {
+                        ...generateSeedNull(),
+                        label: "EXT-DATA-OBJECT",
+                        extData: JSON.stringify(data),
+                      },
+                    ],
+                    council
+                  );
                 }}
               >
                 Export

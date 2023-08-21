@@ -78,6 +78,7 @@ const Home = () => {
           const extDataObject = JSON.parse(
             results.data[results.data.length - 1].extData
           );
+          console.log("ext data: ", extDataObject);
           setCSVImport(extDataObject);
         }
       },
@@ -85,8 +86,11 @@ const Home = () => {
   };
 
   const handleImportCSV = () => {
+    const type = CSVImport.siteCondition.county.includes("Zone")
+      ? "NECCC"
+      : "MCCC";
     dispatch(updateAllSteps({ value: CSVImport }));
-    navigate("/calculator");
+    navigate(`/${type}/calculator`);
   };
   // Import logic end
 

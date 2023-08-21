@@ -204,34 +204,34 @@ const ReviewMix = ({ council }) => {
     return results;
   };
   const generateDetails = (label) => {
-    if (label === "Page A") {
-      return "Page A is about men's clothing";
+    if (label === "Single Species Seeding Rate") {
+      return "Single Species Seeding Rate";
     }
-    if (label === "Page B") {
-      return "Page B is about women's dress";
+    if (label === "Added To Mix") {
+      return "Mix seeding rate added to mix";
     }
-    if (label === "Page C") {
-      return "Page C is about women's bag";
+    if (label === "Drilled or Broadcast with Cultipack") {
+      return "Mix seeding rate with drilled";
     }
-    if (label === "Page D") {
-      return "Page D is about household goods";
+    if (label === "Management Impacts on Mix (+57%)") {
+      return "Mix seeding rate with Management Impact on mix";
     }
-    if (label === "Page E") {
-      return "Page E is about food";
-    }
-    if (label === "Page F") {
-      return "Page F is about baby food";
+    if (label === "Bulk Germination and Purity") {
+      return "Bulk Germination and Purity";
     }
     return "";
   };
 
-  const CustomTooltip = ({ active, payload, label }) => {
+  const CustomTooltip = (scatterData) => {
+    console.log("d", scatterData);
+    const { active, payload, label } = scatterData;
+    console.log("custom tool tip", active, active, label);
     if (active && payload && payload.length) {
       return (
         <div className="custom-tooltip">
           <p className="label">{`${label} : ${payload[0].value}`}</p>
           <p className="intro">{generateDetails(label)}</p>
-          <p className="desc">Anything you want can be displayed here.</p>
+          <p className="desc">Calculation details</p>
         </div>
       );
     }
@@ -265,10 +265,10 @@ const ReviewMix = ({ council }) => {
               <ZAxis dataKey="z" range={[1000, 1449]} name="" unit="" />
               <Tooltip
                 cursor={{ strokeDasharray: "50 50" }}
-                content={CustomTooltip}
+                // content={CustomTooltip}
               />
               <Scatter
-                name="A school"
+                name="Mix Seeding Rates"
                 data={scatterData}
                 fill="#E7885F"
                 margin={{
@@ -343,7 +343,7 @@ const ReviewMix = ({ council }) => {
       {
         label: "Management Impacts on Mix (+57%)",
         key: "managementImpactOnMix",
-        val: data["seedingMethod"]["managementImpactOnMix"],
+        val: seed["step3Result"],
       },
       {
         label: "Bulk Germination and Purity",
@@ -448,6 +448,7 @@ const ReviewMix = ({ council }) => {
       </>
     );
   };
+
   const renderStepsForm = (label1, label2, label3) => {
     if (Array.isArray(label2)) {
       return (
@@ -660,7 +661,9 @@ const ReviewMix = ({ council }) => {
                   }}
                   value={seed.percentOfSingleSpeciesRate}
                 />
-                <Typography className="font-15">MCCC Recommendation</Typography>
+                <Typography className="font-15">
+                  {council === "MCCC" && "MCCC Recommendation"}
+                </Typography>
               </Grid>
               <Grid item xs={1}>
                 <Typography className="math-icon">=</Typography>
@@ -778,7 +781,7 @@ const ReviewMix = ({ council }) => {
             handleChange={(e) => {
               updateSeed(e.target.value, "managementImpactOnMix", seed);
             }}
-            value={seedingMethod.managementImpactOnMix}
+            value={seedingMethod.managementImpactOnMix.toFixed(2)}
           />
         </Grid>
         <Grid item xs={1}>
