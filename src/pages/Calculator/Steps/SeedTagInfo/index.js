@@ -13,16 +13,17 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { updateSteps } from "./../../../../features/stepSlice";
 import { DSTSwitch } from "./../../../../components/Switch";
 import { seedsList, seedsLabel } from "./../../../../shared/data/species";
+import {
+  convertToPercent,
+  convertToDecimal,
+} from "../../../../shared/utils/calculate";
 import { NumberTextField } from "./../../../../components/NumberTextField";
 import "./../steps.css";
 import SeedsSelectedList from "../../../../components/SeedsSelectedList";
 
-const SeedTagInfo = () => {
+const SeedTagInfo = ({ council }) => {
   // themes
   const theme = useTheme();
-  const matchesXs = useMediaQuery(theme.breakpoints.down("xs"));
-  const matchesSm = useMediaQuery(theme.breakpoints.down("sm"));
-  const matchesMd = useMediaQuery(theme.breakpoints.down("md"));
 
   // useSelector for crops reducer data
   const dispatch = useDispatch();
@@ -80,11 +81,11 @@ const SeedTagInfo = () => {
           id="filled-basic"
           variant="filled"
           disabled={disabled}
-          value={data[key]}
+          value={convertToPercent(data[key])}
           handleChange={(e) => {
-            handleSeed(e.target.value, key, "", {
+            handleSeed(convertToDecimal(e.target.value), key, "", {
               ...data,
-              [key]: e.target.value,
+              [key]: convertToDecimal(e.target.value),
             });
           }}
         />

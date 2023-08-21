@@ -1,9 +1,7 @@
-import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import { Typography, useMediaQuery, Grid } from "@mui/material";
 import { useTheme } from "@emotion/react";
 
-const CompletedPage = () => {
+const CompletedPage = ({ council }) => {
   // themes
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down("xs"));

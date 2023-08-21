@@ -15,7 +15,10 @@
   height: 180px;
   margin: 59px 0px;
 }
-
+.dst-mccc-logo img {
+  width: 200px;
+  margin: 59px 0px;
+}
 .import-button {
   margin-top: 79px;
 }

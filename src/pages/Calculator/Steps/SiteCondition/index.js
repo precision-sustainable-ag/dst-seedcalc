@@ -17,7 +17,7 @@ import {
 } from "./../../../../features/stepSlice";
 import "./../steps.css";
 
-const SiteCondition = () => {
+const SiteCondition = ({ council }) => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps);
   const siteCondition = data.value.siteCondition;
@@ -79,8 +79,7 @@ const SiteCondition = () => {
   };
 
   useEffect(() => {
-    // dispatch(getCrops());
-    dispatch(getLocality({ type: "MCCC" }));
+    dispatch(getLocality({ type: council }));
     dispatch(
       getCropsById({
         cropId: "148",
@@ -143,8 +142,14 @@ const SiteCondition = () => {
         />
       </Grid>
       <Grid item xs={12} padding={15} className="site-condition-container">
-        <Typography variant="nrcsStandard">Check NRCS Standards: </Typography>
-        <DSTSwitch checked={checked} handleChange={handleSwitch} />
+        {council === "MCCC" && (
+          <>
+            <Typography variant="nrcsStandard">
+              Check NRCS Standards:{" "}
+            </Typography>
+            <DSTSwitch checked={checked} handleChange={handleSwitch} />
+          </>
+        )}
       </Grid>
     </Grid>
   );

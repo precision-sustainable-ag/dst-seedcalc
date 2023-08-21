@@ -9,11 +9,13 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-import { seedsList, seedsLabel } from "./../../../../shared/data/species";
+import { updateSteps } from "../../../../features/stepSlice";
+import { seedingMethods } from "../../../../shared/data/dropdown";
+import { Dropdown } from "../../../../components/Dropdown";
 import "./../steps.css";
 import SeedsSelectedList from "../../../../components/SeedsSelectedList";
 
-const MixSeedingRate = () => {
+const MixSeedingRate = ({ council }) => {
   // themes
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down("xs"));
@@ -23,29 +25,46 @@ const MixSeedingRate = () => {
   // useSelector for crops reducer data
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
-  const speciesSelection = data.speciesSelection;
+  const { seedingMethod, speciesSelection } = data;
   const seedsSelected = speciesSelection.seedsSelected;
 
+  const handleUpdateSteps = (key, val) => {
+    const data = {
+      type: "seedingMethod",
+      key: key,
+      value: val,
+    };
+    dispatch(updateSteps(data));
+  };
+  const handleSeedingMethod = (e) => {
+    handleUpdateSteps("type", e.target.value);
+  };
   const renderSeedsSelected = () => {
     return <SeedsSelectedList list={seedsSelected} />;
   };
-  const renderRightAccordian = (val) => {
+  const renderRightAccordian = (type, val) => {
     return (
       <Grid item xs={6} className="mix-seeding-rate-grid-right">
-        <Box
-          sx={{
-            width: "50px",
-            height: "50px",
-            padding: "11px",
-            margin: "0 auto",
-            backgroundColor: "#E5E7D5",
-            border: "#C7C7C7 solid 1px",
-            borderRadius: "50%",
-          }}
-        >
-          <Typography>{val}</Typography>
-        </Box>
-        <Typography>Lbs / Acre</Typography>
+        {council === "NECCC" && type !== "precision" ? (
+          <Typography>Not Recommended</Typography>
+        ) : (
+          <>
+            <Box
+              sx={{
+                width: "50px",
+                height: "50px",
+                padding: "11px",
+                margin: "0 auto",
+                backgroundColor: "#E5E7D5",
+                border: "#C7C7C7 solid 1px",
+                borderRadius: "50%",
+              }}
+            >
+              <Typography>{val}</Typography>
+            </Box>
+            <Typography>Lbs / Acre</Typography>
+          </>
+        )}
       </Grid>
     );
   };
@@ -66,22 +85,22 @@ const MixSeedingRate = () => {
             <Grid item xs={6} className="mix-seeding-rate-grid-left">
               <Typography>Precision: </Typography>
             </Grid>
-            {renderRightAccordian(seed.precision)}
-            {/* <Grid item xs={6} className="mix-seeding-rate-grid-left">
+            {renderRightAccordian("precision", seed.precision)}
+            <Grid item xs={6} className="mix-seeding-rate-grid-left">
               <Typography>Drilled: </Typography>
             </Grid>
-            {renderRightAccordian(3)} */}
+            {renderRightAccordian("drilled", 1)}
             <Grid item xs={6} className="mix-seeding-rate-grid-left">
               <Typography>Broadcast(with Light Incorporation): </Typography>
             </Grid>
-            {renderRightAccordian(seed.broadcast)}
+            {renderRightAccordian("broadcast", seed.broadcast)}
             <Grid item xs={6} className="mix-seeding-rate-grid-left">
               <Typography>
                 Aerial(or broadcast with no Light Incorporation{" "}
                 <span className="red-text">Not Recommended</span>):{" "}
               </Typography>
             </Grid>
-            {renderRightAccordian(seed.aerial)}
+            {renderRightAccordian("aerial", seed.aerial)}
           </Grid>
         </AccordionDetails>
       </Accordion>
@@ -99,6 +118,15 @@ const MixSeedingRate = () => {
       >
         <Grid item xs={12}>
           <Typography variant="h2">Mix Seeding Rate</Typography>
+        </Grid>
+        <Grid item xs={12} padding={15} className="site-condition-container">
+          <Dropdown
+            value={seedingMethod.type}
+            label={"Seeding Method: "}
+            handleChange={handleSeedingMethod}
+            size={12}
+            items={seedingMethods}
+          />
         </Grid>
         <Grid item xs={12}>
           {seedsSelected.map((s, i) => {

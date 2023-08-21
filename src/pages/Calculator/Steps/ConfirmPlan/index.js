@@ -7,23 +7,23 @@ import { useSelector, useDispatch } from "react-redux";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
-import Accordion from "@mui/material/Accordion";
 import { Square } from "@mui/icons-material";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
+
 import { calculateAllConfirmPlan } from "../../../../shared/utils/calculate";
 import { generateNullSeed } from "../../../../shared/utils/seeds";
 import { handleDownload } from "./../../../../shared/utils/exportExcel";
 import { updateSteps } from "../../../../features/stepSlice";
 import { NumberTextField } from "../../../../components/NumberTextField";
+import { DSTTextField } from "../../../../components/DSTTextField";
 import { DSTSwitch } from "../../../../components/Switch";
 import NRCSDetailModal from "./modal";
 import { generateNRCSStandards } from "./../../../../shared/utils/NRCS/calculateNRCS";
-
+import ConfirmPlanCharts from "./ConfirmPlanCharts";
+import NRCSStandards from "./NRCSStandards";
 import "./../steps.css";
 import SeedsSelectedList from "../../../../components/SeedsSelectedList";
 
-const ConfirmPlan = () => {
+const ConfirmPlan = ({ council }) => {
   // themes
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down("xs"));
@@ -43,6 +43,10 @@ const ConfirmPlan = () => {
     generateNRCSStandards(speciesSelection.seedsSelected, data.siteCondition);
   }, []);
 
+  const poundsForPurchaseSum = speciesSelection.seedsSelected.reduce(
+    (sum, a) => sum + a.poundsForPurchase,
+    0
+  );
   const plantsPerAcreSum = speciesSelection.seedsSelected.reduce(
     (sum, a) => sum + a.plantsPerAcre,
     0
@@ -257,13 +261,15 @@ const ConfirmPlan = () => {
           </Typography>
         </Grid>
         <Grid item xs={3} className="confirm-plan-form-container">
-          <NumberTextField
+          <DSTTextField
             className="text-field-100"
             id="filled-basic"
             label={`${data.speciesSelection.seedsSelected[0].label}`}
             variant="filled"
             disabled={true}
-            value={data.speciesSelection.seedsSelected[0].totalCost}
+            value={`$${data.speciesSelection.seedsSelected[0].totalCost.toFixed(
+              2
+            )}`}
           />{" "}
         </Grid>
         <Grid item xs={1} className="confirm-plan-form-container">
@@ -274,13 +280,13 @@ const ConfirmPlan = () => {
             return (
               <>
                 <Grid item xs={3} className="confirm-plan-form-container">
-                  <NumberTextField
+                  <DSTTextField
                     className="text-field-100"
                     id="filled-basic"
                     label={`${s.label}`}
                     variant="filled"
                     disabled={true}
-                    value={s.totalCost}
+                    value={`$${s.totalCost.toFixed(2)}`}
                   />{" "}
                 </Grid>
                 <Grid item xs={1} className="confirm-plan-form-container">
@@ -295,13 +301,13 @@ const ConfirmPlan = () => {
           }
         })}
         <Grid item xs={3} className="confirm-plan-form-container">
-          <NumberTextField
+          <DSTTextField
             className="text-field-100"
             id="filled-basic"
             label={"Total Cost of Mix"}
             variant="filled"
             disabled={true}
-            value={totalCostOfMix}
+            value={`$${totalCostOfMix.toFixed(2)}`}
           />{" "}
         </Grid>
       </Grid>
@@ -320,9 +326,9 @@ const ConfirmPlan = () => {
               label="Bulk Lbs / Acre"
               variant="filled"
               handleChange={(e) => {
-                updateSeed(e.target.value, "bulkLbsPerAcre", data);
+                updateSeed(e.target.value, "bulkSeedingRate", data);
               }}
-              value={data.bulkLbsPerAcre}
+              value={data.bulkSeedingRate}
             />
           </Grid>
           <Grid item xs={1}>
@@ -413,13 +419,13 @@ const ConfirmPlan = () => {
           <Typography className="math-icon">=</Typography>
         </Grid>
         <Grid item xs={3}>
-          <NumberTextField
+          <DSTTextField
             className="text-field-100"
             id="filled-basic"
             label="Total Cost"
             variant="filled"
             disabled={true}
-            value={data.totalCost}
+            value={`$${data.totalCost.toFixed(2)}`}
           />
         </Grid>
       </Grid>
@@ -448,6 +454,9 @@ const ConfirmPlan = () => {
       >
         <Grid item xs={12}>
           <Typography variant="h2">Confirm your plan</Typography>
+
+          {/* Export */}
+
           <Grid container sx={{ marginTop: "5px" }} xs={12}>
             <Grid item xs={matchesUpMd ? 11 : 10}></Grid>
             <Grid item xs={matchesUpMd ? 1 : 2}>
@@ -468,303 +477,22 @@ const ConfirmPlan = () => {
               </Button>
             </Grid>
           </Grid>
-          <Grid container xs={12} sx={{ padding: "20px" }}>
-            <Grid
-              item
-              xs={6}
-              sx={{
-                borderRight: "1px solid #CCCCCC",
-                borderBottom: "1px solid #CCCCCC",
-                padding: "10px",
-              }}
-            >
-              <Typography className="data-circle-label">
-                Amount of mix for 50 acres
-              </Typography>
-              <Box className="data-circle">
-                <Typography>3,425</Typography>
-              </Box>
-            </Grid>
-            <Grid
-              item
-              xs={6}
-              sx={{
-                borderBottom: "1px solid #CCCCCC",
-                padding: "10px",
-              }}
-            >
-              <Typography className="data-circle-label">Price/Acre</Typography>
-              <Box className="data-circle">
-                <Typography>$35.33</Typography>
-              </Box>
-            </Grid>
-            <Grid
-              item
-              xs={6}
-              md={6}
-              className="mix-ratio-chart-container"
-              sx={{
-                borderRight: "1px solid #CCCCCC",
-                borderBottom: "1px solid #CCCCCC",
-                padding: "10px",
-              }}
-            >
-              {renderPieChart("poundsOfSeed")}
-              <Typography
-                className="mix-ratio-chart-header"
-                sx={{ fontWeight: 600 }}
-              >
-                Pounds of Seed / Acre{" "}
-              </Typography>
-              <Grid item className="mix-ratio-chart-list-50">
-                {speciesSelection.seedsSelected.map((s, i) => {
-                  return (
-                    <Grid container xs={12}>
-                      <Grid item xs={2}>
-                        <Square sx={{ color: COLORS[i] }}></Square>
-                      </Grid>
-                      <Grid item xs={10}>
-                        <Typography className={matchesMd ? "mix-label-md" : ""}>
-                          {s.label}
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                  );
-                })}
-              </Grid>
-            </Grid>
-            <Grid
-              item
-              xs={6}
-              md={6}
-              className="mix-ratio-chart-container"
-              sx={{
-                borderBottom: "1px solid #CCCCCC",
-                padding: "10px",
-              }}
-            >
-              {renderPieChart("plantsPerAcre")}
-              <Typography
-                className="mix-ratio-chart-header"
-                sx={{ fontWeight: 600 }}
-              >
-                Plants Per Acre{" "}
-              </Typography>
-              <Grid item className="mix-ratio-chart-list-50">
-                {speciesSelection.seedsSelected.map((s, i) => {
-                  return (
-                    <Grid container xs={12}>
-                      <Grid item xs={2}>
-                        <Square sx={{ color: COLORS[i] }}></Square>
-                      </Grid>
-                      <Grid item xs={10}>
-                        <Typography className={matchesMd ? "mix-label-md" : ""}>
-                          {s.label}
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                  );
-                })}
-              </Grid>
-            </Grid>
-          </Grid>
+
+          {/* Charts */}
+
+          <ConfirmPlanCharts
+            council={council}
+            renderPieChart={renderPieChart}
+            poundsForPurchaseSum={poundsForPurchaseSum}
+            speciesSelection={speciesSelection}
+            COLORS={COLORS}
+            matchesMd={matchesMd}
+          />
 
           <Grid container xs={12}>
+            {/* NRCS Standards */}
             {NRCS.enabled && (
-              <>
-                <Grid item xs={12}>
-                  <Typography
-                    sx={{ fontWeight: 600, fontSize: "20px", margin: "20px" }}
-                  >
-                    Indiana NRCS Standards
-                  </Typography>
-                </Grid>
-                <Grid xs={1}></Grid>
-                <Grid xs={10}>
-                  <Typography
-                    sx={{ fontSize: "20px", fontWeight: 600, float: "left" }}
-                  >
-                    Seeding Rate
-                  </Typography>
-                </Grid>
-                <Grid xs={1}></Grid>
-                <Grid xs={1}></Grid>
-                <Grid xs={10}>
-                  <Box className="NRCS-result-container">
-                    <Typography sx={{ float: "left" }}>
-                      {" "}
-                      {NRCS.results.seedingRate.value ? (
-                        <CheckIcon sx={{ color: "green" }}></CheckIcon>
-                      ) : (
-                        <ClearIcon sx={{ color: "red" }}></ClearIcon>
-                      )}
-                    </Typography>
-                    <Typography sx={{ float: "left", marginLeft: "5px" }}>
-                      {NRCS.results.seedingRate.value ? "passed" : "failed"}
-                    </Typography>
-                    <Link
-                      sx={{
-                        float: "right",
-                        cursor: "pointer",
-                        marginTop: "2px",
-                      }}
-                      onClick={() => {
-                        handleModalOpen(NRCS.results.seedingRate);
-                      }}
-                    >
-                      Show Details
-                    </Link>
-                  </Box>
-                </Grid>
-                <Grid xs={1}></Grid>
-                <Grid xs={1}></Grid>
-                <Grid xs={10}>
-                  <Typography
-                    sx={{ fontSize: "20px", fontWeight: 600, float: "left" }}
-                  >
-                    Planting Date
-                  </Typography>
-                </Grid>
-                <Grid xs={1}></Grid>
-
-                <Grid xs={1}></Grid>
-                <Grid xs={10}>
-                  <Box className="NRCS-result-container">
-                    <Typography sx={{ float: "left" }}>
-                      {" "}
-                      {NRCS.results.plantingDate.value ? (
-                        <CheckIcon sx={{ color: "green" }}></CheckIcon>
-                      ) : (
-                        <ClearIcon sx={{ color: "red" }}></ClearIcon>
-                      )}
-                    </Typography>
-                    <Typography sx={{ float: "left", marginLeft: "5px" }}>
-                      {NRCS.results.plantingDate.value ? "passed" : "failed"}
-                    </Typography>
-                    <Link
-                      sx={{
-                        float: "right",
-                        cursor: "pointer",
-                        marginTop: "2px",
-                      }}
-                      onClick={() => {
-                        handleModalOpen(NRCS.results.plantingDate);
-                      }}
-                    >
-                      Show Details
-                    </Link>
-                  </Box>
-                </Grid>
-                <Grid xs={1}></Grid>
-
-                <Grid xs={1}></Grid>
-                <Grid xs={10}>
-                  <Typography
-                    sx={{ fontSize: "20px", fontWeight: 600, float: "left" }}
-                  >
-                    Ratio
-                  </Typography>
-                </Grid>
-                <Grid xs={1}></Grid>
-                <Grid xs={1}></Grid>
-                <Grid xs={10}>
-                  <Box className="NRCS-result-container">
-                    <Typography sx={{ float: "left" }}>
-                      {" "}
-                      {NRCS.results.ratio.value ? (
-                        <CheckIcon sx={{ color: "green" }}></CheckIcon>
-                      ) : (
-                        <ClearIcon sx={{ color: "red" }}></ClearIcon>
-                      )}
-                    </Typography>
-                    <Typography sx={{ float: "left", marginLeft: "10px" }}>
-                      {NRCS.results.ratio.value ? "passed" : "failed"}
-                    </Typography>
-                    <Link
-                      sx={{
-                        float: "right",
-                        cursor: "pointer",
-                        marginTop: "2px",
-                      }}
-                      onClick={() => {
-                        handleModalOpen(NRCS.results.ratio);
-                      }}
-                    >
-                      Show Details
-                    </Link>
-                  </Box>
-                </Grid>
-                <Grid xs={1}></Grid>
-
-                <Grid xs={1}></Grid>
-                <Grid xs={10}>
-                  <Typography
-                    sx={{ fontSize: "20px", fontWeight: 600, float: "left" }}
-                  >
-                    Soil Drainage
-                  </Typography>
-                </Grid>
-                <Grid xs={1}></Grid>
-                <Grid xs={1}></Grid>
-                <Grid xs={10}>
-                  <Box className="NRCS-result-container">
-                    <Typography sx={{ float: "left" }}>
-                      {NRCS.results.soilDrainage.value ? (
-                        <CheckIcon sx={{ color: "green" }}></CheckIcon>
-                      ) : (
-                        <ClearIcon sx={{ color: "red" }}></ClearIcon>
-                      )}
-                    </Typography>
-                    <Typography sx={{ float: "left", marginLeft: "5px" }}>
-                      {NRCS.results.soilDrainage.value ? "passed" : "failed"}
-                    </Typography>
-                    <Link
-                      sx={{
-                        float: "right",
-                        cursor: "pointer",
-                        marginTop: "2px",
-                      }}
-                      onClick={() => {
-                        handleModalOpen(NRCS.results.soilDrainage);
-                      }}
-                    >
-                      Show Details
-                    </Link>
-                  </Box>
-                </Grid>
-                <Grid xs={1}></Grid>
-
-                <Grid xs={1}></Grid>
-                <Grid xs={10}>
-                  <Typography
-                    sx={{ fontSize: "20px", fontWeight: 600, float: "left" }}
-                  >
-                    Expected Winter Survival
-                  </Typography>
-                </Grid>
-                <Grid xs={1}></Grid>
-                <Grid xs={1}></Grid>
-                <Grid xs={10}>
-                  <Box className="NRCS-result-container">
-                    <Typography sx={{ float: "left", marginLeft: "5px" }}>
-                      {NRCS.results.expectedWinterSurvival.value}
-                    </Typography>
-                    <Link
-                      sx={{
-                        float: "right",
-                        cursor: "pointer",
-                        marginTop: "2px",
-                      }}
-                      onClick={() => {
-                        handleModalOpen(NRCS.results.expectedWinterSurvival);
-                      }}
-                    >
-                      Show Details
-                    </Link>
-                  </Box>
-                </Grid>
-                <Grid xs={1}></Grid>
-              </>
+              <NRCSStandards handleModalOpen={handleModalOpen} NRCS={NRCS} />
             )}
             <Grid item xs={12}>
               {" "}

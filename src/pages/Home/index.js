@@ -17,12 +17,14 @@ import {
 import { DSTButton } from "./../../components/Button";
 import { Header } from "./../../components/Header";
 import { CSVModal } from "./CSVModal";
+import { Dropdown } from "../../components/Dropdown";
 import "./home.css";
 
 const Home = () => {
-  const [imgPath, setImgPath] = useState("./neccc-logo.png");
+  const [imgPath, setImgPath] = useState("./mccc-logo.png");
   const [openModal, setOpenModal] = useState(false);
   const [CSVImport, setCSVImport] = useState([]);
+  const [council, setCouncil] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
@@ -91,7 +93,12 @@ const Home = () => {
   const setModal = () => {
     setOpenModal(!openModal);
   };
-
+  const handleCouncil = (e) => {
+    setCouncil(e.target.value);
+    const imagePath =
+      e.target.value === "MCCC" ? "./mccc-logo.png" : "./neccc-logo.png";
+    setImgPath(imagePath);
+  };
   return (
     <Fragment>
       <Grid container spacing={2}>
@@ -102,34 +109,45 @@ const Home = () => {
           size={12}
           style={{ mt: 5 }}
         />
-        <Grid xs={12} className="dst-neccc-logo">
-          <img alt="neccc" src={imgPath} />
+        <Grid item xs={12} padding={15} className="site-condition-container">
+          <Dropdown
+            value={council}
+            label={"Council: "}
+            handleChange={handleCouncil}
+            size={12}
+            items={[
+              { label: "NECCC", value: "NECCC" },
+              { label: "MCCC", value: "MCCC" },
+            ]}
+          />
         </Grid>
-        <DSTButton
-          text="Start a new calculation"
-          buttonClass="dst-button"
-          size={12}
-          theme="dstTheme"
-          path={{ type: "local", url: "/calculator" }}
-        />
-        {/* <Grid xs={12}>
-          <Button className="import-button" onClick={setModal}>
-            Import previous calculation
-          </Button>
-        </Grid> */}
-        <DSTButton
-          text="Import previous calculation"
-          buttonClass="dst-import-button"
-          size={12}
-          theme="dstTheme"
-          handleClick={setModal}
-        />
-        <CSVModal
-          openModal={openModal}
-          setModal={setModal}
-          handleFileUpload={handleFileUpload}
-          handleImportCSV={handleImportCSV}
-        />
+        {council !== "" && (
+          <>
+            <Grid xs={12} className="dst-mccc-logo">
+              <img alt="neccc" src={imgPath} />
+            </Grid>
+            <DSTButton
+              text="Start a new calculation"
+              buttonClass="dst-button"
+              size={12}
+              theme="dstTheme"
+              path={{ type: "local", url: `/${council}/calculator` }}
+            />
+            <DSTButton
+              text="Import previous calculation"
+              buttonClass="dst-import-button"
+              size={12}
+              theme="dstTheme"
+              handleClick={setModal}
+            />
+            <CSVModal
+              openModal={openModal}
+              setModal={setModal}
+              handleFileUpload={handleFileUpload}
+              handleImportCSV={handleImportCSV}
+            />
+          </>
+        )}
       </Grid>
     </Fragment>
   );

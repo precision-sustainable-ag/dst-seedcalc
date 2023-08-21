@@ -19,15 +19,16 @@ export const calculateRatio = (crop, seedsSelected) => {
 
 export const calculateExpectedWinterSurvival = (crop, seedsSelected) => {
   // winter survival rate / lenght of seeds
-  const averageSurvival =
-    seedsSelected.reduce(
-      (a, b) =>
-        a.percentChanceOfWinterSurvival + b.percentChanceOfWinterSurvival
-    ) / seedsSelected.length;
+  let avg = 0;
+  seedsSelected.map((s, i) => {
+    avg += parseFloat(s.percentChanceOfWinterSurvival);
+  });
+  console.log("avg,", avg);
+
   return {
     label: crop.label,
-    expect: "winterSurviaval",
-    result: 0.0,
+    expect: avg / seedsSelected.length,
+    result: avg / seedsSelected.length,
     pass: false,
   };
 };
@@ -70,7 +71,11 @@ export const calculateSeedingRate = (crop, seedsSelected) => {
   };
 };
 
-export const calculateSoilDrainage = (crop, seedsSelected) => {
+export const calculateSoilDrainage = (
+  crop,
+  { soilDrainage },
+  seedsSelected
+) => {
   // take soil drainage selected from user, then check if soil Drainage in crop
   // contains data
 
@@ -79,8 +84,8 @@ export const calculateSoilDrainage = (crop, seedsSelected) => {
   return {
     label: crop.label,
     expect: crop.soilDrainages,
-    result: crop.soilDrainage,
-    pass: soilDrainages.indexOf(crop.soilDrainage) > -1,
+    result: soilDrainage,
+    pass: soilDrainages.indexOf(soilDrainage) > -1,
   };
 };
 
@@ -114,7 +119,11 @@ export const generateNRCSStandards = (seedsSelected, siteCondition) => {
       siteCondition.plannedPlantingDate
     );
     const ratioResult = calculateRatio(s, seedsSelected);
-    const soilDrainageResult = calculateSoilDrainage(s, seedsSelected);
+    const soilDrainageResult = calculateSoilDrainage(
+      s,
+      siteCondition,
+      seedsSelected
+    );
     const expectedWinterSurvivalResult = calculateExpectedWinterSurvival(
       s,
       seedsSelected

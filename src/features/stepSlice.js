@@ -67,6 +67,7 @@ const initialState = {
       max: 0,
       seedingRateAverage: 0,
       seedingRateCoefficient: 0,
+      type: "Drilled",
     },
     reviewMix: {},
     confirmPlan: {},
@@ -99,7 +100,7 @@ export const getCropsById = createAsyncThunk(
 export const getLocality = createAsyncThunk(
   "steps/getLocality",
   async ({ type }, thunkAPI) => {
-    const url = `https://developapi.covercrop-selector.org/v2/regions?locality=state&context=seed_calc&council=MCCC`;
+    const url = `https://developapi.covercrop-selector.org/v2/regions?locality=state&context=seed_calc&council=${type}`;
     const res = await fetch(url).then((data) => data.json());
     return res.data.filter((x) => x.parents[0].shorthand === type);
   }

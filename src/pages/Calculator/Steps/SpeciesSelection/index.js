@@ -1,8 +1,8 @@
 import * as React from "react";
 import Grid from "@mui/material/Grid";
 import { useSelector, useDispatch } from "react-redux";
-import { Typography, Box, Link } from "@mui/material";
-import { useState, useEffect, Fragment } from "react";
+import { Typography, Link } from "@mui/material";
+import { useState } from "react";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -16,16 +16,11 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { SearchField } from "../../../../components/SearchField";
 import { updateSteps, getCropsById } from "./../../../../features/stepSlice";
 import { seedsList, seedsLabel } from "../../../../shared/data/species";
-
-import {
-  calculateAllValues,
-  calculateSeeds,
-} from "../../../../shared/utils/calculate";
+import { calculateAllValues } from "../../../../shared/utils/calculate";
 import "./../steps.css";
 import SeedsSelectedList from "./../../../../components/SeedsSelectedList";
-import { DataArray } from "@mui/icons-material";
 
-const SpeciesSelection = () => {
+const SpeciesSelection = ({ council }) => {
   // themes
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down("xs"));
@@ -68,11 +63,6 @@ const SpeciesSelection = () => {
     handleUpdateStore("speciesSelection", "queryResults", filter);
   };
 
-  // Update Seed/Diversities select logic
-  const checkSeedSelected = (seed) => {
-    const seedSelected = seedsSelected.find((f) => seed.label === f.label);
-    return typeof seedSelected !== "undefined" ? false : true;
-  };
   const retrieveCropDetails = async (id) => {
     const response = await dispatch(
       getCropsById({
@@ -168,9 +158,12 @@ const SpeciesSelection = () => {
       ),
       mixSeedingRate: 0,
       maxPercentAllowedInMix:
-        cropDetails.attributes.Coefficients["Max % Allowed in Mix"][
-          "values"
-        ][0],
+        cropDetails.attributes.Coefficients["Max % Allowed In Mix"] !==
+        undefined
+          ? cropDetails.attributes.Coefficients["Max % Allowed in Mix"][
+              "values"
+            ][0]
+          : 0,
       percentChanceOfWinterSurvival: cropDetails.attributes.Coefficients[
         "% Chance of Winter Survial"
       ]
@@ -189,7 +182,7 @@ const SpeciesSelection = () => {
                 "values"
               ][0]
             )
-          : 0, // TBD
+          : 0.85, // TBD
       purityPercentage:
         cropDetails.attributes.Coefficients["Precision Coefficient"] !==
         undefined
@@ -198,7 +191,7 @@ const SpeciesSelection = () => {
                 "values"
               ][0]
             )
-          : 0, // TBD
+          : 0.95, // TBD
       seedsPerAcre: parseFloat(
         cropDetails.attributes["Planting"]
           ? cropDetails.attributes["Planting"]["Seeds Per lb"]["values"][0]
@@ -228,7 +221,9 @@ const SpeciesSelection = () => {
           ? cropDetails.attributes.Coefficients["Broadcast Coefficient"][
               "values"
             ][0]
-          : 0
+          : cropDetails.attributes.Coefficients[
+              "Broadcast with Cultivation Coefficient"
+            ]
       ),
       precision: parseFloat(
         cropDetails.attributes.Coefficients["Precision Coefficient"] !==
@@ -245,7 +240,12 @@ const SpeciesSelection = () => {
             ][0]
           : 0
       ),
-      drilled: 0, // TBD
+      drilled: parseFloat(
+        cropDetails.attributes.Coefficients["% Live Seed to Emergence"] !==
+          undefined
+          ? cropDetails.attributes.Coefficients["% Live Seed to Emergence"]
+          : 0
+      ), // TBD
       showSteps: false,
       // Review your mix values'
       plantingMethod: 1,
@@ -256,6 +256,20 @@ const SpeciesSelection = () => {
         : [], // TBD
       soilDrainages:
         cropDetails.attributes["Soil Conditions"]["Soil Drainage"]["values"],
+      highFertilityMonocultureCoefficient: cropDetails.attributes.Coefficients[
+        "High Fertility Monoculture Coefficient"
+      ]
+        ? cropDetails.attributes.Coefficients[
+            "High Fertility Monoculture Coefficient"
+          ]
+        : 0,
+      highFertilityCompetitiveCoefficient: cropDetails.attributes.Coefficients[
+        "High Fertility Competition Coefficient"
+      ]
+        ? cropDetails.attributes.Coefficients[
+            "High Fertility Competition Coefficient"
+          ]
+        : 0,
       managementImpactOnMix: 1, // TBD
       mixSeedingRatePLS: 0, // TBD
       bulkGerminationAndPurity: 0,
@@ -299,7 +313,7 @@ const SpeciesSelection = () => {
       },
     };
 
-    newSeed = calculateAllValues(newSeed);
+    newSeed = calculateAllValues(newSeed, data);
     // three checks:
     // * seedlength is 0
     // * seed already exists
