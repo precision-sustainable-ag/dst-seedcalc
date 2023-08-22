@@ -31,6 +31,12 @@ export const soilDrainage = [
   { label: "Well Drained Muck" },
 ];
 
+export const seedingMethods = [
+  { label: "Precision" },
+  { label: "Drilled" },
+  { label: "Broadcast" },
+  { label: "Aerial" },
+];
 export const soilFertility = ["Low-Medium", "High"];
 
 // TODO: Add API to retrieve City, State, & Countries

@@ -37,7 +37,8 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="calculator" element={<Calculator />} />
+            <Route path=":type/calculator" element={<Calculator />} />
+            {/* <Route path="calculator" element={<Calculator />} /> */}
             <Route path="results" element={<Results />} />
           </Routes>
         </BrowserRouter>

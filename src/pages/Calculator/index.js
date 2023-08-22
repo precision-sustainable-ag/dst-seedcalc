@@ -11,6 +11,7 @@ import {
   SeedingMethod,
   CompletedPage,
 } from "./Steps";
+import { useParams } from "react-router-dom";
 import { calculatorList } from "../../shared/data/dropdown";
 import { Header } from "../../components/Header";
 import { StepsList } from "../../components/StepsList";
@@ -19,27 +20,27 @@ import "./calculator.css";
 const Calculator = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
-
+  const { type } = useParams();
   const renderCalculator = (step) => {
     switch (step) {
       case "Site Condition":
-        return <SiteCondition />;
+        return <SiteCondition council={type} />;
       case "Species Selection":
-        return <SpeciesSelection />;
+        return <SpeciesSelection council={type} />;
       case "Mix Ratios":
-        return <MixRatio />;
+        return <MixRatio council={type} />;
       case "Mix Seeding Rate":
-        return <MixSeedingRate />;
+        return <MixSeedingRate council={type} />;
       case "Seeding Method":
-        return <SeedingMethod />;
+        return <SeedingMethod council={type} />;
       case "Seed Tag Info":
-        return <SeedTagInfo />;
+        return <SeedTagInfo council={type} />;
       case "Review Mix":
-        return <ReviewMix />;
+        return <ReviewMix council={type} />;
       case "Confirm Plan":
-        return <ConfirmPlan />;
+        return <ConfirmPlan council={type} />;
       case "Finish":
-        return <CompletedPage />;
+        return <CompletedPage council={type} />;
       default:
         return;
     }

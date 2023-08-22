@@ -1,13 +1,12 @@
 import Grid from "@mui/material/Grid";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { Typography, Box, Link, Button } from "@mui/material";
-import { useState, useEffect, Fragment } from "react";
+import { Typography, Box, Button } from "@mui/material";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   PieChart,
   Pie,
-  Sector,
   Cell,
   ResponsiveContainer,
   ScatterChart,
@@ -28,23 +27,20 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { updateSteps } from "./../../../../features/stepSlice";
 import { NumberTextField } from "./../../../../components/NumberTextField";
 import {
-  calculateAllValues,
-  calculateSeeds,
+  convertToPercent,
+  convertToDecimal,
   calculateAllMixValues,
+  calculateAllMixValuesNECCC,
 } from "./../../../../shared/utils/calculate";
-import { checkAllNRCSStandards } from "../../../../shared/utils/NRCS/checkNRCS";
 import { generateNRCSStandards } from "../../../../shared/utils/NRCS/calculateNRCS";
 import "./../steps.css";
 import SeedsSelectedList from "../../../../components/SeedsSelectedList";
-import { validateNRCS } from "../../../../shared/utils/NRCS/calculateNRCS";
+import StripedLabels from "./StripedLabels";
 
-const ReviewMix = () => {
+const ReviewMix = ({ council }) => {
   // themes
   const theme = useTheme();
-  const matchesXs = useMediaQuery(theme.breakpoints.down("xs"));
-  const matchesSm = useMediaQuery(theme.breakpoints.down("sm"));
   const matchesMd = useMediaQuery(theme.breakpoints.down("md"));
-  const matchesUpMd = useMediaQuery(theme.breakpoints.up("md"));
   // useSelector for crops & mixRaxio reducer
 
   const dispatch = useDispatch();
@@ -61,12 +57,21 @@ const ReviewMix = () => {
     (sum, a) => sum + a.poundsOfSeed,
     0
   );
+  const seedsPerAcreSum = speciesSelection.seedsSelected.reduce(
+    (sum, a) => sum + a.seedsPerAcre,
+    0
+  );
   const poundsOfSeedArray = [];
   const plantsPerAcreArray = [];
+  const seedsPerAcreArray = [];
   speciesSelection.seedsSelected.map((s, i) => {
     plantsPerAcreArray.push({
       name: s.label,
       value: s.plantsPerAcre / plantsPerAcreSum,
+    });
+    seedsPerAcreArray.push({
+      name: s.label,
+      value: s.seedsPerAcre / seedsPerAcreSum,
     });
     poundsOfSeedArray.push({
       name: s.label,
@@ -75,7 +80,6 @@ const ReviewMix = () => {
   });
 
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
-
   const RADIAN = Math.PI / 180;
 
   const handleUpdateSteps = (key, val) => {
@@ -95,30 +99,34 @@ const ReviewMix = () => {
     dispatch(updateSteps(data));
   };
   const initialDataLoad = () => {
-    let data = JSON.parse(JSON.stringify(speciesSelection.seedsSelected));
-    let newData = [...data];
+    let seeds = JSON.parse(JSON.stringify(speciesSelection.seedsSelected));
+    let newData = [...seeds];
 
     newData.map((s, i) => {
       const index = i;
-      newData[index] = calculateAllMixValues(s, siteCondition);
+      // newData[index] =
+      //   council === "MCCC"
+      //     ? calculateAllMixValues(s, data)
+      //     : calculateAllMixValuesNECCC(s, data);
+      newData[index] = calculateAllMixValues(s, data);
       handleUpdateAllSteps(newData, index);
     });
   };
   const handleUpdateAllSteps = (prevData, index) => {
-    let data = [...prevData];
-    data[index] = calculateAllMixValues(data[index], siteCondition);
-    handleUpdateSteps("seedsSelected", data);
+    let seeds = [...prevData];
+    seeds[index] = calculateAllMixValues(seeds[index], data);
+    handleUpdateSteps("seedsSelected", seeds);
   };
   const updateSeed = (val, key, seed) => {
     // find index of seed, parse a copy, update proper values, & send to Redux
     const index = speciesSelection.seedsSelected.findIndex(
       (s) => s.id === seed.id
     );
-    let data = JSON.parse(JSON.stringify(speciesSelection.seedsSelected));
-    data[index][key] = val;
-    handleUpdateSteps("seedsSelected", data);
-    let newData = [...data];
-    newData[index] = calculateAllMixValues(data[index], siteCondition);
+    let seeds = JSON.parse(JSON.stringify(speciesSelection.seedsSelected));
+    seeds[index][key] = val;
+    handleUpdateSteps("seedsSelected", seeds);
+    let newData = [...seeds];
+    newData[index] = calculateAllMixValues(seeds[index], data);
     handleUpdateAllSteps(newData, index);
   };
   const renderCustomizedLabel = ({
@@ -146,71 +154,19 @@ const ReviewMix = () => {
       </text>
     );
   };
-  const calculateSeedsSelectedSum = (key) => {
-    return data.speciesSelection.seedsSelected.reduce(
-      (sum, a) => sum + parseFloat(a[key]),
-      0
-    );
-  };
-  const renderStripedLabels = (seed) => {
-    const labels = [
-      {
-        label: "Single Species Seeding Rate",
-        key: "singleSpeciesSeedingRatePLS",
-        val: seed["singleSpeciesSeedingRatePLS"],
-      },
-      {
-        label: "Added to Mix",
-        key: "addedToMix",
-        val: seed["addedToMix"],
-      },
-      {
-        label: "Drilled or Broadcast with Cultipack",
-        key: "drilled",
-        val: seed["addedToMix"],
-      },
-      {
-        label: "Management Impacts on Mix (+57%)",
-        key: "managementImpactOnMix",
-        val: data["seedingMethod"]["managementImpactOnMix"],
-      },
-      {
-        label: "Bulk Germination and Purity",
-        key: "bulkGerminationAndPurity",
-        val: data["bulkGerminationAndPurity"],
-      },
-    ];
-    const labels2 = [
-      { label: "Species Modifications" },
-      { label: "Species Review" },
-      { label: "Pounds for Purchase" },
-    ];
-    return (
-      <>
-        {labels.map((l, i) => {
-          return (
-            <Grid
-              container
-              sx={{ backgroundColor: !(i % 2) && "#e3e5d3" }}
-              xs={12}
-            >
-              <Grid item sx={{ textAlign: "justify" }} xs={10}>
-                {l.label}
-              </Grid>
-              <Grid item xs={2}>
-                {l.val}
-              </Grid>
-            </Grid>
-          );
-        })}
-      </>
-    );
-  };
 
   const renderPieChart = (type) => {
-    const chartData =
-      type === "plantsPerAcre" ? plantsPerAcreArray : poundsOfSeedArray;
-
+    let chartData;
+    // type === "plantsPerAcre" ? plantsPerAcreArray ? type === "seedsPerAcre" ? plantsPerAcreArray :  poundsOfSeedArray;
+    if (type === "plantsPerAcre") {
+      chartData = plantsPerAcreArray;
+    }
+    if (type === "seedsPerAcre") {
+      chartData = plantsPerAcreArray;
+    }
+    if (type === "poundsOfSeed") {
+      chartData = poundsOfSeedArray;
+    }
     return (
       <ResponsiveContainer width="100%" height={200}>
         <PieChart width={400} height={400}>
@@ -238,29 +194,92 @@ const ReviewMix = () => {
   const renderSeedsSelected = () => {
     return <SeedsSelectedList list={speciesSelection.seedsSelected} />;
   };
-  const renderAccordianChart = (obj) => {
-    const data = [
-      { x: 100, y: 700, z: 600 },
-      { x: 120, y: 100, z: 260 },
-      { x: 170, y: 300, z: 400 },
-      { x: 140, y: 250, z: 280 },
-      { x: 150, y: 400, z: 500 },
-      { x: 110, y: 280, z: 200 },
-    ];
+  const generateScatterData = (labels) => {
+    let results = [];
+    let counter = 0;
+    labels.map((l, i) => {
+      counter += 30;
+      results.push({ x: counter, y: l.val, z: 400 });
+    });
+    return results;
+  };
+  const generateDetails = (label) => {
+    if (label === "Single Species Seeding Rate") {
+      return "Single Species Seeding Rate";
+    }
+    if (label === "Added To Mix") {
+      return "Mix seeding rate added to mix";
+    }
+    if (label === "Drilled or Broadcast with Cultipack") {
+      return "Mix seeding rate with drilled";
+    }
+    if (label === "Management Impacts on Mix (+57%)") {
+      return "Mix seeding rate with Management Impact on mix";
+    }
+    if (label === "Bulk Germination and Purity") {
+      return "Bulk Germination and Purity";
+    }
+    return "";
+  };
+
+  const CustomTooltip = (scatterData) => {
+    console.log("d", scatterData);
+    const { active, payload, label } = scatterData;
+    console.log("custom tool tip", active, active, label);
+    if (active && payload && payload.length) {
+      return (
+        <div className="custom-tooltip">
+          <p className="label">{`${label} : ${payload[0].value}`}</p>
+          <p className="intro">{generateDetails(label)}</p>
+          <p className="desc">Calculation details</p>
+        </div>
+      );
+    }
+
+    return null;
+  };
+  const renderAccordianChart = (obj, labels) => {
+    const scatterData = generateScatterData(labels);
+    // const data = [
+    //   { x: 30, y: 1, z: 600 },
+    //   { x: 60, y: 2, z: 260 },
+    //   { x: 90, y: 1, z: 400 },
+    //   { x: 239, y: 1, z: 280 },
+    //   { x: 150, y: 1, z: 500 },
+    //   { x: 110, y: 1, z: 200 },
+    // ];
 
     return (
       <Grid container xs={12}>
         <Grid item xs={12}>
           <ResponsiveContainer width="100%" height={200}>
-            <ScatterChart width={400} height={400} position="center">
+            <ScatterChart width={400} height={500} position="center">
               <CartesianGrid strokeDasharray="4" />
-              <XAxis type="number" dataKey="x" name="stature" unit="acre" />
-              <YAxis type="number" dataKey="y" name="weight" unit="lb" />
-              <ZAxis dataKey="z" range={[1000, 1449]} name="score" unit="km" />
-              <Tooltip cursor={{ strokeDasharray: "50 50" }} />
-              <Scatter name="A school" data={data} fill="#E7885F">
+              <XAxis type="number" dataKey="x" name="" unit="" />
+              <YAxis
+                type="number"
+                dataKey="y"
+                name="Mix Seeding Rate"
+                unit=""
+              />
+              <ZAxis dataKey="z" range={[1000, 1449]} name="" unit="" />
+              <Tooltip
+                cursor={{ strokeDasharray: "50 50" }}
+                // content={CustomTooltip}
+              />
+              <Scatter
+                name="Mix Seeding Rates"
+                data={scatterData}
+                fill="#E7885F"
+                margin={{
+                  top: 5,
+                  right: 30,
+                  left: 20,
+                  bottom: 5,
+                }}
+              >
                 {/* <LabelList dataKey="x" content={renderCustomizedScatterLabel} /> */}
-                <LabelList dataKey="x" fill="#fff" position="center" />
+                <LabelList dataKey="y" fill="#fff" position="center" />
               </Scatter>
             </ScatterChart>
           </ResponsiveContainer>
@@ -300,108 +319,136 @@ const ReviewMix = () => {
         >
           <Typography>{data.label}</Typography>
         </AccordionSummary>
-        <AccordionDetails>
-          {renderAccordianChart(data)}
-          {renderAccordianDetail(data)}
-        </AccordionDetails>
+        <AccordionDetails>{renderAccordianDetail(data)}</AccordionDetails>
       </Accordion>
     );
   };
-  const renderAccordianDetail = (data) => {
+  const renderAccordianDetail = (seed) => {
+    const labels = [
+      {
+        label: "Single Species Seeding Rate",
+        key: "singleSpeciesSeedingRatePLS",
+        val: seed["singleSpeciesSeedingRatePLS"],
+      },
+      {
+        label: "Added to Mix",
+        key: "step2Result",
+        val: seed["step2Result"],
+      },
+      {
+        label: "Drilled or Broadcast with Cultipack",
+        key: "drilled",
+        val: seed["step2Result"],
+      },
+      {
+        label: "Management Impacts on Mix (+57%)",
+        key: "managementImpactOnMix",
+        val: seed["step3Result"],
+      },
+      {
+        label: "Bulk Germination and Purity",
+        key: "bulkSeedingRate",
+        val: seed["bulkSeedingRate"],
+      },
+    ];
     return (
-      <Grid container xs={12}>
-        {renderStripedLabels(data)}
-        <Grid item xs={6}>
-          <Typography>Mix Seeding Rate PLS</Typography>
-          <Box
-            sx={{
-              width: "50px",
-              height: "50px",
-              padding: "11px",
-              margin: "0 auto",
-              backgroundColor: "#E5E7D5",
-              border: "#C7C7C7 solid 1px",
-              borderRadius: "50%",
-            }}
-          >
-            <Typography>
-              {Math.floor(data.singleSpeciesSeedingRatePLS)}
-            </Typography>
-          </Box>
-          <Typography>Lbs / Acre</Typography>
-        </Grid>
-        <Grid item xs={6}>
-          <Typography>Bulk Seeding Rate</Typography>
-          <Box
-            sx={{
-              width: "50px",
-              height: "50px",
-              padding: "11px",
-              margin: "0 auto",
-              backgroundColor: "#E5E7D5",
-              border: "#C7C7C7 solid 1px",
-              borderRadius: "50%",
-            }}
-          >
-            <Typography>{Math.floor(data.bulkSeedingRate)}</Typography>
-          </Box>
-          <Typography>Lbs / Acre</Typography>
-        </Grid>
-        <Grid item xs={6}>
-          <Box
-            sx={{
-              width: "110px",
-              height: "50px",
-              padding: "11px",
-              margin: "0 auto",
-              backgroundColor: "#E5E7D5",
-              border: "#C7C7C7 solid 1px",
-              borderRadius: "16px",
-            }}
-          >
-            <Typography>{Math.floor(data.plantsPerAcre)}</Typography>
-          </Box>
-          <Typography>Aprox plants per</Typography>
-          <Button variant="outlined">Sqft</Button>
-          {"   "}
-          <Button variant="contained">Acres</Button>
-        </Grid>
-        <Grid item xs={6}>
-          <Box
-            sx={{
-              width: "110px",
-              height: "50px",
-              padding: "11px",
-              margin: "0 auto",
-              backgroundColor: "#E5E7D5",
-              border: "#C7C7C7 solid 1px",
-              borderRadius: "16px",
-            }}
-          >
-            <Typography>{Math.floor(data.seedsPerAcre)}</Typography>
-          </Box>
-          <Typography>Seeds per</Typography>
-          <Button variant="contained">Sqft</Button>
-          {"   "}
-          <Button variant="outlined">Acres</Button>
-        </Grid>
+      <>
+        {renderAccordianChart(seed, labels)}
+        <Grid container xs={12}>
+          <StripedLabels data={data} seed={seed} labels={labels} />
+          <Grid item xs={6}>
+            <Typography>Mix Seeding Rate PLS</Typography>
+            <Box
+              sx={{
+                width: "50px",
+                height: "50px",
+                padding: "11px",
+                margin: "0 auto",
+                backgroundColor: "#E5E7D5",
+                border: "#C7C7C7 solid 1px",
+                borderRadius: "50%",
+              }}
+            >
+              <Typography>
+                {Math.floor(seed.singleSpeciesSeedingRatePLS)}
+              </Typography>
+            </Box>
+            <Typography>Lbs / Acre</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography>Bulk Seeding Rate</Typography>
+            <Box
+              sx={{
+                width: "50px",
+                height: "50px",
+                padding: "11px",
+                margin: "0 auto",
+                backgroundColor: "#E5E7D5",
+                border: "#C7C7C7 solid 1px",
+                borderRadius: "50%",
+              }}
+            >
+              <Typography>{Math.floor(seed.bulkSeedingRate)}</Typography>
+            </Box>
+            <Typography>Lbs / Acre</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Box
+              sx={{
+                width: "110px",
+                height: "50px",
+                padding: "11px",
+                margin: "0 auto",
+                backgroundColor: "#E5E7D5",
+                border: "#C7C7C7 solid 1px",
+                borderRadius: "16px",
+              }}
+            >
+              <Typography>{Math.floor(seed.plantsPerAcre)}</Typography>
+            </Box>
+            <Typography>Aprox plants per</Typography>
+            <Button variant="outlined">Sqft</Button>
+            {"   "}
+            <Button variant="contained">Acres</Button>
+          </Grid>
+          <Grid item xs={6}>
+            <Box
+              sx={{
+                width: "110px",
+                height: "50px",
+                padding: "11px",
+                margin: "0 auto",
+                backgroundColor: "#E5E7D5",
+                border: "#C7C7C7 solid 1px",
+                borderRadius: "16px",
+              }}
+            >
+              <Typography>{Math.floor(seed.seedsPerAcre)}</Typography>
+            </Box>
+            <Typography>Seeds per</Typography>
+            <Button variant="contained">Sqft</Button>
+            {"   "}
+            <Button variant="outlined">Acres</Button>
+          </Grid>
 
-        <Grid item xs={12}>
-          <Button
-            onClick={(e) => {
-              updateSeed(!data.showSteps, "showSteps", data);
-            }}
-            variant="outlined"
-          >
-            {data.showSteps ? "Close Steps" : "Change My Rate"}
-          </Button>
+          <Grid item xs={12}>
+            <Button
+              onClick={(e) => {
+                updateSeed(!seed.showSteps, "showSteps", seed);
+              }}
+              variant="outlined"
+            >
+              {seed.showSteps ? "Close Steps" : "Change My Rate"}
+            </Button>
+          </Grid>
+          <Grid item xs={12}>
+            {seed.showSteps && renderMixRateSteps(seed)}
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          {data.showSteps && renderMixRateSteps(data)}
-        </Grid>
-      </Grid>
+      </>
     );
   };
+
   const renderStepsForm = (label1, label2, label3) => {
     if (Array.isArray(label2)) {
       return (
@@ -466,65 +513,177 @@ const ReviewMix = () => {
       );
     }
   };
-  const renderMixRateSteps = (data) => {
+  const generatePercentInGroup = (seed) => {
+    const group = seed.group.label;
+    let count = 0;
+    speciesSelection.seedsSelected.map((s, i) => {
+      s.group.label === group && count++;
+    });
+    console.log("count...", group, count);
+    return 1 / count;
+  };
+  const renderMixRateSteps = (seed) => {
+    const percentInGroup = generatePercentInGroup(seed);
     return (
       <Grid container xs={12}>
-        <Grid item xs={12}>
-          <Typography className="mix-ratio-step-header">Step 1:</Typography>
-        </Grid>
-        {renderStepsForm(
-          "Single Species Seeding Rate PLS",
-          "% of Single Species Rate",
-          "Mix Seeding Rate"
-        )}
-        <Grid container xs={12} className="mix-ratio-form-container">
-          <Grid item xs={3}>
-            <NumberTextField
-              className="text-field-100"
-              id="filled-basic"
-              disabled={true}
-              label="Single Species Seeding Rate PLS"
-              variant="filled"
-              handleChange={(e) => {
-                updateSeed(e.target.value, "singleSpeciesSeedingRate", data);
-              }}
-              value={data.singleSpeciesSeedingRate}
-            />
-            <Typography className="font-15">Lbs / Acre</Typography>
-          </Grid>
-          <Grid item xs={1}>
-            <Typography className="math-icon">X</Typography>
-          </Grid>
-          <Grid item xs={3}>
-            <NumberTextField
-              className="text-field-100"
-              id="filled-basic"
-              label="% of Single Species Rate"
-              variant="filled"
-              disabled={false}
-              handleChange={(e) => {
-                updateSeed(e.target.value, "percentOfSingleSpeciesRate", data);
-              }}
-              value={data.percentOfSingleSpeciesRate}
-            />
-            <Typography className="font-15">MCCC Recommendation</Typography>
-          </Grid>
-          <Grid item xs={1}>
-            <Typography className="math-icon">=</Typography>
-          </Grid>
-          <Grid item xs={3}>
-            <NumberTextField
-              className="text-field-100"
-              id="filled-basic"
-              label="Mix Seeding Rate"
-              disabled={true}
-              variant="filled"
-              value={data.step1Result}
-            />
-            <Typography className="font-15">Lbs / Acre</Typography>
-          </Grid>
-        </Grid>
+        {/* NECCC Step 1:  */}
+        {council === "NECCC" && (
+          <>
+            <Grid item xs={12}>
+              <Typography className="mix-ratio-step-header">
+                Step 1:{" "}
+              </Typography>
+            </Grid>
+            {renderStepsForm(
+              "Mix Seeding Rate PLS",
+              "% in Group",
+              "% of Single Species Seeding Rate"
+            )}
+            <Grid item xs={3}>
+              <NumberTextField
+                className="text-field-100"
+                id="filled-basic"
+                disabled={false}
+                label="Single Species Seeding Rate PLS"
+                variant="filled"
+                handleChange={(e) => {
+                  updateSeed(
+                    e.target.value,
+                    "singleSpeciesSeedingRatePLS",
+                    seed
+                  );
+                }}
+                value={seed.singleSpeciesSeedingRatePLS}
+              />
+              <Typography>Lbs / Acre</Typography>
+            </Grid>
 
+            <Grid item xs={1}>
+              <Typography className="math-icon">x</Typography>
+            </Grid>
+            <Grid item xs={3}>
+              <NumberTextField
+                className="text-field-100"
+                id="filled-basic"
+                label="% in Group"
+                variant="filled"
+                disabled={true}
+                value={convertToPercent(percentInGroup)}
+              />
+            </Grid>
+            <Grid item xs={1}>
+              <Typography className="math-icon">x</Typography>
+            </Grid>
+            <Grid item xs={3}>
+              <NumberTextField
+                className="text-field-100"
+                id="filled-basic"
+                label="% of Single Species Rate"
+                variant="filled"
+                disabled={false}
+                handleChange={(e) => {
+                  updateSeed(
+                    e.target.value,
+                    "percentOfSingleSpeciesRate",
+                    seed
+                  );
+                }}
+                value={seed.percentOfSingleSpeciesRate}
+              />
+              <Typography>{council === "MCCC" ? "MCCC" : "NECCC"}</Typography>
+            </Grid>
+            <Grid container className="steps-row-2" xs={12}>
+              <Grid item xs={4}>
+                <Typography className="math-icon">=</Typography>
+              </Grid>
+              <Grid item xs={7}>
+                <NumberTextField
+                  className="text-field-100"
+                  id="filled-basic"
+                  label="Mix Seeding Rate"
+                  disabled={true}
+                  variant="filled"
+                  value={seed.mixSeedingRate}
+                />
+                <Typography>Lbs / Acre</Typography>
+              </Grid>
+              <Grid item xs={1}></Grid>
+            </Grid>
+          </>
+        )}
+        {/* NECCC Step 1 END */}
+        {/* MCCC Step 1 START */}
+        {council === "MCCC" && (
+          <>
+            <Grid item xs={12}>
+              <Typography className="mix-ratio-step-header">Step 1:</Typography>
+            </Grid>
+            {renderStepsForm(
+              "Single Species Seeding Rate PLS",
+              "% of Single Species Rate",
+              "Mix Seeding Rate"
+            )}
+            <Grid container xs={12} className="mix-ratio-form-container">
+              <Grid item xs={3}>
+                <NumberTextField
+                  className="text-field-100"
+                  id="filled-basic"
+                  disabled={true}
+                  label="Single Species Seeding Rate PLS"
+                  variant="filled"
+                  handleChange={(e) => {
+                    updateSeed(
+                      e.target.value,
+                      "singleSpeciesSeedingRate",
+                      seed
+                    );
+                  }}
+                  value={seed.singleSpeciesSeedingRate}
+                />
+                <Typography className="font-15">Lbs / Acre</Typography>
+              </Grid>
+              <Grid item xs={1}>
+                <Typography className="math-icon">X</Typography>
+              </Grid>
+              <Grid item xs={3}>
+                <NumberTextField
+                  className="text-field-100"
+                  id="filled-basic"
+                  label="% of Single Species Rate"
+                  variant="filled"
+                  disabled={false}
+                  handleChange={(e) => {
+                    updateSeed(
+                      e.target.value,
+                      "percentOfSingleSpeciesRate",
+                      seed
+                    );
+                  }}
+                  value={seed.percentOfSingleSpeciesRate}
+                />
+                <Typography className="font-15">
+                  {council === "MCCC" && "MCCC Recommendation"}
+                </Typography>
+              </Grid>
+              <Grid item xs={1}>
+                <Typography className="math-icon">=</Typography>
+              </Grid>
+              <Grid item xs={3}>
+                <NumberTextField
+                  className="text-field-100"
+                  id="filled-basic"
+                  label="Mix Seeding Rate"
+                  disabled={true}
+                  variant="filled"
+                  value={seed.step1Result}
+                />
+                <Typography className="font-15">Lbs / Acre</Typography>
+              </Grid>
+            </Grid>
+          </>
+        )}
+
+        {/* MCCC Step 1 END */}
         <Grid item xs={12}>
           <Typography className="mix-ratio-step-header">Step 2: </Typography>
         </Grid>
@@ -540,10 +699,7 @@ const ReviewMix = () => {
             disabled={true}
             label="Mix Seeding Rate PLS"
             variant="filled"
-            // handleChange={(e) => {
-            //   updateSeed(e.target.value, "step2MixSeedingRatePLS", data);
-            // }}
-            value={data.step1Result}
+            value={seed.step1Result}
           />
           <Typography className="font-15">Lbs / Acre</Typography>
         </Grid>
@@ -557,7 +713,7 @@ const ReviewMix = () => {
             disabled={false}
             label="Planting Method"
             variant="filled"
-            value={data.plantingMethod}
+            value={seed.plantingMethod}
           />
         </Grid>
         <Grid item xs={1}>
@@ -570,7 +726,7 @@ const ReviewMix = () => {
             label="Mix Seeding Rate PLS"
             variant="filled"
             disabled={true}
-            value={data.step2Result}
+            value={seed.step2Result}
           />
           <Typography className="font-15">Lbs / Acre</Typography>
         </Grid>
@@ -582,6 +738,7 @@ const ReviewMix = () => {
           "Mix Seeding Rate PLS",
           "Management impact on mix"
         )}
+        {/*  */}
         <Grid item xs={3}>
           <NumberTextField
             className="text-field-100"
@@ -589,7 +746,7 @@ const ReviewMix = () => {
             label="Mix Seeding Rate PLS"
             variant="filled"
             disabled={true}
-            value={data.step2Result}
+            value={seed.step2Result}
           />
         </Grid>
         <Grid item xs={1}>
@@ -606,9 +763,9 @@ const ReviewMix = () => {
             variant="filled"
             disabled={true}
             handleChange={(e) => {
-              updateSeed(e.target.value, "step2Result", data);
+              updateSeed(e.target.value, "step2Result", seed);
             }}
-            value={data.step2Result}
+            value={seed.step2Result}
           />
         </Grid>
         <Grid item xs={1}>
@@ -622,9 +779,9 @@ const ReviewMix = () => {
             variant="filled"
             disabled={true}
             handleChange={(e) => {
-              updateSeed(e.target.value, "managementImpactOnMix", data);
+              updateSeed(e.target.value, "managementImpactOnMix", seed);
             }}
-            value={seedingMethod.managementImpactOnMix}
+            value={seedingMethod.managementImpactOnMix.toFixed(2)}
           />
         </Grid>
         <Grid item xs={1}>
@@ -642,11 +799,12 @@ const ReviewMix = () => {
               label="Mix Seeding Rate PLS"
               variant="filled"
               disabled={true}
-              value={data.step3Result}
+              value={seed.step3Result}
             />
           </Grid>
         </Grid>
         <Grid item xs={1}></Grid>
+        {/*  */}
         <Grid item xs={12}>
           <Typography className="mix-ratio-step-header">Step 4: </Typography>
         </Grid>
@@ -658,7 +816,7 @@ const ReviewMix = () => {
             label="Mix Seeding Rate PLS"
             variant="filled"
             disabled={true}
-            value={data.step3Result}
+            value={seed.step3Result}
           />
           <Typography className="font-15">Lbs / Acre</Typography>
         </Grid>
@@ -674,9 +832,13 @@ const ReviewMix = () => {
             variant="filled"
             disabled={false}
             handleChange={(e) => {
-              updateSeed(e.target.value, "germinationPercentage", data);
+              updateSeed(
+                convertToDecimal(e.target.value),
+                "germinationPercentage",
+                seed
+              );
             }}
-            value={data.germinationPercentage}
+            value={convertToPercent(seed.germinationPercentage)}
           />
         </Grid>
         <Grid item xs={1}>
@@ -688,8 +850,15 @@ const ReviewMix = () => {
             id="filled-basic"
             label="% Purity"
             variant="filled"
-            disabled={true}
-            value={data.purityPercentage}
+            disabled={false}
+            handleChange={(e) => {
+              updateSeed(
+                convertToDecimal(e.target.value),
+                "purityPercentage",
+                seed
+              );
+            }}
+            value={convertToPercent(seed.purityPercentage)}
           />
           <Typography className="font-15">Lbs / Acre</Typography>
         </Grid>
@@ -704,11 +873,12 @@ const ReviewMix = () => {
               label="Bulk Seeding Rate"
               variant="filled"
               disabled={true}
-              value={data.bulkSeedingRate}
+              value={seed.bulkSeedingRate}
             />
           </Grid>
           <Grid item xs={1}></Grid>
         </Grid>
+        {/*  */}
         <Grid item xs={12}>
           <Typography className="mix-ratio-step-header">Step 5: </Typography>
         </Grid>
@@ -720,7 +890,7 @@ const ReviewMix = () => {
             label="Bulk Seeding Rate"
             variant="filled"
             disabled={true}
-            value={data.bulkSeedingRate}
+            value={seed.bulkSeedingRate}
           />
           <Typography className="font-15">Lbs / Acre</Typography>
         </Grid>
@@ -735,7 +905,7 @@ const ReviewMix = () => {
             variant="filled"
             disabled={true}
             handleChange={(e) => {
-              updateSeed(e.target.value, "acres", data);
+              updateSeed(e.target.value, "acres", seed);
             }}
             value={siteCondition.acres}
           />
@@ -750,7 +920,7 @@ const ReviewMix = () => {
             label="Pounds for Purchase"
             variant="filled"
             disabled={true}
-            value={data.poundsForPurchase}
+            value={seed.poundsForPurchase}
           />
           <Typography>Lbs / Acre</Typography>
         </Grid>
@@ -786,13 +956,15 @@ const ReviewMix = () => {
           <Typography variant="h2">Review your mix</Typography>
           <Grid container xs={12}>
             <Grid item xs={6} md={6} className="mix-ratio-chart-container">
-              {renderPieChart("poundsOfSeed")}
+              {council === "MCCC"
+                ? renderPieChart("plantsPerAcre")
+                : renderPieChart("seedsPerAcre")}
               <Typography className="mix-ratio-chart-header">
-                Pounds of Seed / Acre{" "}
+                {council === "MCCC" ? "Pounds of Seed / Acre" : ""}
               </Typography>
               <Grid item className="mix-ratio-chart-list-50">
                 {speciesSelection.seedsSelected.map((s, i) => {
-                  return (
+                  council === "MCCC" ? (
                     <Grid container xs={12}>
                       <Grid item xs={2}>
                         <Square sx={{ color: COLORS[i] }}></Square>
@@ -803,14 +975,16 @@ const ReviewMix = () => {
                         </Typography>
                       </Grid>
                     </Grid>
+                  ) : (
+                    <></>
                   );
                 })}
               </Grid>
             </Grid>
             <Grid item xs={6} md={6} className="mix-ratio-chart-container">
-              {renderPieChart("plantsPerAcre")}
+              {renderPieChart("poundsOfSeed")}
               <Typography className="mix-ratio-chart-header">
-                Plants Per Acre{" "}
+                {council === "MCCC" ? "Plants" : "Seeds"} Per Acre{" "}
               </Typography>
               <Grid item className="mix-ratio-chart-list-50">
                 {speciesSelection.seedsSelected.map((s, i) => {
