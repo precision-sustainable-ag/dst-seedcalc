@@ -3,20 +3,15 @@ import Grid from "@mui/material/Grid";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Typography, Box } from "@mui/material";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+
 import { VerticalSlider } from "../../../../components/VerticalSlider";
-import { seedsList, seedsLabel } from "../../../../shared/data/species";
 import "./../steps.css";
-import { LocalConvenienceStoreOutlined } from "@mui/icons-material";
 import { updateSteps } from "./../../../../features/stepSlice";
 import SeedsSelectedList from "../../../../components/SeedsSelectedList";
 
-const SeedingMethod = () => {
+const SeedingMethod = ({ council }) => {
   // themes
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down("xs"));
@@ -111,7 +106,7 @@ const SeedingMethod = () => {
         item
       >
         <Grid item xs={12}>
-          <Typography variant="h2">Seeding Method</Typography>
+          <Typography variant="h2">Adjust Seeding Rate of Mix</Typography>
         </Grid>
         <Grid
           sx={{ paddingTop: 5 }}

@@ -7,10 +7,10 @@ export const jsonToCSV = (data) => {
   return csvData;
 };
 
-export const handleDownload = (data) => {
+export const handleDownload = (data, council) => {
   const csvData = jsonToCSV(data);
   const blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
-  saveAs(blob, "data.csv");
+  saveAs(blob, `data_${council}.csv`);
 };
 
 export const handleExport = (json) => {
