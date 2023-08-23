@@ -56,9 +56,11 @@ const ConfirmPlanCharts = ({
           padding: "10px",
         }}
       >
-        {renderPieChart("poundsOfSeed")}
+        {council === "MCCC"
+          ? renderPieChart("plantsPerAcre")
+          : renderPieChart("seedsPerAcre")}
         <Typography className="mix-ratio-chart-header" sx={{ fontWeight: 600 }}>
-          Pounds of Seed / Acre{" "}
+          {council === "MCCC" ? "Pounds of Seed / Acre" : "Seeds Per Acre"}
         </Typography>
         <Grid item className="mix-ratio-chart-list-50">
           {speciesSelection.seedsSelected.map((s, i) => {
@@ -87,9 +89,9 @@ const ConfirmPlanCharts = ({
           padding: "10px",
         }}
       >
-        {renderPieChart("plantsPerAcre")}
+        {renderPieChart("poundsOfSeed")}
         <Typography className="mix-ratio-chart-header" sx={{ fontWeight: 600 }}>
-          Plants Per Acre{" "}
+          {council === "MCCC" ? "Plants" : "Seeds"} Per Acre{" "}
         </Typography>
         <Grid item className="mix-ratio-chart-list-50">
           {speciesSelection.seedsSelected.map((s, i) => {

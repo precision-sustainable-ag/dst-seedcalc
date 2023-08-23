@@ -50,15 +50,15 @@ const ReviewMix = ({ council }) => {
   const seedingMethod = data.seedingMethod;
 
   const plantsPerAcreSum = speciesSelection.seedsSelected.reduce(
-    (sum, a) => sum + a.plantsPerAcre,
+    (sum, a) => sum + parseFloat(a.plantsPerAcre),
     0
   );
   const poundsOfSeedSum = speciesSelection.seedsSelected.reduce(
-    (sum, a) => sum + a.poundsOfSeed,
+    (sum, a) => sum + parseFloat(a.poundsOfSeed),
     0
   );
   const seedsPerAcreSum = speciesSelection.seedsSelected.reduce(
-    (sum, a) => sum + a.seedsPerAcre,
+    (sum, a) => sum + parseFloat(a.seedsPerAcre),
     0
   );
   const poundsOfSeedArray = [];
@@ -157,12 +157,11 @@ const ReviewMix = ({ council }) => {
 
   const renderPieChart = (type) => {
     let chartData;
-    // type === "plantsPerAcre" ? plantsPerAcreArray ? type === "seedsPerAcre" ? plantsPerAcreArray :  poundsOfSeedArray;
     if (type === "plantsPerAcre") {
       chartData = plantsPerAcreArray;
     }
     if (type === "seedsPerAcre") {
-      chartData = plantsPerAcreArray;
+      chartData = seedsPerAcreArray;
     }
     if (type === "poundsOfSeed") {
       chartData = poundsOfSeedArray;
@@ -223,9 +222,7 @@ const ReviewMix = ({ council }) => {
   };
 
   const CustomTooltip = (scatterData) => {
-    console.log("d", scatterData);
     const { active, payload, label } = scatterData;
-    console.log("custom tool tip", active, active, label);
     if (active && payload && payload.length) {
       return (
         <div className="custom-tooltip">
@@ -519,7 +516,6 @@ const ReviewMix = ({ council }) => {
     speciesSelection.seedsSelected.map((s, i) => {
       s.group.label === group && count++;
     });
-    console.log("count...", group, count);
     return 1 / count;
   };
   const renderMixRateSteps = (seed) => {
@@ -960,11 +956,13 @@ const ReviewMix = ({ council }) => {
                 ? renderPieChart("plantsPerAcre")
                 : renderPieChart("seedsPerAcre")}
               <Typography className="mix-ratio-chart-header">
-                {council === "MCCC" ? "Pounds of Seed / Acre" : ""}
+                {council === "MCCC"
+                  ? "Pounds of Seed / Acre"
+                  : "Seeds Per Acre"}
               </Typography>
               <Grid item className="mix-ratio-chart-list-50">
                 {speciesSelection.seedsSelected.map((s, i) => {
-                  council === "MCCC" ? (
+                  return (
                     <Grid container xs={12}>
                       <Grid item xs={2}>
                         <Square sx={{ color: COLORS[i] }}></Square>
@@ -975,8 +973,6 @@ const ReviewMix = ({ council }) => {
                         </Typography>
                       </Grid>
                     </Grid>
-                  ) : (
-                    <></>
                   );
                 })}
               </Grid>

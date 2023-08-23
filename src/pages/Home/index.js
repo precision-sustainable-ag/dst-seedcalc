@@ -78,7 +78,6 @@ const Home = () => {
           const extDataObject = JSON.parse(
             results.data[results.data.length - 1].extData
           );
-          console.log("ext data: ", extDataObject);
           setCSVImport(extDataObject);
         }
       },
