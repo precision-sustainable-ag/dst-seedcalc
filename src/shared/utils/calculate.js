@@ -31,7 +31,6 @@ export const calculateAllValues = (prevSeed, data) => {
     prevSeed,
     data.speciesSelection.seedsSelected
   );
-  console.log("percentingroup", percentInGroup);
   seed.mixSeedingRate = calculateSeeds("step1", seed).val.toFixed(2);
   seed.seedsPerAcre = calculateSeeds("step2", seed).val.toFixed(2);
   seed.plantsPerAcre = calculateSeeds("step3", seed).val.toFixed(2);
@@ -40,12 +39,10 @@ export const calculateAllValues = (prevSeed, data) => {
 };
 export const calculateAllValuesNECCC = (prevSeed, data) => {
   let seed = { ...prevSeed };
-  console.log("prev ", prevSeed, data);
   const percentInGroup = generatePercentInGroup(
     prevSeed,
     data.speciesSelection.seedsSelected
   );
-  console.log("percentingroup", percentInGroup);
   seed.mixSeedingRate = calculateSeedsNECCC("step1", seed, data).val.toFixed(2);
   seed.seedsPerAcre = calculateSeedsNECCC("step2", seed, data).val.toFixed(2);
   seed.aproxPlantsSqFt = calculateSeedsNECCC("step3", seed, data).val.toFixed(
@@ -132,7 +129,6 @@ export const calculateSeedsNECCC = (step, seed, { speciesSelection }) => {
 /* Review Mix Calculate logic */
 
 export const calculateAllMixValues = (prevSeed, data) => {
-  console.log("data", data);
   generatePercentInGroup(prevSeed, data.speciesSelection.seedsSelected);
   let seed = { ...prevSeed };
   seed.step1Result = calculateReviewMix("step1", seed, data).val.toFixed(2);
@@ -150,11 +146,9 @@ export const generatePercentInGroup = (seed, seeds) => {
   seeds.map((s, i) => {
     s.group.label === group && count++;
   });
-  console.log("count...", group, count);
   return 1 / count;
 };
 export const calculateAllMixValuesNECCC = (prevSeed, data) => {
-  console.log("data", data);
   generatePercentInGroup(prevSeed, data.speciesSelection.seedsSelected);
   let seed = { ...prevSeed };
   seed.step1Result = calculateReviewMixNECCC("step1", seed, data).val.toFixed(

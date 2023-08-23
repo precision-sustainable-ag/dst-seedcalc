@@ -84,6 +84,7 @@ const SpeciesSelection = ({ council }) => {
 
     // default key values per new seed
     const cropDetails = await retrieveCropDetails(seed.id);
+
     let newSeed = {
       ...seed,
       ...cropDetails,
@@ -108,16 +109,22 @@ const SpeciesSelection = ({ council }) => {
                 .split(" - ")[1]
                 .slice(0, -5)
             : "",
-        secondReliableEstablishmentStart: cropDetails.attributes[
-          "Planting and Growth Windows"
-        ]["Reliable Establishment"]["values"][0]
-          .split(" - ")[0]
-          .slice(0, -5),
-        secondReliableEstablishmentEnd: cropDetails.attributes[
-          "Planting and Growth Windows"
-        ]["Reliable Establishment"]["values"][0]
-          .split(" - ")[1]
-          .slice(0, -5),
+        secondReliableEstablishmentStart:
+          council === "MCCC"
+            ? cropDetails.attributes["Planting and Growth Windows"][
+                "Reliable Establishment"
+              ]["values"][1]
+                .split(" - ")[0]
+                .slice(0, -5)
+            : "",
+        secondReliableEstablishmentEnd:
+          council === "MCCC"
+            ? cropDetails.attributes["Planting and Growth Windows"][
+                "Reliable Establishment"
+              ]["values"][1]
+                .split(" - ")[1]
+                .slice(0, -5)
+            : "",
         earlySeedingDateStart: cropDetails.attributes[
           "Planting and Growth Windows"
         ]["Reliable Establishment"]["values"][0]
@@ -159,8 +166,7 @@ const SpeciesSelection = ({ council }) => {
       ),
       mixSeedingRate: 0,
       maxPercentAllowedInMix:
-        cropDetails.attributes.Coefficients["Max % Allowed In Mix"] !==
-        undefined
+        council === "MCCC"
           ? cropDetails.attributes.Coefficients["Max % Allowed in Mix"][
               "values"
             ][0]
@@ -427,12 +433,27 @@ const SpeciesSelection = ({ council }) => {
   const imgSrc = (imgUrl) => {
     return imgUrl !== null ? imgUrl + "?w=300&h=300&fit=crop&auto=format" : "";
   };
-  const renderImageList = (data) => {
+  const checkPlantingDate = (seed, siteDate) => {
+    const startDate = new Date(
+      seed["Planting and Growth Windows"]["Reliable Establishment"][0]
+        .split(" - ")[0]
+        .slice(0, -5)
+    ).getTime();
+    const endDate = new Date(
+      seed["Planting and Growth Windows"]["Reliable Establishment"][0]
+        .split(" - ")[1]
+        .slice(0, -5)
+    ).getTime();
+    const plannedDate = new Date(siteDate.slice(0, -5)).getTime();
+    const pass = plannedDate >= startDate && plannedDate <= endDate;
+    return pass;
+  };
+  const renderImageList = (seed) => {
     return (
       <ImageList sx={{ maxWidth: "100%" }} cols={matchesSm ? 2 : 6}>
         {filteredSeeds
           .filter((seeds, i) => {
-            return seeds.group !== null && seeds.group.label === data;
+            return seeds.group !== null && seeds.group.label === seed;
           })
           .map((seeds, idx) => (
             <ImageListItem
@@ -444,6 +465,34 @@ const SpeciesSelection = ({ council }) => {
                 ) + Math.random()
               }
             >
+              {council === "NECCC" &&
+                checkPlantingDate(
+                  seeds,
+                  data.siteCondition.plannedPlantingDate
+                ) && (
+                  <>
+                    <Grid
+                      sx={{
+                        position: "absolute",
+                        backgroundColor: "white",
+                        opacity: "0.7",
+                        width: "100%",
+                        height: "35%",
+                        marginTop: "20px",
+                      }}
+                    ></Grid>
+                    <Typography
+                      sx={{
+                        color: "red",
+                        position: "absolute",
+                        marginTop: "30px",
+                      }}
+                    >
+                      Not Recommended for planting dates
+                    </Typography>
+                  </>
+                )}
+
               <img
                 className={matchesSm ? "panel-img-sm" : "panel-img"}
                 src={imgSrc(
@@ -453,14 +502,14 @@ const SpeciesSelection = ({ council }) => {
                 )}
                 alt={seeds.label}
                 onClick={(e) => {
-                  updateSeeds(seeds, data);
+                  updateSeeds(seeds, seed);
                 }}
                 loading="lazy"
               />
               <Link
                 className="img-text"
                 onClick={(e) => {
-                  updateSeeds(seeds, data);
+                  updateSeeds(seeds, seed);
                 }}
               >
                 {seeds.label}{" "}
@@ -470,8 +519,8 @@ const SpeciesSelection = ({ council }) => {
       </ImageList>
     );
   };
-  const renderAccordian = (data) => {
-    console.log("accordiaan data", data);
+  const renderAccordian = (seed) => {
+    console.log("accordiaan data", seed);
     return (
       <Accordion xs={12} className="accordian-container">
         <AccordionSummary
@@ -480,10 +529,10 @@ const SpeciesSelection = ({ council }) => {
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography>{seedsLabel[data]}</Typography>
+          <Typography>{seedsLabel[seed]}</Typography>
         </AccordionSummary>
         <AccordionDetails className="accordian-details">
-          {renderImageList(data)}
+          {renderImageList(seed)}
         </AccordionDetails>
       </Accordion>
     );

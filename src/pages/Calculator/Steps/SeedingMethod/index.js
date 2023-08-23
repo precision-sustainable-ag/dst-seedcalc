@@ -46,7 +46,6 @@ const SeedingMethod = ({ council }) => {
     setSeedingRateCoefficient(
       average + (seedingMethod.managementImpactOnMix - 0.5) * average
     );
-    console.log("*** max, min, coefficient", maximum, minimum, coefficient);
     toggleDataLoaded(true);
   };
   const updateManagementImpactOnMix = (e) => {
@@ -92,8 +91,6 @@ const SeedingMethod = ({ council }) => {
   useEffect(() => {
     updateSeedingRateAverage();
     return () => {
-      console.log("clearing chart");
-
       dataLoaded && clearChart();
     };
   }, []);

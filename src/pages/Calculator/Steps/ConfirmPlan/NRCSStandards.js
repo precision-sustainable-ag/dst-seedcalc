@@ -172,7 +172,14 @@ const NRCSStandards = ({ NRCS, handleModalOpen }) => {
       <Grid xs={10}>
         <Box className="NRCS-result-container">
           <Typography sx={{ float: "left", marginLeft: "5px" }}>
-            {NRCS.results.expectedWinterSurvival.value}
+            {NRCS.results.expectedWinterSurvival.value ? (
+              <CheckIcon sx={{ color: "green" }}></CheckIcon>
+            ) : (
+              <ClearIcon sx={{ color: "red" }}></ClearIcon>
+            )}
+          </Typography>
+          <Typography sx={{ float: "left", marginLeft: "5px" }}>
+            {NRCS.results.soilDrainage.value ? "passed" : "failed"}
           </Typography>
           <Link
             sx={{
