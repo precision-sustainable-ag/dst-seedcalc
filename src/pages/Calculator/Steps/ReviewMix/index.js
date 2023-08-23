@@ -962,16 +962,18 @@ const ReviewMix = ({ council }) => {
               </Typography>
               <Grid item className="mix-ratio-chart-list-50">
                 {speciesSelection.seedsSelected.map((s, i) => {
-                  <Grid container xs={12}>
-                    <Grid item xs={2}>
-                      <Square sx={{ color: COLORS[i] }}></Square>
+                  return (
+                    <Grid container xs={12}>
+                      <Grid item xs={2}>
+                        <Square sx={{ color: COLORS[i] }}></Square>
+                      </Grid>
+                      <Grid item xs={10}>
+                        <Typography className={matchesMd ? "mix-label-md" : ""}>
+                          {s.label}
+                        </Typography>
+                      </Grid>
                     </Grid>
-                    <Grid item xs={10}>
-                      <Typography className={matchesMd ? "mix-label-md" : ""}>
-                        {s.label}
-                      </Typography>
-                    </Grid>
-                  </Grid>;
+                  );
                 })}
               </Grid>
             </Grid>
