@@ -48,20 +48,31 @@ const ConfirmPlan = ({ council }) => {
     (sum, a) => sum + a.poundsForPurchase,
     0
   );
+
   const plantsPerAcreSum = speciesSelection.seedsSelected.reduce(
-    (sum, a) => sum + a.plantsPerAcre,
+    (sum, a) => sum + parseFloat(a.plantsPerAcre),
     0
   );
   const poundsOfSeedSum = speciesSelection.seedsSelected.reduce(
-    (sum, a) => sum + a.poundsOfSeed,
+    (sum, a) => sum + parseFloat(a.poundsOfSeed),
+    0
+  );
+  const seedsPerAcreSum = speciesSelection.seedsSelected.reduce(
+    (sum, a) => sum + parseFloat(a.seedsPerAcre),
     0
   );
   const poundsOfSeedArray = [];
   const plantsPerAcreArray = [];
+  const seedsPerAcreArray = [];
+
   speciesSelection.seedsSelected.map((s, i) => {
     plantsPerAcreArray.push({
       name: s.label,
       value: s.plantsPerAcre / plantsPerAcreSum,
+    });
+    seedsPerAcreArray.push({
+      name: s.label,
+      value: s.seedsPerAcre / seedsPerAcreSum,
     });
     poundsOfSeedArray.push({
       name: s.label,
@@ -142,9 +153,16 @@ const ConfirmPlan = ({ council }) => {
   };
 
   const renderPieChart = (type) => {
-    const chartData =
-      type === "plantsPerAcre" ? plantsPerAcreArray : poundsOfSeedArray;
-
+    let chartData;
+    if (type === "plantsPerAcre") {
+      chartData = plantsPerAcreArray;
+    }
+    if (type === "seedsPerAcre") {
+      chartData = seedsPerAcreArray;
+    }
+    if (type === "poundsOfSeed") {
+      chartData = poundsOfSeedArray;
+    }
     return (
       <ResponsiveContainer width="100%" height={200}>
         <PieChart width={400} height={400}>

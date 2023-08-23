@@ -23,13 +23,12 @@ export const calculateExpectedWinterSurvival = (crop, seedsSelected) => {
   seedsSelected.map((s, i) => {
     avg += parseFloat(s.percentChanceOfWinterSurvival);
   });
-  console.log("avg,", avg);
 
   return {
     label: crop.label,
-    expect: avg / seedsSelected.length,
+    expect: crop.percentChanceOfWinterSurvival,
     result: avg / seedsSelected.length,
-    pass: false,
+    pass: crop.percentChanceOfWinterSurvival >= avg / seedsSelected.length,
   };
 };
 export const calculatePlantingDate = (seed, siteDate) => {
@@ -40,11 +39,19 @@ export const calculatePlantingDate = (seed, siteDate) => {
   const endDate = new Date(
     seed.plantingDates.firstReliableEstablishmentEnd
   ).getTime();
+  const secondStartDate = new Date(
+    seed.plantingDates.secondReliableEstablishmentStart
+  ).getTime();
+  const secondEndDate = new Date(
+    seed.plantingDates.secondReliableEstablishmentEnd
+  ).getTime();
   const plannedDate = new Date(siteDate.slice(0, -5)).getTime();
-  const pass = plannedDate >= startDate && plannedDate <= endDate;
+  const pass =
+    (plannedDate >= startDate && plannedDate <= endDate) ||
+    (plannedDate >= secondStartDate && plannedDate <= secondEndDate);
   return {
     label: seed.label,
-    expect: `${seed.plantingDates.firstReliableEstablishmentStart} - ${seed.plantingDates.firstReliableEstablishmentEnd}`,
+    expect: `${seed.plantingDates.firstReliableEstablishmentStart} - ${seed.plantingDates.firstReliableEstablishmentEnd}, ${seed.plantingDates.secondReliableEstablishmentStart} - ${seed.plantingDates.secondReliableEstablishmentEnd}`,
     result: siteDate.slice(0, -5),
     pass: pass,
   };
@@ -62,7 +69,6 @@ export const calculateSeedingRate = (crop, seedsSelected) => {
     [crop.singleSpeciesSeedingRate, seedsSelected.length],
     "divide"
   );
-  console.log("seed nrcs", seedingRateNRCS, seedingRateResult, crop);
   return {
     label: crop.label,
     expect: seedingRateNRCS,

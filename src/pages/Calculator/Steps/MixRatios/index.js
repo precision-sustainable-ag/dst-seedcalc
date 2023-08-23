@@ -40,23 +40,32 @@ const MixRatio = ({ council }) => {
   const data = useSelector((state) => state.steps.value);
   const speciesSelection = data.speciesSelection;
   const plantsPerAcreSum = speciesSelection.seedsSelected.reduce(
-    (sum, a) => sum + a.plantsPerAcre,
+    (sum, a) => parseFloat(sum) + parseFloat(a.aproxPlantsSqFt),
     0
   );
   const poundsOfSeedSum = speciesSelection.seedsSelected.reduce(
-    (sum, a) => sum + a.poundsOfSeed,
+    (sum, a) => parseFloat(sum) + parseFloat(a.poundsOfSeed),
+    0
+  );
+  const seedsPerAcreSum = speciesSelection.seedsSelected.reduce(
+    (sum, a) => parseFloat(sum) + parseFloat(a.seedsPerAcre),
     0
   );
   const poundsOfSeedArray = [];
   const plantsPerAcreArray = [];
+  const seedsPerAcreArray = [];
   speciesSelection.seedsSelected.map((s, i) => {
     plantsPerAcreArray.push({
       name: s.label,
-      value: s.plantsPerAcre / plantsPerAcreSum,
+      value: parseFloat(s.aproxPlantsSqFt) / plantsPerAcreSum,
+    });
+    seedsPerAcreArray.push({
+      name: s.label,
+      value: parseFloat(s.seedsPerAcre) / parseFloat(seedsPerAcreSum),
     });
     poundsOfSeedArray.push({
       name: s.label,
-      value: s.poundsOfSeed / poundsOfSeedSum,
+      value: parseFloat(s.poundsOfSeed) / poundsOfSeedSum,
     });
   });
 
@@ -124,9 +133,16 @@ const MixRatio = ({ council }) => {
   };
 
   const renderPieChart = (type) => {
-    const chartData =
-      type === "plantsPerAcre" ? plantsPerAcreArray : poundsOfSeedArray;
-
+    let chartData;
+    if (type === "plantsPerAcre") {
+      chartData = plantsPerAcreArray;
+    }
+    if (type === "seedsPerAcre") {
+      chartData = seedsPerAcreArray;
+    }
+    if (type === "poundsOfSeed") {
+      chartData = poundsOfSeedArray;
+    }
     return (
       <ResponsiveContainer width="100%" height={200}>
         <PieChart width={400} height={400}>
