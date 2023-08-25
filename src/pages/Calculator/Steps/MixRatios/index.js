@@ -20,7 +20,7 @@ import {
   convertToDecimal,
 } from "./../../../../shared/utils/calculate";
 
-import { updateSteps } from "./../../../../features/stepSlice";
+import { updateSteps } from "../../../../features/stepSlice";
 import { NumberTextField } from "./../../../../components/NumberTextField";
 
 import "./../steps.css";

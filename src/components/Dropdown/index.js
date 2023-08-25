@@ -23,6 +23,7 @@ export const Dropdown = ({
   size,
   theme,
   items,
+  disabled = false,
 }) => {
   const renderedItems = items.map((item, i) => {
     return (
@@ -36,7 +37,12 @@ export const Dropdown = ({
     <Box className="dropdown-container" sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
         <InputLabel>{label}</InputLabel>
-        <Select value={value} label={label} onChange={handleChange}>
+        <Select
+          disabled={disabled}
+          value={value}
+          label={label}
+          onChange={handleChange}
+        >
           {renderedItems}
         </Select>
       </FormControl>

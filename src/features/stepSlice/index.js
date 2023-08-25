@@ -1,119 +1,8 @@
-import { fabClasses } from "@mui/material";
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import dayjs from "dayjs";
+import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
-  value: {
-    modal: {
-      loading: false,
-      error: false,
-      success: false,
-      errorTitle: "",
-      errorMessage: "",
-      successTitle: "",
-      successMessage: "",
-      isOpen: false,
-    },
-    siteCondition: {
-      state: "",
-      stateId: "",
-      county: "",
-      countyId: "",
-      soilDrainage: "",
-      plannedPlantingDate: dayjs(new Date()),
-      acres: 0,
-      checkNRCSStandards: false,
-    },
-    speciesSelection: {
-      queryString: "",
-      queryResults: [],
-      diversitySelected: [],
-      seedsSelected: [],
-    },
-    mixRatios: {
-      poundsOfSeed: 0,
-      plantsPerAcre: 0,
-    },
-    NRCS: {
-      enabled: false,
-      results: {
-        seedingRate: {
-          value: true,
-          seeds: [],
-        },
-        plantingDate: {
-          value: true,
-          seeds: [],
-        },
-        ratio: {
-          value: true,
-          seeds: [],
-        },
-        soilDrainage: {
-          value: true,
-          seeds: [],
-        },
-        expectedWinterSurvival: {
-          value: 0,
-          seeds: [],
-        },
-      },
-    },
-    mixSeedingRate: {},
-    seedTagInfo: {},
-    seedingMethod: {
-      managementImpactOnMix: 0.5,
-      min: 0,
-      max: 0,
-      seedingRateAverage: 0,
-      seedingRateCoefficient: 0,
-      type: "Drilled",
-    },
-    reviewMix: {},
-    confirmPlan: {},
-    states: [],
-    counties: [],
-    crops: [],
-  },
-  etc: {},
-};
+import { getCrops, getCropsById, getLocality, getRegion } from "./api";
+import { initialState } from "./state";
 
-export const getCrops = createAsyncThunk(
-  "steps/getCrops",
-  async ({ regionId }, thunkAPI) => {
-    const res = await fetch(
-      `https://developapi.covercrop-selector.org/v2/crops/?regions=${regionId}&context=seed_calc`
-    ).then((data) => data.json());
-    return res;
-  }
-);
-
-export const getCropsById = createAsyncThunk(
-  "steps/getCropsById",
-  async ({ cropId, regionId, countyId }, thunkAPI) => {
-    const url = `https://developapi.covercrop-selector.org/v2/crops/${cropId}?regions=${regionId}&context=seed_calc&regions=${countyId}`;
-    const res = await fetch(url).then((data) => data.json());
-    return res;
-  }
-);
-
-export const getLocality = createAsyncThunk(
-  "steps/getLocality",
-  async ({ type }, thunkAPI) => {
-    const url = `https://developapi.covercrop-selector.org/v2/regions?locality=state&context=seed_calc&council=${type}`;
-    const res = await fetch(url).then((data) => data.json());
-    return res.data.filter((x) => x.parents[0].shorthand === type);
-  }
-);
-
-export const getRegion = createAsyncThunk(
-  "steps/getRegion",
-  async ({ regionId }, thunkAPI) => {
-    const url = `https://developapi.covercrop-selector.org/v2/regions/${regionId}`;
-    const res = await fetch(url).then((data) => data.json());
-    return res;
-  }
-);
 /* 
 
 Reducer Documentation: 
@@ -199,6 +88,7 @@ export const stepSlice = createSlice({
     },
     [getLocality.fulfilled]: (state, { payload }) => {
       state.value.states = payload;
+
       console.log("fulfilled locality", payload.data);
     },
     [getLocality.rejected]: (state) => {

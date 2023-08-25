@@ -24,7 +24,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-import { updateSteps } from "./../../../../features/stepSlice";
+import { updateSteps } from "../../../../features/stepSlice";
 import { NumberTextField } from "./../../../../components/NumberTextField";
 import {
   convertToPercent,

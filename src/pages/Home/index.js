@@ -7,8 +7,9 @@ import Typography from "@mui/material/Typography";
 import { Fragment } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
 import Papa from "papaparse";
+
+import { getLocality } from "../../features/stepSlice/api";
 import {
   updateAllSteps,
   updateSteps,
@@ -19,16 +20,19 @@ import { Header } from "./../../components/Header";
 import { CSVModal } from "./CSVModal";
 import { Dropdown } from "../../components/Dropdown";
 import "./home.css";
+import LocationComponent from "./LocationComponent";
 
 const Home = () => {
-  const [imgPath, setImgPath] = useState("./mccc-logo.png");
   const [openModal, setOpenModal] = useState(false);
   const [CSVImport, setCSVImport] = useState([]);
   const [council, setCouncil] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
-  const speciesSelection = data.speciesSelection;
+  const { speciesSelection, siteCondition } = data;
+  const [imgPath, setImgPath] = useState(
+    siteCondition.council === "MCCC" ? "./mccc-logo.png" : "./neccc-logo.png"
+  );
   const seedsSelected = speciesSelection.seedsSelected;
   const handleModal = (type, title, description) => {
     var payload = {};
@@ -102,29 +106,22 @@ const Home = () => {
       e.target.value === "MCCC" ? "./mccc-logo.png" : "./neccc-logo.png";
     setImgPath(imagePath);
   };
-  return (
-    <Fragment>
-      <Grid container spacing={2}>
-        <Header
-          className="header-container"
-          headerVariant="dstHeaderHome"
-          text="Seeding Rate Calculator"
-          size={12}
-          style={{ mt: 5 }}
-        />
+  const renderHome = () => {
+    return (
+      <>
         <Grid item xs={12} padding={15} className="site-condition-container">
           <Dropdown
-            value={council}
+            value={siteCondition.council}
             label={"Council: "}
             handleChange={handleCouncil}
+            disabled={true}
             size={12}
             items={[
-              { label: "NECCC", value: "NECCC" },
-              { label: "MCCC", value: "MCCC" },
+              { label: siteCondition.council, value: siteCondition.council },
             ]}
           />
         </Grid>
-        {council !== "" && (
+        {siteCondition.council !== "" && (
           <>
             <Grid xs={12} className="dst-mccc-logo">
               <img alt="neccc" src={imgPath} />
@@ -134,7 +131,10 @@ const Home = () => {
               buttonClass="dst-button"
               size={12}
               theme="dstTheme"
-              path={{ type: "local", url: `/${council}/calculator` }}
+              path={{
+                type: "local",
+                url: `/${siteCondition.council}/calculator`,
+              }}
             />
             <DSTButton
               text="Import previous calculation"
@@ -150,6 +150,30 @@ const Home = () => {
               handleImportCSV={handleImportCSV}
             />
           </>
+        )}
+      </>
+    );
+  };
+
+  useEffect(() => {
+    dispatch(getLocality());
+  }, []);
+  return (
+    <Fragment>
+      <Grid container spacing={2}>
+        <Header
+          className="header-container"
+          headerVariant="dstHeaderHome"
+          text="Seeding Rate Calculator"
+          size={12}
+          style={{ mt: 5 }}
+        />
+        {data.siteCondition.locationSelected ? (
+          renderHome()
+        ) : (
+          <Grid xs={12} item>
+            <LocationComponent />
+          </Grid>
         )}
       </Grid>
     </Fragment>

@@ -14,7 +14,8 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import { SearchField } from "../../../../components/SearchField";
-import { updateSteps, getCropsById } from "./../../../../features/stepSlice";
+import { updateSteps } from "../../../../features/stepSlice/index";
+import { getCropsById } from "../../../../features/stepSlice/api";
 import { seedsList, seedsLabel } from "../../../../shared/data/species";
 import { calculateAllValues } from "../../../../shared/utils/calculate";
 import "./../steps.css";
@@ -31,8 +32,7 @@ const SpeciesSelection = ({ council }) => {
   // useSelector for crops reducer data
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
-  const crops = data.crops;
-  const speciesSelection = data.speciesSelection;
+  const { crops, speciesSelection } = data;
   const seedsSelected = speciesSelection.seedsSelected;
   const diversitySelected = speciesSelection.diversitySelected;
   const [filteredSeeds, setFilteredSeeds] = useState(crops);

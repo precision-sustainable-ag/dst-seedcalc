@@ -19,6 +19,21 @@ export const calculatorList = [
   "Confirm Plan",
 ];
 
+export const availableStates = [
+  "Connecticut",
+  "Delaware",
+  "Indiana",
+  "Maryland",
+  "Massachusetts",
+  "New Hampshire",
+  "New Jersey",
+  "New York",
+  "Pennsylvania",
+  "Rhode Island",
+  "Vermont",
+  "West Virginia",
+];
+
 export const soilDrainage = [
   { label: "Very Poorly Drained" },
   { label: "Poorly Drained" },

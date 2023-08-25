@@ -8,7 +8,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 
 import { VerticalSlider } from "../../../../components/VerticalSlider";
 import "./../steps.css";
-import { updateSteps } from "./../../../../features/stepSlice";
+import { updateSteps } from "../../../../features/stepSlice";
 import SeedsSelectedList from "../../../../components/SeedsSelectedList";
 
 const SeedingMethod = ({ council }) => {

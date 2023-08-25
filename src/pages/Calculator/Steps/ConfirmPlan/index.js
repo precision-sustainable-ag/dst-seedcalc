@@ -5,14 +5,10 @@ import { Typography, Box, Link, Button, Modal } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
-import CheckIcon from "@mui/icons-material/Check";
-import ClearIcon from "@mui/icons-material/Clear";
-import { Square } from "@mui/icons-material";
 
 import { calculateAllConfirmPlan } from "../../../../shared/utils/calculate";
-import { generateNullSeed } from "../../../../shared/utils/seeds";
 import { handleDownload } from "./../../../../shared/utils/exportExcel";
-import { updateSteps } from "../../../../features/stepSlice";
+import { updateSteps } from "../../../../features/stepSlice/index";
 import { NumberTextField } from "../../../../components/NumberTextField";
 import { DSTTextField } from "../../../../components/DSTTextField";
 import { DSTSwitch } from "../../../../components/Switch";

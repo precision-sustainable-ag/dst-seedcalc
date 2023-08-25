@@ -7,21 +7,23 @@ import { DatePicker } from "./../../../../components/DatePicker";
 import { Dropdown } from "./../../../../components/Dropdown";
 import { NumberTextField } from "./../../../../components/NumberTextField";
 import { DSTSwitch } from "./../../../../components/Switch";
-import { updateSteps } from "./../../../../features/stepSlice";
 import { soilDrainage } from "./../../../../shared/data/dropdown";
 import {
   getCrops,
   getCropsById,
   getLocality,
   getRegion,
-} from "./../../../../features/stepSlice";
+} from "../../../../features/stepSlice/api";
+import { updateSteps } from "../../../../features/stepSlice/index";
 import "./../steps.css";
 
 const SiteCondition = ({ council }) => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps);
   const siteCondition = data.value.siteCondition;
-  const states = data.value.states;
+  const states = data.value.states.filter(
+    (x) => x.parents[0].shorthand === council
+  );
   const counties = data.value.counties;
   const [checked, setChecked] = useState(data.value.NRCS.enabled);
 
@@ -69,7 +71,6 @@ const SiteCondition = ({ council }) => {
   const handleRegion = (e) => {
     const countyId = counties.filter((c, i) => c.label === e.target.value)[0]
       .id;
-
     handleUpdateSteps("county", "siteCondition", e.target.value);
     handleUpdateSteps("countyId", "siteCondition", countyId);
 
@@ -81,7 +82,7 @@ const SiteCondition = ({ council }) => {
   };
 
   useEffect(() => {
-    dispatch(getLocality({ type: council }));
+    dispatch(getLocality());
     dispatch(
       getCropsById({
         cropId: "148",

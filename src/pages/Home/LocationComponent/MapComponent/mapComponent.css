@@ -1,0 +1,10 @@
+.map-council-text {
+    margin-top: 20px !important;
+    float: right;
+  }
+.map-council-text-bold {
+    font-weight: 600 !important;
+}
+.map-component-dropdown {
+    padding-bottom: 20px;
+}
