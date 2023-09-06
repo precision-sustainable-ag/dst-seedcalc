@@ -1,19 +1,11 @@
 import Grid from "@mui/material/Grid";
 import { Button } from "@mui/material";
 import { RegionSelectorMap } from "@psa/dst.ui.region-selector-map";
-import { Typography } from "@mui/material/styles/createTypography";
 
 import { availableStates } from "../../../../shared/data/dropdown";
 import { Dropdown } from "../../../../components/Dropdown";
 
-const RegionSelector = ({
-  currentStep,
-  setSelectedRegion,
-  setMapState,
-  handleNext,
-  value,
-  states,
-}) => {
+const RegionSelector = ({ setMapState, handleNext, value, states }) => {
   return (
     <Grid xs={12} container>
       <Grid item xs={12} padding={15} className="site-condition-container">

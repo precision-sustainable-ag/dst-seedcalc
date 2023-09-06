@@ -83,14 +83,6 @@ const SiteCondition = ({ council }) => {
 
   useEffect(() => {
     dispatch(getLocality());
-    dispatch(
-      getCropsById({
-        cropId: "148",
-        regionId: "18",
-        countyId: "180",
-        url: "https://developapi.covercrop-selector.org/v2/crops/148?regions=18&context=seed_calc&regions=180",
-      })
-    );
   }, []);
   return (
     <Grid container justifyContent="center" alignItems="center" size={12}>

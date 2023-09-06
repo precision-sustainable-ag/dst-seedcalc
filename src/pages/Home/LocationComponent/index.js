@@ -1,15 +1,11 @@
-import { Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import { useTheme } from "@mui/material/styles";
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
-import { Map } from "@psa/dst.ui.map";
-import { Button } from "@mui/material";
 
-import { Dropdown } from "../../../components/Dropdown";
 import RegionSelector from "./RegionSelector";
 import MapComponent from "./MapComponent";
 import { updateSteps } from "../../../features/stepSlice";
+import { getRegion } from "../../../features/stepSlice/api";
 import statesLatLongDict from "../../../shared/data/statesLatLongDict";
 
 const LocationComponent = ({ council }) => {
@@ -33,6 +29,7 @@ const LocationComponent = ({ council }) => {
   };
 
   // RegionalSelector function to update Redux with the latitude/longitude based on state selected.
+  // Afterwards,set the
   const handleState = (val) => {
     setSelectedToEditSite({
       ...selectedToEditSite,
@@ -48,13 +45,19 @@ const LocationComponent = ({ council }) => {
       "siteCondition",
       stateSelected.parents[0].shorthand
     );
+
     handleUpdateSteps("state", "siteCondition", val);
     handleUpdateSteps("stateId", "siteCondition", stateSelected.id);
+    dispatch(getRegion({ regionId: stateSelected.id })).then((res) => {});
   };
   const handleSteps = (type, complete) => {
     type === "next" ? setStep(step + 1) : setStep(step - 1);
     type === "back" && setSelectedToEditSite({});
-    complete && handleUpdateSteps("locationSelected", "siteCondition", true);
+    complete && handleCompleteLocation();
+  };
+  const handleCompleteLocation = () => {
+    handleUpdateSteps("locationSelected", "siteCondition", true);
+    dispatch(getRegion({ regionId: siteCondition.siteId })).then((res) => {});
   };
 
   useEffect(() => {
@@ -67,15 +70,7 @@ const LocationComponent = ({ council }) => {
     ) {
       return;
     }
-    console.log(
-      "use effect",
-      selectedToEditSite,
-      latitude,
-      longitude,
-      address,
-      zipCode,
-      county
-    );
+
     if (Object.keys(selectedToEditSite).length > 0) {
       handleUpdateSteps("latitude", "siteCondition", latitude);
       handleUpdateSteps("longitude", "siteCondition", longitude);

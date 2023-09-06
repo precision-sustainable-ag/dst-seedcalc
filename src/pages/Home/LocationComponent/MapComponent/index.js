@@ -2,11 +2,6 @@ import { Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { Map } from "@psa/dst.ui.map";
 import { Button } from "@mui/material";
-import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 
 import "./mapComponent.css";
 import { Dropdown } from "../../../../components/Dropdown";
