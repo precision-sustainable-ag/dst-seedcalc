@@ -56,7 +56,7 @@
   },
   "devDependencies": {
     "@psa/dst.ui.region-selector-map": "^0.0.14",
-    "mapbox-gl": "^2.15.0",
+    "mapbox-gl": "^2.10.0",
     "sass": "^1.66.1"
   }
 }
