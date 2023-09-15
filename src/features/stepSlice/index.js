@@ -1,7 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { getCrops, getCropsById, getLocality, getRegion } from "./api";
+import {
+  getCrops,
+  getCropsById,
+  getLocality,
+  getRegion,
+  getSSURGOData,
+} from "./api";
 import { initialState } from "./state";
+import { soilDrainage } from "../../shared/data/dropdown";
 
 /* 
 
@@ -82,7 +89,24 @@ export const stepSlice = createSlice({
       state.error = true;
       state.errorMessage = "";
     },
-
+    [getSSURGOData.pending]: (state) => {
+      state.loading = false;
+    },
+    [getSSURGOData.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      const string = payload.Table[1][2] !== null ? payload.Table[1][2] : "";
+      const checkSoilDrainage = soilDrainage.filter(
+        (a) => a.label.toLowerCase() === string.toLowerCase()
+      );
+      const dropdownVal =
+        string !== "" && checkSoilDrainage.length > 0
+          ? checkSoilDrainage[0].label
+          : "";
+      state.value.siteCondition.soilDrainage = dropdownVal;
+    },
+    [getSSURGOData.rejected]: (state, { payload }) => {
+      state.loading = false;
+    },
     [getLocality.pending]: (state) => {
       state.loading = true;
     },

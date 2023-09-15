@@ -63,18 +63,6 @@ const MapComponent = ({
           hasMarkerMovable
         />
       </Grid>
-      <Grid xs={1} item></Grid>
-      <Grid xs={2} item>
-        <Button onClick={() => handleSteps("back", false)}>Back</Button>
-      </Grid>
-      <Grid xs={8} item></Grid>
-      <Grid xs={2} item>
-        <Button
-          onClick={() => handleSteps("next", currentStep === 2 ? true : false)}
-        >
-          Next
-        </Button>
-      </Grid>
     </Grid>
   );
 };

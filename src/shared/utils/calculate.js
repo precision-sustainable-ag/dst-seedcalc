@@ -375,6 +375,5 @@ const setAll = (obj, val) => {
 const setNull = (obj) => setAll(obj, null);
 export const emptyValues = (data) => {
   const emptyObj = setNull(data);
-  console.log("emptyObj", emptyObj);
   return emptyObj;
 };

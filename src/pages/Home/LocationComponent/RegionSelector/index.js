@@ -5,14 +5,21 @@ import { RegionSelectorMap } from "@psa/dst.ui.region-selector-map";
 import { availableStates } from "../../../../shared/data/dropdown";
 import { Dropdown } from "../../../../components/Dropdown";
 
-const RegionSelector = ({ setMapState, handleNext, value, states }) => {
+const RegionSelector = ({
+  setMapState,
+  setSelectedState,
+  handleNext,
+  states,
+  selectorFunction,
+  selectedState,
+}) => {
   return (
     <Grid xs={12} container>
       <Grid item xs={12} padding={15} className="site-condition-container">
         <Dropdown
-          value={value}
+          value={selectedState.label || ""}
           label={"State: "}
-          handleChange={(e) => setMapState(e.target.value)}
+          handleChange={(e) => setSelectedState(e.target.value)}
           size={12}
           items={states}
         />
@@ -20,24 +27,15 @@ const RegionSelector = ({ setMapState, handleNext, value, states }) => {
       <Grid xs={1} item></Grid>
       <Grid xs={10} item>
         <RegionSelectorMap
-          selectorFunction={(e) => {
-            console.log("setMapState", e.properties.STATE_NAME, states);
-            setMapState(e.properties.STATE_NAME);
-          }}
-          selectedState={value}
+          selectorFunction={setMapState}
+          selectedState={selectedState.label}
           availableStates={availableStates}
           initWidth="100%"
           initHeight="400px"
-          initLon={-95}
-          initLat={43}
-          initStartZoom={2}
+          initLon={-80}
+          initLat={40}
+          initStartZoom={4}
         />
-      </Grid>
-      <Grid xs={1} item></Grid>
-      <Grid xs={2} item></Grid>
-      <Grid xs={8} item></Grid>
-      <Grid xs={2} item>
-        <Button onClick={() => handleNext("next", false)}>Next</Button>
       </Grid>
     </Grid>
   );

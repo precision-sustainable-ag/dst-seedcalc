@@ -323,7 +323,6 @@ const MixRatio = ({ council }) => {
     speciesSelection.seedsSelected.map((s, i) => {
       s.group.label === group && count++;
     });
-    console.log("count...", group, count);
     return 1 / count;
   };
 

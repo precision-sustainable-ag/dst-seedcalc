@@ -2,23 +2,12 @@ import Grid from "@mui/material/Grid";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Typography, Box, Link, Button, Modal } from "@mui/material";
-import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
-
-import { calculateAllConfirmPlan } from "../../../../shared/utils/calculate";
-import { handleDownload } from "../../../../shared/utils/exportExcel";
-import { updateSteps } from "../../../../features/stepSlice/index";
 import { NumberTextField } from "../../../../components/NumberTextField";
 import { DSTTextField } from "../../../../components/DSTTextField";
 import { DSTSwitch } from "../../../../components/Switch";
-import NRCSDetailModal from "./modal";
-import { generateNRCSStandards } from "../../../../shared/utils/NRCS/calculateNRCS";
-import ConfirmPlanCharts from "./charts";
+
 import NRCSStandards from "./NRCSStandards";
 import "./../steps.css";
-import SeedsSelectedList from "../../../../components/SeedsSelectedList";
-import { emptyValues } from "../../../../shared/utils/calculate";
 
 const ConfirmPlanForm = ({
   updateSeed,

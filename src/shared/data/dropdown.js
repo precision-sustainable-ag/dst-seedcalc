@@ -25,6 +25,7 @@ export const availableStates = [
   "Indiana",
   "Maryland",
   "Massachusetts",
+  "Maine",
   "New Hampshire",
   "New Jersey",
   "New York",

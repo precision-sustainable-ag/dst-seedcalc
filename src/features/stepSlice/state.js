@@ -24,6 +24,7 @@ export const initialState = {
       locationSelected: false,
       latitude: 37.75,
       longitude: -80.16,
+      stateSelected: {},
       markers: null,
       zipCode: 0,
       zone: 0,

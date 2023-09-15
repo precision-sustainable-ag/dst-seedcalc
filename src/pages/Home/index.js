@@ -8,6 +8,7 @@ import { Fragment } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Papa from "papaparse";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 import { getLocality } from "../../features/stepSlice/api";
 import {
@@ -31,7 +32,7 @@ const Home = () => {
   const data = useSelector((state) => state.steps.value);
   const { speciesSelection, siteCondition } = data;
   const [imgPath, setImgPath] = useState(
-    siteCondition.council === "MCCC" ? "./mccc-logo.png" : "./neccc-logo.png"
+    siteCondition?.council === "MCCC" ? "./mccc-logo.png" : "./neccc-logo.png"
   );
   const seedsSelected = speciesSelection.seedsSelected;
   const handleModal = (type, title, description) => {
@@ -88,6 +89,16 @@ const Home = () => {
     });
   };
 
+  // update logic
+  const handleUpdateSteps = (key, type, val) => {
+    dispatch(
+      updateSteps({
+        type: type,
+        key: key,
+        value: val,
+      })
+    );
+  };
   const handleImportCSV = () => {
     const type = CSVImport.siteCondition.county.includes("Zone")
       ? "NECCC"
@@ -106,10 +117,20 @@ const Home = () => {
       e.target.value === "MCCC" ? "./mccc-logo.png" : "./neccc-logo.png";
     setImgPath(imagePath);
   };
+  const navigateToLocationPage = () => {
+    handleUpdateSteps("locationSelected", "siteCondition", false);
+  };
   const renderHome = () => {
     return (
       <>
-        <Grid item xs={12} padding={15} className="site-condition-container">
+        <Grid item xs={5} md={3}>
+          <Button onClick={navigateToLocationPage}>
+            <ArrowBackIosIcon />
+            Change Location
+          </Button>
+        </Grid>
+        <Grid ixem xs={7} md={9}></Grid>
+        <Grid item xs={12} className="site-condition-container">
           <Dropdown
             value={siteCondition.council}
             label={"Council: "}
@@ -123,8 +144,15 @@ const Home = () => {
         </Grid>
         {siteCondition.council !== "" && (
           <>
-            <Grid xs={12} className="dst-mccc-logo">
-              <img alt="neccc" src={imgPath} />
+            <Grid xs={12} item className="dst-mccc-logo">
+              <img
+                alt="neccc"
+                src={
+                  siteCondition.council === "MCCC"
+                    ? "./mccc-logo.png"
+                    : "./neccc-logo.png"
+                }
+              />
             </Grid>
             <DSTButton
               text="Start a new calculation"
