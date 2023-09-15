@@ -154,17 +154,23 @@ const LocationComponent = ({ council }) => {
   return (
     <Grid xs={12} container>
       <Grid xs={2} item>
-        <Button onClick={() => handleSteps("back", false)}>
-          <ArrowBackIosIcon />
-          Back
-        </Button>
+        {step !== 1 && (
+          <Button onClick={() => handleSteps("back", false)}>
+            <ArrowBackIosIcon />
+            Back
+          </Button>
+        )}
       </Grid>
       <Grid xs={8} item></Grid>
       <Grid xs={2} item>
-        <Button onClick={() => handleSteps("next", step === 2 ? true : false)}>
-          Next
-          <ArrowForwardIosIcon />
-        </Button>
+        {Object.keys(selectedState).length !== 0 && (
+          <Button
+            onClick={() => handleSteps("next", step === 2 ? true : false)}
+          >
+            Next
+            <ArrowForwardIosIcon />
+          </Button>
+        )}
       </Grid>
       <Grid xs={12} item>
         {step === 1 && stateList.length !== 0 ? (
