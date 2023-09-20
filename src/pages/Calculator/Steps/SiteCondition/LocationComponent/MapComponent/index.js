@@ -4,7 +4,7 @@ import { Map } from "@psa/dst.ui.map";
 import { Button } from "@mui/material";
 
 import "./mapComponent.css";
-import { Dropdown } from "../../../../components/Dropdown";
+import { Dropdown } from "../../../../../../components/Dropdown";
 
 const MapComponent = ({
   council,

@@ -1,5 +1,11 @@
+//////////////////////////////////////////////////////////
+//                      Imports                         //
+//////////////////////////////////////////////////////////
+
 import { useState } from "react";
 import Grid from "@mui/material/Grid";
+import { useSelector } from "react-redux";
+
 import {
   SiteCondition,
   SpeciesSelection,
@@ -11,42 +17,22 @@ import {
   SeedingMethod,
   CompletedPage,
 } from "./Steps";
-import { useParams } from "react-router-dom";
-import { calculatorList } from "../../shared/data/dropdown";
+
+import { calculatorList, completedList } from "../../shared/data/dropdown";
 import { Header } from "../../components/Header";
 import { StepsList } from "../../components/StepsList";
 import "./calculator.css";
 
 const Calculator = () => {
+  const data = useSelector((state) => state.steps.value);
+  const type = data.siteCondition.council;
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
-  const { type } = useParams();
-  const renderCalculator = (step) => {
-    switch (step) {
-      case "Site Condition":
-        return <SiteCondition council={type} />;
-      case "Species Selection":
-        return <SpeciesSelection council={type} />;
-      case "Mix Ratios":
-        return <MixRatio council={type} />;
-      case "Mix Seeding Rate":
-        return <MixSeedingRate council={type} />;
-      case "Seeding Method":
-        return <SeedingMethod council={type} />;
-      case "Seed Tag Info":
-        return <SeedTagInfo council={type} />;
-      case "Review Mix":
-        return <ReviewMix council={type} />;
-      case "Confirm Plan":
-        return <ConfirmPlan council={type} />;
-      case "Finish":
-        return <CompletedPage council={type} />;
-      default:
-        return;
-    }
-  };
+  const [completedStep, setCompletedStep] = useState([...completedList]);
 
-  // Steps List Logic
+  //////////////////////////////////////////////////////////
+  //                      State Logic                     //
+  //////////////////////////////////////////////////////////
 
   const isStepOptional = (step) => {
     return step === 1;
@@ -88,6 +74,89 @@ const Calculator = () => {
     setActiveStep(0);
   };
 
+  //////////////////////////////////////////////////////////
+  //                      Render                          //
+  //////////////////////////////////////////////////////////
+
+  const renderCalculator = (step) => {
+    switch (step) {
+      case "Site Conditions":
+        return (
+          <SiteCondition
+            council={type}
+            completedStep={completedStep}
+            setCompletedStep={setCompletedStep}
+          />
+        );
+      case "Species Selection":
+        return (
+          <SpeciesSelection
+            council={type}
+            completedStep={completedStep}
+            setCompletedStep={setCompletedStep}
+          />
+        );
+      case "Mix Ratios":
+        return (
+          <MixRatio
+            council={type}
+            completedStep={completedStep}
+            setCompletedStep={setCompletedStep}
+          />
+        );
+      case "Mix Seeding Rate":
+        return (
+          <MixSeedingRate
+            council={type}
+            completedStep={completedStep}
+            setCompletedStep={setCompletedStep}
+          />
+        );
+      case "Seeding Method":
+        return (
+          <SeedingMethod
+            council={type}
+            completedStep={completedStep}
+            setCompletedStep={setCompletedStep}
+          />
+        );
+      case "Seed Tag Info":
+        return (
+          <SeedTagInfo
+            council={type}
+            completedStep={completedStep}
+            setCompletedStep={setCompletedStep}
+          />
+        );
+      case "Review Mix":
+        return (
+          <ReviewMix
+            council={type}
+            completedStep={completedStep}
+            setCompletedStep={setCompletedStep}
+          />
+        );
+      case "Confirm Plan":
+        return (
+          <ConfirmPlan
+            council={type}
+            completedStep={completedStep}
+            setCompletedStep={setCompletedStep}
+          />
+        );
+      case "Finish":
+        return (
+          <CompletedPage
+            council={type}
+            completedStep={completedStep}
+            setCompletedStep={setCompletedStep}
+          />
+        );
+      default:
+        return;
+    }
+  };
+
   return (
     <Grid container justifyContent="center" alignItems="center">
       <Header
@@ -104,6 +173,8 @@ const Calculator = () => {
         handleBack={handleBack}
         handleSkip={handleSkip}
         handleReset={handleReset}
+        completedStep={completedStep}
+        setCompletedStep={setCompletedStep}
         className="steps-container"
       />
       {renderCalculator(

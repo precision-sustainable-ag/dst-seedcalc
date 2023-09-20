@@ -34,6 +34,7 @@ export const StepsList = ({
   handleBack,
   handleSkip,
   handleReset,
+  completedStep,
 }) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
@@ -45,7 +46,6 @@ export const StepsList = ({
   const isStepSkipped = (step) => {
     return skipped.has(step);
   };
-
   return (
     <Box sx={{ width: "100%", color: "#4f5f30" }}>
       <Stepper
@@ -98,7 +98,10 @@ export const StepsList = ({
               </Button>
             )} */}
 
-            <Button onClick={handleNext}>
+            <Button
+              disabled={completedStep[activeStep] === true ? false : true}
+              onClick={handleNext}
+            >
               {activeStep === steps.length - 1
                 ? "Finish"
                 : steps[activeStep + 1]}

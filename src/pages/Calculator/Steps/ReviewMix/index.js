@@ -1,3 +1,7 @@
+//////////////////////////////////////////////////////////
+//                     Imports                          //
+//////////////////////////////////////////////////////////
+
 import Grid from "@mui/material/Grid";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -76,6 +80,10 @@ const ReviewMix = ({ council }) => {
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
   const RADIAN = Math.PI / 180;
 
+  //////////////////////////////////////////////////////////
+  //                      Redux                           //
+  //////////////////////////////////////////////////////////
+
   const handleUpdateSteps = (key, val) => {
     const data = {
       type: "speciesSelection",
@@ -119,6 +127,36 @@ const ReviewMix = ({ council }) => {
     newData[index] = calculateAllMixValues(seeds[index], data);
     handleUpdateAllSteps(newData, index);
   };
+
+  //////////////////////////////////////////////////////////
+  //                    State Logic                       //
+  //////////////////////////////////////////////////////////
+
+  const updateNRCS = async () => {
+    const NRCSData = await generateNRCSStandards(
+      speciesSelection.seedsSelected,
+      data.siteCondition
+    );
+    const NRCSResults = NRCSData;
+
+    handleUpdateNRCS("results", NRCSData);
+  };
+
+  //////////////////////////////////////////////////////////
+  //                    useEffect                         //
+  //////////////////////////////////////////////////////////
+
+  useEffect(() => {
+    initialDataLoad();
+    return () => {
+      updateNRCS();
+    };
+  }, []);
+
+  //////////////////////////////////////////////////////////
+  //                     Render                           //
+  //////////////////////////////////////////////////////////
+
   const renderCustomizedLabel = ({
     cx,
     cy,
@@ -511,21 +549,6 @@ const ReviewMix = ({ council }) => {
     }
   };
 
-  const updateNRCS = async () => {
-    const NRCSData = await generateNRCSStandards(
-      speciesSelection.seedsSelected,
-      data.siteCondition
-    );
-    const NRCSResults = NRCSData;
-
-    await handleUpdateNRCS("results", NRCSData);
-  };
-  useEffect(() => {
-    initialDataLoad();
-    return () => {
-      updateNRCS();
-    };
-  }, []);
   return (
     <Grid xs={12} container>
       {renderSeedsSelected()}

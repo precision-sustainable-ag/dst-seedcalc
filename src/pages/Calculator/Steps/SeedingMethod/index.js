@@ -1,3 +1,7 @@
+//////////////////////////////////////////////////////////
+//                     Imports                          //
+//////////////////////////////////////////////////////////
+
 import * as React from "react";
 import Grid from "@mui/material/Grid";
 import { useState, useEffect } from "react";
@@ -31,6 +35,23 @@ const SeedingMethod = ({ council }) => {
   const [seedingRateCoefficient, setSeedingRateCoefficient] = useState(0);
   const [seedingRateAverage, setSeedingRateAverage] = useState(0);
 
+  //////////////////////////////////////////////////////////
+  //                      Redux                           //
+  //////////////////////////////////////////////////////////
+
+  const handleUpdateSteps = (key, val) => {
+    const data = {
+      type: "seedingMethod",
+      key: key,
+      value: val,
+    };
+    dispatch(updateSteps(data));
+  };
+
+  //////////////////////////////////////////////////////////
+  //                    State Logic                       //
+  //////////////////////////////////////////////////////////
+
   const updateSeedingRateAverage = async () => {
     let average = 0;
     seedsSelected.map((s, i) => {
@@ -56,15 +77,6 @@ const SeedingMethod = ({ council }) => {
   const clearChart = () => {
     toggleDataLoaded(false);
   };
-  const handleUpdateSteps = (key, val) => {
-    const data = {
-      type: "seedingMethod",
-      key: key,
-      value: val,
-    };
-    dispatch(updateSteps(data));
-  };
-
   const renderSeedsSelected = () => {
     return <SeedsSelectedList list={speciesSelection.seedsSelected} />;
   };
@@ -88,12 +100,21 @@ const SeedingMethod = ({ council }) => {
     );
   };
 
+  //////////////////////////////////////////////////////////
+  //                    useEffect                         //
+  //////////////////////////////////////////////////////////
+
   useEffect(() => {
     updateSeedingRateAverage();
     return () => {
       dataLoaded && clearChart();
     };
   }, []);
+
+  //////////////////////////////////////////////////////////
+  //                      Render                          //
+  //////////////////////////////////////////////////////////
+
   return (
     <Grid xs={12} justify="center" container>
       {seedsSelected.length > 0 && renderSeedsSelected()}

@@ -1,3 +1,7 @@
+//////////////////////////////////////////////////////////
+//                     Imports                          //
+//////////////////////////////////////////////////////////
+
 import Grid from "@mui/material/Grid";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -14,10 +18,6 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   calculateAllValues,
   calculateAllValuesNECCC,
-  calculateSeeds,
-  calculateSeedsNECCC,
-  convertToPercent,
-  convertToDecimal,
 } from "./../../../../shared/utils/calculate";
 import { updateSteps } from "../../../../features/stepSlice";
 import "./../steps.css";
@@ -27,10 +27,7 @@ import MixRatioSteps from "./form";
 const MixRatio = ({ council }) => {
   // themes
   const theme = useTheme();
-  const matchesXs = useMediaQuery(theme.breakpoints.down("xs"));
-  const matchesSm = useMediaQuery(theme.breakpoints.down("sm"));
   const matchesMd = useMediaQuery(theme.breakpoints.down("md"));
-  const matchesUpMd = useMediaQuery(theme.breakpoints.up("md"));
   // useSelector for crops & mixRaxio reducer
 
   const dispatch = useDispatch();
