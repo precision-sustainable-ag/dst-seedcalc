@@ -9,7 +9,7 @@ export const plantHardinessZone = [
 ];
 
 export const calculatorList = [
-  "Site Condition",
+  "Site Conditions",
   "Species Selection",
   "Mix Ratios",
   "Mix Seeding Rate",
@@ -18,6 +18,7 @@ export const calculatorList = [
   "Review Mix",
   "Confirm Plan",
 ];
+export const completedList = [false, false, true, true, true, true, true, true];
 
 export const availableStates = [
   "Connecticut",

@@ -6,6 +6,7 @@ import {
   getLocality,
   getRegion,
   getSSURGOData,
+  getZoneData,
 } from "./api";
 import { initialState } from "./state";
 import { soilDrainage } from "../../shared/data/dropdown";
@@ -71,7 +72,6 @@ export const stepSlice = createSlice({
     [getCrops.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.value.crops = payload.data;
-      console.log("getCrops V2 fulfilled: ", payload.data);
     },
     [getCrops.rejected]: (state) => {
       state.loading = false;
@@ -82,7 +82,6 @@ export const stepSlice = createSlice({
     },
     [getCropsById.fulfilled]: (state, { payload }) => {
       state.loading = false;
-      console.log("Get Crops By Id fulfilled: ", payload.data);
     },
     [getCropsById.rejected]: (state) => {
       state.loading = false;
@@ -128,9 +127,22 @@ export const stepSlice = createSlice({
           : payload.data.kids.Counties !== undefined
           ? payload.data.kids.Counties
           : [];
-      console.log("fulfilled counties", payload.data.kids.Zones);
     },
     [getRegion.rejected]: (state) => {
+      state.loading = false;
+    },
+    [getZoneData.pending]: (state) => {
+      state.loading = true;
+    },
+    [getZoneData.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      // only set Zone if not MCCC state.
+      if (state.value.siteCondition.state !== "Indiana") {
+        state.value.siteCondition.county =
+          "Zone " + payload.replace(/[^0-9]/g, "");
+      }
+    },
+    [getZoneData.rejected]: (state) => {
       state.loading = false;
     },
   },

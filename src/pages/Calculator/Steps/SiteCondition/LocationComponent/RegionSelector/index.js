@@ -2,8 +2,8 @@ import Grid from "@mui/material/Grid";
 import { Button } from "@mui/material";
 import { RegionSelectorMap } from "@psa/dst.ui.region-selector-map";
 
-import { availableStates } from "../../../../shared/data/dropdown";
-import { Dropdown } from "../../../../components/Dropdown";
+import { availableStates } from "../../../../../../shared/data/dropdown";
+import { Dropdown } from "../../../../../../components/Dropdown";
 
 const RegionSelector = ({
   setMapState,

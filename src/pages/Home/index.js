@@ -1,14 +1,13 @@
+//////////////////////////////////////////////////////////
+//                      Imports                         //
+//////////////////////////////////////////////////////////
+
 import { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
-import { Modal } from "@mui/material";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import { Fragment } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Papa from "papaparse";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 import { getLocality } from "../../features/stepSlice/api";
 import {
@@ -21,20 +20,39 @@ import { Header } from "./../../components/Header";
 import { CSVModal } from "./CSVModal";
 import { Dropdown } from "../../components/Dropdown";
 import "./home.css";
-import LocationComponent from "./LocationComponent";
 
 const Home = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState(false);
   const [CSVImport, setCSVImport] = useState([]);
   const [council, setCouncil] = useState("");
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+
   const data = useSelector((state) => state.steps.value);
   const { speciesSelection, siteCondition } = data;
   const [imgPath, setImgPath] = useState(
     siteCondition?.council === "MCCC" ? "./mccc-logo.png" : "./neccc-logo.png"
   );
   const seedsSelected = speciesSelection.seedsSelected;
+
+  //////////////////////////////////////////////////////////
+  //                      Redux                           //
+  //////////////////////////////////////////////////////////
+
+  const handleUpdateSteps = (key, type, val) => {
+    dispatch(
+      updateSteps({
+        type: type,
+        key: key,
+        value: val,
+      })
+    );
+  };
+
+  //////////////////////////////////////////////////////////
+  //                      State Logic                     //
+  //////////////////////////////////////////////////////////
+
   const handleModal = (type, title, description) => {
     var payload = {};
     if (type === "error") {
@@ -66,7 +84,11 @@ const Home = () => {
     }
     dispatch(updateModal(payload));
   };
-  // Import logic start
+
+  //////////////////////////////////////////////////////////
+  //                  Import Logic                        //
+  //////////////////////////////////////////////////////////
+
   const handleFileUpload = (event) => {
     Papa.parse(event.target.files[0], {
       header: true,
@@ -88,26 +110,13 @@ const Home = () => {
       },
     });
   };
-
-  // update logic
-  const handleUpdateSteps = (key, type, val) => {
-    dispatch(
-      updateSteps({
-        type: type,
-        key: key,
-        value: val,
-      })
-    );
-  };
   const handleImportCSV = () => {
     const type = CSVImport.siteCondition.county.includes("Zone")
       ? "NECCC"
       : "MCCC";
     dispatch(updateAllSteps({ value: CSVImport }));
-    navigate(`/${type}/calculator`);
+    navigate(`/calculator`);
   };
-  // Import logic end
-
   const setModal = () => {
     setOpenModal(!openModal);
   };
@@ -117,19 +126,21 @@ const Home = () => {
       e.target.value === "MCCC" ? "./mccc-logo.png" : "./neccc-logo.png";
     setImgPath(imagePath);
   };
-  const navigateToLocationPage = () => {
-    handleUpdateSteps("locationSelected", "siteCondition", false);
-  };
+  //////////////////////////////////////////////////////////
+  //                     useEffect                        //
+  //////////////////////////////////////////////////////////
+
+  useEffect(() => {
+    dispatch(getLocality());
+  }, []);
+
+  //////////////////////////////////////////////////////////
+  //                      Render                          //
+  //////////////////////////////////////////////////////////
+
   const renderHome = () => {
     return (
       <>
-        <Grid item xs={5} md={3}>
-          <Button onClick={navigateToLocationPage}>
-            <ArrowBackIosIcon />
-            Change Location
-          </Button>
-        </Grid>
-        <Grid ixem xs={7} md={9}></Grid>
         <Grid item xs={12} className="site-condition-container">
           <Dropdown
             value={siteCondition.council}
@@ -161,7 +172,7 @@ const Home = () => {
               theme="dstTheme"
               path={{
                 type: "local",
-                url: `/${siteCondition.council}/calculator`,
+                url: `/calculator`,
               }}
             />
             <DSTButton
@@ -183,9 +194,6 @@ const Home = () => {
     );
   };
 
-  useEffect(() => {
-    dispatch(getLocality());
-  }, []);
   return (
     <Fragment>
       <Grid container spacing={2}>
@@ -196,13 +204,7 @@ const Home = () => {
           size={12}
           style={{ mt: 5 }}
         />
-        {data.siteCondition.locationSelected ? (
-          renderHome()
-        ) : (
-          <Grid xs={12} item>
-            <LocationComponent />
-          </Grid>
-        )}
+        {renderHome()}
       </Grid>
     </Fragment>
   );

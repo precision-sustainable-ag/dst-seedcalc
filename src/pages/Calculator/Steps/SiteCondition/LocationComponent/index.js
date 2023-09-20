@@ -1,3 +1,7 @@
+//////////////////////////////////////////////////////////
+//                      Imports                         //
+//////////////////////////////////////////////////////////
+
 import Grid from "@mui/material/Grid";
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
@@ -7,9 +11,13 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 import RegionSelector from "./RegionSelector";
 import MapComponent from "./MapComponent";
-import { updateSteps } from "../../../features/stepSlice";
-import { getRegion, getSSURGOData } from "../../../features/stepSlice/api";
-import statesLatLongDict from "../../../shared/data/statesLatLongDict";
+import { updateSteps } from "../../../../../features/stepSlice";
+import {
+  getRegion,
+  getSSURGOData,
+  getZoneData,
+} from "../../../../../features/stepSlice/api";
+import statesLatLongDict from "../../../../../shared/data/statesLatLongDict";
 
 const LocationComponent = ({ council }) => {
   const dispatch = useDispatch();
@@ -22,7 +30,10 @@ const LocationComponent = ({ council }) => {
   const [mapState, setMapState] = useState({});
   const [selectedState, setSelectedState] = useState({});
 
-  // update logic
+  //////////////////////////////////////////////////////////
+  //                       Redux                          //
+  //////////////////////////////////////////////////////////
+
   const handleUpdateSteps = (key, type, val) => {
     dispatch(
       updateSteps({
@@ -32,6 +43,10 @@ const LocationComponent = ({ council }) => {
       })
     );
   };
+
+  //////////////////////////////////////////////////////////
+  //                   State Logic                        //
+  //////////////////////////////////////////////////////////
 
   // RegionalSelector function to update Redux with the latitude/longitude based on state selected.
   const handleStateDropdown = (val) => {
@@ -49,6 +64,7 @@ const LocationComponent = ({ council }) => {
       latitude: statesLatLongDict[val][0],
       longitude: statesLatLongDict[val][1],
     });
+
     // Update Redux
     handleUpdateSteps("latitude", "siteCondition", statesLatLongDict[val][0]);
     handleUpdateSteps("longitude", "siteCondition", statesLatLongDict[val][1]);
@@ -59,8 +75,10 @@ const LocationComponent = ({ council }) => {
     );
     handleUpdateSteps("state", "siteCondition", val);
     handleUpdateSteps("stateId", "siteCondition", stateSelected.id);
+
     // Retrieve region and SSURGO data
-    dispatch(getRegion({ regionId: stateSelected.id })).then((res) => {});
+    stateSelected.id !== undefined &&
+      dispatch(getRegion({ regionId: stateSelected.id })).then((res) => {});
     dispatch(
       getSSURGOData({
         lat: statesLatLongDict[val][0],
@@ -76,11 +94,17 @@ const LocationComponent = ({ council }) => {
   };
   const handleCompleteLocation = () => {
     handleUpdateSteps("locationSelected", "siteCondition", true);
-    dispatch(getRegion({ regionId: siteCondition.siteId })).then((res) => {});
+    siteCondition.siteId !== undefined &&
+      dispatch(getRegion({ regionId: siteCondition.siteId })).then((res) => {});
   };
+
+  //////////////////////////////////////////////////////////
+  //                      useEffect                       //
+  //////////////////////////////////////////////////////////
 
   // mapStateToEdit effect
   useEffect(() => {
+    console.log("selectedtoeditState", selectedToEditSite);
     const { latitude, longitude, address, zipCode, county } =
       selectedToEditSite;
 
@@ -96,7 +120,8 @@ const LocationComponent = ({ council }) => {
       handleUpdateSteps("longitude", "siteCondition", longitude);
       handleUpdateSteps("address", "siteCondition", address);
       handleUpdateSteps("zipCode", "siteCondition", zipCode);
-      handleUpdateSteps("county", "siteCondition", county);
+      // handleUpdateSteps("county", "siteCondition", county);
+      dispatch(getZoneData({ zip: zipCode }));
     }
   }, [selectedToEditSite]);
 
@@ -114,11 +139,16 @@ const LocationComponent = ({ council }) => {
   // useEffect for selectedState
 
   useEffect(() => {
+    console.log("selected state eff", selectedState);
     if (Object.keys(selectedState).length !== 0) {
       handleState(selectedState.label);
       handleUpdateSteps("stateSelected", "siteCondition", selectedState);
     }
   }, [selectedState]);
+
+  //////////////////////////////////////////////////////////
+  //                      Render                          //
+  //////////////////////////////////////////////////////////
 
   const renderMap = () => {
     return (
@@ -143,7 +173,6 @@ const LocationComponent = ({ council }) => {
         <RegionSelector
           states={stateList}
           handleNext={handleSteps}
-          // setMapState={handleState}
           setMapState={setMapState}
           setSelectedState={handleStateDropdown}
           selectedState={selectedState}

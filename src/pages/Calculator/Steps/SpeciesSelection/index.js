@@ -1,4 +1,9 @@
+//////////////////////////////////////////////////////////
+//                      Imports                         //
+//////////////////////////////////////////////////////////
+
 import * as React from "react";
+import { useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import { useSelector, useDispatch } from "react-redux";
 import { Typography, Link } from "@mui/material";
@@ -21,8 +26,9 @@ import { calculateAllValues } from "../../../../shared/utils/calculate";
 import "./../steps.css";
 import SeedsSelectedList from "./../../../../components/SeedsSelectedList";
 import { emptyValues } from "../../../../shared/utils/calculate";
+import { validateForms } from "../../../../shared/utils/format";
 
-const SpeciesSelection = ({ council }) => {
+const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   // themes
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down("xs"));
@@ -38,13 +44,9 @@ const SpeciesSelection = ({ council }) => {
   const [filteredSeeds, setFilteredSeeds] = useState(crops);
   const [query, setQuery] = useState("");
 
-  // Filter query logic
-  const updateQuery = (e) => {
-    setQuery(e.target.value);
-    filterSeeds(e.target.value);
-  };
-
-  // create a data object that specifies the type(data layer 1), the key(data layer 2), & the value for the key.
+  //////////////////////////////////////////////////////////
+  //                      Redux                           //
+  //////////////////////////////////////////////////////////
   const handleUpdateStore = (type, key, val) => {
     const data = {
       type: type,
@@ -53,6 +55,19 @@ const SpeciesSelection = ({ council }) => {
     };
     dispatch(updateSteps(data));
   };
+
+  //////////////////////////////////////////////////////////
+  //                    State Logic                       //
+  //////////////////////////////////////////////////////////
+
+  // Filter query logic
+  const updateQuery = (e) => {
+    setQuery(e.target.value);
+    filterSeeds(e.target.value);
+  };
+
+  // create a data object that specifies the type(data layer 1), the key(data layer 2), & the value for the key.
+
   const filterSeeds = (query) => {
     const filter =
       query !== ""
@@ -519,8 +534,21 @@ const SpeciesSelection = ({ council }) => {
       </ImageList>
     );
   };
+
+  useEffect(() => {
+    validateForms(
+      speciesSelection.seedsSelected.length > 1,
+      1,
+      completedStep,
+      setCompletedStep
+    );
+  }, [speciesSelection]);
+
+  //////////////////////////////////////////////////////////
+  //                      Render                          //
+  //////////////////////////////////////////////////////////
+
   const renderAccordian = (seed) => {
-    console.log("accordiaan data", seed);
     return (
       <Accordion xs={12} className="accordian-container">
         <AccordionSummary

@@ -1,3 +1,7 @@
+//////////////////////////////////////////////////////////
+//                    Imports                           //
+//////////////////////////////////////////////////////////
+
 import * as React from "react";
 import Grid from "@mui/material/Grid";
 import { useSelector, useDispatch } from "react-redux";
@@ -28,6 +32,10 @@ const MixSeedingRate = ({ council }) => {
   const { seedingMethod, speciesSelection } = data;
   const seedsSelected = speciesSelection.seedsSelected;
 
+  //////////////////////////////////////////////////////////
+  //                      Redux                           //
+  //////////////////////////////////////////////////////////
+
   const handleUpdateSteps = (key, val) => {
     const data = {
       type: "seedingMethod",
@@ -36,6 +44,11 @@ const MixSeedingRate = ({ council }) => {
     };
     dispatch(updateSteps(data));
   };
+
+  //////////////////////////////////////////////////////////
+  //                   State Logic                        //
+  //////////////////////////////////////////////////////////
+
   const handleSeedingMethod = (e) => {
     handleUpdateSteps("type", e.target.value);
   };
@@ -106,6 +119,11 @@ const MixSeedingRate = ({ council }) => {
       </Accordion>
     );
   };
+
+  //////////////////////////////////////////////////////////
+  //                    Render                            //
+  //////////////////////////////////////////////////////////
+
   return (
     <Grid xs={12} container>
       {seedsSelected.length > 0 && renderSeedsSelected()}
