@@ -32,8 +32,8 @@ const RegionSelector = ({
           availableStates={availableStates}
           initWidth="100%"
           initHeight="400px"
-          initLon={-80}
-          initLat={40}
+          initLon={-78}
+          initLat={43}
           initStartZoom={4}
         />
       </Grid>
