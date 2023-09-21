@@ -5,17 +5,10 @@ import { RegionSelectorMap } from "@psa/dst.ui.region-selector-map";
 import { availableStates } from "../../../../../../shared/data/dropdown";
 import { Dropdown } from "../../../../../../components/Dropdown";
 
-const RegionSelector = ({
-  setMapState,
-  setSelectedState,
-  handleNext,
-  states,
-  selectorFunction,
-  selectedState,
-}) => {
+const RegionSelector = ({ setMapState, selectedState }) => {
   return (
     <Grid xs={12} container>
-      <Grid item xs={12} padding={15} className="site-condition-container">
+      {/* <Grid item xs={12} padding={15} className="site-condition-container">
         <Dropdown
           value={selectedState.label || ""}
           label={"State: "}
@@ -23,15 +16,14 @@ const RegionSelector = ({
           size={12}
           items={states}
         />
-      </Grid>
-      <Grid xs={1} item></Grid>
-      <Grid xs={10} item>
+      </Grid> */}
+      <Grid xs={12} md={12} item>
         <RegionSelectorMap
           selectorFunction={setMapState}
           selectedState={selectedState.label}
           availableStates={availableStates}
           initWidth="100%"
-          initHeight="400px"
+          initHeight="380px"
           initLon={-78}
           initLat={43}
           initStartZoom={4}

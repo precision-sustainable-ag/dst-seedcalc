@@ -11,13 +11,14 @@
 /* dst image */
 
 .dst-neccc-logo img {
-  width: 167px;
-  height: 180px;
-  margin: 59px 0px;
+  width: 65px;
+  margin: 20px;
+  float: left;
 }
 .dst-mccc-logo img {
-  width: 200px;
-  margin: 59px 0px;
+  width: 115px;
+  margin: 20px;
+  float: left;
 }
 .import-button {
   margin-top: 79px;

@@ -6,22 +6,20 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
-import { DatePicker } from "./../../../../components/DatePicker";
 import { Dropdown } from "./../../../../components/Dropdown";
-import { NumberTextField } from "./../../../../components/NumberTextField";
-import { DSTSwitch } from "./../../../../components/Switch";
-import { soilDrainage } from "./../../../../shared/data/dropdown";
 import {
   getCrops,
   getLocality,
   getRegion,
+  getSSURGOData,
+  getZoneData,
 } from "../../../../features/stepSlice/api";
 import { updateSteps } from "../../../../features/stepSlice/index";
 import LocationComponent from "./LocationComponent";
 import { isEmptyNull, validateForms } from "../../../../shared/utils/format";
+import SiteConditionForm from "./form";
+import statesLatLongDict from "../../../../shared/data/statesLatLongDict";
 import "./../steps.css";
 
 const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
@@ -33,6 +31,13 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
   );
   const counties = data.value.counties;
   const [checked, setChecked] = useState(data.value.NRCS.enabled);
+
+  // Location state
+  const stateList = data.value.states;
+  const [selectedToEditSite, setSelectedToEditSite] = useState({});
+  const [step, setStep] = useState(1);
+  const [mapState, setMapState] = useState({});
+  const [selectedState, setSelectedState] = useState({});
 
   //////////////////////////////////////////////////////////
   //                      Redux                           //
@@ -46,9 +51,6 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
     };
     dispatch(updateSteps(data));
   };
-  const navigateToLocationPage = () => {
-    handleUpdateSteps("locationSelected", "siteCondition", false);
-  };
 
   //////////////////////////////////////////////////////////
   //                   State Logic                        //
@@ -60,7 +62,6 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
   };
   const renderCountyList = () => {
     if (counties.length > 0) {
-      const countyFilter = counties.map((b, i) => b.County);
       if (siteCondition.state !== "") {
         return (
           <Grid item xs={12} padding={15} className="site-condition-container">
@@ -78,26 +79,137 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
       }
     }
   };
-  const handleStates = (e) => {
-    const state = states.filter((s, i) => s.label === e.target.value);
-    handleUpdateSteps("state", "siteCondition", e.target.value);
-    handleUpdateSteps("stateId", "siteCondition", state[0].id);
-    handleUpdateSteps("county", "siteCondition", "");
-    handleUpdateSteps("countyId", "siteCondition", "");
-    state[0].id !== undefined &&
-      dispatch(getRegion({ regionId: state[0].id })).then((res) => {});
-  };
   const handleRegion = (e) => {
     const countyId = counties.filter((c, i) => c.label === e)[0].id;
+    console.log("handle region", e, countyId);
     handleUpdateSteps("county", "siteCondition", e);
-    handleUpdateSteps("countyId", "siteCondition", countyId);
+    if (countyId !== undefined && countyId !== undefined) {
+      console.log("handle region pass", e, countyId);
+      dispatch(
+        getCrops({
+          regionId: countyId,
+        })
+      );
+    }
+  };
 
+  //////////////////////////////////////////////////////////
+  //                   Location Logic                     //
+  //////////////////////////////////////////////////////////
+
+  // RegionalSelector function to update Redux with the latitude/longitude based on state selected.
+  const handleStateDropdown = (val) => {
+    const stateSelected = stateList.filter((s, i) => s.label === val)[0];
+    setSelectedState(stateSelected);
+    handleUpdateSteps("state", "siteCondition", val);
+    handleUpdateSteps("stateSelected", "siteCondition", stateSelected);
+  };
+  //
+  const handleState = (val) => {
+    // Clear out all seeds selected in Redux
+    handleUpdateSteps("seedsSelected", "speciesSelection", []);
+    handleUpdateSteps("diversitySelected", "speciesSelection", []);
+    const stateSelected = stateList.filter((s) => s.label === val)[0];
+
+    // Update lat/lon state values
+    setSelectedToEditSite({
+      ...selectedToEditSite,
+      latitude: statesLatLongDict[val][0],
+      longitude: statesLatLongDict[val][1],
+    });
+
+    // Update Redux
+    handleUpdateSteps("latitude", "siteCondition", statesLatLongDict[val][0]);
+    handleUpdateSteps("longitude", "siteCondition", statesLatLongDict[val][1]);
+    handleUpdateSteps("state", "siteCondition", val);
+    handleUpdateSteps("stateId", "siteCondition", stateSelected.id);
+    handleUpdateSteps(
+      "council",
+      "siteCondition",
+      stateSelected.parents[0].shorthand
+    );
+
+    // Retrieve region and SSURGO data
+    stateSelected.id !== undefined &&
+      dispatch(getRegion({ regionId: stateSelected.id })).then((res) => {});
     dispatch(
-      getCrops({
-        regionId: countyId,
+      getSSURGOData({
+        lat: statesLatLongDict[val][0],
+        lon: statesLatLongDict[val][1],
       })
     );
   };
+
+  const handleSteps = (type, complete) => {
+    type === "next" ? setStep(step + 1) : setStep(step - 1);
+    type === "back" && setSelectedToEditSite({});
+    complete && handleCompleteLocation();
+  };
+  const handleCompleteLocation = () => {
+    handleUpdateSteps("locationSelected", "siteCondition", true);
+    siteCondition.siteId !== undefined &&
+      dispatch(getRegion({ regionId: siteCondition.siteId })).then((res) => {});
+  };
+
+  //////////////////////////////////////////////////////////
+  //                 Location useEffect                   //
+  //////////////////////////////////////////////////////////
+
+  // mapStateToEdit effect
+  useEffect(() => {
+    const { latitude, longitude, address, zipCode, county } =
+      selectedToEditSite;
+
+    if (
+      latitude === siteCondition.latitude &&
+      longitude === siteCondition.longitude
+    ) {
+      return;
+    }
+
+    if (Object.keys(selectedToEditSite).length > 0) {
+      handleUpdateSteps("latitude", "siteCondition", latitude);
+      handleUpdateSteps("longitude", "siteCondition", longitude);
+      handleUpdateSteps("address", "siteCondition", address);
+      handleUpdateSteps("zipCode", "siteCondition", zipCode);
+      dispatch(getZoneData({ zip: zipCode }));
+      dispatch(
+        getSSURGOData({
+          lat: latitude,
+          lon: longitude,
+        })
+      );
+    }
+  }, [selectedToEditSite]);
+
+  useEffect(() => {
+    if (Object.keys(mapState).length !== 0) {
+      const st = stateList.filter(
+        (s) => s.label === mapState.properties.STATE_NAME
+      );
+      if (st.length > 0) {
+        setSelectedState(st[0]);
+      }
+    }
+  }, [mapState]);
+
+  // useEffect for selectedState
+  useEffect(() => {
+    if (Object.keys(selectedState).length !== 0) {
+      handleState(selectedState.label);
+      handleUpdateSteps("stateSelected", "siteCondition", selectedState);
+    }
+  }, [selectedState]);
+
+  // This is to ensure that county id is updated to the current county
+  useEffect(() => {
+    if (siteCondition.county !== "") {
+      const countyId = counties.filter(
+        (c, i) => c.label === siteCondition.county
+      )[0].id;
+      handleUpdateSteps("countyId", "siteCondition", countyId);
+    }
+  }, [siteCondition.county]);
 
   //////////////////////////////////////////////////////////
   //                     useEffect                        //
@@ -118,94 +230,23 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
       setCompletedStep
     );
     if (!isEmptyNull(siteCondition.county)) {
-      const countyId = counties.filter(
+      const county = counties.filter(
         (c, i) => c.label === siteCondition.county
-      )[0].id;
-
-      dispatch(
-        getCrops({
-          regionId: countyId,
-        })
-      );
+      )[0];
+      if (county !== undefined && county.id !== undefined) {
+        dispatch(
+          getCrops({
+            regionId: county.id,
+          })
+        );
+      }
     }
   }, [siteCondition]);
+
   //////////////////////////////////////////////////////////
   //                      Render                          //
   //////////////////////////////////////////////////////////
 
-  const renderDropdown = () => {
-    return (
-      <>
-        <Grid item xs={5} md={3}>
-          <Button onClick={navigateToLocationPage}>
-            <ArrowBackIosIcon />
-            Change Location
-          </Button>
-        </Grid>
-        <Grid item xs={7} md={9}></Grid>
-
-        <Grid item xs={12} padding={15} className="site-condition-container">
-          <Dropdown
-            value={siteCondition.state}
-            label={"State: "}
-            handleChange={handleStates}
-            size={12}
-            items={states}
-          />
-        </Grid>
-        {renderCountyList()}
-        <Grid item xs={12} padding={15} className="site-condition-container">
-          <Dropdown
-            value={siteCondition.soilDrainage}
-            label={"Soil Drainage: "}
-            handleChange={(e) => {
-              handleUpdateSteps(
-                "soilDrainage",
-                "siteCondition",
-                e.target.value
-              );
-            }}
-            size={12}
-            items={soilDrainage}
-          />
-        </Grid>
-        <Grid item xs={12} padding={15} className="site-condition-container">
-          <DatePicker
-            label={"Planned Planting Date: "}
-            value={siteCondition.plannedPlantingDate}
-            handleChange={(e) => {
-              const formattedDate = `${e["$M"] + 1}/${e["$D"]}/${e["$y"]}`;
-              handleUpdateSteps(
-                "plannedPlantingDate",
-                "siteCondition",
-                formattedDate
-              );
-            }}
-          />
-        </Grid>
-        <Grid item xs={12} padding={15} className="site-condition-container">
-          <NumberTextField
-            value={siteCondition.acres}
-            label={"Acres"}
-            disabled={false}
-            handleChange={(e) => {
-              handleUpdateSteps("acres", "siteCondition", e.target.value);
-            }}
-          />
-        </Grid>
-        <Grid item xs={12} padding={15} className="site-condition-container">
-          {council === "MCCC" && (
-            <>
-              <Typography variant="nrcsStandard">
-                Check NRCS Standards:{" "}
-              </Typography>
-              <DSTSwitch checked={checked} handleChange={handleSwitch} />
-            </>
-          )}
-        </Grid>
-      </>
-    );
-  };
   return (
     <Grid container justifyContent="center" alignItems="center" size={12}>
       <Grid item xs={12} className="site-condition-header">
@@ -213,13 +254,37 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
           Tell us about your planting site
         </Typography>
       </Grid>
-      {!siteCondition.locationSelected ? (
-        <Grid xs={12} item>
-          <LocationComponent />
+
+      {stateList.length > 0 && (
+        <Grid xs={12} md={6} item>
+          <LocationComponent
+            step={step}
+            handleSteps={handleSteps}
+            selectedState={selectedState}
+            setSelectedToEditSite={setSelectedToEditSite}
+            setMapState={setMapState}
+            stateList={stateList}
+            handleStateDropdown={handleStateDropdown}
+            data={data}
+            siteCondition={siteCondition}
+            handleUpdateSteps={handleUpdateSteps}
+          />
         </Grid>
-      ) : (
-        renderDropdown()
       )}
+      <Grid xs={12} md={6} item>
+        <SiteConditionForm
+          siteCondition={siteCondition}
+          states={stateList}
+          setSelectedState={setSelectedState}
+          selectedState={selectedState}
+          handleStateDropdown={handleStateDropdown}
+          renderCountyList={renderCountyList}
+          handleUpdateSteps={handleUpdateSteps}
+          council={council}
+          checked={checked}
+          handleSwitch={handleSwitch}
+        />
+      </Grid>
     </Grid>
   );
 };

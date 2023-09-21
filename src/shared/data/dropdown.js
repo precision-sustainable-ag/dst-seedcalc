@@ -41,6 +41,7 @@ export const soilDrainage = [
   { label: "Poorly Drained" },
   { label: "Somewhat Poorly Drained" },
   { label: "Moderately Poorly Drained" },
+  { label: "Moderately Well Drained" },
   { label: "Well Drained" },
   { label: "Somewhat Excessively Drained" },
   { label: "Excessively Drained" },

@@ -131,7 +131,10 @@ const Home = () => {
   //////////////////////////////////////////////////////////
 
   useEffect(() => {
-    dispatch(getLocality());
+    dispatch(getLocality()).then((res) => {
+      console.log("testing", res);
+      navigate(`/calculator`);
+    });
   }, []);
 
   //////////////////////////////////////////////////////////
@@ -155,7 +158,15 @@ const Home = () => {
         </Grid>
         {siteCondition.council !== "" && (
           <>
-            <Grid xs={12} item className="dst-mccc-logo">
+            <Grid
+              xs={12}
+              item
+              className={
+                siteCondition.council === "MCCC"
+                  ? "dst-mccc-logo"
+                  : "dst-neccc-logo"
+              }
+            >
               <img
                 alt="neccc"
                 src={

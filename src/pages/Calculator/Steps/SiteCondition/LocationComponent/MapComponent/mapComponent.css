@@ -8,3 +8,6 @@
 .map-component-dropdown {
     padding-bottom: 20px;
 }
+.map-container div[class*='map_infobar__'] {
+  bottom: 9%;
+}

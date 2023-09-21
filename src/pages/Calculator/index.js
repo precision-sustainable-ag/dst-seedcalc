@@ -159,12 +159,42 @@ const Calculator = () => {
 
   return (
     <Grid container justifyContent="center" alignItems="center">
-      <Header
+      {data.siteCondition.council === "" ? (
+        <Grid xs={12} item>
+          <Grid className={"dst-mccc-logo"}>
+            <img alt="neccc" src={"./mccc-logo.png"} />
+          </Grid>
+          <Grid className={"dst-neccc-logo"}>
+            <img alt="neccc" src={"./neccc-logo.png"} />
+          </Grid>
+        </Grid>
+      ) : (
+        <Grid
+          xs={12}
+          item
+          className={
+            data.siteCondition.council === "MCCC"
+              ? "dst-mccc-logo"
+              : "dst-neccc-logo"
+          }
+        >
+          <img
+            alt="neccc"
+            src={
+              data.siteCondition.council === "MCCC"
+                ? "./mccc-logo.png"
+                : "./neccc-logo.png"
+            }
+          />
+        </Grid>
+      )}
+
+      {/* <Header
         headerVariant="dstHeader"
         text="Seeding Rate Calculator"
         size={12}
         style={{ mt: 1, mb: 1.5 }}
-      />
+      /> */}
       <StepsList
         steps={calculatorList}
         activeStep={activeStep}

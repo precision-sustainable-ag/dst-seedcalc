@@ -28,7 +28,7 @@ export const initialState = {
       markers: null,
       zipCode: 0,
       zone: "",
-      council: "MCCC",
+      council: "",
     },
     speciesSelection: {
       queryString: "",

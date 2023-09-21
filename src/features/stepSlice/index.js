@@ -94,6 +94,7 @@ export const stepSlice = createSlice({
     [getSSURGOData.fulfilled]: (state, { payload }) => {
       state.loading = false;
       const string = payload.Table[1][2] !== null ? payload.Table[1][2] : "";
+      console.log("payload ssurgo", payload.Table);
       const checkSoilDrainage = soilDrainage.filter(
         (a) => a.label.toLowerCase() === string.toLowerCase()
       );

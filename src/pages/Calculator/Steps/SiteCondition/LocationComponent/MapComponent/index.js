@@ -6,21 +6,10 @@ import { Button } from "@mui/material";
 import "./mapComponent.css";
 import { Dropdown } from "../../../../../../components/Dropdown";
 
-const MapComponent = ({
-  council,
-  currentStep,
-  handleState,
-  handleLocation,
-  handleSteps,
-  list,
-  currentState,
-  val,
-  lat,
-  lng,
-}) => {
+const MapComponent = ({ handleLocation, lat, lng }) => {
   return (
-    <Grid xs={12} container>
-      <Grid item xs={1}></Grid>
+    <Grid xs={12} container className="map-container">
+      {/* <Grid item xs={1}></Grid>
       <Grid item xs={3} className=" map-component-dropdown">
         <Dropdown
           value={currentState}
@@ -39,14 +28,13 @@ const MapComponent = ({
           <span className="map-council-text-bold">Council:</span> {council}
         </Typography>
       </Grid>
-      <Grid item xs={1}></Grid>
-      <Grid xs={1} item></Grid>
-      <Grid xs={10} item>
+      <Grid item xs={1}></Grid> */}
+      <Grid xs={12} md={12} item>
         <Map
           setAddress={handleLocation}
           initWidth="100%"
           padding="20px"
-          initHeight="400px"
+          initHeight="380px"
           initLat={lat}
           initLon={lng}
           initStartZoom={12}
