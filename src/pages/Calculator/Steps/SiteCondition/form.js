@@ -11,6 +11,7 @@ import { NumberTextField } from "./../../../../components/NumberTextField";
 import { DSTSwitch } from "./../../../../components/Switch";
 import { soilDrainage } from "./../../../../shared/data/dropdown";
 import "./../steps.css";
+import "./siteCondition.css";
 
 const SiteConditionForm = ({
   siteCondition,
@@ -34,17 +35,8 @@ const SiteConditionForm = ({
         </Grid>
         <Grid item xs={7} md={9}></Grid> */}
 
-      <Grid item xs={12} padding={15} className="site-condition-container">
-        <Dropdown
-          value={selectedState?.label || ""}
-          label={"State: "}
-          handleChange={(e) => handleStateDropdown(e.target.value)}
-          size={12}
-          items={states}
-        />
-      </Grid>
       {renderCountyList()}
-      <Grid item xs={12} padding={15} className="site-condition-container">
+      <Grid item xs={12} md={6} className="site-condition-form-container">
         <Dropdown
           value={siteCondition.soilDrainage}
           label={"Soil Drainage: "}
@@ -55,7 +47,8 @@ const SiteConditionForm = ({
           items={soilDrainage}
         />
       </Grid>
-      <Grid item xs={12} padding={15} className="site-condition-container">
+
+      <Grid item xs={12} md={6} className="site-condition-form-container">
         <DatePicker
           label={"Planned Planting Date: "}
           value={siteCondition.plannedPlantingDate}
@@ -69,7 +62,8 @@ const SiteConditionForm = ({
           }}
         />
       </Grid>
-      <Grid item xs={12} padding={15} className="site-condition-container">
+
+      <Grid item xs={12} md={6} className="site-condition-form-container">
         <NumberTextField
           value={siteCondition.acres}
           label={"Acres"}
@@ -79,7 +73,8 @@ const SiteConditionForm = ({
           }}
         />
       </Grid>
-      <Grid item xs={12} padding={15} className="site-condition-container">
+
+      <Grid item xs={12} md={12} className="site-condition-form-container">
         {council === "MCCC" && (
           <>
             <Typography variant="nrcsStandard">

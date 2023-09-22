@@ -6,3 +6,10 @@
 .steps-container {
     margin-bottom: 40px;
 }
+.dst-header-container {
+    max-height: 80px;
+    height: 80px;
+    width: 100%;
+    margin: 10px !important;
+
+}

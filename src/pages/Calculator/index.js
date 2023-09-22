@@ -22,6 +22,7 @@ import { calculatorList, completedList } from "../../shared/data/dropdown";
 import { Header } from "../../components/Header";
 import { StepsList } from "../../components/StepsList";
 import "./calculator.css";
+import "./../Home/home.css";
 
 const Calculator = () => {
   const data = useSelector((state) => state.steps.value);
@@ -160,13 +161,8 @@ const Calculator = () => {
   return (
     <Grid container justifyContent="center" alignItems="center">
       {data.siteCondition.council === "" ? (
-        <Grid xs={12} item>
-          <Grid className={"dst-mccc-logo"}>
-            <img alt="neccc" src={"./mccc-logo.png"} />
-          </Grid>
-          <Grid className={"dst-neccc-logo"}>
-            <img alt="neccc" src={"./neccc-logo.png"} />
-          </Grid>
+        <Grid xs={12} className={"dst-header-container dst-psa-logo"} item>
+          <img alt="neccc" src={"./PSALogo.png"} />
         </Grid>
       ) : (
         <Grid
@@ -174,8 +170,8 @@ const Calculator = () => {
           item
           className={
             data.siteCondition.council === "MCCC"
-              ? "dst-mccc-logo"
-              : "dst-neccc-logo"
+              ? "dst-header-container dst-mccc-logo"
+              : "dst-header-container dst-neccc-logo"
           }
         >
           <img

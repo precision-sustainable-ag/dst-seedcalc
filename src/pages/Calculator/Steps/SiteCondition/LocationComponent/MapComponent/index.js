@@ -2,39 +2,41 @@ import { Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { Map } from "@psa/dst.ui.map";
 import { Button } from "@mui/material";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import PlaceIcon from "@mui/icons-material/Place";
 
 import "./mapComponent.css";
 import { Dropdown } from "../../../../../../components/Dropdown";
 
-const MapComponent = ({ handleLocation, lat, lng }) => {
+const MapComponent = ({
+  handleLocation,
+  lat,
+  lng,
+  handleSteps,
+  step,
+  selectedState,
+  states,
+}) => {
   return (
     <Grid xs={12} container className="map-container">
-      {/* <Grid item xs={1}></Grid>
-      <Grid item xs={3} className=" map-component-dropdown">
-        <Dropdown
-          value={currentState}
-          label={"States: "}
-          handleChange={(e) => {
-            handleState(e.target.value);
-          }}
-          disabled={true}
-          size={12}
-          items={list}
-        />
+      <Grid xs={5} item>
+        {step !== 1 && (
+          <Button
+            className="location-back-button"
+            variant="contained"
+            onClick={() => handleSteps("back", false)}
+          >
+            <PlaceIcon /> Select State
+          </Button>
+        )}
       </Grid>
-      <Grid item xs={2}></Grid>
-      <Grid item xs={5} className="">
-        <Typography className="map-council-text">
-          <span className="map-council-text-bold">Council:</span> {council}
-        </Typography>
-      </Grid>
-      <Grid item xs={1}></Grid> */}
+
       <Grid xs={12} md={12} item>
         <Map
           setAddress={handleLocation}
           initWidth="100%"
           padding="20px"
-          initHeight="380px"
+          initHeight="360px"
           initLat={lat}
           initLon={lng}
           initStartZoom={12}

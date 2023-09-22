@@ -35,9 +35,11 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
   // Location state
   const stateList = data.value.states;
   const [selectedToEditSite, setSelectedToEditSite] = useState({});
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(siteCondition.locationStep);
   const [mapState, setMapState] = useState({});
-  const [selectedState, setSelectedState] = useState({});
+  const [selectedState, setSelectedState] = useState(
+    siteCondition.stateSelected !== {} ? siteCondition.stateSelected : {}
+  );
 
   //////////////////////////////////////////////////////////
   //                      Redux                           //
@@ -64,7 +66,7 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
     if (counties.length > 0) {
       if (siteCondition.state !== "") {
         return (
-          <Grid item xs={12} padding={15} className="site-condition-container">
+          <Grid item xs={12} md={6} className="site-condition-form-container">
             <Dropdown
               value={siteCondition.county}
               label={
@@ -168,6 +170,16 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
     }
 
     if (Object.keys(selectedToEditSite).length > 0) {
+      console.log("county", county, counties);
+      if (siteCondition.council === "MCCC") {
+        const filteredCounty = counties.filter((c) =>
+          county.toLowerCase().includes(c.label.toLowerCase())
+        );
+        if (filteredCounty.length > 0) {
+          console.log("filtered county", filteredCounty, county);
+          handleUpdateSteps("county", "siteCondition", filteredCounty[0].label);
+        }
+      }
       handleUpdateSteps("latitude", "siteCondition", latitude);
       handleUpdateSteps("longitude", "siteCondition", longitude);
       handleUpdateSteps("address", "siteCondition", address);
@@ -256,7 +268,7 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
       </Grid>
 
       {stateList.length > 0 && (
-        <Grid xs={12} md={6} item>
+        <Grid xs={12} md={12} item>
           <LocationComponent
             step={step}
             handleSteps={handleSteps}
@@ -271,10 +283,12 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
           />
         </Grid>
       )}
-      <Grid xs={12} md={6} item>
+      <Grid xs={12} md={12} container>
         <SiteConditionForm
           siteCondition={siteCondition}
           states={stateList}
+          handleSteps={handleSteps}
+          step={step}
           setSelectedState={setSelectedState}
           selectedState={selectedState}
           handleStateDropdown={handleStateDropdown}

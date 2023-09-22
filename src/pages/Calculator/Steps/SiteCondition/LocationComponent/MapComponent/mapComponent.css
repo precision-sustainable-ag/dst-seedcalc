@@ -9,5 +9,21 @@
     padding-bottom: 20px;
 }
 .map-container div[class*='map_infobar__'] {
-  bottom: 9%;
+  bottom: 175px;
+  left: 5px;
+}
+.mark-location-button {
+    margin-top: 25px !important;
+    margin-right: 25px !important;
+    padding-right: 4px !important;
+    padding-left: 11px !important;
+}
+.location-back-button {
+    margin-top: 25px !important;
+    margin-right: 25px !important;
+    margin-left: 15px !important;
+    margin-bottom: 15px !important;
+    padding-right: 12px !important;
+    padding-left: 6px !important;
+    float: left;
 }

@@ -26,6 +26,7 @@ export const initialState = {
       longitude: -80.16,
       stateSelected: {},
       markers: null,
+      locationStep: 1,
       zipCode: 0,
       zone: "",
       council: "",
