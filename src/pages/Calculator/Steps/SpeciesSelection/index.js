@@ -12,9 +12,6 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
-import Fade from "@mui/material/Fade";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
@@ -22,18 +19,17 @@ import { SearchField } from "../../../../components/SearchField";
 import { updateSteps } from "../../../../features/stepSlice/index";
 import { getCropsById } from "../../../../features/stepSlice/api";
 import { seedsList, seedsLabel } from "../../../../shared/data/species";
-import { calculateAllValues } from "../../../../shared/utils/calculate";
+import { calculateAllMixRatioValues } from "../../../../shared/utils/calculate";
 import "./../steps.css";
 import SeedsSelectedList from "./../../../../components/SeedsSelectedList";
-import { emptyValues } from "../../../../shared/utils/calculate";
 import { validateForms } from "../../../../shared/utils/format";
+import ImageListComponent from "./imageListComponent";
+import Diversity from "./diversity";
 
 const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   // themes
   const theme = useTheme();
-  const matchesXs = useMediaQuery(theme.breakpoints.down("xs"));
   const matchesSm = useMediaQuery(theme.breakpoints.down("sm"));
-  const matchesMd = useMediaQuery(theme.breakpoints.down("md"));
 
   // useSelector for crops reducer data
   const dispatch = useDispatch();
@@ -47,6 +43,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   //////////////////////////////////////////////////////////
   //                      Redux                           //
   //////////////////////////////////////////////////////////
+
   const handleUpdateStore = (type, key, val) => {
     const data = {
       type: type,
@@ -313,7 +310,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
       totalCost: 0,
       addedToMix: 0,
     };
-    newSeed = calculateAllValues(newSeed, data);
+    newSeed = calculateAllMixRatioValues(newSeed, data);
     // three checks:
     // * seedlength is 0
     // * seed already exists
@@ -325,6 +322,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
           percentOfSingleSpeciesRate: (1 / (seedsSelected.length + 1)) * 100,
         };
       });
+      // update Redux with the seedsSelected and diversitySelected with the new list.
       handleUpdateStore("speciesSelection", "seedsSelected", [
         ...newList,
         newSeed,
@@ -380,64 +378,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
       }
     }
   };
-  const calculateSize = () => {
-    return diversitySelected.length === 1
-      ? 12
-      : diversitySelected.length === 2
-      ? 6
-      : diversitySelected.length >= 2 && diversitySelected.length < 4
-      ? 4
-      : 3;
-  };
-  const renderDiversityProgress = () => {
-    return (
-      <Grid container justify="space-between" alignItems="stretch">
-        <Grid
-          container
-          xs={12}
-          className="progress-bar"
-          justify="space-between"
-          alignItems="stretch"
-        >
-          {diversitySelected &&
-            diversitySelected.length > 0 &&
-            diversitySelected.map((d, i) => {
-              return (
-                <Fade in={true}>
-                  <Grid
-                    item
-                    xs={calculateSize()}
-                    className="progress-bar-item"
-                  ></Grid>
-                </Fade>
-              );
-            })}
-        </Grid>
-        {diversitySelected &&
-          diversitySelected.length > 0 &&
-          diversitySelected.length === 0 && (
-            <Grid item xs={12}>
-              <Typography className="progress-bar-text">
-                Select a species
-              </Typography>
-            </Grid>
-          )}
-        {diversitySelected &&
-          diversitySelected.length > 0 &&
-          diversitySelected.map((d, i) => {
-            return (
-              <Fade in={true}>
-                <Grid item xs={calculateSize()}>
-                  <Typography className="progress-bar-text">
-                    {seedsLabel[d]}
-                  </Typography>
-                </Grid>
-              </Fade>
-            );
-          })}
-      </Grid>
-    );
-  };
+
   const renderSeedsSelected = () => {
     return (
       <>
@@ -445,95 +386,10 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
       </>
     );
   };
-  const imgSrc = (imgUrl) => {
-    return imgUrl !== null ? imgUrl + "?w=300&h=300&fit=crop&auto=format" : "";
-  };
-  const checkPlantingDate = (seed, siteDate) => {
-    const startDate = new Date(
-      seed["Planting and Growth Windows"]["Reliable Establishment"][0]
-        .split(" - ")[0]
-        .slice(0, -5)
-    ).getTime();
-    const endDate = new Date(
-      seed["Planting and Growth Windows"]["Reliable Establishment"][0]
-        .split(" - ")[1]
-        .slice(0, -5)
-    ).getTime();
-    const plannedDate = new Date(siteDate.slice(0, -5)).getTime();
-    const pass = plannedDate >= startDate && plannedDate <= endDate;
-    return pass;
-  };
-  const renderImageList = (seed) => {
-    return (
-      <ImageList sx={{ maxWidth: "100%" }} cols={matchesSm ? 2 : 6}>
-        {filteredSeeds
-          .filter((seeds, i) => {
-            return seeds.group !== null && seeds.group.label === seed;
-          })
-          .map((seeds, idx) => (
-            <ImageListItem
-              key={
-                imgSrc(
-                  seeds.thumbnail !== null && seeds.thumbnail !== ""
-                    ? seeds.thumbnail
-                    : "https://www.gardeningknowhow.com/wp-content/uploads/2020/04/spinach.jpg"
-                ) + Math.random()
-              }
-            >
-              {council === "NECCC" &&
-                checkPlantingDate(
-                  seeds,
-                  data.siteCondition.plannedPlantingDate
-                ) && (
-                  <>
-                    <Grid
-                      sx={{
-                        position: "absolute",
-                        backgroundColor: "white",
-                        opacity: "0.7",
-                        width: "100%",
-                        height: "35%",
-                        marginTop: "20px",
-                      }}
-                    ></Grid>
-                    <Typography
-                      sx={{
-                        color: "red",
-                        position: "absolute",
-                        marginTop: "30px",
-                      }}
-                    >
-                      Not Recommended for planting dates
-                    </Typography>
-                  </>
-                )}
 
-              <img
-                className={matchesSm ? "panel-img-sm" : "panel-img"}
-                src={imgSrc(
-                  seeds.thumbnail !== null && seeds.thumbnail !== ""
-                    ? seeds.thumbnail
-                    : "https://www.gardeningknowhow.com/wp-content/uploads/2020/04/spinach.jpg"
-                )}
-                alt={seeds.label}
-                onClick={(e) => {
-                  updateSeeds(seeds, seed);
-                }}
-                loading="lazy"
-              />
-              <Link
-                className="img-text"
-                onClick={(e) => {
-                  updateSeeds(seeds, seed);
-                }}
-              >
-                {seeds.label}{" "}
-              </Link>
-            </ImageListItem>
-          ))}
-      </ImageList>
-    );
-  };
+  //////////////////////////////////////////////////////////
+  //                     useEffect                        //
+  //////////////////////////////////////////////////////////
 
   useEffect(() => {
     validateForms(
@@ -560,7 +416,14 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
           <Typography>{seedsLabel[seed]}</Typography>
         </AccordionSummary>
         <AccordionDetails className="accordian-details">
-          {renderImageList(seed)}
+          <ImageListComponent
+            seed={seed}
+            matchesSm={matchesSm}
+            filteredSeeds={filteredSeeds}
+            council={council}
+            data={data}
+            updateSeeds={updateSeeds}
+          />
         </AccordionDetails>
       </Accordion>
     );
@@ -584,7 +447,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
             value={query}
             handleFilter={filterSeeds}
           />
-          {renderDiversityProgress()}
+          <Diversity diversitySelected={diversitySelected} />
         </Grid>
         <Grid item xs={12}>
           <Grid item xs={12}>

@@ -6,7 +6,6 @@ import Grid from "@mui/material/Grid";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Typography, Box, Link, Button } from "@mui/material";
-import { useState, useEffect, Fragment } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from "recharts";
 import Accordion from "@mui/material/Accordion";
@@ -16,7 +15,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import {
-  calculateAllValues,
+  calculateAllMixRatioValues,
   calculateAllValuesNECCC,
 } from "./../../../../shared/utils/calculate";
 import { updateSteps } from "../../../../features/stepSlice";
@@ -67,6 +66,10 @@ const MixRatio = ({ council }) => {
 
   const RADIAN = Math.PI / 180;
 
+  //////////////////////////////////////////////////////////
+  //                      Redux                           //
+  //////////////////////////////////////////////////////////
+
   const handleUpdateSteps = (key, val) => {
     const data = {
       type: "speciesSelection",
@@ -79,7 +82,7 @@ const MixRatio = ({ council }) => {
     let seeds = [...prevData];
     seeds[index] =
       council === "MCCC"
-        ? calculateAllValues(seeds[index], data)
+        ? calculateAllMixRatioValues(seeds[index], data)
         : calculateAllValuesNECCC(seeds[index], data);
     handleUpdateSteps("seedsSelected", seeds);
   };
@@ -96,10 +99,15 @@ const MixRatio = ({ council }) => {
     let newData = [...seeds];
     newData[index] =
       council === "MCCC"
-        ? calculateAllValues(seeds[index], data)
+        ? calculateAllMixRatioValues(seeds[index], data)
         : calculateAllValuesNECCC(seeds[index], data);
     handleUpdateAllSteps(newData, index);
   };
+
+  //////////////////////////////////////////////////////////
+  //                   State Logic                        //
+  //////////////////////////////////////////////////////////
+
   const renderCustomizedLabel = ({
     cx,
     cy,
@@ -322,6 +330,10 @@ const MixRatio = ({ council }) => {
     });
     return 1 / count;
   };
+
+  //////////////////////////////////////////////////////////
+  //                      Render                          //
+  //////////////////////////////////////////////////////////
 
   return (
     <Grid xs={12} container>

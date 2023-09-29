@@ -7,7 +7,6 @@ export const plantHardinessZone = [
   { label: "Zone 6" },
   { label: "Zone 7" },
 ];
-
 export const calculatorList = [
   "Site Conditions",
   "Species Selection",

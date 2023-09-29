@@ -67,7 +67,7 @@ export const stepSlice = createSlice({
   },
   extraReducers: {
     [getCrops.pending]: (state) => {
-      state.loading = false;
+      state.loading = true;
     },
     [getCrops.fulfilled]: (state, { payload }) => {
       state.loading = false;
@@ -89,12 +89,11 @@ export const stepSlice = createSlice({
       state.errorMessage = "";
     },
     [getSSURGOData.pending]: (state) => {
-      state.loading = false;
+      state.loading = true;
     },
     [getSSURGOData.fulfilled]: (state, { payload }) => {
       state.loading = false;
       const string = payload.Table[1][2] !== null ? payload.Table[1][2] : "";
-      console.log("payload ssurgo", payload.Table);
       const checkSoilDrainage = soilDrainage.filter(
         (a) => a.label.toLowerCase() === string.toLowerCase()
       );

@@ -1,7 +1,11 @@
+//////////////////////////////////////////////////////////
+//                      Imports                         //
+//////////////////////////////////////////////////////////
+
 import Grid from "@mui/material/Grid";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { Typography, Box, Link, Button, Modal } from "@mui/material";
+import { Typography, Button } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
@@ -9,17 +13,14 @@ import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import { calculateAllConfirmPlan } from "../../../../shared/utils/calculate";
 import { handleDownload } from "./../../../../shared/utils/exportExcel";
 import { updateSteps } from "../../../../features/stepSlice/index";
-import { NumberTextField } from "../../../../components/NumberTextField";
-import { DSTTextField } from "../../../../components/DSTTextField";
-import { DSTSwitch } from "../../../../components/Switch";
 import NRCSDetailModal from "./modal";
 import { generateNRCSStandards } from "./../../../../shared/utils/NRCS/calculateNRCS";
 import ConfirmPlanCharts from "./charts";
-import NRCSStandards from "./NRCSStandards";
 import "./../steps.css";
 import SeedsSelectedList from "../../../../components/SeedsSelectedList";
 import { emptyValues } from "../../../../shared/utils/calculate";
 import ConfirmPlanForm from "./form";
+
 const ConfirmPlan = ({ council }) => {
   // themes
   const theme = useTheme();
@@ -33,10 +34,6 @@ const ConfirmPlan = ({ council }) => {
   const data = useSelector((state) => state.steps.value);
   const speciesSelection = data.speciesSelection;
   const NRCS = data.NRCS;
-
-  useEffect(() => {
-    generateNRCSStandards(speciesSelection.seedsSelected, data.siteCondition);
-  }, []);
 
   const poundsForPurchaseSum = speciesSelection.seedsSelected.reduce(
     (sum, a) => sum + a.poundsForPurchase,
@@ -77,10 +74,10 @@ const ConfirmPlan = ({ council }) => {
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
   const RADIAN = Math.PI / 180;
-  const handleModalOpen = (data) => {
-    !modalOpen && setCurrentModal(data);
-    setModalOpen(!modalOpen);
-  };
+
+  //////////////////////////////////////////////////////////
+  //                      Redux                           //
+  //////////////////////////////////////////////////////////
   const handleUpdateSteps = (key, val) => {
     const data = {
       type: "speciesSelection",
@@ -114,6 +111,15 @@ const ConfirmPlan = ({ council }) => {
     newData[index] = calculateAllConfirmPlan(data[index]);
     handleUpdateAllSteps(newData, index);
   };
+
+  //////////////////////////////////////////////////////////
+  //                   State Logic                        //
+  //////////////////////////////////////////////////////////
+
+  const handleModalOpen = (data) => {
+    !modalOpen && setCurrentModal(data);
+    setModalOpen(!modalOpen);
+  };
   const renderCustomizedLabel = ({
     cx,
     cy,
@@ -139,13 +145,6 @@ const ConfirmPlan = ({ council }) => {
       </text>
     );
   };
-  const calculateSeedsSelectedSum = (key) => {
-    return data.speciesSelection.seedsSelected.reduce(
-      (sum, a) => sum + parseFloat(a[key]),
-      0
-    );
-  };
-
   const renderPieChart = (type) => {
     let chartData;
     if (type === "plantsPerAcre") {
@@ -191,9 +190,20 @@ const ConfirmPlan = ({ council }) => {
     console.log("generateSeedNull", emptyValues(seed));
     return emptyValues(seed);
   };
+
+  //////////////////////////////////////////////////////////
+  //                     useEffect                        //
+  //////////////////////////////////////////////////////////
+
   useEffect(() => {
     initialDataLoad();
+    generateNRCSStandards(speciesSelection.seedsSelected, data.siteCondition);
   }, []);
+
+  //////////////////////////////////////////////////////////
+  //                      Render                          //
+  //////////////////////////////////////////////////////////
+
   return (
     <Grid xs={12} container>
       {currentModal !== null && (

@@ -1,31 +1,12 @@
 import Grid from "@mui/material/Grid";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { Typography, Box, Link, Button } from "@mui/material";
-import { useState, useEffect, Fragment } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from "recharts";
-import Accordion from "@mui/material/Accordion";
-import { Square } from "@mui/icons-material";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Typography } from "@mui/material";
 
 import {
-  calculateAllValues,
-  calculateAllValuesNECCC,
-  calculateSeeds,
-  calculateSeedsNECCC,
   convertToPercent,
   convertToDecimal,
 } from "./../../../../shared/utils/calculate";
-
-import { updateSteps } from "../../../../features/stepSlice";
 import { NumberTextField } from "./../../../../components/NumberTextField";
-
 import "./../steps.css";
-import SeedsSelectedList from "../../../../components/SeedsSelectedList";
-import { seedsList } from "../../../../shared/data/species";
 
 const MixRatioSteps = ({
   seed,

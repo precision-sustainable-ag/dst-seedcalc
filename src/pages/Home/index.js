@@ -17,7 +17,6 @@ import {
 } from "../../features/stepSlice";
 import { DSTButton } from "./../../components/Button";
 import { Header } from "./../../components/Header";
-import { CSVModal } from "./CSVModal";
 import { Dropdown } from "../../components/Dropdown";
 import "./home.css";
 
@@ -133,7 +132,7 @@ const Home = () => {
   useEffect(() => {
     dispatch(getLocality()).then((res) => {
       console.log("testing", res);
-      navigate(`/calculator`);
+      // navigate(`/calculator`);
     });
   }, []);
 
@@ -186,7 +185,7 @@ const Home = () => {
                 url: `/calculator`,
               }}
             />
-            <DSTButton
+            {/* <DSTButton
               text="Import previous calculation"
               buttonClass="dst-import-button"
               size={12}
@@ -198,7 +197,7 @@ const Home = () => {
               setModal={setModal}
               handleFileUpload={handleFileUpload}
               handleImportCSV={handleImportCSV}
-            />
+            /> */}
           </>
         )}
       </>
@@ -215,6 +214,7 @@ const Home = () => {
           size={12}
           style={{ mt: 5 }}
         />
+
         {renderHome()}
       </Grid>
     </Fragment>

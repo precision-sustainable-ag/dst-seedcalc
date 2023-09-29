@@ -27,14 +27,6 @@ const SiteConditionForm = ({
 }) => {
   return (
     <>
-      {/* <Grid item xs={5} md={3}>
-          <Button onClick={navigateToLocationPage}>
-            <ArrowBackIosIcon />
-            Change Location
-          </Button>
-        </Grid>
-        <Grid item xs={7} md={9}></Grid> */}
-
       {renderCountyList()}
       <Grid item xs={12} md={6} className="site-condition-form-container">
         <Dropdown

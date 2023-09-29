@@ -35,6 +35,8 @@ import "./../steps.css";
 import SeedsSelectedList from "../../../../components/SeedsSelectedList";
 import StripedLabels from "./StripedLabels";
 import ReviewMixSteps from "./Steps";
+import PieChartComponent from "./PieChart";
+
 const ReviewMix = ({ council }) => {
   // themes
   const theme = useTheme();
@@ -47,6 +49,7 @@ const ReviewMix = ({ council }) => {
   const speciesSelection = data.speciesSelection;
   const seedingMethod = data.seedingMethod;
 
+  // TODO: make into shared function
   const plantsPerAcreSum = speciesSelection.seedsSelected.reduce(
     (sum, a) => sum + parseFloat(a.plantsPerAcre),
     0
@@ -59,9 +62,11 @@ const ReviewMix = ({ council }) => {
     (sum, a) => sum + parseFloat(a.seedsPerAcre),
     0
   );
+
   const poundsOfSeedArray = [];
   const plantsPerAcreArray = [];
   const seedsPerAcreArray = [];
+
   speciesSelection.seedsSelected.map((s, i) => {
     plantsPerAcreArray.push({
       name: s.label,
@@ -137,8 +142,6 @@ const ReviewMix = ({ council }) => {
       speciesSelection.seedsSelected,
       data.siteCondition
     );
-    const NRCSResults = NRCSData;
-
     handleUpdateNRCS("results", NRCSData);
   };
 
@@ -156,6 +159,10 @@ const ReviewMix = ({ council }) => {
   //////////////////////////////////////////////////////////
   //                     Render                           //
   //////////////////////////////////////////////////////////
+
+  const renderSeedsSelected = () => {
+    return <SeedsSelectedList list={speciesSelection.seedsSelected} />;
+  };
 
   const renderCustomizedLabel = ({
     cx,
@@ -183,44 +190,6 @@ const ReviewMix = ({ council }) => {
     );
   };
 
-  const renderPieChart = (type) => {
-    let chartData;
-    if (type === "plantsPerAcre") {
-      chartData = plantsPerAcreArray;
-    }
-    if (type === "seedsPerAcre") {
-      chartData = seedsPerAcreArray;
-    }
-    if (type === "poundsOfSeed") {
-      chartData = poundsOfSeedArray;
-    }
-    return (
-      <ResponsiveContainer width="100%" height={200}>
-        <PieChart width={400} height={400}>
-          <Pie
-            data={chartData}
-            cx="50%"
-            cy="50%"
-            labelLine={false}
-            label={renderCustomizedLabel}
-            outerRadius={80}
-            fill="#8884d8"
-            dataKey="value"
-          >
-            {chartData.map((entry, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={COLORS[index % COLORS.length]}
-              />
-            ))}
-          </Pie>
-        </PieChart>
-      </ResponsiveContainer>
-    );
-  };
-  const renderSeedsSelected = () => {
-    return <SeedsSelectedList list={speciesSelection.seedsSelected} />;
-  };
   const generateScatterData = (labels) => {
     let results = [];
     let counter = 0;
@@ -265,14 +234,6 @@ const ReviewMix = ({ council }) => {
   };
   const renderAccordianChart = (obj, labels) => {
     const scatterData = generateScatterData(labels);
-    // const data = [
-    //   { x: 30, y: 1, z: 600 },
-    //   { x: 60, y: 2, z: 260 },
-    //   { x: 90, y: 1, z: 400 },
-    //   { x: 239, y: 1, z: 280 },
-    //   { x: 150, y: 1, z: 500 },
-    //   { x: 110, y: 1, z: 200 },
-    // ];
 
     return (
       <Grid container xs={12}>
@@ -563,9 +524,25 @@ const ReviewMix = ({ council }) => {
           <Typography variant="h2">Review your mix</Typography>
           <Grid container xs={12}>
             <Grid item xs={6} md={6} className="mix-ratio-chart-container">
-              {council === "MCCC"
-                ? renderPieChart("plantsPerAcre")
-                : renderPieChart("seedsPerAcre")}
+              {council === "MCCC" ? (
+                <PieChartComponent
+                  type={"plantsPerAcre"}
+                  plantsPerAcreArray={plantsPerAcreArray}
+                  seedsPerAcreArray={seedsPerAcreArray}
+                  poundsOfSeedArray={poundsOfSeedArray}
+                  COLORS={COLORS}
+                  renderCustomizedLabel={renderCustomizedLabel}
+                />
+              ) : (
+                <PieChartComponent
+                  type={"seedsPerAcre"}
+                  plantsPerAcreArray={plantsPerAcreArray}
+                  seedsPerAcreArray={seedsPerAcreArray}
+                  poundsOfSeedArray={poundsOfSeedArray}
+                  COLORS={COLORS}
+                  renderCustomizedLabel={renderCustomizedLabel}
+                />
+              )}
               <Typography className="mix-ratio-chart-header">
                 {council === "MCCC"
                   ? "Pounds of Seed / Acre"
@@ -589,7 +566,15 @@ const ReviewMix = ({ council }) => {
               </Grid>
             </Grid>
             <Grid item xs={6} md={6} className="mix-ratio-chart-container">
-              {renderPieChart("poundsOfSeed")}
+              <PieChartComponent
+                type={"poundsOfSeed"}
+                plantsPerAcreArray={plantsPerAcreArray}
+                seedsPerAcreArray={seedsPerAcreArray}
+                poundsOfSeedArray={poundsOfSeedArray}
+                COLORS={COLORS}
+                renderCustomizedLabel={renderCustomizedLabel}
+              />
+
               <Typography className="mix-ratio-chart-header">
                 {council === "MCCC" ? "Plants" : "Seeds"} Per Acre{" "}
               </Typography>
