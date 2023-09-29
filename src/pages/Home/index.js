@@ -132,7 +132,7 @@ const Home = () => {
   useEffect(() => {
     dispatch(getLocality()).then((res) => {
       console.log("testing", res);
-      // navigate(`/calculator`);
+      navigate(`/calculator`);
     });
   }, []);
 
@@ -141,67 +141,7 @@ const Home = () => {
   //////////////////////////////////////////////////////////
 
   const renderHome = () => {
-    return (
-      <>
-        <Grid item xs={12} className="site-condition-container">
-          <Dropdown
-            value={siteCondition.council}
-            label={"Council: "}
-            handleChange={handleCouncil}
-            disabled={true}
-            size={12}
-            items={[
-              { label: siteCondition.council, value: siteCondition.council },
-            ]}
-          />
-        </Grid>
-        {siteCondition.council !== "" && (
-          <>
-            <Grid
-              xs={12}
-              item
-              className={
-                siteCondition.council === "MCCC"
-                  ? "dst-mccc-logo"
-                  : "dst-neccc-logo"
-              }
-            >
-              <img
-                alt="neccc"
-                src={
-                  siteCondition.council === "MCCC"
-                    ? "./mccc-logo.png"
-                    : "./neccc-logo.png"
-                }
-              />
-            </Grid>
-            <DSTButton
-              text="Start a new calculation"
-              buttonClass="dst-button"
-              size={12}
-              theme="dstTheme"
-              path={{
-                type: "local",
-                url: `/calculator`,
-              }}
-            />
-            {/* <DSTButton
-              text="Import previous calculation"
-              buttonClass="dst-import-button"
-              size={12}
-              theme="dstTheme"
-              handleClick={setModal}
-            />
-            <CSVModal
-              openModal={openModal}
-              setModal={setModal}
-              handleFileUpload={handleFileUpload}
-              handleImportCSV={handleImportCSV}
-            /> */}
-          </>
-        )}
-      </>
-    );
+    return <></>;
   };
 
   return (
