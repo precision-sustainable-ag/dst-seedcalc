@@ -450,7 +450,7 @@ const SpeciesSelection = ({ council }) => {
   };
   const renderImageList = (seed) => {
     return (
-      <ImageList sx={{ maxWidth: "100%" }} cols={matchesSm ? 2 : 6}>
+      <ImageList sx={{ maxWidth: "100%" }} cols={matchesXs ? 1 : matchesSm ? 2 : matchesMd ? 3 : 6}>
         {filteredSeeds
           .filter((seeds, i) => {
             return seeds.group !== null && seeds.group.label === seed;
