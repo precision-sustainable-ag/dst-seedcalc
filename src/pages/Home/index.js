@@ -1,14 +1,15 @@
+//////////////////////////////////////////////////////////
+//                      Imports                         //
+//////////////////////////////////////////////////////////
+
 import { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
-import { Modal } from "@mui/material";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import { Fragment } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
 import Papa from "papaparse";
+
+import { getLocality } from "../../features/stepSlice/api";
 import {
   updateAllSteps,
   updateSteps,
@@ -16,20 +17,41 @@ import {
 } from "../../features/stepSlice";
 import { DSTButton } from "./../../components/Button";
 import { Header } from "./../../components/Header";
-import { CSVModal } from "./CSVModal";
 import { Dropdown } from "../../components/Dropdown";
 import "./home.css";
 
 const Home = () => {
-  const [imgPath, setImgPath] = useState("./mccc-logo.png");
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState(false);
   const [CSVImport, setCSVImport] = useState([]);
   const [council, setCouncil] = useState("");
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+
   const data = useSelector((state) => state.steps.value);
-  const speciesSelection = data.speciesSelection;
+  const { speciesSelection, siteCondition } = data;
+  const [imgPath, setImgPath] = useState(
+    siteCondition?.council === "MCCC" ? "./mccc-logo.png" : "./neccc-logo.png"
+  );
   const seedsSelected = speciesSelection.seedsSelected;
+
+  //////////////////////////////////////////////////////////
+  //                      Redux                           //
+  //////////////////////////////////////////////////////////
+
+  const handleUpdateSteps = (key, type, val) => {
+    dispatch(
+      updateSteps({
+        type: type,
+        key: key,
+        value: val,
+      })
+    );
+  };
+
+  //////////////////////////////////////////////////////////
+  //                      State Logic                     //
+  //////////////////////////////////////////////////////////
+
   const handleModal = (type, title, description) => {
     var payload = {};
     if (type === "error") {
@@ -61,7 +83,11 @@ const Home = () => {
     }
     dispatch(updateModal(payload));
   };
-  // Import logic start
+
+  //////////////////////////////////////////////////////////
+  //                  Import Logic                        //
+  //////////////////////////////////////////////////////////
+
   const handleFileUpload = (event) => {
     Papa.parse(event.target.files[0], {
       header: true,
@@ -83,16 +109,13 @@ const Home = () => {
       },
     });
   };
-
   const handleImportCSV = () => {
     const type = CSVImport.siteCondition.county.includes("Zone")
       ? "NECCC"
       : "MCCC";
     dispatch(updateAllSteps({ value: CSVImport }));
-    navigate(`/${type}/calculator`);
+    navigate(`/calculator`);
   };
-  // Import logic end
-
   const setModal = () => {
     setOpenModal(!openModal);
   };
@@ -102,6 +125,25 @@ const Home = () => {
       e.target.value === "MCCC" ? "./mccc-logo.png" : "./neccc-logo.png";
     setImgPath(imagePath);
   };
+  //////////////////////////////////////////////////////////
+  //                     useEffect                        //
+  //////////////////////////////////////////////////////////
+
+  useEffect(() => {
+    dispatch(getLocality()).then((res) => {
+      console.log("testing", res);
+      navigate(`/calculator`);
+    });
+  }, []);
+
+  //////////////////////////////////////////////////////////
+  //                      Render                          //
+  //////////////////////////////////////////////////////////
+
+  const renderHome = () => {
+    return <></>;
+  };
+
   return (
     <Fragment>
       <Grid container spacing={2}>
@@ -112,45 +154,8 @@ const Home = () => {
           size={12}
           style={{ mt: 5 }}
         />
-        <Grid item xs={12} padding={15} className="site-condition-container">
-          <Dropdown
-            value={council}
-            label={"Council: "}
-            handleChange={handleCouncil}
-            size={12}
-            items={[
-              { label: "NECCC", value: "NECCC" },
-              { label: "MCCC", value: "MCCC" },
-            ]}
-          />
-        </Grid>
-        {council !== "" && (
-          <>
-            <Grid xs={12} className="dst-mccc-logo">
-              <img alt="neccc" src={imgPath} />
-            </Grid>
-            <DSTButton
-              text="Start a new calculation"
-              buttonClass="dst-button"
-              size={12}
-              theme="dstTheme"
-              path={{ type: "local", url: `/${council}/calculator` }}
-            />
-            <DSTButton
-              text="Import previous calculation"
-              buttonClass="dst-import-button"
-              size={12}
-              theme="dstTheme"
-              handleClick={setModal}
-            />
-            <CSVModal
-              openModal={openModal}
-              setModal={setModal}
-              handleFileUpload={handleFileUpload}
-              handleImportCSV={handleImportCSV}
-            />
-          </>
-        )}
+
+        {renderHome()}
       </Grid>
     </Fragment>
   );

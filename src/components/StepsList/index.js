@@ -5,7 +5,9 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import "./stepsList.css";
@@ -34,6 +36,7 @@ export const StepsList = ({
   handleBack,
   handleSkip,
   handleReset,
+  completedStep,
 }) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
@@ -45,7 +48,6 @@ export const StepsList = ({
   const isStepSkipped = (step) => {
     return skipped.has(step);
   };
-
   return (
     <Box sx={{ width: "100%", color: "#4f5f30" }}>
       <Stepper
@@ -89,7 +91,8 @@ export const StepsList = ({
               onClick={handleBack}
               sx={{ mr: 1 }}
             >
-              {activeStep === 0 ? "Start" : steps[activeStep - 1]}
+              {activeStep !== 0 && <ArrowBackIosIcon />}
+              {steps[activeStep - 1]}
             </Button>
             <Box sx={{ flex: "1 1 auto" }} />
             {/* {isStepOptional(activeStep) && (
@@ -98,10 +101,14 @@ export const StepsList = ({
               </Button>
             )} */}
 
-            <Button onClick={handleNext}>
+            <Button
+              disabled={completedStep[activeStep] === true ? false : true}
+              onClick={handleNext}
+            >
               {activeStep === steps.length - 1
                 ? "Finish"
-                : steps[activeStep + 1]}
+                : steps[activeStep + 1]}{" "}
+              <ArrowForwardIosIcon />
             </Button>
           </Box>
         </Fragment>

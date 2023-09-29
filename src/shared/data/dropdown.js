@@ -7,9 +7,8 @@ export const plantHardinessZone = [
   { label: "Zone 6" },
   { label: "Zone 7" },
 ];
-
 export const calculatorList = [
-  "Site Condition",
+  "Site Conditions",
   "Species Selection",
   "Mix Ratios",
   "Mix Seeding Rate",
@@ -18,12 +17,30 @@ export const calculatorList = [
   "Review Mix",
   "Confirm Plan",
 ];
+export const completedList = [false, false, true, true, true, true, true, true];
+
+export const availableStates = [
+  "Connecticut",
+  "Delaware",
+  "Indiana",
+  "Maryland",
+  "Massachusetts",
+  "Maine",
+  "New Hampshire",
+  "New Jersey",
+  "New York",
+  "Pennsylvania",
+  "Rhode Island",
+  "Vermont",
+  "West Virginia",
+];
 
 export const soilDrainage = [
   { label: "Very Poorly Drained" },
   { label: "Poorly Drained" },
   { label: "Somewhat Poorly Drained" },
   { label: "Moderately Poorly Drained" },
+  { label: "Moderately Well Drained" },
   { label: "Well Drained" },
   { label: "Somewhat Excessively Drained" },
   { label: "Excessively Drained" },

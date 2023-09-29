@@ -1,3 +1,7 @@
+//////////////////////////////////////////////////////////
+//                     Imports                          //
+//////////////////////////////////////////////////////////
+
 import * as React from "react";
 import Grid from "@mui/material/Grid";
 import { useState } from "react";
@@ -10,7 +14,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-import { updateSteps } from "./../../../../features/stepSlice";
+import { updateSteps } from "../../../../features/stepSlice";
 import { DSTSwitch } from "./../../../../components/Switch";
 import { seedsList, seedsLabel } from "./../../../../shared/data/species";
 import {
