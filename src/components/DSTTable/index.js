@@ -28,13 +28,7 @@ export default function DSTTable({ rows, cells }) {
                 {row[cells[0]]}
               </TableCell>
               {cells.map((cell, idx) => {
-                return (
-                  <>
-                    {idx !== 0 && (
-                      <TableCell align="right">{row[cell]}</TableCell>
-                    )}
-                  </>
-                );
+                return <>{idx !== 0 && <TableCell>{row[cell]}</TableCell>}</>;
               })}
             </TableRow>
           ))}
