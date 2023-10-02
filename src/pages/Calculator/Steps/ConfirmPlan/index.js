@@ -197,6 +197,7 @@ const ConfirmPlan = ({ council }) => {
 
   useEffect(() => {
     initialDataLoad();
+    // FIXME: this line seems not have any funcitonality here, NRCS calculated in ReviewMix
     generateNRCSStandards(speciesSelection.seedsSelected, data.siteCondition);
   }, []);
 
