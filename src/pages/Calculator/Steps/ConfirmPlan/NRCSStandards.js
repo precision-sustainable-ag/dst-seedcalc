@@ -1,10 +1,21 @@
 import Grid from "@mui/material/Grid";
-import { Typography, Box, Link, Button, Modal } from "@mui/material";
+import {
+  Typography,
+  Box,
+  Link,
+  Button,
+  Modal,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+} from "@mui/material";
 
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 
 import "./../steps.css";
+import { ExpandMore } from "@mui/icons-material";
+import DSTTable from "../../../../components/DSTTable";
 
 const NRCSStandards = ({ NRCS, handleModalOpen }) => {
   const NRCSItem = ({ title, result, openModal }) => {
@@ -17,6 +28,7 @@ const NRCSStandards = ({ NRCS, handleModalOpen }) => {
           </Typography>
         </Grid>
         <Grid xs={1}></Grid>
+
         <Grid xs={1}></Grid>
         <Grid xs={10}>
           <Box className="NRCS-result-container">
@@ -46,6 +58,24 @@ const NRCSStandards = ({ NRCS, handleModalOpen }) => {
         <Grid xs={1}></Grid>
       </>
     );
+  };
+
+  const renderTable = (data) => {
+    const createData = (label, expect, result, pass) => {
+      return { label, expect, result, pass };
+    };
+
+    const rows = data.seeds.map((d, i) => {
+      return createData(
+        d.label,
+        d.expect,
+        d.result,
+        d.pass ? "passed" : "failed"
+      );
+    });
+
+    const cells = ["label", "expect", "result", "pass"];
+    return <DSTTable rows={rows} createData={createData} cells={cells} />;
   };
   return (
     <>
@@ -84,6 +114,28 @@ const NRCSStandards = ({ NRCS, handleModalOpen }) => {
         result={NRCS.results.expectedWinterSurvival.value}
         openModal={() => handleModalOpen(NRCS.results.expectedWinterSurvival)}
       />
+
+      <Grid xs={1}></Grid>
+      <Grid xs={10}>
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMore />}>
+            {NRCS.results.expectedWinterSurvival.value ? (
+              <CheckIcon sx={{ color: "green" }}></CheckIcon>
+            ) : (
+              <ClearIcon sx={{ color: "red" }}></ClearIcon>
+            )}
+            <Typography sx={{ float: "left", marginLeft: "5px" }}>
+              {NRCS.results.expectedWinterSurvival.value ? "passed" : "failed"}
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography>
+              {renderTable(NRCS.results.expectedWinterSurvival)}
+            </Typography>
+          </AccordionDetails>
+        </Accordion>
+      </Grid>
+      <Grid xs={1}></Grid>
     </>
   );
 };

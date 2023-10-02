@@ -7,6 +7,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
+import "./DSTTable.css";
+
 export default function DSTTable({ rows, cells }) {
   return (
     <TableContainer component={Paper}>
