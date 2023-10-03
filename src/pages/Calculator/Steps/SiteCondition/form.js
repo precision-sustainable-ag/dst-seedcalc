@@ -2,6 +2,7 @@
 //                      Imports                         //
 //////////////////////////////////////////////////////////
 
+import { useState } from "react";
 import { Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 
@@ -10,21 +11,59 @@ import { Dropdown } from "./../../../../components/Dropdown";
 import { NumberTextField } from "./../../../../components/NumberTextField";
 import { DSTSwitch } from "./../../../../components/Switch";
 import { soilDrainage } from "./../../../../shared/data/dropdown";
+import { getCrops } from "../../../../features/stepSlice/api";
 import "./../steps.css";
 import "./siteCondition.css";
+import { useDispatch } from "react-redux";
 
 const SiteConditionForm = ({
   siteCondition,
-  states,
-  renderCountyList,
   handleUpdateSteps,
   council,
-  checked,
-  handleSwitch,
-  handleStateDropdown,
-  setSelectedState,
-  selectedState,
+  counties,
+  NRCS,
 }) => {
+  const [checked, setChecked] = useState(NRCS.enabled);
+  const dispatch = useDispatch();
+
+  const handleSwitch = () => {
+    setChecked(!checked);
+    handleUpdateSteps("enabled", "NRCS", !checked);
+  };
+
+  const handleRegion = (e) => {
+    const countyId = counties.filter((c, i) => c.label === e)[0].id;
+    console.log("handle region", e, countyId);
+    handleUpdateSteps("county", "siteCondition", e);
+    if (countyId !== undefined && countyId !== undefined) {
+      console.log("handle region pass", e, countyId);
+      dispatch(
+        getCrops({
+          regionId: countyId,
+        })
+      );
+    }
+  };
+
+  const renderCountyList = () => {
+    if (counties.length > 0) {
+      if (siteCondition.state !== "") {
+        return (
+          <Grid item xs={12} md={6} className="site-condition-form-container">
+            <Dropdown
+              value={siteCondition.county}
+              label={
+                council === "MCCC" ? "County: " : "USDA Plant Hardiness Zone: "
+              }
+              handleChange={(e) => handleRegion(e.target.value)}
+              size={12}
+              items={counties}
+            />
+          </Grid>
+        );
+      }
+    }
+  };
   return (
     <>
       {renderCountyList()}

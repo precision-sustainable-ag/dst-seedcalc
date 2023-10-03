@@ -3,81 +3,97 @@ import { Button } from "@mui/material";
 import { RegionSelectorMap } from "@psa/dst.ui.region-selector-map";
 import PlaceIcon from "@mui/icons-material/Place";
 import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-
+import { useDispatch } from "react-redux";
+import { getRegion } from "../../../../../../features/stepSlice/api";
+import statesLatLongDict from "../../../../../../shared/data/statesLatLongDict";
 import { availableStates } from "../../../../../../shared/data/dropdown";
 import { Dropdown } from "../../../../../../components/Dropdown";
-import "./../MapComponent/mapComponent.css";
 import DSTImport from "../../../../../../components/DSTImport";
-import {
-  updateAllSteps,
-  updateModal,
-} from "../../../../../../features/stepSlice";
+import "./../MapComponent/mapComponent.css";
 
 const RegionSelector = ({
-  setMapState,
-  selectedState,
-  handleStateDropdown,
-  states,
+  stateList,
   handleSteps,
+  siteCondition,
+  handleUpdateSteps,
   step,
 }) => {
-  const navigate = useNavigate();
+  const [isImported, setIsImported] = useState(false);
+  const [mapState, setMapState] = useState({});
+  const [selectedState, setSelectedState] = useState(
+    siteCondition.stateSelected
+  );
+
   const dispatch = useDispatch();
-  const [openModal, setOpenModal] = useState(false);
-  const [CSVImport, setCSVImport] = useState(null);
-
-  const data = useSelector((state) => state.steps.value);
-
-  //////////////////////////////////////////////////////////
-  //                      Redux                           //
-  //////////////////////////////////////////////////////////
 
   //////////////////////////////////////////////////////////
   //                      State Logic                     //
   //////////////////////////////////////////////////////////
-  const handleModal = (type, title, description) => {
-    var payload = {};
-    if (type === "error") {
-      payload = {
-        value: {
-          loading: false,
-          error: true,
-          success: false,
-          errorTitle: title,
-          errorMessage: description,
-          successTitle: "",
-          successMessage: "",
-          isOpen: true,
-        },
-      };
-    } else {
-      payload = {
-        value: {
-          loading: false,
-          error: true,
-          success: true,
-          errorTitle: "",
-          errorMessage: "",
-          successTitle: title,
-          successMessage: description,
-          isOpen: true,
-        },
-      };
-    }
-    dispatch(updateModal(payload));
+
+  const handleStateDropdown = (val) => {
+    const stateSelected = stateList.filter((s, i) => s.label === val)[0];
+    setSelectedState(stateSelected);
+    handleUpdateSteps("state", "siteCondition", val);
+    handleUpdateSteps("stateSelected", "siteCondition", stateSelected);
   };
+
+  const handleState = (val) => {
+    // Clear out all seeds selected in Redux
+    if (isImported) return;
+    setIsImported(false);
+    // FIXME: this also clears imported csv plants
+    handleUpdateSteps("seedsSelected", "speciesSelection", []);
+    handleUpdateSteps("diversitySelected", "speciesSelection", []);
+    const stateSelected = stateList.filter((s) => s.label === val)[0];
+
+    // Update Redux
+    handleUpdateSteps("latitude", "siteCondition", statesLatLongDict[val][0]);
+    handleUpdateSteps("longitude", "siteCondition", statesLatLongDict[val][1]);
+    handleUpdateSteps("state", "siteCondition", val);
+    handleUpdateSteps("stateId", "siteCondition", stateSelected.id);
+    handleUpdateSteps(
+      "council",
+      "siteCondition",
+      stateSelected.parents[0].shorthand
+    );
+
+    // Retrieve region and SSURGO data
+    stateSelected.id !== undefined &&
+      dispatch(getRegion({ stateId: stateSelected.id })).then((res) => {});
+  };
+
+  //////////////////////////////////////////////////////////
+  //                      useEffect                       //
+  //////////////////////////////////////////////////////////
+
+  useEffect(() => {
+    if (Object.keys(mapState).length !== 0) {
+      const st = stateList.filter(
+        (s) => s.label === mapState.properties.STATE_NAME
+      );
+      if (st.length > 0) {
+        setSelectedState(st[0]);
+      }
+    }
+  }, [mapState]);
+
+  // useEffect for selectedState
+  useEffect(() => {
+    if (Object.keys(selectedState).length !== 0) {
+      handleState(selectedState.label);
+      handleUpdateSteps("stateSelected", "siteCondition", selectedState);
+    }
+  }, [selectedState]);
 
   return (
     <Grid xs={12} container>
       <Grid item xs={7} md={10} className="site-condition-container">
         <Dropdown
-          value={selectedState?.label || ""}
+          value={siteCondition.stateSelected.label || ""}
           label={"State: "}
           handleChange={(e) => handleStateDropdown(e.target.value)}
           size={12}
-          items={states}
+          items={stateList}
         />
       </Grid>
       <Grid xs={5} md={2} item>
@@ -87,7 +103,7 @@ const RegionSelector = ({
             Object.keys(selectedState).length !== 0 && step !== 2 ? false : true
           }
           variant={"contained"}
-          onClick={() => handleSteps("next", step === 2 ? true : false)}
+          onClick={() => handleSteps("next")}
         >
           Mark Location <PlaceIcon />
         </Button>
@@ -95,7 +111,7 @@ const RegionSelector = ({
       <Grid xs={12} md={12} item>
         <RegionSelectorMap
           selectorFunction={setMapState}
-          selectedState={selectedState.label}
+          selectedState={siteCondition.stateSelected.label || ""}
           availableStates={availableStates}
           initWidth="100%"
           initHeight="360px"
@@ -103,16 +119,7 @@ const RegionSelector = ({
           initLat={43}
           initStartZoom={4}
         />
-        <DSTImport
-          handleModal={handleModal}
-          setCSVImport={setCSVImport}
-          CSVImport={CSVImport}
-          navigate={navigate}
-          dispatch={dispatch}
-          updateAllSteps={updateAllSteps}
-          setOpenModal={setOpenModal}
-          openModal={openModal}
-        />
+        <DSTImport setIsImported={setIsImported} />
       </Grid>
     </Grid>
   );

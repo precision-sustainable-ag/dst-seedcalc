@@ -24,41 +24,29 @@ const LocationComponent = ({
   //                      Render                          //
   //////////////////////////////////////////////////////////
 
-  const renderMap = () => {
-    return (
-      <MapComponent
-        step={step}
-        handleLocation={setSelectedToEditSite}
-        handleSteps={handleSteps}
-        selectedState={selectedState}
-        states={stateList}
-        lat={siteCondition.latitude}
-        lng={siteCondition.longitude}
-      />
-    );
-  };
-
-  const renderRegionSelector = () => {
-    return (
-      <>
-        <RegionSelector
-          states={stateList}
-          handleSteps={handleSteps}
-          handleStateDropdown={handleStateDropdown}
-          setMapState={setMapState}
-          selectedState={selectedState}
-        />
-      </>
-    );
-  };
+  console.log("siteCondition.stateSelected", siteCondition.stateSelected);
 
   return (
     <Grid xs={12} container>
       <Grid xs={12} item>
         {step === 1 && stateList.length !== 0 ? (
-          renderRegionSelector()
+          <RegionSelector
+            states={stateList}
+            handleSteps={handleSteps}
+            handleStateDropdown={handleStateDropdown}
+            setMapState={setMapState}
+            selectedState={siteCondition.stateSelected}
+          />
         ) : step === 2 && stateList.length !== 0 ? (
-          renderMap()
+          <MapComponent
+            step={step}
+            handleLocation={setSelectedToEditSite}
+            handleSteps={handleSteps}
+            selectedState={selectedState}
+            states={stateList}
+            lat={siteCondition.latitude}
+            lng={siteCondition.longitude}
+          />
         ) : (
           <></>
         )}

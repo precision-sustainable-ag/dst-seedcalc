@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Papa from "papaparse";
 
 import { DSTButton } from "../Button";
@@ -6,20 +7,50 @@ import { Box } from "@mui/system";
 import { Grid, Modal, Typography, Button } from "@mui/material";
 
 import "./DSTImport.css";
+import { useDispatch } from "react-redux";
+import { updateAllSteps, updateModal } from "../../features/stepSlice";
 
-const DSTImport = ({
-  handleModal,
-  setCSVImport,
-  CSVImport,
-  navigate,
-  dispatch,
-  updateAllSteps,
-  setOpenModal,
-  openModal,
-}) => {
+const DSTImport = ({ setIsImported }) => {
+  const [openModal, setOpenModal] = useState(false);
+  const [CSVImport, setCSVImport] = useState(null);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   //////////////////////////////////////////////////////////
   //                  Import Logic                        //
   //////////////////////////////////////////////////////////
+  const handleModal = (type, title, description) => {
+    var payload = {};
+    if (type === "error") {
+      payload = {
+        value: {
+          loading: false,
+          error: true,
+          success: false,
+          errorTitle: title,
+          errorMessage: description,
+          successTitle: "",
+          successMessage: "",
+          isOpen: true,
+        },
+      };
+    } else {
+      payload = {
+        value: {
+          loading: false,
+          error: true,
+          success: true,
+          errorTitle: "",
+          errorMessage: "",
+          successTitle: title,
+          successMessage: description,
+          isOpen: true,
+        },
+      };
+    }
+    dispatch(updateModal(payload));
+  };
 
   const handleFileUpload = (event) => {
     Papa.parse(event.target.files[0], {
@@ -38,10 +69,12 @@ const DSTImport = ({
             results.data[results.data.length - 1].extData
           );
           setCSVImport(extDataObject);
+          setIsImported(true);
         }
       },
     });
   };
+
   const handleImportCSV = () => {
     if (CSVImport === null) {
       setModal();
@@ -51,9 +84,11 @@ const DSTImport = ({
     navigate(`/calculator`);
     setModal();
   };
+
   const setModal = () => {
     setOpenModal(!openModal);
   };
+
   return (
     <>
       <Modal
