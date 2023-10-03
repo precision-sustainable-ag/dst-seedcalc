@@ -26,7 +26,7 @@ const RegionSelector = ({
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState(false);
-  const [CSVImport, setCSVImport] = useState([]);
+  const [CSVImport, setCSVImport] = useState(null);
 
   const data = useSelector((state) => state.steps.value);
 
