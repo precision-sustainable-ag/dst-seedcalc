@@ -7,9 +7,9 @@ import { useDispatch } from "react-redux";
 import {
   getZoneData,
   getSSURGOData,
-} from "../../../../../../features/stepSlice/api";
+} from "../../../../../features/stepSlice/api";
 
-import "./mapComponent.css";
+import "../siteCondition.css";
 
 const MapComponent = ({
   handleSteps,

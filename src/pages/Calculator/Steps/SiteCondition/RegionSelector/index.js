@@ -4,12 +4,13 @@ import { RegionSelectorMap } from "@psa/dst.ui.region-selector-map";
 import PlaceIcon from "@mui/icons-material/Place";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { getRegion } from "../../../../../../features/stepSlice/api";
-import statesLatLongDict from "../../../../../../shared/data/statesLatLongDict";
-import { availableStates } from "../../../../../../shared/data/dropdown";
-import { Dropdown } from "../../../../../../components/Dropdown";
-import DSTImport from "../../../../../../components/DSTImport";
-import "./../MapComponent/mapComponent.css";
+import { getRegion } from "../../../../../features/stepSlice/api";
+import statesLatLongDict from "../../../../../shared/data/statesLatLongDict";
+import { availableStates } from "../../../../../shared/data/dropdown";
+import { Dropdown } from "../../../../../components/Dropdown";
+import DSTImport from "../../../../../components/DSTImport";
+
+import "../siteCondition.css";
 
 const RegionSelector = ({
   stateList,

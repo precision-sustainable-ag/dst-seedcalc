@@ -10,8 +10,8 @@ import { getCrops, getLocality } from "../../../../features/stepSlice/api";
 import { updateSteps } from "../../../../features/stepSlice/index";
 import { isEmptyNull, validateForms } from "../../../../shared/utils/format";
 import SiteConditionForm from "./form";
-import RegionSelector from "./LocationComponent/RegionSelector";
-import MapComponent from "./LocationComponent/MapComponent";
+import RegionSelector from "./RegionSelector";
+import MapComponent from "./MapComponent";
 import "./../steps.css";
 
 const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
@@ -127,7 +127,7 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
           )}
         </Grid>
       )}
-      <Grid xs={12} md={12} container>
+      <Grid xs={12} md={12} item>
         <SiteConditionForm
           siteCondition={siteCondition}
           handleSteps={handleSteps}
