@@ -1,0 +1,25 @@
+.nrcs-summary {
+  height: 24px;
+  min-height: 24px;
+}
+
+.nrcs-summary.Mui-expanded {
+  min-height: 32px !important;
+}
+
+.nrcs-summary .MuiAccordionSummary-expandIconWrapper.Mui-expanded {
+  transform: rotate(0deg);
+}
+
+.nrcs-summary .MuiAccordionSummary-content {
+  margin: 5px 0;
+}
+
+.nrcs-summary p {
+  font-size: 16px !important;
+  font-weight: normal !important;
+}
+
+.nrcs-details.MuiAccordionDetails-root {
+  padding: 2% !important;
+}

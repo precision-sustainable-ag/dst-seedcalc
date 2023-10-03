@@ -14,11 +14,13 @@ import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 
 import "./../steps.css";
-import { ExpandMore } from "@mui/icons-material";
+import "./NRCSStandard.css";
 import DSTTable from "../../../../components/DSTTable";
+import { useState } from "react";
 
-const NRCSStandards = ({ NRCS, handleModalOpen }) => {
-  const NRCSItem = ({ title, result, openModal }) => {
+const NRCSStandards = ({ NRCS }) => {
+  const NRCSItem = ({ title, result, data }) => {
+    const [expanded, setExpanded] = useState(false);
     return (
       <>
         <Grid xs={1}></Grid>
@@ -31,29 +33,32 @@ const NRCSStandards = ({ NRCS, handleModalOpen }) => {
 
         <Grid xs={1}></Grid>
         <Grid xs={10}>
-          <Box className="NRCS-result-container">
-            <Typography sx={{ float: "left" }}>
-              {" "}
+          <Accordion
+            expanded={expanded}
+            onChange={() => setExpanded(!expanded)}
+          >
+            <AccordionSummary
+              className="nrcs-summary"
+              expandIcon={
+                <Typography className="nrcs-expanded">
+                  {expanded ? "Hide" : "Show"} Details
+                </Typography>
+              }
+              sx={{ height: "24px", minHeight: "24px" }}
+            >
               {result ? (
                 <CheckIcon sx={{ color: "green" }}></CheckIcon>
               ) : (
                 <ClearIcon sx={{ color: "red" }}></ClearIcon>
               )}
-            </Typography>
-            <Typography sx={{ float: "left", marginLeft: "5px" }}>
-              {result ? "passed" : "failed"}
-            </Typography>
-            <Link
-              sx={{
-                float: "right",
-                cursor: "pointer",
-                marginTop: "2px",
-              }}
-              onClick={openModal}
-            >
-              Show Details
-            </Link>
-          </Box>
+              <Typography sx={{ float: "left", marginLeft: "5px" }}>
+                {result ? "passed" : "failed"}
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails className="nrcs-details">
+              <Typography>{renderTable(data)}</Typography>
+            </AccordionDetails>
+          </Accordion>
         </Grid>
         <Grid xs={1}></Grid>
       </>
@@ -88,54 +93,32 @@ const NRCSStandards = ({ NRCS, handleModalOpen }) => {
       <NRCSItem
         title={"Seeding Rate"}
         result={NRCS.results.seedingRate.value}
-        openModal={() => handleModalOpen(NRCS.results.seedingRate)}
+        data={NRCS.results.seedingRate}
       />
 
       <NRCSItem
         title={"Planting Date"}
         result={NRCS.results.plantingDate.value}
-        openModal={() => handleModalOpen(NRCS.results.plantingDate)}
+        data={NRCS.results.plantingDate}
       />
 
       <NRCSItem
         title={"Ratio"}
         result={NRCS.results.ratio.value}
-        openModal={() => handleModalOpen(NRCS.results.ratio)}
+        data={NRCS.results.ratio}
       />
 
       <NRCSItem
         title={"Soil Drainage"}
         result={NRCS.results.soilDrainage.value}
-        openModal={() => handleModalOpen(NRCS.results.soilDrainage)}
+        data={NRCS.results.soilDrainage}
       />
 
       <NRCSItem
         title={"Expected Winter Survival"}
         result={NRCS.results.expectedWinterSurvival.value}
-        openModal={() => handleModalOpen(NRCS.results.expectedWinterSurvival)}
+        data={NRCS.results.expectedWinterSurvival}
       />
-
-      <Grid xs={1}></Grid>
-      <Grid xs={10}>
-        <Accordion>
-          <AccordionSummary expandIcon={<ExpandMore />}>
-            {NRCS.results.expectedWinterSurvival.value ? (
-              <CheckIcon sx={{ color: "green" }}></CheckIcon>
-            ) : (
-              <ClearIcon sx={{ color: "red" }}></ClearIcon>
-            )}
-            <Typography sx={{ float: "left", marginLeft: "5px" }}>
-              {NRCS.results.expectedWinterSurvival.value ? "passed" : "failed"}
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography>
-              {renderTable(NRCS.results.expectedWinterSurvival)}
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
-      </Grid>
-      <Grid xs={1}></Grid>
     </>
   );
 };

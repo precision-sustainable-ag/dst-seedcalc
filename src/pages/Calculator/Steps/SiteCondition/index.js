@@ -38,7 +38,9 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
   const [step, setStep] = useState(siteCondition.locationStep);
   const [mapState, setMapState] = useState({});
   const [selectedState, setSelectedState] = useState(
-    siteCondition.stateSelected !== {} ? siteCondition.stateSelected : {}
+    Object.keys(siteCondition.stateSelected) > 0
+      ? siteCondition.stateSelected
+      : {}
   );
 
   //////////////////////////////////////////////////////////

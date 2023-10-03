@@ -7,3 +7,9 @@
 .MuiTableRow-root {
   background-color: #fffff2;
 }
+.MuiTable-root th {
+  padding: 8px;
+}
+.MuiTable-root td {
+  padding: 8px;
+}
