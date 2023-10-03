@@ -21,18 +21,37 @@ import { useState } from "react";
 const NRCSStandards = ({ NRCS }) => {
   const NRCSItem = ({ title, result, data }) => {
     const [expanded, setExpanded] = useState(false);
+
+    const renderTable = (data) => {
+      const createData = (label, expect, result, pass) => {
+        return { label, expect, result, pass };
+      };
+
+      const rows = data.seeds.map((d, i) => {
+        return createData(
+          d.label,
+          d.expect,
+          d.result,
+          d.pass ? "passed" : "failed"
+        );
+      });
+
+      const cells = ["label", "result", "expect", "pass"];
+      return <DSTTable rows={rows} createData={createData} cells={cells} />;
+    };
+
     return (
       <>
-        <Grid xs={1}></Grid>
-        <Grid xs={10}>
+        <Grid xs={0} md={1}></Grid>
+        <Grid xs={12} md={10}>
           <Typography sx={{ fontSize: "20px", fontWeight: 600, float: "left" }}>
             {title}
           </Typography>
         </Grid>
-        <Grid xs={1}></Grid>
+        <Grid xs={0} md={1}></Grid>
 
-        <Grid xs={1}></Grid>
-        <Grid xs={10}>
+        <Grid xs={0} md={1}></Grid>
+        <Grid xs={12} md={10}>
           <Accordion
             expanded={expanded}
             onChange={() => setExpanded(!expanded)}
@@ -60,28 +79,11 @@ const NRCSStandards = ({ NRCS }) => {
             </AccordionDetails>
           </Accordion>
         </Grid>
-        <Grid xs={1}></Grid>
+        <Grid xs={0} md={1}></Grid>
       </>
     );
   };
 
-  const renderTable = (data) => {
-    const createData = (label, expect, result, pass) => {
-      return { label, expect, result, pass };
-    };
-
-    const rows = data.seeds.map((d, i) => {
-      return createData(
-        d.label,
-        d.expect,
-        d.result,
-        d.pass ? "passed" : "failed"
-      );
-    });
-
-    const cells = ["label", "expect", "result", "pass"];
-    return <DSTTable rows={rows} createData={createData} cells={cells} />;
-  };
   return (
     <>
       <Grid item xs={12}>

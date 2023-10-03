@@ -4,7 +4,7 @@ import { calculateInt } from "../calculate";
 import { checkPlantingDate } from "./checkNRCS";
 
 export const calculateRatio = (crop, seedsSelected) => {
-  const identifier = "less or equal than ";
+  const identifier = "≤ ";
   const sumOfSeeds = seedsSelected.reduce(
     (sum, s) => sum + parseFloat(s.poundsOfSeed),
     0
@@ -20,7 +20,7 @@ export const calculateRatio = (crop, seedsSelected) => {
 
 export const calculateExpectedWinterSurvival = (crop, seedsSelected) => {
   // winter survival rate / lenght of seeds
-  const identifier = "more or equal than ";
+  const identifier = "≥ ";
   let sum = 0;
   seedsSelected.map((s, i) => {
     sum += parseFloat(s.percentChanceOfWinterSurvival);
@@ -29,8 +29,8 @@ export const calculateExpectedWinterSurvival = (crop, seedsSelected) => {
 
   return {
     label: crop.label,
-    expect: identifier + averageWinterSurvival,
-    result: crop.percentChanceOfWinterSurvival,
+    expect: crop.percentChanceOfWinterSurvival,
+    result: averageWinterSurvival,
     pass: crop.percentChanceOfWinterSurvival >= averageWinterSurvival,
   };
 };
@@ -71,7 +71,7 @@ export const calculatePlantingDate = (seed, siteDate) => {
 export const calculateSeedingRate = (crop, seedsSelected) => {
   // multiply the crop by the plantMethodModifier,
   // then c
-  const identifier = "less or equal than ";
+  const identifier = "≤ ";
 
   const seedingRateNRCS = calculateInt(
     [crop.mixSeedingRate, crop.plantingMethod],
