@@ -101,6 +101,7 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
           Tell us about your planting site
         </Typography>
       </Grid>
+      {/* <Grid item xs={12} sx={{ height: "1000px" }}></Grid> */}
 
       {stateList.length > 0 && (
         <Grid xs={12} md={12} item>
@@ -127,7 +128,7 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
           )}
         </Grid>
       )}
-      <Grid xs={12} md={12} item>
+      <Grid xs={12} md={12} container>
         <SiteConditionForm
           siteCondition={siteCondition}
           handleSteps={handleSteps}
