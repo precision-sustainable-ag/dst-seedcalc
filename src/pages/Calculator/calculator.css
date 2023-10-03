@@ -1,15 +1,14 @@
 .header-container {
-    width: 100% !important;
-    margin-top: 15px;
-    margin-bottom: 25px;
+  width: 100% !important;
+  margin-top: 15px;
+  margin-bottom: 25px;
 }
 .steps-container {
-    margin-bottom: 40px;
+  margin-bottom: 40px;
 }
 .dst-header-container {
-    max-height: 80px;
-    height: 80px;
-    width: 100%;
-    margin: 10px !important;
-
+  max-height: 80px;
+  height: 80px;
+  width: 100%;
+  margin: 10px !important;
 }
