@@ -1,19 +1,115 @@
 import Grid from "@mui/material/Grid";
 import { Typography, Box, Link, Button, Modal } from "@mui/material";
 import { Square } from "@mui/icons-material";
+import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
-// import { ConfirmPlanChart }
 import "./../steps.css";
-import SeedsSelectedList from "../../../../components/SeedsSelectedList";
 
-const ConfirmPlanCharts = ({
-  council,
-  renderPieChart,
-  poundsForPurchaseSum,
-  speciesSelection,
-  COLORS,
-  matchesMd,
-}) => {
+// TODO: build pie chart to a custom component, this should be done in another pr
+const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
+  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+
+  const RADIAN = Math.PI / 180;
+
+  const poundsForPurchaseSum = speciesSelection.seedsSelected.reduce(
+    (sum, a) => sum + a.poundsForPurchase,
+    0
+  );
+
+  const plantsPerAcreSum = speciesSelection.seedsSelected.reduce(
+    (sum, a) => sum + parseFloat(a.plantsPerAcre),
+    0
+  );
+  const poundsOfSeedSum = speciesSelection.seedsSelected.reduce(
+    (sum, a) => sum + parseFloat(a.poundsOfSeed),
+    0
+  );
+  const seedsPerAcreSum = speciesSelection.seedsSelected.reduce(
+    (sum, a) => sum + parseFloat(a.seedsPerAcre),
+    0
+  );
+
+  const poundsOfSeedArray = [];
+  const plantsPerAcreArray = [];
+  const seedsPerAcreArray = [];
+
+  speciesSelection.seedsSelected.map((s, i) => {
+    plantsPerAcreArray.push({
+      name: s.label,
+      value: s.plantsPerAcre / plantsPerAcreSum,
+    });
+    seedsPerAcreArray.push({
+      name: s.label,
+      value: s.seedsPerAcre / seedsPerAcreSum,
+    });
+    poundsOfSeedArray.push({
+      name: s.label,
+      value: s.poundsOfSeed / poundsOfSeedSum,
+    });
+  });
+
+  const renderCustomizedLabel = ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    percent,
+    index,
+  }) => {
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    return (
+      <text
+        x={x}
+        y={y}
+        fill="white"
+        textAnchor={x > cx ? "start" : "end"}
+        dominantBaseline="central"
+      >
+        {`${(percent * 100).toFixed(0)}%`}
+      </text>
+    );
+  };
+
+  const renderPieChart = (type) => {
+    let chartData;
+    if (type === "plantsPerAcre") {
+      chartData = plantsPerAcreArray;
+    }
+    if (type === "seedsPerAcre") {
+      chartData = seedsPerAcreArray;
+    }
+    if (type === "poundsOfSeed") {
+      chartData = poundsOfSeedArray;
+    }
+    return (
+      <ResponsiveContainer width="100%" height={200}>
+        <PieChart width={400} height={400}>
+          <Pie
+            data={chartData}
+            cx="50%"
+            cy="50%"
+            labelLine={false}
+            label={renderCustomizedLabel}
+            outerRadius={80}
+            fill="#8884d8"
+            dataKey="value"
+          >
+            {chartData.map((entry, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={COLORS[index % COLORS.length]}
+              />
+            ))}
+          </Pie>
+        </PieChart>
+      </ResponsiveContainer>
+    );
+  };
+
   return (
     <Grid container xs={12} sx={{ padding: "20px" }}>
       <Grid
