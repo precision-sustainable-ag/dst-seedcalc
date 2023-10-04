@@ -39,10 +39,10 @@ const RegionSelector = ({
   };
 
   const handleState = (val) => {
-    // Clear out all seeds selected in Redux
+    // if the state data comes from csv import do not do this to refresh the state
     if (isImported) return;
     setIsImported(false);
-    // FIXME: this also clears imported csv plants
+    // Clear out all seeds selected in Redux
     handleUpdateSteps("seedsSelected", "speciesSelection", []);
     handleUpdateSteps("diversitySelected", "speciesSelection", []);
     const stateSelected = stateList.filter((s) => s.label === val)[0];
@@ -80,7 +80,10 @@ const RegionSelector = ({
 
   // useEffect for selectedState
   useEffect(() => {
-    if (Object.keys(selectedState).length !== 0) {
+    if (
+      Object.keys(selectedState).length !== 0 &&
+      selectedState.label !== siteCondition.state
+    ) {
       handleState(selectedState.label);
       handleUpdateSteps("stateSelected", "siteCondition", selectedState);
     }

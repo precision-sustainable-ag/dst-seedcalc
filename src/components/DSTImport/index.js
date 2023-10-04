@@ -20,6 +20,8 @@ const DSTImport = ({ setIsImported }) => {
   //////////////////////////////////////////////////////////
   //                  Import Logic                        //
   //////////////////////////////////////////////////////////
+
+  // show a modal to handle failure import
   const handleModal = (type, title, description) => {
     var payload = {};
     if (type === "error") {
@@ -58,6 +60,7 @@ const DSTImport = ({ setIsImported }) => {
       skipEmptyLines: true,
       complete: function (results) {
         const lastItem = results.data[results.data.length - 1];
+        // TODO: not sure how to test error import
         if (lastItem.label !== "EXT-DATA-OBJECT") {
           handleModal(
             "error",

@@ -30,6 +30,7 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
   //                      Redux                           //
   //////////////////////////////////////////////////////////
 
+  // update redux value
   const handleUpdateSteps = (key, type, val) => {
     const data = {
       type: type,
@@ -43,6 +44,7 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
   //                   State Logic                        //
   //////////////////////////////////////////////////////////
 
+  // handle steps for the map
   const handleSteps = (type) => {
     type === "next" ? setStep(step + 1) : setStep(step - 1);
     type === "back" && setSelectedToEditSite({});
@@ -62,10 +64,14 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
     }
   }, [siteCondition.county]);
 
+  // initially get states data
   useEffect(() => {
-    dispatch(getLocality());
+    if (data.value.states.length === 0) {
+      dispatch(getLocality());
+    }
   }, []);
 
+  // validate all information on this page is selected
   useEffect(() => {
     validateForms(
       !isEmptyNull(siteCondition.state) &&
@@ -76,6 +82,9 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
       completedStep,
       setCompletedStep
     );
+  }, [siteCondition]);
+
+  useEffect(() => {
     if (!isEmptyNull(siteCondition.county)) {
       const county = counties.filter(
         (c, i) => c.label === siteCondition.county
@@ -88,7 +97,7 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
         );
       }
     }
-  }, [siteCondition]);
+  }, [siteCondition.county]);
 
   //////////////////////////////////////////////////////////
   //                      Render                          //
