@@ -34,15 +34,6 @@ export default function DSTTable({ rows, cells }) {
               })}
             </TableRow>
           ))}
-          {/* <TableRow>
-            <TableCell component="th" scope="row">
-              <div>
-                <h2>Title</h2>
-                <p>Description</p>
-              </div>
-              <button>Click me</button>
-            </TableCell>
-          </TableRow> */}
         </TableBody>
       </Table>
     </TableContainer>
