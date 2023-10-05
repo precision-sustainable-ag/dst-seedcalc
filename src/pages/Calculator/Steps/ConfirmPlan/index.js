@@ -12,7 +12,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { calculateAllConfirmPlan } from "../../../../shared/utils/calculate";
 import { handleDownload } from "./../../../../shared/utils/exportExcel";
 import { updateSteps } from "../../../../features/stepSlice/index";
-import NRCSDetailModal from "./modal";
 import { generateNRCSStandards } from "./../../../../shared/utils/NRCS/calculateNRCS";
 import ConfirmPlanCharts from "./charts";
 import "./../steps.css";
@@ -80,10 +79,6 @@ const ConfirmPlan = ({ council }) => {
     setModalOpen(!modalOpen);
   };
 
-  const renderSeedsSelected = (seed) => {
-    return <SeedsSelectedList list={speciesSelection.seedsSelected} />;
-  };
-
   const generateSeedNull = () => {
     const seed = { ...speciesSelection.seedsSelected[1] };
     console.log("generateSeedNull", emptyValues(seed));
@@ -106,14 +101,7 @@ const ConfirmPlan = ({ council }) => {
 
   return (
     <Grid xs={12} container>
-      {currentModal !== null && (
-        <NRCSDetailModal
-          modalOpen={modalOpen}
-          handleModalOpen={handleModalOpen}
-          data={currentModal}
-        />
-      )}
-      {renderSeedsSelected()}
+      <SeedsSelectedList list={speciesSelection.seedsSelected} />
       <Grid
         xs={12}
         md={speciesSelection.seedsSelected.length > 0 ? 11 : 12}

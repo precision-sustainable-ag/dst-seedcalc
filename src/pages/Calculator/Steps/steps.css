@@ -19,7 +19,7 @@ site-condition-header {
 }
 .selected-seeds-container {
   flex-wrap: nowrap !important;
-  overflow-x: scroll !important;
+  overflow-x: auto !important;
 }
 .selected-seeds-item {
   padding: 0px 15px;
@@ -346,4 +346,13 @@ site-condition-header {
 
 .custom-tooltip {
   background-color: white;
+}
+
+/* remove black outline of ALL rechart piechart */
+.recharts-layer {
+  outline: none;
+}
+
+.recharts-layer path {
+  outline: none;
 }

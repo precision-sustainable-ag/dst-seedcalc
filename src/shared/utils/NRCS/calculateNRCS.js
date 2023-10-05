@@ -1,7 +1,4 @@
-import { SiteCondition } from "../../../pages/Calculator/Steps";
-import { soilDrainage } from "../../data/dropdown";
 import { calculateInt } from "../calculate";
-import { checkPlantingDate } from "./checkNRCS";
 
 export const calculateRatio = (crop, seedsSelected) => {
   const identifier = "≤ ";
