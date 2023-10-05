@@ -2,33 +2,41 @@ import { calculateInt } from "../calculate";
 
 export const calculateRatio = (crop, seedsSelected) => {
   const identifier = "≤ ";
-  const sumOfSeeds = seedsSelected.reduce(
-    (sum, s) => sum + parseFloat(s.poundsOfSeed),
+
+  const seedsPerAcre = parseFloat(crop.seedsPerAcre);
+  const sumSeedsPerAcre = seedsSelected.reduce(
+    (sum, s) => sum + parseFloat(s.seedsPerAcre),
     0
   );
-  const seedRatio = (crop.poundsOfSeed / sumOfSeeds).toFixed(2);
+  const percentInMix = (seedsPerAcre / sumSeedsPerAcre).toFixed(2);
   return {
     label: crop.label,
     expect: identifier + crop.maxPercentAllowedInMix,
-    result: seedRatio,
-    pass: seedRatio <= crop.maxPercentAllowedInMix,
+    result: percentInMix,
+    pass: percentInMix <= crop.maxPercentAllowedInMix,
   };
 };
 
-export const calculateExpectedWinterSurvival = (crop, seedsSelected) => {
+export const calculateExpectedWinterSurvival = (seedsSelected) => {
   // winter survival rate / lenght of seeds
   const identifier = "≥ ";
   let sum = 0;
+  console.log(seedsSelected);
+  const sumSeedsPerAcre = seedsSelected.reduce(
+    (sum, s) => sum + parseFloat(s.seedsPerAcre),
+    0
+  );
   seedsSelected.map((s, i) => {
-    sum += parseFloat(s.percentChanceOfWinterSurvival);
+    const seedsPerAcre = parseFloat(s.seedsPerAcre);
+    const percentInMix = (seedsPerAcre / sumSeedsPerAcre).toFixed(2);
+    sum += parseFloat(s.percentChanceOfWinterSurvival) * percentInMix;
   });
-  const averageWinterSurvival = sum / seedsSelected.length;
 
   return {
-    label: crop.label,
-    expect: crop.percentChanceOfWinterSurvival,
-    result: averageWinterSurvival,
-    pass: crop.percentChanceOfWinterSurvival >= averageWinterSurvival,
+    label: seedsSelected.map((s) => s.label).join(", "),
+    expect: identifier + "0.5",
+    result: sum.toFixed(2),
+    pass: sum >= 0.5,
   };
 };
 
@@ -70,21 +78,27 @@ export const calculateSeedingRate = (crop, seedsSelected) => {
   // then c
   const identifier = "≤ ";
 
-  const seedingRateNRCS = calculateInt(
-    [crop.mixSeedingRate, crop.plantingMethod],
-    "multiply"
-  ).toFixed(2);
+  const singleSpeciesSeedingRate = crop.singleSpeciesSeedingRate;
 
-  const seedingRateResult = calculateInt(
-    [crop.singleSpeciesSeedingRate, seedsSelected.length],
-    "divide"
+  const seedingRateResult = (
+    (singleSpeciesSeedingRate *
+      crop.plantingMethod *
+      crop.managementImpactOnMix) /
+    (seedsSelected.length * crop.germinationPercentage * crop.purityPercentage)
   ).toFixed(2);
 
   return {
     label: crop.label,
-    expect: identifier + seedingRateNRCS,
+    expect:
+      (singleSpeciesSeedingRate * 0.5).toFixed(2) +
+      " ≤ result ≤ " +
+      (singleSpeciesSeedingRate * 2.5).toFixed(2),
     result: seedingRateResult,
-    pass: seedingRateResult <= seedingRateNRCS ? true : false,
+    pass:
+      singleSpeciesSeedingRate * 0.5 <= seedingRateResult &&
+      seedingRateResult <= singleSpeciesSeedingRate * 2.5
+        ? true
+        : false,
   };
 };
 
@@ -141,24 +155,23 @@ export const generateNRCSStandards = (seedsSelected, siteCondition) => {
       siteCondition,
       seedsSelected
     );
-    const expectedWinterSurvivalResult = calculateExpectedWinterSurvival(
-      s,
-      seedsSelected
-    );
+
     if (!seedingRateResult.pass) result.seedingRate.value = false;
     if (!plantingDateResult.pass) result.plantingDate.value = false;
     if (!ratioResult.pass) result.ratio.value = false;
     if (!soilDrainageResult.pass) result.soilDrainage.value = false;
 
-    if (!expectedWinterSurvivalResult.pass)
-      result.expectedWinterSurvival.value = false;
-
     result.seedingRate.seeds.push(seedingRateResult);
     result.plantingDate.seeds.push(plantingDateResult);
     result.soilDrainage.seeds.push(soilDrainageResult);
     result.ratio.seeds.push(ratioResult);
-    result.expectedWinterSurvival.seeds.push(expectedWinterSurvivalResult);
   });
+
+  const expectedWinterSurvivalResult =
+    calculateExpectedWinterSurvival(seedsSelected);
+  if (!expectedWinterSurvivalResult.pass)
+    result.expectedWinterSurvival.value = false;
+  result.expectedWinterSurvival.seeds.push(expectedWinterSurvivalResult);
 
   result.seedingRate.value = validateNRCS(result.seedingRate.seeds);
   result.ratio.value = validateNRCS(result.ratio.seeds);
