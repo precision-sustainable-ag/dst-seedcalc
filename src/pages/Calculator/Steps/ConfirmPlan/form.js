@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import Grid from "@mui/material/Grid";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -125,7 +126,7 @@ const ConfirmPlanForm = ({
         {data.speciesSelection.seedsSelected.map((s, i) => {
           if (i !== 0) {
             return (
-              <>
+              <Fragment key={i}>
                 <Grid item xs={3} className="confirm-plan-form-container">
                   <DSTTextField
                     className="text-field-100"
@@ -143,7 +144,7 @@ const ConfirmPlanForm = ({
                       : "="}
                   </Typography>
                 </Grid>
-              </>
+              </Fragment>
             );
           }
         })}
@@ -288,7 +289,7 @@ const ConfirmPlanForm = ({
       <Grid item xs={12}>
         {" "}
         {speciesSelection.seedsSelected.map((s, i) => {
-          return <> {renderSeedData(s)}</>;
+          return <Fragment key={i}> {renderSeedData(s)}</Fragment>;
         })}
         {renderTotalCostOfMix(data)}
       </Grid>

@@ -1,5 +1,6 @@
 import { calculateInt } from "../calculate";
 
+// TODO: still need to check for other calculations
 export const calculateRatio = (crop, seedsSelected) => {
   const identifier = "≤ ";
 
@@ -18,10 +19,8 @@ export const calculateRatio = (crop, seedsSelected) => {
 };
 
 export const calculateExpectedWinterSurvival = (seedsSelected) => {
-  // winter survival rate / lenght of seeds
   const identifier = "≥ ";
   let sum = 0;
-  console.log(seedsSelected);
   const sumSeedsPerAcre = seedsSelected.reduce(
     (sum, s) => sum + parseFloat(s.seedsPerAcre),
     0
@@ -33,7 +32,7 @@ export const calculateExpectedWinterSurvival = (seedsSelected) => {
   });
 
   return {
-    label: seedsSelected.map((s) => s.label).join(", "),
+    label: "Mix winter survival rate",
     expect: identifier + "0.5",
     result: sum.toFixed(2),
     pass: sum >= 0.5,
@@ -74,10 +73,6 @@ export const calculatePlantingDate = (seed, siteDate) => {
 };
 
 export const calculateSeedingRate = (crop, seedsSelected) => {
-  // multiply the crop by the plantMethodModifier,
-  // then c
-  const identifier = "≤ ";
-
   const singleSpeciesSeedingRate = crop.singleSpeciesSeedingRate;
 
   const seedingRateResult = (

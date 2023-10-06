@@ -75,7 +75,7 @@ const NRCSStandards = ({ NRCS }) => {
               </Typography>
             </AccordionSummary>
             <AccordionDetails className="nrcs-details">
-              <Typography>{renderTable(data)}</Typography>
+              {renderTable(data)}
             </AccordionDetails>
           </Accordion>
         </Grid>

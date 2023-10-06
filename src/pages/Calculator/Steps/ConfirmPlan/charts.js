@@ -161,7 +161,7 @@ const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
         <Grid item className="mix-ratio-chart-list-50">
           {speciesSelection.seedsSelected.map((s, i) => {
             return (
-              <Grid container xs={12}>
+              <Grid container xs={12} key={i}>
                 <Grid item xs={2}>
                   <Square sx={{ color: COLORS[i] }}></Square>
                 </Grid>
@@ -192,7 +192,7 @@ const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
         <Grid item className="mix-ratio-chart-list-50">
           {speciesSelection.seedsSelected.map((s, i) => {
             return (
-              <Grid container xs={12}>
+              <Grid container xs={12} key={i}>
                 <Grid item xs={2}>
                   <Square sx={{ color: COLORS[i] }}></Square>
                 </Grid>
