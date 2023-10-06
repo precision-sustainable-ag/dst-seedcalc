@@ -101,6 +101,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
       ...seed,
       ...cropDetails,
       plantingDates: {
+        // FIXME: there are some plants don't have ReliableEstablishment
         firstReliableEstablishmentStart:
           cropDetails.attributes["Planting and Growth Windows"][
             "Reliable Establishment"
@@ -122,6 +123,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
                 .slice(0, -5)
             : "",
         secondReliableEstablishmentStart:
+          // FIXME: there are some plants that only have one ReliableEstablishment period
           council === "MCCC"
             ? cropDetails.attributes["Planting and Growth Windows"][
                 "Reliable Establishment"

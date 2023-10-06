@@ -84,17 +84,6 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
     );
   }, [siteCondition]);
 
-  // get crops for specific zone/county when componentWillUnmount
-  useEffect(
-    () => () => {
-      console.log("clean up run", siteCondition.countyId);
-      if (siteCondition.countyId) {
-        dispatch(getCrops({ regionId: siteCondition.countyId }));
-      }
-    },
-    []
-  );
-
   //////////////////////////////////////////////////////////
   //                      Render                          //
   //////////////////////////////////////////////////////////
