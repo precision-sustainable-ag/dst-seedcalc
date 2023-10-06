@@ -54,7 +54,14 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
   //                     useEffect                        //
   //////////////////////////////////////////////////////////
 
-  // This is to ensure that county id is updated to the current county
+  // initially get states data
+  useEffect(() => {
+    if (data.value.states.length === 0) {
+      dispatch(getLocality());
+    }
+  }, []);
+
+  // Ensure that county id is updated to the current county
   useEffect(() => {
     if (siteCondition.county !== "") {
       const countyId = counties.filter(
@@ -63,13 +70,6 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
       handleUpdateSteps("countyId", "siteCondition", countyId);
     }
   }, [siteCondition.county]);
-
-  // initially get states data
-  useEffect(() => {
-    if (data.value.states.length === 0) {
-      dispatch(getLocality());
-    }
-  }, []);
 
   // validate all information on this page is selected
   useEffect(() => {
@@ -84,20 +84,16 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
     );
   }, [siteCondition]);
 
-  useEffect(() => {
-    if (!isEmptyNull(siteCondition.county)) {
-      const county = counties.filter(
-        (c, i) => c.label === siteCondition.county
-      )[0];
-      if (county !== undefined && county.id !== undefined) {
-        dispatch(
-          getCrops({
-            regionId: county.id,
-          })
-        );
+  // get crops for specific zone/county when componentWillUnmount
+  useEffect(
+    () => () => {
+      console.log("clean up run", siteCondition.countyId);
+      if (siteCondition.countyId) {
+        dispatch(getCrops({ regionId: siteCondition.countyId }));
       }
-    }
-  }, [siteCondition.county]);
+    },
+    []
+  );
 
   //////////////////////////////////////////////////////////
   //                      Render                          //

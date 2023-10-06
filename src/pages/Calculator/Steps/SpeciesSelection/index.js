@@ -17,7 +17,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 
 import { SearchField } from "../../../../components/SearchField";
 import { updateSteps } from "../../../../features/stepSlice/index";
-import { getCropsById } from "../../../../features/stepSlice/api";
+import { getCrops, getCropsById } from "../../../../features/stepSlice/api";
 import { seedsList, seedsLabel } from "../../../../shared/data/species";
 import { calculateAllMixRatioValues } from "../../../../shared/utils/calculate";
 import "./../steps.css";
@@ -390,6 +390,23 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   //////////////////////////////////////////////////////////
   //                     useEffect                        //
   //////////////////////////////////////////////////////////
+
+  useEffect(() => {
+    if (data.siteCondition.countyId) {
+      dispatch(getCrops({ regionId: data.siteCondition.countyId }));
+    } else {
+      // TODO: add error handling
+      console.error("no countyId!");
+    }
+  }, []);
+
+  // TODO: modify this page loading logic and load plant data logic
+  // The page should use redux data for first time loading
+  useEffect(() => {
+    if (data.crops.length > 0) {
+      setFilteredSeeds(data.crops);
+    }
+  }, [data.crops]);
 
   useEffect(() => {
     validateForms(

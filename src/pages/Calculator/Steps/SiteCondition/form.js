@@ -45,28 +45,20 @@ const SiteConditionForm = ({
     }
   };
 
-  const renderCountyList = () => {
-    if (counties.length > 0) {
-      if (siteCondition.state !== "") {
-        return (
-          <Grid item xs={12} md={6} className="site-condition-form-container">
-            <Dropdown
-              value={siteCondition.county}
-              label={
-                council === "MCCC" ? "County: " : "USDA Plant Hardiness Zone: "
-              }
-              handleChange={(e) => handleRegion(e.target.value)}
-              size={12}
-              items={counties}
-            />
-          </Grid>
-        );
-      }
-    }
-  };
   return (
     <>
-      {renderCountyList()}
+      <Grid item xs={12} md={6} className="site-condition-form-container">
+        <Dropdown
+          value={siteCondition.county}
+          label={
+            council === "MCCC" ? "County: " : "USDA Plant Hardiness Zone: "
+          }
+          handleChange={(e) => handleRegion(e.target.value)}
+          size={12}
+          items={counties}
+        />
+      </Grid>
+
       <Grid item xs={12} md={6} className="site-condition-form-container">
         <Dropdown
           value={siteCondition.soilDrainage}

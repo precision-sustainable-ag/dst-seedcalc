@@ -4,12 +4,9 @@ import { Map } from "@psa/dst.ui.map";
 import { Button } from "@mui/material";
 import PlaceIcon from "@mui/icons-material/Place";
 import { useDispatch } from "react-redux";
-import {
-  getZoneData,
-  getSSURGOData,
-} from "../../../../../features/stepSlice/api";
+import { getZoneData, getSSURGOData } from "../../../../features/stepSlice/api";
 
-import "../siteCondition.css";
+import "./siteCondition.css";
 
 const MapComponent = ({
   handleSteps,
