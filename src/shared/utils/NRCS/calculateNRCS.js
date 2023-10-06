@@ -1,5 +1,3 @@
-import { calculateInt } from "../calculate";
-
 // TODO: still need to check for other calculations
 export const calculateRatio = (crop, seedsSelected) => {
   const identifier = "≤ ";

@@ -1,22 +1,16 @@
+import { useState } from "react";
 import Grid from "@mui/material/Grid";
 import {
   Typography,
-  Box,
-  Link,
-  Button,
-  Modal,
   Accordion,
   AccordionSummary,
   AccordionDetails,
 } from "@mui/material";
-
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
-
+import DSTTable from "../../../../components/DSTTable";
 import "./../steps.css";
 import "./NRCSStandard.css";
-import DSTTable from "../../../../components/DSTTable";
-import { useState } from "react";
 
 const NRCSStandards = ({ NRCS }) => {
   const NRCSItem = ({ title, result, data }) => {

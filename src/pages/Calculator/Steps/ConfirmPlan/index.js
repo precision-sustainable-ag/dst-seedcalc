@@ -25,13 +25,10 @@ const ConfirmPlan = ({ council }) => {
   const matchesMd = useMediaQuery(theme.breakpoints.down("md"));
   const matchesUpMd = useMediaQuery(theme.breakpoints.up("md"));
   // useSelector for crops &  reducer
-  const [modalOpen, setModalOpen] = useState(false);
-  const [currentModal, setCurrentModal] = useState({ value: false, seeds: [] });
   const dispatch = useDispatch();
 
   const data = useSelector((state) => state.steps.value);
   const speciesSelection = data.speciesSelection;
-  const NRCS = data.NRCS;
 
   //////////////////////////////////////////////////////////
   //                      Redux                           //
@@ -44,11 +41,13 @@ const ConfirmPlan = ({ council }) => {
     };
     dispatch(updateSteps(data));
   };
+
   const handleUpdateAllSteps = (prevData, index) => {
     let data = [...prevData];
     data[index] = calculateAllConfirmPlan(data[index]);
     handleUpdateSteps("seedsSelected", data);
   };
+
   const initialDataLoad = () => {
     let data = JSON.parse(JSON.stringify(speciesSelection.seedsSelected));
     let newData = [...data];
@@ -57,6 +56,7 @@ const ConfirmPlan = ({ council }) => {
       handleUpdateAllSteps(newData, i);
     });
   };
+
   const updateSeed = (val, key, seed) => {
     // find index of seed, parse a copy, update proper values, & send to Redux
     const index = speciesSelection.seedsSelected.findIndex(
@@ -74,11 +74,6 @@ const ConfirmPlan = ({ council }) => {
   //                   State Logic                        //
   //////////////////////////////////////////////////////////
 
-  const handleModalOpen = (data) => {
-    !modalOpen && setCurrentModal(data);
-    setModalOpen(!modalOpen);
-  };
-
   const generateSeedNull = () => {
     const seed = { ...speciesSelection.seedsSelected[1] };
     console.log("generateSeedNull", emptyValues(seed));
@@ -89,9 +84,9 @@ const ConfirmPlan = ({ council }) => {
   //                     useEffect                        //
   //////////////////////////////////////////////////////////
 
+  // FIXME: this useEffect seems didn't update anything in redux devtools
   useEffect(() => {
     initialDataLoad();
-    // FIXME: this line seems not have any funcitonality here, NRCS calculated in ReviewMix
     generateNRCSStandards(speciesSelection.seedsSelected, data.siteCondition);
   }, []);
 
@@ -145,13 +140,7 @@ const ConfirmPlan = ({ council }) => {
             speciesSelection={speciesSelection}
             matchesMd={matchesMd}
           />
-          <ConfirmPlanForm
-            updateSeed={updateSeed}
-            NRCS={NRCS}
-            handleModal={handleModalOpen}
-            data={data}
-            speciesSelection={speciesSelection}
-          />
+          <ConfirmPlanForm updateSeed={updateSeed} data={data} />
         </Grid>
       </Grid>
     </Grid>
