@@ -67,7 +67,7 @@ export const stepSlice = createSlice({
   },
   extraReducers: {
     [getCrops.pending]: (state) => {
-      state.loading = true;
+      state.loading = "getCrops";
     },
     [getCrops.fulfilled]: (state, { payload }) => {
       state.loading = false;
@@ -107,12 +107,11 @@ export const stepSlice = createSlice({
       state.loading = false;
     },
     [getLocality.pending]: (state) => {
-      state.loading = true;
+      state.loading = "getLocality";
     },
     [getLocality.fulfilled]: (state, { payload }) => {
+      state.loading = false;
       state.value.states = payload;
-
-      console.log("fulfilled locality", payload.data);
     },
     [getLocality.rejected]: (state) => {
       state.loading = false;
@@ -121,6 +120,7 @@ export const stepSlice = createSlice({
       state.loading = true;
     },
     [getRegion.fulfilled]: (state, { payload }) => {
+      state.loading = false;
       state.value.counties =
         payload.data.kids.Zones !== undefined
           ? payload.data.kids.Zones

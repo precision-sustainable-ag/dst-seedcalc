@@ -30,7 +30,7 @@ export const DSTButton = ({
   handleClick,
 }) => {
   return (
-    <Grid xs={size} className={buttonClass}>
+    <Grid xs={size} className={buttonClass} item>
       <Button
         variant="contained"
         theme={dstTheme}

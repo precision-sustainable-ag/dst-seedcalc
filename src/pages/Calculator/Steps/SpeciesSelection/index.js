@@ -25,6 +25,7 @@ import SeedsSelectedList from "./../../../../components/SeedsSelectedList";
 import { validateForms } from "../../../../shared/utils/format";
 import ImageListComponent from "./imageListComponent";
 import Diversity from "./diversity";
+import { DSTLoading } from "../../../../components/DSTLoading";
 
 const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   // themes
@@ -34,6 +35,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   // useSelector for crops reducer data
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
+  const loading = useSelector((state) => state.steps.loading);
   const { crops, speciesSelection } = data;
   const seedsSelected = speciesSelection.seedsSelected;
   const diversitySelected = speciesSelection.diversitySelected;
@@ -423,30 +425,6 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   //                      Render                          //
   //////////////////////////////////////////////////////////
 
-  const renderAccordian = (seed) => {
-    return (
-      <Accordion xs={12} className="accordian-container">
-        <AccordionSummary
-          xs={12}
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography>{seedsLabel[seed]}</Typography>
-        </AccordionSummary>
-        <AccordionDetails className="accordian-details">
-          <ImageListComponent
-            seed={seed}
-            matchesSm={matchesSm}
-            filteredSeeds={filteredSeeds}
-            council={council}
-            data={data}
-            updateSeeds={updateSeeds}
-          />
-        </AccordionDetails>
-      </Accordion>
-    );
-  };
   return (
     <Grid xs={12} container>
       {seedsSelected.length > 0 && renderSeedsSelected()}
@@ -474,8 +452,31 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
           </Grid>
           {seedsList.map((s, i) => {
             return (
-              <Grid xs={12}>
-                <Grid item>{renderAccordian(s)}</Grid>
+              <Grid item xs={12}>
+                <Accordion xs={12} className="accordian-container">
+                  <AccordionSummary
+                    xs={12}
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
+                    <Typography>{seedsLabel[s]}</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails className="accordian-details">
+                    {loading === "getCrops" ? (
+                      <DSTLoading />
+                    ) : (
+                      <ImageListComponent
+                        seed={s}
+                        matchesSm={matchesSm}
+                        filteredSeeds={filteredSeeds}
+                        council={council}
+                        data={data}
+                        updateSeeds={updateSeeds}
+                      />
+                    )}
+                  </AccordionDetails>
+                </Accordion>
               </Grid>
             );
           })}

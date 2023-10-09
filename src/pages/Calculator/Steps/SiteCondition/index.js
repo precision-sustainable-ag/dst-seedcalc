@@ -12,6 +12,7 @@ import { isEmptyNull, validateForms } from "../../../../shared/utils/format";
 import SiteConditionForm from "./form";
 import RegionSelector from "./RegionSelector";
 import MapComponent from "./MapComponent";
+import { DSTLoading } from "../../../../components/DSTLoading";
 import "./../steps.css";
 
 const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
@@ -89,7 +90,7 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
   //////////////////////////////////////////////////////////
 
   return (
-    <Grid container justifyContent="center" alignItems="center" size={12}>
+    <Grid container justifyContent="center" alignItems="center">
       <Grid item xs={12} className="site-condition-header">
         <Typography variant="h2" className="site-condition-header">
           Tell us about your planting site
@@ -97,7 +98,9 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
       </Grid>
       {/* <Grid item xs={12} sx={{ height: "1000px" }}></Grid> */}
 
-      {stateList.length > 0 && (
+      {data.loading === "getLocality" ? (
+        <DSTLoading />
+      ) : (
         <Grid xs={12} md={12} item>
           {step === 1 ? (
             <RegionSelector
@@ -122,7 +125,8 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
           )}
         </Grid>
       )}
-      <Grid xs={12} md={12} container>
+
+      <Grid container>
         <SiteConditionForm
           siteCondition={siteCondition}
           handleSteps={handleSteps}
