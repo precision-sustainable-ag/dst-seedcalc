@@ -100,68 +100,60 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
     let newSeed = {
       ...seed,
       ...cropDetails,
+      // FIXME: some of the value may not needed in the app
       plantingDates: {
-        // FIXME: there are some plants don't have ReliableEstablishment
         firstReliableEstablishmentStart:
           cropDetails.attributes["Planting and Growth Windows"][
             "Reliable Establishment"
-          ]["values"][0] !== undefined
-            ? cropDetails.attributes["Planting and Growth Windows"][
-                "Reliable Establishment"
-              ]["values"][0]
-                .split(" - ")[0]
-                .slice(0, -5)
-            : "",
+          ]?.["values"][0] ?? "",
         firstReliableEstablishmentEnd:
           cropDetails.attributes["Planting and Growth Windows"][
             "Reliable Establishment"
-          ]["values"][0] !== undefined
-            ? cropDetails.attributes["Planting and Growth Windows"][
-                "Reliable Establishment"
-              ]["values"][0]
-                .split(" - ")[1]
-                .slice(0, -5)
-            : "",
+          ]?.["values"][0] ?? "",
         secondReliableEstablishmentStart:
-          // FIXME: there are some plants that only have one ReliableEstablishment period
           council === "MCCC"
             ? cropDetails.attributes["Planting and Growth Windows"][
                 "Reliable Establishment"
-              ]["values"][1]
-                .split(" - ")[0]
-                .slice(0, -5)
+              ]?.["values"][1]
+                ?.split(" - ")[0]
+                .slice(0, -5) ?? ""
             : "",
         secondReliableEstablishmentEnd:
           council === "MCCC"
             ? cropDetails.attributes["Planting and Growth Windows"][
                 "Reliable Establishment"
-              ]["values"][1]
-                .split(" - ")[1]
-                .slice(0, -5)
+              ]?.["values"][1]
+                ?.split(" - ")[1]
+                .slice(0, -5) ?? ""
             : "",
-        earlySeedingDateStart: cropDetails.attributes[
-          "Planting and Growth Windows"
-        ]["Reliable Establishment"]["values"][0]
-          .split(" - ")[0]
-          .slice(0, -5),
-        earlySeedingDateEnd: cropDetails.attributes[
-          "Planting and Growth Windows"
-        ]["Reliable Establishment"]["values"][0]
-          .split(" - ")[1]
-          .slice(0, -5),
-        lateSeedingDateStart: cropDetails.attributes[
-          "Planting and Growth Windows"
-        ]["Reliable Establishment"]["values"][0]
-          .split(" - ")[0]
-          .slice(0, -5),
-        lateSeedingDateEnd: cropDetails.attributes[
-          "Planting and Growth Windows"
-        ]["Reliable Establishment"]["values"][0]
-          .split(" - ")[1]
-          .slice(0, -5),
+        earlySeedingDateStart:
+          cropDetails.attributes["Planting and Growth Windows"][
+            "Early Seeding Date"
+          ]?.["values"][0]
+            .split(" - ")[0]
+            .slice(0, -5) ?? "",
+        earlySeedingDateEnd:
+          cropDetails.attributes["Planting and Growth Windows"][
+            "Early Seeding Date"
+          ]?.["values"][0]
+            .split(" - ")[1]
+            .slice(0, -5) ?? "",
+        lateSeedingDateStart:
+          cropDetails.attributes["Planting and Growth Windows"][
+            "Late Seeding Date"
+          ]?.["values"][0]
+            .split(" - ")[0]
+            .slice(0, -5) ?? "",
+        lateSeedingDateEnd:
+          cropDetails.attributes["Planting and Growth Windows"][
+            "Late Seeding Date"
+          ]?.["values"][0]
+            .split(" - ")[1]
+            .slice(0, -5) ?? "",
       },
       siteConditionPlantingDate: data.siteCondition.plannedPlantingDate,
       soilDrainage: data.siteCondition.soilDrainage,
+      // FIXME: Soybean (only in NECCC) doen't have Coefficients attr
       singleSpeciesSeedingRate: parseFloat(
         cropDetails.attributes.Coefficients["Single Species Seeding Rate"]
           .values[0]
@@ -276,7 +268,9 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
           ]
         : [], // TBD
       soilDrainages:
-        cropDetails.attributes["Soil Conditions"]["Soil Drainage"]["values"],
+        cropDetails.attributes["Soil Conditions"]?.["Soil Drainage"][
+          "values"
+        ] ?? "",
       highFertilityMonocultureCoefficient: cropDetails.attributes.Coefficients[
         "High Fertility Monoculture Coefficient"
       ]
