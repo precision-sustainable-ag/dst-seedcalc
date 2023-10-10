@@ -2,7 +2,7 @@
 //                      Imports                         //
 //////////////////////////////////////////////////////////
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import { useSelector } from "react-redux";
 
@@ -23,13 +23,18 @@ import { Header } from "../../components/Header";
 import { StepsList } from "../../components/StepsList";
 import "./calculator.css";
 import "./../Home/home.css";
+import { Alert, Fade, Typography } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
 const Calculator = () => {
   const data = useSelector((state) => state.steps.value);
+  const error = useSelector((state) => state.steps.error);
   const type = data.siteCondition.council;
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
   const [completedStep, setCompletedStep] = useState([...completedList]);
+  const [showAlert, setShowAlert] = useState(false);
 
   //////////////////////////////////////////////////////////
   //                      State Logic                     //
@@ -158,8 +163,33 @@ const Calculator = () => {
     }
   };
 
+  useEffect(() => {
+    setShowAlert(error);
+  }, [error]);
+
   return (
     <Grid container justifyContent="center" alignItems="center">
+      <Grid item style={{ position: "fixed", top: "0px", zIndex: 1000 }}>
+        <Fade in={showAlert}>
+          <Alert
+            severity="error"
+            action={
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => setShowAlert(false)}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+          >
+            <Typography fontWeight={600}>
+              Network Error - Try again later or refresh the page!
+            </Typography>
+          </Alert>
+        </Fade>
+      </Grid>
       {data.siteCondition.council === "" ? (
         <Grid xs={12} className={"dst-header-container dst-psa-logo"} item>
           <img alt="neccc" src={"./PSALogo.png"} />

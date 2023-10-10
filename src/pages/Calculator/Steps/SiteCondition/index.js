@@ -74,15 +74,16 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
 
   // validate all information on this page is selected
   useEffect(() => {
-    validateForms(
+    const checkNextStep =
       !isEmptyNull(siteCondition.state) &&
-        !isEmptyNull(siteCondition.soilDrainage) &&
-        siteCondition.acres !== 0 &&
-        !isEmptyNull(siteCondition.county),
-      0,
-      completedStep,
-      setCompletedStep
-    );
+      !isEmptyNull(siteCondition.soilDrainage) &&
+      siteCondition.acres !== "0" &&
+      !isEmptyNull(siteCondition.county);
+    validateForms(checkNextStep, 0, completedStep, setCompletedStep);
+    if (checkNextStep) {
+      // call getCrops api to get all crops from countyId
+      dispatch(getCrops({ regionId: siteCondition.countyId }));
+    }
   }, [siteCondition]);
 
   //////////////////////////////////////////////////////////
@@ -97,7 +98,6 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
         </Typography>
       </Grid>
       {/* <Grid item xs={12} sx={{ height: "1000px" }}></Grid> */}
-
       {data.loading === "getLocality" ? (
         <DSTLoading />
       ) : (

@@ -6,18 +6,16 @@ import * as React from "react";
 import { useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import { useSelector, useDispatch } from "react-redux";
-import { Typography, Link } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useState } from "react";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 
 import { SearchField } from "../../../../components/SearchField";
 import { updateSteps } from "../../../../features/stepSlice/index";
-import { getCrops, getCropsById } from "../../../../features/stepSlice/api";
+import { getCropsById } from "../../../../features/stepSlice/api";
 import { seedsList, seedsLabel } from "../../../../shared/data/species";
 import { calculateAllMixRatioValues } from "../../../../shared/utils/calculate";
 import "./../steps.css";
@@ -28,10 +26,6 @@ import Diversity from "./diversity";
 import { DSTLoading } from "../../../../components/DSTLoading";
 
 const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
-  // themes
-  const theme = useTheme();
-  const matchesSm = useMediaQuery(theme.breakpoints.down("sm"));
-
   // useSelector for crops reducer data
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
@@ -39,7 +33,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   const { crops, speciesSelection } = data;
   const seedsSelected = speciesSelection.seedsSelected;
   const diversitySelected = speciesSelection.diversitySelected;
-  const [filteredSeeds, setFilteredSeeds] = useState(crops);
+  const [filteredSeeds, setFilteredSeeds] = useState([]);
   const [query, setQuery] = useState("");
 
   //////////////////////////////////////////////////////////
@@ -396,17 +390,6 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   //////////////////////////////////////////////////////////
 
   useEffect(() => {
-    if (data.siteCondition.countyId) {
-      dispatch(getCrops({ regionId: data.siteCondition.countyId }));
-    } else {
-      // TODO: add error handling
-      console.error("no countyId!");
-    }
-  }, []);
-
-  // TODO: modify this page loading logic and load plant data logic
-  // The page should use redux data for first time loading
-  useEffect(() => {
     if (data.crops.length > 0) {
       setFilteredSeeds(data.crops);
     }
@@ -450,6 +433,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
           <Grid item xs={12}>
             <Typography>Mix Diversity</Typography>
           </Grid>
+          {loading === "getCrops" && <DSTLoading />}
           {seedsList.map((s, i) => {
             return (
               <Grid item xs={12}>
@@ -468,7 +452,6 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
                     ) : (
                       <ImageListComponent
                         seed={s}
-                        matchesSm={matchesSm}
                         filteredSeeds={filteredSeeds}
                         council={council}
                         data={data}

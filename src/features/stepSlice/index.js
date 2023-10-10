@@ -68,10 +68,12 @@ export const stepSlice = createSlice({
   extraReducers: {
     [getCrops.pending]: (state) => {
       state.loading = "getCrops";
+      state.error = false;
     },
     [getCrops.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.value.crops = payload.data;
+      state.error = false;
     },
     [getCrops.rejected]: (state) => {
       state.loading = false;
@@ -79,17 +81,19 @@ export const stepSlice = createSlice({
     },
     [getCropsById.pending]: (state) => {
       state.loading = true;
+      state.error = false;
     },
     [getCropsById.fulfilled]: (state, { payload }) => {
       state.loading = false;
+      state.error = false;
     },
     [getCropsById.rejected]: (state) => {
       state.loading = false;
-      state.error = true;
-      state.errorMessage = "";
+      state.error = false;
     },
     [getSSURGOData.pending]: (state) => {
       state.loading = true;
+      state.error = false;
     },
     [getSSURGOData.fulfilled]: (state, { payload }) => {
       state.loading = false;
@@ -102,22 +106,28 @@ export const stepSlice = createSlice({
           ? checkSoilDrainage[0].label
           : "";
       state.value.siteCondition.soilDrainage = dropdownVal;
+      state.error = false;
     },
     [getSSURGOData.rejected]: (state, { payload }) => {
       state.loading = false;
+      state.error = true;
     },
     [getLocality.pending]: (state) => {
       state.loading = "getLocality";
+      state.error = false;
     },
     [getLocality.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.value.states = payload;
+      state.error = false;
     },
     [getLocality.rejected]: (state) => {
       state.loading = false;
+      state.error = true;
     },
     [getRegion.pending]: (state) => {
       state.loading = true;
+      state.error = false;
     },
     [getRegion.fulfilled]: (state, { payload }) => {
       state.loading = false;
@@ -127,12 +137,15 @@ export const stepSlice = createSlice({
           : payload.data.kids.Counties !== undefined
           ? payload.data.kids.Counties
           : [];
+      state.error = false;
     },
     [getRegion.rejected]: (state) => {
       state.loading = false;
+      state.error = true;
     },
     [getZoneData.pending]: (state) => {
       state.loading = true;
+      state.error = false;
     },
     [getZoneData.fulfilled]: (state, { payload }) => {
       state.loading = false;
@@ -141,9 +154,11 @@ export const stepSlice = createSlice({
         state.value.siteCondition.county =
           "Zone " + payload.replace(/[^0-9]/g, "");
       }
+      state.error = false;
     },
     [getZoneData.rejected]: (state) => {
       state.loading = false;
+      state.error = true;
     },
   },
 });
