@@ -63,7 +63,7 @@ export const getSSURGOData = createAsyncThunk(
     const url = "https://sdmdataaccess.sc.egov.usda.gov/Tabular/post.rest";
     const res = await fetch(url, requestOptions).then((data) => data.json());
 
-    if (res !== {}) {
+    if (Object.keys(res).length > 0) {
       return res;
     }
   }

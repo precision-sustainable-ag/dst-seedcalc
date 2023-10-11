@@ -138,6 +138,7 @@ const ReviewMix = ({ council }) => {
   //////////////////////////////////////////////////////////
 
   const updateNRCS = async () => {
+    // TODO: NRCS calculated here
     const NRCSData = await generateNRCSStandards(
       speciesSelection.seedsSelected,
       data.siteCondition
