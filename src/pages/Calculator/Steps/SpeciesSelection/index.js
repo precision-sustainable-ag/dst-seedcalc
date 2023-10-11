@@ -354,6 +354,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
           );
         }
       } else {
+        // FIXME: add update for previous crops
         // if seed doesn't exist, add NRCS, seedsSelected, & diveristySelected
         const newList = seedsSelected.map((s, i) => {
           return {

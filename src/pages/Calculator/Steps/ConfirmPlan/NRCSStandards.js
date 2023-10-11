@@ -1,12 +1,83 @@
+import { useState } from "react";
 import Grid from "@mui/material/Grid";
-import { Typography, Box, Link, Button, Modal } from "@mui/material";
-
+import {
+  Typography,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+} from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
-
+import DSTTable from "../../../../components/DSTTable";
 import "./../steps.css";
+import "./NRCSStandard.css";
 
-const NRCSStandards = ({ NRCS, handleModalOpen }) => {
+const NRCSStandards = ({ NRCS }) => {
+  const NRCSItem = ({ title, result, data }) => {
+    const [expanded, setExpanded] = useState(false);
+
+    const renderTable = (data) => {
+      const createData = (label, expect, result, pass) => {
+        return { label, expect, result, pass };
+      };
+
+      const rows = data.seeds.map((d, i) => {
+        return createData(
+          d.label,
+          d.expect,
+          d.result,
+          d.pass ? "passed" : "failed"
+        );
+      });
+
+      const cells = ["label", "result", "expect", "pass"];
+      return <DSTTable rows={rows} createData={createData} cells={cells} />;
+    };
+
+    return (
+      <>
+        <Grid xs={0} md={1}></Grid>
+        <Grid xs={12} md={10}>
+          <Typography sx={{ fontSize: "20px", fontWeight: 600, float: "left" }}>
+            {title}
+          </Typography>
+        </Grid>
+        <Grid xs={0} md={1}></Grid>
+
+        <Grid xs={0} md={1}></Grid>
+        <Grid xs={12} md={10}>
+          <Accordion
+            expanded={expanded}
+            onChange={() => setExpanded(!expanded)}
+          >
+            <AccordionSummary
+              className="nrcs-summary"
+              expandIcon={
+                <Typography className="nrcs-expanded">
+                  {expanded ? "Hide" : "Show"} Details
+                </Typography>
+              }
+              sx={{ height: "24px", minHeight: "24px" }}
+            >
+              {result ? (
+                <CheckIcon sx={{ color: "green" }}></CheckIcon>
+              ) : (
+                <ClearIcon sx={{ color: "red" }}></ClearIcon>
+              )}
+              <Typography sx={{ float: "left", marginLeft: "5px" }}>
+                {result ? "passed" : "failed"}
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails className="nrcs-details">
+              {renderTable(data)}
+            </AccordionDetails>
+          </Accordion>
+        </Grid>
+        <Grid xs={0} md={1}></Grid>
+      </>
+    );
+  };
+
   return (
     <>
       <Grid item xs={12}>
@@ -14,189 +85,38 @@ const NRCSStandards = ({ NRCS, handleModalOpen }) => {
           Indiana NRCS Standards
         </Typography>
       </Grid>
-      <Grid xs={1}></Grid>
-      <Grid xs={10}>
-        <Typography sx={{ fontSize: "20px", fontWeight: 600, float: "left" }}>
-          Seeding Rate
-        </Typography>
-      </Grid>
-      <Grid xs={1}></Grid>
-      <Grid xs={1}></Grid>
-      <Grid xs={10}>
-        <Box className="NRCS-result-container">
-          <Typography sx={{ float: "left" }}>
-            {" "}
-            {NRCS.results.seedingRate.value ? (
-              <CheckIcon sx={{ color: "green" }}></CheckIcon>
-            ) : (
-              <ClearIcon sx={{ color: "red" }}></ClearIcon>
-            )}
-          </Typography>
-          <Typography sx={{ float: "left", marginLeft: "5px" }}>
-            {NRCS.results.seedingRate.value ? "passed" : "failed"}
-          </Typography>
-          <Link
-            sx={{
-              float: "right",
-              cursor: "pointer",
-              marginTop: "2px",
-            }}
-            onClick={() => {
-              handleModalOpen(NRCS.results.seedingRate);
-            }}
-          >
-            Show Details
-          </Link>
-        </Box>
-      </Grid>
-      <Grid xs={1}></Grid>
-      <Grid xs={1}></Grid>
-      <Grid xs={10}>
-        <Typography sx={{ fontSize: "20px", fontWeight: 600, float: "left" }}>
-          Planting Date
-        </Typography>
-      </Grid>
-      <Grid xs={1}></Grid>
 
-      <Grid xs={1}></Grid>
-      <Grid xs={10}>
-        <Box className="NRCS-result-container">
-          <Typography sx={{ float: "left" }}>
-            {" "}
-            {NRCS.results.plantingDate.value ? (
-              <CheckIcon sx={{ color: "green" }}></CheckIcon>
-            ) : (
-              <ClearIcon sx={{ color: "red" }}></ClearIcon>
-            )}
-          </Typography>
-          <Typography sx={{ float: "left", marginLeft: "5px" }}>
-            {NRCS.results.plantingDate.value ? "passed" : "failed"}
-          </Typography>
-          <Link
-            sx={{
-              float: "right",
-              cursor: "pointer",
-              marginTop: "2px",
-            }}
-            onClick={() => {
-              handleModalOpen(NRCS.results.plantingDate);
-            }}
-          >
-            Show Details
-          </Link>
-        </Box>
-      </Grid>
-      <Grid xs={1}></Grid>
+      <NRCSItem
+        title={"Seeding Rate"}
+        result={NRCS.results.seedingRate.value}
+        data={NRCS.results.seedingRate}
+      />
 
-      <Grid xs={1}></Grid>
-      <Grid xs={10}>
-        <Typography sx={{ fontSize: "20px", fontWeight: 600, float: "left" }}>
-          Ratio
-        </Typography>
-      </Grid>
-      <Grid xs={1}></Grid>
-      <Grid xs={1}></Grid>
-      <Grid xs={10}>
-        <Box className="NRCS-result-container">
-          <Typography sx={{ float: "left" }}>
-            {" "}
-            {NRCS.results.ratio.value ? (
-              <CheckIcon sx={{ color: "green" }}></CheckIcon>
-            ) : (
-              <ClearIcon sx={{ color: "red" }}></ClearIcon>
-            )}
-          </Typography>
-          <Typography sx={{ float: "left", marginLeft: "10px" }}>
-            {NRCS.results.ratio.value ? "passed" : "failed"}
-          </Typography>
-          <Link
-            sx={{
-              float: "right",
-              cursor: "pointer",
-              marginTop: "2px",
-            }}
-            onClick={() => {
-              handleModalOpen(NRCS.results.ratio);
-            }}
-          >
-            Show Details
-          </Link>
-        </Box>
-      </Grid>
-      <Grid xs={1}></Grid>
+      <NRCSItem
+        title={"Planting Date"}
+        result={NRCS.results.plantingDate.value}
+        data={NRCS.results.plantingDate}
+      />
 
-      <Grid xs={1}></Grid>
-      <Grid xs={10}>
-        <Typography sx={{ fontSize: "20px", fontWeight: 600, float: "left" }}>
-          Soil Drainage
-        </Typography>
-      </Grid>
-      <Grid xs={1}></Grid>
-      <Grid xs={1}></Grid>
-      <Grid xs={10}>
-        <Box className="NRCS-result-container">
-          <Typography sx={{ float: "left" }}>
-            {NRCS.results.soilDrainage.value ? (
-              <CheckIcon sx={{ color: "green" }}></CheckIcon>
-            ) : (
-              <ClearIcon sx={{ color: "red" }}></ClearIcon>
-            )}
-          </Typography>
-          <Typography sx={{ float: "left", marginLeft: "5px" }}>
-            {NRCS.results.soilDrainage.value ? "passed" : "failed"}
-          </Typography>
-          <Link
-            sx={{
-              float: "right",
-              cursor: "pointer",
-              marginTop: "2px",
-            }}
-            onClick={() => {
-              handleModalOpen(NRCS.results.soilDrainage);
-            }}
-          >
-            Show Details
-          </Link>
-        </Box>
-      </Grid>
-      <Grid xs={1}></Grid>
+      <NRCSItem
+        title={"Ratio"}
+        result={NRCS.results.ratio.value}
+        data={NRCS.results.ratio}
+      />
 
-      <Grid xs={1}></Grid>
-      <Grid xs={10}>
-        <Typography sx={{ fontSize: "20px", fontWeight: 600, float: "left" }}>
-          Expected Winter Survival
-        </Typography>
-      </Grid>
-      <Grid xs={1}></Grid>
-      <Grid xs={1}></Grid>
-      <Grid xs={10}>
-        <Box className="NRCS-result-container">
-          <Typography sx={{ float: "left", marginLeft: "5px" }}>
-            {NRCS.results.expectedWinterSurvival.value ? (
-              <CheckIcon sx={{ color: "green" }}></CheckIcon>
-            ) : (
-              <ClearIcon sx={{ color: "red" }}></ClearIcon>
-            )}
-          </Typography>
-          <Typography sx={{ float: "left", marginLeft: "5px" }}>
-            {NRCS.results.soilDrainage.value ? "passed" : "failed"}
-          </Typography>
-          <Link
-            sx={{
-              float: "right",
-              cursor: "pointer",
-              marginTop: "2px",
-            }}
-            onClick={() => {
-              handleModalOpen(NRCS.results.expectedWinterSurvival);
-            }}
-          >
-            Show Details
-          </Link>
-        </Box>
-      </Grid>
-      <Grid xs={1}></Grid>
+      <NRCSItem
+        title={"Soil Drainage"}
+        result={NRCS.results.soilDrainage.value}
+        data={NRCS.results.soilDrainage}
+      />
+
+      <NRCSItem
+        title={"Expected Winter Survival"}
+        result={NRCS.results.expectedWinterSurvival.value}
+        data={NRCS.results.expectedWinterSurvival}
+      />
     </>
   );
 };
+
 export default NRCSStandards;
