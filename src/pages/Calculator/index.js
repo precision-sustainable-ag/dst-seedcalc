@@ -19,7 +19,6 @@ import {
 } from "./Steps";
 
 import { calculatorList, completedList } from "../../shared/data/dropdown";
-import { Header } from "../../components/Header";
 import { StepsList } from "../../components/StepsList";
 import "./calculator.css";
 import "./../Home/home.css";
@@ -27,53 +26,10 @@ import "./../Home/home.css";
 const Calculator = () => {
   const data = useSelector((state) => state.steps.value);
   const type = data.siteCondition.council;
+
   const [activeStep, setActiveStep] = useState(0);
-  const [skipped, setSkipped] = useState(new Set());
+  // this completedStep is to determine whether the next button is clickable on each page
   const [completedStep, setCompletedStep] = useState([...completedList]);
-
-  //////////////////////////////////////////////////////////
-  //                      State Logic                     //
-  //////////////////////////////////////////////////////////
-
-  const isStepOptional = (step) => {
-    return step === 1;
-  };
-
-  const isStepSkipped = (step) => {
-    return skipped.has(step);
-  };
-
-  const handleNext = () => {
-    let newSkipped = skipped;
-    if (isStepSkipped(activeStep)) {
-      newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(activeStep);
-    }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped(newSkipped);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleSkip = () => {
-    if (!isStepOptional(activeStep)) {
-      throw new Error("You can't skip a step that isn't optional.");
-    }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped((prevSkipped) => {
-      const newSkipped = new Set(prevSkipped.values());
-      newSkipped.add(activeStep);
-      return newSkipped;
-    });
-  };
-
-  const handleReset = () => {
-    setActiveStep(0);
-  };
 
   //////////////////////////////////////////////////////////
   //                      Render                          //
@@ -192,16 +148,9 @@ const Calculator = () => {
         style={{ mt: 1, mb: 1.5 }}
       /> */}
       <StepsList
-        steps={calculatorList}
         activeStep={activeStep}
-        skipped={skipped}
-        handleNext={handleNext}
-        handleBack={handleBack}
-        handleSkip={handleSkip}
-        handleReset={handleReset}
-        completedStep={completedStep}
-        setCompletedStep={setCompletedStep}
-        className="steps-container"
+        setActiveStep={setActiveStep}
+        availableSteps={completedStep}
       />
       {renderCalculator(
         activeStep === calculatorList.length
