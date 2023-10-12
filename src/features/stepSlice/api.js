@@ -72,7 +72,6 @@ export const getZoneData = createAsyncThunk(
   async ({ zip }, thunkAPI) => {
     const url = `https://phzmapi.org/${zip}.json`;
     const res = await fetch(url).then((data) => data.json());
-    console.log("response for zones", res);
     return res.zone;
   }
 );
