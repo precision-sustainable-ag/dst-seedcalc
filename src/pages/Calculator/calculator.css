@@ -7,8 +7,8 @@
   margin-bottom: 40px;
 }
 .dst-header-container {
-  max-height: 100px;
-  height: 100px;
+  max-height: 80px;
+  height: 80px;
   width: 100%;
-  padding: 10px 0;
+  margin: 10px !important;
 }

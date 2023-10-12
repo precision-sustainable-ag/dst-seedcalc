@@ -1,7 +1,8 @@
+import { Fragment } from "react";
 import Grid from "@mui/material/Grid";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { Typography, Box, Link, Button, Modal } from "@mui/material";
+import { Typography } from "@mui/material";
 import { NumberTextField } from "../../../../components/NumberTextField";
 import { DSTTextField } from "../../../../components/DSTTextField";
 import { DSTSwitch } from "../../../../components/Switch";
@@ -9,16 +10,14 @@ import { DSTSwitch } from "../../../../components/Switch";
 import NRCSStandards from "./NRCSStandards";
 import "./../steps.css";
 
-const ConfirmPlanForm = ({
-  updateSeed,
-  NRCS,
-  handleModal,
-  data,
-  speciesSelection,
-}) => {
+const ConfirmPlanForm = ({ updateSeed, data }) => {
+  const speciesSelection = data.speciesSelection;
+  const NRCS = data.NRCS;
+
   const theme = useTheme();
   const matchesMd = useMediaQuery(theme.breakpoints.down("md"));
   const matchesUpMd = useMediaQuery(theme.breakpoints.up("md"));
+
   const renderSeedData = (seed) => {
     return (
       <Grid container xs={12}>
@@ -31,6 +30,7 @@ const ConfirmPlanForm = ({
       </Grid>
     );
   };
+
   const renderStepsForm = (label1, label2, label3) => {
     if (Array.isArray(label2)) {
       return (
@@ -95,6 +95,7 @@ const ConfirmPlanForm = ({
       );
     }
   };
+
   const renderTotalCostOfMix = (data) => {
     const totalCostOfMix = data.speciesSelection.seedsSelected.reduce(
       (sum, a) => sum + a.totalCost,
@@ -125,7 +126,7 @@ const ConfirmPlanForm = ({
         {data.speciesSelection.seedsSelected.map((s, i) => {
           if (i !== 0) {
             return (
-              <>
+              <Fragment key={i}>
                 <Grid item xs={3} className="confirm-plan-form-container">
                   <DSTTextField
                     className="text-field-100"
@@ -143,7 +144,7 @@ const ConfirmPlanForm = ({
                       : "="}
                   </Typography>
                 </Grid>
-              </>
+              </Fragment>
             );
           }
         })}
@@ -160,6 +161,7 @@ const ConfirmPlanForm = ({
       </Grid>
     );
   };
+
   const renderConfirmPlanForm = (seed) => {
     return (
       <Grid container xs={12}>
@@ -282,13 +284,11 @@ const ConfirmPlanForm = ({
   return (
     <Grid container xs={12}>
       {/* NRCS Standards */}
-      {NRCS.enabled && (
-        <NRCSStandards handleModalOpen={handleModal} NRCS={NRCS} />
-      )}
+      {NRCS.enabled && <NRCSStandards NRCS={NRCS} />}
       <Grid item xs={12}>
         {" "}
         {speciesSelection.seedsSelected.map((s, i) => {
-          return <> {renderSeedData(s)}</>;
+          return <Fragment key={i}> {renderSeedData(s)}</Fragment>;
         })}
         {renderTotalCostOfMix(data)}
       </Grid>
