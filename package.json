@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "mapbox-gl": "^2.10.0",
     "@date-io/jalaali": "^2.17.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
@@ -56,7 +57,6 @@
   },
   "devDependencies": {
     "@psa/dst.ui.region-selector-map": "^0.0.16",
-    "mapbox-gl": "^2.10.0",
     "sass": "^1.67.0"
   }
 }
