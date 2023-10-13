@@ -68,9 +68,12 @@ export const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
               key={label}
               sx={{ color: "#4f5f30" }}
               completed={index <= completedStep}
+              disabled={completedStep < 1}
             >
               <StepButton
-                className="steps-label"
+                className={`steps-label ${
+                  completedStep >= 1 ? "available-step" : ""
+                }`}
                 onClick={() => setActiveStep(index)}
               >
                 {matches && label}
