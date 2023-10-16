@@ -29,10 +29,11 @@ export const calculateAveragePercentage = (nums) => {
 
 export const calculateAllMixRatioValues = (prevSeed, data) => {
   let seed = { ...prevSeed };
-  const percentInGroup = generatePercentInGroup(
-    prevSeed,
-    data.speciesSelection.seedsSelected
-  );
+  // const percentInGroup = generatePercentInGroup(
+  //   prevSeed,
+  //   data.speciesSelection.seedsSelected
+  // );
+  // TODO: investigate this function, it changes these values when user hit button in step 3
   seed.mixSeedingRate = calculateMixRatio("step1", seed).val.toFixed(2);
   seed.seedsPerAcre = calculateMixRatio("step2", seed).val.toFixed(2);
   seed.plantsPerAcre = calculateMixRatio("step3", seed).val.toFixed(2);
@@ -47,6 +48,7 @@ export const calculateMixRatio = (step, seed) => {
         key: "mixSeedingRate",
         val: calculateInt(
           [
+            // TODO: seeding rate changed here
             seed.singleSpeciesSeedingRatePLS,
             convertToDecimal(seed.percentOfSingleSpeciesRate),
           ],

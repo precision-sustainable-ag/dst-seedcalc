@@ -95,6 +95,9 @@ const MixRatio = ({ council }) => {
     seeds[index][key] = val;
     handleUpdateSteps("seedsSelected", seeds);
 
+    // FIXME: this calculates the steps value again, not sure why doing this
+    // and the calculation causes the value changes
+
     // create new copy of recently updated Redux state, calculate & update all seed's step data.
     let newData = [...seeds];
     newData[index] =
@@ -272,6 +275,7 @@ const MixRatio = ({ council }) => {
         <Grid item xs={12}>
           <Button
             onClick={(e) => {
+              // TODO: calculation here leads to value change
               updateSeed(!seed.showSteps, "showSteps", seed);
             }}
             variant="outlined"

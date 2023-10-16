@@ -307,7 +307,8 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
       totalCost: 0,
       addedToMix: 0,
     };
-    newSeed = calculateAllMixRatioValues(newSeed, data);
+    // newSeed = calculateAllMixRatioValues(newSeed, data);
+    // FIXME: is there need to use different calculations for MCCC and NECCC
     // three checks:
     // * seedlength is 0
     // * seed already exists
@@ -322,7 +323,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
       // update Redux with the seedsSelected and diversitySelected with the new list.
       handleUpdateStore("speciesSelection", "seedsSelected", [
         ...newList,
-        newSeed,
+        calculateAllMixRatioValues(newSeed, data),
       ]);
       handleUpdateStore("speciesSelection", "diversitySelected", [
         ...diversitySelected,
@@ -337,12 +338,15 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
         const filterList = seedsSelected.filter(
           (item) => item.label !== seed.label
         );
-        const newList = filterList.map((n, i) => {
-          return {
-            ...n,
-            percentOfSingleSpeciesRate: (1 / (seedsSelected.length + 1)) * 100,
-          };
-        });
+        const newList = filterList
+          .map((n, i) => {
+            return {
+              ...n,
+              percentOfSingleSpeciesRate:
+                (1 / (seedsSelected.length + 1)) * 100,
+            };
+          })
+          .map((seed) => calculateAllMixRatioValues(seed));
         handleUpdateStore("speciesSelection", "seedsSelected", newList);
         const seedResult = seedsSelected.filter((i) => {
           return i.group.label === species;
@@ -363,10 +367,11 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
             percentOfSingleSpeciesRate: (1 / (seedsSelected.length + 1)) * 100,
           };
         });
-        handleUpdateStore("speciesSelection", "seedsSelected", [
-          ...newList,
-          newSeed,
-        ]);
+        handleUpdateStore(
+          "speciesSelection",
+          "seedsSelected",
+          [...newList, newSeed].map((seed) => calculateAllMixRatioValues(seed))
+        );
         if (!diversitySelected.includes(species)) {
           handleUpdateStore("speciesSelection", "diversitySelected", [
             ...diversitySelected,
