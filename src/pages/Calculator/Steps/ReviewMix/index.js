@@ -300,8 +300,7 @@ const ReviewMix = ({ council }) => {
         <AccordionSummary
           xs={12}
           expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
+          className="accordian-summary"
         >
           <Typography>{data.label}</Typography>
         </AccordionSummary>
@@ -511,100 +510,89 @@ const ReviewMix = ({ council }) => {
   };
 
   return (
-    <Grid xs={12} container>
-      {renderSeedsSelected()}
-      <Grid
-        xs={12}
-        md={speciesSelection.seedsSelected.length > 0 ? 11 : 12}
-        item
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Grid item xs={12}>
-          <Typography variant="h2">Review your mix</Typography>
-          <Grid container xs={12}>
-            <Grid item xs={6} md={6} className="mix-ratio-chart-container">
-              {council === "MCCC" ? (
-                <PieChartComponent
-                  type={"plantsPerAcre"}
-                  plantsPerAcreArray={plantsPerAcreArray}
-                  seedsPerAcreArray={seedsPerAcreArray}
-                  poundsOfSeedArray={poundsOfSeedArray}
-                  COLORS={COLORS}
-                  renderCustomizedLabel={renderCustomizedLabel}
-                />
-              ) : (
-                <PieChartComponent
-                  type={"seedsPerAcre"}
-                  plantsPerAcreArray={plantsPerAcreArray}
-                  seedsPerAcreArray={seedsPerAcreArray}
-                  poundsOfSeedArray={poundsOfSeedArray}
-                  COLORS={COLORS}
-                  renderCustomizedLabel={renderCustomizedLabel}
-                />
-              )}
-              <Typography className="mix-ratio-chart-header">
-                {council === "MCCC"
-                  ? "Pounds of Seed / Acre"
-                  : "Seeds Per Acre"}
-              </Typography>
-              <Grid item className="mix-ratio-chart-list-50">
-                {speciesSelection.seedsSelected.map((s, i) => {
-                  return (
-                    <Grid container xs={12}>
-                      <Grid item xs={2}>
-                        <Square sx={{ color: COLORS[i] }}></Square>
-                      </Grid>
-                      <Grid item xs={10}>
-                        <Typography className={matchesMd ? "mix-label-md" : ""}>
-                          {s.label}
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                  );
-                })}
-              </Grid>
-            </Grid>
-            <Grid item xs={6} md={6} className="mix-ratio-chart-container">
+    <Grid container>
+      <Grid item xs={12}>
+        <Typography variant="h2">Review your mix</Typography>
+        <Grid container xs={12}>
+          <Grid item xs={6} md={6} className="mix-ratio-chart-container">
+            {council === "MCCC" ? (
               <PieChartComponent
-                type={"poundsOfSeed"}
+                type={"plantsPerAcre"}
                 plantsPerAcreArray={plantsPerAcreArray}
                 seedsPerAcreArray={seedsPerAcreArray}
                 poundsOfSeedArray={poundsOfSeedArray}
                 COLORS={COLORS}
                 renderCustomizedLabel={renderCustomizedLabel}
               />
-
-              <Typography className="mix-ratio-chart-header">
-                {council === "MCCC" ? "Plants" : "Seeds"} Per Acre{" "}
-              </Typography>
-              <Grid item className="mix-ratio-chart-list-50">
-                {speciesSelection.seedsSelected.map((s, i) => {
-                  return (
-                    <Grid container xs={12}>
-                      <Grid item xs={2}>
-                        <Square sx={{ color: COLORS[i] }}></Square>
-                      </Grid>
-                      <Grid item xs={10}>
-                        <Typography className={matchesMd ? "mix-label-md" : ""}>
-                          {s.label}
-                        </Typography>
-                      </Grid>
+            ) : (
+              <PieChartComponent
+                type={"seedsPerAcre"}
+                plantsPerAcreArray={plantsPerAcreArray}
+                seedsPerAcreArray={seedsPerAcreArray}
+                poundsOfSeedArray={poundsOfSeedArray}
+                COLORS={COLORS}
+                renderCustomizedLabel={renderCustomizedLabel}
+              />
+            )}
+            <Typography className="mix-ratio-chart-header">
+              {council === "MCCC" ? "Pounds of Seed / Acre" : "Seeds Per Acre"}
+            </Typography>
+            <Grid item className="mix-ratio-chart-list-50">
+              {speciesSelection.seedsSelected.map((s, i) => {
+                return (
+                  <Grid container xs={12}>
+                    <Grid item xs={2}>
+                      <Square sx={{ color: COLORS[i] }}></Square>
                     </Grid>
-                  );
-                })}
-              </Grid>
+                    <Grid item xs={10}>
+                      <Typography className={matchesMd ? "mix-label-md" : ""}>
+                        {s.label}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                );
+              })}
             </Grid>
           </Grid>
-          <Grid container xs={12}>
-            {speciesSelection.seedsSelected.map((s, i) => {
-              return (
-                <Grid item xs={12}>
-                  {renderAccordian(s)}
-                </Grid>
-              );
-            })}
+          <Grid item xs={6} md={6} className="mix-ratio-chart-container">
+            <PieChartComponent
+              type={"poundsOfSeed"}
+              plantsPerAcreArray={plantsPerAcreArray}
+              seedsPerAcreArray={seedsPerAcreArray}
+              poundsOfSeedArray={poundsOfSeedArray}
+              COLORS={COLORS}
+              renderCustomizedLabel={renderCustomizedLabel}
+            />
+
+            <Typography className="mix-ratio-chart-header">
+              {council === "MCCC" ? "Plants" : "Seeds"} Per Acre{" "}
+            </Typography>
+            <Grid item className="mix-ratio-chart-list-50">
+              {speciesSelection.seedsSelected.map((s, i) => {
+                return (
+                  <Grid container xs={12}>
+                    <Grid item xs={2}>
+                      <Square sx={{ color: COLORS[i] }}></Square>
+                    </Grid>
+                    <Grid item xs={10}>
+                      <Typography className={matchesMd ? "mix-label-md" : ""}>
+                        {s.label}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                );
+              })}
+            </Grid>
           </Grid>
+        </Grid>
+        <Grid container xs={12}>
+          {speciesSelection.seedsSelected.map((s, i) => {
+            return (
+              <Grid item xs={12}>
+                {renderAccordian(s)}
+              </Grid>
+            );
+          })}
         </Grid>
       </Grid>
     </Grid>

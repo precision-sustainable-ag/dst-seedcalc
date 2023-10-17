@@ -95,53 +95,44 @@ const ConfirmPlan = ({ council }) => {
   //////////////////////////////////////////////////////////
 
   return (
-    <Grid xs={12} container>
-      <SeedsSelectedList list={speciesSelection.seedsSelected} />
-      <Grid
-        xs={12}
-        md={speciesSelection.seedsSelected.length > 0 ? 11 : 12}
-        item
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Grid item xs={12}>
-          <Typography variant="h2">Confirm your plan</Typography>
+    <Grid container>
+      <Grid item xs={12}>
+        <Typography variant="h2">Confirm your plan</Typography>
 
-          {/* Export */}
+        {/* Export */}
 
-          <Grid container sx={{ marginTop: "5px" }} xs={12}>
-            <Grid item xs={matchesUpMd ? 11 : 10}></Grid>
-            <Grid item xs={matchesUpMd ? 1 : 2}>
-              <Button
-                className="export-button"
-                onClick={() => {
-                  handleDownload(
-                    [
-                      ...speciesSelection.seedsSelected,
-                      {
-                        ...generateSeedNull(),
-                        label: "EXT-DATA-OBJECT",
-                        extData: JSON.stringify(data),
-                      },
-                    ],
-                    council
-                  );
-                }}
-              >
-                Export
-              </Button>
-            </Grid>
+        <Grid container sx={{ marginTop: "5px" }} xs={12}>
+          <Grid item xs={matchesUpMd ? 11 : 10}></Grid>
+          <Grid item xs={matchesUpMd ? 1 : 2}>
+            <Button
+              className="export-button"
+              onClick={() => {
+                handleDownload(
+                  [
+                    ...speciesSelection.seedsSelected,
+                    {
+                      ...generateSeedNull(),
+                      label: "EXT-DATA-OBJECT",
+                      extData: JSON.stringify(data),
+                    },
+                  ],
+                  council
+                );
+              }}
+            >
+              Export
+            </Button>
           </Grid>
-
-          {/* Charts */}
-
-          <ConfirmPlanCharts
-            council={council}
-            speciesSelection={speciesSelection}
-            matchesMd={matchesMd}
-          />
-          <ConfirmPlanForm updateSeed={updateSeed} data={data} />
         </Grid>
+
+        {/* Charts */}
+
+        <ConfirmPlanCharts
+          council={council}
+          speciesSelection={speciesSelection}
+          matchesMd={matchesMd}
+        />
+        <ConfirmPlanForm updateSeed={updateSeed} data={data} />
       </Grid>
     </Grid>
   );

@@ -225,7 +225,7 @@ const Calculator = () => {
         />
       </Grid>
 
-      {activeStep > 0 && (
+      {activeStep > 0 && activeStep < 7 && (
         <Grid
           item
           xs={12}

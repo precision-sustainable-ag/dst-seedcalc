@@ -52,9 +52,7 @@ const MixSeedingRate = ({ council }) => {
   const handleSeedingMethod = (e) => {
     handleUpdateSteps("type", e.target.value);
   };
-  const renderSeedsSelected = () => {
-    return <SeedsSelectedList list={seedsSelected} />;
-  };
+
   const renderRightAccordian = (type, val) => {
     return (
       <Grid item xs={6} className="mix-seeding-rate-grid-right">
@@ -88,8 +86,7 @@ const MixSeedingRate = ({ council }) => {
         <AccordionSummary
           xs={12}
           expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
+          className="accordian-summary"
         >
           <Typography>{seed.label}</Typography>
         </AccordionSummary>
@@ -125,36 +122,27 @@ const MixSeedingRate = ({ council }) => {
   //////////////////////////////////////////////////////////
 
   return (
-    <Grid xs={12} container>
-      {seedsSelected.length > 0 && renderSeedsSelected()}
-      <Grid
-        xs={seedsSelected.length > 0 ? 12 : 12}
-        md={seedsSelected.length > 0 ? 11 : 12}
-        item
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Grid item xs={12}>
-          <Typography variant="h2">Mix Seeding Rate</Typography>
-        </Grid>
-        <Grid item xs={12} padding={15} className="">
-          <Dropdown
-            value={seedingMethod.type}
-            label={"Seeding Method: "}
-            handleChange={handleSeedingMethod}
-            size={12}
-            items={seedingMethods}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          {seedsSelected.map((s, i) => {
-            return (
-              <Grid xs={12}>
-                <Grid item>{renderAccordian(s)}</Grid>
-              </Grid>
-            );
-          })}
-        </Grid>
+    <Grid container>
+      <Grid item xs={12}>
+        <Typography variant="h2">Mix Seeding Rate</Typography>
+      </Grid>
+      <Grid item xs={12} padding={"15px"} className="">
+        <Dropdown
+          value={seedingMethod.type}
+          label={"Seeding Method: "}
+          handleChange={handleSeedingMethod}
+          size={12}
+          items={seedingMethods}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        {seedsSelected.map((s, i) => {
+          return (
+            <Grid xs={12}>
+              <Grid item>{renderAccordian(s)}</Grid>
+            </Grid>
+          );
+        })}
       </Grid>
     </Grid>
   );

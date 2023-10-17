@@ -103,8 +103,7 @@ const SeedTagInfo = ({ council }) => {
         <AccordionSummary
           xs={12}
           expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
+          className="accordian-summary"
         >
           <Typography>{data.label}</Typography>
         </AccordionSummary>
@@ -137,31 +136,22 @@ const SeedTagInfo = ({ council }) => {
     setSameInfoActive(!sameInfoActive);
   };
   return (
-    <Grid xs={12} container>
-      {seedsSelected.length > 0 && renderSeedsSelected()}
-      <Grid
-        xs={seedsSelected.length > 0 ? 12 : 12}
-        md={seedsSelected.length > 0 ? 11 : 12}
-        item
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Grid item xs={12}>
-          <Typography variant="h2">Enter seed tag info</Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <DSTSwitch checked={sameInfoActive} handleChange={handleSwitch} />{" "}
-          Same Information for All Species
-        </Grid>
-        <Grid item xs={12}>
-          {speciesSelection.seedsSelected.map((s, i) => {
-            return (
-              <Grid xs={12}>
-                <Grid item>{renderAccordian(s)}</Grid>
-              </Grid>
-            );
-          })}
-        </Grid>
+    <Grid container>
+      <Grid item xs={12}>
+        <Typography variant="h2">Enter seed tag info</Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <DSTSwitch checked={sameInfoActive} handleChange={handleSwitch} /> Same
+        Information for All Species
+      </Grid>
+      <Grid item xs={12}>
+        {speciesSelection.seedsSelected.map((s, i) => {
+          return (
+            <Grid xs={12}>
+              <Grid item>{renderAccordian(s)}</Grid>
+            </Grid>
+          );
+        })}
       </Grid>
     </Grid>
   );
