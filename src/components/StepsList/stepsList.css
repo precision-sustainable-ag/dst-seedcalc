@@ -1,17 +1,15 @@
 .stepper-container {
-    overflow: auto;
-    color: #4f5f30 !important;
+  color: #4f5f30 !important;
 }
 
-
 .stepper-container .MuiStepLabel-iconContainer .Mui-active {
-    color: #4f5f30 !important;
+  color: #4f5f30 !important;
 }
 
 .stepper-container .MuiStepLabel-iconContainer .Mui-completed {
-    color: #77b400 !important;
+  color: #77b400 !important;
 }
 
 .steps-label {
-    color: red !important;
+  color: red !important;
 }

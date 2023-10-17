@@ -2,9 +2,10 @@
 //                      Imports                         //
 //////////////////////////////////////////////////////////
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Grid from "@mui/material/Grid";
 import { useSelector } from "react-redux";
+import { useMediaQuery } from "@mui/material";
 
 import {
   SiteCondition,
@@ -20,6 +21,7 @@ import {
 
 import { calculatorList, completedList } from "../../shared/data/dropdown";
 import { StepsList } from "../../components/StepsList";
+import { useTheme } from "@mui/material/styles";
 
 const Calculator = () => {
   const data = useSelector((state) => state.steps.value);
@@ -27,6 +29,12 @@ const Calculator = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
   const [completedStep, setCompletedStep] = useState([...completedList]);
+  const [showHeaderLogo, setShowHeaderLogo] = useState(true);
+
+  const stepperRef = useRef();
+
+  const theme = useTheme();
+  const matchesSm = useMediaQuery(theme.breakpoints.down("sm"));
 
   //////////////////////////////////////////////////////////
   //                      State Logic                     //
@@ -161,9 +169,24 @@ const Calculator = () => {
     else if (data.siteCondition.council === "NECCC") return "./neccc-logo.png";
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 85) {
+        // Adjust the scroll threshold as needed
+        setShowHeaderLogo(false);
+      } else {
+        setShowHeaderLogo(true);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <Grid container>
-      <Grid item xs={12} mt={"10px"} mb={"10px"}>
+      <Grid item xs={12} paddingTop={"10px"} height={"85px"}>
         <img
           alt={data.siteCondition.council}
           src={headerLogo()}
@@ -171,28 +194,48 @@ const Calculator = () => {
         />
       </Grid>
 
-      {/* <Header
-        headerVariant="dstHeader"
-        text="Seeding Rate Calculator"
-        size={12}
-        style={{ mt: 1, mb: 1.5 }}
-      /> */}
-      <StepsList
-        steps={calculatorList}
-        activeStep={activeStep}
-        skipped={skipped}
-        handleNext={handleNext}
-        handleBack={handleBack}
-        handleSkip={handleSkip}
-        handleReset={handleReset}
-        completedStep={completedStep}
-        setCompletedStep={setCompletedStep}
-      />
-      {renderCalculator(
-        activeStep === calculatorList.length
-          ? "Finish"
-          : calculatorList[activeStep]
-      )}
+      <Grid
+        item
+        xs={12}
+        sx={
+          matchesSm && !showHeaderLogo
+            ? {
+                position: "fixed",
+                width: "100%",
+                paddingTop: "20px",
+                backgroundColor: "primary.light",
+                top: "0",
+                zIndex: "100",
+              }
+            : { paddingTop: "20px" }
+        }
+        // height={"100px"}
+        ref={stepperRef}
+      >
+        <StepsList
+          steps={calculatorList}
+          activeStep={activeStep}
+          skipped={skipped}
+          handleNext={handleNext}
+          handleBack={handleBack}
+          handleSkip={handleSkip}
+          handleReset={handleReset}
+          completedStep={completedStep}
+          setCompletedStep={setCompletedStep}
+        />
+      </Grid>
+
+      <Grid
+        item
+        xs={12}
+        sx={matchesSm && !showHeaderLogo ? { paddingTop: "90px" } : {}}
+      >
+        {renderCalculator(
+          activeStep === calculatorList.length
+            ? "Finish"
+            : calculatorList[activeStep]
+        )}
+      </Grid>
     </Grid>
   );
 };

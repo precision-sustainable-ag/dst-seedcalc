@@ -42,7 +42,7 @@ export const StepsList = ({
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
 
   return (
-    <Box sx={{ width: "100%", color: "#4f5f30" }}>
+    <Box sx={{ color: "primary.text" }}>
       <Stepper
         activeStep={activeStep}
         alternativeLabel
@@ -58,14 +58,14 @@ export const StepsList = ({
       </Stepper>
       {activeStep === steps.length ? (
         <Fragment>
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+          <Box sx={{ display: "flex", flexDirection: "row", pt: 1 }}>
             <Box sx={{ flex: "1 1 auto" }} />
             <Button onClick={handleReset}>Reset</Button>
           </Box>
         </Fragment>
       ) : (
         <Fragment>
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+          <Box sx={{ display: "flex", flexDirection: "row", pt: 1 }}>
             <Button
               color="inherit"
               disabled={activeStep === 0}
