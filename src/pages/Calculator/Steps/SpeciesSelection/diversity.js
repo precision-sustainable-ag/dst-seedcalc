@@ -18,25 +18,20 @@ const Diversity = ({ diversitySelected }) => {
   };
 
   return (
-    <Grid container justify="space-between" alignItems="stretch">
-      <Grid
-        container
-        xs={12}
-        className="progress-bar"
-        justify="space-between"
-        alignItems="stretch"
-      >
+    <Grid container>
+      <Typography color={"primary.text"} pt={"1rem"}>
+        Mix Diversity
+      </Typography>
+      <Grid container className="progress-bar">
         {diversitySelected &&
           diversitySelected.length > 0 &&
           diversitySelected.map((d, i) => {
             return (
-              <Fade in={true}>
-                <Grid
-                  item
-                  xs={calculateSize()}
-                  className="progress-bar-item"
-                ></Grid>
-              </Fade>
+              <Grid
+                item
+                xs={calculateSize()}
+                className="progress-bar-item"
+              ></Grid>
             );
           })}
       </Grid>

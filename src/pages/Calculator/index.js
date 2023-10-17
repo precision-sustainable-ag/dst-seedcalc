@@ -5,7 +5,7 @@
 import { useEffect, useRef, useState } from "react";
 import Grid from "@mui/material/Grid";
 import { useSelector } from "react-redux";
-import { useMediaQuery } from "@mui/material";
+import { Typography, useMediaQuery, Box } from "@mui/material";
 
 import {
   SiteCondition,
@@ -18,6 +18,7 @@ import {
   SeedingMethod,
   CompletedPage,
 } from "./Steps";
+import SeedsSelectedList from "../../components/SeedsSelectedList";
 
 import { calculatorList, completedList } from "../../shared/data/dropdown";
 import { StepsList } from "../../components/StepsList";
@@ -204,8 +205,7 @@ const Calculator = () => {
                 width: "100%",
                 paddingTop: "20px",
                 backgroundColor: "primary.light",
-                top: "0",
-                zIndex: "100",
+                zIndex: "101",
               }
             : { paddingTop: "20px" }
         }
@@ -225,10 +225,31 @@ const Calculator = () => {
         />
       </Grid>
 
+      {activeStep > 0 && (
+        <Grid
+          item
+          xs={12}
+          md={1}
+          sx={
+            matchesSm && !showHeaderLogo
+              ? {
+                  position: "fixed",
+                  width: "100%",
+                  paddingTop: "88px",
+                  zIndex: "100",
+                }
+              : {}
+          }
+        >
+          <SeedsSelectedList list={data.speciesSelection.seedsSelected} />
+        </Grid>
+      )}
+
       <Grid
         item
         xs={12}
-        sx={matchesSm && !showHeaderLogo ? { paddingTop: "90px" } : {}}
+        md={activeStep > 0 ? 11 : 12}
+        sx={matchesSm && !showHeaderLogo ? { paddingTop: "194px" } : {}}
       >
         {renderCalculator(
           activeStep === calculatorList.length

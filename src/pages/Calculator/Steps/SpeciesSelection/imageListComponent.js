@@ -48,6 +48,7 @@ const ImageListComponent = ({
                   : "https://www.gardeningknowhow.com/wp-content/uploads/2020/04/spinach.jpg"
               ) + Math.random()
             }
+            sx={{ "&:hover": { cursor: "pointer" } }}
           >
             {council === "NECCC" &&
               checkPlantingDate(
@@ -91,7 +92,6 @@ const ImageListComponent = ({
               loading="lazy"
             />
             <Link
-              className="img-text"
               onClick={(e) => {
                 updateSeeds(seeds, seed);
               }}

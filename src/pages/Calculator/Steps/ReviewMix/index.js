@@ -298,7 +298,6 @@ const ReviewMix = ({ council }) => {
     return (
       <Accordion xs={12} className="accordian-container">
         <AccordionSummary
-          className="accordian-header"
           xs={12}
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
