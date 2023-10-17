@@ -205,6 +205,7 @@ const Calculator = () => {
                 width: "100%",
                 paddingTop: "20px",
                 backgroundColor: "primary.light",
+                height: "90px",
                 zIndex: "101",
               }
             : { paddingTop: "20px" }
@@ -235,7 +236,7 @@ const Calculator = () => {
               ? {
                   position: "fixed",
                   width: "100%",
-                  paddingTop: "88px",
+                  paddingTop: "90px",
                   zIndex: "100",
                 }
               : {}
@@ -249,7 +250,7 @@ const Calculator = () => {
         item
         xs={12}
         md={activeStep > 0 ? 11 : 12}
-        sx={matchesSm && !showHeaderLogo ? { paddingTop: "194px" } : {}}
+        sx={matchesSm && !showHeaderLogo ? { paddingTop: "190px" } : {}}
       >
         {renderCalculator(
           activeStep === calculatorList.length

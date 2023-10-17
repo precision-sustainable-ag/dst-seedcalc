@@ -22,7 +22,7 @@ function App() {
     <ThemeProvider theme={dstTheme}>
       <div className="App">
         {/* TODO: modal not used now */}
-        <DSTModal
+        {/* <DSTModal
           isOpen={modalState.isOpen}
           setModal={handleModal}
           handleClose={handleModal}
@@ -35,7 +35,7 @@ function App() {
               : modalState.successMessage
           }
           style={{}}
-        />
+        /> */}
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />

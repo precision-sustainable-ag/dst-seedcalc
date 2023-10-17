@@ -145,13 +145,13 @@ const Home = () => {
 
   return (
     <Fragment>
-      <Grid container spacing={2}>
+      <Grid container>
         <Header
           className="header-container"
           headerVariant="dstHeaderHome"
           text="Seeding Rate Calculator"
           size={12}
-          style={{ mt: 5 }}
+          // style={{ mt: 5 }}
         />
 
         {renderHome()}

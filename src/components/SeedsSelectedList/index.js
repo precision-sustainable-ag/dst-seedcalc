@@ -12,47 +12,50 @@ const SeedsSelectedList = ({ list }) => {
   const matchesMd = useMediaQuery(theme.breakpoints.down("md"));
   return (
     <Box
-      sx={{
-        width: "100%",
-        height: " 100%",
-        backgroundColor: "#e5e7d5",
-        border: "#c7c7c7 solid 1px",
-      }}
+      sx={
+        matchesMd
+          ? {
+              height: "100px",
+              whiteSpace: "normal",
+              overflowX: "auto",
+            }
+          : {
+              height: "100%",
+            }
+      }
+      bgcolor={"#e5e7d5"}
+      border={"#c7c7c7 solid 1px"}
+      display={"flex"}
+      flexDirection={matchesMd ? "row" : "column"}
     >
-      <Grid
-        container
-        sx={{ flexWrap: "nowrap", overflowX: "auto" }}
-        flexDirection={matchesMd ? "row" : "column"}
-      >
-        {list.map((s, idx) => {
-          return (
-            <Grid item sx={{ padding: "0px 15px" }}>
-              <img
-                style={{
-                  borderRadius: "50%",
-                  width: "60px",
-                  height: "60px",
-                  marginTop: "10px",
-                }}
-                src={
-                  s.thumbnail !== null && s.thumbnail !== ""
-                    ? s.thumbnail
-                    : "https://www.gardeningknowhow.com/wp-content/uploads/2020/04/spinach.jpg"
-                }
-                alt={s.label}
-                loading="lazy"
-              />
-              <Typography
-                color={"primary.text"}
-                fontSize={"12px"}
-                lineHeight={1.25}
-              >
-                {s.label}
-              </Typography>
-            </Grid>
-          );
-        })}{" "}
-      </Grid>
+      {list.map((s, idx) => {
+        return (
+          <Box minWidth={"120px"}>
+            <img
+              style={{
+                borderRadius: "50%",
+                width: "60px",
+                height: "60px",
+                marginTop: "10px",
+              }}
+              src={
+                s.thumbnail !== null && s.thumbnail !== ""
+                  ? s.thumbnail
+                  : "https://www.gardeningknowhow.com/wp-content/uploads/2020/04/spinach.jpg"
+              }
+              alt={s.label}
+              loading="lazy"
+            />
+            <Typography
+              color={"primary.text"}
+              fontSize={"12px"}
+              lineHeight={1.25}
+            >
+              {s.label}
+            </Typography>
+          </Box>
+        );
+      })}{" "}
     </Box>
   );
 };
