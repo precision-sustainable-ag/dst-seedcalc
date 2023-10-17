@@ -8,7 +8,7 @@ import { DSTTextField } from "../../../../components/DSTTextField";
 import { DSTSwitch } from "../../../../components/Switch";
 
 import NRCSStandards from "./NRCSStandards";
-import "./../steps.css";
+import "./../steps.scss";
 
 const ConfirmPlanForm = ({ updateSeed, data }) => {
   const speciesSelection = data.speciesSelection;

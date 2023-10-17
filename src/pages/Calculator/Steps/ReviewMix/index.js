@@ -31,7 +31,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { updateSteps } from "../../../../features/stepSlice";
 import { calculateAllMixValues } from "./../../../../shared/utils/calculate";
 import { generateNRCSStandards } from "../../../../shared/utils/NRCS/calculateNRCS";
-import "./../steps.css";
+import "./../steps.scss";
 import SeedsSelectedList from "../../../../components/SeedsSelectedList";
 import StripedLabels from "./StripedLabels";
 import ReviewMixSteps from "./Steps";

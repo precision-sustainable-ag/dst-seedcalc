@@ -9,7 +9,7 @@ import {
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import DSTTable from "../../../../components/DSTTable";
-import "./../steps.css";
+import "./../steps.scss";
 import "./NRCSStandard.css";
 
 const NRCSStandards = ({ NRCS }) => {

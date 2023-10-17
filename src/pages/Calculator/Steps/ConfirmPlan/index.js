@@ -14,7 +14,7 @@ import { handleDownload } from "./../../../../shared/utils/exportExcel";
 import { updateSteps } from "../../../../features/stepSlice/index";
 import { generateNRCSStandards } from "./../../../../shared/utils/NRCS/calculateNRCS";
 import ConfirmPlanCharts from "./charts";
-import "./../steps.css";
+import "./../steps.scss";
 import SeedsSelectedList from "../../../../components/SeedsSelectedList";
 import { emptyValues } from "../../../../shared/utils/calculate";
 import ConfirmPlanForm from "./form";

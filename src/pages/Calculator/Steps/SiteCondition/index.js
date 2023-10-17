@@ -20,7 +20,7 @@ import LocationComponent from "./LocationComponent";
 import { isEmptyNull, validateForms } from "../../../../shared/utils/format";
 import SiteConditionForm from "./form";
 import statesLatLongDict from "../../../../shared/data/statesLatLongDict";
-import "./../steps.css";
+import "./../steps.scss";
 
 const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
   const dispatch = useDispatch();
@@ -263,10 +263,8 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
 
   return (
     <Grid container justifyContent="center" alignItems="center" size={12}>
-      <Grid item xs={12} className="site-condition-header">
-        <Typography variant="h2" className="site-condition-header">
-          Tell us about your planting site
-        </Typography>
+      <Grid item xs={12}>
+        <Typography variant="h2">Tell us about your planting site</Typography>
       </Grid>
 
       {stateList.length > 0 && (

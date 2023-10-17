@@ -6,7 +6,7 @@ import {
   convertToPercent,
   convertToDecimal,
 } from "./../../../../shared/utils/calculate";
-import "./../steps.css";
+import "./../steps.scss";
 
 const ReviewMixSteps = ({
   speciesSelection,

@@ -4,7 +4,7 @@ import { Typography, Link } from "@mui/material";
 import Fade from "@mui/material/Fade";
 
 import { seedsLabel } from "../../../../shared/data/species";
-import "./../steps.css";
+import "./../steps.scss";
 
 const Diversity = ({ diversitySelected }) => {
   const calculateSize = () => {

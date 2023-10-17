@@ -22,7 +22,7 @@ import {
   convertToDecimal,
 } from "../../../../shared/utils/calculate";
 import { NumberTextField } from "./../../../../components/NumberTextField";
-import "./../steps.css";
+import "./../steps.scss";
 import SeedsSelectedList from "../../../../components/SeedsSelectedList";
 
 const SeedTagInfo = ({ council }) => {

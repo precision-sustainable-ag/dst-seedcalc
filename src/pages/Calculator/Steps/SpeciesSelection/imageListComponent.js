@@ -4,7 +4,7 @@ import { Typography, Link } from "@mui/material";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 
-import "./../steps.css";
+import "./../steps.scss";
 
 const ImageListComponent = ({
   seed,

@@ -11,7 +11,7 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import { VerticalSlider } from "../../../../components/VerticalSlider";
-import "./../steps.css";
+import "./../steps.scss";
 import { updateSteps } from "../../../../features/stepSlice";
 import SeedsSelectedList from "../../../../components/SeedsSelectedList";
 

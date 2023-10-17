@@ -10,7 +10,7 @@ import { Dropdown } from "./../../../../components/Dropdown";
 import { NumberTextField } from "./../../../../components/NumberTextField";
 import { DSTSwitch } from "./../../../../components/Switch";
 import { soilDrainage } from "./../../../../shared/data/dropdown";
-import "./../steps.css";
+import "./../steps.scss";
 import "./siteCondition.css";
 
 const SiteConditionForm = ({

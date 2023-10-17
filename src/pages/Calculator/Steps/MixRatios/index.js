@@ -19,7 +19,7 @@ import {
   calculateAllValuesNECCC,
 } from "./../../../../shared/utils/calculate";
 import { updateSteps } from "../../../../features/stepSlice";
-import "./../steps.css";
+import "./../steps.scss";
 import SeedsSelectedList from "../../../../components/SeedsSelectedList";
 import MixRatioSteps from "./form";
 

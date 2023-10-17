@@ -1,6 +1,6 @@
 import Grid from "@mui/material/Grid";
 
-import "./../steps.css";
+import "./../steps.scss";
 
 const StripedLabels = ({ seed, data, labels }) => {
   const labels2 = [

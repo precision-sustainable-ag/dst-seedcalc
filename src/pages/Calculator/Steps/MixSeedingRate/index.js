@@ -16,7 +16,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { updateSteps } from "../../../../features/stepSlice";
 import { seedingMethods } from "../../../../shared/data/dropdown";
 import { Dropdown } from "../../../../components/Dropdown";
-import "./../steps.css";
+import "./../steps.scss";
 import SeedsSelectedList from "../../../../components/SeedsSelectedList";
 
 const MixSeedingRate = ({ council }) => {
@@ -137,7 +137,7 @@ const MixSeedingRate = ({ council }) => {
         <Grid item xs={12}>
           <Typography variant="h2">Mix Seeding Rate</Typography>
         </Grid>
-        <Grid item xs={12} padding={15} className="site-condition-container">
+        <Grid item xs={12} padding={15} className="">
           <Dropdown
             value={seedingMethod.type}
             label={"Seeding Method: "}

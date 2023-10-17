@@ -6,7 +6,7 @@ import {
   convertToDecimal,
 } from "./../../../../shared/utils/calculate";
 import { NumberTextField } from "./../../../../components/NumberTextField";
-import "./../steps.css";
+import "./../steps.scss";
 
 const MixRatioSteps = ({
   seed,

@@ -3,7 +3,7 @@ import { Typography, Box, Link, Button, Modal } from "@mui/material";
 import { Square } from "@mui/icons-material";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
-import "./../steps.css";
+import "./../steps.scss";
 
 // TODO: build pie chart to a custom component, this should be done in another pr
 const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
