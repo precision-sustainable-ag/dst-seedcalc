@@ -30,7 +30,7 @@ const SeedsSelectedList = ({ list }) => {
     >
       {list.map((s, idx) => {
         return (
-          <Box minWidth={"120px"}>
+          <Box minWidth={matchesMd ? "120px" : ""}>
             <img
               style={{
                 borderRadius: "50%",
