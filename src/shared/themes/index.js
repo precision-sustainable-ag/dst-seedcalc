@@ -4,6 +4,9 @@ export const dstTheme = createTheme({
   palette: {
     primary: {
       main: "#4F5F30",
+      light: "#FFFFF2",
+      dark: "#eff1e0",
+      text: "#4F5F30",
     },
   },
   breakpoints: {

@@ -41,13 +41,6 @@ export const StepsList = ({
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
 
-  const isStepOptional = (step) => {
-    return step === 1;
-  };
-
-  const isStepSkipped = (step) => {
-    return skipped.has(step);
-  };
   return (
     <Box sx={{ width: "100%", color: "#4f5f30" }}>
       <Stepper
@@ -56,21 +49,9 @@ export const StepsList = ({
         className="stepper-container"
       >
         {steps.map((label, index) => {
-          const stepProps = {};
-          const labelProps = {};
-          if (isStepOptional(index)) {
-            labelProps.optional = (
-              <Typography variant="caption">{matches && "Optional"}</Typography>
-            );
-          }
-          if (isStepSkipped(index)) {
-            stepProps.completed = false;
-          }
           return (
-            <Step key={label} sx={{ color: "#4f5f30" }} {...stepProps}>
-              <StepLabel className="steps-label" {...labelProps}>
-                {matches && label}
-              </StepLabel>
+            <Step key={label} sx={{ color: "#4f5f30" }}>
+              <StepLabel className="steps-label">{matches && label}</StepLabel>
             </Step>
           );
         })}

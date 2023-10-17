@@ -19,10 +19,7 @@ import {
 } from "./Steps";
 
 import { calculatorList, completedList } from "../../shared/data/dropdown";
-import { Header } from "../../components/Header";
 import { StepsList } from "../../components/StepsList";
-import "./calculator.css";
-import "./../Home/home.css";
 
 const Calculator = () => {
   const data = useSelector((state) => state.steps.value);
@@ -158,32 +155,21 @@ const Calculator = () => {
     }
   };
 
+  const headerLogo = () => {
+    if (data.siteCondition.council === "") return "./PSALogo.png";
+    else if (data.siteCondition.council === "MCCC") return "./mccc-logo.png";
+    else if (data.siteCondition.council === "NECCC") return "./neccc-logo.png";
+  };
+
   return (
-    <Grid container justifyContent="center" alignItems="center">
-      {data.siteCondition.council === "" ? (
-        <Grid xs={12} className={"dst-header-container dst-psa-logo"} item>
-          <img alt="neccc" src={"./PSALogo.png"} />
-        </Grid>
-      ) : (
-        <Grid
-          xs={12}
-          item
-          className={
-            data.siteCondition.council === "MCCC"
-              ? "dst-header-container dst-mccc-logo"
-              : "dst-header-container dst-neccc-logo"
-          }
-        >
-          <img
-            alt="neccc"
-            src={
-              data.siteCondition.council === "MCCC"
-                ? "./mccc-logo.png"
-                : "./neccc-logo.png"
-            }
-          />
-        </Grid>
-      )}
+    <Grid container>
+      <Grid item xs={12} mt={"10px"} mb={"10px"}>
+        <img
+          alt={data.siteCondition.council}
+          src={headerLogo()}
+          height={"75px"}
+        />
+      </Grid>
 
       {/* <Header
         headerVariant="dstHeader"
@@ -201,7 +187,6 @@ const Calculator = () => {
         handleReset={handleReset}
         completedStep={completedStep}
         setCompletedStep={setCompletedStep}
-        className="steps-container"
       />
       {renderCalculator(
         activeStep === calculatorList.length

@@ -21,6 +21,7 @@ function App() {
   return (
     <ThemeProvider theme={dstTheme}>
       <div className="App">
+        {/* TODO: modal not used now */}
         <DSTModal
           isOpen={modalState.isOpen}
           setModal={handleModal}

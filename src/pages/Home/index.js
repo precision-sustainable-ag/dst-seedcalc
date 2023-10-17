@@ -18,7 +18,6 @@ import {
 import { DSTButton } from "./../../components/Button";
 import { Header } from "./../../components/Header";
 import { Dropdown } from "../../components/Dropdown";
-import "./home.css";
 
 const Home = () => {
   const navigate = useNavigate();
