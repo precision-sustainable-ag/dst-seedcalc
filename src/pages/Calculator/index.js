@@ -187,7 +187,7 @@ const Calculator = () => {
 
   return (
     <Grid container>
-      <Grid item xs={12} paddingTop={"10px"} height={"85px"}>
+      <Grid item xs={12} paddingTop={"0.625rem"} height={"85px"}>
         <img
           alt={data.siteCondition.council}
           src={headerLogo()}

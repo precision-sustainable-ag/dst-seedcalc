@@ -32,7 +32,7 @@ export const SearchField = ({ value, handleChange }) => {
         inputProps={{ "aria-label": "Search Filter List" }}
         onChange={handleChange}
       />
-      <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+      <IconButton type="button" sx={{ p: "0.625rem" }} aria-label="search">
         <SearchIcon />
       </IconButton>
     </Paper>

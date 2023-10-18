@@ -50,6 +50,9 @@ const ImageListComponent = ({
               ) + Math.random()
             }
             sx={{ "&:hover": { cursor: "pointer" } }}
+            onClick={(e) => {
+              updateSeeds(seeds, seed);
+            }}
           >
             {council === "NECCC" &&
               !checkPlantingDate(
@@ -60,44 +63,40 @@ const ImageListComponent = ({
                   sx={{
                     position: "absolute",
                     backgroundColor: "white",
-                    opacity: "0.7",
+                    opacity: "0.8",
                     width: "100%",
                     height: "35%",
-                    marginTop: "20px",
+                    marginTop: "10%",
                   }}
                 >
                   <Typography
                     sx={{
-                      color: "red",
+                      color: "#DA7059",
                       position: "absolute",
-                      marginTop: "10px",
+                      marginTop: "5%",
+                      fontStyle: "italic",
                     }}
                   >
-                    Not Recommended for planting dates
+                    Not Recommended for Planting Date
                   </Typography>
                 </Grid>
               )}
 
             <img
-              className={matchesSm ? "panel-img-sm" : "panel-img"}
+              style={{
+                borderRadius: "25px",
+                width: "100%",
+                height: matchesSm ? "100px" : "190px",
+              }}
               src={imgSrc(
                 seeds.thumbnail !== null && seeds.thumbnail !== ""
                   ? seeds.thumbnail
                   : "https://www.gardeningknowhow.com/wp-content/uploads/2020/04/spinach.jpg"
               )}
               alt={seeds.label}
-              onClick={(e) => {
-                updateSeeds(seeds, seed);
-              }}
               loading="lazy"
             />
-            <Link
-              onClick={(e) => {
-                updateSeeds(seeds, seed);
-              }}
-            >
-              {seeds.label}{" "}
-            </Link>
+            <Link>{seeds.label} </Link>
           </ImageListItem>
         ))}
     </ImageList>

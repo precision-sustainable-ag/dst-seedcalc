@@ -11,17 +11,6 @@ div[class*="map_infobar__"] {
   display: none;
 }
 
-.panel-img {
-  border-radius: 25px;
-  width: 100%;
-  height: 190px !important;
-  &-sm {
-    border-radius: 25px;
-    width: 100%;
-    height: 100px !important;
-  }
-}
-
 .accordian-container {
   width: 100%;
   .accordian-summary {
