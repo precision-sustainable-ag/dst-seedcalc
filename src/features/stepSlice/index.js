@@ -111,8 +111,6 @@ export const stepSlice = createSlice({
     },
     [getLocality.fulfilled]: (state, { payload }) => {
       state.value.states = payload;
-
-      console.log("fulfilled locality", payload.data);
     },
     [getLocality.rejected]: (state) => {
       state.loading = false;

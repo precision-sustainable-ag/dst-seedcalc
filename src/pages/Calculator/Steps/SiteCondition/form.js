@@ -33,10 +33,8 @@ const SiteConditionForm = ({
 
   const handleRegion = (e) => {
     const countyId = counties.filter((c, i) => c.label === e)[0].id;
-    console.log("handle region", e, countyId);
     handleUpdateSteps("county", "siteCondition", e);
     if (countyId !== undefined && countyId !== undefined) {
-      console.log("handle region pass", e, countyId);
       dispatch(
         getCrops({
           regionId: countyId,
