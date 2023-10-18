@@ -76,7 +76,6 @@ const ConfirmPlan = ({ council }) => {
 
   const generateSeedNull = () => {
     const seed = { ...speciesSelection.seedsSelected[1] };
-    console.log("generateSeedNull", emptyValues(seed));
     return emptyValues(seed);
   };
 

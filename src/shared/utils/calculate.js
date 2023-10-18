@@ -242,10 +242,6 @@ export const calculateReviewMixNECCC = (
   seed,
   { siteCondition, speciesSelection }
 ) => {
-  console.log(
-    "convertToDecimal(seed.percentOfSingleSpeciesRate)",
-    convertToDecimal(seed.percentOfSingleSpeciesRate)
-  );
   switch (step) {
     case "step1":
       return {
