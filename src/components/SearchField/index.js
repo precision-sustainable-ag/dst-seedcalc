@@ -18,6 +18,7 @@ import SearchIcon from "@mui/icons-material/Search";
 export const SearchField = ({ value, handleChange }) => {
   return (
     <Paper
+    // FIXME: delete this line to prevent user hit enter and cause page refresh
       component="form"
       sx={{
         p: "2px 4px",

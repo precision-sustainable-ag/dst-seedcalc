@@ -126,6 +126,7 @@ const SeedTagInfo = ({ council }) => {
             <Grid item xs={6} className="seed-tag-info-grid-left">
               <Typography>Seeds per Pound </Typography>
             </Grid>
+            {/* FIXME: this also turns seeds per pound 100 times larger */}
             {renderRightAccordian("poundsOfSeed", data, "", true)}
           </Grid>
         </AccordionDetails>

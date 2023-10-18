@@ -101,6 +101,8 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
       ...seed,
       ...cropDetails,
       // FIXME: some of the value may not needed in the app
+      // FIXME: need furthur check for all the values
+      // FIXME: Soybean (only in NECCC) doen't have Coefficients attr
       plantingDates: {
         firstReliableEstablishmentStart:
           cropDetails.attributes["Planting and Growth Windows"][
@@ -153,7 +155,6 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
       },
       siteConditionPlantingDate: data.siteCondition.plannedPlantingDate,
       soilDrainage: data.siteCondition.soilDrainage,
-      // FIXME: Soybean (only in NECCC) doen't have Coefficients attr
       singleSpeciesSeedingRate: parseFloat(
         cropDetails.attributes.Coefficients["Single Species Seeding Rate"]
           .values[0]
@@ -270,7 +271,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
       soilDrainages:
         cropDetails.attributes["Soil Conditions"]?.["Soil Drainage"][
           "values"
-        ] ?? "",
+        ] ?? [],
       highFertilityMonocultureCoefficient: cropDetails.attributes.Coefficients[
         "High Fertility Monoculture Coefficient"
       ]
@@ -354,6 +355,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
           );
         }
       } else {
+        // FIXME: add update for previous crops
         // if seed doesn't exist, add NRCS, seedsSelected, & diveristySelected
         const newList = seedsSelected.map((s, i) => {
           return {
