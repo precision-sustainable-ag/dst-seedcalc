@@ -30,8 +30,8 @@ export const getLocality = createAsyncThunk(
 
 export const getRegion = createAsyncThunk(
   "steps/getRegion",
-  async ({ regionId }, thunkAPI) => {
-    const url = `https://developapi.covercrop-selector.org/v2/regions/${regionId}`;
+  async ({ stateId }, thunkAPI) => {
+    const url = `https://developapi.covercrop-selector.org/v2/regions/${stateId}`;
     const res = await fetch(url).then((data) => data.json());
     return res;
   }
@@ -63,9 +63,7 @@ export const getSSURGOData = createAsyncThunk(
     const url = "https://sdmdataaccess.sc.egov.usda.gov/Tabular/post.rest";
     const res = await fetch(url, requestOptions).then((data) => data.json());
 
-    if (Object.keys(res).length > 0) {
-      return res;
-    }
+    return res;
   }
 );
 
@@ -74,7 +72,6 @@ export const getZoneData = createAsyncThunk(
   async ({ zip }, thunkAPI) => {
     const url = `https://phzmapi.org/${zip}.json`;
     const res = await fetch(url).then((data) => data.json());
-    console.log("response for zones", res);
     return res.zone;
   }
 );

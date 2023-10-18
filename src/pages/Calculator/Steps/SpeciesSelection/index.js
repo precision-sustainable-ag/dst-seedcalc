@@ -17,7 +17,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 
 import { SearchField } from "../../../../components/SearchField";
 import { updateSteps } from "../../../../features/stepSlice/index";
-import { getCropsById } from "../../../../features/stepSlice/api";
+import { getCrops, getCropsById } from "../../../../features/stepSlice/api";
 import { seedsList, seedsLabel } from "../../../../shared/data/species";
 import { calculateAllMixRatioValues } from "../../../../shared/utils/calculate";
 import "./../steps.css";
@@ -100,63 +100,58 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
     let newSeed = {
       ...seed,
       ...cropDetails,
+      // FIXME: some of the value may not needed in the app
+      // FIXME: need furthur check for all the values
+      // FIXME: Soybean (only in NECCC) doen't have Coefficients attr
       plantingDates: {
         firstReliableEstablishmentStart:
           cropDetails.attributes["Planting and Growth Windows"][
             "Reliable Establishment"
-          ]["values"][0] !== undefined
-            ? cropDetails.attributes["Planting and Growth Windows"][
-                "Reliable Establishment"
-              ]["values"][0]
-                .split(" - ")[0]
-                .slice(0, -5)
-            : "",
+          ]?.["values"][0] ?? "",
         firstReliableEstablishmentEnd:
           cropDetails.attributes["Planting and Growth Windows"][
             "Reliable Establishment"
-          ]["values"][0] !== undefined
-            ? cropDetails.attributes["Planting and Growth Windows"][
-                "Reliable Establishment"
-              ]["values"][0]
-                .split(" - ")[1]
-                .slice(0, -5)
-            : "",
+          ]?.["values"][0] ?? "",
         secondReliableEstablishmentStart:
           council === "MCCC"
             ? cropDetails.attributes["Planting and Growth Windows"][
                 "Reliable Establishment"
-              ]["values"][1]
-                .split(" - ")[0]
-                .slice(0, -5)
+              ]?.["values"][1]
+                ?.split(" - ")[0]
+                .slice(0, -5) ?? ""
             : "",
         secondReliableEstablishmentEnd:
           council === "MCCC"
             ? cropDetails.attributes["Planting and Growth Windows"][
                 "Reliable Establishment"
-              ]["values"][1]
-                .split(" - ")[1]
-                .slice(0, -5)
+              ]?.["values"][1]
+                ?.split(" - ")[1]
+                .slice(0, -5) ?? ""
             : "",
-        earlySeedingDateStart: cropDetails.attributes[
-          "Planting and Growth Windows"
-        ]["Reliable Establishment"]["values"][0]
-          .split(" - ")[0]
-          .slice(0, -5),
-        earlySeedingDateEnd: cropDetails.attributes[
-          "Planting and Growth Windows"
-        ]["Reliable Establishment"]["values"][0]
-          .split(" - ")[1]
-          .slice(0, -5),
-        lateSeedingDateStart: cropDetails.attributes[
-          "Planting and Growth Windows"
-        ]["Reliable Establishment"]["values"][0]
-          .split(" - ")[0]
-          .slice(0, -5),
-        lateSeedingDateEnd: cropDetails.attributes[
-          "Planting and Growth Windows"
-        ]["Reliable Establishment"]["values"][0]
-          .split(" - ")[1]
-          .slice(0, -5),
+        earlySeedingDateStart:
+          cropDetails.attributes["Planting and Growth Windows"][
+            "Early Seeding Date"
+          ]?.["values"][0]
+            .split(" - ")[0]
+            .slice(0, -5) ?? "",
+        earlySeedingDateEnd:
+          cropDetails.attributes["Planting and Growth Windows"][
+            "Early Seeding Date"
+          ]?.["values"][0]
+            .split(" - ")[1]
+            .slice(0, -5) ?? "",
+        lateSeedingDateStart:
+          cropDetails.attributes["Planting and Growth Windows"][
+            "Late Seeding Date"
+          ]?.["values"][0]
+            .split(" - ")[0]
+            .slice(0, -5) ?? "",
+        lateSeedingDateEnd:
+          cropDetails.attributes["Planting and Growth Windows"][
+            "Late Seeding Date"
+          ]?.["values"][0]
+            .split(" - ")[1]
+            .slice(0, -5) ?? "",
       },
       siteConditionPlantingDate: data.siteCondition.plannedPlantingDate,
       soilDrainage: data.siteCondition.soilDrainage,
@@ -274,7 +269,9 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
           ]
         : [], // TBD
       soilDrainages:
-        cropDetails.attributes["Soil Conditions"]["Soil Drainage"]["values"],
+        cropDetails.attributes["Soil Conditions"]?.["Soil Drainage"][
+          "values"
+        ] ?? [],
       highFertilityMonocultureCoefficient: cropDetails.attributes.Coefficients[
         "High Fertility Monoculture Coefficient"
       ]
@@ -391,6 +388,23 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   //////////////////////////////////////////////////////////
   //                     useEffect                        //
   //////////////////////////////////////////////////////////
+
+  useEffect(() => {
+    if (data.siteCondition.countyId) {
+      dispatch(getCrops({ regionId: data.siteCondition.countyId }));
+    } else {
+      // TODO: add error handling
+      console.error("no countyId!");
+    }
+  }, []);
+
+  // TODO: modify this page loading logic and load plant data logic
+  // The page should use redux data for first time loading
+  useEffect(() => {
+    if (data.crops.length > 0) {
+      setFilteredSeeds(data.crops);
+    }
+  }, [data.crops]);
 
   useEffect(() => {
     validateForms(
