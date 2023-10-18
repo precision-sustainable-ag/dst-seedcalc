@@ -27,14 +27,14 @@ export const Dropdown = ({
 }) => {
   const renderedItems = items.map((item, i) => {
     return (
-      <MenuItem key={item + "" + i} value={item.label}>
+      <MenuItem key={item + "" + i} value={item.label} color="#4F5F30">
         {item.label}
       </MenuItem>
     );
   });
 
   return (
-    <Box className="dropdown-container" sx={{ minWidth: 120 }}>
+    <Box sx={{ minWidth: 120, color: "#4F5F30" }}>
       <FormControl fullWidth>
         <InputLabel>{label}</InputLabel>
         <Select

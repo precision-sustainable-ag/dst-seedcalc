@@ -53,5 +53,12 @@ export const dstTheme = createTheme({
         },
       ],
     },
+    MuiInputBase: {
+      styleOverrides: {
+        input: {
+          color: "#4F5F30",
+        },
+      },
+    },
   },
 });

@@ -18,6 +18,7 @@ const SeedsSelectedList = ({ list }) => {
               height: "100px",
               whiteSpace: "normal",
               overflowX: "auto",
+              opacity: "90%",
             }
           : {
               height: "100%",

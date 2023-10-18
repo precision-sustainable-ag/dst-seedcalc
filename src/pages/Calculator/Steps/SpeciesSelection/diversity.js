@@ -6,6 +6,8 @@ import Fade from "@mui/material/Fade";
 import { seedsLabel } from "../../../../shared/data/species";
 import "./../steps.scss";
 
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+
 const Diversity = ({ diversitySelected }) => {
   const calculateSize = () => {
     return diversitySelected.length === 1
@@ -19,10 +21,18 @@ const Diversity = ({ diversitySelected }) => {
 
   return (
     <Grid container>
-      <Typography color={"primary.text"} pt={"1rem"}>
+      <Typography color={"primary.text"} pt={"1rem"} fontWeight={600}>
         Mix Diversity
       </Typography>
-      <Grid container className="progress-bar">
+      <Grid
+        container
+        sx={{
+          height: "10px",
+          border: "#e5e5e5 1px solid",
+          margin: "5px 0",
+          borderRadius: "0.6875rem",
+        }}
+      >
         {diversitySelected &&
           diversitySelected.length > 0 &&
           diversitySelected.map((d, i) => {
@@ -30,7 +40,8 @@ const Diversity = ({ diversitySelected }) => {
               <Grid
                 item
                 xs={calculateSize()}
-                className="progress-bar-item"
+                bgcolor={COLORS[i]}
+                borderRadius={"0.6875rem"}
               ></Grid>
             );
           })}
@@ -39,7 +50,7 @@ const Diversity = ({ diversitySelected }) => {
         diversitySelected.length > 0 &&
         diversitySelected.length === 0 && (
           <Grid item xs={12}>
-            <Typography className="progress-bar-text">
+            <Typography fontSize={"0.75rem"} color={"primary.text"}>
               Select a species
             </Typography>
           </Grid>
@@ -50,7 +61,7 @@ const Diversity = ({ diversitySelected }) => {
           return (
             <Fade in={true}>
               <Grid item xs={calculateSize()}>
-                <Typography className="progress-bar-text">
+                <Typography fontSize={"0.75rem"} color={"primary.text"}>
                   {seedsLabel[d]}
                 </Typography>
               </Grid>

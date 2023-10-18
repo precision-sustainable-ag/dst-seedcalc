@@ -35,24 +35,9 @@ $primary-text: #4f5f30;
       color: $primary-text;
     }
   }
-}
-
-.progress-bar {
-  height: 10px;
-  background-color: white;
-  border: #e5e5e5 1px solid;
-  margin-top: 5px;
-  margin-bottom: 4px;
-  border-radius: 20px;
-}
-.progress-bar-item {
-  height: 10px;
-  border-radius: 20px;
-  background-color: #5992e6;
-}
-.progress-bar-text {
-  font-size: 12px !important;
-  color: #8d9774;
+  .accordian-details {
+    color: $primary-text;
+  }
 }
 
 .mix-ratio-chart-container {
@@ -62,6 +47,7 @@ $primary-text: #4f5f30;
 .mix-ratio-chart-header {
   font-weight: 600;
   text-align: center;
+  color: $primary-text;
 }
 .mix-ratio-chart-list-50 {
   margin: 0 auto !important;
@@ -255,6 +241,7 @@ $primary-text: #4f5f30;
   font-size: 15px !important;
   margin: 10px !important;
   font-weight: 600 !important;
+  color: $primary-text;
 }
 /* .NRCS-result-container  {
     border-radius: 25px;

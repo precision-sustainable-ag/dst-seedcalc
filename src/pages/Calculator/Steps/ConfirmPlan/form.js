@@ -282,11 +282,10 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
   };
 
   return (
-    <Grid container xs={12}>
+    <Grid container xs={12} color={"primary.text"}>
       {/* NRCS Standards */}
       {NRCS.enabled && <NRCSStandards NRCS={NRCS} />}
       <Grid item xs={12}>
-        {" "}
         {speciesSelection.seedsSelected.map((s, i) => {
           return <Fragment key={i}> {renderSeedData(s)}</Fragment>;
         })}

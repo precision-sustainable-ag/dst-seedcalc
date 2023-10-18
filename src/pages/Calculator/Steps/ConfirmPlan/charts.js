@@ -166,7 +166,10 @@ const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
                   <Square sx={{ color: COLORS[i] }}></Square>
                 </Grid>
                 <Grid item xs={10}>
-                  <Typography className={matchesMd ? "mix-label-md" : ""}>
+                  <Typography
+                    className={matchesMd ? "mix-label-md" : ""}
+                    color={"primary.text"}
+                  >
                     {s.label}
                   </Typography>
                 </Grid>
@@ -197,7 +200,10 @@ const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
                   <Square sx={{ color: COLORS[i] }}></Square>
                 </Grid>
                 <Grid item xs={10}>
-                  <Typography className={matchesMd ? "mix-label-md" : ""}>
+                  <Typography
+                    className={matchesMd ? "mix-label-md" : ""}
+                    color={"primary.text"}
+                  >
                     {s.label}
                   </Typography>
                 </Grid>

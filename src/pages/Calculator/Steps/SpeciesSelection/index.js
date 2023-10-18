@@ -421,9 +421,11 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   };
 
   return (
-    <Grid container>
+    <Grid container justifyContent={"center"}>
       <Grid item xs={12}>
         <Typography variant="h2">Pick species for the mix.</Typography>
+      </Grid>
+      <Grid item xs={11}>
         <Box
           display={"flex"}
           justifyContent={"center"}
@@ -435,6 +437,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
           <Diversity diversitySelected={diversitySelected} />
         </Box>
       </Grid>
+
       {seedsList.map((s, i) => {
         return (
           <Grid item xs={12}>

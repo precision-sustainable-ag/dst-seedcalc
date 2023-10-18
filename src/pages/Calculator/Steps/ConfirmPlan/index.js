@@ -100,10 +100,9 @@ const ConfirmPlan = ({ council }) => {
         <Typography variant="h2">Confirm your plan</Typography>
 
         {/* Export */}
-
         <Grid container sx={{ marginTop: "5px" }} xs={12}>
-          <Grid item xs={matchesUpMd ? 11 : 10}></Grid>
-          <Grid item xs={matchesUpMd ? 1 : 2}>
+          <Grid item xs={matchesUpMd ? 11 : 9}></Grid>
+          <Grid item xs={matchesUpMd ? 1 : 3}>
             <Button
               className="export-button"
               onClick={() => {

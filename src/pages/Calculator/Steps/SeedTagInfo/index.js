@@ -140,9 +140,17 @@ const SeedTagInfo = ({ council }) => {
       <Grid item xs={12}>
         <Typography variant="h2">Enter seed tag info</Typography>
       </Grid>
-      <Grid item xs={12}>
-        <DSTSwitch checked={sameInfoActive} handleChange={handleSwitch} /> Same
-        Information for All Species
+      <Grid
+        item
+        xs={12}
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
+        <DSTSwitch checked={sameInfoActive} handleChange={handleSwitch} />
+        <Typography color={"primary.text"}>
+          Same Information for All Species
+        </Typography>
       </Grid>
       <Grid item xs={12}>
         {speciesSelection.seedsSelected.map((s, i) => {

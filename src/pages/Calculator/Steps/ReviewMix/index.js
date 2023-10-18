@@ -304,7 +304,9 @@ const ReviewMix = ({ council }) => {
         >
           <Typography>{data.label}</Typography>
         </AccordionSummary>
-        <AccordionDetails>{renderAccordianDetail(data)}</AccordionDetails>
+        <AccordionDetails className="accordian-details">
+          {renderAccordianDetail(data)}
+        </AccordionDetails>
       </Accordion>
     );
   };
@@ -545,7 +547,10 @@ const ReviewMix = ({ council }) => {
                       <Square sx={{ color: COLORS[i] }}></Square>
                     </Grid>
                     <Grid item xs={10}>
-                      <Typography className={matchesMd ? "mix-label-md" : ""}>
+                      <Typography
+                        className={matchesMd ? "mix-label-md" : ""}
+                        color={"primary.text"}
+                      >
                         {s.label}
                       </Typography>
                     </Grid>
@@ -575,7 +580,10 @@ const ReviewMix = ({ council }) => {
                       <Square sx={{ color: COLORS[i] }}></Square>
                     </Grid>
                     <Grid item xs={10}>
-                      <Typography className={matchesMd ? "mix-label-md" : ""}>
+                      <Typography
+                        className={matchesMd ? "mix-label-md" : ""}
+                        color={"primary.text"}
+                      >
                         {s.label}
                       </Typography>
                     </Grid>
