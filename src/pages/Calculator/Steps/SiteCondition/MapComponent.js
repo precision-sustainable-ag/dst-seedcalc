@@ -36,7 +36,6 @@ const MapComponent = ({
           county.toLowerCase().includes(c.label.toLowerCase())
         );
         if (filteredCounty.length > 0) {
-          console.log("filtered county", filteredCounty, county);
           handleUpdateSteps("county", "siteCondition", filteredCounty[0].label);
         }
       }

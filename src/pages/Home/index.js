@@ -131,7 +131,6 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(getLocality()).then((res) => {
-      console.log("testing", res);
       navigate(`/calculator`);
     });
   }, []);

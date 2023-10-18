@@ -7,6 +7,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
+import "./DSTTable.css";
+
 export default function DSTTable({ rows, cells }) {
   return (
     <TableContainer component={Paper}>
@@ -14,7 +16,7 @@ export default function DSTTable({ rows, cells }) {
         <TableHead>
           <TableRow>
             {cells.map((c, i) => {
-              return <TableCell>{c}</TableCell>;
+              return <TableCell key={i}>{c}</TableCell>;
             })}
           </TableRow>
         </TableHead>
@@ -24,17 +26,13 @@ export default function DSTTable({ rows, cells }) {
               key={row[cells[0]]}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
+              <TableCell component="th" scope="row" key={`${i}-0`}>
                 {row[cells[0]]}
               </TableCell>
               {cells.map((cell, idx) => {
-                return (
-                  <>
-                    {idx !== 0 && (
-                      <TableCell align="right">{row[cell]}</TableCell>
-                    )}
-                  </>
-                );
+                if (idx !== 0) {
+                  return <TableCell key={`${i}-${idx}`}>{row[cell]}</TableCell>;
+                }
               })}
             </TableRow>
           ))}
