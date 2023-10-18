@@ -11,10 +11,9 @@ import { Dropdown } from "./../../../../components/Dropdown";
 import { NumberTextField } from "./../../../../components/NumberTextField";
 import { DSTSwitch } from "./../../../../components/Switch";
 import { soilDrainage } from "./../../../../shared/data/dropdown";
-import "./../steps.scss";
-import "./siteCondition.css";
 import { useDispatch } from "react-redux";
 import { getCrops } from "../../../../features/stepSlice/api";
+import "./../steps.scss";
 
 const SiteConditionForm = ({
   siteCondition,
@@ -45,7 +44,7 @@ const SiteConditionForm = ({
 
   return (
     <>
-      <Grid item xs={12} md={6} className="site-condition-form-container">
+      <Grid item xs={12} md={6} p={"10px"}>
         <Dropdown
           value={siteCondition.county}
           label={
@@ -57,7 +56,7 @@ const SiteConditionForm = ({
         />
       </Grid>
 
-      <Grid item xs={12} md={6} className="site-condition-form-container">
+      <Grid item xs={12} md={6} p={"10px"}>
         <Dropdown
           value={siteCondition.soilDrainage}
           label={"Soil Drainage: "}
@@ -69,7 +68,7 @@ const SiteConditionForm = ({
         />
       </Grid>
 
-      <Grid item xs={12} md={6} className="site-condition-form-container">
+      <Grid item xs={12} md={6} p={"10px"}>
         <DatePicker
           label={"Planned Planting Date: "}
           value={siteCondition.plannedPlantingDate}
@@ -84,7 +83,7 @@ const SiteConditionForm = ({
         />
       </Grid>
 
-      <Grid item xs={12} md={6} className="site-condition-form-container">
+      <Grid item xs={12} md={6} p={"10px"}>
         <NumberTextField
           value={siteCondition.acres}
           label={"Acres"}
@@ -95,7 +94,7 @@ const SiteConditionForm = ({
         />
       </Grid>
 
-      <Grid item xs={12} md={12} className="site-condition-form-container">
+      <Grid item xs={12} md={12} p={"10px"}>
         {council === "MCCC" && (
           <>
             <Typography variant="nrcsStandard">

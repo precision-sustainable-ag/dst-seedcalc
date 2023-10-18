@@ -5,8 +5,7 @@ import { Button } from "@mui/material";
 import PlaceIcon from "@mui/icons-material/Place";
 import { useDispatch } from "react-redux";
 import { getZoneData, getSSURGOData } from "../../../../features/stepSlice/api";
-
-import "./siteCondition.css";
+import "./../steps.scss";
 
 const MapComponent = ({
   handleSteps,
@@ -54,14 +53,10 @@ const MapComponent = ({
   }, [selectedToEditSite]);
 
   return (
-    <Grid xs={12} container className="map-container">
-      <Grid xs={5} item>
+    <Grid container>
+      <Grid xs={2} item p={"10px"}>
         {step !== 1 && (
-          <Button
-            className="location-back-button"
-            variant="contained"
-            onClick={() => handleSteps("back")}
-          >
+          <Button variant="contained" onClick={() => handleSteps("back")}>
             <PlaceIcon /> Select State
           </Button>
         )}

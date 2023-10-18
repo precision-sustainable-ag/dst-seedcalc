@@ -4,11 +4,11 @@ $primary-light: #fffff2;
 $primary-dark: #eff1e0;
 $primary-text: #4f5f30;
 
-.site-condition-container {
-  padding: 15px 15px !important;
-  h3 {
-    margin-bottom: 20px;
-  }
+div[class*="map_infobar__"] {
+  /* bottom: 175px;
+  left: 5px; */
+  /* hide the info bar(currently have overflow issue) */
+  display: none;
 }
 
 .panel-img {
