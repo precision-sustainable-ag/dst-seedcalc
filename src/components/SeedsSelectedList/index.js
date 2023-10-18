@@ -29,7 +29,7 @@ const SeedsSelectedList = ({ list }) => {
       display={"flex"}
       flexDirection={matchesMd ? "row" : "column"}
     >
-      {list.map((s, idx) => {
+      {[...list].reverse().map((s, idx) => {
         return (
           <Box minWidth={matchesMd ? "120px" : ""}>
             <img

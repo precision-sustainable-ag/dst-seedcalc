@@ -14,6 +14,7 @@ import { soilDrainage } from "./../../../../shared/data/dropdown";
 import "./../steps.scss";
 import "./siteCondition.css";
 import { useDispatch } from "react-redux";
+import { getCrops } from "../../../../features/stepSlice/api";
 
 const SiteConditionForm = ({
   siteCondition,
