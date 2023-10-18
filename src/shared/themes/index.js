@@ -41,5 +41,17 @@ export const dstTheme = createTheme({
       fontSize: 20,
     },
   },
-  components: {},
+  components: {
+    MuiButton: {
+      variants: [
+        {
+          props: { variant: "stepper" },
+          style: {
+            textTransform: "none",
+            padding: "0.5rem 0",
+          },
+        },
+      ],
+    },
+  },
 });

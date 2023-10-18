@@ -226,7 +226,7 @@ const Calculator = () => {
         />
       </Grid>
 
-      {activeStep > 0 && activeStep < 7 && (
+      {activeStep > 0 && activeStep < 8 && (
         <Grid
           item
           xs={12}
@@ -250,7 +250,13 @@ const Calculator = () => {
         item
         xs={12}
         md={activeStep > 0 ? 11 : 12}
-        sx={matchesSm && !showHeaderLogo ? { paddingTop: "190px" } : {}}
+        sx={
+          matchesSm && !showHeaderLogo
+            ? activeStep === 0
+              ? { paddingTop: "90px" }
+              : { paddingTop: "190px" }
+            : {}
+        }
       >
         {renderCalculator(
           activeStep === calculatorList.length

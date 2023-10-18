@@ -262,13 +262,13 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
   //////////////////////////////////////////////////////////
 
   return (
-    <Grid container justifyContent="center" alignItems="center" size={12}>
+    <Grid container justifyContent="center">
       <Grid item xs={12}>
         <Typography variant="h2">Tell us about your planting site</Typography>
       </Grid>
 
       {stateList.length > 0 && (
-        <Grid xs={12} md={12} item>
+        <Grid xs={11} md={11} item>
           <LocationComponent
             step={step}
             handleSteps={handleSteps}
@@ -283,7 +283,7 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
           />
         </Grid>
       )}
-      <Grid xs={12} md={12} container>
+      <Grid xs={11} md={11} container>
         <SiteConditionForm
           siteCondition={siteCondition}
           states={stateList}

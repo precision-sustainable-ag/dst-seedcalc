@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -60,19 +61,20 @@ export const StepsList = ({
         <Fragment>
           <Box sx={{ display: "flex", flexDirection: "row", pt: 1 }}>
             <Box sx={{ flex: "1 1 auto" }} />
-            <Button onClick={handleReset}>Reset</Button>
+            <Button variant="stepper" onClick={handleReset}>
+              Reset
+            </Button>
           </Box>
         </Fragment>
       ) : (
         <Fragment>
           <Box sx={{ display: "flex", flexDirection: "row", pt: 1 }}>
             <Button
-              color="inherit"
+              variant="stepper"
               disabled={activeStep === 0}
               onClick={handleBack}
-              sx={{ mr: 1 }}
             >
-              {activeStep !== 0 && <ArrowBackIosIcon />}
+              {activeStep !== 0 && <ArrowBackIosNewIcon />}
               {steps[activeStep - 1]}
             </Button>
             <Box sx={{ flex: "1 1 auto" }} />
@@ -83,6 +85,7 @@ export const StepsList = ({
             )} */}
 
             <Button
+              variant="stepper"
               disabled={completedStep[activeStep] === true ? false : true}
               onClick={handleNext}
             >
