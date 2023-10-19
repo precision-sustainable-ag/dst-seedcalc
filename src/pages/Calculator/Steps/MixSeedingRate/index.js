@@ -171,15 +171,14 @@ const MixSeedingRate = () => {
                 sx={{
                   "& .MuiSlider-thumb": {
                     "&::before": {
-                      content: `'${seedingRateCoefficient}'`,
+                      content: `'${seedingRateCoefficient}Lbs/Acre'`,
                       position: "absolute",
                       backgroundColor: "white",
                       color: "primary.text",
                       border: "3px solid",
-                      padding: "1rem",
-                      height: "4rem",
-                      width: "4rem",
-                      borderRadius: "50%",
+                      height: "2rem",
+                      width: "6rem",
+                      borderRadius: "1rem",
                       zIndex: 2,
                       boxSizing: "border-box",
                     },

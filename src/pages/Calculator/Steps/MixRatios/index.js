@@ -266,7 +266,7 @@ const MixRatio = ({ council }) => {
           {"   "}
           <Button variant="outlined">Acres</Button>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} pt={"1rem"}>
           <Button
             onClick={(e) => {
               updateSeed(!seed.showSteps, "showSteps", seed);
@@ -296,6 +296,7 @@ const MixRatio = ({ council }) => {
         <Grid item xs={3}>
           <Typography
             className={matchesMd ? "mix-ratio-form-label" : "no-display"}
+            sx={{ fontSize: matchesMd ? "0.75rem" : "0" }}
           >
             {label1}
           </Typography>
@@ -304,6 +305,7 @@ const MixRatio = ({ council }) => {
         <Grid item xs={3}>
           <Typography
             className={matchesMd ? "mix-ratio-form-label" : "no-display"}
+            sx={{ fontSize: matchesMd ? "0.75rem" : "0" }}
           >
             {label2}
           </Typography>
@@ -312,6 +314,7 @@ const MixRatio = ({ council }) => {
         <Grid item xs={3}>
           <Typography
             className={matchesMd ? "mix-ratio-form-label" : "no-display"}
+            sx={{ fontSize: matchesMd ? "0.75rem" : "0" }}
           >
             {label3}
           </Typography>
