@@ -12,11 +12,11 @@ import { dstTheme } from "./shared/themes";
 import { DSTModal } from "./components/DSTModal";
 import { clearModal } from "./features/stepSlice/index";
 function App() {
-  const dispatch = useDispatch();
-  const modalState = useSelector((state) => state.steps.value.modal);
-  const handleModal = () => {
-    modalState.error ? window.location.reload(false) : clearModal();
-  };
+  // const dispatch = useDispatch();
+  // const modalState = useSelector((state) => state.steps.value.modal);
+  // const handleModal = () => {
+  //   modalState.error ? window.location.reload(false) : clearModal();
+  // };
 
   return (
     <ThemeProvider theme={dstTheme}>

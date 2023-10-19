@@ -186,7 +186,7 @@ const Calculator = () => {
   }, []);
 
   return (
-    <Grid container>
+    <Grid container justifyContent="center">
       <Grid item xs={12} paddingTop={"0.625rem"} height={"85px"}>
         <img
           alt={data.siteCondition.council}
@@ -195,9 +195,11 @@ const Calculator = () => {
         />
       </Grid>
 
+      <Grid item md={0} lg={2}></Grid>
       <Grid
         item
         xs={12}
+        lg={8}
         sx={
           matchesSm && !showHeaderLogo
             ? {
@@ -225,6 +227,9 @@ const Calculator = () => {
           setCompletedStep={setCompletedStep}
         />
       </Grid>
+      <Grid item md={0} lg={2}></Grid>
+
+      <Grid item md={0} lg={2}></Grid>
 
       {activeStep > 0 && activeStep < 8 && (
         <Grid
@@ -249,6 +254,7 @@ const Calculator = () => {
       <Grid
         item
         xs={12}
+        lg={7}
         md={activeStep > 0 ? 11 : 12}
         sx={
           matchesSm && !showHeaderLogo
@@ -264,6 +270,8 @@ const Calculator = () => {
             : calculatorList[activeStep]
         )}
       </Grid>
+
+      <Grid item md={0} lg={2}></Grid>
     </Grid>
   );
 };

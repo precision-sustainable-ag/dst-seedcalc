@@ -13,6 +13,8 @@ function valuetext(value) {
   set mark as maximum of 50 above the current mixing state
 
 */
+
+// TODO: not used now
 export const VerticalSlider = ({ value, marks, handleChange }) => {
   return (
     <Stack sx={{ height: "50vh" }} spacing={1} direction="row">
