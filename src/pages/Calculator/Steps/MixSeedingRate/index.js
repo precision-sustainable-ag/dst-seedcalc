@@ -6,7 +6,7 @@ import * as React from "react";
 import Grid from "@mui/material/Grid";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Typography, Box, Slider } from "@mui/material";
+import { Typography, Box, Slider, Stack } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
@@ -65,12 +65,18 @@ const MixSeedingRate = () => {
     setSeedingRateAverage(average);
     setSeedingRateCoefficient(coefficient);
     setMarks([
-      { value: minimum, label: `${minimum}` },
+      {
+        value: minimum,
+        label: `Low Limit on Mix Seeding Rate: ${minimum} Lbs/Acre`,
+      },
       {
         value: coefficient,
-        label: `Mix Seeding Rate`,
+        label: `Calculated Mix Seeding Rate: ${coefficient} Lbs/Acre`,
       },
-      { value: maximum, label: `${maximum}` },
+      {
+        value: maximum,
+        label: `High Limit on Mix Seeding Rate: ${maximum} Lbs/Acre`,
+      },
     ]);
     toggleDataLoaded(true);
   };
@@ -101,80 +107,103 @@ const MixSeedingRate = () => {
       <Grid container sx={{ padding: "3% 3%" }}>
         <Grid
           container
-          xs={4}
+          xs={5}
+          sm={6}
           flexDirection={"column"}
           justifyContent="space-between"
           alignItems="center"
         >
-          <Box className="seeding-method-detail-container">
-            <Typography
-              sx={{
-                color: "#4F5F30",
-                fontSize: "0.75rem",
-                fontWeight: "600",
-                lineHeight: "0.9375rem",
-              }}
-            >
-              Factors that lower Seeding Rate:
-              <br />- Cost Saving
-              <br />- Low Biomass
-              <br />- Planting Green
-            </Typography>
-          </Box>
-          <Box className="seeding-method-label-container">
-            <Typography>Calculated Mix Seeding Rate</Typography>
-          </Box>
-          <Box className="seeding-method-detail-container">
-            <Typography
-              sx={{
-                color: "#4F5F30",
-                fontSize: "0.75rem",
-                fontWeight: "600",
-                lineHeight: "0.9375rem",
-              }}
-            >
-              Factors that may raise Seeding Rate:
-              <br />- Erosion Control
-              <br />- Weed Supression
-              <br />- Grazing
-            </Typography>
-          </Box>
+          <Typography
+            sx={{
+              color: "#4F5F30",
+              fontSize: "0.75rem",
+              fontWeight: "600",
+              lineHeight: "0.9375rem",
+              border: "2px solid #4f5f30",
+              padding: "0.5rem",
+              borderRadius: "1rem",
+            }}
+          >
+            Factors that lower Seeding Rate:
+            <br />- Cost Saving
+            <br />- Low Biomass
+            <br />- Planting Green
+          </Typography>
+
+          <Typography
+            sx={{
+              color: "#4F5F30",
+              fontSize: "0.75rem",
+              fontWeight: "600",
+              lineHeight: "0.9375rem",
+              border: "2px solid #4f5f30",
+              padding: "0.5rem",
+              borderRadius: "1rem",
+            }}
+          >
+            Factors that may raise Seeding Rate:
+            <br />- Erosion Control
+            <br />- Weed Supression
+            <br />- Grazing
+          </Typography>
         </Grid>
         <Grid
           container
-          xs={4}
-          justifyContent="center"
+          xs={7}
+          sm={6}
+          justifyContent="flex-start"
           alignItems="center"
           minHeight={"28rem"}
         >
           {dataLoaded && (
-            <Slider
-              orientation="vertical"
-              min={min}
-              max={max}
-              value={seedingRateCoefficient}
-              valueLabelDisplay="auto"
-              onChange={(e) => {
-                updateManagementImpactOnMix(e);
-              }}
-              marks={marks}
-              track={false}
-            />
+            <Stack sx={{ height: "24rem" }}>
+              <Slider
+                orientation="vertical"
+                min={min}
+                max={max}
+                value={seedingRateCoefficient}
+                valueLabelDisplay="off"
+                onChange={(e) => {
+                  updateManagementImpactOnMix(e);
+                }}
+                marks={marks}
+                track={false}
+                sx={{
+                  "& .MuiSlider-thumb": {
+                    "&::before": {
+                      content: `'${seedingRateCoefficient}'`,
+                      position: "absolute",
+                      backgroundColor: "white",
+                      color: "primary.text",
+                      border: "3px solid",
+                      padding: "1rem",
+                      height: "4rem",
+                      width: "4rem",
+                      borderRadius: "50%",
+                      zIndex: 2,
+                      boxSizing: "border-box",
+                    },
+                  },
+                  "& .MuiSlider-mark": {
+                    width: "0",
+                    height: "0",
+                    "&Label": {
+                      left: "5rem",
+                      color: "primary.text",
+                      border: "2px solid",
+                      borderRadius: "1rem",
+                      padding: "0.5rem",
+                      backgroundColor: "white",
+                      fontSize: "0.75rem",
+                      display: "flex",
+                      whiteSpace: "normal",
+                      width: "8rem",
+                    },
+                  },
+                }}
+              />
+            </Stack>
           )}
-        </Grid>
-        <Grid
-          container
-          xs={4}
-          flexDirection={"column"}
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Box className="seeding-method-label-container">
-            <Typography>High limit of Mix Seeding Rate</Typography>
-          </Box>
-          <Box className="seeding-method-label-container">
-            <Typography>Low limit of Mix Seeding Rate</Typography>
-          </Box>
         </Grid>
       </Grid>
     </Grid>
