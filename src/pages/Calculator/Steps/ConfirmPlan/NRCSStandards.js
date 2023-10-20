@@ -9,11 +9,38 @@ import {
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import DSTTable from "../../../../components/DSTTable";
+import styled from "@emotion/styled";
 import "./../steps.scss";
-import "./NRCSStandard.css";
 
 const NRCSStandards = ({ NRCS }) => {
   const NRCSItem = ({ title, result, data }) => {
+    const NRCSAccordionSummary = styled(AccordionSummary)(({ theme }) => ({
+      "&.MuiAccordionSummary-root": {
+        minHeight: "1.5rem",
+        padding: "0.3125rem 1rem",
+        backgroundColor: theme.palette.primary.dark,
+        color: theme.palette.primary.text,
+        ".MuiAccordionSummary-content": {
+          margin: "0",
+        },
+        "&.Mui-expanded": {
+          minHeight: "2rem",
+        },
+        ".MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
+          transform: "rotate(0deg) !important",
+        },
+      },
+    }));
+
+    const NRCSAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
+      "&.MuiAccordionDetails-root": {
+        padding: " 2%",
+        "th,td": {
+          color: theme.palette.primary.text,
+        },
+      },
+    }));
+
     const [expanded, setExpanded] = useState(false);
 
     const renderTable = (data) => {
@@ -38,7 +65,14 @@ const NRCSStandards = ({ NRCS }) => {
       <>
         <Grid xs={0} md={1}></Grid>
         <Grid xs={12} md={10}>
-          <Typography sx={{ fontSize: "20px", fontWeight: 600, float: "left" }}>
+          <Typography
+            sx={{
+              fontSize: "20px",
+              fontWeight: 600,
+              float: "left",
+              pt: "1rem",
+            }}
+          >
             {title}
           </Typography>
         </Grid>
@@ -50,14 +84,10 @@ const NRCSStandards = ({ NRCS }) => {
             expanded={expanded}
             onChange={() => setExpanded(!expanded)}
           >
-            <AccordionSummary
-              className="nrcs-summary"
+            <NRCSAccordionSummary
               expandIcon={
-                <Typography className="nrcs-expanded">
-                  {expanded ? "Hide" : "Show"} Details
-                </Typography>
+                <Typography>{expanded ? "Hide" : "Show"} Details</Typography>
               }
-              sx={{ height: "24px", minHeight: "24px" }}
             >
               {result ? (
                 <CheckIcon sx={{ color: "green" }}></CheckIcon>
@@ -67,10 +97,8 @@ const NRCSStandards = ({ NRCS }) => {
               <Typography sx={{ float: "left", marginLeft: "5px" }}>
                 {result ? "passed" : "failed"}
               </Typography>
-            </AccordionSummary>
-            <AccordionDetails className="nrcs-details">
-              {renderTable(data)}
-            </AccordionDetails>
+            </NRCSAccordionSummary>
+            <NRCSAccordionDetails>{renderTable(data)}</NRCSAccordionDetails>
           </Accordion>
         </Grid>
         <Grid xs={0} md={1}></Grid>

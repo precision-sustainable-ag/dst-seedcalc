@@ -96,7 +96,7 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
       {/* <Grid item xs={12} sx={{ height: "1000px" }}></Grid> */}
 
       {stateList.length > 0 && (
-        <Grid xs={11} lg={8} item>
+        <Grid xs={12} lg={8} item>
           {step === 1 ? (
             <RegionSelector
               stateList={stateList}
@@ -120,7 +120,7 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
           )}
         </Grid>
       )}
-      <Grid xs={11} lg={8} container>
+      <Grid xs={12} container>
         <SiteConditionForm
           siteCondition={siteCondition}
           handleSteps={handleSteps}

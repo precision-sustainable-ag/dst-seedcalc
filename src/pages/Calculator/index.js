@@ -254,7 +254,7 @@ const Calculator = () => {
       <Grid
         item
         xs={12}
-        lg={7}
+        lg={activeStep === 0 ? 8 : 7}
         md={activeStep > 0 ? 11 : 12}
         sx={
           matchesSm && !showHeaderLogo
