@@ -168,10 +168,15 @@ const MixSeedingRate = () => {
                   updateManagementImpactOnMix(e);
                 }}
                 marks={marks}
-                track={false}
                 sx={{
                   "& .MuiSlider-thumb": {
                     zIndex: 2,
+                    "&::hover": {
+                      boxShadow: "0px 0px 5px 25px rgba(79, 95, 48, 0.16)",
+                    },
+                    "&.Mui-active": {
+                      boxShadow: "0px 0px 5px 28px rgba(79, 95, 48, 0.32)",
+                    },
                     "&::before": {
                       content: `'${seedingRateCoefficient}'`,
                       position: "absolute",
@@ -214,6 +219,7 @@ const MixSeedingRate = () => {
                   "& .MuiSlider-rail": {
                     zIndex: 1,
                     opacity: 1,
+                    color: "primary.dark",
                     "&::before ": {
                       content: `'${max}'`,
                       position: "absolute",
@@ -242,6 +248,12 @@ const MixSeedingRate = () => {
                       right: "-1.85rem",
                       paddingTop: "1rem",
                     },
+                  },
+                  "& .MuiSlider-track": {
+                    color: "primary.text",
+                    zIndex: 1,
+                    position: "absolute",
+                    bottom: "2rem !important",
                   },
                 }}
               />
