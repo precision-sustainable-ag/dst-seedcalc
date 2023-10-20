@@ -19,14 +19,11 @@ export const dstTheme = createTheme({
     },
   },
   typography: {
-    dstHeaderHome: {
-      fontSize: 28,
+    dstHeader: {
+      fontSize: "1.25rem",
       color: "#4f5f30",
       fontWeight: 800,
-      lineHeight: "33.41px",
       textShadow: "0px 4px 4px rgba(0, 0, 0, 0.15)",
-      textAlign: "center",
-      marginTop: 100,
     },
     h2: {
       color: "#4F5F30",

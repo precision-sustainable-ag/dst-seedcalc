@@ -187,12 +187,23 @@ const Calculator = () => {
 
   return (
     <Grid container justifyContent="center">
-      <Grid item xs={12} paddingTop={"0.625rem"} height={"85px"}>
+      <Grid
+        item
+        xs={12}
+        paddingTop={"0.625rem"}
+        height={"85px"}
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
         <img
           alt={data.siteCondition.council}
           src={headerLogo()}
           height={"75px"}
         />
+        <Typography variant="dstHeader" pl={"1rem"}>
+          Seeding Rate Calculator
+        </Typography>
       </Grid>
 
       <Grid item md={0} lg={2}></Grid>

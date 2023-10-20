@@ -107,8 +107,8 @@ const MixSeedingRate = () => {
       <Grid container sx={{ padding: "3% 3%" }}>
         <Grid
           container
-          xs={5}
-          sm={6}
+          xs={4}
+          sm={5}
           flexDirection={"column"}
           justifyContent="space-between"
           alignItems="center"
@@ -149,11 +149,12 @@ const MixSeedingRate = () => {
         </Grid>
         <Grid
           container
-          xs={7}
-          sm={6}
+          xs={8}
+          sm={7}
           justifyContent="flex-start"
           alignItems="center"
           minHeight={"28rem"}
+          pl={"3rem"}
         >
           {dataLoaded && (
             <Stack sx={{ height: "24rem" }}>
@@ -170,24 +171,35 @@ const MixSeedingRate = () => {
                 track={false}
                 sx={{
                   "& .MuiSlider-thumb": {
+                    zIndex: 2,
                     "&::before": {
-                      content: `'${seedingRateCoefficient}Lbs/Acre'`,
+                      content: `'${seedingRateCoefficient}'`,
                       position: "absolute",
                       backgroundColor: "white",
                       color: "primary.text",
-                      border: "3px solid",
-                      height: "2rem",
-                      width: "6rem",
-                      borderRadius: "1rem",
-                      zIndex: 2,
+                      border: "4px solid",
+                      height: "4rem",
+                      width: "4rem",
+                      borderRadius: "50%",
                       boxSizing: "border-box",
+                      paddingTop: "1rem",
                     },
                   },
                   "& .MuiSlider-mark": {
                     width: "0",
                     height: "0",
+                    pointerEvents: "none",
+                    "&::after": {
+                      position: "absolute",
+                      content: `""`,
+                      width: "6rem",
+                      color: "primary.text",
+                      borderTop: "2px dotted",
+                      zIndex: -1,
+                    },
                     "&Label": {
-                      left: "5rem",
+                      pointerEvents: "none",
+                      left: "6rem",
                       color: "primary.text",
                       border: "2px solid",
                       borderRadius: "1rem",
@@ -196,7 +208,39 @@ const MixSeedingRate = () => {
                       fontSize: "0.75rem",
                       display: "flex",
                       whiteSpace: "normal",
-                      width: "8rem",
+                      width: "6rem",
+                    },
+                  },
+                  "& .MuiSlider-rail": {
+                    zIndex: 1,
+                    opacity: 1,
+                    "&::before ": {
+                      content: `'${max}'`,
+                      position: "absolute",
+                      backgroundColor: "primary.light",
+                      color: "primary.text",
+                      border: "2px solid",
+                      height: "4rem",
+                      width: "4rem",
+                      borderRadius: "50%",
+                      boxSizing: "border-box",
+                      top: "-2rem",
+                      right: "-1.85rem",
+                      paddingTop: "1rem",
+                    },
+                    "&::after": {
+                      content: `'${min}'`,
+                      position: "absolute",
+                      backgroundColor: "primary.light",
+                      color: "primary.text",
+                      border: "2px solid",
+                      height: "4rem",
+                      width: "4rem",
+                      borderRadius: "50%",
+                      boxSizing: "border-box",
+                      top: "22rem",
+                      right: "-1.85rem",
+                      paddingTop: "1rem",
                     },
                   },
                 }}
