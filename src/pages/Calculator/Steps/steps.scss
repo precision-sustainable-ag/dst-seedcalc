@@ -5,8 +5,6 @@ $primary-dark: #eff1e0;
 $primary-text: #4f5f30;
 
 div[class*="map_infobar__"] {
-  /* bottom: 175px;
-  left: 5px; */
   /* hide the info bar(currently have overflow issue) */
   display: none;
 }
@@ -31,7 +29,7 @@ div[class*="map_infobar__"] {
   }
 }
 
-.mix-ratio-chart-container {
+.pie-chart-container {
   text-align: justify;
   margin: 0 auto;
 }
@@ -52,7 +50,6 @@ div[class*="map_infobar__"] {
 }
 .mix-ratio-step-header {
   padding: 16px;
-  text-align: justify;
   background: #e5e7d5;
   margin: 30px 0px !important;
   font-size: 18px !important;
@@ -110,12 +107,7 @@ div[class*="map_infobar__"] {
 .MuiAccordionDetails-root {
   background: #fffff2 !important;
 }
-.text-field-100 {
-  width: 100%;
-}
-.text-field-30 {
-  width: 30%;
-}
+
 .text-field-50 {
   width: 50% !important;
 }

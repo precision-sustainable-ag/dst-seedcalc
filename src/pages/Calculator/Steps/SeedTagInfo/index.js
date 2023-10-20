@@ -82,7 +82,6 @@ const SeedTagInfo = ({ council }) => {
       <Grid item xs={6} className="seed-tag-info-grid-right">
         <NumberTextField
           className="text-field-50"
-          id="filled-basic"
           variant="filled"
           disabled={disabled}
           value={convertToPercent(data[key])}

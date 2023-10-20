@@ -340,7 +340,7 @@ const MixRatio = ({ council }) => {
       <Grid item xs={12}>
         <Typography variant="h2">Review Proportions</Typography>
         <Grid container xs={12}>
-          <Grid item xs={6} md={6} className="mix-ratio-chart-container">
+          <Grid item xs={6} md={6} className="pie-chart-container">
             {council === "MCCC"
               ? renderPieChart("plantsPerAcre")
               : renderPieChart("seedsPerAcre")}
@@ -367,7 +367,7 @@ const MixRatio = ({ council }) => {
               })}
             </Grid>
           </Grid>
-          <Grid item xs={6} md={6} className="mix-ratio-chart-container">
+          <Grid item xs={6} md={6} className="pie-chart-container">
             {renderPieChart("poundsOfSeed")}
             <Typography className="mix-ratio-chart-header">
               {council === "MCCC" ? "Plants" : "Seeds"} Per Acre{" "}

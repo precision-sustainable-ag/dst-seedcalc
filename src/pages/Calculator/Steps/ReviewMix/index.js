@@ -516,7 +516,7 @@ const ReviewMix = ({ council }) => {
       <Grid item xs={12}>
         <Typography variant="h2">Review your mix</Typography>
         <Grid container xs={12}>
-          <Grid item xs={6} md={6} className="mix-ratio-chart-container">
+          <Grid item xs={6} md={6} className="pie-chart-container">
             {council === "MCCC" ? (
               <PieChartComponent
                 type={"plantsPerAcre"}
@@ -559,7 +559,7 @@ const ReviewMix = ({ council }) => {
               })}
             </Grid>
           </Grid>
-          <Grid item xs={6} md={6} className="mix-ratio-chart-container">
+          <Grid item xs={6} md={6} className="pie-chart-container">
             <PieChartComponent
               type={"poundsOfSeed"}
               plantsPerAcreArray={plantsPerAcreArray}

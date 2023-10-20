@@ -110,8 +110,6 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
         </Grid>
         <Grid item xs={3} className="confirm-plan-form-container">
           <DSTTextField
-            className="text-field-100"
-            id="filled-basic"
             label={`${data.speciesSelection.seedsSelected[0].label}`}
             variant="filled"
             disabled={true}
@@ -129,8 +127,6 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
               <Fragment key={i}>
                 <Grid item xs={3} className="confirm-plan-form-container">
                   <DSTTextField
-                    className="text-field-100"
-                    id="filled-basic"
                     label={`${s.label}`}
                     variant="filled"
                     disabled={true}
@@ -150,8 +146,6 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
         })}
         <Grid item xs={3} className="confirm-plan-form-container">
           <DSTTextField
-            className="text-field-100"
-            id="filled-basic"
             label={"Total Cost of Mix"}
             variant="filled"
             disabled={true}
@@ -169,8 +163,6 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
         <Grid container xs={12} className="confirm-plan-form-container">
           <Grid item xs={3}>
             <NumberTextField
-              className="text-field-100"
-              id="filled-basic"
               disabled={true}
               label="Bulk Lbs / Acre"
               variant="filled"
@@ -185,8 +177,6 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
           </Grid>
           <Grid item xs={3}>
             <NumberTextField
-              className="text-field-100"
-              id="filled-basic"
               label="Acres"
               variant="filled"
               disabled={false}
@@ -201,8 +191,6 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
           </Grid>
           <Grid item xs={3}>
             <NumberTextField
-              className="text-field-100"
-              id="filled-basic"
               label="Total Pounds"
               disabled={true}
               variant="filled"
@@ -218,8 +206,6 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
           <Grid item xs={1}></Grid>
           <Grid item xs={3}>
             <NumberTextField
-              className="text-field-100"
-              id="filled-basic"
               label="Cost/Pound"
               variant="filled"
               disabled={true}
@@ -240,8 +226,6 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
         {renderStepsForm("Cost/Pound", "Total Pounds", "Total Cost")}
         <Grid item xs={3}>
           <NumberTextField
-            className="text-field-100"
-            id="filled-basic"
             disabled={true}
             label="Cost/Pound"
             variant="filled"
@@ -256,8 +240,6 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
         </Grid>
         <Grid item xs={3}>
           <NumberTextField
-            className="text-field-100"
-            id="filled-basic"
             disabled={true}
             label="Total Pounds"
             variant="filled"
@@ -269,8 +251,6 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
         </Grid>
         <Grid item xs={3}>
           <DSTTextField
-            className="text-field-100"
-            id="filled-basic"
             label="Total Cost"
             variant="filled"
             disabled={true}

@@ -145,7 +145,7 @@ const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
         item
         xs={6}
         md={6}
-        className="mix-ratio-chart-container"
+        className="pie-chart-container"
         sx={{
           borderRight: "1px solid #CCCCCC",
           borderBottom: "1px solid #CCCCCC",
@@ -182,7 +182,7 @@ const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
         item
         xs={6}
         md={6}
-        className="mix-ratio-chart-container"
+        className="pie-chart-container"
         sx={{
           borderBottom: "1px solid #CCCCCC",
           padding: "10px",
