@@ -68,20 +68,27 @@ div[class*="map_infobar__"] {
 
 .mix-seeding-rate-grid-left {
   height: 150px;
-  padding-top: 60px;
   border: 1px solid #c7c7c7;
   border-left: none;
-  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  p {
+    font-weight: bold;
+  }
 }
-.mix-seeding-rate-grid-left p {
-  font-weight: bold !important;
-}
+
 .mix-seeding-rate-grid-right {
   height: 150px;
-  padding-top: 30px;
   border: 1px solid #c7c7c7;
   border-right: none;
-  font-weight: bold;
+  display: flex;
+  flex-direction: column !important;
+  justify-content: center;
+  align-items: center;
+  p {
+    font-weight: bold;
+  }
 }
 
 /* Seed Tag Info */
@@ -96,7 +103,6 @@ div[class*="map_infobar__"] {
 }
 .seed-tag-info-grid-right {
   height: 80px;
-  font-weight: bold;
 }
 
 .mix-label-md {
@@ -188,7 +194,7 @@ div[class*="map_infobar__"] {
   border-radius: 50%;
   width: 80px;
   height: 80px;
-  margin: 0 auto;
+  margin: 0 auto 10px auto;
 }
 .data-circle p {
   padding-top: 30px;

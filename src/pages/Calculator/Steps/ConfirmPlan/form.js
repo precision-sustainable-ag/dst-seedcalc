@@ -38,6 +38,7 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
           <Grid item xs={3}>
             <Typography
               className={matchesMd ? "mix-ratio-form-label" : "no-display"}
+              sx={{ fontSize: matchesMd ? "0.75rem" : "0" }}
             >
               {label1}
             </Typography>
@@ -46,6 +47,7 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
           <Grid item xs={3}>
             <Typography
               className={matchesMd ? "mix-ratio-form-label" : "no-display"}
+              sx={{ fontSize: matchesMd ? "0.75rem" : "0" }}
             >
               {label2[0]}
             </Typography>
@@ -54,6 +56,7 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
           <Grid item xs={3}>
             <Typography
               className={matchesMd ? "mix-ratio-form-label" : "no-display"}
+              sx={{ fontSize: matchesMd ? "0.75rem" : "0" }}
             >
               {label2[1]}
             </Typography>
@@ -71,6 +74,7 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
           <Grid item xs={3}>
             <Typography
               className={matchesMd ? "mix-ratio-form-label" : "no-display"}
+              sx={{ fontSize: matchesMd ? "0.75rem" : "0" }}
             >
               {label1}
             </Typography>
@@ -79,6 +83,7 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
           <Grid item xs={3}>
             <Typography
               className={matchesMd ? "mix-ratio-form-label" : "no-display"}
+              sx={{ fontSize: matchesMd ? "0.75rem" : "0" }}
             >
               {label2}
             </Typography>
@@ -87,6 +92,7 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
           <Grid item xs={3}>
             <Typography
               className={matchesMd ? "mix-ratio-form-label" : "no-display"}
+              sx={{ fontSize: matchesMd ? "0.75rem" : "0" }}
             >
               {label3}
             </Typography>
@@ -111,7 +117,7 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
         <Grid item xs={3} className="confirm-plan-form-container">
           <DSTTextField
             label={`${data.speciesSelection.seedsSelected[0].label}`}
-            variant="filled"
+            // variant="filled"
             disabled={true}
             value={`$${data.speciesSelection.seedsSelected[0].totalCost.toFixed(
               2

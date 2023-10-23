@@ -138,6 +138,7 @@ const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
       >
         <Typography className="data-circle-label">Price/Acre</Typography>
         <Box className="data-circle">
+          {/* FIXME: static value here */}
           <Typography>$35.33</Typography>
         </Box>
       </Grid>

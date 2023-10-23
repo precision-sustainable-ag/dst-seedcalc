@@ -66,7 +66,8 @@ const SeedingMethod = ({ council }) => {
                 padding: "11px",
                 margin: "0 auto",
                 backgroundColor: "#E5E7D5",
-                border: "#C7C7C7 solid 1px",
+                color: "primary.text",
+                border: "solid 2px",
                 borderRadius: "50%",
               }}
             >
