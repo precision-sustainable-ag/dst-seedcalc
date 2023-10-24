@@ -111,7 +111,7 @@ const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
   };
 
   return (
-    <Grid container xs={12} sx={{ padding: "20px" }}>
+    <Grid container xs={12} sx={{ padding: "0.5rem" }}>
       <Grid
         item
         xs={6}
@@ -125,7 +125,7 @@ const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
           Amount of mix for 50 acres
         </Typography>
         <Box className="data-circle">
-          <Typography>{parseInt(poundsForPurchaseSum)}</Typography>
+          <Typography>{parseInt(poundsForPurchaseSum) + "lbs"}</Typography>
         </Box>
       </Grid>
       <Grid
@@ -189,6 +189,7 @@ const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
           padding: "10px",
         }}
       >
+        {/* FIXME: the chart rendered seems different than the label? */}
         {renderPieChart("poundsOfSeed")}
         <Typography className="mix-ratio-chart-header" sx={{ fontWeight: 600 }}>
           {council === "MCCC" ? "Plants" : "Seeds"} Per Acre{" "}

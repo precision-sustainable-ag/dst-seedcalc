@@ -56,10 +56,12 @@ const MixSeedingRate = () => {
     seedsSelected.map((s, i) => {
       average += Math.round(s.mixSeedingRate);
     });
-    const minimum = average - average / 2;
-    const maximum = average + average / 2;
-    const coefficient =
-      average + (seedingMethod.managementImpactOnMix - 0.5) * average;
+    const minimum = Math.round(average - average / 2);
+    const maximum = Math.round(average + average / 2);
+    const coefficient = Math.round(
+      average + (seedingMethod.managementImpactOnMix - 0.5) * average
+    );
+    average = Math.round(average);
     setMin(minimum);
     setMax(maximum);
     setSeedingRateAverage(average);
@@ -124,10 +126,10 @@ const MixSeedingRate = () => {
               borderRadius: "1rem",
             }}
           >
-            Factors that lower Seeding Rate:
-            <br />- Cost Saving
-            <br />- Low Biomass
-            <br />- Planting Green
+            Factors that may raise Seeding Rate:
+            <br />- Erosion Control
+            <br />- Weed Supression
+            <br />- Grazing
           </Typography>
 
           <Typography
@@ -141,10 +143,10 @@ const MixSeedingRate = () => {
               borderRadius: "1rem",
             }}
           >
-            Factors that may raise Seeding Rate:
-            <br />- Erosion Control
-            <br />- Weed Supression
-            <br />- Grazing
+            Factors that lower Seeding Rate:
+            <br />- Cost Saving
+            <br />- Low Biomass
+            <br />- Planting Green
           </Typography>
         </Grid>
         <Grid
@@ -171,7 +173,7 @@ const MixSeedingRate = () => {
                 sx={{
                   "& .MuiSlider-thumb": {
                     zIndex: 2,
-                    "&::hover": {
+                    "&:hover": {
                       boxShadow: "0px 0px 5px 25px rgba(79, 95, 48, 0.16)",
                     },
                     "&.Mui-active": {

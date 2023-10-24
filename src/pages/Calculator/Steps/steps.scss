@@ -205,9 +205,9 @@ div[class*="map_infobar__"] {
 }
 .data-circle-label {
   font-size: 15px !important;
-  margin: 10px !important;
   font-weight: 600 !important;
   color: $primary-text;
+  min-height: 45px;
 }
 /* .NRCS-result-container  {
     border-radius: 25px;

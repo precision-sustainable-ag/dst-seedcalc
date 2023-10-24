@@ -15,10 +15,9 @@ const SeedsSelectedList = ({ list }) => {
       sx={
         matchesMd
           ? {
-              height: "100px",
+              minHeight: "100px",
               whiteSpace: "normal",
               overflowX: "auto",
-              opacity: "90%",
             }
           : {
               height: "100%",
