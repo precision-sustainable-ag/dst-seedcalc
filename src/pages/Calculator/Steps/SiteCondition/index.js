@@ -12,7 +12,7 @@ import { isEmptyNull, validateForms } from "../../../../shared/utils/format";
 import SiteConditionForm from "./form";
 import RegionSelector from "./RegionSelector";
 import MapComponent from "./MapComponent";
-import { DSTLoading } from "../../../../components/DSTLoading";
+import { Spinner } from "@psa/dst.ui.spinner";
 import "./../steps.css";
 
 const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
@@ -99,7 +99,7 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
       </Grid>
       {/* <Grid item xs={12} sx={{ height: "1000px" }}></Grid> */}
       {data.loading === "getLocality" ? (
-        <DSTLoading />
+        <Spinner />
       ) : (
         <Grid xs={12} md={12} item>
           {step === 1 ? (

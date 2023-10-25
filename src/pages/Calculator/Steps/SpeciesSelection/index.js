@@ -23,7 +23,7 @@ import SeedsSelectedList from "./../../../../components/SeedsSelectedList";
 import { validateForms } from "../../../../shared/utils/format";
 import ImageListComponent from "./imageListComponent";
 import Diversity from "./diversity";
-import { DSTLoading } from "../../../../components/DSTLoading";
+import { Spinner } from "@psa/dst.ui.spinner";
 
 const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   // useSelector for crops reducer data
@@ -429,7 +429,6 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
           <Grid item xs={12}>
             <Typography>Mix Diversity</Typography>
           </Grid>
-          {loading === "getCrops" && <DSTLoading />}
           {seedsList.map((s, i) => {
             return (
               <Grid item xs={12}>
@@ -444,7 +443,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
                   </AccordionSummary>
                   <AccordionDetails className="accordian-details">
                     {loading === "getCrops" ? (
-                      <DSTLoading />
+                      <Spinner />
                     ) : (
                       <ImageListComponent
                         seed={s}

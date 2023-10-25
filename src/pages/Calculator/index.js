@@ -19,13 +19,12 @@ import {
 } from "./Steps";
 
 import { calculatorList, completedList } from "../../shared/data/dropdown";
-import { Header } from "../../components/Header";
 import { StepsList } from "../../components/StepsList";
 import "./calculator.css";
 import "./../Home/home.css";
-import { Alert, Fade, Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import { FadeAlert } from "@psa/dst.ui.fade-alert";
 
 const Calculator = () => {
   const data = useSelector((state) => state.steps.value);
@@ -170,25 +169,20 @@ const Calculator = () => {
   return (
     <Grid container justifyContent="center" alignItems="center">
       <Grid item style={{ position: "fixed", top: "0px", zIndex: 1000 }}>
-        <Fade in={showAlert}>
-          <Alert
-            severity="error"
-            action={
-              <IconButton
-                aria-label="close"
-                color="inherit"
-                size="small"
-                onClick={() => setShowAlert(false)}
-              >
-                <CloseIcon fontSize="inherit" />
-              </IconButton>
-            }
-          >
-            <Typography fontWeight={600}>
-              Network Error - Try again later or refresh the page!
-            </Typography>
-          </Alert>
-        </Fade>
+        <FadeAlert
+          showAlert={showAlert}
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => setShowAlert(false)}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+          message="Network Error - Try again later or refresh the page!"
+        />
       </Grid>
       {data.siteCondition.council === "" ? (
         <Grid xs={12} className={"dst-header-container dst-psa-logo"} item>
