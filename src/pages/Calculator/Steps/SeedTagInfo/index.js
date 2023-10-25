@@ -66,13 +66,14 @@ const SeedTagInfo = ({ council }) => {
   };
 
   const renderRightAccordian = (key, data, type, disabled) => {
-    const value = Math.floor(data[key]);
+    const value =
+      type === "percent" ? convertToPercent(data[key]) : Math.floor(data[key]);
     return (
       <Grid item xs={6}>
         <NumberTextField
           className="text-field-50"
           disabled={disabled}
-          value={convertToPercent(data[key])}
+          value={value}
           handleChange={(e) => {
             handleSeed(convertToDecimal(e.target.value), key, "", {
               ...data,
