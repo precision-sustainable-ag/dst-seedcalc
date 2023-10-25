@@ -7,6 +7,7 @@ export const NumberTextField = ({
   handleChange,
   className,
   disabled,
+  placeholder,
 }) => {
   return (
     <TextField
@@ -15,12 +16,12 @@ export const NumberTextField = ({
       value={value}
       label={label}
       onChange={handleChange}
-      id="outlined-number"
-      type="number"
       InputLabelProps={{
         shrink: true,
       }}
-      InputProps={{ inputProps: { min: 0 }, disabled: disabled }}
+      type="number"
+      placeholder={placeholder}
+      disabled={disabled}
     />
   );
 };

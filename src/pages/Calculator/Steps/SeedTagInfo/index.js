@@ -11,33 +11,21 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 
 import { updateSteps } from "../../../../features/stepSlice";
 import { DSTSwitch } from "./../../../../components/Switch";
-import { seedsList, seedsLabel } from "./../../../../shared/data/species";
 import {
   convertToPercent,
   convertToDecimal,
 } from "../../../../shared/utils/calculate";
 import { NumberTextField } from "./../../../../components/NumberTextField";
 import "./../steps.scss";
-import SeedsSelectedList from "../../../../components/SeedsSelectedList";
 
 const SeedTagInfo = ({ council }) => {
-  // themes
-  const theme = useTheme();
-
-  // useSelector for crops reducer data
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
   const speciesSelection = data.speciesSelection;
-  const seedsSelected = speciesSelection.seedsSelected;
   const [sameInfoActive, setSameInfoActive] = useState(false);
-  const renderSeedsSelected = () => {
-    return <SeedsSelectedList list={speciesSelection.seedsSelected} />;
-  };
 
   const handleUpdateSteps = (key, val) => {
     const data = {
@@ -66,6 +54,7 @@ const SeedTagInfo = ({ council }) => {
       updateSeed(val, key1, key2, seed);
     }
   };
+
   const updateSeed = (val, key1, key2, seed) => {
     // find index of seed, parse a copy, update proper values, & send to Redux
     const index = speciesSelection.seedsSelected.findIndex(
@@ -79,10 +68,9 @@ const SeedTagInfo = ({ council }) => {
   const renderRightAccordian = (key, data, type, disabled) => {
     const value = Math.floor(data[key]);
     return (
-      <Grid item xs={6} className="seed-tag-info-grid-right">
+      <Grid item xs={6}>
         <NumberTextField
           className="text-field-50"
-          variant="filled"
           disabled={disabled}
           value={convertToPercent(data[key])}
           handleChange={(e) => {
@@ -131,14 +119,17 @@ const SeedTagInfo = ({ council }) => {
       </Accordion>
     );
   };
+
   const handleSwitch = () => {
     setSameInfoActive(!sameInfoActive);
   };
+
   return (
     <Grid container>
       <Grid item xs={12}>
         <Typography variant="h2">Enter seed tag info</Typography>
       </Grid>
+
       <Grid
         item
         xs={12}
@@ -151,15 +142,14 @@ const SeedTagInfo = ({ council }) => {
           Same Information for All Species
         </Typography>
       </Grid>
-      <Grid item xs={12}>
-        {speciesSelection.seedsSelected.map((s, i) => {
-          return (
-            <Grid xs={12}>
-              <Grid item>{renderAccordian(s)}</Grid>
-            </Grid>
-          );
-        })}
-      </Grid>
+
+      {speciesSelection.seedsSelected.map((s, i) => {
+        return (
+          <Grid item xs={12}>
+            {renderAccordian(s)}
+          </Grid>
+        );
+      })}
     </Grid>
   );
 };

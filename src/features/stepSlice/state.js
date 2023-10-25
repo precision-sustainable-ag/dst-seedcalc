@@ -19,7 +19,7 @@ export const initialState = {
       countyId: "",
       soilDrainage: "",
       plannedPlantingDate: dayjs(new Date()),
-      acres: 0,
+      acres: "",
       checkNRCSStandards: false,
       locationSelected: false,
       latitude: 37.75,

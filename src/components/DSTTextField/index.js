@@ -15,7 +15,6 @@ export const DSTTextField = ({
       value={value}
       label={label}
       onChange={handleChange}
-      id="outlined-number"
       InputLabelProps={{
         shrink: true,
       }}

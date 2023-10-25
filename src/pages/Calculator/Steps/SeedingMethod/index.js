@@ -82,16 +82,15 @@ const SeedingMethod = ({ council }) => {
 
   const renderAccordian = (seed) => {
     return (
-      <Accordion xs={12} className="accordian-container">
+      <Accordion className="accordian-container">
         <AccordionSummary
-          xs={12}
           expandIcon={<ExpandMoreIcon />}
           className="accordian-summary"
         >
           <Typography>{seed.label}</Typography>
         </AccordionSummary>
         <AccordionDetails className="accordian-details">
-          <Grid xs={12} container>
+          <Grid container>
             <Grid item xs={6} className="mix-seeding-rate-grid-left">
               <Typography>Precision: </Typography>
             </Grid>
@@ -107,7 +106,10 @@ const SeedingMethod = ({ council }) => {
             <Grid item xs={6} className="mix-seeding-rate-grid-left">
               <Typography>
                 Aerial(or broadcast with no Light Incorporation{" "}
-                <span className="red-text">Not Recommended</span>):{" "}
+                <Typography color={"red"} display={"inline"}>
+                  Not Recommended
+                </Typography>
+                ):{" "}
               </Typography>
             </Grid>
             {renderRightAccordian("aerial", seed.aerial)}
@@ -135,15 +137,13 @@ const SeedingMethod = ({ council }) => {
           items={seedingMethods}
         />
       </Grid>
-      <Grid item xs={12}>
-        {seedsSelected.map((s, i) => {
-          return (
-            <Grid xs={12}>
-              <Grid item>{renderAccordian(s)}</Grid>
-            </Grid>
-          );
-        })}
-      </Grid>
+      {seedsSelected.map((s, i) => {
+        return (
+          <Grid item xs={12}>
+            {renderAccordian(s)}
+          </Grid>
+        );
+      })}
     </Grid>
   );
 };

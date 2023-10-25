@@ -91,6 +91,7 @@ const SiteConditionForm = ({
           handleChange={(e) => {
             handleUpdateSteps("acres", "siteCondition", e.target.value);
           }}
+          placeholder={"Enter your field acres here"}
         />
       </Grid>
 
