@@ -1,3 +1,7 @@
+//////////////////////////////////////////////////////////
+//                     Imports                          //
+//////////////////////////////////////////////////////////
+
 import * as React from "react";
 import Grid from "@mui/material/Grid";
 import { useState } from "react";
@@ -10,7 +14,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-import { updateSteps } from "./../../../../features/stepSlice";
+import { updateSteps } from "../../../../features/stepSlice";
 import { DSTSwitch } from "./../../../../components/Switch";
 import { seedsList, seedsLabel } from "./../../../../shared/data/species";
 import {
@@ -122,6 +126,7 @@ const SeedTagInfo = ({ council }) => {
             <Grid item xs={6} className="seed-tag-info-grid-left">
               <Typography>Seeds per Pound </Typography>
             </Grid>
+            {/* FIXME: this also turns seeds per pound 100 times larger */}
             {renderRightAccordian("poundsOfSeed", data, "", true)}
           </Grid>
         </AccordionDetails>

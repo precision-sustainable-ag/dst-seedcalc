@@ -1,3 +1,7 @@
+//////////////////////////////////////////////////////////
+//                     Imports                          //
+//////////////////////////////////////////////////////////
+
 import * as React from "react";
 import Grid from "@mui/material/Grid";
 import { useState, useEffect } from "react";
@@ -8,7 +12,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 
 import { VerticalSlider } from "../../../../components/VerticalSlider";
 import "./../steps.css";
-import { updateSteps } from "./../../../../features/stepSlice";
+import { updateSteps } from "../../../../features/stepSlice";
 import SeedsSelectedList from "../../../../components/SeedsSelectedList";
 
 const SeedingMethod = ({ council }) => {
@@ -30,6 +34,23 @@ const SeedingMethod = ({ council }) => {
   const [max, setMax] = useState(0);
   const [seedingRateCoefficient, setSeedingRateCoefficient] = useState(0);
   const [seedingRateAverage, setSeedingRateAverage] = useState(0);
+
+  //////////////////////////////////////////////////////////
+  //                      Redux                           //
+  //////////////////////////////////////////////////////////
+
+  const handleUpdateSteps = (key, val) => {
+    const data = {
+      type: "seedingMethod",
+      key: key,
+      value: val,
+    };
+    dispatch(updateSteps(data));
+  };
+
+  //////////////////////////////////////////////////////////
+  //                    State Logic                       //
+  //////////////////////////////////////////////////////////
 
   const updateSeedingRateAverage = async () => {
     let average = 0;
@@ -56,15 +77,6 @@ const SeedingMethod = ({ council }) => {
   const clearChart = () => {
     toggleDataLoaded(false);
   };
-  const handleUpdateSteps = (key, val) => {
-    const data = {
-      type: "seedingMethod",
-      key: key,
-      value: val,
-    };
-    dispatch(updateSteps(data));
-  };
-
   const renderSeedsSelected = () => {
     return <SeedsSelectedList list={speciesSelection.seedsSelected} />;
   };
@@ -88,12 +100,21 @@ const SeedingMethod = ({ council }) => {
     );
   };
 
+  //////////////////////////////////////////////////////////
+  //                    useEffect                         //
+  //////////////////////////////////////////////////////////
+
   useEffect(() => {
     updateSeedingRateAverage();
     return () => {
       dataLoaded && clearChart();
     };
   }, []);
+
+  //////////////////////////////////////////////////////////
+  //                      Render                          //
+  //////////////////////////////////////////////////////////
+
   return (
     <Grid xs={12} justify="center" container>
       {seedsSelected.length > 0 && renderSeedsSelected()}

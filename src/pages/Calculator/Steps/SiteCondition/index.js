@@ -1,30 +1,37 @@
+//////////////////////////////////////////////////////////
+//                      Imports                         //
+//////////////////////////////////////////////////////////
+
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
-
-import { DatePicker } from "./../../../../components/DatePicker";
-import { Dropdown } from "./../../../../components/Dropdown";
-import { NumberTextField } from "./../../../../components/NumberTextField";
-import { DSTSwitch } from "./../../../../components/Switch";
-import { updateSteps } from "./../../../../features/stepSlice";
-import { soilDrainage } from "./../../../../shared/data/dropdown";
-import {
-  getCrops,
-  getCropsById,
-  getLocality,
-  getRegion,
-} from "./../../../../features/stepSlice";
+import { getCrops, getLocality } from "../../../../features/stepSlice/api";
+import { updateSteps } from "../../../../features/stepSlice/index";
+import { isEmptyNull, validateForms } from "../../../../shared/utils/format";
+import SiteConditionForm from "./form";
+import RegionSelector from "./RegionSelector";
+import MapComponent from "./MapComponent";
+import { Spinner } from "@psa/dst.ui.spinner";
 import "./../steps.css";
 
-const SiteCondition = ({ council }) => {
+const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps);
   const siteCondition = data.value.siteCondition;
-  const states = data.value.states;
   const counties = data.value.counties;
-  const [checked, setChecked] = useState(data.value.NRCS.enabled);
+  const NRCS = data.value.NRCS;
 
+  // Location state
+  const stateList = data.value.states;
+  const [selectedToEditSite, setSelectedToEditSite] = useState({});
+  const [step, setStep] = useState(siteCondition.locationStep);
+
+  //////////////////////////////////////////////////////////
+  //                      Redux                           //
+  //////////////////////////////////////////////////////////
+
+  // update redux value
   const handleUpdateSteps = (key, type, val) => {
     const data = {
       type: type,
@@ -34,124 +41,113 @@ const SiteCondition = ({ council }) => {
     dispatch(updateSteps(data));
   };
 
-  const handleSwitch = () => {
-    setChecked(!checked);
-    handleUpdateSteps("enabled", "NRCS", !checked);
-  };
-  const renderCountyList = () => {
-    if (counties.length > 0) {
-      const countyFilter = counties.map((b, i) => b.County);
-      if (siteCondition.state !== "") {
-        return (
-          <Grid item xs={12} padding={15} className="site-condition-container">
-            <Dropdown
-              value={siteCondition.county}
-              label={
-                council === "MCCC" ? "County: " : "USDA Plant Hardiness Zone: "
-              }
-              handleChange={handleRegion}
-              size={12}
-              items={counties}
-            />
-          </Grid>
-        );
-      }
-    }
-  };
-  const handleStates = (e) => {
-    const state = states.filter((s, i) => s.label === e.target.value);
-    handleUpdateSteps("state", "siteCondition", e.target.value);
-    handleUpdateSteps("stateId", "siteCondition", state[0].id);
-    handleUpdateSteps("county", "siteCondition", "");
-    handleUpdateSteps("countyId", "siteCondition", "");
-    dispatch(getRegion({ regionId: state[0].id })).then((res) => {});
-  };
-  const handleRegion = (e) => {
-    const countyId = counties.filter((c, i) => c.label === e.target.value)[0]
-      .id;
+  //////////////////////////////////////////////////////////
+  //                   State Logic                        //
+  //////////////////////////////////////////////////////////
 
-    handleUpdateSteps("county", "siteCondition", e.target.value);
-    handleUpdateSteps("countyId", "siteCondition", countyId);
-
-    dispatch(
-      getCrops({
-        regionId: countyId,
-      })
-    );
+  // handle steps for the map
+  const handleSteps = (type) => {
+    type === "next" ? setStep(step + 1) : setStep(step - 1);
+    type === "back" && setSelectedToEditSite({});
   };
 
+  //////////////////////////////////////////////////////////
+  //                     useEffect                        //
+  //////////////////////////////////////////////////////////
+
+  // initially get states data
   useEffect(() => {
-    dispatch(getLocality({ type: council }));
-    dispatch(
-      getCropsById({
-        cropId: "148",
-        regionId: "18",
-        countyId: "180",
-        url: "https://developapi.covercrop-selector.org/v2/crops/148?regions=18&context=seed_calc&regions=180",
-      })
-    );
+    if (data.value.states.length === 0) {
+      dispatch(getLocality());
+    }
   }, []);
+
+  // Ensure that county id is updated to the current county
+  useEffect(() => {
+    if (siteCondition.county !== "") {
+      const countyId = counties.filter(
+        (c, i) => c.label === siteCondition.county
+      )[0].id;
+      handleUpdateSteps("countyId", "siteCondition", countyId);
+    }
+  }, [siteCondition.county]);
+
+  // set favicon based on redux council value
+  useEffect(() => {
+    const favicon = document.getElementById("favicon");
+    if (siteCondition.council === "MCCC") {
+      favicon.href = "favicons/mccc-favicon.ico";
+    } else if (siteCondition.council === "NECCC") {
+      favicon.href = "favicons/neccc-favicon.ico";
+    } else if (siteCondition.council === "") {
+      favicon.href = "PSALogo.png";
+    }
+  }, [siteCondition.council]);
+
+  // validate all information on this page is selected
+  useEffect(() => {
+    const checkNextStep =
+      !isEmptyNull(siteCondition.state) &&
+      !isEmptyNull(siteCondition.soilDrainage) &&
+      siteCondition.acres !== "0" &&
+      !isEmptyNull(siteCondition.county);
+    validateForms(checkNextStep, 0, completedStep, setCompletedStep);
+    if (checkNextStep) {
+      // call getCrops api to get all crops from countyId
+      dispatch(getCrops({ regionId: siteCondition.countyId }));
+    }
+  }, [siteCondition]);
+
+  //////////////////////////////////////////////////////////
+  //                      Render                          //
+  //////////////////////////////////////////////////////////
+
   return (
-    <Grid container justifyContent="center" alignItems="center" size={12}>
+    <Grid container justifyContent="center" alignItems="center">
       <Grid item xs={12} className="site-condition-header">
         <Typography variant="h2" className="site-condition-header">
           Tell us about your planting site
         </Typography>
       </Grid>
-      <Grid item xs={12} padding={15} className="site-condition-container">
-        <Dropdown
-          value={siteCondition.state}
-          label={"State: "}
-          handleChange={handleStates}
-          size={12}
-          items={states}
+      {/* <Grid item xs={12} sx={{ height: "1000px" }}></Grid> */}
+      {data.loading === "getLocality" ? (
+        <Spinner />
+      ) : (
+        <Grid xs={12} md={12} item>
+          {step === 1 ? (
+            <RegionSelector
+              stateList={stateList}
+              handleSteps={handleSteps}
+              siteCondition={siteCondition}
+              handleUpdateSteps={handleUpdateSteps}
+              step={step}
+            />
+          ) : step === 2 ? (
+            <MapComponent
+              step={step}
+              handleSteps={handleSteps}
+              selectedToEditSite={selectedToEditSite}
+              setSelectedToEditSite={setSelectedToEditSite}
+              siteCondition={siteCondition}
+              handleUpdateSteps={handleUpdateSteps}
+              counties={counties}
+            />
+          ) : (
+            <></>
+          )}
+        </Grid>
+      )}
+
+      <Grid container>
+        <SiteConditionForm
+          siteCondition={siteCondition}
+          handleSteps={handleSteps}
+          step={step}
+          handleUpdateSteps={handleUpdateSteps}
+          council={council}
+          counties={counties}
+          NRCS={NRCS}
         />
-      </Grid>
-      {renderCountyList()}
-      <Grid item xs={12} padding={15} className="site-condition-container">
-        <Dropdown
-          value={siteCondition.soilDrainage}
-          label={"Soil Drainage: "}
-          handleChange={(e) => {
-            handleUpdateSteps("soilDrainage", "siteCondition", e.target.value);
-          }}
-          size={12}
-          items={soilDrainage}
-        />
-      </Grid>
-      <Grid item xs={12} padding={15} className="site-condition-container">
-        <DatePicker
-          label={"Planned Planting Date: "}
-          value={siteCondition.plannedPlantingDate}
-          handleChange={(e) => {
-            const formattedDate = `${e["$M"] + 1}/${e["$D"]}/${e["$y"]}`;
-            handleUpdateSteps(
-              "plannedPlantingDate",
-              "siteCondition",
-              formattedDate
-            );
-          }}
-        />
-      </Grid>
-      <Grid item xs={12} padding={15} className="site-condition-container">
-        <NumberTextField
-          value={siteCondition.acres}
-          label={"Acres"}
-          disabled={false}
-          handleChange={(e) => {
-            handleUpdateSteps("acres", "siteCondition", e.target.value);
-          }}
-        />
-      </Grid>
-      <Grid item xs={12} padding={15} className="site-condition-container">
-        {council === "MCCC" && (
-          <>
-            <Typography variant="nrcsStandard">
-              Check NRCS Standards:{" "}
-            </Typography>
-            <DSTSwitch checked={checked} handleChange={handleSwitch} />
-          </>
-        )}
       </Grid>
     </Grid>
   );

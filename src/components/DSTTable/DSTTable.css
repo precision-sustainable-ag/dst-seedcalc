@@ -1,0 +1,15 @@
+.MuiTableRow-root.MuiTableRow-head {
+  background-color: #eff1e1;
+}
+.MuiTableCell-root.MuiTableCell-head {
+  font-weight: bold;
+}
+.MuiTableRow-root {
+  background-color: #fffff2;
+}
+.MuiTable-root th {
+  padding: 8px;
+}
+.MuiTable-root td {
+  padding: 8px;
+}
