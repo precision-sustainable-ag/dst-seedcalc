@@ -11,7 +11,7 @@ export const DSTTextField = ({
   return (
     <TextField
       fullWidth
-      className={className !== "" ? className : "number-text-container"}
+      className={className}
       value={value}
       label={label}
       onChange={handleChange}

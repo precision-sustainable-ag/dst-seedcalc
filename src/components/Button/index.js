@@ -3,7 +3,6 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import { Typography } from "@mui/material";
 import { dstTheme } from "../../shared/themes";
-import "./button.css";
 
 /* 
 {
@@ -21,6 +20,7 @@ import "./button.css";
   }
 }
 */
+// TODO: not used now
 export const DSTButton = ({
   text,
   buttonClass,
