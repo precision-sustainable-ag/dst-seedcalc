@@ -134,6 +134,7 @@ const MixRatio = ({ council }) => {
     );
   };
 
+  // TODO: build a custom component for piechart since they are used 3 times as the same chart
   const renderPieChart = (type) => {
     let chartData;
     if (type === "plantsPerAcre") {
