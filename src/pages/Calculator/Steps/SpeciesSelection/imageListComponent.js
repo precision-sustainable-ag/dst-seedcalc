@@ -1,6 +1,9 @@
 import * as React from "react";
 import Grid from "@mui/material/Grid";
 import { Typography, Link } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 
@@ -8,12 +11,15 @@ import "./../steps.css";
 
 const ImageListComponent = ({
   seed,
-  matchesSm,
   filteredSeeds,
   council,
   data,
   updateSeeds,
 }) => {
+  // themes
+  const theme = useTheme();
+  const matchesSm = useMediaQuery(theme.breakpoints.down("sm"));
+
   const imgSrc = (imgUrl) => {
     return imgUrl !== null ? imgUrl + "?w=300&h=300&fit=crop&auto=format" : "";
   };

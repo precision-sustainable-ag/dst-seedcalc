@@ -2,7 +2,7 @@
 //                      Imports                         //
 //////////////////////////////////////////////////////////
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import { useSelector } from "react-redux";
 
@@ -22,14 +22,19 @@ import { calculatorList, completedList } from "../../shared/data/dropdown";
 import { StepsList } from "../../components/StepsList";
 import "./calculator.css";
 import "./../Home/home.css";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import { FadeAlert } from "@psa/dst.ui.fade-alert";
 
 const Calculator = () => {
   const data = useSelector((state) => state.steps.value);
+  const error = useSelector((state) => state.steps.error);
   const type = data.siteCondition.council;
 
   const [activeStep, setActiveStep] = useState(0);
   // this completedStep is to determine whether the next button is clickable on each page
   const [completedStep, setCompletedStep] = useState([...completedList]);
+  const [showAlert, setShowAlert] = useState(false);
 
   //////////////////////////////////////////////////////////
   //                      Render                          //
@@ -114,8 +119,28 @@ const Calculator = () => {
     }
   };
 
+  useEffect(() => {
+    setShowAlert(error);
+  }, [error]);
+
   return (
     <Grid container justifyContent="center" alignItems="center">
+      <Grid item style={{ position: "fixed", top: "0px", zIndex: 1000 }}>
+        <FadeAlert
+          showAlert={showAlert}
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => setShowAlert(false)}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+          message="Network Error - Try again later or refresh the page!"
+        />
+      </Grid>
       {data.siteCondition.council === "" ? (
         <Grid xs={12} className={"dst-header-container dst-psa-logo"} item>
           <img alt="neccc" src={"./PSALogo.png"} />

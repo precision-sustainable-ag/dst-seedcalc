@@ -12,6 +12,7 @@ import { isEmptyNull, validateForms } from "../../../../shared/utils/format";
 import SiteConditionForm from "./form";
 import RegionSelector from "./RegionSelector";
 import MapComponent from "./MapComponent";
+import { Spinner } from "@psa/dst.ui.spinner";
 import "./../steps.css";
 
 const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
@@ -85,15 +86,16 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
 
   // validate all information on this page is selected
   useEffect(() => {
-    validateForms(
+    const checkNextStep =
       !isEmptyNull(siteCondition.state) &&
-        !isEmptyNull(siteCondition.soilDrainage) &&
-        siteCondition.acres !== 0 &&
-        !isEmptyNull(siteCondition.county),
-      0,
-      completedStep,
-      setCompletedStep
-    );
+      !isEmptyNull(siteCondition.soilDrainage) &&
+      siteCondition.acres !== "0" &&
+      !isEmptyNull(siteCondition.county);
+    validateForms(checkNextStep, 0, completedStep, setCompletedStep);
+    if (checkNextStep) {
+      // call getCrops api to get all crops from countyId
+      dispatch(getCrops({ regionId: siteCondition.countyId }));
+    }
   }, [siteCondition]);
 
   //////////////////////////////////////////////////////////
@@ -101,15 +103,16 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
   //////////////////////////////////////////////////////////
 
   return (
-    <Grid container justifyContent="center" alignItems="center" size={12}>
+    <Grid container justifyContent="center" alignItems="center">
       <Grid item xs={12} className="site-condition-header">
         <Typography variant="h2" className="site-condition-header">
           Tell us about your planting site
         </Typography>
       </Grid>
       {/* <Grid item xs={12} sx={{ height: "1000px" }}></Grid> */}
-
-      {stateList.length > 0 && (
+      {data.loading === "getLocality" ? (
+        <Spinner />
+      ) : (
         <Grid xs={12} md={12} item>
           {step === 1 ? (
             <RegionSelector
@@ -134,7 +137,8 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
           )}
         </Grid>
       )}
-      <Grid xs={12} md={12} container>
+
+      <Grid container>
         <SiteConditionForm
           siteCondition={siteCondition}
           handleSteps={handleSteps}

@@ -90,7 +90,7 @@ const RegionSelector = ({
   }, [selectedState]);
 
   return (
-    <Grid xs={12} container>
+    <Grid container>
       <Grid item xs={7} md={10} className="site-condition-container">
         <Dropdown
           value={siteCondition.stateSelected.label || ""}

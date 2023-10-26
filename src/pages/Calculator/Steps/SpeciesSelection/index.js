@@ -6,18 +6,16 @@ import * as React from "react";
 import { useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import { useSelector, useDispatch } from "react-redux";
-import { Typography, Link } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useState } from "react";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 
 import { SearchField } from "../../../../components/SearchField";
 import { updateSteps } from "../../../../features/stepSlice/index";
-import { getCrops, getCropsById } from "../../../../features/stepSlice/api";
+import { getCropsById } from "../../../../features/stepSlice/api";
 import { seedsList, seedsLabel } from "../../../../shared/data/species";
 import { calculateAllMixRatioValues } from "../../../../shared/utils/calculate";
 import "./../steps.css";
@@ -25,19 +23,17 @@ import SeedsSelectedList from "./../../../../components/SeedsSelectedList";
 import { validateForms } from "../../../../shared/utils/format";
 import ImageListComponent from "./imageListComponent";
 import Diversity from "./diversity";
+import { Spinner } from "@psa/dst.ui.spinner";
 
 const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
-  // themes
-  const theme = useTheme();
-  const matchesSm = useMediaQuery(theme.breakpoints.down("sm"));
-
   // useSelector for crops reducer data
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
+  const loading = useSelector((state) => state.steps.loading);
   const { crops, speciesSelection } = data;
   const seedsSelected = speciesSelection.seedsSelected;
   const diversitySelected = speciesSelection.diversitySelected;
-  const [filteredSeeds, setFilteredSeeds] = useState(crops);
+  const [filteredSeeds, setFilteredSeeds] = useState([]);
   const [query, setQuery] = useState("");
 
   //////////////////////////////////////////////////////////
@@ -390,17 +386,6 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   //////////////////////////////////////////////////////////
 
   useEffect(() => {
-    if (data.siteCondition.countyId) {
-      dispatch(getCrops({ regionId: data.siteCondition.countyId }));
-    } else {
-      // TODO: add error handling
-      console.error("no countyId!");
-    }
-  }, []);
-
-  // TODO: modify this page loading logic and load plant data logic
-  // The page should use redux data for first time loading
-  useEffect(() => {
     if (data.crops.length > 0) {
       setFilteredSeeds(data.crops);
     }
@@ -419,30 +404,6 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   //                      Render                          //
   //////////////////////////////////////////////////////////
 
-  const renderAccordian = (seed) => {
-    return (
-      <Accordion xs={12} className="accordian-container">
-        <AccordionSummary
-          xs={12}
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography>{seedsLabel[seed]}</Typography>
-        </AccordionSummary>
-        <AccordionDetails className="accordian-details">
-          <ImageListComponent
-            seed={seed}
-            matchesSm={matchesSm}
-            filteredSeeds={filteredSeeds}
-            council={council}
-            data={data}
-            updateSeeds={updateSeeds}
-          />
-        </AccordionDetails>
-      </Accordion>
-    );
-  };
   return (
     <Grid xs={12} container>
       {seedsSelected.length > 0 && renderSeedsSelected()}
@@ -470,8 +431,30 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
           </Grid>
           {seedsList.map((s, i) => {
             return (
-              <Grid xs={12}>
-                <Grid item>{renderAccordian(s)}</Grid>
+              <Grid item xs={12}>
+                <Accordion xs={12} className="accordian-container">
+                  <AccordionSummary
+                    xs={12}
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
+                    <Typography>{seedsLabel[s]}</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails className="accordian-details">
+                    {loading === "getCrops" ? (
+                      <Spinner />
+                    ) : (
+                      <ImageListComponent
+                        seed={s}
+                        filteredSeeds={filteredSeeds}
+                        council={council}
+                        data={data}
+                        updateSeeds={updateSeeds}
+                      />
+                    )}
+                  </AccordionDetails>
+                </Accordion>
               </Grid>
             );
           })}
