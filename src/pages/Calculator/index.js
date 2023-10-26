@@ -23,12 +23,17 @@ import SeedsSelectedList from "../../components/SeedsSelectedList";
 import { calculatorList, completedList } from "../../shared/data/dropdown";
 import { StepsList } from "../../components/StepsList";
 import { useTheme } from "@mui/material/styles";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import { FadeAlert } from "@psa/dst.ui.fade-alert";
 
 const Calculator = () => {
   const data = useSelector((state) => state.steps.value);
+  const error = useSelector((state) => state.steps.error);
   const type = data.siteCondition.council;
+
   const [activeStep, setActiveStep] = useState(0);
-  const [skipped, setSkipped] = useState(new Set());
+  // this completedStep is to determine whether the next button is clickable on each page
   const [completedStep, setCompletedStep] = useState([...completedList]);
   const [showHeaderLogo, setShowHeaderLogo] = useState(true);
 
@@ -36,50 +41,7 @@ const Calculator = () => {
 
   const theme = useTheme();
   const matchesSm = useMediaQuery(theme.breakpoints.down("sm"));
-
-  //////////////////////////////////////////////////////////
-  //                      State Logic                     //
-  //////////////////////////////////////////////////////////
-
-  const isStepOptional = (step) => {
-    return step === 1;
-  };
-
-  const isStepSkipped = (step) => {
-    return skipped.has(step);
-  };
-
-  const handleNext = () => {
-    let newSkipped = skipped;
-    if (isStepSkipped(activeStep)) {
-      newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(activeStep);
-    }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped(newSkipped);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleSkip = () => {
-    if (!isStepOptional(activeStep)) {
-      throw new Error("You can't skip a step that isn't optional.");
-    }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped((prevSkipped) => {
-      const newSkipped = new Set(prevSkipped.values());
-      newSkipped.add(activeStep);
-      return newSkipped;
-    });
-  };
-
-  const handleReset = () => {
-    setActiveStep(0);
-  };
+  const [showAlert, setShowAlert] = useState(false);
 
   //////////////////////////////////////////////////////////
   //                      Render                          //
@@ -185,8 +147,28 @@ const Calculator = () => {
     };
   }, []);
 
+  useEffect(() => {
+    setShowAlert(error);
+  }, [error]);
+
   return (
     <Grid container justifyContent="center">
+      <Grid item style={{ position: "fixed", top: "0px", zIndex: 1000 }}>
+        <FadeAlert
+          showAlert={showAlert}
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => setShowAlert(false)}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+          message="Network Error - Try again later or refresh the page!"
+        />
+      </Grid>
       <Grid
         item
         xs={12}
@@ -227,15 +209,9 @@ const Calculator = () => {
         ref={stepperRef}
       >
         <StepsList
-          steps={calculatorList}
           activeStep={activeStep}
-          skipped={skipped}
-          handleNext={handleNext}
-          handleBack={handleBack}
-          handleSkip={handleSkip}
-          handleReset={handleReset}
-          completedStep={completedStep}
-          setCompletedStep={setCompletedStep}
+          setActiveStep={setActiveStep}
+          availableSteps={completedStep}
         />
       </Grid>
       <Grid item md={0} lg={2}></Grid>

@@ -1,12 +1,13 @@
+import { useState } from "react";
 import { Fragment } from "react";
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
+import { StepButton } from "@mui/material";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { calculatorList } from "../../shared/data/dropdown";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
 import { useTheme } from "@mui/material/styles";
@@ -29,37 +30,71 @@ import "./stepsList.css";
 }
 */
 
-export const StepsList = ({
-  steps,
-  activeStep,
-  skipped,
-  handleNext,
-  handleBack,
-  handleSkip,
-  handleReset,
-  completedStep,
-}) => {
+export const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
+
+  // this completed step is to determine whether each step is completed
+  const [completedStep, setCompletedStep] = useState(-1);
+
+  //////////////////////////////////////////////////////////
+  //                      State Logic                     //
+  //////////////////////////////////////////////////////////
+
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    setCompletedStep(activeStep);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleReset = () => {
+    setActiveStep(0);
+    setCompletedStep(-1);
+  };
 
   return (
     <Box sx={{ color: "primary.text" }}>
       <Stepper
         activeStep={activeStep}
         alternativeLabel
+        nonLinear
         className="stepper-container"
       >
-        {steps.map((label, index) => {
+        {calculatorList.map((label, index) => {
           return (
-            <Step key={label} sx={{ color: "#4f5f30" }}>
-              <StepLabel className="steps-label">{matches && label}</StepLabel>
+            <Step
+              key={label}
+              sx={{ color: "#4f5f30" }}
+              completed={index <= completedStep}
+              disabled={completedStep < 1}
+            >
+              <StepButton
+                className={`steps-label ${
+                  completedStep >= 1 ? "available-step" : ""
+                }`}
+                onClick={() => setActiveStep(index)}
+              >
+                {matches && label}
+              </StepButton>
             </Step>
           );
         })}
       </Stepper>
-      {activeStep === steps.length ? (
+      {activeStep === calculatorList.length ? (
         <Fragment>
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 1 }}>
+          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+            <Button
+              color="inherit"
+              disabled={activeStep === 0}
+              onClick={handleBack}
+              sx={{ mr: 1 }}
+            >
+              <ArrowBackIosIcon />
+              BACK
+            </Button>
             <Box sx={{ flex: "1 1 auto" }} />
             <Button variant="stepper" onClick={handleReset}>
               Reset
@@ -75,23 +110,17 @@ export const StepsList = ({
               onClick={handleBack}
             >
               {activeStep !== 0 && <ArrowBackIosNewIcon />}
-              {steps[activeStep - 1]}
+              {calculatorList[activeStep - 1]}
             </Button>
             <Box sx={{ flex: "1 1 auto" }} />
-            {/* {isStepOptional(activeStep) && (
-              <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-                Skip
-              </Button>
-            )} */}
-
             <Button
               variant="stepper"
-              disabled={completedStep[activeStep] === true ? false : true}
+              disabled={availableSteps[activeStep] === true ? false : true}
               onClick={handleNext}
             >
-              {activeStep === steps.length - 1
+              {activeStep === calculatorList.length - 1
                 ? "Finish"
-                : steps[activeStep + 1]}{" "}
+                : calculatorList[activeStep + 1]}{" "}
               <ArrowForwardIosIcon />
             </Button>
           </Box>

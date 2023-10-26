@@ -2,8 +2,12 @@
   color: #4f5f30 !important;
 }
 
-.stepper-container .MuiStepLabel-iconContainer .Mui-active {
+.available-step .MuiStepLabel-iconContainer .MuiSvgIcon-root {
   color: #4f5f30 !important;
+}
+
+.stepper-container .MuiStepLabel-iconContainer .Mui-active {
+  color: #77b400 !important;
 }
 
 .stepper-container .MuiStepLabel-iconContainer .Mui-completed {
