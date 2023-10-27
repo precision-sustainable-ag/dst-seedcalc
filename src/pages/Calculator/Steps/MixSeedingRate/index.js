@@ -147,9 +147,8 @@ const MixSeedingRate = () => {
   //                    State Logic                       //
   //////////////////////////////////////////////////////////
 
-  const updateManagementImpactOnMix = (e) => {
-    setSeedingRateCoefficient(e.target.value);
-    const percentage = e.target.value / seedingRateAverage - 0.5;
+  const updateManagementImpactOnMix = () => {
+    const percentage = seedingRateCoefficient / seedingRateAverage - 0.5;
     handleUpdateSteps("managementImpactOnMix", percentage);
   };
 
@@ -158,16 +157,17 @@ const MixSeedingRate = () => {
   //////////////////////////////////////////////////////////
 
   useEffect(() => {
-    let average = 0;
-    seedsSelected.map((s, i) => {
-      average += Math.round(s.mixSeedingRate);
-    });
+    const average = Math.round(
+      seedsSelected.reduce(
+        (total, seed) => total + parseFloat(seed.mixSeedingRate),
+        0
+      )
+    );
     const minimum = Math.round(average - average / 2);
     const maximum = Math.round(average + average / 2);
     const coefficient = Math.round(
       average + (seedingMethod.managementImpactOnMix - 0.5) * average
     );
-    average = Math.round(average);
     setMin(minimum);
     setMax(maximum);
     setSeedingRateAverage(average);
@@ -238,9 +238,8 @@ const MixSeedingRate = () => {
                 max={max}
                 value={seedingRateCoefficient}
                 valueLabelDisplay="off"
-                onChange={(e) => {
-                  updateManagementImpactOnMix(e);
-                }}
+                onChange={(e) => setSeedingRateCoefficient(e.target.value)}
+                onChangeCommitted={updateManagementImpactOnMix}
                 marks={marks}
                 coefficient={seedingRateCoefficient}
                 theme={theme}

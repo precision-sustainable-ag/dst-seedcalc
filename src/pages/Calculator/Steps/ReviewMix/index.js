@@ -152,6 +152,7 @@ const ReviewMix = ({ council }) => {
 
   useEffect(() => {
     initialDataLoad();
+    // FIXME: possible issues in useEffect return: state maybe unupdated value
     return () => {
       updateNRCS();
     };
@@ -160,10 +161,6 @@ const ReviewMix = ({ council }) => {
   //////////////////////////////////////////////////////////
   //                     Render                           //
   //////////////////////////////////////////////////////////
-
-  const renderSeedsSelected = () => {
-    return <SeedsSelectedList list={speciesSelection.seedsSelected} />;
-  };
 
   const renderCustomizedLabel = ({
     cx,
@@ -328,6 +325,7 @@ const ReviewMix = ({ council }) => {
         val: seed["step2Result"],
       },
       {
+        // FIXME: static value here, maybe need to change to dynamic
         label: "Management Impacts on Mix (+57%)",
         key: "managementImpactOnMix",
         val: seed["step3Result"],

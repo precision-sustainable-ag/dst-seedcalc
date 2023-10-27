@@ -1,17 +1,14 @@
 import { useState } from "react";
-import { Fragment } from "react";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import { StepButton } from "@mui/material";
 import Button from "@mui/material/Button";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { calculatorList } from "../../shared/data/dropdown";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { calculatorList } from "../../shared/data/dropdown";
 
 /*
 {
@@ -62,14 +59,14 @@ export const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
             <Step
               key={label}
               completed={index <= completedStep}
-              disabled={completedStep < 1}
+              disabled={completedStep + 1 < index}
             >
               <StepButton
                 onClick={() => setActiveStep(index)}
                 sx={{
                   "& .MuiSvgIcon-root": {
-                    color: completedStep >= 1 ? "#4f5f30" : "",
-                    "&.Mui-active,&.Mui-completed": {
+                    color: completedStep + 1 < index ? "" : "#4f5f30",
+                    "&.Mui-completed": {
                       color: "#77b400",
                     },
                   },
@@ -90,7 +87,7 @@ export const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
       <Box sx={{ display: "flex", flexDirection: "row", pt: 1 }}>
         {activeStep !== 0 && (
           <Button variant="stepper" onClick={handleBack}>
-            <ArrowBackIosIcon />
+            <ArrowBackIosNewIcon />
             {activeStep === calculatorList.length
               ? "BACK"
               : calculatorList[activeStep - 1]}

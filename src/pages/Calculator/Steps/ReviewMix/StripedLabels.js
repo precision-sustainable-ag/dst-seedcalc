@@ -17,7 +17,7 @@ const StripedLabels = ({ seed, data, labels }) => {
             sx={{ backgroundColor: !(i % 2) && "#e3e5d3" }}
             xs={12}
           >
-            <Grid item sx={{ textAlign: "justify" }} xs={10}>
+            <Grid item sx={{ textAlign: "justify" }} xs={10} pl={1}>
               {l.label}
             </Grid>
             <Grid item xs={2}>
