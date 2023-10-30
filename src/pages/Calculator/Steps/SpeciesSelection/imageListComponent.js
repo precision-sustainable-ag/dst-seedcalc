@@ -23,6 +23,7 @@ const ImageListComponent = ({
   const imgSrc = (imgUrl) => {
     return imgUrl !== null ? imgUrl + "?w=300&h=300&fit=crop&auto=format" : "";
   };
+
   const checkPlantingDate = (seed, siteDate) => {
     // FIXME: this method didn't take crops with 2 RE period into count
     const startDate = new Date(
@@ -48,13 +49,6 @@ const ImageListComponent = ({
         })
         .map((seeds, idx) => (
           <ImageListItem
-            key={
-              imgSrc(
-                seeds.thumbnail !== null && seeds.thumbnail !== ""
-                  ? seeds.thumbnail
-                  : "https://www.gardeningknowhow.com/wp-content/uploads/2020/04/spinach.jpg"
-              ) + Math.random()
-            }
             sx={{ "&:hover": { cursor: "pointer" } }}
             onClick={(e) => {
               updateSeeds(seeds, seed);

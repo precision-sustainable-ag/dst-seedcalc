@@ -16,10 +16,9 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { SearchField } from "../../../../components/SearchField";
 import { updateSteps } from "../../../../features/stepSlice/index";
 import { getCropsById } from "../../../../features/stepSlice/api";
-import { seedsList, seedsLabel } from "../../../../shared/data/species";
+import { seedsType, seedsLabel } from "../../../../shared/data/species";
 import { calculateAllMixRatioValues } from "../../../../shared/utils/calculate";
 import "./../steps.scss";
-import SeedsSelectedList from "./../../../../components/SeedsSelectedList";
 import { validateForms } from "../../../../shared/utils/format";
 import ImageListComponent from "./imageListComponent";
 import Diversity from "./diversity";
@@ -33,7 +32,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   const { crops, speciesSelection } = data;
   const seedsSelected = speciesSelection.seedsSelected;
   const diversitySelected = speciesSelection.diversitySelected;
-  const [filteredSeeds, setFilteredSeeds] = useState([]);
+  const [filteredSeeds, setFilteredSeeds] = useState(crops);
   const [query, setQuery] = useState("");
 
   //////////////////////////////////////////////////////////
@@ -55,22 +54,19 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
 
   // Filter query logic
   const updateQuery = (e) => {
-    setQuery(e.target.value);
-    filterSeeds(e.target.value);
-  };
-
-  // create a data object that specifies the type(data layer 1), the key(data layer 2), & the value for the key.
-
-  const filterSeeds = (query) => {
-    const filter =
+    const query = e.target.value;
+    setQuery(query);
+    const filtered =
       query !== ""
         ? crops.filter((x) =>
             x.label.toLowerCase().includes(query.toLowerCase())
           )
         : crops;
-    setFilteredSeeds(filter);
-    handleUpdateStore("speciesSelection", "queryResults", filter);
+    setFilteredSeeds(filtered);
+    handleUpdateStore("speciesSelection", "queryResults", filtered);
   };
+
+  // create a data object that specifies the type(data layer 1), the key(data layer 2), & the value for the key.
 
   const retrieveCropDetails = async (id) => {
     const response = await dispatch(
@@ -378,45 +374,17 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   //////////////////////////////////////////////////////////
 
   useEffect(() => {
-    if (data.crops.length > 0) {
-      setFilteredSeeds(data.crops);
-    }
-  }, [data.crops]);
-
-  useEffect(() => {
     validateForms(
       speciesSelection.seedsSelected.length > 1,
       1,
       completedStep,
       setCompletedStep
     );
-  }, [speciesSelection]);
+  }, [speciesSelection.seedsSelected]);
 
   //////////////////////////////////////////////////////////
   //                      Render                          //
   //////////////////////////////////////////////////////////
-
-  const renderAccordian = (seed) => {
-    return (
-      <Accordion className="accordian-container">
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          className="accordian-summary"
-        >
-          <Typography>{seedsLabel[seed]}</Typography>
-        </AccordionSummary>
-        <AccordionDetails className="accordian-details">
-          <ImageListComponent
-            seed={seed}
-            filteredSeeds={filteredSeeds}
-            council={council}
-            data={data}
-            updateSeeds={updateSeeds}
-          />
-        </AccordionDetails>
-      </Accordion>
-    );
-  };
 
   return (
     <Grid container justifyContent={"center"}>
@@ -436,10 +404,31 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
         </Box>
       </Grid>
 
-      {seedsList.map((s, i) => {
+      {seedsType.map((seed, i) => {
         return (
           <Grid item xs={12}>
-            {renderAccordian(s)}
+            {/* TODO: make accordian a reusable component? check usage in other files */}
+            <Accordion className="accordian-container">
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                className="accordian-summary"
+              >
+                <Typography>{seedsLabel[seed]}</Typography>
+              </AccordionSummary>
+              <AccordionDetails className="accordian-details">
+                {loading === "getCrops" ? (
+                  <Spinner />
+                ) : (
+                  <ImageListComponent
+                    seed={seed}
+                    filteredSeeds={filteredSeeds}
+                    council={council}
+                    data={data}
+                    updateSeeds={updateSeeds}
+                  />
+                )}
+              </AccordionDetails>
+            </Accordion>
           </Grid>
         );
       })}
