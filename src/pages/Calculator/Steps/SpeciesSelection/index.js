@@ -20,7 +20,7 @@ import { seedsType, seedsLabel } from "../../../../shared/data/species";
 import { calculateAllMixRatioValues } from "../../../../shared/utils/calculate";
 import "./../steps.scss";
 import { validateForms } from "../../../../shared/utils/format";
-import ImageListComponent from "./imageListComponent";
+import PlantList from "./PlantList";
 import Diversity from "./diversity";
 import { Spinner } from "@psa/dst.ui.spinner";
 
@@ -404,7 +404,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
         </Box>
       </Grid>
 
-      {seedsType.map((seed, i) => {
+      {seedsType.map((seedType, i) => {
         return (
           <Grid item xs={12}>
             {/* TODO: make accordian a reusable component? check usage in other files */}
@@ -413,20 +413,19 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
                 expandIcon={<ExpandMoreIcon />}
                 className="accordian-summary"
               >
-                <Typography>{seedsLabel[seed]}</Typography>
+                <Typography>{seedsLabel[seedType]}</Typography>
               </AccordionSummary>
               <AccordionDetails className="accordian-details">
-                {loading === "getCrops" ? (
-                  <Spinner />
-                ) : (
-                  <ImageListComponent
-                    seed={seed}
-                    filteredSeeds={filteredSeeds}
-                    council={council}
-                    data={data}
-                    updateSeeds={updateSeeds}
-                  />
-                )}
+                {loading === "getCrops" && <Spinner />}
+
+                <PlantList
+                  seedType={seedType}
+                  filteredSeeds={filteredSeeds}
+                  seedsSelected={seedsSelected}
+                  updateSeeds={updateSeeds}
+                  council={council}
+                  plantingDate={data.siteCondition.plannedPlantingDate}
+                />
               </AccordionDetails>
             </Accordion>
           </Grid>
