@@ -32,7 +32,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   const { crops, speciesSelection } = data;
   const seedsSelected = speciesSelection.seedsSelected;
   const diversitySelected = speciesSelection.diversitySelected;
-  const [filteredSeeds, setFilteredSeeds] = useState(crops);
+  const [filteredSeeds, setFilteredSeeds] = useState([]);
   const [query, setQuery] = useState("");
 
   //////////////////////////////////////////////////////////
@@ -63,10 +63,10 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
           )
         : crops;
     setFilteredSeeds(filtered);
-    handleUpdateStore("speciesSelection", "queryResults", filtered);
   };
 
-  // create a data object that specifies the type(data layer 1), the key(data layer 2), & the value for the key.
+  // create a data object that specifies the type(data layer 1),
+  // the key(data layer 2), & the value for the key.
 
   const retrieveCropDetails = async (id) => {
     const response = await dispatch(
@@ -372,6 +372,11 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   //////////////////////////////////////////////////////////
   //                     useEffect                        //
   //////////////////////////////////////////////////////////
+
+  useEffect(() => {
+    console.log("run");
+    setFilteredSeeds(crops);
+  }, [crops]);
 
   useEffect(() => {
     validateForms(

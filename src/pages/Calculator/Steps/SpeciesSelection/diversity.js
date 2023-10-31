@@ -33,8 +33,7 @@ const Diversity = ({ diversitySelected }) => {
           borderRadius: "0.6875rem",
         }}
       >
-        {diversitySelected &&
-          diversitySelected.length > 0 &&
+        {diversitySelected.length > 0 &&
           diversitySelected.map((d, i) => {
             return (
               <Grid
@@ -46,26 +45,21 @@ const Diversity = ({ diversitySelected }) => {
             );
           })}
       </Grid>
-      {diversitySelected &&
-        diversitySelected.length > 0 &&
-        diversitySelected.length === 0 && (
-          <Grid item xs={12}>
-            <Typography fontSize={"0.75rem"} color={"primary.text"}>
-              Select a species
-            </Typography>
-          </Grid>
-        )}
-      {diversitySelected &&
-        diversitySelected.length > 0 &&
+      {diversitySelected.length === 0 && (
+        <Grid item xs={12}>
+          <Typography fontSize={"0.75rem"} color={"primary.text"}>
+            Select a species
+          </Typography>
+        </Grid>
+      )}
+      {diversitySelected.length > 0 &&
         diversitySelected.map((d, i) => {
           return (
-            <Fade in={true}>
-              <Grid item xs={calculateSize()}>
-                <Typography fontSize={"0.75rem"} color={"primary.text"}>
-                  {seedsLabel[d]}
-                </Typography>
-              </Grid>
-            </Fade>
+            <Grid item xs={calculateSize()}>
+              <Typography fontSize={"0.75rem"} color={"primary.text"}>
+                {seedsLabel[d]}
+              </Typography>
+            </Grid>
           );
         })}
     </Grid>
