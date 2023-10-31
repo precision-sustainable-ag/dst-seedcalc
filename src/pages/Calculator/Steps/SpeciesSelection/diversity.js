@@ -1,7 +1,6 @@
 import * as React from "react";
 import Grid from "@mui/material/Grid";
-import { Typography, Link } from "@mui/material";
-import Fade from "@mui/material/Fade";
+import { Typography } from "@mui/material";
 
 import { seedsLabel } from "../../../../shared/data/species";
 import "./../steps.scss";

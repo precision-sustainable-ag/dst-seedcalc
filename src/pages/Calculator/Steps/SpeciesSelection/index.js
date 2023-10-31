@@ -18,11 +18,11 @@ import { updateSteps } from "../../../../features/stepSlice/index";
 import { getCropsById } from "../../../../features/stepSlice/api";
 import { seedsType, seedsLabel } from "../../../../shared/data/species";
 import { calculateAllMixRatioValues } from "../../../../shared/utils/calculate";
-import "./../steps.scss";
 import { validateForms } from "../../../../shared/utils/format";
 import PlantList from "./PlantList";
 import Diversity from "./diversity";
 import { Spinner } from "@psa/dst.ui.spinner";
+import "./../steps.scss";
 
 const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   // useSelector for crops reducer data
