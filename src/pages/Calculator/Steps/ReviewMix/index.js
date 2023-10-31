@@ -372,7 +372,6 @@ const ReviewMix = ({ council }) => {
                         seedingMethod={seedingMethod}
                         siteCondition={siteCondition}
                         seed={seed}
-                        matchesMd={matchesMd}
                       />
                     )}
                   </Grid>

@@ -63,6 +63,7 @@ const DSTPieChartLabel = ({ children }) => {
         color: "primary.text",
         textDecoration: "underline #cccccc",
         textUnderlineOffset: "0.5rem",
+        fontWeight: 600,
       }}
     >
       {children}
