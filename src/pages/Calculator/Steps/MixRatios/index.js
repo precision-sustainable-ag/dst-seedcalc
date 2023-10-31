@@ -5,16 +5,16 @@
 import Grid from "@mui/material/Grid";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { Typography, Box, Link, Button } from "@mui/material";
+import { Typography, Button } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
 import {
   calculateAllMixRatioValues,
   calculateAllValuesNECCC,
+  calculatePieChartData,
 } from "./../../../../shared/utils/calculate";
 import { updateSteps } from "../../../../features/stepSlice";
 import MixRatioSteps from "./form";
@@ -23,12 +23,12 @@ import {
   DSTPieChartLabel,
   DSTPieChartLegend,
 } from "../../../../components/DSTPieChart";
-
-import "./../steps.scss";
 import {
   SeedDataChip,
   SeedingRateChip,
 } from "../../../../components/SeedingRateCard";
+
+import "./../steps.scss";
 
 const MixRatio = ({ council }) => {
   // themes
@@ -40,35 +40,8 @@ const MixRatio = ({ council }) => {
   const data = useSelector((state) => state.steps.value);
   const speciesSelection = data.speciesSelection;
 
-  const plantsPerAcreSum = speciesSelection.seedsSelected.reduce(
-    (sum, a) => parseFloat(sum) + parseFloat(a.aproxPlantsSqFt),
-    0
-  );
-  const poundsOfSeedSum = speciesSelection.seedsSelected.reduce(
-    (sum, a) => parseFloat(sum) + parseFloat(a.poundsOfSeed),
-    0
-  );
-  const seedsPerAcreSum = speciesSelection.seedsSelected.reduce(
-    (sum, a) => parseFloat(sum) + parseFloat(a.seedsPerAcre),
-    0
-  );
-  const poundsOfSeedArray = [];
-  const plantsPerAcreArray = [];
-  const seedsPerAcreArray = [];
-  speciesSelection.seedsSelected.map((s, i) => {
-    plantsPerAcreArray.push({
-      name: s.label,
-      value: parseFloat(s.aproxPlantsSqFt) / plantsPerAcreSum,
-    });
-    seedsPerAcreArray.push({
-      name: s.label,
-      value: parseFloat(s.seedsPerAcre) / parseFloat(seedsPerAcreSum),
-    });
-    poundsOfSeedArray.push({
-      name: s.label,
-      value: parseFloat(s.poundsOfSeed) / poundsOfSeedSum,
-    });
-  });
+  const { poundsOfSeedArray, plantsPerAcreArray, seedsPerAcreArray } =
+    calculatePieChartData(speciesSelection.seedsSelected);
 
   //////////////////////////////////////////////////////////
   //                      Redux                           //

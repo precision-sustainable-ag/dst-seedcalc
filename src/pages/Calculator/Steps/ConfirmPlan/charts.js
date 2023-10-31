@@ -2,6 +2,7 @@ import Grid from "@mui/material/Grid";
 import { Typography, Box, Link, Button, Modal } from "@mui/material";
 import { Square } from "@mui/icons-material";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import { calculatePieChartData } from "../../../../shared/utils/calculate";
 
 import "./../steps.scss";
 
@@ -16,37 +17,8 @@ const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
     0
   );
 
-  const plantsPerAcreSum = speciesSelection.seedsSelected.reduce(
-    (sum, a) => sum + parseFloat(a.plantsPerAcre),
-    0
-  );
-  const poundsOfSeedSum = speciesSelection.seedsSelected.reduce(
-    (sum, a) => sum + parseFloat(a.poundsOfSeed),
-    0
-  );
-  const seedsPerAcreSum = speciesSelection.seedsSelected.reduce(
-    (sum, a) => sum + parseFloat(a.seedsPerAcre),
-    0
-  );
-
-  const poundsOfSeedArray = [];
-  const plantsPerAcreArray = [];
-  const seedsPerAcreArray = [];
-
-  speciesSelection.seedsSelected.map((s, i) => {
-    plantsPerAcreArray.push({
-      name: s.label,
-      value: s.plantsPerAcre / plantsPerAcreSum,
-    });
-    seedsPerAcreArray.push({
-      name: s.label,
-      value: s.seedsPerAcre / seedsPerAcreSum,
-    });
-    poundsOfSeedArray.push({
-      name: s.label,
-      value: s.poundsOfSeed / poundsOfSeedSum,
-    });
-  });
+  const { poundsOfSeedArray, plantsPerAcreArray, seedsPerAcreArray } =
+    calculatePieChartData(speciesSelection.seedsSelected);
 
   const renderCustomizedLabel = ({
     cx,

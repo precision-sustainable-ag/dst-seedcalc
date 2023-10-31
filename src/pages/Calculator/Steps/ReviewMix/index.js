@@ -9,9 +9,6 @@ import { Typography, Box, Button } from "@mui/material";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  PieChart,
-  Pie,
-  Cell,
   ResponsiveContainer,
   ScatterChart,
   Scatter,
@@ -31,11 +28,11 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { updateSteps } from "../../../../features/stepSlice";
 import { calculateAllMixValues } from "./../../../../shared/utils/calculate";
 import { generateNRCSStandards } from "../../../../shared/utils/NRCS/calculateNRCS";
-import "./../steps.scss";
-import SeedsSelectedList from "../../../../components/SeedsSelectedList";
 import StripedLabels from "./StripedLabels";
 import ReviewMixSteps from "./Steps";
 import PieChartComponent from "./PieChart";
+import { calculatePieChartData } from "./../../../../shared/utils/calculate";
+import "./../steps.scss";
 
 const ReviewMix = ({ council }) => {
   // themes
@@ -49,38 +46,8 @@ const ReviewMix = ({ council }) => {
   const speciesSelection = data.speciesSelection;
   const seedingMethod = data.seedingMethod;
 
-  // TODO: make into shared function
-  const plantsPerAcreSum = speciesSelection.seedsSelected.reduce(
-    (sum, a) => sum + parseFloat(a.plantsPerAcre),
-    0
-  );
-  const poundsOfSeedSum = speciesSelection.seedsSelected.reduce(
-    (sum, a) => sum + parseFloat(a.poundsOfSeed),
-    0
-  );
-  const seedsPerAcreSum = speciesSelection.seedsSelected.reduce(
-    (sum, a) => sum + parseFloat(a.seedsPerAcre),
-    0
-  );
-
-  const poundsOfSeedArray = [];
-  const plantsPerAcreArray = [];
-  const seedsPerAcreArray = [];
-
-  speciesSelection.seedsSelected.map((s, i) => {
-    plantsPerAcreArray.push({
-      name: s.label,
-      value: s.plantsPerAcre / plantsPerAcreSum,
-    });
-    seedsPerAcreArray.push({
-      name: s.label,
-      value: s.seedsPerAcre / seedsPerAcreSum,
-    });
-    poundsOfSeedArray.push({
-      name: s.label,
-      value: s.poundsOfSeed / poundsOfSeedSum,
-    });
-  });
+  const { poundsOfSeedArray, plantsPerAcreArray, seedsPerAcreArray } =
+    calculatePieChartData(speciesSelection.seedsSelected);
 
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
   const RADIAN = Math.PI / 180;
@@ -97,6 +64,7 @@ const ReviewMix = ({ council }) => {
     };
     dispatch(updateSteps(data));
   };
+
   const handleUpdateNRCS = (key, val) => {
     const data = {
       type: "NRCS",
@@ -105,6 +73,7 @@ const ReviewMix = ({ council }) => {
     };
     dispatch(updateSteps(data));
   };
+
   const initialDataLoad = () => {
     let seeds = JSON.parse(JSON.stringify(speciesSelection.seedsSelected));
     let newData = [...seeds];
@@ -115,11 +84,13 @@ const ReviewMix = ({ council }) => {
       handleUpdateAllSteps(newData, index);
     });
   };
+
   const handleUpdateAllSteps = (prevData, index) => {
     let seeds = [...prevData];
     seeds[index] = calculateAllMixValues(seeds[index], data);
     handleUpdateSteps("seedsSelected", seeds);
   };
+
   const updateSeed = (val, key, seed) => {
     // find index of seed, parse a copy, update proper values, & send to Redux
     const index = speciesSelection.seedsSelected.findIndex(

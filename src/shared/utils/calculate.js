@@ -382,3 +382,39 @@ export const emptyValues = (data) => {
   const emptyObj = setNull(data);
   return emptyObj;
 };
+
+export const calculatePieChartData = (seedsSelected) => {
+  const poundsOfSeedArray = [];
+  const plantsPerAcreArray = [];
+  const seedsPerAcreArray = [];
+
+  const poundsOfSeedSum = seedsSelected.reduce(
+    (sum, a) => parseFloat(sum) + parseFloat(a.poundsOfSeed),
+    0
+  );
+  const plantsPerAcreSum = seedsSelected.reduce(
+    (sum, a) => parseFloat(sum) + parseFloat(a.aproxPlantsSqFt),
+    0
+  );
+  const seedsPerAcreSum = seedsSelected.reduce(
+    (sum, a) => parseFloat(sum) + parseFloat(a.seedsPerAcre),
+    0
+  );
+
+  seedsSelected.forEach((s) => {
+    poundsOfSeedArray.push({
+      name: s.label,
+      value: parseFloat(s.poundsOfSeed) / poundsOfSeedSum,
+    });
+    plantsPerAcreArray.push({
+      name: s.label,
+      value: parseFloat(s.aproxPlantsSqFt) / plantsPerAcreSum,
+    });
+    seedsPerAcreArray.push({
+      name: s.label,
+      value: parseFloat(s.seedsPerAcre) / parseFloat(seedsPerAcreSum),
+    });
+  });
+
+  return { poundsOfSeedArray, plantsPerAcreArray, seedsPerAcreArray };
+};
