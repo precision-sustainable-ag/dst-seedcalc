@@ -1,6 +1,5 @@
-import { Typography, Grid } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import { Square } from "@mui/icons-material";
-
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
@@ -58,21 +57,25 @@ const DSTPieChart = ({ chartData }) => {
 
 const DSTPieChartLabel = ({ children }) => {
   return (
-    <Typography sx={{ textAlign: "center", color: "primary.text" }}>
+    <Typography
+      sx={{
+        textAlign: "center",
+        color: "primary.text",
+        textDecoration: "underline #cccccc",
+        textUnderlineOffset: "0.5rem",
+      }}
+    >
       {children}
     </Typography>
   );
 };
 
 const DSTPieChartLegend = ({ labels, matchesMd }) => {
-  {
-    /* TODO: need further change to make it on the center */
-  }
   return (
-    <Grid container sx={{ pt: "1.5rem" }}>
+    <Box sx={{ pt: "1.5rem" }}>
       {labels.map((label, i) => {
         return (
-          <Grid container pl={matchesMd ? "1.5rem" : "5rem"} pt={"0.5rem"}>
+          <Box sx={{ display: "flex", pl: matchesMd ? "25%" : "30%" }}>
             <Square sx={{ color: COLORS[i] }}></Square>
             <Typography
               fontSize={matchesMd ? "0.75rem" : "1rem"}
@@ -80,10 +83,10 @@ const DSTPieChartLegend = ({ labels, matchesMd }) => {
             >
               {label}
             </Typography>
-          </Grid>
+          </Box>
         );
       })}
-    </Grid>
+    </Box>
   );
 };
 

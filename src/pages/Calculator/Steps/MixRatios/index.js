@@ -110,23 +110,6 @@ const MixRatio = ({ council }) => {
   //                   State Logic                        //
   //////////////////////////////////////////////////////////
 
-  const renderAccordian = (data) => {
-    return (
-      <Accordion className="accordian-container">
-        <AccordionSummary
-          xs={12}
-          expandIcon={<ExpandMoreIcon />}
-          className="accordian-summary"
-        >
-          <Typography>{data.label}</Typography>
-        </AccordionSummary>
-        <AccordionDetails className="accordian-details">
-          {renderAccordianDetail(data)}
-        </AccordionDetails>
-      </Accordion>
-    );
-  };
-
   const renderAccordianDetail = (seed) => {
     return (
       <Grid container xs={12}>
@@ -312,7 +295,17 @@ const MixRatio = ({ council }) => {
       {speciesSelection.seedsSelected.map((s, i) => {
         return (
           <Grid item xs={12}>
-            {renderAccordian(s)}
+            <Accordion className="accordian-container">
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                className="accordian-summary"
+              >
+                <Typography>{s.label}</Typography>
+              </AccordionSummary>
+              <AccordionDetails className="accordian-details">
+                {renderAccordianDetail(s)}
+              </AccordionDetails>
+            </Accordion>
           </Grid>
         );
       })}
