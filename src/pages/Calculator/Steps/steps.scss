@@ -31,10 +31,8 @@ div[class*="map_infobar__"] {
 
 .pie-chart-container {
   text-align: justify;
-  margin: 0 auto;
 }
 .mix-ratio-chart-header {
-  font-weight: 600;
   text-align: center;
   color: $primary-text;
 }
@@ -43,11 +41,7 @@ div[class*="map_infobar__"] {
   width: 50% !important;
   margin-top: 34px !important;
 }
-.mix-ratio-chart-list-100 {
-  margin: 0 auto !important;
-  width: 100% !important;
-  margin-top: 34px !important;
-}
+
 .mix-ratio-step-header {
   padding: 16px;
   background: #e5e7d5;

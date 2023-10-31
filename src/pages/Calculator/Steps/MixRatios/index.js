@@ -7,9 +7,7 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Typography, Box, Link, Button } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from "recharts";
 import Accordion from "@mui/material/Accordion";
-import { Square } from "@mui/icons-material";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -20,6 +18,12 @@ import {
 } from "./../../../../shared/utils/calculate";
 import { updateSteps } from "../../../../features/stepSlice";
 import MixRatioSteps from "./form";
+import {
+  DSTPieChart,
+  DSTPieChartLabel,
+  DSTPieChartLegend,
+} from "../../../../components/DSTPieChart";
+
 import "./../steps.scss";
 
 const MixRatio = ({ council }) => {
@@ -31,6 +35,7 @@ const MixRatio = ({ council }) => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
   const speciesSelection = data.speciesSelection;
+
   const plantsPerAcreSum = speciesSelection.seedsSelected.reduce(
     (sum, a) => parseFloat(sum) + parseFloat(a.aproxPlantsSqFt),
     0
@@ -61,10 +66,6 @@ const MixRatio = ({ council }) => {
     });
   });
 
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
-
-  const RADIAN = Math.PI / 180;
-
   //////////////////////////////////////////////////////////
   //                      Redux                           //
   //////////////////////////////////////////////////////////
@@ -77,6 +78,7 @@ const MixRatio = ({ council }) => {
     };
     dispatch(updateSteps(data));
   };
+
   const handleUpdateAllSteps = (prevData, index) => {
     let seeds = [...prevData];
     seeds[index] =
@@ -85,6 +87,7 @@ const MixRatio = ({ council }) => {
         : calculateAllValuesNECCC(seeds[index], data);
     handleUpdateSteps("seedsSelected", seeds);
   };
+
   const updateSeed = (val, key, seed) => {
     // find index of seed, parse a copy, update proper values, & send to Redux
     const index = speciesSelection.seedsSelected.findIndex(
@@ -107,69 +110,6 @@ const MixRatio = ({ council }) => {
   //                   State Logic                        //
   //////////////////////////////////////////////////////////
 
-  const renderCustomizedLabel = ({
-    cx,
-    cy,
-    midAngle,
-    innerRadius,
-    outerRadius,
-    percent,
-    index,
-  }) => {
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-    return (
-      <text
-        x={x}
-        y={y}
-        fill="white"
-        textAnchor={x > cx ? "start" : "end"}
-        dominantBaseline="central"
-      >
-        {`${(percent * 100).toFixed(0)}%`}
-      </text>
-    );
-  };
-
-  // TODO: build a custom component for piechart since they are used 3 times as the same chart
-  const renderPieChart = (type) => {
-    let chartData;
-    if (type === "plantsPerAcre") {
-      chartData = plantsPerAcreArray;
-    }
-    if (type === "seedsPerAcre") {
-      chartData = seedsPerAcreArray;
-    }
-    if (type === "poundsOfSeed") {
-      chartData = poundsOfSeedArray;
-    }
-    return (
-      <ResponsiveContainer width="100%" height={200}>
-        <PieChart width={400} height={400}>
-          <Pie
-            data={chartData}
-            cx="50%"
-            cy="50%"
-            labelLine={false}
-            label={renderCustomizedLabel}
-            outerRadius={80}
-            fill="#8884d8"
-            dataKey="value"
-          >
-            {chartData.map((entry, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={COLORS[index % COLORS.length]}
-              />
-            ))}
-          </Pie>
-        </PieChart>
-      </ResponsiveContainer>
-    );
-  };
-
   const renderAccordian = (data) => {
     return (
       <Accordion className="accordian-container">
@@ -186,6 +126,7 @@ const MixRatio = ({ council }) => {
       </Accordion>
     );
   };
+
   const renderAccordianDetail = (seed) => {
     return (
       <Grid container xs={12}>
@@ -291,6 +232,7 @@ const MixRatio = ({ council }) => {
       </Grid>
     );
   };
+
   const renderFormLabel = (label1, label2, label3) => {
     return (
       <Grid container xs={12} className="mix-ratio-form-container">
@@ -323,6 +265,7 @@ const MixRatio = ({ council }) => {
       </Grid>
     );
   };
+
   const generatePercentInGroup = (seed) => {
     const group = seed.group.label;
     let count = 0;
@@ -340,70 +283,39 @@ const MixRatio = ({ council }) => {
     <Grid container>
       <Grid item xs={12}>
         <Typography variant="h2">Review Proportions</Typography>
-        <Grid container xs={12}>
-          <Grid item xs={6} md={6} className="pie-chart-container">
-            {council === "MCCC"
-              ? renderPieChart("plantsPerAcre")
-              : renderPieChart("seedsPerAcre")}
-            <Typography className="mix-ratio-chart-header">
-              Pounds of Seed / Acre{" "}
-            </Typography>
-            <Grid item className="mix-ratio-chart-list-50">
-              {speciesSelection.seedsSelected.map((s, i) => {
-                return (
-                  <Grid container xs={12}>
-                    <Grid item xs={2}>
-                      <Square sx={{ color: COLORS[i] }}></Square>
-                    </Grid>
-                    <Grid item xs={10}>
-                      <Typography
-                        className={matchesMd ? "mix-label-md" : ""}
-                        color={"primary.text"}
-                      >
-                        {s.label}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                );
-              })}
-            </Grid>
-          </Grid>
-          <Grid item xs={6} md={6} className="pie-chart-container">
-            {renderPieChart("poundsOfSeed")}
-            <Typography className="mix-ratio-chart-header">
-              {council === "MCCC" ? "Plants" : "Seeds"} Per Acre{" "}
-            </Typography>
-            <Grid item className="mix-ratio-chart-list-50">
-              {speciesSelection.seedsSelected.map((s, i) => {
-                return (
-                  <Grid container xs={12}>
-                    <Grid item xs={2}>
-                      <Square sx={{ color: COLORS[i] }}></Square>
-                    </Grid>
-                    <Grid item xs={10}>
-                      <Typography
-                        className={matchesMd ? "mix-label-md" : ""}
-                        color={"primary.text"}
-                      >
-                        {s.label}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                );
-              })}
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid container xs={12}>
-          {speciesSelection.seedsSelected.map((s, i) => {
-            return (
-              <Grid item xs={12}>
-                {renderAccordian(s)}
-              </Grid>
-            );
-          })}
-        </Grid>
       </Grid>
+
+      <Grid item xs={6} md={6} sx={{ textAlign: "justify" }}>
+        <DSTPieChart chartData={poundsOfSeedArray} />
+        <DSTPieChartLabel>Pounds of Seed / Acre </DSTPieChartLabel>
+        <DSTPieChartLegend
+          labels={speciesSelection.seedsSelected.map((seed) => seed.label)}
+          matchesMd={matchesMd}
+        />
+      </Grid>
+
+      <Grid item xs={6} md={6} sx={{ textAlign: "justify" }}>
+        {council === "MCCC" ? (
+          <DSTPieChart chartData={plantsPerAcreArray} />
+        ) : (
+          <DSTPieChart chartData={seedsPerAcreArray} />
+        )}
+        <DSTPieChartLabel>
+          {council === "MCCC" ? "Plants" : "Seeds"} Per Acre{" "}
+        </DSTPieChartLabel>
+        <DSTPieChartLegend
+          labels={speciesSelection.seedsSelected.map((seed) => seed.label)}
+          matchesMd={matchesMd}
+        />
+      </Grid>
+
+      {speciesSelection.seedsSelected.map((s, i) => {
+        return (
+          <Grid item xs={12}>
+            {renderAccordian(s)}
+          </Grid>
+        );
+      })}
     </Grid>
   );
 };
