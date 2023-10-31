@@ -25,6 +25,10 @@ import {
 } from "../../../../components/DSTPieChart";
 
 import "./../steps.scss";
+import {
+  SeedDataChip,
+  SeedingRateChip,
+} from "../../../../components/SeedingRateCard";
 
 const MixRatio = ({ council }) => {
   // themes
@@ -107,158 +111,6 @@ const MixRatio = ({ council }) => {
   };
 
   //////////////////////////////////////////////////////////
-  //                   State Logic                        //
-  //////////////////////////////////////////////////////////
-
-  const renderAccordianDetail = (seed) => {
-    return (
-      <Grid container xs={12}>
-        <Grid item xs={6}>
-          <Typography>Default Single Species Seeding Rate PLS</Typography>
-          <Box
-            sx={{
-              width: "50px",
-              height: "50px",
-              padding: "11px",
-              margin: "0 auto",
-              backgroundColor: "#E5E7D5",
-              border: "#C7C7C7 solid 1px",
-              borderRadius: "50%",
-            }}
-          >
-            <Typography>
-              {Math.floor(seed.singleSpeciesSeedingRatePLS)}
-            </Typography>
-          </Box>
-          <Typography>Lbs / Acre</Typography>
-        </Grid>
-        <Grid item xs={6}>
-          <Typography>Default Mix Seeding Rate PLS</Typography>
-          <Box
-            sx={{
-              width: "50px",
-              height: "50px",
-              padding: "11px",
-              margin: "0 auto",
-              backgroundColor: "#E5E7D5",
-              border: "#C7C7C7 solid 1px",
-              borderRadius: "50%",
-            }}
-          >
-            <Typography>{Math.round(seed.mixSeedingRate)}</Typography>
-          </Box>
-          <Typography className="font-15">Lbs / Acre</Typography>
-        </Grid>
-        <Grid item xs={6}>
-          {council === "MCCC" && (
-            <>
-              <Box
-                sx={{
-                  width: "110px",
-                  height: "50px",
-                  padding: "11px",
-                  margin: "0 auto",
-                  backgroundColor: "#E5E7D5",
-                  border: "#C7C7C7 solid 1px",
-                  borderRadius: "16px",
-                }}
-              >
-                <Typography>{Math.floor(seed.plantsPerAcre)}</Typography>
-              </Box>
-              <Typography>Aprox plants per</Typography>
-              <Button variant="outlined">Sqft</Button>
-              {"   "}
-              <Button variant="contained">Acres</Button>
-            </>
-          )}
-        </Grid>
-        <Grid item xs={6}>
-          <Box
-            sx={{
-              width: "110px",
-              height: "50px",
-              padding: "11px",
-              margin: "0 auto",
-              backgroundColor: "#E5E7D5",
-              border: "#C7C7C7 solid 1px",
-              borderRadius: "16px",
-            }}
-          >
-            <Typography>{Math.floor(seed.seedsPerAcre)}</Typography>
-          </Box>
-          <Typography>Seeds per</Typography>
-          <Button variant="contained">Sqft</Button>
-          {"   "}
-          <Button variant="outlined">Acres</Button>
-        </Grid>
-        <Grid item xs={12} pt={"1rem"}>
-          <Button
-            onClick={(e) => {
-              updateSeed(!seed.showSteps, "showSteps", seed);
-            }}
-            variant="outlined"
-          >
-            {seed.showSteps ? "Close Steps" : "Change My Rate"}
-          </Button>
-        </Grid>
-        <Grid item xs={12}>
-          {seed.showSteps && (
-            <MixRatioSteps
-              seed={seed}
-              council={council}
-              renderFormLabel={renderFormLabel}
-              updateSeed={updateSeed}
-              generatePercentInGroup={generatePercentInGroup}
-            />
-          )}
-        </Grid>
-      </Grid>
-    );
-  };
-
-  const renderFormLabel = (label1, label2, label3) => {
-    return (
-      <Grid container xs={12} className="mix-ratio-form-container">
-        <Grid item xs={3}>
-          <Typography
-            className={matchesMd ? "mix-ratio-form-label" : "no-display"}
-            sx={{ fontSize: matchesMd ? "0.75rem" : "0" }}
-          >
-            {label1}
-          </Typography>
-        </Grid>
-        <Grid item xs={1}></Grid>
-        <Grid item xs={3}>
-          <Typography
-            className={matchesMd ? "mix-ratio-form-label" : "no-display"}
-            sx={{ fontSize: matchesMd ? "0.75rem" : "0" }}
-          >
-            {label2}
-          </Typography>
-        </Grid>
-        <Grid item xs={1}></Grid>
-        <Grid item xs={3}>
-          <Typography
-            className={matchesMd ? "mix-ratio-form-label" : "no-display"}
-            sx={{ fontSize: matchesMd ? "0.75rem" : "0" }}
-          >
-            {label3}
-          </Typography>
-        </Grid>
-      </Grid>
-    );
-  };
-
-  const generatePercentInGroup = (seed) => {
-    const group = seed.group.label;
-    let count = 0;
-    speciesSelection.seedsSelected.map((s, i) => {
-      s.group.label === group && count++;
-    });
-    return 1 / count;
-  };
-
-  //////////////////////////////////////////////////////////
   //                      Render                          //
   //////////////////////////////////////////////////////////
 
@@ -292,18 +144,65 @@ const MixRatio = ({ council }) => {
         />
       </Grid>
 
-      {speciesSelection.seedsSelected.map((s, i) => {
+      {speciesSelection.seedsSelected.map((seed, i) => {
         return (
-          <Grid item xs={12}>
+          <Grid item xs={12} key={i}>
             <Accordion className="accordian-container">
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 className="accordian-summary"
               >
-                <Typography>{s.label}</Typography>
+                <Typography>{seed.label}</Typography>
               </AccordionSummary>
+
               <AccordionDetails className="accordian-details">
-                {renderAccordianDetail(s)}
+                <Grid container xs={12}>
+                  <Grid item xs={6}>
+                    <SeedingRateChip
+                      label={"Default Single Species Seeding Rate PLS"}
+                      value={Math.floor(seed.singleSpeciesSeedingRatePLS)}
+                    />
+                    {council === "MCCC" && (
+                      <SeedDataChip
+                        label={"Aprox plants per"}
+                        value={Math.floor(seed.plantsPerAcre)}
+                      />
+                    )}
+                  </Grid>
+
+                  <Grid item xs={6}>
+                    <SeedingRateChip
+                      label={"Default Mix Seeding Rate PLS"}
+                      value={Math.round(seed.mixSeedingRate)}
+                    />
+                    <SeedDataChip
+                      label={"Seeds per"}
+                      value={Math.floor(seed.seedsPerAcre)}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} pt={"1rem"}>
+                    <Button
+                      onClick={() => {
+                        updateSeed(!seed.showSteps, "showSteps", seed);
+                      }}
+                      variant="outlined"
+                    >
+                      {seed.showSteps ? "Close Steps" : "Change My Rate"}
+                    </Button>
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    {seed.showSteps && (
+                      <MixRatioSteps
+                        seed={seed}
+                        council={council}
+                        speciesSelection={speciesSelection}
+                        updateSeed={updateSeed}
+                      />
+                    )}
+                  </Grid>
+                </Grid>
               </AccordionDetails>
             </Accordion>
           </Grid>

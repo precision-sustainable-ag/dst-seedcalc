@@ -1,20 +1,59 @@
 import Grid from "@mui/material/Grid";
-import { Typography } from "@mui/material";
+import { Typography, useTheme, useMediaQuery } from "@mui/material";
 
+import { NumberTextField } from "./../../../../components/NumberTextField";
 import {
   convertToPercent,
   convertToDecimal,
 } from "./../../../../shared/utils/calculate";
-import { NumberTextField } from "./../../../../components/NumberTextField";
 import "./../steps.scss";
 
-const MixRatioSteps = ({
-  seed,
-  council,
-  renderFormLabel,
-  updateSeed,
-  generatePercentInGroup,
-}) => {
+const MixRatioSteps = ({ seed, council, updateSeed, speciesSelection }) => {
+  const theme = useTheme();
+  const matchesMd = useMediaQuery(theme.breakpoints.down("md"));
+
+  const renderFormLabel = (label1, label2, label3) => {
+    return (
+      <Grid container xs={12} className="mix-ratio-form-container">
+        <Grid item xs={3}>
+          <Typography
+            className={matchesMd ? "mix-ratio-form-label" : "no-display"}
+            sx={{ fontSize: matchesMd ? "0.75rem" : "0" }}
+          >
+            {label1}
+          </Typography>
+        </Grid>
+        <Grid item xs={1}></Grid>
+        <Grid item xs={3}>
+          <Typography
+            className={matchesMd ? "mix-ratio-form-label" : "no-display"}
+            sx={{ fontSize: matchesMd ? "0.75rem" : "0" }}
+          >
+            {label2}
+          </Typography>
+        </Grid>
+        <Grid item xs={1}></Grid>
+        <Grid item xs={3}>
+          <Typography
+            className={matchesMd ? "mix-ratio-form-label" : "no-display"}
+            sx={{ fontSize: matchesMd ? "0.75rem" : "0" }}
+          >
+            {label3}
+          </Typography>
+        </Grid>
+      </Grid>
+    );
+  };
+
+  const generatePercentInGroup = (seed) => {
+    const group = seed.group.label;
+    let count = 0;
+    speciesSelection.seedsSelected.map((s, i) => {
+      s.group.label === group && count++;
+    });
+    return 1 / count;
+  };
+
   const percentInGroup = generatePercentInGroup(seed);
   return (
     <Grid container xs={12}>
