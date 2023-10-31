@@ -11,11 +11,11 @@ import "./../steps.scss";
 const ReviewMixSteps = ({
   speciesSelection,
   council,
-  renderStepsForm,
   updateSeed,
   seedingMethod,
   siteCondition,
   seed,
+  matchesMd,
 }) => {
   const generatePercentInGroup = (seed) => {
     const group = seed.group.label;
@@ -26,6 +26,77 @@ const ReviewMixSteps = ({
     return 1 / count;
   };
   const percentInGroup = generatePercentInGroup(seed);
+
+  const renderStepsForm = (label1, label2, label3) => {
+    if (Array.isArray(label2)) {
+      return (
+        <Grid container xs={12} className="mix-ratio-form-container">
+          <Grid item xs={3}>
+            <Typography
+              className={matchesMd ? "mix-ratio-form-label" : "no-display"}
+              sx={{ fontSize: matchesMd ? "0.75rem" : "0" }}
+            >
+              {label1}
+            </Typography>
+          </Grid>
+          <Grid item xs={1}></Grid>
+          <Grid item xs={3}>
+            <Typography
+              className={matchesMd ? "mix-ratio-form-label" : "no-display"}
+              sx={{ fontSize: matchesMd ? "0.75rem" : "0" }}
+            >
+              {label2[0]}
+            </Typography>
+          </Grid>
+          <Grid item xs={1}></Grid>
+          <Grid item xs={3}>
+            <Typography
+              className={matchesMd ? "mix-ratio-form-label" : "no-display"}
+              sx={{ fontSize: matchesMd ? "0.75rem" : "0" }}
+            >
+              {label2[1]}
+            </Typography>
+          </Grid>
+          <Grid container xs={12} className="mix-ratio-form-container">
+            <Grid item xs={3}>
+              {label3}
+            </Grid>
+          </Grid>
+        </Grid>
+      );
+    } else {
+      return (
+        <Grid container xs={12} className="mix-ratio-form-container">
+          <Grid item xs={3}>
+            <Typography
+              className={matchesMd ? "mix-ratio-form-label" : "no-display"}
+              sx={{ fontSize: matchesMd ? "0.75rem" : "0" }}
+            >
+              {label1}
+            </Typography>
+          </Grid>
+          <Grid item xs={1}></Grid>
+          <Grid item xs={3}>
+            <Typography
+              className={matchesMd ? "mix-ratio-form-label" : "no-display"}
+              sx={{ fontSize: matchesMd ? "0.75rem" : "0" }}
+            >
+              {label2}
+            </Typography>
+          </Grid>
+          <Grid item xs={1}></Grid>
+          <Grid item xs={3}>
+            <Typography
+              className={matchesMd ? "mix-ratio-form-label" : "no-display"}
+              sx={{ fontSize: matchesMd ? "0.75rem" : "0" }}
+            >
+              {label3}
+            </Typography>
+          </Grid>
+        </Grid>
+      );
+    }
+  };
 
   return (
     <Grid container xs={12}>
