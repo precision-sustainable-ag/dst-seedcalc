@@ -3,8 +3,6 @@
 //////////////////////////////////////////////////////////
 
 import Grid from "@mui/material/Grid";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import { Typography, Button } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import Accordion from "@mui/material/Accordion";
@@ -31,9 +29,6 @@ import {
 import "./../steps.scss";
 
 const MixRatio = ({ council }) => {
-  // themes
-  const theme = useTheme();
-  const matchesMd = useMediaQuery(theme.breakpoints.down("md"));
   // useSelector for crops & mixRaxio reducer
 
   const dispatch = useDispatch();
@@ -93,16 +88,15 @@ const MixRatio = ({ council }) => {
         <Typography variant="h2">Review Proportions</Typography>
       </Grid>
 
-      <Grid item xs={6} md={6} sx={{ textAlign: "justify" }}>
+      <Grid item xs={6} sx={{ textAlign: "justify" }}>
         <DSTPieChart chartData={poundsOfSeedArray} />
         <DSTPieChartLabel>Pounds of Seed / Acre </DSTPieChartLabel>
         <DSTPieChartLegend
           labels={speciesSelection.seedsSelected.map((seed) => seed.label)}
-          matchesMd={matchesMd}
         />
       </Grid>
 
-      <Grid item xs={6} md={6} sx={{ textAlign: "justify" }}>
+      <Grid item xs={6} sx={{ textAlign: "justify" }}>
         <DSTPieChart
           chartData={
             council === "MCCC" ? plantsPerAcreArray : seedsPerAcreArray
@@ -113,7 +107,6 @@ const MixRatio = ({ council }) => {
         </DSTPieChartLabel>
         <DSTPieChartLegend
           labels={speciesSelection.seedsSelected.map((seed) => seed.label)}
-          matchesMd={matchesMd}
         />
       </Grid>
 
@@ -129,7 +122,7 @@ const MixRatio = ({ council }) => {
               </AccordionSummary>
 
               <AccordionDetails className="accordian-details">
-                <Grid container xs={12}>
+                <Grid container>
                   <Grid item xs={6}>
                     <SeedingRateChip
                       label={"Default Single Species Seeding Rate PLS"}

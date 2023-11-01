@@ -1,7 +1,5 @@
 import Grid from "@mui/material/Grid";
-import { Typography, Box, Link, Button, Modal } from "@mui/material";
-import { Square } from "@mui/icons-material";
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import { Typography, Box } from "@mui/material";
 import { calculatePieChartData } from "../../../../shared/utils/calculate";
 
 import "./../steps.scss";
@@ -11,7 +9,6 @@ import {
   DSTPieChartLegend,
 } from "../../../../components/DSTPieChart";
 
-// TODO: build pie chart to a custom component, this should be done in another pr
 const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
   const poundsForPurchaseSum = speciesSelection.seedsSelected.reduce(
     (sum, a) => sum + a.poundsForPurchase,
@@ -85,7 +82,6 @@ const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
         <DSTPieChartLabel>{"Pounds of Seed / Acre"}</DSTPieChartLabel>
         <DSTPieChartLegend
           labels={speciesSelection.seedsSelected.map((seed) => seed.label)}
-          matchesMd={matchesMd}
         />
       </Grid>
       <Grid
@@ -97,7 +93,7 @@ const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
           textAlign: "justify",
         }}
       >
-        {/* FIXME: the chart rendered seems different than the label? */}
+        {/* FIXME: Check all the charts as well as other components */}
         <DSTPieChart
           chartData={
             council === "MCCC" ? plantsPerAcreArray : seedsPerAcreArray
@@ -108,7 +104,6 @@ const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
         </DSTPieChartLabel>
         <DSTPieChartLegend
           labels={speciesSelection.seedsSelected.map((seed) => seed.label)}
-          matchesMd={matchesMd}
         />
       </Grid>
     </Grid>

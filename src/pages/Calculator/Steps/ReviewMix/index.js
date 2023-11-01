@@ -3,8 +3,6 @@
 //////////////////////////////////////////////////////////
 
 import Grid from "@mui/material/Grid";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import { Typography, Box, Button } from "@mui/material";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -41,9 +39,6 @@ import {
 } from "../../../../components/SeedingRateCard";
 
 const ReviewMix = ({ council }) => {
-  // themes
-  const theme = useTheme();
-  const matchesMd = useMediaQuery(theme.breakpoints.down("md"));
   // useSelector for crops & mixRaxio reducer
 
   const dispatch = useDispatch();
@@ -221,7 +216,7 @@ const ReviewMix = ({ council }) => {
       const { active, payload, label } = scatterData;
       if (active && payload && payload.length) {
         return (
-          <div className="custom-tooltip">
+          <div>
             <p className="label">{`${label} : ${payload[0].value}`}</p>
             <p className="intro">{generateDetails(label)}</p>
             <p className="desc">Calculation details</p>
@@ -269,7 +264,11 @@ const ReviewMix = ({ council }) => {
 
         {labels.map((l, i) => {
           return (
-            <Grid container sx={{ backgroundColor: !(i % 2) && "#e3e5d3" }}>
+            <Grid
+              container
+              sx={{ backgroundColor: !(i % 2) && "#e3e5d3" }}
+              key={i}
+            >
               <Grid item sx={{ textAlign: "justify" }} xs={10} pl={1}>
                 {l.label}
               </Grid>
@@ -293,7 +292,6 @@ const ReviewMix = ({ council }) => {
         <DSTPieChartLabel>{"Pounds of Seed / Acre"}</DSTPieChartLabel>
         <DSTPieChartLegend
           labels={speciesSelection.seedsSelected.map((seed) => seed.label)}
-          matchesMd={matchesMd}
         />
       </Grid>
 
@@ -309,12 +307,11 @@ const ReviewMix = ({ council }) => {
 
         <DSTPieChartLegend
           labels={speciesSelection.seedsSelected.map((seed) => seed.label)}
-          matchesMd={matchesMd}
         />
       </Grid>
       {speciesSelection.seedsSelected.map((seed, i) => {
         return (
-          <Grid item xs={12}>
+          <Grid item xs={12} key={i}>
             <Accordion xs={12} className="accordian-container">
               <AccordionSummary
                 xs={12}

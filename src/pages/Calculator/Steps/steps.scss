@@ -135,17 +135,3 @@ div[class*="map_infobar__"] {
   width: 100%;
   height: 50px;
 }
-/* Completed Page end */
-
-.custom-tooltip {
-  background-color: white;
-}
-
-/* remove black outline of ALL rechart piechart */
-.recharts-layer {
-  outline: none;
-}
-
-.recharts-layer path {
-  outline: none;
-}

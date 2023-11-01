@@ -1,8 +1,6 @@
 import * as React from "react";
-import Grid from "@mui/material/Grid";
 import { useTheme } from "@mui/material/styles";
-import { useState, useEffect, Fragment } from "react";
-import { Typography, Box, Link, useMediaQuery } from "@mui/material";
+import { Typography, Box, useMediaQuery } from "@mui/material";
 
 const SeedsSelectedList = ({ list }) => {
   // themes
@@ -28,9 +26,9 @@ const SeedsSelectedList = ({ list }) => {
       display={"flex"}
       flexDirection={matchesMd ? "row" : "column"}
     >
-      {[...list].reverse().map((s, idx) => {
+      {[...list].reverse().map((s, i) => {
         return (
-          <Box minWidth={matchesMd ? "120px" : ""}>
+          <Box minWidth={matchesMd ? "120px" : ""} key={i}>
             <img
               style={{
                 borderRadius: "50%",

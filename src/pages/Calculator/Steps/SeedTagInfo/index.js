@@ -85,42 +85,6 @@ const SeedTagInfo = ({ council }) => {
     );
   };
 
-  const renderAccordian = (data) => {
-    return (
-      <Accordion xs={12} className="accordian-container">
-        <AccordionSummary
-          xs={12}
-          expandIcon={<ExpandMoreIcon />}
-          className="accordian-summary"
-        >
-          <Typography>{data.label}</Typography>
-        </AccordionSummary>
-        <AccordionDetails className="accordian-details">
-          <Grid xs={12} container>
-            <Grid item xs={6} className="seed-tag-info-grid-left">
-              <Typography>% Germination: </Typography>
-            </Grid>
-            {renderRightAccordian(
-              "germinationPercentage",
-              data,
-              "percent",
-              false
-            )}
-            <Grid item xs={6} className="seed-tag-info-grid-left">
-              <Typography>% Purity: </Typography>
-            </Grid>
-            {renderRightAccordian("purityPercentage", data, "percent", false)}
-            <Grid item xs={6} className="seed-tag-info-grid-left">
-              <Typography>Seeds per Pound </Typography>
-            </Grid>
-            {/* FIXME: this also turns seeds per pound 100 times larger */}
-            {renderRightAccordian("poundsOfSeed", data, "", true)}
-          </Grid>
-        </AccordionDetails>
-      </Accordion>
-    );
-  };
-
   const handleSwitch = () => {
     setSameInfoActive(!sameInfoActive);
   };
@@ -144,10 +108,44 @@ const SeedTagInfo = ({ council }) => {
         </Typography>
       </Grid>
 
-      {speciesSelection.seedsSelected.map((s, i) => {
+      {speciesSelection.seedsSelected.map((seed, i) => {
         return (
-          <Grid item xs={12}>
-            {renderAccordian(s)}
+          <Grid item xs={12} key={i}>
+            <Accordion className="accordian-container">
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                className="accordian-summary"
+              >
+                <Typography>{seed.label}</Typography>
+              </AccordionSummary>
+              <AccordionDetails className="accordian-details">
+                <Grid container>
+                  <Grid item xs={6} className="seed-tag-info-grid-left">
+                    <Typography>% Germination: </Typography>
+                  </Grid>
+                  {renderRightAccordian(
+                    "germinationPercentage",
+                    seed,
+                    "percent",
+                    false
+                  )}
+                  <Grid item xs={6} className="seed-tag-info-grid-left">
+                    <Typography>% Purity: </Typography>
+                  </Grid>
+                  {renderRightAccordian(
+                    "purityPercentage",
+                    seed,
+                    "percent",
+                    false
+                  )}
+                  <Grid item xs={6} className="seed-tag-info-grid-left">
+                    <Typography>Seeds per Pound </Typography>
+                  </Grid>
+                  {/* FIXME: this also turns seeds per pound 100 times larger */}
+                  {renderRightAccordian("poundsOfSeed", seed, "", true)}
+                </Grid>
+              </AccordionDetails>
+            </Accordion>
           </Grid>
         );
       })}

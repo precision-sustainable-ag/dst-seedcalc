@@ -21,7 +21,7 @@ import { calculateAllMixRatioValues } from "../../../../shared/utils/calculate";
 import "./../steps.scss";
 import { validateForms } from "../../../../shared/utils/format";
 import PlantList from "./PlantList";
-import Diversity from "./diversity";
+import Diversity from "./Diversity";
 import { Spinner } from "@psa/dst.ui.spinner";
 
 const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
@@ -406,7 +406,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
 
       {seedsType.map((seedType, i) => {
         return (
-          <Grid item xs={12}>
+          <Grid item xs={12} key={i}>
             {/* TODO: make accordian a reusable component? check usage in other files */}
             <Accordion className="accordian-container">
               <AccordionSummary

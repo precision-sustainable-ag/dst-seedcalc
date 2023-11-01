@@ -42,6 +42,7 @@ const Diversity = ({ diversitySelected }) => {
                 xs={calculateSize()}
                 bgcolor={COLORS[i]}
                 borderRadius={"0.6875rem"}
+                key={i}
               ></Grid>
             );
           })}
@@ -59,7 +60,7 @@ const Diversity = ({ diversitySelected }) => {
         diversitySelected.length > 0 &&
         diversitySelected.map((d, i) => {
           return (
-            <Fade in={true}>
+            <Fade in={true} key={i}>
               <Grid item xs={calculateSize()}>
                 <Typography fontSize={"0.75rem"} color={"primary.text"}>
                   {seedsLabel[d]}

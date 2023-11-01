@@ -201,6 +201,7 @@ const MixSeedingRate = () => {
       <Grid container sx={{ padding: "3% 3%" }}>
         <Grid
           container
+          item
           xs={4}
           sm={5}
           flexDirection={"column"}
@@ -223,6 +224,7 @@ const MixSeedingRate = () => {
         </Grid>
         <Grid
           container
+          item
           xs={8}
           sm={7}
           justifyContent="flex-start"

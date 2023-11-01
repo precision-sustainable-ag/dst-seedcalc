@@ -15,7 +15,7 @@ const MixRatioSteps = ({ seed, council, updateSeed, speciesSelection }) => {
   const renderFormLabel = (label1, label2, label3) => {
     return (
       matchesMd && (
-        <Grid container xs={12}>
+        <Grid container>
           <Grid item xs={3}>
             <Typography sx={{ fontSize: "0.75rem", pb: "1rem" }}>
               {label1}
@@ -50,7 +50,7 @@ const MixRatioSteps = ({ seed, council, updateSeed, speciesSelection }) => {
   const percentInGroup = generatePercentInGroup(seed);
 
   return (
-    <Grid container xs={12}>
+    <Grid container>
       {/* NECCC Step 1:  */}
       {council === "NECCC" && (
         <>
@@ -100,7 +100,7 @@ const MixRatioSteps = ({ seed, council, updateSeed, speciesSelection }) => {
             <Typography>NECCC</Typography>
           </Grid>
 
-          <Grid container className="steps-row-2" xs={12}>
+          <Grid container className="steps-row-2">
             <Grid item xs={4}>
               <Typography className="math-icon">=</Typography>
             </Grid>
@@ -130,7 +130,7 @@ const MixRatioSteps = ({ seed, council, updateSeed, speciesSelection }) => {
             "% of Single Species Rate",
             "Mix Seeding Rate"
           )}
-          <Grid container xs={12}>
+          <Grid container>
             <Grid item xs={3}>
               <NumberTextField
                 label={matchesMd ? "" : "Single Species Seeding Rate PLS"}

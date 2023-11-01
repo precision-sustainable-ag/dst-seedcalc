@@ -80,45 +80,6 @@ const SeedingMethod = ({ council }) => {
     );
   };
 
-  const renderAccordian = (seed) => {
-    return (
-      <Accordion className="accordian-container">
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          className="accordian-summary"
-        >
-          <Typography>{seed.label}</Typography>
-        </AccordionSummary>
-        <AccordionDetails className="accordian-details">
-          <Grid container>
-            <Grid item xs={6} className="mix-seeding-rate-grid-left">
-              <Typography>Precision: </Typography>
-            </Grid>
-            {renderRightAccordian("precision", seed.precision)}
-            <Grid item xs={6} className="mix-seeding-rate-grid-left">
-              <Typography>Drilled: </Typography>
-            </Grid>
-            {renderRightAccordian("drilled", 1)}
-            <Grid item xs={6} className="mix-seeding-rate-grid-left">
-              <Typography>Broadcast(with Light Incorporation): </Typography>
-            </Grid>
-            {renderRightAccordian("broadcast", seed.broadcast)}
-            <Grid item xs={6} className="mix-seeding-rate-grid-left">
-              <Typography>
-                Aerial(or broadcast with no Light Incorporation{" "}
-                <Typography color={"red"} display={"inline"}>
-                  Not Recommended
-                </Typography>
-                ):{" "}
-              </Typography>
-            </Grid>
-            {renderRightAccordian("aerial", seed.aerial)}
-          </Grid>
-        </AccordionDetails>
-      </Accordion>
-    );
-  };
-
   //////////////////////////////////////////////////////////
   //                    Render                            //
   //////////////////////////////////////////////////////////
@@ -137,10 +98,44 @@ const SeedingMethod = ({ council }) => {
           items={seedingMethods}
         />
       </Grid>
-      {seedsSelected.map((s, i) => {
+      {seedsSelected.map((seed, i) => {
         return (
-          <Grid item xs={12}>
-            {renderAccordian(s)}
+          <Grid item xs={12} key={i}>
+            <Accordion className="accordian-container">
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                className="accordian-summary"
+              >
+                <Typography>{seed.label}</Typography>
+              </AccordionSummary>
+
+              <AccordionDetails className="accordian-details">
+                <Grid container>
+                  <Grid item xs={6} className="mix-seeding-rate-grid-left">
+                    <Typography>Precision: </Typography>
+                  </Grid>
+                  {renderRightAccordian("precision", seed.precision)}
+                  <Grid item xs={6} className="mix-seeding-rate-grid-left">
+                    <Typography>Drilled: </Typography>
+                  </Grid>
+                  {renderRightAccordian("drilled", 1)}
+                  <Grid item xs={6} className="mix-seeding-rate-grid-left">
+                    <Typography>
+                      Broadcast(with Light Incorporation):{" "}
+                    </Typography>
+                  </Grid>
+                  {renderRightAccordian("broadcast", seed.broadcast)}
+                  <Grid item xs={6} className="mix-seeding-rate-grid-left">
+                    <Typography>
+                      Aerial(or broadcast with no Light Incorporation{" "}
+                      <span style={{ color: "red" }}>Not Recommended</span>
+                      ):
+                    </Typography>
+                  </Grid>
+                  {renderRightAccordian("aerial", seed.aerial)}
+                </Grid>
+              </AccordionDetails>
+            </Accordion>
           </Grid>
         );
       })}

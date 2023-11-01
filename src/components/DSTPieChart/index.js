@@ -1,6 +1,7 @@
-import { Typography, Box } from "@mui/material";
+import { Typography, Box, useMediaQuery } from "@mui/material";
 import { Square } from "@mui/icons-material";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import { useTheme } from "@emotion/react";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
@@ -71,12 +72,15 @@ const DSTPieChartLabel = ({ children }) => {
   );
 };
 
-const DSTPieChartLegend = ({ labels, matchesMd }) => {
+const DSTPieChartLegend = ({ labels }) => {
+  const theme = useTheme();
+  const matchesMd = useMediaQuery(theme.breakpoints.down("md"));
+
   return (
     <Box sx={{ pt: "1.5rem" }}>
       {labels.map((label, i) => {
         return (
-          <Box sx={{ display: "flex", pl: matchesMd ? "25%" : "30%" }}>
+          <Box sx={{ display: "flex", pl: matchesMd ? "25%" : "30%" }} key={i}>
             <Square sx={{ color: COLORS[i] }}></Square>
             <Typography
               fontSize={matchesMd ? "0.75rem" : "1rem"}
