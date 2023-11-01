@@ -20,7 +20,7 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
   const renderStepsForm = (label1, label2, label3) => {
     return (
       matchesMd && (
-        <Grid container xs={12}>
+        <Grid container>
           <Grid item xs={3}>
             <Typography sx={{ fontSize: "0.75rem", pb: "1rem" }}>
               {label1}
@@ -45,8 +45,8 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
 
   const renderConfirmPlanForm = (seed) => {
     return (
-      <Grid container xs={12}>
-        <Grid container xs={12} className="confirm-plan-form-container">
+      <Grid container>
+        <Grid container className="confirm-plan-form-container">
           {renderStepsForm("Bulk Lbs / Acre", "Acres", "Total Pounds")}
           <Grid item xs={3}>
             <NumberTextField
@@ -88,7 +88,7 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
           <Grid item xs={1}></Grid>
         </Grid>
 
-        <Grid container xs={12} className="confirm-plan-form-container">
+        <Grid container className="confirm-plan-form-container">
           <Grid item xs={3}>
             {/* <Typography>Cost / Pound</Typography> */}
           </Grid>
@@ -111,7 +111,7 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
           </Grid>
         </Grid>
 
-        <Grid container xs={12} className="confirm-plan-form-container">
+        <Grid container className="confirm-plan-form-container">
           {renderStepsForm("Cost/Pound", "Total Pounds", "Total Cost")}
           <Grid item xs={3}>
             <NumberTextField
@@ -154,7 +154,7 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
       0
     );
     return (
-      <Grid container xs={12}>
+      <Grid container>
         <Grid item xs={12}>
           <Typography className="confirm-plan-header">
             Total Cost of mix:
@@ -203,13 +203,13 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
   };
 
   return (
-    <Grid container xs={12} color={"primary.text"}>
+    <Grid container color={"primary.text"}>
       {/* NRCS Standards */}
       {NRCS.enabled && <NRCSStandards NRCS={NRCS} />}
       <Grid item xs={12}>
         {seedsSelected.map((seed, i) => {
           return (
-            <Grid container xs={12} key={i}>
+            <Grid container key={i}>
               <Grid item xs={12}>
                 <Typography className="confirm-plan-header">
                   {seed.label}

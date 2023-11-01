@@ -227,7 +227,7 @@ const ReviewMix = ({ council }) => {
     };
 
     return (
-      <Grid container xs={12}>
+      <Grid container>
         <Grid item xs={12}>
           <ResponsiveContainer width="100%" height={200}>
             <ScatterChart width={400} height={500} position="center">

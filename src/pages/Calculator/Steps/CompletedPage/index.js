@@ -4,61 +4,52 @@ import { useTheme } from "@emotion/react";
 const CompletedPage = ({ council }) => {
   // themes
   const theme = useTheme();
-  const matchesXs = useMediaQuery(theme.breakpoints.down("xs"));
-  const matchesSm = useMediaQuery(theme.breakpoints.down("sm"));
-  const matchesMd = useMediaQuery(theme.breakpoints.down("md"));
   const matchesUpMd = useMediaQuery(theme.breakpoints.up("md"));
   return (
     <>
-      <Grid xs={12} container>
-        <Grid xs={12} className="cp-empty-block-50" container></Grid>
-        <Grid xs={3} item></Grid>
-        <Grid xs={6} item>
+      {/* FIXME: is these words still needed? */}
+      <Grid container>
+        <Grid xs={12} item sx={{ pt: "50px" }} justifyContent={"center"}>
           <Typography>
             Thank you for completing the Seeding Rate Calculator Cognitive
             Walkthrough
           </Typography>
         </Grid>
-        <Grid xs={3}></Grid>
-      </Grid>
-      <Grid xs={12} className="cp-empty-block" container></Grid>
-      <Grid xs={12} container>
-        <Grid xs={3} item></Grid>
-        <Grid xs={6} item>
+
+        <Grid xs={12} item sx={{ pt: "150px" }} justifyContent={"center"}>
           <Typography sx={{ fontWeight: 600 }}>
             Questions or Comments? Email Juliet Norton jnnorton@purdue.edu
           </Typography>
         </Grid>
-        <Grid xs={3} item></Grid>
       </Grid>
-      <Grid xs={12} className="cp-empty-block" container></Grid>
-      <Grid xs={12} container>
+
+      <Grid container sx={{ pt: "150px" }}>
         <Grid xs={!matchesUpMd ? 6 : 3} item>
           <img
             alt="axilab"
             src="./axilab.png"
-            className={!matchesUpMd ? "logo-img-80" : "logo-img-50"}
+            width={!matchesUpMd ? "80%" : "50%"}
           />
         </Grid>
         <Grid xs={!matchesUpMd ? 6 : 3} item>
           <img
             alt="MCCC"
             src="./MCCCLogo.png"
-            className={!matchesUpMd ? "logo-img-80" : "logo-img-50"}
+            width={!matchesUpMd ? "80%" : "50%"}
           />
         </Grid>
         <Grid xs={!matchesUpMd ? 3 : 2} item>
           <img
             alt="PSA"
             src="./PSALogo.png"
-            className={!matchesUpMd ? "logo-img-80" : "logo-img-50"}
+            width={!matchesUpMd ? "80%" : "50%"}
           />
         </Grid>
         <Grid xs={!matchesUpMd ? 9 : 4} item>
           <img
             alt="NECCC"
             src="./NECCCWideLogo.png"
-            className={!matchesUpMd ? "logo-img-80" : "logo-img-50"}
+            width={!matchesUpMd ? "80%" : "50%"}
           />
         </Grid>
       </Grid>

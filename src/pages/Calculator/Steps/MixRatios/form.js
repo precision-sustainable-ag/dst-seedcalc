@@ -100,7 +100,7 @@ const MixRatioSteps = ({ seed, council, updateSeed, speciesSelection }) => {
             <Typography>NECCC</Typography>
           </Grid>
 
-          <Grid container className="steps-row-2">
+          <Grid container p={"10px"}>
             <Grid item xs={4}>
               <Typography className="math-icon">=</Typography>
             </Grid>

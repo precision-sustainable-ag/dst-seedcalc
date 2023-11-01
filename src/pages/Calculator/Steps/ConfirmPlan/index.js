@@ -98,7 +98,7 @@ const ConfirmPlan = ({ council }) => {
         <Typography variant="h2">Confirm your plan</Typography>
 
         {/* Export */}
-        <Grid container sx={{ marginTop: "5px" }} xs={12}>
+        <Grid container sx={{ marginTop: "5px" }}>
           <Grid item xs={matchesUpMd ? 11 : 9}></Grid>
           <Grid item xs={matchesUpMd ? 1 : 3}>
             <Button
