@@ -26,17 +26,8 @@ div[class*="map_infobar__"] {
   .accordian-details {
     color: $primary-text;
     padding: 1rem 0;
+    background-color: #fffff2;
   }
-}
-
-.mix-ratio-chart-header {
-  text-align: center;
-  color: $primary-text;
-}
-.mix-ratio-chart-list-50 {
-  margin: 0 auto !important;
-  width: 50% !important;
-  margin-top: 34px !important;
 }
 
 .mix-ratio-step-header {
@@ -47,12 +38,6 @@ div[class*="map_infobar__"] {
   font-weight: 600 !important;
   text-align: justify !important;
   color: #4f5f30 !important;
-}
-.mix-ratio-form-container {
-  padding: 0px;
-}
-.mix-ratio-form-label {
-  margin-bottom: 20px !important;
 }
 
 /* mix seeding rate */
@@ -92,31 +77,13 @@ div[class*="map_infobar__"] {
   }
 }
 
-.mix-label-md {
-  margin-top: 5px !important;
-  margin-left: 15px !important;
-  font-size: 10px !important;
-}
-.MuiAccordionDetails-root {
-  background: #fffff2 !important;
-}
-
 .text-field-50 {
   width: 80% !important;
 }
-.font-15 {
-  font-size: 15px;
-}
-.no-display {
-  opacity: 0%;
-}
+
 .math-icon {
   margin-top: 15px !important;
   font-weight: 600 !important;
-}
-
-.vertical-slider {
-  margin-top: 70px;
 }
 
 /* Confirm Plan start */
@@ -125,16 +92,12 @@ div[class*="map_infobar__"] {
   padding: 0px;
   margin: 10px 0px !important;
 }
-.Mui-expanded {
-  margin: 0px !important;
-}
 
 .confirm-plan-header {
   padding: 16px;
   text-align: justify;
   background: #e5e7d5;
-  margin: 30px 0px !important;
-  margin-bottom: 0px !important;
+  margin: 1rem 0 !important;
   font-size: 18px !important;
   font-weight: 600 !important;
   text-align: justify !important;
@@ -150,23 +113,10 @@ div[class*="map_infobar__"] {
   border-radius: 26px !important;
 }
 
-/* Confirm Plan end */
-
 /* Steps */
-
 .steps-row-2 {
-  margin-top: 20px;
+  margin: 10px;
 }
-
-/* .NRCS-result-container  {
-    border-radius: 25px;
-    background: white;
-    padding: 4px 15px; 
-    padding-bottom: 30px;
-    width: 100%;
-    border: 1px solid #ececec; 
-    height: 10px;  
-} */
 
 /* Completed Page start */
 

@@ -21,25 +21,27 @@ const ReviewMixSteps = ({
 
   const renderStepsForm = (label1, label2, label3) => {
     return (
-      <Grid container xs={12}>
-        <Grid item xs={3}>
-          <Typography sx={{ fontSize: "0.75rem", pb: "1rem" }}>
-            {label1}
-          </Typography>
+      matchesMd && (
+        <Grid container xs={12}>
+          <Grid item xs={3}>
+            <Typography sx={{ fontSize: "0.75rem", pb: "1rem" }}>
+              {label1}
+            </Typography>
+          </Grid>
+          <Grid item xs={1}></Grid>
+          <Grid item xs={3}>
+            <Typography sx={{ fontSize: "0.75rem", pb: "1rem" }}>
+              {label2}
+            </Typography>
+          </Grid>
+          <Grid item xs={1}></Grid>
+          <Grid item xs={3}>
+            <Typography sx={{ fontSize: "0.75rem", pb: "1rem" }}>
+              {label3}
+            </Typography>
+          </Grid>
         </Grid>
-        <Grid item xs={1}></Grid>
-        <Grid item xs={3}>
-          <Typography sx={{ fontSize: "0.75rem", pb: "1rem" }}>
-            {label2}
-          </Typography>
-        </Grid>
-        <Grid item xs={1}></Grid>
-        <Grid item xs={3}>
-          <Typography sx={{ fontSize: "0.75rem", pb: "1rem" }}>
-            {label3}
-          </Typography>
-        </Grid>
-      </Grid>
+      )
     );
   };
 
@@ -135,7 +137,7 @@ const ReviewMixSteps = ({
             "% of Single Species Rate",
             "Mix Seeding Rate"
           )}
-          <Grid container xs={12} className="mix-ratio-form-container">
+          <Grid container xs={12}>
             <Grid item xs={3}>
               <NumberTextField
                 disabled
@@ -145,7 +147,7 @@ const ReviewMixSteps = ({
                 }}
                 value={seed.singleSpeciesSeedingRate}
               />
-              <Typography className="font-15">Lbs / Acre</Typography>
+              <Typography>Lbs / Acre</Typography>
             </Grid>
 
             <Grid item xs={1}>
@@ -164,7 +166,7 @@ const ReviewMixSteps = ({
                 }}
                 value={seed.percentOfSingleSpeciesRate}
               />
-              <Typography className="font-15">
+              <Typography>
                 {council === "MCCC" && "MCCC Recommendation"}
               </Typography>
             </Grid>
@@ -179,7 +181,7 @@ const ReviewMixSteps = ({
                 disabled
                 value={seed.step1Result}
               />
-              <Typography className="font-15">Lbs / Acre</Typography>
+              <Typography>Lbs / Acre</Typography>
             </Grid>
           </Grid>
         </>
@@ -201,7 +203,7 @@ const ReviewMixSteps = ({
             label={matchesMd ? "" : "Mix Seeding Rate PLS"}
             value={seed.step1Result}
           />
-          <Typography className="font-15">Lbs / Acre</Typography>
+          <Typography>Lbs / Acre</Typography>
         </Grid>
 
         <Grid item xs={1}>
@@ -225,7 +227,7 @@ const ReviewMixSteps = ({
             disabled
             value={seed.step2Result}
           />
-          <Typography className="font-15">Lbs / Acre</Typography>
+          <Typography>Lbs / Acre</Typography>
         </Grid>
       </>
 
@@ -315,7 +317,7 @@ const ReviewMixSteps = ({
             disabled
             value={seed.step3Result}
           />
-          <Typography className="font-15">Lbs / Acre</Typography>
+          <Typography>Lbs / Acre</Typography>
         </Grid>
 
         <Grid item xs={1}>
@@ -352,7 +354,7 @@ const ReviewMixSteps = ({
             }}
             value={convertToPercent(seed.purityPercentage)}
           />
-          <Typography className="font-15">Lbs / Acre</Typography>
+          <Typography>Lbs / Acre</Typography>
         </Grid>
 
         <Grid container className="steps-row-2" xs={12}>
@@ -384,7 +386,7 @@ const ReviewMixSteps = ({
             disabled
             value={seed.bulkSeedingRate}
           />
-          <Typography className="font-15">Lbs / Acre</Typography>
+          <Typography>Lbs / Acre</Typography>
         </Grid>
 
         <Grid item xs={1}>
