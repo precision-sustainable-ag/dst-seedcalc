@@ -16,7 +16,6 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
 
   const theme = useTheme();
   const matchesMd = useMediaQuery(theme.breakpoints.down("md"));
-  const matchesUpMd = useMediaQuery(theme.breakpoints.up("md"));
 
   const renderSeedData = (seed) => {
     return (

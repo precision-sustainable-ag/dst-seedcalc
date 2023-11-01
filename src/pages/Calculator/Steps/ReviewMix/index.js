@@ -288,16 +288,9 @@ const ReviewMix = ({ council }) => {
       <Grid item xs={12}>
         <Typography variant="h2">Review your mix</Typography>
       </Grid>
-
       <Grid item xs={6} md={6} sx={{ textAlign: "justify" }}>
-        {council === "MCCC" ? (
-          <DSTPieChart chartData={poundsOfSeedArray} />
-        ) : (
-          <DSTPieChart chartData={seedsPerAcreArray} />
-        )}
-        <DSTPieChartLabel>
-          {council === "MCCC" ? "Pounds of Seed / Acre" : "Seeds Per Acre"}
-        </DSTPieChartLabel>
+        <DSTPieChart chartData={poundsOfSeedArray} />
+        <DSTPieChartLabel>{"Pounds of Seed / Acre"}</DSTPieChartLabel>
         <DSTPieChartLegend
           labels={speciesSelection.seedsSelected.map((seed) => seed.label)}
           matchesMd={matchesMd}
@@ -305,7 +298,11 @@ const ReviewMix = ({ council }) => {
       </Grid>
 
       <Grid item xs={6} md={6} sx={{ textAlign: "justify" }}>
-        <DSTPieChart chartData={plantsPerAcreArray} />
+        <DSTPieChart
+          chartData={
+            council === "MCCC" ? plantsPerAcreArray : seedsPerAcreArray
+          }
+        />
         <DSTPieChartLabel>
           {council === "MCCC" ? "Plants" : "Seeds"} Per Acre{" "}
         </DSTPieChartLabel>
@@ -315,7 +312,6 @@ const ReviewMix = ({ council }) => {
           matchesMd={matchesMd}
         />
       </Grid>
-
       {speciesSelection.seedsSelected.map((seed, i) => {
         return (
           <Grid item xs={12}>

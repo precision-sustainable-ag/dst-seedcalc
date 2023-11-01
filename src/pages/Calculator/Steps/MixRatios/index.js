@@ -103,11 +103,11 @@ const MixRatio = ({ council }) => {
       </Grid>
 
       <Grid item xs={6} md={6} sx={{ textAlign: "justify" }}>
-        {council === "MCCC" ? (
-          <DSTPieChart chartData={plantsPerAcreArray} />
-        ) : (
-          <DSTPieChart chartData={seedsPerAcreArray} />
-        )}
+        <DSTPieChart
+          chartData={
+            council === "MCCC" ? plantsPerAcreArray : seedsPerAcreArray
+          }
+        />
         <DSTPieChartLabel>
           {council === "MCCC" ? "Plants" : "Seeds"} Per Acre{" "}
         </DSTPieChartLabel>

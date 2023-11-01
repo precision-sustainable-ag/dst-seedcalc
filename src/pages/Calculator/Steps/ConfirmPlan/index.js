@@ -15,7 +15,6 @@ import { updateSteps } from "../../../../features/stepSlice/index";
 import { generateNRCSStandards } from "./../../../../shared/utils/NRCS/calculateNRCS";
 import ConfirmPlanCharts from "./charts";
 import "./../steps.scss";
-import SeedsSelectedList from "../../../../components/SeedsSelectedList";
 import { emptyValues } from "../../../../shared/utils/calculate";
 import ConfirmPlanForm from "./form";
 
@@ -130,6 +129,7 @@ const ConfirmPlan = ({ council }) => {
           speciesSelection={speciesSelection}
           matchesMd={matchesMd}
         />
+
         <ConfirmPlanForm updateSeed={updateSeed} data={data} />
       </Grid>
     </Grid>

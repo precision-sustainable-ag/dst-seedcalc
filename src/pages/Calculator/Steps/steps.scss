@@ -29,9 +29,6 @@ div[class*="map_infobar__"] {
   }
 }
 
-.pie-chart-container {
-  text-align: justify;
-}
 .mix-ratio-chart-header {
   text-align: center;
   color: $primary-text;
@@ -152,22 +149,7 @@ div[class*="map_infobar__"] {
   font-size: 12px !important;
   border-radius: 26px !important;
 }
-.confirm-plan-modal {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  width: 80%;
-  height: 80%;
-  background-color: #fff;
-  border: 2px solid #000;
-  box-shadow: 0px 11px 15px -7px rgb(0 0 0 / 20%),
-    0px 24px 38px 3px rgb(0 0 0 / 14%), 0px 9px 46px 8px rgb(0 0 0 / 12%);
-  padding: 32px;
-}
+
 /* Confirm Plan end */
 
 /* Steps */
@@ -176,27 +158,6 @@ div[class*="map_infobar__"] {
   margin-top: 20px;
 }
 
-.data-circle {
-  background-color: #e7885f;
-  color: white;
-  border-radius: 50%;
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 10px auto;
-}
-.data-circle p {
-  padding-top: 30px;
-}
-.data-circle-icon {
-  margin-top: 15px;
-  font-size: 45px !important;
-}
-.data-circle-label {
-  font-size: 15px !important;
-  font-weight: 600 !important;
-  color: $primary-text;
-  min-height: 45px;
-}
 /* .NRCS-result-container  {
     border-radius: 25px;
     background: white;
