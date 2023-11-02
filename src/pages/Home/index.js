@@ -15,9 +15,6 @@ import {
   updateSteps,
   updateModal,
 } from "../../features/stepSlice";
-import { DSTButton } from "./../../components/Button";
-import { Header } from "./../../components/Header";
-import { Dropdown } from "../../components/Dropdown";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -145,13 +142,13 @@ const Home = () => {
   return (
     <Fragment>
       <Grid container>
-        <Header
+        {/* <Header
           className="header-container"
           headerVariant="dstHeaderHome"
           text="Seeding Rate Calculator"
           size={12}
           // style={{ mt: 5 }}
-        />
+        /> */}
 
         {renderHome()}
       </Grid>

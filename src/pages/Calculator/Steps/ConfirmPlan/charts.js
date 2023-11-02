@@ -27,21 +27,20 @@ const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
         <Box
           sx={{
             bgcolor: "#e7885f",
-            color: "white",
             borderRadius: "50%",
             width: "5rem",
             height: "5rem",
             margin: "0 auto 10px auto",
           }}
         >
-          <Typography sx={{ pt: "30px" }}>{value}</Typography>
+          <Typography sx={{ pt: "30px", color: "white" }}>{value}</Typography>
         </Box>
       </>
     );
   };
 
   return (
-    <Grid container xs={12} sx={{ padding: "0.5rem" }}>
+    <Grid container sx={{ padding: "0.5rem" }}>
       <Grid
         item
         xs={6}

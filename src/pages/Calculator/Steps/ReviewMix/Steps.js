@@ -22,7 +22,7 @@ const ReviewMixSteps = ({
   const renderStepsForm = (label1, label2, label3) => {
     return (
       matchesMd && (
-        <Grid container xs={12}>
+        <Grid container>
           <Grid item xs={3}>
             <Typography sx={{ fontSize: "0.75rem", pb: "1rem" }}>
               {label1}
@@ -57,7 +57,7 @@ const ReviewMixSteps = ({
   const percentInGroup = generatePercentInGroup(seed);
 
   return (
-    <Grid container xs={12}>
+    <Grid container>
       {/* NECCC Step 1:  */}
       {council === "NECCC" && (
         <>
@@ -137,7 +137,7 @@ const ReviewMixSteps = ({
             "% of Single Species Rate",
             "Mix Seeding Rate"
           )}
-          <Grid container xs={12}>
+          <Grid container>
             <Grid item xs={3}>
               <NumberTextField
                 disabled
