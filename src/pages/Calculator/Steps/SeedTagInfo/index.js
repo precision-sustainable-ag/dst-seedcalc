@@ -6,7 +6,7 @@ import * as React from "react";
 import Grid from "@mui/material/Grid";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Typography, Box } from "@mui/material";
+import { Typography } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -20,6 +20,17 @@ import {
 } from "../../../../shared/utils/calculate";
 import { NumberTextField } from "./../../../../components/NumberTextField";
 import "./../steps.scss";
+import styled from "@emotion/styled";
+
+const LeftGrid = styled(Grid)({
+  "&.MuiGrid-item": {
+    height: "80px",
+    paddingTop: "15px",
+    "& p": {
+      fontWeight: "bold",
+    },
+  },
+});
 
 const SeedTagInfo = ({ council }) => {
   const dispatch = useDispatch();
@@ -69,19 +80,21 @@ const SeedTagInfo = ({ council }) => {
     const value =
       type === "percent" ? convertToPercent(data[key]) : Math.floor(data[key]);
     return (
-      <Grid item xs={6}>
-        <NumberTextField
-          className="text-field-50"
-          disabled={disabled}
-          value={value}
-          handleChange={(e) => {
-            handleSeed(convertToDecimal(e.target.value), key, "", {
-              ...data,
-              [key]: convertToDecimal(e.target.value),
-            });
-          }}
-        />
-      </Grid>
+      <>
+        <Grid item xs={4}>
+          <NumberTextField
+            disabled={disabled}
+            value={value}
+            handleChange={(e) => {
+              handleSeed(convertToDecimal(e.target.value), key, "", {
+                ...data,
+                [key]: convertToDecimal(e.target.value),
+              });
+            }}
+          />
+        </Grid>
+        <Grid item xs={2}></Grid>
+      </>
     );
   };
 
@@ -120,27 +133,27 @@ const SeedTagInfo = ({ council }) => {
               </AccordionSummary>
               <AccordionDetails className="accordian-details">
                 <Grid container>
-                  <Grid item xs={6} className="seed-tag-info-grid-left">
+                  <LeftGrid item xs={6}>
                     <Typography>% Germination: </Typography>
-                  </Grid>
+                  </LeftGrid>
                   {renderRightAccordian(
                     "germinationPercentage",
                     seed,
                     "percent",
                     false
                   )}
-                  <Grid item xs={6} className="seed-tag-info-grid-left">
+                  <LeftGrid item xs={6}>
                     <Typography>% Purity: </Typography>
-                  </Grid>
+                  </LeftGrid>
                   {renderRightAccordian(
                     "purityPercentage",
                     seed,
                     "percent",
                     false
                   )}
-                  <Grid item xs={6} className="seed-tag-info-grid-left">
+                  <LeftGrid item xs={6}>
                     <Typography>Seeds per Pound </Typography>
-                  </Grid>
+                  </LeftGrid>
                   {/* FIXME: this also turns seeds per pound 100 times larger */}
                   {renderRightAccordian("poundsOfSeed", seed, "", true)}
                 </Grid>

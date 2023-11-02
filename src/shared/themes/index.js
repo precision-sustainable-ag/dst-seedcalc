@@ -21,12 +21,10 @@ export const dstTheme = createTheme({
   typography: {
     dstHeader: {
       fontSize: "1.25rem",
-      color: "#4f5f30",
       fontWeight: 800,
       textShadow: "0px 4px 4px rgba(0, 0, 0, 0.15)",
     },
     h2: {
-      color: "#4F5F30",
       fontSize: "1.25rem",
       fontWeight: 800,
       lineHeight: "1.5rem",
@@ -34,11 +32,13 @@ export const dstTheme = createTheme({
       paddingBottom: "0.75rem",
       backgroundColor: "rgba(79, 95, 48, 0.09)",
     },
-    nrcsStandard: {
-      fontSize: 20,
-    },
   },
   components: {
+    MuiTypography: {
+      defaultProps: {
+        color: "#4F5F30",
+      },
+    },
     MuiButton: {
       variants: [
         {

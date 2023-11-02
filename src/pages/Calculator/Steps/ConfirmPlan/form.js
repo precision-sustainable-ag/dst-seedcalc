@@ -46,7 +46,7 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
   const renderConfirmPlanForm = (seed) => {
     return (
       <Grid container>
-        <Grid container className="confirm-plan-form-container">
+        <Grid container sx={{ p: "0.625rem" }}>
           {renderStepsForm("Bulk Lbs / Acre", "Acres", "Total Pounds")}
           <Grid item xs={3}>
             <NumberTextField
@@ -88,7 +88,7 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
           <Grid item xs={1}></Grid>
         </Grid>
 
-        <Grid container className="confirm-plan-form-container">
+        <Grid container sx={{ p: "0.625rem" }}>
           <Grid item xs={3}>
             {/* <Typography>Cost / Pound</Typography> */}
           </Grid>
@@ -111,7 +111,7 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
           </Grid>
         </Grid>
 
-        <Grid container className="confirm-plan-form-container">
+        <Grid container sx={{ p: "0.625rem" }}>
           {renderStepsForm("Cost/Pound", "Total Pounds", "Total Cost")}
           <Grid item xs={3}>
             <NumberTextField
@@ -156,11 +156,9 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
     return (
       <Grid container>
         <Grid item xs={12}>
-          <Typography className="confirm-plan-header">
-            Total Cost of mix:
-          </Typography>
+          <Typography className="step-header">Total Cost of mix:</Typography>
         </Grid>
-        <Grid item xs={3} className="confirm-plan-form-container">
+        <Grid item xs={3} sx={{ p: "0.625rem" }}>
           <DSTTextField
             label={`${seedsSelected[0].label}`}
             //
@@ -168,21 +166,21 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
             value={`$${seedsSelected[0].totalCost.toFixed(2)}`}
           />{" "}
         </Grid>
-        <Grid item xs={1} className="confirm-plan-form-container">
+        <Grid item xs={1} sx={{ p: "0.625rem" }}>
           <Typography className="math-icon">+</Typography>
         </Grid>
         {seedsSelected.map((s, i) => {
           if (i !== 0) {
             return (
               <Fragment key={i}>
-                <Grid item xs={3} className="confirm-plan-form-container">
+                <Grid item xs={3} sx={{ p: "0.625rem" }}>
                   <DSTTextField
                     label={`${s.label}`}
                     disabled
                     value={`$${s.totalCost.toFixed(2)}`}
                   />{" "}
                 </Grid>
-                <Grid item xs={1} className="confirm-plan-form-container">
+                <Grid item xs={1} sx={{ p: "0.625rem" }}>
                   <Typography className="math-icon">
                     {i !== seedsSelected.length - 1 ? "+" : "="}
                   </Typography>
@@ -191,7 +189,7 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
             );
           }
         })}
-        <Grid item xs={6} className="confirm-plan-form-container">
+        <Grid item xs={6} sx={{ p: "0.625rem" }}>
           <DSTTextField
             label={"Total Cost of Mix"}
             disabled
@@ -211,9 +209,7 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
           return (
             <Grid container key={i}>
               <Grid item xs={12}>
-                <Typography className="confirm-plan-header">
-                  {seed.label}
-                </Typography>
+                <Typography className="step-header">{seed.label}</Typography>
               </Grid>
               <Grid item xs={12}>
                 {renderConfirmPlanForm(seed)}

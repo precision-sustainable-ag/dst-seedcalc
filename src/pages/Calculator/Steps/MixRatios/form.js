@@ -55,7 +55,7 @@ const MixRatioSteps = ({ seed, council, updateSeed, speciesSelection }) => {
       {council === "NECCC" && (
         <>
           <Grid item xs={12}>
-            <Typography className="mix-ratio-step-header">Step 1: </Typography>
+            <Typography className="step-header">Step 1: </Typography>
           </Grid>
           {renderFormLabel(
             "Mix Seeding Rate PLS",
@@ -123,7 +123,7 @@ const MixRatioSteps = ({ seed, council, updateSeed, speciesSelection }) => {
       {council === "MCCC" && (
         <>
           <Grid item xs={12}>
-            <Typography className="mix-ratio-step-header">Step 1:</Typography>
+            <Typography className="step-header">Step 1:</Typography>
           </Grid>
           {renderFormLabel(
             "Single Species Seeding Rate PLS",
@@ -184,7 +184,7 @@ const MixRatioSteps = ({ seed, council, updateSeed, speciesSelection }) => {
       {/* Step 2: */}
       <>
         <Grid item xs={12}>
-          <Typography className="mix-ratio-step-header">Step 2: </Typography>
+          <Typography className="step-header">Step 2: </Typography>
         </Grid>
         {renderFormLabel(
           "Single Species Seeding Rate PLS",
@@ -232,7 +232,7 @@ const MixRatioSteps = ({ seed, council, updateSeed, speciesSelection }) => {
       {council === "NECCC" && (
         <>
           <Grid item xs={12}>
-            <Typography className="mix-ratio-step-header">Step 3: </Typography>
+            <Typography className="step-header">Step 3: </Typography>
           </Grid>
           {renderFormLabel("Seeds/Acre", "Sq. Ft. / Acres", "Plants/Acre")}
           <Grid item xs={3}>
@@ -273,7 +273,7 @@ const MixRatioSteps = ({ seed, council, updateSeed, speciesSelection }) => {
       {council === "MCCC" && (
         <>
           <Grid item xs={12}>
-            <Typography className="mix-ratio-step-header">Step 3: </Typography>
+            <Typography className="step-header">Step 3: </Typography>
           </Grid>
           {renderFormLabel("Seeds/Acre", "% Survival", "Plants/Acre")}
           <Grid item xs={3}>
@@ -315,7 +315,7 @@ const MixRatioSteps = ({ seed, council, updateSeed, speciesSelection }) => {
           </Grid>
 
           <Grid item xs={12}>
-            <Typography className="mix-ratio-step-header">Step 4: </Typography>
+            <Typography className="step-header">Step 4: </Typography>
           </Grid>
           {renderFormLabel(
             "Plants/Acre",

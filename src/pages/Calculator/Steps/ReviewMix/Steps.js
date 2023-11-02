@@ -62,7 +62,7 @@ const ReviewMixSteps = ({
       {council === "NECCC" && (
         <>
           <Grid item xs={12}>
-            <Typography className="mix-ratio-step-header">Step 1: </Typography>
+            <Typography className="step-header">Step 1: </Typography>
           </Grid>
           {renderStepsForm(
             "Mix Seeding Rate PLS",
@@ -130,7 +130,7 @@ const ReviewMixSteps = ({
       {council === "MCCC" && (
         <>
           <Grid item xs={12}>
-            <Typography className="mix-ratio-step-header">Step 1:</Typography>
+            <Typography className="step-header">Step 1:</Typography>
           </Grid>
           {renderStepsForm(
             "Single Species Seeding Rate PLS",
@@ -190,7 +190,7 @@ const ReviewMixSteps = ({
       {/* Step 2: */}
       <>
         <Grid item xs={12}>
-          <Typography className="mix-ratio-step-header">Step 2: </Typography>
+          <Typography className="step-header">Step 2: </Typography>
         </Grid>
         {renderStepsForm(
           "Mix Seeding Rate PLS",
@@ -234,7 +234,7 @@ const ReviewMixSteps = ({
       {/* Step 3: */}
       <>
         <Grid item xs={12}>
-          <Typography className="mix-ratio-step-header">Step 3: </Typography>
+          <Typography className="step-header">Step 3: </Typography>
         </Grid>
         {renderStepsForm(
           "Mix Seeding Rate PLS",
@@ -308,7 +308,7 @@ const ReviewMixSteps = ({
       {/* Step 4: */}
       <>
         <Grid item xs={12}>
-          <Typography className="mix-ratio-step-header">Step 4: </Typography>
+          <Typography className="step-header">Step 4: </Typography>
         </Grid>
         {renderStepsForm("Mix Seeding Rate PLS", "% Germination", "% Purity")}
         <Grid item xs={3}>
@@ -377,7 +377,7 @@ const ReviewMixSteps = ({
       {/* Step 5: */}
       <>
         <Grid item xs={12}>
-          <Typography className="mix-ratio-step-header">Step 5: </Typography>
+          <Typography className="step-header">Step 5: </Typography>
         </Grid>
         {renderStepsForm("Bulk Seeding Rate", "Acres", "Pounds for Purchase")}
         <Grid item xs={3}>

@@ -102,7 +102,15 @@ const ConfirmPlan = ({ council }) => {
           <Grid item xs={matchesUpMd ? 11 : 9}></Grid>
           <Grid item xs={matchesUpMd ? 1 : 3}>
             <Button
-              className="export-button"
+              sx={{
+                bgcolor: "#e7885f",
+                color: "white",
+                padding: "7px",
+                width: "83px",
+                margin: "3px",
+                fontSize: "12px",
+                borderRadius: "26px",
+              }}
               onClick={() => {
                 handleDownload(
                   [

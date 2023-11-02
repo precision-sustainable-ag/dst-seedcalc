@@ -61,7 +61,6 @@ const DSTPieChartLabel = ({ children }) => {
     <Typography
       sx={{
         textAlign: "center",
-        color: "primary.text",
         textDecoration: "underline #cccccc",
         textUnderlineOffset: "0.5rem",
         fontWeight: 600,
@@ -82,10 +81,7 @@ const DSTPieChartLegend = ({ labels }) => {
         return (
           <Box sx={{ display: "flex", pl: matchesMd ? "25%" : "30%" }} key={i}>
             <Square sx={{ color: COLORS[i] }}></Square>
-            <Typography
-              fontSize={matchesMd ? "0.75rem" : "1rem"}
-              color={"primary.text"}
-            >
+            <Typography fontSize={matchesMd ? "0.75rem" : "1rem"}>
               {label}
             </Typography>
           </Box>
