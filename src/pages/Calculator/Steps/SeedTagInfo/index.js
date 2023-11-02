@@ -116,15 +116,13 @@ const SeedTagInfo = ({ council }) => {
         alignItems={"center"}
       >
         <DSTSwitch checked={sameInfoActive} handleChange={handleSwitch} />
-        <Typography color={"primary.text"}>
-          Same Information for All Species
-        </Typography>
+        <Typography>Same Information for All Species</Typography>
       </Grid>
 
       {speciesSelection.seedsSelected.map((seed, i) => {
         return (
           <Grid item xs={12} key={i}>
-            <Accordion className="accordian-container">
+            <Accordion>
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 className="accordian-summary"

@@ -408,7 +408,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
         return (
           <Grid item xs={12} key={i}>
             {/* TODO: make accordian a reusable component? check usage in other files */}
-            <Accordion className="accordian-container">
+            <Accordion>
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 className="accordian-summary"

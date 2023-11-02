@@ -312,7 +312,7 @@ const ReviewMix = ({ council }) => {
       {speciesSelection.seedsSelected.map((seed, i) => {
         return (
           <Grid item xs={12} key={i}>
-            <Accordion xs={12} className="accordian-container">
+            <Accordion xs={12}>
               <AccordionSummary
                 xs={12}
                 expandIcon={<ExpandMoreIcon />}

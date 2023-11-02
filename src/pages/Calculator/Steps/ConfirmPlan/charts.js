@@ -21,9 +21,7 @@ const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
   const ConfirmPlanChip = ({ label, value }) => {
     return (
       <>
-        <Typography
-          sx={{ fontWeight: 600, minHeight: "45px", color: "primary.text" }}
-        >
+        <Typography sx={{ fontWeight: 600, minHeight: "45px" }}>
           {label}
         </Typography>
         <Box

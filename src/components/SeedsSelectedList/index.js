@@ -44,11 +44,7 @@ const SeedsSelectedList = ({ list }) => {
               alt={s.label}
               loading="lazy"
             />
-            <Typography
-              color={"primary.text"}
-              fontSize={"12px"}
-              lineHeight={1.25}
-            >
+            <Typography fontSize={"12px"} lineHeight={1.25}>
               {s.label}
             </Typography>
           </Box>

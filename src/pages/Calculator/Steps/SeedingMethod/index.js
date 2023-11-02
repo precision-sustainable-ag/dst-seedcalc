@@ -120,7 +120,7 @@ const SeedingMethod = ({ council }) => {
       {seedsSelected.map((seed, i) => {
         return (
           <Grid item xs={12} key={i}>
-            <Accordion className="accordian-container">
+            <Accordion>
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 className="accordian-summary"

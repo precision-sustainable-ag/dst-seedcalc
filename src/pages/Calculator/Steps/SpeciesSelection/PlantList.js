@@ -72,9 +72,7 @@ const PlantList = ({
           )}
 
           <CardContent>
-            <Typography sx={{ color: "primary.text", fontWeight: "bold" }}>
-              {name}
-            </Typography>
+            <Typography sx={{ fontWeight: "bold" }}>{name}</Typography>
           </CardContent>
         </CardActionArea>
       </Card>

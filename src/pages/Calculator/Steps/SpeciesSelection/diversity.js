@@ -21,7 +21,7 @@ const Diversity = ({ diversitySelected }) => {
 
   return (
     <Grid container>
-      <Typography color={"primary.text"} pt={"1rem"} fontWeight={600}>
+      <Typography pt={"1rem"} fontWeight={600}>
         Mix Diversity
       </Typography>
       <Grid
@@ -51,9 +51,7 @@ const Diversity = ({ diversitySelected }) => {
         diversitySelected.length > 0 &&
         diversitySelected.length === 0 && (
           <Grid item xs={12}>
-            <Typography fontSize={"0.75rem"} color={"primary.text"}>
-              Select a species
-            </Typography>
+            <Typography fontSize={"0.75rem"}>Select a species</Typography>
           </Grid>
         )}
       {diversitySelected &&
@@ -62,9 +60,7 @@ const Diversity = ({ diversitySelected }) => {
           return (
             <Fade in={true} key={i}>
               <Grid item xs={calculateSize()}>
-                <Typography fontSize={"0.75rem"} color={"primary.text"}>
-                  {seedsLabel[d]}
-                </Typography>
+                <Typography fontSize={"0.75rem"}>{seedsLabel[d]}</Typography>
               </Grid>
             </Fade>
           );
