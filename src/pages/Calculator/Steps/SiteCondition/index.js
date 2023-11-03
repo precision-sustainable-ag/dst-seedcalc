@@ -89,7 +89,8 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
     const checkNextStep =
       !isEmptyNull(siteCondition.state) &&
       !isEmptyNull(siteCondition.soilDrainage) &&
-      siteCondition.acres !== "0" &&
+      !isEmptyNull(siteCondition.acres) &&
+      siteCondition.acres > 0 &&
       !isEmptyNull(siteCondition.county);
     validateForms(checkNextStep, 0, completedStep, setCompletedStep);
     if (checkNextStep) {
