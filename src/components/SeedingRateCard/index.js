@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Typography, Box, Button } from "@mui/material";
 
 const SeedingRateChip = ({ label, value }) => {
@@ -23,6 +24,20 @@ const SeedingRateChip = ({ label, value }) => {
 };
 
 const SeedDataChip = ({ label, value }) => {
+  // default value is always seeds/palnts per acre
+  const [displayValue, setDisplayValue] = useState(value);
+  const [perAcre, setperAcre] = useState(true);
+
+  const handleClickSqft = () => {
+    setperAcre(false);
+    setDisplayValue((value / 43560).toFixed(2));
+  };
+
+  const handleClickAcre = () => {
+    setperAcre(true);
+    setDisplayValue(value);
+  };
+
   return (
     <>
       <Box
@@ -36,13 +51,23 @@ const SeedDataChip = ({ label, value }) => {
           borderRadius: "16px",
         }}
       >
-        <Typography>{value}</Typography>
+        <Typography>{displayValue}</Typography>
       </Box>
       <Typography>{label}</Typography>
-      {/* FIXME: currently there's no function to these buttons */}
-      <Button variant="outlined">Sqft</Button>
+
+      <Button
+        variant={perAcre ? "outlined" : "contained"}
+        onClick={handleClickSqft}
+      >
+        Sqft
+      </Button>
       {"   "}
-      <Button variant="contained">Acres</Button>
+      <Button
+        variant={perAcre ? "contained" : "outlined"}
+        onClick={handleClickAcre}
+      >
+        Acres
+      </Button>
     </>
   );
 };
