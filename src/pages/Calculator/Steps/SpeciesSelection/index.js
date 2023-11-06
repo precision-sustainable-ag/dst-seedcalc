@@ -63,7 +63,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
           )
         : crops;
     setFilteredSeeds(filtered);
-    handleUpdateStore("speciesSelection", "queryResults", filtered);
+    // handleUpdateStore("speciesSelection", "queryResults", filtered);
   };
 
   // create a data object that specifies the type(data layer 1), the key(data layer 2), & the value for the key.
@@ -372,6 +372,10 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   //////////////////////////////////////////////////////////
   //                     useEffect                        //
   //////////////////////////////////////////////////////////
+
+  useEffect(() => {
+    setFilteredSeeds(crops);
+  }, [crops]);
 
   useEffect(() => {
     validateForms(
