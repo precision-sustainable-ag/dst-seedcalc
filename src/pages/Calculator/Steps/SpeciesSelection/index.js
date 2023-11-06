@@ -374,7 +374,6 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   //////////////////////////////////////////////////////////
 
   useEffect(() => {
-    console.log("run");
     setFilteredSeeds(crops);
   }, [crops]);
 
@@ -411,8 +410,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
 
       {seedsType.map((seedType, i) => {
         return (
-          <Grid item xs={12}>
-            {/* TODO: make accordian a reusable component? check usage in other files */}
+          <Grid item xs={12} key={i}>
             <Accordion className="accordian-container">
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
