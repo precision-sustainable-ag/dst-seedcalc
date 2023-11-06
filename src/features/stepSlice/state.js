@@ -20,7 +20,7 @@ export const initialState = {
       soilDrainage: "",
       // FIXME: this value would cause warning in console
       plannedPlantingDate: dayjs(new Date()),
-      acres: 0,
+      acres: "",
       checkNRCSStandards: false,
       locationSelected: false,
       latitude: 37.75,

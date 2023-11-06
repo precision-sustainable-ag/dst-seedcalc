@@ -6,7 +6,7 @@ import {
   convertToPercent,
   convertToDecimal,
 } from "./../../../../shared/utils/calculate";
-import "./../steps.css";
+import "./../steps.scss";
 
 const ReviewMixSteps = ({
   speciesSelection,
@@ -42,8 +42,6 @@ const ReviewMixSteps = ({
           )}
           <Grid item xs={3}>
             <NumberTextField
-              className="text-field-100"
-              id="filled-basic"
               disabled={false}
               label="Single Species Seeding Rate PLS"
               variant="filled"
@@ -60,8 +58,6 @@ const ReviewMixSteps = ({
           </Grid>
           <Grid item xs={3}>
             <NumberTextField
-              className="text-field-100"
-              id="filled-basic"
               label="% in Group"
               variant="filled"
               disabled={true}
@@ -73,8 +69,6 @@ const ReviewMixSteps = ({
           </Grid>
           <Grid item xs={3}>
             <NumberTextField
-              className="text-field-100"
-              id="filled-basic"
               label="% of Single Species Rate"
               variant="filled"
               disabled={false}
@@ -91,8 +85,6 @@ const ReviewMixSteps = ({
             </Grid>
             <Grid item xs={7}>
               <NumberTextField
-                className="text-field-100"
-                id="filled-basic"
                 label="Mix Seeding Rate"
                 disabled={true}
                 variant="filled"
@@ -119,8 +111,6 @@ const ReviewMixSteps = ({
           <Grid container xs={12} className="mix-ratio-form-container">
             <Grid item xs={3}>
               <NumberTextField
-                className="text-field-100"
-                id="filled-basic"
                 disabled={true}
                 label="Single Species Seeding Rate PLS"
                 variant="filled"
@@ -136,8 +126,6 @@ const ReviewMixSteps = ({
             </Grid>
             <Grid item xs={3}>
               <NumberTextField
-                className="text-field-100"
-                id="filled-basic"
                 label="% of Single Species Rate"
                 variant="filled"
                 disabled={false}
@@ -159,8 +147,6 @@ const ReviewMixSteps = ({
             </Grid>
             <Grid item xs={3}>
               <NumberTextField
-                className="text-field-100"
-                id="filled-basic"
                 label="Mix Seeding Rate"
                 disabled={true}
                 variant="filled"
@@ -183,8 +169,6 @@ const ReviewMixSteps = ({
       )}
       <Grid item xs={3}>
         <NumberTextField
-          className="text-field-100"
-          id="filled-basic"
           disabled={true}
           label="Mix Seeding Rate PLS"
           variant="filled"
@@ -197,8 +181,6 @@ const ReviewMixSteps = ({
       </Grid>
       <Grid item xs={3}>
         <NumberTextField
-          className="text-field-100"
-          id="filled-basic"
           disabled={false}
           label="Planting Method"
           variant="filled"
@@ -210,8 +192,6 @@ const ReviewMixSteps = ({
       </Grid>
       <Grid item xs={3}>
         <NumberTextField
-          className="text-field-100"
-          id="filled-basic"
           label="Mix Seeding Rate PLS"
           variant="filled"
           disabled={true}
@@ -230,8 +210,6 @@ const ReviewMixSteps = ({
       {/*  */}
       <Grid item xs={3}>
         <NumberTextField
-          className="text-field-100"
-          id="filled-basic"
           label="Mix Seeding Rate PLS"
           variant="filled"
           disabled={true}
@@ -246,8 +224,6 @@ const ReviewMixSteps = ({
       </Grid>
       <Grid item xs={2}>
         <NumberTextField
-          className="text-field-100"
-          id="filled-basic"
           label="Mix Seeding Rate PLS"
           variant="filled"
           disabled={true}
@@ -262,8 +238,6 @@ const ReviewMixSteps = ({
       </Grid>
       <Grid item xs={2}>
         <NumberTextField
-          className="text-field-100"
-          id="filled-basic"
           label="Management Impact on Mix"
           variant="filled"
           disabled={true}
@@ -283,8 +257,6 @@ const ReviewMixSteps = ({
         </Grid>
         <Grid item xs={7}>
           <NumberTextField
-            className="text-field-100"
-            id="filled-basic"
             label="Mix Seeding Rate PLS"
             variant="filled"
             disabled={true}
@@ -300,8 +272,6 @@ const ReviewMixSteps = ({
       {renderStepsForm("Mix Seeding Rate PLS", "% Germination", "% Purity")}
       <Grid item xs={3}>
         <NumberTextField
-          className="text-field-100"
-          id="filled-basic"
           label="Mix Seeding Rate PLS"
           variant="filled"
           disabled={true}
@@ -315,8 +285,6 @@ const ReviewMixSteps = ({
       </Grid>
       <Grid item xs={3}>
         <NumberTextField
-          className="text-field-100"
-          id="filled-basic"
           label="% Germination"
           variant="filled"
           disabled={false}
@@ -335,8 +303,6 @@ const ReviewMixSteps = ({
       </Grid>
       <Grid item xs={3}>
         <NumberTextField
-          className="text-field-100"
-          id="filled-basic"
           label="% Purity"
           variant="filled"
           disabled={false}
@@ -357,8 +323,6 @@ const ReviewMixSteps = ({
         </Grid>
         <Grid item xs={7}>
           <NumberTextField
-            className="text-field-100"
-            id="filled-basic"
             label="Bulk Seeding Rate"
             variant="filled"
             disabled={true}
@@ -374,8 +338,6 @@ const ReviewMixSteps = ({
       {renderStepsForm("Bulk Seeding Rate", "Acres", "Pounds for Purchase")}
       <Grid item xs={3}>
         <NumberTextField
-          className="text-field-100"
-          id="filled-basic"
           label="Bulk Seeding Rate"
           variant="filled"
           disabled={true}
@@ -388,8 +350,6 @@ const ReviewMixSteps = ({
       </Grid>
       <Grid item xs={3}>
         <NumberTextField
-          className="text-field-100"
-          id="filled-basic"
           label="Acres"
           variant="filled"
           disabled={true}
@@ -404,8 +364,6 @@ const ReviewMixSteps = ({
       </Grid>
       <Grid item xs={3}>
         <NumberTextField
-          className="text-field-100"
-          id="filled-basic"
           label="Pounds for Purchase"
           variant="filled"
           disabled={true}

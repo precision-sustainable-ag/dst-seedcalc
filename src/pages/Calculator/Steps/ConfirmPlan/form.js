@@ -8,7 +8,7 @@ import { DSTTextField } from "../../../../components/DSTTextField";
 import { DSTSwitch } from "../../../../components/Switch";
 
 import NRCSStandards from "./NRCSStandards";
-import "./../steps.css";
+import "./../steps.scss";
 
 const ConfirmPlanForm = ({ updateSeed, data }) => {
   const speciesSelection = data.speciesSelection;
@@ -38,6 +38,7 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
           <Grid item xs={3}>
             <Typography
               className={matchesMd ? "mix-ratio-form-label" : "no-display"}
+              sx={{ fontSize: matchesMd ? "0.75rem" : "0" }}
             >
               {label1}
             </Typography>
@@ -46,6 +47,7 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
           <Grid item xs={3}>
             <Typography
               className={matchesMd ? "mix-ratio-form-label" : "no-display"}
+              sx={{ fontSize: matchesMd ? "0.75rem" : "0" }}
             >
               {label2[0]}
             </Typography>
@@ -54,6 +56,7 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
           <Grid item xs={3}>
             <Typography
               className={matchesMd ? "mix-ratio-form-label" : "no-display"}
+              sx={{ fontSize: matchesMd ? "0.75rem" : "0" }}
             >
               {label2[1]}
             </Typography>
@@ -71,6 +74,7 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
           <Grid item xs={3}>
             <Typography
               className={matchesMd ? "mix-ratio-form-label" : "no-display"}
+              sx={{ fontSize: matchesMd ? "0.75rem" : "0" }}
             >
               {label1}
             </Typography>
@@ -79,6 +83,7 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
           <Grid item xs={3}>
             <Typography
               className={matchesMd ? "mix-ratio-form-label" : "no-display"}
+              sx={{ fontSize: matchesMd ? "0.75rem" : "0" }}
             >
               {label2}
             </Typography>
@@ -87,6 +92,7 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
           <Grid item xs={3}>
             <Typography
               className={matchesMd ? "mix-ratio-form-label" : "no-display"}
+              sx={{ fontSize: matchesMd ? "0.75rem" : "0" }}
             >
               {label3}
             </Typography>
@@ -110,10 +116,8 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
         </Grid>
         <Grid item xs={3} className="confirm-plan-form-container">
           <DSTTextField
-            className="text-field-100"
-            id="filled-basic"
             label={`${data.speciesSelection.seedsSelected[0].label}`}
-            variant="filled"
+            // variant="filled"
             disabled={true}
             value={`$${data.speciesSelection.seedsSelected[0].totalCost.toFixed(
               2
@@ -129,8 +133,6 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
               <Fragment key={i}>
                 <Grid item xs={3} className="confirm-plan-form-container">
                   <DSTTextField
-                    className="text-field-100"
-                    id="filled-basic"
                     label={`${s.label}`}
                     variant="filled"
                     disabled={true}
@@ -150,8 +152,6 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
         })}
         <Grid item xs={3} className="confirm-plan-form-container">
           <DSTTextField
-            className="text-field-100"
-            id="filled-basic"
             label={"Total Cost of Mix"}
             variant="filled"
             disabled={true}
@@ -169,8 +169,6 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
         <Grid container xs={12} className="confirm-plan-form-container">
           <Grid item xs={3}>
             <NumberTextField
-              className="text-field-100"
-              id="filled-basic"
               disabled={true}
               label="Bulk Lbs / Acre"
               variant="filled"
@@ -185,8 +183,6 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
           </Grid>
           <Grid item xs={3}>
             <NumberTextField
-              className="text-field-100"
-              id="filled-basic"
               label="Acres"
               variant="filled"
               disabled={false}
@@ -201,8 +197,6 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
           </Grid>
           <Grid item xs={3}>
             <NumberTextField
-              className="text-field-100"
-              id="filled-basic"
               label="Total Pounds"
               disabled={true}
               variant="filled"
@@ -218,8 +212,6 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
           <Grid item xs={1}></Grid>
           <Grid item xs={3}>
             <NumberTextField
-              className="text-field-100"
-              id="filled-basic"
               label="Cost/Pound"
               variant="filled"
               disabled={true}
@@ -240,8 +232,6 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
         {renderStepsForm("Cost/Pound", "Total Pounds", "Total Cost")}
         <Grid item xs={3}>
           <NumberTextField
-            className="text-field-100"
-            id="filled-basic"
             disabled={true}
             label="Cost/Pound"
             variant="filled"
@@ -256,8 +246,6 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
         </Grid>
         <Grid item xs={3}>
           <NumberTextField
-            className="text-field-100"
-            id="filled-basic"
             disabled={true}
             label="Total Pounds"
             variant="filled"
@@ -269,8 +257,6 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
         </Grid>
         <Grid item xs={3}>
           <DSTTextField
-            className="text-field-100"
-            id="filled-basic"
             label="Total Cost"
             variant="filled"
             disabled={true}
@@ -282,11 +268,10 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
   };
 
   return (
-    <Grid container xs={12}>
+    <Grid container xs={12} color={"primary.text"}>
       {/* NRCS Standards */}
       {NRCS.enabled && <NRCSStandards NRCS={NRCS} />}
       <Grid item xs={12}>
-        {" "}
         {speciesSelection.seedsSelected.map((s, i) => {
           return <Fragment key={i}> {renderSeedData(s)}</Fragment>;
         })}

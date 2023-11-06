@@ -6,7 +6,7 @@ import * as React from "react";
 import { useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import { useSelector, useDispatch } from "react-redux";
-import { Typography } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import { useState } from "react";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -18,7 +18,7 @@ import { updateSteps } from "../../../../features/stepSlice/index";
 import { getCropsById } from "../../../../features/stepSlice/api";
 import { seedsList, seedsLabel } from "../../../../shared/data/species";
 import { calculateAllMixRatioValues } from "../../../../shared/utils/calculate";
-import "./../steps.css";
+import "./../steps.scss";
 import SeedsSelectedList from "./../../../../components/SeedsSelectedList";
 import { validateForms } from "../../../../shared/utils/format";
 import ImageListComponent from "./imageListComponent";
@@ -373,14 +373,6 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
     }
   };
 
-  const renderSeedsSelected = () => {
-    return (
-      <>
-        <SeedsSelectedList list={speciesSelection.seedsSelected} />
-      </>
-    );
-  };
-
   //////////////////////////////////////////////////////////
   //                     useEffect                        //
   //////////////////////////////////////////////////////////
@@ -404,62 +396,53 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   //                      Render                          //
   //////////////////////////////////////////////////////////
 
-  return (
-    <Grid xs={12} container>
-      {seedsSelected.length > 0 && renderSeedsSelected()}
-      <Grid
-        xs={12}
-        md={seedsSelected.length > 0 ? 11 : 12}
-        item
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Grid item xs={12}>
-          <Typography variant="h2">Pick species for the mix.</Typography>
-        </Grid>
-        <Grid item xs={12} padding={15} className="site-condition-container">
-          <SearchField
-            handleChange={updateQuery}
-            value={query}
-            handleFilter={filterSeeds}
+  const renderAccordian = (seed) => {
+    return (
+      <Accordion className="accordian-container">
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          className="accordian-summary"
+        >
+          <Typography>{seedsLabel[seed]}</Typography>
+        </AccordionSummary>
+        <AccordionDetails className="accordian-details">
+          <ImageListComponent
+            seed={seed}
+            filteredSeeds={filteredSeeds}
+            council={council}
+            data={data}
+            updateSeeds={updateSeeds}
           />
-          <Diversity diversitySelected={diversitySelected} />
-        </Grid>
-        <Grid item xs={12}>
-          <Grid item xs={12}>
-            <Typography>Mix Diversity</Typography>
-          </Grid>
-          {seedsList.map((s, i) => {
-            return (
-              <Grid item xs={12}>
-                <Accordion xs={12} className="accordian-container">
-                  <AccordionSummary
-                    xs={12}
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                  >
-                    <Typography>{seedsLabel[s]}</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails className="accordian-details">
-                    {loading === "getCrops" ? (
-                      <Spinner />
-                    ) : (
-                      <ImageListComponent
-                        seed={s}
-                        filteredSeeds={filteredSeeds}
-                        council={council}
-                        data={data}
-                        updateSeeds={updateSeeds}
-                      />
-                    )}
-                  </AccordionDetails>
-                </Accordion>
-              </Grid>
-            );
-          })}
-        </Grid>
+        </AccordionDetails>
+      </Accordion>
+    );
+  };
+
+  return (
+    <Grid container justifyContent={"center"}>
+      <Grid item xs={12}>
+        <Typography variant="h2">Pick species for the mix.</Typography>
       </Grid>
+      <Grid item xs={11}>
+        <Box
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          flexDirection={"column"}
+          p={"1rem"}
+        >
+          <SearchField handleChange={updateQuery} value={query} />
+          <Diversity diversitySelected={diversitySelected} />
+        </Box>
+      </Grid>
+
+      {seedsList.map((s, i) => {
+        return (
+          <Grid item xs={12}>
+            {renderAccordian(s)}
+          </Grid>
+        );
+      })}
     </Grid>
   );
 };

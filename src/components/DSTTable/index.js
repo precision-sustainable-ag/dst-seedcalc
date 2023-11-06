@@ -7,12 +7,30 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-import "./DSTTable.css";
-
 export default function DSTTable({ rows, cells }) {
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 0 }} aria-label="simple table">
+      <Table
+        sx={{
+          minWidth: 0,
+          "& .MuiTableRow-root.MuiTableRow-head": {
+            backgroundColor: "#eff1e1",
+          },
+          "& .MuiTableCell-root.MuiTableCell-head": {
+            fontWeight: "bold",
+          },
+          "& .MuiTableRow-root": {
+            backgroundColor: "#fffff2",
+          },
+          "& th": {
+            padding: "0.5rem",
+          },
+          "& td": {
+            padding: "0.5rem",
+          },
+        }}
+        aria-label="simple table"
+      >
         <TableHead>
           <TableRow>
             {cells.map((c, i) => {

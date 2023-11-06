@@ -9,8 +9,7 @@ import statesLatLongDict from "../../../../shared/data/statesLatLongDict";
 import { availableStates } from "../../../../shared/data/dropdown";
 import { Dropdown } from "../../../../components/Dropdown";
 import DSTImport from "../../../../components/DSTImport";
-
-import "./siteCondition.css";
+import "./../steps.scss";
 
 const RegionSelector = ({
   stateList,
@@ -91,7 +90,7 @@ const RegionSelector = ({
 
   return (
     <Grid container>
-      <Grid item xs={7} md={10} className="site-condition-container">
+      <Grid item xs={8} md={10} p={"10px"}>
         <Dropdown
           value={siteCondition.stateSelected.label || ""}
           label={"State: "}
@@ -100,9 +99,16 @@ const RegionSelector = ({
           items={stateList}
         />
       </Grid>
-      <Grid xs={5} md={2} item>
+      <Grid
+        xs={4}
+        md={2}
+        item
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
         <Button
-          className="mark-location-button"
+          // className="mark-location-button"
           disabled={
             Object.keys(selectedState).length !== 0 && step !== 2 ? false : true
           }

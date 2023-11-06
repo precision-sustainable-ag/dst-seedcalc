@@ -1,17 +1,14 @@
 import { useState } from "react";
-import { Fragment } from "react";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
-import { StepButton } from "@mui/material";
+import { StepButton, Tooltip } from "@mui/material";
 import Button from "@mui/material/Button";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { calculatorList } from "../../shared/data/dropdown";
-
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import "./stepsList.css";
 
 /*
 {
@@ -55,26 +52,30 @@ export const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
   };
 
   return (
-    <Box sx={{ width: "100%", color: "#4f5f30" }}>
-      <Stepper
-        activeStep={activeStep}
-        alternativeLabel
-        nonLinear
-        className="stepper-container"
-      >
+    <Box sx={{ color: "primary.text" }}>
+      <Stepper activeStep={activeStep} alternativeLabel nonLinear>
         {calculatorList.map((label, index) => {
           return (
             <Step
               key={label}
-              sx={{ color: "#4f5f30" }}
               completed={index <= completedStep}
-              disabled={completedStep < 1}
+              disabled={completedStep + 1 < index}
             >
               <StepButton
-                className={`steps-label ${
-                  completedStep >= 1 ? "available-step" : ""
-                }`}
                 onClick={() => setActiveStep(index)}
+                sx={{
+                  "& .MuiSvgIcon-root": {
+                    color: completedStep + 1 < index ? "" : "#4f5f30",
+                    "&.Mui-completed": {
+                      color: "#77b400",
+                    },
+                  },
+                  "& .MuiStepLabel-label": {
+                    "&.Mui-active,&.Mui-completed": {
+                      color: "primary.text",
+                    },
+                  },
+                }}
               >
                 {matches && label}
               </StepButton>
@@ -82,47 +83,49 @@ export const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
           );
         })}
       </Stepper>
-      {activeStep === calculatorList.length ? (
-        <Fragment>
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-            <Button
-              color="inherit"
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              sx={{ mr: 1 }}
-            >
-              <ArrowBackIosIcon />
-              BACK
-            </Button>
-            <Box sx={{ flex: "1 1 auto" }} />
-            <Button onClick={handleReset}>Reset</Button>
-          </Box>
-        </Fragment>
-      ) : (
-        <Fragment>
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-            <Button
-              color="inherit"
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              sx={{ mr: 1 }}
-            >
-              {activeStep !== 0 && <ArrowBackIosIcon />}
-              {calculatorList[activeStep - 1]}
-            </Button>
-            <Box sx={{ flex: "1 1 auto" }} />
-            <Button
-              disabled={availableSteps[activeStep] === true ? false : true}
-              onClick={handleNext}
-            >
-              {activeStep === calculatorList.length - 1
-                ? "Finish"
-                : calculatorList[activeStep + 1]}{" "}
-              <ArrowForwardIosIcon />
-            </Button>
-          </Box>
-        </Fragment>
-      )}
+
+      <Box sx={{ display: "flex", flexDirection: "row", pt: 1 }}>
+        {activeStep !== 0 && (
+          <Button variant="stepper" onClick={handleBack}>
+            <ArrowBackIosNewIcon />
+            {activeStep === calculatorList.length
+              ? "BACK"
+              : calculatorList[activeStep - 1]}
+          </Button>
+        )}
+
+        <Box sx={{ flex: "1 1 auto" }} />
+
+        {activeStep === calculatorList.length ? (
+          <Button variant="stepper" onClick={handleReset}>
+            Reset
+          </Button>
+        ) : (
+          <Tooltip
+            arrow
+            title={
+              activeStep === 0 && !availableSteps[0]
+                ? "Please enter the necessary info below."
+                : activeStep === 1 && !availableSteps[1]
+                ? "Please select at least 2 plants."
+                : ""
+            }
+          >
+            <span>
+              <Button
+                variant="stepper"
+                disabled={availableSteps[activeStep] === true ? false : true}
+                onClick={handleNext}
+              >
+                {activeStep === calculatorList.length - 1
+                  ? "Finish"
+                  : calculatorList[activeStep + 1]}{" "}
+                <ArrowForwardIosIcon />
+              </Button>
+            </span>
+          </Tooltip>
+        )}
+      </Box>
     </Box>
   );
 };

@@ -1,10 +1,12 @@
 import * as React from "react";
 import Grid from "@mui/material/Grid";
-import { Typography, Link } from "@mui/material";
+import { Typography, Link, Box } from "@mui/material";
 import Fade from "@mui/material/Fade";
 
 import { seedsLabel } from "../../../../shared/data/species";
-import "./../steps.css";
+import "./../steps.scss";
+
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
 const Diversity = ({ diversitySelected }) => {
   const calculateSize = () => {
@@ -18,33 +20,39 @@ const Diversity = ({ diversitySelected }) => {
   };
 
   return (
-    <Grid container justify="space-between" alignItems="stretch">
-      <Grid
-        container
-        xs={12}
-        className="progress-bar"
-        justify="space-between"
-        alignItems="stretch"
-      >
-        {diversitySelected &&
-          diversitySelected.length > 0 &&
-          diversitySelected.map((d, i) => {
-            return (
-              <Fade in={true}>
+    <Grid container>
+      <Typography color={"primary.text"} pt={"1rem"} fontWeight={600}>
+        Mix Diversity
+      </Typography>
+      <Box sx={{ width: "100%", p: "5px 0" }}>
+        <Grid
+          container
+          sx={{
+            height: "10px",
+            border: "#e5e5e5 1px solid",
+            borderRadius: "0.6875rem",
+          }}
+        >
+          {diversitySelected &&
+            diversitySelected.length > 0 &&
+            diversitySelected.map((d, i) => {
+              return (
                 <Grid
                   item
                   xs={calculateSize()}
-                  className="progress-bar-item"
+                  bgcolor={COLORS[i]}
+                  borderRadius={"0.6875rem"}
                 ></Grid>
-              </Fade>
-            );
-          })}
-      </Grid>
+              );
+            })}
+        </Grid>
+      </Box>
+
       {diversitySelected &&
         diversitySelected.length > 0 &&
         diversitySelected.length === 0 && (
           <Grid item xs={12}>
-            <Typography className="progress-bar-text">
+            <Typography fontSize={"0.75rem"} color={"primary.text"}>
               Select a species
             </Typography>
           </Grid>
@@ -55,7 +63,7 @@ const Diversity = ({ diversitySelected }) => {
           return (
             <Fade in={true}>
               <Grid item xs={calculateSize()}>
-                <Typography className="progress-bar-text">
+                <Typography fontSize={"0.75rem"} color={"primary.text"}>
                   {seedsLabel[d]}
                 </Typography>
               </Grid>

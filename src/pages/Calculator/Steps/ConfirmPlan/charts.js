@@ -3,7 +3,7 @@ import { Typography, Box, Link, Button, Modal } from "@mui/material";
 import { Square } from "@mui/icons-material";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
-import "./../steps.css";
+import "./../steps.scss";
 
 // TODO: build pie chart to a custom component, this should be done in another pr
 const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
@@ -111,7 +111,7 @@ const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
   };
 
   return (
-    <Grid container xs={12} sx={{ padding: "20px" }}>
+    <Grid container xs={12} sx={{ padding: "0.5rem" }}>
       <Grid
         item
         xs={6}
@@ -125,7 +125,7 @@ const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
           Amount of mix for 50 acres
         </Typography>
         <Box className="data-circle">
-          <Typography>{parseInt(poundsForPurchaseSum)}</Typography>
+          <Typography>{parseInt(poundsForPurchaseSum) + "lbs"}</Typography>
         </Box>
       </Grid>
       <Grid
@@ -138,6 +138,7 @@ const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
       >
         <Typography className="data-circle-label">Price/Acre</Typography>
         <Box className="data-circle">
+          {/* FIXME: static value here */}
           <Typography>$35.33</Typography>
         </Box>
       </Grid>
@@ -145,7 +146,7 @@ const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
         item
         xs={6}
         md={6}
-        className="mix-ratio-chart-container"
+        className="pie-chart-container"
         sx={{
           borderRight: "1px solid #CCCCCC",
           borderBottom: "1px solid #CCCCCC",
@@ -166,7 +167,10 @@ const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
                   <Square sx={{ color: COLORS[i] }}></Square>
                 </Grid>
                 <Grid item xs={10}>
-                  <Typography className={matchesMd ? "mix-label-md" : ""}>
+                  <Typography
+                    className={matchesMd ? "mix-label-md" : ""}
+                    color={"primary.text"}
+                  >
                     {s.label}
                   </Typography>
                 </Grid>
@@ -179,12 +183,13 @@ const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
         item
         xs={6}
         md={6}
-        className="mix-ratio-chart-container"
+        className="pie-chart-container"
         sx={{
           borderBottom: "1px solid #CCCCCC",
           padding: "10px",
         }}
       >
+        {/* FIXME: the chart rendered seems different than the label? */}
         {renderPieChart("poundsOfSeed")}
         <Typography className="mix-ratio-chart-header" sx={{ fontWeight: 600 }}>
           {council === "MCCC" ? "Plants" : "Seeds"} Per Acre{" "}
@@ -197,7 +202,10 @@ const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
                   <Square sx={{ color: COLORS[i] }}></Square>
                 </Grid>
                 <Grid item xs={10}>
-                  <Typography className={matchesMd ? "mix-label-md" : ""}>
+                  <Typography
+                    className={matchesMd ? "mix-label-md" : ""}
+                    color={"primary.text"}
+                  >
                     {s.label}
                   </Typography>
                 </Grid>

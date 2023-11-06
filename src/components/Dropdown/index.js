@@ -25,16 +25,8 @@ export const Dropdown = ({
   items,
   disabled = false,
 }) => {
-  const renderedItems = items.map((item, i) => {
-    return (
-      <MenuItem key={item + "" + i} value={item.label}>
-        {item.label}
-      </MenuItem>
-    );
-  });
-
   return (
-    <Box className="dropdown-container" sx={{ minWidth: 120 }}>
+    <Box sx={{ minWidth: 120, color: "#4F5F30" }}>
       <FormControl fullWidth>
         <InputLabel>{label}</InputLabel>
         <Select
@@ -43,7 +35,13 @@ export const Dropdown = ({
           label={label}
           onChange={handleChange}
         >
-          {renderedItems}
+          {items.map((item, i) => {
+            return (
+              <MenuItem key={item + "" + i} value={item.label} color="#4F5F30">
+                {item.label}
+              </MenuItem>
+            );
+          })}
         </Select>
       </FormControl>
     </Box>

@@ -1,126 +1,42 @@
-.site-condition-container h3 {
-  margin-bottom: 20px;
-}
-.site-condition-container {
-  padding: 15px 15px !important;
-}
-site-condition-header {
-  color: #4f5f30 !important;
-  margin-bottom: 45px;
-  margin-top: 25px;
-  margin-bottom: 30px;
-}
-.selected-seeds-box {
-  width: 100%;
-  height: 100%;
-  padding: 1px;
-  background-color: #e5e7d5;
-  border: #c7c7c7 solid 1px;
-}
-.selected-seeds-container {
-  flex-wrap: nowrap !important;
-  overflow-x: auto !important;
-}
-.selected-seeds-item {
-  padding: 0px 15px;
-}
-.panel-img {
-  border-radius: 25px;
-  width: 100%;
-  height: 190px !important;
-}
-.panel-img-sm {
-  border-radius: 25px;
-  width: 100%;
-  height: 100% !important;
-}
-.left-panel-img {
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  margin-top: 12px;
-}
-.left-panel-img-xs {
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  margin-top: 12px;
-}
-.left-panel-img-sm {
-  border-radius: 50%;
-  width: 53px;
-  height: 53px;
-  margin-top: 12px;
-}
-.left-panel-img-md {
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  margin-top: 12px;
+// temp color vars
+$primary-main: #4f5f30;
+$primary-light: #fffff2;
+$primary-dark: #eff1e0;
+$primary-text: #4f5f30;
+
+div[class*="map_infobar__"] {
+  /* hide the info bar(currently have overflow issue) */
+  display: none;
 }
 
-.left-panel-text {
-  font-size: 12px !important;
-}
-.img-text:hover {
-  cursor: pointer;
-}
-.panel-img:hover {
-  cursor: pointer;
-}
 .accordian-container {
   width: 100%;
-}
-.accordian-header {
-  background-color: #eff1e1 !important;
-  color: #4f5f30 !important;
-  font-weight: bold !important;
-}
-.accordian-header p {
-  font-weight: 550 !important;
-}
-.MuiAccordionSummary-root {
-  background-color: #eff1e1 !important;
-  color: #4f5f30 !important;
-  font-weight: bold !important;
-  font-size: 20px !important;
-  font-weight: 600 !important;
-  text-align: justify !important;
-  color: #4f5f30 !important;
-}
-.MuiAccordionSummary-root p {
-  font-weight: bold !important;
-  font-size: 20px !important;
-  font-weight: 600 !important;
-  text-align: justify !important;
-  color: #4f5f30 !important;
-}
-.progress-bar {
-  width: 80%;
-  height: 10px;
-  background-color: white;
-  border: #e5e5e5 1px solid;
-  margin-top: 15px;
-  margin-bottom: 4px;
-  border-radius: 20px;
-}
-.progress-bar-item {
-  height: 10px;
-  border-radius: 20px;
-  background-color: #5992e6;
-}
-.progress-bar-text {
-  font-size: 12px !important;
-  color: #8d9774;
+
+  .accordian-summary {
+    background-color: $primary-dark;
+    height: 3rem;
+    p {
+      font-size: 1.25rem;
+      line-height: 1.5rem;
+      font-weight: 600;
+      text-align: justify;
+      color: $primary-text;
+    }
+  }
+  .accordian-details {
+    color: $primary-text;
+    padding: 1rem 0;
+  }
 }
 
-.mix-ratio-chart-container {
+.pie-chart-container {
   text-align: justify;
   margin: 0 auto;
 }
 .mix-ratio-chart-header {
   font-weight: 600;
   text-align: center;
+  color: $primary-text;
 }
 .mix-ratio-chart-list-50 {
   margin: 0 auto !important;
@@ -134,7 +50,6 @@ site-condition-header {
 }
 .mix-ratio-step-header {
   padding: 16px;
-  text-align: justify;
   background: #e5e7d5;
   margin: 30px 0px !important;
   font-size: 18px !important;
@@ -147,28 +62,33 @@ site-condition-header {
 }
 .mix-ratio-form-label {
   margin-bottom: 20px !important;
-  text-align: justify;
-  font-size: 12px;
 }
 
 /* mix seeding rate */
 
 .mix-seeding-rate-grid-left {
   height: 150px;
-  padding-top: 60px;
   border: 1px solid #c7c7c7;
   border-left: none;
-  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  p {
+    font-weight: bold;
+  }
 }
-.mix-seeding-rate-grid-left p {
-  font-weight: bold !important;
-}
+
 .mix-seeding-rate-grid-right {
   height: 150px;
-  padding-top: 30px;
   border: 1px solid #c7c7c7;
   border-right: none;
-  font-weight: bold;
+  display: flex;
+  flex-direction: column !important;
+  justify-content: center;
+  align-items: center;
+  p {
+    font-weight: bold;
+  }
 }
 
 /* Seed Tag Info */
@@ -176,36 +96,11 @@ site-condition-header {
 .seed-tag-info-grid-left {
   height: 80px;
   padding-top: 15px;
-  font-weight: bold;
-}
-.seed-tag-info-grid-left p {
-  font-weight: bold !important;
-}
-.seed-tag-info-grid-right {
-  height: 80px;
-  font-weight: bold;
+  p {
+    font-weight: bold;
+  }
 }
 
-/* Seeding Method */
-
-.seeding-method-label-container {
-  background: white;
-  width: 150px;
-  color: #4f5f30;
-  padding: 9px;
-  border: 2px solid #4f5f30;
-  border-radius: 12px;
-  height: 75px;
-}
-.seeding-method-detail-container {
-  color: #4f5f30;
-  padding: 9px;
-  border: 2px solid #4f5f30;
-  border-radius: 12px;
-  width: 180px;
-  height: 150px;
-  background: none;
-}
 .mix-label-md {
   margin-top: 5px !important;
   margin-left: 15px !important;
@@ -213,16 +108,10 @@ site-condition-header {
 }
 .MuiAccordionDetails-root {
   background: #fffff2 !important;
-  padding: 3% !important;
 }
-.text-field-100 {
-  width: 100%;
-}
-.text-field-30 {
-  width: 30%;
-}
+
 .text-field-50 {
-  width: 50% !important;
+  width: 80% !important;
 }
 .font-15 {
   font-size: 15px;
@@ -234,9 +123,7 @@ site-condition-header {
   margin-top: 15px !important;
   font-weight: 600 !important;
 }
-.red-text {
-  color: red;
-}
+
 .vertical-slider {
   margin-top: 70px;
 }
@@ -301,7 +188,7 @@ site-condition-header {
   border-radius: 50%;
   width: 80px;
   height: 80px;
-  margin: 0 auto;
+  margin: 0 auto 10px auto;
 }
 .data-circle p {
   padding-top: 30px;
@@ -312,8 +199,9 @@ site-condition-header {
 }
 .data-circle-label {
   font-size: 15px !important;
-  margin: 10px !important;
   font-weight: 600 !important;
+  color: $primary-text;
+  min-height: 45px;
 }
 /* .NRCS-result-container  {
     border-radius: 25px;

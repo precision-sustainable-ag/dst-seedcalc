@@ -6,7 +6,7 @@ import {
   convertToDecimal,
 } from "./../../../../shared/utils/calculate";
 import { NumberTextField } from "./../../../../components/NumberTextField";
-import "./../steps.css";
+import "./../steps.scss";
 
 const MixRatioSteps = ({
   seed,
@@ -31,8 +31,6 @@ const MixRatioSteps = ({
           )}
           <Grid item xs={3}>
             <NumberTextField
-              className="text-field-100"
-              id="filled-basic"
               disabled={false}
               label="Single Species Seeding Rate PLS"
               variant="filled"
@@ -49,8 +47,6 @@ const MixRatioSteps = ({
           </Grid>
           <Grid item xs={3}>
             <NumberTextField
-              className="text-field-100"
-              id="filled-basic"
               label="% in Group"
               variant="filled"
               disabled={true}
@@ -62,8 +58,6 @@ const MixRatioSteps = ({
           </Grid>
           <Grid item xs={3}>
             <NumberTextField
-              className="text-field-100"
-              id="filled-basic"
               label="% of Single Species Rate"
               variant="filled"
               disabled={false}
@@ -80,8 +74,6 @@ const MixRatioSteps = ({
             </Grid>
             <Grid item xs={7}>
               <NumberTextField
-                className="text-field-100"
-                id="filled-basic"
                 label="Mix Seeding Rate"
                 disabled={true}
                 variant="filled"
@@ -109,8 +101,6 @@ const MixRatioSteps = ({
           <Grid container xs={12} className="mix-ratio-form-container">
             <Grid item xs={3}>
               <NumberTextField
-                className="text-field-100"
-                id="filled-basic"
                 disabled={false}
                 label="Single Species Seeding Rate PLS"
                 variant="filled"
@@ -130,8 +120,6 @@ const MixRatioSteps = ({
             </Grid>
             <Grid item xs={3}>
               <NumberTextField
-                className="text-field-100"
-                id="filled-basic"
                 label="% of Single Species Rate"
                 variant="filled"
                 disabled={false}
@@ -151,8 +139,6 @@ const MixRatioSteps = ({
             </Grid>
             <Grid item xs={3}>
               <NumberTextField
-                className="text-field-100"
-                id="filled-basic"
                 label="Mix Seeding Rate"
                 disabled={true}
                 variant="filled"
@@ -175,8 +161,6 @@ const MixRatioSteps = ({
       )}
       <Grid item xs={3}>
         <NumberTextField
-          className="text-field-100"
-          id="filled-basic"
           disabled={true}
           label="Seeds / Pound"
           variant="filled"
@@ -191,8 +175,6 @@ const MixRatioSteps = ({
       </Grid>
       <Grid item xs={3}>
         <NumberTextField
-          className="text-field-100"
-          id="filled-basic"
           disabled={true}
           label="Mix Seeding Rate"
           variant="filled"
@@ -205,8 +187,6 @@ const MixRatioSteps = ({
       </Grid>
       <Grid item xs={3}>
         <NumberTextField
-          className="text-field-100"
-          id="filled-basic"
           label="Seeds / Acre"
           variant="filled"
           disabled={true}
@@ -222,8 +202,6 @@ const MixRatioSteps = ({
           {renderFormLabel("Seeds/Acre", "Sq. Ft. / Acres", "Plants/Acre")}
           <Grid item xs={3}>
             <NumberTextField
-              className="text-field-100"
-              id="filled-basic"
               label="Seeds / Acre"
               variant="filled"
               disabled={true}
@@ -235,8 +213,6 @@ const MixRatioSteps = ({
           </Grid>
           <Grid item xs={3}>
             <NumberTextField
-              className="text-field-100"
-              id="filled-basic"
               label="Sq. Ft./ Acre"
               variant="filled"
               disabled={true}
@@ -248,8 +224,6 @@ const MixRatioSteps = ({
           </Grid>
           <Grid item xs={3}>
             <NumberTextField
-              className="text-field-100"
-              id="filled-basic"
               label="Seeds / Sq. Ft."
               variant="filled"
               disabled={true}
@@ -266,8 +240,6 @@ const MixRatioSteps = ({
           {renderFormLabel("Seeds/Acre", "% Survival", "Plants/Acre")}
           <Grid item xs={3}>
             <NumberTextField
-              className="text-field-100"
-              id="filled-basic"
               label="Seeds / Acre"
               variant="filled"
               disabled={true}
@@ -279,8 +251,6 @@ const MixRatioSteps = ({
           </Grid>
           <Grid item xs={3}>
             <NumberTextField
-              className="text-field-100"
-              id="filled-basic"
               label="% Survival"
               variant="filled"
               disabled={false}
@@ -299,8 +269,6 @@ const MixRatioSteps = ({
           </Grid>
           <Grid item xs={3}>
             <NumberTextField
-              className="text-field-100"
-              id="filled-basic"
               label="Plants / Acre"
               variant="filled"
               disabled={true}
@@ -317,8 +285,6 @@ const MixRatioSteps = ({
           )}
           <Grid item xs={3}>
             <NumberTextField
-              className="text-field-100"
-              id="filled-basic"
               label="Plants / Acre"
               variant="filled"
               disabled={true}
@@ -330,8 +296,6 @@ const MixRatioSteps = ({
           </Grid>
           <Grid item xs={3}>
             <NumberTextField
-              className="text-field-100"
-              id="filled-basic"
               label="Sq. Ft./ Acre"
               variant="filled"
               disabled={true}
@@ -343,8 +307,6 @@ const MixRatioSteps = ({
           </Grid>
           <Grid item xs={3}>
             <NumberTextField
-              className="text-field-100"
-              id="filled-basic"
               label="Aproximate Plants  / Sq. Ft."
               variant="filled"
               disabled={true}
