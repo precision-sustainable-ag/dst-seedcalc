@@ -1,6 +1,6 @@
 import * as React from "react";
 import Grid from "@mui/material/Grid";
-import { Typography } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 
 import { seedsLabel } from "../../../../shared/data/species";
 import "./../steps.scss";
@@ -23,27 +23,29 @@ const Diversity = ({ diversitySelected }) => {
       <Typography color={"primary.text"} pt={"1rem"} fontWeight={600}>
         Mix Diversity
       </Typography>
-      <Grid
-        container
-        sx={{
-          height: "10px",
-          border: "#e5e5e5 1px solid",
-          margin: "5px 0",
-          borderRadius: "0.6875rem",
-        }}
-      >
-        {diversitySelected.length > 0 &&
-          diversitySelected.map((d, i) => {
-            return (
-              <Grid
-                item
-                xs={calculateSize()}
-                bgcolor={COLORS[i]}
-                borderRadius={"0.6875rem"}
-              ></Grid>
-            );
-          })}
-      </Grid>
+      <Box sx={{ width: "100%", p: "5px 0" }}>
+        <Grid
+          container
+          sx={{
+            height: "10px",
+            border: "#e5e5e5 1px solid",
+            borderRadius: "0.6875rem",
+          }}
+        >
+          {diversitySelected.length > 0 &&
+            diversitySelected.map((d, i) => {
+              return (
+                <Grid
+                  item
+                  xs={calculateSize()}
+                  bgcolor={COLORS[i]}
+                  borderRadius={"0.6875rem"}
+                ></Grid>
+              );
+            })}
+        </Grid>
+      </Box>
+
       {diversitySelected.length === 0 && (
         <Grid item xs={12}>
           <Typography fontSize={"0.75rem"} color={"primary.text"}>
