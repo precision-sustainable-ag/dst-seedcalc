@@ -360,7 +360,7 @@ export const convertSqftToAcres = (number) => {
 };
 
 export const convertToPercent = (num) => {
-  return parseFloat(num) * 100;
+  return (parseFloat(num) * 100).toFixed(1);
 };
 
 export const convertToDecimal = (num) => {
@@ -417,4 +417,9 @@ export const calculatePieChartData = (seedsSelected) => {
   });
 
   return { poundsOfSeedArray, plantsPerAcreArray, seedsPerAcreArray };
+};
+
+export const roundToDecimal = (float, digits) => {
+  const factor = Math.pow(10, digits);
+  return Math.round(float * factor) / factor;
 };

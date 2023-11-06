@@ -21,7 +21,7 @@ import { calculateAllMixRatioValues } from "../../../../shared/utils/calculate";
 import "./../steps.scss";
 import { validateForms } from "../../../../shared/utils/format";
 import PlantList from "./PlantList";
-import Diversity from "./Diversity";
+import Diversity from "./diversity";
 import { Spinner } from "@psa/dst.ui.spinner";
 
 const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
