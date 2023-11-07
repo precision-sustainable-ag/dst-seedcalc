@@ -163,6 +163,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
         cropDetails.attributes.Coefficients["Single Species Seeding Rate"]
           .values[0]
       ),
+      // FIXME: this value is calculated later, should not be calc here
       percentOfSingleSpeciesRate: (1 / (seedsSelected.length + 1)) * 100,
       seedsPound: parseFloat(
         cropDetails.attributes["Planting"]
@@ -307,12 +308,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
       totalCost: 0,
       addedToMix: 0,
     };
-    // newSeed = calculateAllMixRatioValues(newSeed, data);
-    // FIXME: is there need to use different calculations for MCCC and NECCC
-    // three checks:
-    // * seedlength is 0
-    // * seed already exists
-    // * seed doesn't exist
+
     if (seedsSelected.length === 0) {
       const newList = seedsSelected.map((s, i) => {
         return {
@@ -323,7 +319,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
       // update Redux with the seedsSelected and diversitySelected with the new list.
       handleUpdateStore("speciesSelection", "seedsSelected", [
         ...newList,
-        calculateAllMixRatioValues(newSeed, data),
+        calculateAllMixRatioValues(newSeed, data, council),
       ]);
       handleUpdateStore("speciesSelection", "diversitySelected", [
         ...diversitySelected,
@@ -333,8 +329,8 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
       // the seed list, we'll update the percentage in mix of all seeds.
     } else {
       const seedsExist = seedsSelected.find((f) => seed.label === f.label);
-      // if seed does exist, remove seed in seedsSelected, as well as diversitySelected
-      if (typeof seedsExist !== "undefined") {
+      // if seed exist, remove seed in seedsSelected, as well as diversitySelected
+      if (seedsExist) {
         const filterList = seedsSelected.filter(
           (item) => item.label !== seed.label
         );
@@ -346,7 +342,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
                 (1 / (seedsSelected.length + 1)) * 100,
             };
           })
-          .map((seed) => calculateAllMixRatioValues(seed));
+          .map((seed) => calculateAllMixRatioValues(seed, data, council));
         handleUpdateStore("speciesSelection", "seedsSelected", newList);
         const seedResult = seedsSelected.filter((i) => {
           return i.group.label === species;
@@ -370,7 +366,9 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
         handleUpdateStore(
           "speciesSelection",
           "seedsSelected",
-          [...newList, newSeed].map((seed) => calculateAllMixRatioValues(seed))
+          [...newList, newSeed].map((seed) =>
+            calculateAllMixRatioValues(seed, data, council)
+          )
         );
         if (!diversitySelected.includes(species)) {
           handleUpdateStore("speciesSelection", "diversitySelected", [
