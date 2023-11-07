@@ -12,7 +12,8 @@ import { isEmptyNull, validateForms } from "../../../../shared/utils/format";
 import SiteConditionForm from "./form";
 import RegionSelector from "./RegionSelector";
 import MapComponent from "./MapComponent";
-import "./../steps.css";
+import { Spinner } from "@psa/dst.ui.spinner";
+import "./../steps.scss";
 
 const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
   const dispatch = useDispatch();
@@ -71,17 +72,31 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
     }
   }, [siteCondition.county]);
 
+  // set favicon based on redux council value
+  useEffect(() => {
+    const favicon = document.getElementById("favicon");
+    if (siteCondition.council === "MCCC") {
+      favicon.href = "favicons/mccc-favicon.ico";
+    } else if (siteCondition.council === "NECCC") {
+      favicon.href = "favicons/neccc-favicon.ico";
+    } else if (siteCondition.council === "") {
+      favicon.href = "PSALogo.png";
+    }
+  }, [siteCondition.council]);
+
   // validate all information on this page is selected
   useEffect(() => {
-    validateForms(
+    const checkNextStep =
       !isEmptyNull(siteCondition.state) &&
-        !isEmptyNull(siteCondition.soilDrainage) &&
-        siteCondition.acres !== 0 &&
-        !isEmptyNull(siteCondition.county),
-      0,
-      completedStep,
-      setCompletedStep
-    );
+      !isEmptyNull(siteCondition.soilDrainage) &&
+      !isEmptyNull(siteCondition.acres) &&
+      siteCondition.acres > 0 &&
+      !isEmptyNull(siteCondition.county);
+    validateForms(checkNextStep, 0, completedStep, setCompletedStep);
+    if (checkNextStep) {
+      // call getCrops api to get all crops from countyId
+      dispatch(getCrops({ regionId: siteCondition.countyId }));
+    }
   }, [siteCondition]);
 
   //////////////////////////////////////////////////////////
@@ -89,16 +104,15 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
   //////////////////////////////////////////////////////////
 
   return (
-    <Grid container justifyContent="center" alignItems="center" size={12}>
-      <Grid item xs={12} className="site-condition-header">
-        <Typography variant="h2" className="site-condition-header">
-          Tell us about your planting site
-        </Typography>
+    <Grid container justifyContent="center">
+      <Grid item xs={12}>
+        <Typography variant="h2">Tell us about your planting site</Typography>
       </Grid>
       {/* <Grid item xs={12} sx={{ height: "1000px" }}></Grid> */}
-
-      {stateList.length > 0 && (
-        <Grid xs={12} md={12} item>
+      {data.loading === "getLocality" ? (
+        <Spinner />
+      ) : (
+        <Grid xs={12} lg={8} item>
           {step === 1 ? (
             <RegionSelector
               stateList={stateList}
@@ -122,7 +136,8 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
           )}
         </Grid>
       )}
-      <Grid xs={12} md={12} container>
+
+      <Grid container>
         <SiteConditionForm
           siteCondition={siteCondition}
           handleSteps={handleSteps}

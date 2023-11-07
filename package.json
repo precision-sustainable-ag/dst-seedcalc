@@ -9,7 +9,10 @@
     "@mui/icons-material": "^5.14.9",
     "@mui/material": "^5.14.10",
     "@mui/x-date-pickers": "^5.0.20",
+    "@psa/dst.ui.fade-alert": "^0.0.3",
     "@psa/dst.ui.map": "^0.0.58",
+    "@psa/dst.ui.region-selector-map": "^0.0.16",
+    "@psa/dst.ui.spinner": "^0.0.2",
     "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.3.0",
@@ -17,6 +20,7 @@
     "dayjs": "^1.11.10",
     "file-saver": "^2.0.5",
     "install": "^0.13.0",
+    "mapbox-gl": "^2.10.0",
     "moment": "^2.29.4",
     "npm": "^8.19.4",
     "papaparse": "^5.4.1",
@@ -46,7 +50,11 @@
     "production": [
       ">0.2%",
       "not dead",
-      "not op_mini all"
+      "not op_mini all",
+      "not safari < 10",
+      "not chrome < 51",
+      "not android < 5",
+      "not ie < 12"
     ],
     "development": [
       "last 1 chrome version",
@@ -55,8 +63,6 @@
     ]
   },
   "devDependencies": {
-    "@psa/dst.ui.region-selector-map": "^0.0.16",
-    "mapbox-gl": "^2.10.0",
     "sass": "^1.67.0"
   }
 }

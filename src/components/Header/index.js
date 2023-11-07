@@ -14,7 +14,7 @@ import "./header.css";
     }
 }
 */
-
+// TODO: not used now
 export const Header = ({ text, size, style, headerVariant }) => {
   return (
     <Grid p xs={size} sx={style}>

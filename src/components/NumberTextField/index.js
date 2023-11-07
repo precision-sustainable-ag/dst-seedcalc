@@ -7,20 +7,21 @@ export const NumberTextField = ({
   handleChange,
   className,
   disabled,
+  placeholder,
 }) => {
   return (
     <TextField
       fullWidth
-      className={className !== "" ? className : "number-text-container"}
+      className={className}
       value={value}
       label={label}
       onChange={handleChange}
-      id="outlined-number"
-      type="number"
       InputLabelProps={{
         shrink: true,
       }}
-      InputProps={{ inputProps: { min: 0 }, disabled: disabled }}
+      type="number"
+      placeholder={placeholder}
+      disabled={disabled}
     />
   );
 };

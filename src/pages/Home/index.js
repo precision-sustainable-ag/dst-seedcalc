@@ -18,7 +18,6 @@ import {
 import { DSTButton } from "./../../components/Button";
 import { Header } from "./../../components/Header";
 import { Dropdown } from "../../components/Dropdown";
-import "./home.css";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -145,13 +144,13 @@ const Home = () => {
 
   return (
     <Fragment>
-      <Grid container spacing={2}>
+      <Grid container>
         <Header
           className="header-container"
           headerVariant="dstHeaderHome"
           text="Seeding Rate Calculator"
           size={12}
-          style={{ mt: 5 }}
+          // style={{ mt: 5 }}
         />
 
         {renderHome()}

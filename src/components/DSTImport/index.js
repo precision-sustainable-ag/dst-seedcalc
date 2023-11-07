@@ -2,13 +2,24 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Papa from "papaparse";
 
-import { DSTButton } from "../Button";
 import { Box } from "@mui/system";
 import { Grid, Modal, Typography, Button } from "@mui/material";
 
-import "./DSTImport.css";
 import { useDispatch } from "react-redux";
 import { updateAllSteps, updateModal } from "../../features/stepSlice";
+
+const modalStyle = {
+  position: "absolute",
+  top: " 50%",
+  left: " 50%",
+  transform: " translate(-50%, -50%)",
+  width: " 400px",
+  backgroundColor: " #fff",
+  border: " 2px solid #000",
+  boxShadow:
+    " 0px 11px 15px -7px rgb(0 0 0 / 20%), 0px 24px 38px 3px rgb(0 0 0 / 14%), 0px 9px 46px 8px rgb(0 0 0 / 12%)",
+  padding: " 32px",
+};
 
 const DSTImport = ({ setIsImported }) => {
   const [openModal, setOpenModal] = useState(false);
@@ -23,34 +34,18 @@ const DSTImport = ({ setIsImported }) => {
 
   // show a modal to handle failure import
   const handleModal = (type, title, description) => {
-    var payload = {};
-    if (type === "error") {
-      payload = {
-        value: {
-          loading: false,
-          error: true,
-          success: false,
-          errorTitle: title,
-          errorMessage: description,
-          successTitle: "",
-          successMessage: "",
-          isOpen: true,
-        },
-      };
-    } else {
-      payload = {
-        value: {
-          loading: false,
-          error: true,
-          success: true,
-          errorTitle: "",
-          errorMessage: "",
-          successTitle: title,
-          successMessage: description,
-          isOpen: true,
-        },
-      };
-    }
+    const payload = {
+      value: {
+        loading: false,
+        error: true,
+        success: type === "error" ? false : true,
+        errorTitle: title,
+        errorMessage: description,
+        successTitle: title,
+        successMessage: description,
+        isOpen: true,
+      },
+    };
     dispatch(updateModal(payload));
   };
 
@@ -100,24 +95,24 @@ const DSTImport = ({ setIsImported }) => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box className="home-import-modal">
-          <Grid xs={12} container>
+        <Box sx={modalStyle}>
+          <Grid container>
             <Grid xs={3} item></Grid>
             <Grid xs={6} item>
-              <Typography id="modal-modal-title" variant="h6" component="h2">
+              <Typography variant="h6" component="h2">
                 Import a CSV file
               </Typography>
             </Grid>
             <Grid xs={3} item></Grid>
             <Grid xs={2} item></Grid>
             <Grid xs={8} item>
-              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              <Typography sx={{ mt: 2 }}>
                 <input type="file" accept=".csv" onChange={handleFileUpload} />
               </Typography>
             </Grid>
             <Grid xs={2} item></Grid>
             <Grid xs={8} item></Grid>
-            <Grid xs={4}>
+            <Grid xs={4} item>
               <Button
                 sx={{ marginTop: "15px" }}
                 onClick={(e) => {
@@ -130,13 +125,13 @@ const DSTImport = ({ setIsImported }) => {
           </Grid>
         </Box>
       </Modal>
-      <DSTButton
-        text="Import previous calculation"
-        buttonClass="dst-import-button"
-        size={12}
-        theme="dstTheme"
-        handleClick={setModal}
-      />
+      <Button
+        variant="contained"
+        onClick={setModal}
+        sx={{ textDecoration: "none", margin: "1rem" }}
+      >
+        Import previous calculation
+      </Button>
     </>
   );
 };

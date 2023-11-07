@@ -1,6 +1,7 @@
 import { Box } from "@mui/system";
 import { Grid, Modal, Typography, Button } from "@mui/material";
 
+// TODO: not used now
 export const DSTModal = ({
   isOpen,
   setModal,
@@ -18,7 +19,7 @@ export const DSTModal = ({
       aria-describedby="modal-modal-description"
     >
       <Box className="home-import-modal">
-        <Grid xs={12} container>
+        <Grid container>
           <Grid xs={3} item></Grid>
           <Grid xs={6} item>
             <Typography id="modal-modal-title" variant="h6" component="h2">
@@ -34,7 +35,7 @@ export const DSTModal = ({
           </Grid>
           <Grid xs={2} item></Grid>
           <Grid xs={8} item></Grid>
-          <Grid xs={4}>
+          <Grid xs={4} item>
             <Button sx={{ marginTop: "15px" }} onClick={handleClose}>
               Close
             </Button>

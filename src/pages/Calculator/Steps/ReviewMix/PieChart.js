@@ -1,6 +1,6 @@
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
-import "./../steps.css";
+import "./../steps.scss";
 
 const PieChartComponent = ({
   type,

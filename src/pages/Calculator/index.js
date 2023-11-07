@@ -2,9 +2,10 @@
 //                      Imports                         //
 //////////////////////////////////////////////////////////
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Grid from "@mui/material/Grid";
 import { useSelector } from "react-redux";
+import { Typography, useMediaQuery, Box } from "@mui/material";
 
 import {
   SiteCondition,
@@ -17,63 +18,30 @@ import {
   SeedingMethod,
   CompletedPage,
 } from "./Steps";
+import SeedsSelectedList from "../../components/SeedsSelectedList";
 
 import { calculatorList, completedList } from "../../shared/data/dropdown";
-import { Header } from "../../components/Header";
 import { StepsList } from "../../components/StepsList";
-import "./calculator.css";
-import "./../Home/home.css";
+import { useTheme } from "@mui/material/styles";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import { FadeAlert } from "@psa/dst.ui.fade-alert";
 
 const Calculator = () => {
   const data = useSelector((state) => state.steps.value);
+  const error = useSelector((state) => state.steps.error);
   const type = data.siteCondition.council;
+
   const [activeStep, setActiveStep] = useState(0);
-  const [skipped, setSkipped] = useState(new Set());
+  // this completedStep is to determine whether the next button is clickable on each page
   const [completedStep, setCompletedStep] = useState([...completedList]);
+  const [showHeaderLogo, setShowHeaderLogo] = useState(true);
 
-  //////////////////////////////////////////////////////////
-  //                      State Logic                     //
-  //////////////////////////////////////////////////////////
+  const stepperRef = useRef();
 
-  const isStepOptional = (step) => {
-    return step === 1;
-  };
-
-  const isStepSkipped = (step) => {
-    return skipped.has(step);
-  };
-
-  const handleNext = () => {
-    let newSkipped = skipped;
-    if (isStepSkipped(activeStep)) {
-      newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(activeStep);
-    }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped(newSkipped);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleSkip = () => {
-    if (!isStepOptional(activeStep)) {
-      throw new Error("You can't skip a step that isn't optional.");
-    }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped((prevSkipped) => {
-      const newSkipped = new Set(prevSkipped.values());
-      newSkipped.add(activeStep);
-      return newSkipped;
-    });
-  };
-
-  const handleReset = () => {
-    setActiveStep(0);
-  };
+  const theme = useTheme();
+  const matchesSm = useMediaQuery(theme.breakpoints.down("sm"));
+  const [showAlert, setShowAlert] = useState(false);
 
   //////////////////////////////////////////////////////////
   //                      Render                          //
@@ -158,56 +126,139 @@ const Calculator = () => {
     }
   };
 
+  const headerLogo = () => {
+    if (data.siteCondition.council === "") return "./PSALogo.png";
+    else if (data.siteCondition.council === "MCCC") return "./mccc-logo.png";
+    else if (data.siteCondition.council === "NECCC") return "./neccc-logo.png";
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 85) {
+        // Adjust the scroll threshold as needed
+        setShowHeaderLogo(false);
+      } else {
+        setShowHeaderLogo(true);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    setShowAlert(error);
+  }, [error]);
+
   return (
-    <Grid container justifyContent="center" alignItems="center">
-      {data.siteCondition.council === "" ? (
-        <Grid xs={12} className={"dst-header-container dst-psa-logo"} item>
-          <img alt="neccc" src={"./PSALogo.png"} />
-        </Grid>
-      ) : (
+    <Grid container justifyContent="center">
+      <Grid item style={{ position: "fixed", top: "0px", zIndex: 1000 }}>
+        <FadeAlert
+          showAlert={showAlert}
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => setShowAlert(false)}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+          message="Network Error - Try again later or refresh the page!"
+        />
+      </Grid>
+      <Grid
+        item
+        xs={12}
+        paddingTop={"0.625rem"}
+        height={"85px"}
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
+        <img
+          alt={data.siteCondition.council}
+          src={headerLogo()}
+          height={"75px"}
+        />
+        <Typography variant="dstHeader" pl={"1rem"}>
+          Seeding Rate Calculator
+        </Typography>
+      </Grid>
+
+      <Grid item md={0} lg={2}></Grid>
+      <Grid
+        item
+        xs={12}
+        lg={8}
+        sx={
+          matchesSm && !showHeaderLogo
+            ? {
+                position: "fixed",
+                width: "100%",
+                paddingTop: "20px",
+                backgroundColor: "primary.light",
+                height: "90px",
+                zIndex: "101",
+              }
+            : { paddingTop: "20px" }
+        }
+        // height={"100px"}
+        ref={stepperRef}
+      >
+        <StepsList
+          activeStep={activeStep}
+          setActiveStep={setActiveStep}
+          availableSteps={completedStep}
+        />
+      </Grid>
+      <Grid item md={0} lg={2}></Grid>
+
+      <Grid item md={0} lg={2}></Grid>
+
+      {activeStep > 0 && activeStep < 8 && (
         <Grid
-          xs={12}
           item
-          className={
-            data.siteCondition.council === "MCCC"
-              ? "dst-header-container dst-mccc-logo"
-              : "dst-header-container dst-neccc-logo"
+          xs={12}
+          md={1}
+          sx={
+            matchesSm && !showHeaderLogo
+              ? {
+                  position: "fixed",
+                  width: "100%",
+                  paddingTop: "90px",
+                  zIndex: "100",
+                }
+              : {}
           }
         >
-          <img
-            alt="neccc"
-            src={
-              data.siteCondition.council === "MCCC"
-                ? "./mccc-logo.png"
-                : "./neccc-logo.png"
-            }
-          />
+          <SeedsSelectedList list={data.speciesSelection.seedsSelected} />
         </Grid>
       )}
 
-      {/* <Header
-        headerVariant="dstHeader"
-        text="Seeding Rate Calculator"
-        size={12}
-        style={{ mt: 1, mb: 1.5 }}
-      /> */}
-      <StepsList
-        steps={calculatorList}
-        activeStep={activeStep}
-        skipped={skipped}
-        handleNext={handleNext}
-        handleBack={handleBack}
-        handleSkip={handleSkip}
-        handleReset={handleReset}
-        completedStep={completedStep}
-        setCompletedStep={setCompletedStep}
-        className="steps-container"
-      />
-      {renderCalculator(
-        activeStep === calculatorList.length
-          ? "Finish"
-          : calculatorList[activeStep]
-      )}
+      <Grid
+        item
+        xs={12}
+        lg={activeStep === 0 ? 8 : 7}
+        md={activeStep > 0 ? 11 : 12}
+        sx={
+          matchesSm && !showHeaderLogo
+            ? activeStep === 0
+              ? { paddingTop: "90px" }
+              : { paddingTop: "190px" }
+            : {}
+        }
+      >
+        {renderCalculator(
+          activeStep === calculatorList.length
+            ? "Finish"
+            : calculatorList[activeStep]
+        )}
+      </Grid>
+
+      <Grid item md={0} lg={2}></Grid>
     </Grid>
   );
 };

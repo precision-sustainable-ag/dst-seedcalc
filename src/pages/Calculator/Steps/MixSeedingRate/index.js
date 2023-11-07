@@ -1,36 +1,134 @@
 //////////////////////////////////////////////////////////
-//                    Imports                           //
+//                     Imports                          //
 //////////////////////////////////////////////////////////
 
 import * as React from "react";
-import Grid from "@mui/material/Grid";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Typography, Box } from "@mui/material";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import styled from "@emotion/styled";
+import { Typography, Slider, Stack } from "@mui/material";
+import Grid from "@mui/material/Grid";
 import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 
 import { updateSteps } from "../../../../features/stepSlice";
-import { seedingMethods } from "../../../../shared/data/dropdown";
-import { Dropdown } from "../../../../components/Dropdown";
-import "./../steps.css";
-import SeedsSelectedList from "../../../../components/SeedsSelectedList";
+import "./../steps.scss";
 
-const MixSeedingRate = ({ council }) => {
+const MixSeedingSlider = styled(Slider)(({ theme, min, max, coefficient }) => ({
+  "& .MuiSlider-thumb": {
+    zIndex: 2,
+    "&:hover": {
+      boxShadow: "0px 0px 5px 25px rgba(79, 95, 48, 0.16)",
+    },
+    "&.Mui-active": {
+      boxShadow: "0px 0px 5px 28px rgba(79, 95, 48, 0.32)",
+    },
+    "&::before": {
+      content: `'${coefficient}'`,
+      position: "absolute",
+      backgroundColor: "white",
+      color: theme.palette.primary.text,
+      border: "4px solid",
+      height: "4rem",
+      width: "4rem",
+      borderRadius: "50%",
+      boxSizing: "border-box",
+      paddingTop: "1rem",
+    },
+  },
+  "& .MuiSlider-mark": {
+    width: "0",
+    height: "0",
+    pointerEvents: "none",
+    "&::after": {
+      position: "absolute",
+      content: `""`,
+      width: "6rem",
+      color: theme.palette.primary.text,
+      borderTop: "2px dotted",
+      zIndex: -1,
+    },
+    "&Label": {
+      pointerEvents: "none",
+      left: "6rem",
+      color: theme.palette.primary.text,
+      border: "2px solid",
+      borderRadius: "1rem",
+      padding: "0.5rem",
+      backgroundColor: "white",
+      fontSize: "0.75rem",
+      display: "flex",
+      whiteSpace: "normal",
+      width: "6rem",
+    },
+  },
+  "& .MuiSlider-rail": {
+    zIndex: 1,
+    opacity: 1,
+    color: theme.palette.primary.dark,
+    "&::before ": {
+      content: `'${max}'`,
+      position: "absolute",
+      backgroundColor: theme.palette.primary.light,
+      color: theme.palette.primary.text,
+      border: "2px solid",
+      height: "4rem",
+      width: "4rem",
+      borderRadius: "50%",
+      boxSizing: "border-box",
+      top: "-2rem",
+      right: "-1.85rem",
+      paddingTop: "1rem",
+    },
+    "&::after": {
+      content: `'${min}'`,
+      position: "absolute",
+      backgroundColor: theme.palette.primary.light,
+      color: theme.palette.primary.text,
+      border: "2px solid",
+      height: "4rem",
+      width: "4rem",
+      borderRadius: "50%",
+      boxSizing: "border-box",
+      top: "22rem",
+      right: "-1.85rem",
+      paddingTop: "1rem",
+    },
+  },
+  "& .MuiSlider-track": {
+    color: theme.palette.primary.text,
+    zIndex: 1,
+    position: "absolute",
+    bottom: "2rem !important",
+  },
+}));
+
+const MixSeedingTypography = styled(Typography)(({ theme }) => ({
+  color: theme.palette.primary.text,
+  fontSize: "0.75rem",
+  fontWeight: "600",
+  lineHeight: "0.9375rem",
+  border: "2px solid #4f5f30",
+  padding: "0.5rem",
+  borderRadius: "1rem",
+}));
+
+const MixSeedingRate = () => {
   // themes
   const theme = useTheme();
-  const matchesXs = useMediaQuery(theme.breakpoints.down("xs"));
-  const matchesSm = useMediaQuery(theme.breakpoints.down("sm"));
-  const matchesMd = useMediaQuery(theme.breakpoints.down("md"));
 
   // useSelector for crops reducer data
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
-  const { seedingMethod, speciesSelection } = data;
+  const seedingMethod = data.seedingMethod;
+  const speciesSelection = data.speciesSelection;
   const seedsSelected = speciesSelection.seedsSelected;
+
+  const [dataLoaded, toggleDataLoaded] = useState(false);
+  const [min, setMin] = useState(0);
+  const [max, setMax] = useState(0);
+  const [seedingRateCoefficient, setSeedingRateCoefficient] = useState(0);
+  const [seedingRateAverage, setSeedingRateAverage] = useState(0);
+  const [marks, setMarks] = useState([]);
 
   //////////////////////////////////////////////////////////
   //                      Redux                           //
@@ -46,114 +144,108 @@ const MixSeedingRate = ({ council }) => {
   };
 
   //////////////////////////////////////////////////////////
-  //                   State Logic                        //
+  //                    State Logic                       //
   //////////////////////////////////////////////////////////
 
-  const handleSeedingMethod = (e) => {
-    handleUpdateSteps("type", e.target.value);
-  };
-  const renderSeedsSelected = () => {
-    return <SeedsSelectedList list={seedsSelected} />;
-  };
-  const renderRightAccordian = (type, val) => {
-    return (
-      <Grid item xs={6} className="mix-seeding-rate-grid-right">
-        {council === "NECCC" && type !== "precision" ? (
-          <Typography>Not Recommended</Typography>
-        ) : (
-          <>
-            <Box
-              sx={{
-                width: "50px",
-                height: "50px",
-                padding: "11px",
-                margin: "0 auto",
-                backgroundColor: "#E5E7D5",
-                border: "#C7C7C7 solid 1px",
-                borderRadius: "50%",
-              }}
-            >
-              <Typography>{val}</Typography>
-            </Box>
-            <Typography>Lbs / Acre</Typography>
-          </>
-        )}
-      </Grid>
-    );
-  };
-
-  const renderAccordian = (seed) => {
-    return (
-      <Accordion xs={12} className="accordian-container">
-        <AccordionSummary
-          xs={12}
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography>{seed.label}</Typography>
-        </AccordionSummary>
-        <AccordionDetails className="accordian-details">
-          <Grid xs={12} container>
-            <Grid item xs={6} className="mix-seeding-rate-grid-left">
-              <Typography>Precision: </Typography>
-            </Grid>
-            {renderRightAccordian("precision", seed.precision)}
-            <Grid item xs={6} className="mix-seeding-rate-grid-left">
-              <Typography>Drilled: </Typography>
-            </Grid>
-            {renderRightAccordian("drilled", 1)}
-            <Grid item xs={6} className="mix-seeding-rate-grid-left">
-              <Typography>Broadcast(with Light Incorporation): </Typography>
-            </Grid>
-            {renderRightAccordian("broadcast", seed.broadcast)}
-            <Grid item xs={6} className="mix-seeding-rate-grid-left">
-              <Typography>
-                Aerial(or broadcast with no Light Incorporation{" "}
-                <span className="red-text">Not Recommended</span>):{" "}
-              </Typography>
-            </Grid>
-            {renderRightAccordian("aerial", seed.aerial)}
-          </Grid>
-        </AccordionDetails>
-      </Accordion>
-    );
+  const updateManagementImpactOnMix = () => {
+    const percentage = seedingRateCoefficient / seedingRateAverage - 0.5;
+    handleUpdateSteps("managementImpactOnMix", percentage);
   };
 
   //////////////////////////////////////////////////////////
-  //                    Render                            //
+  //                    useEffect                         //
+  //////////////////////////////////////////////////////////
+
+  useEffect(() => {
+    const average = Math.round(
+      seedsSelected.reduce(
+        (total, seed) => total + parseFloat(seed.mixSeedingRate),
+        0
+      )
+    );
+    const minimum = Math.round(average - average / 2);
+    const maximum = Math.round(average + average / 2);
+    const coefficient = Math.round(
+      average + (seedingMethod.managementImpactOnMix - 0.5) * average
+    );
+    setMin(minimum);
+    setMax(maximum);
+    setSeedingRateAverage(average);
+    setSeedingRateCoefficient(coefficient);
+    setMarks([
+      {
+        value: minimum,
+        label: `Low Limit on Mix Seeding Rate: ${minimum} Lbs/Acre`,
+      },
+      {
+        value: coefficient,
+        label: `Calculated Mix Seeding Rate: ${coefficient} Lbs/Acre`,
+      },
+      {
+        value: maximum,
+        label: `High Limit on Mix Seeding Rate: ${maximum} Lbs/Acre`,
+      },
+    ]);
+    toggleDataLoaded(true);
+  }, []);
+
+  //////////////////////////////////////////////////////////
+  //                      Render                          //
   //////////////////////////////////////////////////////////
 
   return (
-    <Grid xs={12} container>
-      {seedsSelected.length > 0 && renderSeedsSelected()}
-      <Grid
-        xs={seedsSelected.length > 0 ? 12 : 12}
-        md={seedsSelected.length > 0 ? 11 : 12}
-        item
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Grid item xs={12}>
-          <Typography variant="h2">Mix Seeding Rate</Typography>
+    <Grid container>
+      <Grid item xs={12}>
+        <Typography variant="h2">Adjust Seeding Rate of Mix</Typography>
+      </Grid>
+      <Grid container sx={{ padding: "3% 3%" }}>
+        <Grid
+          container
+          xs={4}
+          sm={5}
+          flexDirection={"column"}
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <MixSeedingTypography>
+            Factors that may raise Seeding Rate:
+            <br />- Erosion Control
+            <br />- Weed Supression
+            <br />- Grazing
+          </MixSeedingTypography>
+
+          <MixSeedingTypography>
+            Factors that lower Seeding Rate:
+            <br />- Cost Saving
+            <br />- Low Biomass
+            <br />- Planting Green
+          </MixSeedingTypography>
         </Grid>
-        <Grid item xs={12} padding={15} className="site-condition-container">
-          <Dropdown
-            value={seedingMethod.type}
-            label={"Seeding Method: "}
-            handleChange={handleSeedingMethod}
-            size={12}
-            items={seedingMethods}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          {seedsSelected.map((s, i) => {
-            return (
-              <Grid xs={12}>
-                <Grid item>{renderAccordian(s)}</Grid>
-              </Grid>
-            );
-          })}
+        <Grid
+          container
+          xs={8}
+          sm={7}
+          justifyContent="flex-start"
+          alignItems="center"
+          minHeight={"28rem"}
+          pl={"3rem"}
+        >
+          {dataLoaded && (
+            <Stack sx={{ height: "24rem" }}>
+              <MixSeedingSlider
+                orientation="vertical"
+                min={min}
+                max={max}
+                value={seedingRateCoefficient}
+                valueLabelDisplay="off"
+                onChange={(e) => setSeedingRateCoefficient(e.target.value)}
+                onChangeCommitted={updateManagementImpactOnMix}
+                marks={marks}
+                coefficient={seedingRateCoefficient}
+                theme={theme}
+              />
+            </Stack>
+          )}
         </Grid>
       </Grid>
     </Grid>
