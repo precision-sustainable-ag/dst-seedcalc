@@ -306,13 +306,14 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
     };
 
     if (seedsSelected.length === 0) {
+      // no seed selected before(this is the first seed selected)
       const newList = seedsSelected.map((s, i) => {
         return {
           ...s,
           percentOfSingleSpeciesRate: (1 / (seedsSelected.length + 1)) * 100,
         };
       });
-      // update Redux with the seedsSelected and diversitySelected with the new list.
+      // update seedsSelected and diversitySelected
       handleUpdateStore("speciesSelection", "seedsSelected", [
         ...newList,
         calculateAllMixRatioValues(newSeed, data, council),
@@ -324,9 +325,10 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
       // by default, we want equal amount of percentage of the seed in the mix, so whenever updating
       // the seed list, we'll update the percentage in mix of all seeds.
     } else {
+      // test if seed is selected before(if selected, delete seed from the list, else add it)
       const seedsExist = seedsSelected.find((f) => seed.label === f.label);
-      // if seed exist, remove seed in seedsSelected, as well as diversitySelected
       if (seedsExist) {
+        // if seed exist, remove seed in seedsSelected, update diversitySelected
         const filterList = seedsSelected.filter(
           (item) => item.label !== seed.label
         );
@@ -351,8 +353,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
           );
         }
       } else {
-        // FIXME: add update for previous crops
-        // if seed doesn't exist, add NRCS, seedsSelected, & diveristySelected
+        // if seed doesn't exist, add seed to seedsSelected, update diversitySelected
         const newList = seedsSelected.map((s, i) => {
           return {
             ...s,

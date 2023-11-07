@@ -27,6 +27,7 @@ export const calculateAveragePercentage = (nums) => {
 //                    Mix Ratio                         //
 //////////////////////////////////////////////////////////
 
+// calculation for mix ratio steps in MCCC/NECCC
 export const calculateAllMixRatioValues = (prevSeed, data, council) => {
   let seed = { ...prevSeed };
 
@@ -61,7 +62,6 @@ export const calculateMixRatioMCCC = (step, seed) => {
         key: "mixSeedingRate",
         val: calculateInt(
           [
-            // TODO: seeding rate changed here
             seed.singleSpeciesSeedingRatePLS,
             convertToDecimal(seed.percentOfSingleSpeciesRate),
           ],
