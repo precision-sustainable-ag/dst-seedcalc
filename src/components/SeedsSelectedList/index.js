@@ -1,13 +1,36 @@
 import * as React from "react";
 import { useTheme } from "@mui/material/styles";
-import { Typography, Box, useMediaQuery } from "@mui/material";
+import {
+  Typography,
+  Box,
+  useMediaQuery,
+  Card,
+  CardActionArea,
+} from "@mui/material";
+import { useDispatch } from "react-redux";
+import { updateSteps } from "../../features/stepSlice";
 
 const SeedsSelectedList = ({ list }) => {
   // themes
   const theme = useTheme();
-  const matchesXs = useMediaQuery(theme.breakpoints.down("xs"));
-  const matchesSm = useMediaQuery(theme.breakpoints.down("sm"));
   const matchesMd = useMediaQuery(theme.breakpoints.down("md"));
+
+  const dispatch = useDispatch();
+
+  const handleUpdateStore = (type, key, val) => {
+    const data = {
+      type: type,
+      key: key,
+      value: val,
+    };
+    dispatch(updateSteps(data));
+  };
+
+  const selectSpecies = (species) => {
+    console.log("update redux");
+    handleUpdateStore("speciesSelection", "selectedSpecies", species);
+  };
+
   return (
     <Box
       sx={
@@ -29,24 +52,34 @@ const SeedsSelectedList = ({ list }) => {
       {[...list].reverse().map((s, i) => {
         return (
           <Box minWidth={matchesMd ? "120px" : ""} key={i}>
-            <img
-              style={{
-                borderRadius: "50%",
-                width: "60px",
-                height: "60px",
-                marginTop: "10px",
+            <Card
+              sx={{
+                backgroundColor: "transparent",
+                boxShadow: "none",
+                cursor: "pointer",
               }}
-              src={
-                s.thumbnail !== null && s.thumbnail !== ""
-                  ? s.thumbnail
-                  : "https://www.gardeningknowhow.com/wp-content/uploads/2020/04/spinach.jpg"
-              }
-              alt={s.label}
-              loading="lazy"
-            />
-            <Typography fontSize={"12px"} lineHeight={1.25}>
-              {s.label}
-            </Typography>
+            >
+              <CardActionArea onClick={() => selectSpecies(s.label)}>
+                <img
+                  style={{
+                    borderRadius: "50%",
+                    width: "60px",
+                    height: "60px",
+                    marginTop: "10px",
+                  }}
+                  src={
+                    s.thumbnail !== null && s.thumbnail !== ""
+                      ? s.thumbnail
+                      : "https://www.gardeningknowhow.com/wp-content/uploads/2020/04/spinach.jpg"
+                  }
+                  alt={s.label}
+                  loading="lazy"
+                />
+                <Typography fontSize={"12px"} lineHeight={1.25}>
+                  {s.label}
+                </Typography>
+              </CardActionArea>
+            </Card>
           </Box>
         );
       })}{" "}

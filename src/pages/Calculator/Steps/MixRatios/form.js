@@ -8,7 +8,7 @@ import {
 } from "./../../../../shared/utils/calculate";
 import "./../steps.scss";
 
-const MixRatioSteps = ({ seed, council, updateSeed, speciesSelection }) => {
+const MixRatioSteps = ({ seed, council, updateSeed, seedsSelected }) => {
   const theme = useTheme();
   const matchesMd = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -41,7 +41,7 @@ const MixRatioSteps = ({ seed, council, updateSeed, speciesSelection }) => {
   const generatePercentInGroup = (seed) => {
     const group = seed.group.label;
     let count = 0;
-    speciesSelection.seedsSelected.map((s, i) => {
+    seedsSelected.map((s, i) => {
       s.group.label === group && count++;
     });
     return 1 / count;

@@ -34,6 +34,7 @@ export const initialState = {
     },
     speciesSelection: {
       queryString: "",
+      selectedSpecies: "",
       queryResults: [],
       diversitySelected: [],
       seedsSelected: [],

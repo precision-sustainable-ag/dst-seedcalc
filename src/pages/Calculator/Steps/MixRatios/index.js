@@ -27,16 +27,24 @@ import {
 } from "../../../../components/SeedingRateCard";
 
 import "./../steps.scss";
+import { useState } from "react";
+import { useEffect } from "react";
 
 const MixRatio = ({ council }) => {
-  // useSelector for crops & mixRaxio reducer
-
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
-  const speciesSelection = data.speciesSelection;
+  const { selectedSpecies, seedsSelected } = data.speciesSelection;
+
+  // create an key/value pair for the seed and related accordion expanded state
+  const [accordionState, setAccordionState] = useState(
+    seedsSelected.reduce((res, seed) => {
+      res[seed.label] = false;
+      return res;
+    }, {})
+  );
 
   const { poundsOfSeedArray, plantsPerAcreArray, seedsPerAcreArray } =
-    calculatePieChartData(speciesSelection.seedsSelected);
+    calculatePieChartData(seedsSelected);
 
   //////////////////////////////////////////////////////////
   //                      Redux                           //
@@ -62,10 +70,8 @@ const MixRatio = ({ council }) => {
 
   const updateSeed = (val, key, seed) => {
     // find index of seed, parse a copy, update proper values, & send to Redux
-    const index = speciesSelection.seedsSelected.findIndex(
-      (s) => s.id === seed.id
-    );
-    let seeds = JSON.parse(JSON.stringify(speciesSelection.seedsSelected));
+    const index = seedsSelected.findIndex((s) => s.id === seed.id);
+    let seeds = JSON.parse(JSON.stringify(seedsSelected));
     seeds[index][key] = val;
     handleUpdateSteps("seedsSelected", seeds);
 
@@ -77,6 +83,22 @@ const MixRatio = ({ council }) => {
         : calculateAllValuesNECCC(seeds[index], data);
     handleUpdateAllSteps(newData, index);
   };
+
+  // handler for click to open accordion
+  const handleExpandAccordion = (label) => {
+    const open = accordionState[label];
+    setAccordionState({ ...accordionState, [label]: !open });
+  };
+
+  useEffect(() => {
+    // expand related accordion based on sidebar click
+    setAccordionState(
+      seedsSelected.reduce((res, seed) => {
+        res[seed.label] = seed.label === selectedSpecies ? true : false;
+        return res;
+      }, {})
+    );
+  }, [selectedSpecies]);
 
   //////////////////////////////////////////////////////////
   //                      Render                          //
@@ -110,10 +132,13 @@ const MixRatio = ({ council }) => {
         />
       </Grid>
 
-      {speciesSelection.seedsSelected.map((seed, i) => {
+      {seedsSelected.map((seed, i) => {
         return (
           <Grid item xs={12} key={i}>
-            <Accordion>
+            <Accordion
+              expanded={accordionState[seed.label]}
+              onChange={() => handleExpandAccordion(seed.label)}
+            >
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 className="accordian-summary"
@@ -163,7 +188,7 @@ const MixRatio = ({ council }) => {
                       <MixRatioSteps
                         seed={seed}
                         council={council}
-                        speciesSelection={speciesSelection}
+                        seedsSelected={seedsSelected}
                         updateSeed={updateSeed}
                       />
                     )}
