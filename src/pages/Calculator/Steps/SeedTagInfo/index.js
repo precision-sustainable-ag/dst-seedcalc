@@ -4,7 +4,7 @@
 
 import * as React from "react";
 import Grid from "@mui/material/Grid";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Typography } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
@@ -35,7 +35,15 @@ const LeftGrid = styled(Grid)({
 const SeedTagInfo = ({ council }) => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
-  const speciesSelection = data.speciesSelection;
+  const { selectedSpecies, seedsSelected } = data.speciesSelection;
+
+  const [accordionState, setAccordionState] = useState(
+    seedsSelected.reduce((res, seed) => {
+      res[seed.label] = false;
+      return res;
+    }, {})
+  );
+
   const [sameInfoActive, setSameInfoActive] = useState(false);
 
   const handleUpdateSteps = (key, val) => {
@@ -53,8 +61,8 @@ const SeedTagInfo = ({ council }) => {
   */
   const handleSeed = (val, key1, key2, seed) => {
     if (sameInfoActive) {
-      let data = JSON.parse(JSON.stringify(speciesSelection.seedsSelected));
-      speciesSelection.seedsSelected.map((s, i) => {
+      let data = JSON.parse(JSON.stringify(seedsSelected));
+      seedsSelected.map((s, i) => {
         data[i]["germinationPercentage"] =
           key1 === "germinationPercentage" ? val : seed.germinationPercentage;
         data[i]["purityPercentage"] =
@@ -68,13 +76,27 @@ const SeedTagInfo = ({ council }) => {
 
   const updateSeed = (val, key1, key2, seed) => {
     // find index of seed, parse a copy, update proper values, & send to Redux
-    const index = speciesSelection.seedsSelected.findIndex(
-      (s) => s.id === seed.id
-    );
-    let data = JSON.parse(JSON.stringify(speciesSelection.seedsSelected));
+    const index = seedsSelected.findIndex((s) => s.id === seed.id);
+    let data = JSON.parse(JSON.stringify(seedsSelected));
     data[index][key1] = val;
     handleUpdateSteps("seedsSelected", data);
   };
+
+  // handler for click to open accordion
+  const handleExpandAccordion = (label) => {
+    const open = accordionState[label];
+    setAccordionState({ ...accordionState, [label]: !open });
+  };
+
+  useEffect(() => {
+    // expand related accordion based on sidebar click
+    setAccordionState(
+      seedsSelected.reduce((res, seed) => {
+        res[seed.label] = seed.label === selectedSpecies ? true : false;
+        return res;
+      }, {})
+    );
+  }, [selectedSpecies]);
 
   const renderRightAccordian = (key, data, type, disabled) => {
     const value =
@@ -98,10 +120,6 @@ const SeedTagInfo = ({ council }) => {
     );
   };
 
-  const handleSwitch = () => {
-    setSameInfoActive(!sameInfoActive);
-  };
-
   return (
     <Grid container>
       <Grid item xs={12}>
@@ -115,14 +133,20 @@ const SeedTagInfo = ({ council }) => {
         justifyContent={"center"}
         alignItems={"center"}
       >
-        <DSTSwitch checked={sameInfoActive} handleChange={handleSwitch} />
+        <DSTSwitch
+          checked={sameInfoActive}
+          handleChange={() => setSameInfoActive(!sameInfoActive)}
+        />
         <Typography>Same Information for All Species</Typography>
       </Grid>
 
-      {speciesSelection.seedsSelected.map((seed, i) => {
+      {seedsSelected.map((seed, i) => {
         return (
           <Grid item xs={12} key={i}>
-            <Accordion>
+            <Accordion
+              expanded={accordionState[seed.label]}
+              onChange={() => handleExpandAccordion(seed.label)}
+            >
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 className="accordian-summary"

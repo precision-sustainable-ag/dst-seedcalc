@@ -2,7 +2,7 @@
 //                    Imports                           //
 //////////////////////////////////////////////////////////
 
-import * as React from "react";
+import { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import { useSelector, useDispatch } from "react-redux";
 import { Typography, Box } from "@mui/material";
@@ -59,7 +59,15 @@ const SeedingMethod = ({ council }) => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
   const { seedingMethod, speciesSelection } = data;
-  const seedsSelected = speciesSelection.seedsSelected;
+  const { selectedSpecies, seedsSelected } = speciesSelection;
+
+  // create an key/value pair for the seed and related accordion expanded state
+  const [accordionState, setAccordionState] = useState(
+    seedsSelected.reduce((res, seed) => {
+      res[seed.label] = false;
+      return res;
+    }, {})
+  );
 
   //////////////////////////////////////////////////////////
   //                      Redux                           //
@@ -99,6 +107,22 @@ const SeedingMethod = ({ council }) => {
     );
   };
 
+  // handler for click to open accordion
+  const handleExpandAccordion = (label) => {
+    const open = accordionState[label];
+    setAccordionState({ ...accordionState, [label]: !open });
+  };
+
+  useEffect(() => {
+    // expand related accordion based on sidebar click
+    setAccordionState(
+      seedsSelected.reduce((res, seed) => {
+        res[seed.label] = seed.label === selectedSpecies ? true : false;
+        return res;
+      }, {})
+    );
+  }, [selectedSpecies]);
+
   //////////////////////////////////////////////////////////
   //                    Render                            //
   //////////////////////////////////////////////////////////
@@ -120,7 +144,10 @@ const SeedingMethod = ({ council }) => {
       {seedsSelected.map((seed, i) => {
         return (
           <Grid item xs={12} key={i}>
-            <Accordion>
+            <Accordion
+              expanded={accordionState[seed.label]}
+              onChange={() => handleExpandAccordion(seed.label)}
+            >
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 className="accordian-summary"

@@ -7,7 +7,7 @@ import {
   Card,
   CardActionArea,
 } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateSteps } from "../../features/stepSlice";
 
 const SeedsSelectedList = ({ list }) => {
@@ -16,6 +16,8 @@ const SeedsSelectedList = ({ list }) => {
   const matchesMd = useMediaQuery(theme.breakpoints.down("md"));
 
   const dispatch = useDispatch();
+  const data = useSelector((state) => state.steps.value);
+  const { selectedSpecies } = data.speciesSelection;
 
   const handleUpdateStore = (type, key, val) => {
     const data = {
@@ -27,8 +29,11 @@ const SeedsSelectedList = ({ list }) => {
   };
 
   const selectSpecies = (species) => {
-    console.log("update redux");
-    handleUpdateStore("speciesSelection", "selectedSpecies", species);
+    handleUpdateStore(
+      "speciesSelection",
+      "selectedSpecies",
+      selectedSpecies === species ? "" : species
+    );
   };
 
   return (
