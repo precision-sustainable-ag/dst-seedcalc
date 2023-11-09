@@ -1,4 +1,4 @@
-export const seedsList = ["Brassica", "Broadleaf", "Grass", "Legume"];
+export const seedsType = ["Brassica", "Broadleaf", "Grass", "Legume"];
 export const seedsLabel = {
   Broadleaf: "Broadleaves",
   Grass: "Grasses",
