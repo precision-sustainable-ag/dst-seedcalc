@@ -45,6 +45,10 @@ const PlantList = ({
   council,
   plantingDate,
 }) => {
+  const seedsList = filteredSeeds.filter((seed) => {
+    return seed.group !== null && seed.group.label === seedType;
+  });
+
   const checkPlantingDate = (council, seed, siteDate) => {
     if (council === "MCCC") return true;
     // FIXME: this method didn't take crops with 2 RE period into count
@@ -107,11 +111,10 @@ const PlantList = ({
 
   return (
     <Grid container spacing={"1rem"} pl={"1rem"}>
-      {filteredSeeds
-        .filter((seed) => {
-          return seed.group !== null && seed.group.label === seedType;
-        })
-        .map((seed, i) => (
+      {seedsList.length === 0 ? (
+        <Typography variant="h6">No available seeds in this type!</Typography>
+      ) : (
+        seedsList.map((seed, i) => (
           <Grid item key={i} position={"relative"}>
             {seedsSelected.filter((s) => s.label === seed.label).length > 0 && (
               <CheckBoxIcon
@@ -133,7 +136,8 @@ const PlantList = ({
               recommended={checkPlantingDate(council, seed, plantingDate)}
             />
           </Grid>
-        ))}
+        ))
+      )}
     </Grid>
   );
 };

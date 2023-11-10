@@ -18,11 +18,11 @@ import { updateSteps } from "../../../../features/stepSlice/index";
 import { getCropsById } from "../../../../features/stepSlice/api";
 import { seedsType, seedsLabel } from "../../../../shared/data/species";
 import { calculateAllMixRatioValues } from "../../../../shared/utils/calculate";
-import "./../steps.scss";
 import { validateForms } from "../../../../shared/utils/format";
 import PlantList from "./PlantList";
 import Diversity from "./diversity";
 import { Spinner } from "@psa/dst.ui.spinner";
+import "./../steps.scss";
 
 const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   // useSelector for crops reducer data
@@ -32,7 +32,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   const { crops, speciesSelection } = data;
   const seedsSelected = speciesSelection.seedsSelected;
   const diversitySelected = speciesSelection.diversitySelected;
-  const [filteredSeeds, setFilteredSeeds] = useState(crops);
+  const [filteredSeeds, setFilteredSeeds] = useState([]);
   const [query, setQuery] = useState("");
 
   //////////////////////////////////////////////////////////
@@ -63,10 +63,10 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
           )
         : crops;
     setFilteredSeeds(filtered);
-    // handleUpdateStore("speciesSelection", "queryResults", filtered);
   };
 
-  // create a data object that specifies the type(data layer 1), the key(data layer 2), & the value for the key.
+  // create a data object that specifies the type(data layer 1),
+  // the key(data layer 2), & the value for the key.
 
   const retrieveCropDetails = async (id) => {
     const response = await dispatch(
