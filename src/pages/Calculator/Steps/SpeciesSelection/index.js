@@ -74,7 +74,6 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
         cropId: `${id}`,
         regionId: data.siteCondition.stateId,
         countyId: data.siteCondition.countyId,
-        url: "https://developapi.covercrop-selector.org/v2/crops/148?regions=18&context=seed_calc&regions=180",
       })
     );
     return response.payload.data;
