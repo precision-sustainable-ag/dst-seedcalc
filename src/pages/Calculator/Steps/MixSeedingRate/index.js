@@ -6,35 +6,65 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "@emotion/styled";
-import { Typography, Slider, Stack } from "@mui/material";
+import { Typography, Slider, Stack, SliderThumb } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { useTheme } from "@mui/material/styles";
+import { MenuRounded } from "@mui/icons-material";
 
 import { updateSteps } from "../../../../features/stepSlice";
 import "./../steps.scss";
 
+function CustomThumb(props) {
+  const { children, ...other } = props;
+  return (
+    <SliderThumb {...other}>
+      {children}
+      <MenuRounded />
+    </SliderThumb>
+  );
+}
+
 const MixSeedingSlider = styled(Slider)(({ theme, min, max, coefficient }) => ({
+  "&.MuiSlider-root": {
+    zIndex: 0,
+    position: "relative",
+    padding: "0 13px",
+  },
   "& .MuiSlider-thumb": {
     zIndex: 2,
+    height: 30,
+    width: 30,
+    backgroundColor: "#fff",
+    border: "1px solid currentColor",
     "&:hover": {
-      boxShadow: "0px 0px 5px 25px rgba(79, 95, 48, 0.16)",
-    },
-    "&.Mui-active": {
-      boxShadow: "0px 0px 5px 28px rgba(79, 95, 48, 0.32)",
-    },
-    "&::before": {
-      content: `'${coefficient}'`,
-      position: "absolute",
-      backgroundColor: "white",
-      color: theme.palette.primary.text,
-      border: "4px solid",
-      height: "4rem",
-      width: "4rem",
-      borderRadius: "50%",
-      boxSizing: "border-box",
-      paddingTop: "1rem",
+      boxShadow: "0 0 0 8px rgba(58, 133, 137, 0.16)",
     },
   },
+  "& .MuiSlider-valueLabelOpen": {
+    fontWeight: "bold",
+    fontSize: "1.5rem",
+    paddingRight: "0.5rem",
+  },
+  // "& .MuiSlider-thumb": {
+  // "&:hover": {
+  //   boxShadow: "0px 0px 5px 25px rgba(79, 95, 48, 0.16)",
+  // },
+  // "&.Mui-active": {
+  //   boxShadow: "0px 0px 5px 28px rgba(79, 95, 48, 0.32)",
+  // },
+  // "&::before": {
+  //   content: `'${coefficient}'`,
+  //   position: "absolute",
+  //   backgroundColor: "white",
+  //   color: theme.palette.primary.text,
+  //   border: "4px solid",
+  //   height: "4rem",
+  //   width: "4rem",
+  //   borderRadius: "50%",
+  //   boxSizing: "border-box",
+  //   paddingTop: "1rem",
+  // },
+  // },
   "& .MuiSlider-mark": {
     width: "0",
     height: "0",
@@ -45,7 +75,6 @@ const MixSeedingSlider = styled(Slider)(({ theme, min, max, coefficient }) => ({
       width: "6rem",
       color: theme.palette.primary.text,
       borderTop: "2px dotted",
-      zIndex: -1,
     },
     "&Label": {
       pointerEvents: "none",
@@ -56,49 +85,55 @@ const MixSeedingSlider = styled(Slider)(({ theme, min, max, coefficient }) => ({
       padding: "0.5rem",
       backgroundColor: "white",
       fontSize: "0.75rem",
+      fontWeight: "bold",
       display: "flex",
       whiteSpace: "normal",
-      width: "6rem",
+      width: "5rem",
     },
   },
   "& .MuiSlider-rail": {
     zIndex: 1,
     opacity: 1,
     color: theme.palette.primary.dark,
-    "&::before ": {
-      content: `'${max}'`,
-      position: "absolute",
-      backgroundColor: theme.palette.primary.light,
-      color: theme.palette.primary.text,
-      border: "2px solid",
-      height: "4rem",
-      width: "4rem",
-      borderRadius: "50%",
-      boxSizing: "border-box",
-      top: "-2rem",
-      right: "-1.85rem",
-      paddingTop: "1rem",
-    },
-    "&::after": {
-      content: `'${min}'`,
-      position: "absolute",
-      backgroundColor: theme.palette.primary.light,
-      color: theme.palette.primary.text,
-      border: "2px solid",
-      height: "4rem",
-      width: "4rem",
-      borderRadius: "50%",
-      boxSizing: "border-box",
-      top: "22rem",
-      right: "-1.85rem",
-      paddingTop: "1rem",
-    },
+    width: "1rem",
+    // "&::before ": {
+    //   content: `'${max}'`,
+    //   position: "absolute",
+    //   // backgroundColor: theme.palette.primary.light,
+    //   color: theme.palette.primary.text,
+    //   // border: "2px solid",
+    //   // height: "4rem",
+    //   // width: "4rem",
+    //   // borderRadius: "50%",
+    //   // boxSizing: "border-box",
+    //   top: "-2rem",
+    //   right: "0.25rem",
+    //   fontWeight: "bold",
+
+    //   // paddingTop: "1rem",
+    // },
+    // "&::after": {
+    //   content: `'${min}'`,
+    //   position: "absolute",
+    //   // backgroundColor: theme.palette.primary.light,
+    //   color: theme.palette.primary.text,
+    //   // border: "2px solid",
+    //   // height: "4rem",
+    //   // width: "4rem",
+    //   // borderRadius: "50%",
+    //   // boxSizing: "border-box",
+    //   bottom: "-2rem",
+    //   right: "0.25rem",
+    //   fontWeight: "bold",
+    //   // paddingTop: "1rem",
+    // },
   },
   "& .MuiSlider-track": {
     color: theme.palette.primary.text,
-    zIndex: 1,
+    zIndex: 2,
     position: "absolute",
-    bottom: "2rem !important",
+    // bottom: "2rem !important",
+    width: " 1rem",
   },
 }));
 
@@ -175,15 +210,15 @@ const MixSeedingRate = () => {
     setMarks([
       {
         value: minimum,
-        label: `Low Limit on Mix Seeding Rate: ${minimum} Lbs/Acre`,
+        label: `Low Limit`,
       },
       {
         value: coefficient,
-        label: `Calculated Mix Seeding Rate: ${coefficient} Lbs/Acre`,
+        label: `Calculated`,
       },
       {
         value: maximum,
-        label: `High Limit on Mix Seeding Rate: ${maximum} Lbs/Acre`,
+        label: `High Limit`,
       },
     ]);
     toggleDataLoaded(true);
@@ -233,19 +268,34 @@ const MixSeedingRate = () => {
           pl={"3rem"}
         >
           {dataLoaded && (
-            <Stack sx={{ height: "24rem" }}>
+            <Stack sx={{ height: "100%" }}>
+              <Typography
+                width={"30px"}
+                fontWeight={"bold"}
+                fontSize={"1.25rem"}
+              >
+                {max}
+              </Typography>
               <MixSeedingSlider
                 orientation="vertical"
                 min={min}
                 max={max}
                 value={seedingRateCoefficient}
-                valueLabelDisplay="off"
+                valueLabelDisplay="on"
                 onChange={(e) => setSeedingRateCoefficient(e.target.value)}
                 onChangeCommitted={updateManagementImpactOnMix}
                 marks={marks}
                 coefficient={seedingRateCoefficient}
                 theme={theme}
+                slots={{ thumb: CustomThumb }}
               />
+              <Typography
+                width={"30px"}
+                fontWeight={"bold"}
+                fontSize={"1.25rem"}
+              >
+                {min}
+              </Typography>
             </Stack>
           )}
         </Grid>
