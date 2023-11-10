@@ -93,8 +93,8 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
       siteCondition.acres > 0 &&
       !isEmptyNull(siteCondition.county);
     validateForms(checkNextStep, 0, completedStep, setCompletedStep);
+    // call getCrops api to get all crops from countyId
     if (checkNextStep) {
-      // call getCrops api to get all crops from countyId
       dispatch(getCrops({ regionId: siteCondition.countyId }));
     }
   }, [siteCondition]);

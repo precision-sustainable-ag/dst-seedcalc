@@ -1,7 +1,6 @@
 import * as React from "react";
 import Grid from "@mui/material/Grid";
-import { Typography, Link, Box } from "@mui/material";
-import Fade from "@mui/material/Fade";
+import { Typography, Box } from "@mui/material";
 
 import { seedsLabel } from "../../../../shared/data/species";
 import "./../steps.scss";
@@ -33,8 +32,7 @@ const Diversity = ({ diversitySelected }) => {
             borderRadius: "0.6875rem",
           }}
         >
-          {diversitySelected &&
-            diversitySelected.length > 0 &&
+          {diversitySelected.length > 0 &&
             diversitySelected.map((d, i) => {
               return (
                 <Grid
@@ -42,32 +40,28 @@ const Diversity = ({ diversitySelected }) => {
                   xs={calculateSize()}
                   bgcolor={COLORS[i]}
                   borderRadius={"0.6875rem"}
+                  key={i}
                 ></Grid>
               );
             })}
         </Grid>
       </Box>
 
-      {diversitySelected &&
-        diversitySelected.length > 0 &&
-        diversitySelected.length === 0 && (
-          <Grid item xs={12}>
-            <Typography fontSize={"0.75rem"} color={"primary.text"}>
-              Select a species
-            </Typography>
-          </Grid>
-        )}
-      {diversitySelected &&
-        diversitySelected.length > 0 &&
+      {diversitySelected.length === 0 && (
+        <Grid item xs={12}>
+          <Typography fontSize={"0.75rem"} color={"primary.text"}>
+            Select a species
+          </Typography>
+        </Grid>
+      )}
+      {diversitySelected.length > 0 &&
         diversitySelected.map((d, i) => {
           return (
-            <Fade in={true}>
-              <Grid item xs={calculateSize()}>
-                <Typography fontSize={"0.75rem"} color={"primary.text"}>
-                  {seedsLabel[d]}
-                </Typography>
-              </Grid>
-            </Fade>
+            <Grid item xs={calculateSize()} key={i}>
+              <Typography fontSize={"0.75rem"} color={"primary.text"}>
+                {seedsLabel[d]}
+              </Typography>
+            </Grid>
           );
         })}
     </Grid>
