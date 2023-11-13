@@ -77,16 +77,8 @@ const MixRatio = ({ council }) => {
     };
     dispatch(updateSteps(data));
   };
-  const handleUpdateAllSteps = (prevData, index) => {
-    let seeds = [...prevData];
-    seeds[index] =
-      council === "MCCC"
-        ? calculateAllMixRatioValues(seeds[index], data)
-        : calculateAllValuesNECCC(seeds[index], data);
-    handleUpdateSteps("seedsSelected", seeds);
-  };
+
   const updateSeed = (val, key, seed) => {
-    // find index of seed, parse a copy, update proper values, & send to Redux
     const index = speciesSelection.seedsSelected.findIndex(
       (s) => s.id === seed.id
     );
@@ -96,11 +88,18 @@ const MixRatio = ({ council }) => {
 
     // create new copy of recently updated Redux state, calculate & update all seed's step data.
     let newData = [...seeds];
-    newData[index] =
-      council === "MCCC"
-        ? calculateAllMixRatioValues(seeds[index], data)
-        : calculateAllValuesNECCC(seeds[index], data);
-    handleUpdateAllSteps(newData, index);
+    newData[index] = calculateAllMixRatioValues(newData[index], data, council);
+    handleUpdateSteps("seedsSelected", newData);
+  };
+
+  const showStep = (val, key, seed) => {
+    // find index of seed, parse a copy, update proper values, & send to Redux
+    const index = speciesSelection.seedsSelected.findIndex(
+      (s) => s.id === seed.id
+    );
+    let seeds = JSON.parse(JSON.stringify(speciesSelection.seedsSelected));
+    seeds[index][key] = val;
+    handleUpdateSteps("seedsSelected", seeds);
   };
 
   //////////////////////////////////////////////////////////
@@ -270,7 +269,8 @@ const MixRatio = ({ council }) => {
         <Grid item xs={12} pt={"1rem"}>
           <Button
             onClick={(e) => {
-              updateSeed(!seed.showSteps, "showSteps", seed);
+              // TODO: calculation here leads to value change
+              showStep(!seed.showSteps, "showSteps", seed);
             }}
             variant="outlined"
           >

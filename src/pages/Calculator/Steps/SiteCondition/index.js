@@ -84,7 +84,7 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
     }
   }, [siteCondition.council]);
 
-  // validate all information on this page is selected
+  // validate all information on this page is selected, then call getCrops api
   useEffect(() => {
     const checkNextStep =
       !isEmptyNull(siteCondition.state) &&

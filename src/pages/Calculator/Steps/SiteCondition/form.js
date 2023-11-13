@@ -14,6 +14,7 @@ import { soilDrainage } from "./../../../../shared/data/dropdown";
 import { useDispatch } from "react-redux";
 import { getCrops } from "../../../../features/stepSlice/api";
 import "./../steps.scss";
+import dayjs from "dayjs";
 
 const SiteConditionForm = ({
   siteCondition,
@@ -73,7 +74,7 @@ const SiteConditionForm = ({
           label={"Planned Planting Date: "}
           value={siteCondition.plannedPlantingDate}
           handleChange={(e) => {
-            const formattedDate = `${e["$M"] + 1}/${e["$D"]}/${e["$y"]}`;
+            const formattedDate = dayjs(e).format("MM/DD/YYYY");
             handleUpdateSteps(
               "plannedPlantingDate",
               "siteCondition",

@@ -20,9 +20,7 @@ const RegionSelector = ({
 }) => {
   const [isImported, setIsImported] = useState(false);
   const [mapState, setMapState] = useState({});
-  const [selectedState, setSelectedState] = useState(
-    siteCondition.stateSelected
-  );
+  const [selectedState, setSelectedState] = useState({});
 
   const dispatch = useDispatch();
 
@@ -33,39 +31,51 @@ const RegionSelector = ({
   const handleStateDropdown = (val) => {
     const stateSelected = stateList.filter((s, i) => s.label === val)[0];
     setSelectedState(stateSelected);
-    handleUpdateSteps("state", "siteCondition", val);
-    handleUpdateSteps("stateSelected", "siteCondition", stateSelected);
   };
 
-  const handleState = (val) => {
+  //////////////////////////////////////////////////////////
+  //                      Redux                           //
+  //////////////////////////////////////////////////////////
+
+  // update redux based on selectedState change
+  const updateStateRedux = (selectedState) => {
     // if the state data comes from csv import do not do this to refresh the state
     if (isImported) return;
     setIsImported(false);
+    // Retrieve region
+    dispatch(getRegion({ stateId: selectedState.id })).then((res) => {});
+
+    // Clear all the rest forms value
+    handleUpdateSteps("county", "siteCondition", "");
+    handleUpdateSteps("countyId", "siteCondition", "");
+    handleUpdateSteps("soilDrainage", "siteCondition", "");
     // Clear out all seeds selected in Redux
     handleUpdateSteps("seedsSelected", "speciesSelection", []);
     handleUpdateSteps("diversitySelected", "speciesSelection", []);
-    const stateSelected = stateList.filter((s) => s.label === val)[0];
 
-    // Update Redux
-    handleUpdateSteps("latitude", "siteCondition", statesLatLongDict[val][0]);
-    handleUpdateSteps("longitude", "siteCondition", statesLatLongDict[val][1]);
-    handleUpdateSteps("state", "siteCondition", val);
-    handleUpdateSteps("stateId", "siteCondition", stateSelected.id);
+    // Update siteCondition Redux
+    const { label } = selectedState;
+    handleUpdateSteps("latitude", "siteCondition", statesLatLongDict[label][0]);
+    handleUpdateSteps(
+      "longitude",
+      "siteCondition",
+      statesLatLongDict[label][1]
+    );
+    handleUpdateSteps("state", "siteCondition", label);
+    handleUpdateSteps("stateId", "siteCondition", selectedState.id);
     handleUpdateSteps(
       "council",
       "siteCondition",
-      stateSelected.parents[0].shorthand
+      selectedState.parents[0].shorthand
     );
-
-    // Retrieve region
-    stateSelected.id !== undefined &&
-      dispatch(getRegion({ stateId: stateSelected.id })).then((res) => {});
+    handleUpdateSteps("stateSelected", "siteCondition", selectedState);
   };
 
   //////////////////////////////////////////////////////////
   //                      useEffect                       //
   //////////////////////////////////////////////////////////
 
+  // update selectedState based on map state selection
   useEffect(() => {
     if (Object.keys(mapState).length !== 0) {
       const st = stateList.filter(
@@ -77,14 +87,13 @@ const RegionSelector = ({
     }
   }, [mapState]);
 
-  // useEffect for selectedState
+  // handle selectedState change based on dropdown selection or map selection
   useEffect(() => {
     if (
       Object.keys(selectedState).length !== 0 &&
       selectedState.label !== siteCondition.state
     ) {
-      handleState(selectedState.label);
-      handleUpdateSteps("stateSelected", "siteCondition", selectedState);
+      updateStateRedux(selectedState);
     }
   }, [selectedState]);
 
@@ -92,7 +101,7 @@ const RegionSelector = ({
     <Grid container>
       <Grid item xs={8} md={10} p={"10px"}>
         <Dropdown
-          value={siteCondition.stateSelected.label || ""}
+          value={selectedState.label || ""}
           label={"State: "}
           handleChange={(e) => handleStateDropdown(e.target.value)}
           size={12}
@@ -108,7 +117,6 @@ const RegionSelector = ({
         alignItems={"center"}
       >
         <Button
-          // className="mark-location-button"
           disabled={
             Object.keys(selectedState).length !== 0 && step !== 2 ? false : true
           }

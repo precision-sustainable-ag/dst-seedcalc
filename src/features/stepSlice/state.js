@@ -18,8 +18,7 @@ export const initialState = {
       county: "",
       countyId: "",
       soilDrainage: "",
-      // FIXME: this value would cause warning in console
-      plannedPlantingDate: dayjs(new Date()),
+      plannedPlantingDate: dayjs(new Date()).format("MM/DD/YYYY"),
       acres: "",
       checkNRCSStandards: false,
       locationSelected: false,
