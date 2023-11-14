@@ -4,16 +4,14 @@
 
 import * as React from "react";
 import Grid from "@mui/material/Grid";
-import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Typography, Box } from "@mui/material";
+import { Typography } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { updateSteps } from "../../../../features/stepSlice";
-import { DSTSwitch } from "./../../../../components/Switch";
 import {
   convertToPercent,
   convertToDecimal,
@@ -21,11 +19,10 @@ import {
 import { NumberTextField } from "./../../../../components/NumberTextField";
 import "./../steps.scss";
 
-const SeedTagInfo = ({ council }) => {
+const SeedTagInfo = () => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
   const speciesSelection = data.speciesSelection;
-  const [sameInfoActive, setSameInfoActive] = useState(false);
 
   const handleUpdateSteps = (key, val) => {
     const data = {
@@ -35,27 +32,8 @@ const SeedTagInfo = ({ council }) => {
     };
     dispatch(updateSteps(data));
   };
-  /*  
-      handleSeed checks for whether the sameInfoActive is true/false.
-      If true, loop through all seeds and update values to the same as the current seed being changed.
-      Else, update individual value.
-  */
-  const handleSeed = (val, key1, key2, seed) => {
-    if (sameInfoActive) {
-      let data = JSON.parse(JSON.stringify(speciesSelection.seedsSelected));
-      speciesSelection.seedsSelected.map((s, i) => {
-        data[i]["germinationPercentage"] =
-          key1 === "germinationPercentage" ? val : seed.germinationPercentage;
-        data[i]["purityPercentage"] =
-          key1 === "purityPercentage" ? val : seed.purityPercentage;
-      });
-      handleUpdateSteps("seedsSelected", data);
-    } else {
-      updateSeed(val, key1, key2, seed);
-    }
-  };
 
-  const updateSeed = (val, key1, key2, seed) => {
+  const updateSeed = (val, key1, seed) => {
     // find index of seed, parse a copy, update proper values, & send to Redux
     const index = speciesSelection.seedsSelected.findIndex(
       (s) => s.id === seed.id
@@ -75,7 +53,7 @@ const SeedTagInfo = ({ council }) => {
           disabled={disabled}
           value={value}
           handleChange={(e) => {
-            handleSeed(convertToDecimal(e.target.value), key, "", {
+            updateSeed(convertToDecimal(e.target.value), key, {
               ...data,
               [key]: convertToDecimal(e.target.value),
             });
@@ -121,27 +99,10 @@ const SeedTagInfo = ({ council }) => {
     );
   };
 
-  const handleSwitch = () => {
-    setSameInfoActive(!sameInfoActive);
-  };
-
   return (
     <Grid container>
       <Grid item xs={12}>
         <Typography variant="h2">Enter seed tag info</Typography>
-      </Grid>
-
-      <Grid
-        item
-        xs={12}
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-      >
-        <DSTSwitch checked={sameInfoActive} handleChange={handleSwitch} />
-        <Typography color={"primary.text"}>
-          Same Information for All Species
-        </Typography>
       </Grid>
 
       {speciesSelection.seedsSelected.map((s, i) => {
