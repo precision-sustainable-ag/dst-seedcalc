@@ -389,31 +389,19 @@ export const calculatePieChartData = (seedsSelected) => {
   const plantsPerAcreArray = [];
   const seedsPerAcreArray = [];
 
-  const poundsOfSeedSum = seedsSelected.reduce(
-    (sum, a) => parseFloat(sum) + parseFloat(a.poundsOfSeed),
-    0
-  );
-  const plantsPerAcreSum = seedsSelected.reduce(
-    (sum, a) => parseFloat(sum) + parseFloat(a.aproxPlantsSqFt),
-    0
-  );
-  const seedsPerAcreSum = seedsSelected.reduce(
-    (sum, a) => parseFloat(sum) + parseFloat(a.seedsPerAcre),
-    0
-  );
-
   seedsSelected.forEach((s) => {
     poundsOfSeedArray.push({
       name: s.label,
-      value: parseFloat(s.poundsOfSeed) / poundsOfSeedSum,
+      value: parseFloat(s.poundsOfSeed),
     });
     plantsPerAcreArray.push({
       name: s.label,
-      value: parseFloat(s.aproxPlantsSqFt) / plantsPerAcreSum,
+      // FIXME: not sure why the value is per acre while this is per sqft
+      value: parseFloat(s.aproxPlantsSqFt),
     });
     seedsPerAcreArray.push({
       name: s.label,
-      value: parseFloat(s.seedsPerAcre) / parseFloat(seedsPerAcreSum),
+      value: parseFloat(s.seedsPerAcre),
     });
   });
 

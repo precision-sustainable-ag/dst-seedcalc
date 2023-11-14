@@ -11,7 +11,6 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   calculateAllMixRatioValues,
-  calculateAllValuesNECCC,
   calculatePieChartData,
 } from "./../../../../shared/utils/calculate";
 import { updateSteps } from "../../../../features/stepSlice";

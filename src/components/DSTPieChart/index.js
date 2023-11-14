@@ -18,7 +18,7 @@ const DSTPieChart = ({ chartData }) => {
     percent,
     index,
   }) => {
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.3;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
@@ -99,7 +99,7 @@ const DSTPieChartLegend = ({ chartData }) => {
               fontSize={matchesMd ? "0.75rem" : "1rem"}
               sx={{ display: "flex", alignItems: "center" }}
             >
-              {convertToPercent(roundToDecimal(chartData.value, 3)) + "%"}
+              {chartData.value}
             </Typography>
           </Box>
         );
