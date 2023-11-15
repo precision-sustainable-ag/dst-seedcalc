@@ -1,4 +1,5 @@
 import * as React from "react";
+import dayjs from "dayjs";
 import Grid from "@mui/material/Grid";
 import {
   Typography,
@@ -67,7 +68,23 @@ const PlantList = ({
     return pass;
   };
 
-  const SeedCard = ({ name, imgSrc, onSelect, recommended }) => {
+  const SeedCard = ({ name, imgSrc, onSelect, recommended, seedData }) => {
+    const startDate = dayjs(
+      new Date(
+        seedData["Planting and Growth Windows"]["Reliable Establishment"]?.[0]
+          .split(" - ")[0]
+          .slice(0, -5)
+      )
+    ).format("MM/DD");
+    const endDate = dayjs(
+      new Date(
+        seedData["Planting and Growth Windows"]["Reliable Establishment"]?.[0]
+          .split(" - ")[1]
+          .slice(0, -5)
+      )
+    ).format("MM/DD");
+    console.log(startDate, endDate);
+
     return (
       <Card
         sx={{
@@ -90,14 +107,14 @@ const PlantList = ({
               sx={{
                 color: "#DA7059",
                 position: "absolute",
-                top: "2rem",
+                top: "1rem",
                 fontStyle: "italic",
                 fontWeight: "bold",
                 bgcolor: "primary.light",
                 opacity: "80%",
               }}
             >
-              Not Recommended for Planting Date
+              Recommend Planting Date: {startDate} - {endDate}
             </Typography>
           )}
 
@@ -134,6 +151,7 @@ const PlantList = ({
               }
               onSelect={() => updateSeeds(seed, seedType)}
               recommended={checkPlantingDate(council, seed, plantingDate)}
+              seedData={seed}
             />
           </Grid>
         ))
