@@ -83,7 +83,6 @@ const PlantList = ({
           .slice(0, -5)
       )
     ).format("MM/DD");
-    console.log(startDate, endDate);
 
     return (
       <Card
