@@ -159,9 +159,9 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
       seedsPound: parseFloat(
         cropDetails.attributes["Planting"]
           ? cropDetails.attributes["Planting"]["Seeds Per lb"]["values"][0]
-          : cropDetails.attributes["Planting Information"]["Seed Count"][
+          : cropDetails.attributes["Planting Information"]["Seed Count"]?.[
               "values"
-            ][0] // TBD
+            ][0] ?? 0 // TBD
       ),
       mixSeedingRate: 0,
       maxPercentAllowedInMix:
@@ -201,23 +201,23 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
       seedsPerAcre: parseFloat(
         cropDetails.attributes["Planting"]
           ? cropDetails.attributes["Planting"]["Seeds Per lb"]["values"][0]
-          : cropDetails.attributes["Planting Information"]["Seed Count"][
+          : cropDetails.attributes["Planting Information"]["Seed Count"]?.[
               "values"
-            ][0] // TBD
+            ][0] ?? 0 // TBD
       ),
       poundsOfSeed: parseFloat(
         cropDetails.attributes["Planting"]
           ? cropDetails.attributes["Planting"]["Seeds Per lb"]["values"][0]
-          : cropDetails.attributes["Planting Information"]["Seed Count"][
+          : cropDetails.attributes["Planting Information"]["Seed Count"]?.[
               "values"
-            ][0] // TBD
+            ][0] ?? 0 // TBD
       ), // TBD
       seedsPerPound: parseFloat(
         cropDetails.attributes["Planting"]
           ? cropDetails.attributes["Planting"]["Seeds Per lb"]["values"][0]
-          : cropDetails.attributes["Planting Information"]["Seed Count"][
+          : cropDetails.attributes["Planting Information"]["Seed Count"]?.[
               "values"
-            ][0] // TBD
+            ][0] ?? 0 // TBD
       ),
       plantsPerAcre: 0,
       aproxPlantsSqFt: 0,
@@ -414,7 +414,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
       {seedsType.map((seedType, i) => {
         return (
           <Grid item xs={12} key={i}>
-            <Accordion className="accordian-container">
+            <Accordion>
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 className="accordian-summary"

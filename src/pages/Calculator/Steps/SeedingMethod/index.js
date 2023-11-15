@@ -10,21 +10,51 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
-
 import { updateSteps } from "../../../../features/stepSlice";
 import { seedingMethods } from "../../../../shared/data/dropdown";
 import { Dropdown } from "../../../../components/Dropdown";
+import styled from "@emotion/styled";
 import "./../steps.scss";
 
-const SeedingMethod = ({ council }) => {
-  // themes
-  const theme = useTheme();
-  const matchesXs = useMediaQuery(theme.breakpoints.down("xs"));
-  const matchesSm = useMediaQuery(theme.breakpoints.down("sm"));
-  const matchesMd = useMediaQuery(theme.breakpoints.down("md"));
+const LeftGrid = styled(Grid)(() => ({
+  "&.MuiGrid-item": {
+    height: "150px",
+    border: "1px solid #c7c7c7",
+    borderLeft: "none",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    "& p": {
+      fontWeight: "bold",
+    },
+  },
+}));
 
+const RightGrid = styled(Grid)(() => ({
+  "&.MuiGrid-item": {
+    height: "150px",
+    border: "1px solid #c7c7c7",
+    borderRight: "none",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    "& .MuiBox-root": {
+      width: "50px",
+      height: "50px",
+      padding: "11px",
+      margin: "0 auto",
+      backgroundColor: "#E5E7D5",
+      border: "solid 2px",
+      borderRadius: "50%",
+    },
+    "& p": {
+      fontWeight: "bold",
+    },
+  },
+}));
+
+const SeedingMethod = ({ council }) => {
   // useSelector for crops reducer data
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
@@ -54,68 +84,18 @@ const SeedingMethod = ({ council }) => {
 
   const renderRightAccordian = (type, val) => {
     return (
-      <Grid item xs={6} className="mix-seeding-rate-grid-right">
+      <RightGrid item xs={6}>
         {council === "NECCC" && type !== "precision" ? (
           <Typography>Not Recommended</Typography>
         ) : (
           <>
-            <Box
-              sx={{
-                width: "50px",
-                height: "50px",
-                padding: "11px",
-                margin: "0 auto",
-                backgroundColor: "#E5E7D5",
-                color: "primary.text",
-                border: "solid 2px",
-                borderRadius: "50%",
-              }}
-            >
+            <Box>
               <Typography>{val}</Typography>
             </Box>
             <Typography>Lbs / Acre</Typography>
           </>
         )}
-      </Grid>
-    );
-  };
-
-  const renderAccordian = (seed) => {
-    return (
-      <Accordion className="accordian-container">
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          className="accordian-summary"
-        >
-          <Typography>{seed.label}</Typography>
-        </AccordionSummary>
-        <AccordionDetails className="accordian-details">
-          <Grid container>
-            <Grid item xs={6} className="mix-seeding-rate-grid-left">
-              <Typography>Precision: </Typography>
-            </Grid>
-            {renderRightAccordian("precision", seed.precision)}
-            <Grid item xs={6} className="mix-seeding-rate-grid-left">
-              <Typography>Drilled: </Typography>
-            </Grid>
-            {renderRightAccordian("drilled", 1)}
-            <Grid item xs={6} className="mix-seeding-rate-grid-left">
-              <Typography>Broadcast(with Light Incorporation): </Typography>
-            </Grid>
-            {renderRightAccordian("broadcast", seed.broadcast)}
-            <Grid item xs={6} className="mix-seeding-rate-grid-left">
-              <Typography>
-                Aerial(or broadcast with no Light Incorporation{" "}
-                <Typography color={"red"} display={"inline"}>
-                  Not Recommended
-                </Typography>
-                ):{" "}
-              </Typography>
-            </Grid>
-            {renderRightAccordian("aerial", seed.aerial)}
-          </Grid>
-        </AccordionDetails>
-      </Accordion>
+      </RightGrid>
     );
   };
 
@@ -137,10 +117,44 @@ const SeedingMethod = ({ council }) => {
           items={seedingMethods}
         />
       </Grid>
-      {seedsSelected.map((s, i) => {
+      {seedsSelected.map((seed, i) => {
         return (
-          <Grid item xs={12}>
-            {renderAccordian(s)}
+          <Grid item xs={12} key={i}>
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                className="accordian-summary"
+              >
+                <Typography>{seed.label}</Typography>
+              </AccordionSummary>
+
+              <AccordionDetails className="accordian-details">
+                <Grid container>
+                  <LeftGrid item xs={6}>
+                    <Typography>Precision: </Typography>
+                  </LeftGrid>
+                  {renderRightAccordian("precision", seed.precision)}
+                  <LeftGrid item xs={6}>
+                    <Typography>Drilled: </Typography>
+                  </LeftGrid>
+                  {renderRightAccordian("drilled", 1)}
+                  <LeftGrid item xs={6}>
+                    <Typography>
+                      Broadcast(with Light Incorporation):{" "}
+                    </Typography>
+                  </LeftGrid>
+                  {renderRightAccordian("broadcast", seed.broadcast)}
+                  <LeftGrid item xs={6}>
+                    <Typography>
+                      Aerial(or broadcast with no Light Incorporation{" "}
+                      <span style={{ color: "red" }}>Not Recommended</span>
+                      ):
+                    </Typography>
+                  </LeftGrid>
+                  {renderRightAccordian("aerial", seed.aerial)}
+                </Grid>
+              </AccordionDetails>
+            </Accordion>
           </Grid>
         );
       })}

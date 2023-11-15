@@ -96,16 +96,18 @@ const SiteConditionForm = ({
         />
       </Grid>
 
-      <Grid item xs={12} md={12} p={"10px"}>
-        {council === "MCCC" && (
-          <>
-            <Typography variant="nrcsStandard">
-              Check NRCS Standards:{" "}
-            </Typography>
-            <DSTSwitch checked={checked} handleChange={handleSwitch} />
-          </>
-        )}
-      </Grid>
+      {council === "MCCC" && (
+        <Grid
+          item
+          xs={12}
+          p={"1rem"}
+          display={"flex"}
+          justifyContent={"center"}
+        >
+          <Typography fontSize={"1.25rem"}>Check NRCS Standards: </Typography>
+          <DSTSwitch checked={checked} handleChange={handleSwitch} />
+        </Grid>
+      )}
     </>
   );
 };

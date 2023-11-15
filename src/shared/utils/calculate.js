@@ -361,7 +361,7 @@ export const convertSqftToAcres = (number) => {
 };
 
 export const convertToPercent = (num) => {
-  return parseFloat(num) * 100;
+  return (parseFloat(num) * 100).toFixed(1);
 };
 
 export const convertToDecimal = (num) => {
@@ -382,4 +382,33 @@ const setNull = (obj) => setAll(obj, null);
 export const emptyValues = (data) => {
   const emptyObj = setNull(data);
   return emptyObj;
+};
+
+export const calculatePieChartData = (seedsSelected) => {
+  const poundsOfSeedArray = [];
+  const plantsPerAcreArray = [];
+  const seedsPerAcreArray = [];
+
+  seedsSelected.forEach((s) => {
+    poundsOfSeedArray.push({
+      name: s.label,
+      value: parseFloat(s.poundsOfSeed),
+    });
+    plantsPerAcreArray.push({
+      name: s.label,
+      // FIXME: not sure why the value is per acre while this is per sqft
+      value: parseFloat(s.aproxPlantsSqFt),
+    });
+    seedsPerAcreArray.push({
+      name: s.label,
+      value: parseFloat(s.seedsPerAcre),
+    });
+  });
+
+  return { poundsOfSeedArray, plantsPerAcreArray, seedsPerAcreArray };
+};
+
+export const roundToDecimal = (float, digits) => {
+  const factor = Math.pow(10, digits);
+  return Math.round(float * factor) / factor;
 };

@@ -20,7 +20,7 @@ const Diversity = ({ diversitySelected }) => {
 
   return (
     <Grid container>
-      <Typography color={"primary.text"} pt={"1rem"} fontWeight={600}>
+      <Typography pt={"1rem"} fontWeight={600}>
         Mix Diversity
       </Typography>
       <Box sx={{ width: "100%", p: "5px 0" }}>
@@ -49,18 +49,14 @@ const Diversity = ({ diversitySelected }) => {
 
       {diversitySelected.length === 0 && (
         <Grid item xs={12}>
-          <Typography fontSize={"0.75rem"} color={"primary.text"}>
-            Select a species
-          </Typography>
+          <Typography fontSize={"0.75rem"}>Select a species</Typography>
         </Grid>
       )}
       {diversitySelected.length > 0 &&
         diversitySelected.map((d, i) => {
           return (
             <Grid item xs={calculateSize()} key={i}>
-              <Typography fontSize={"0.75rem"} color={"primary.text"}>
-                {seedsLabel[d]}
-              </Typography>
+              <Typography fontSize={"0.75rem"}>{seedsLabel[d]}</Typography>
             </Grid>
           );
         })}

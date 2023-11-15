@@ -1,8 +1,6 @@
 import * as React from "react";
-import Grid from "@mui/material/Grid";
 import { useTheme } from "@mui/material/styles";
-import { useState, useEffect, Fragment } from "react";
-import { Typography, Box, Link, useMediaQuery } from "@mui/material";
+import { Typography, Box, useMediaQuery } from "@mui/material";
 
 const SeedsSelectedList = ({ list }) => {
   // themes
@@ -28,9 +26,9 @@ const SeedsSelectedList = ({ list }) => {
       display={"flex"}
       flexDirection={matchesMd ? "row" : "column"}
     >
-      {[...list].reverse().map((s, idx) => {
+      {[...list].reverse().map((s, i) => {
         return (
-          <Box minWidth={matchesMd ? "120px" : ""}>
+          <Box minWidth={matchesMd ? "120px" : ""} key={i}>
             <img
               style={{
                 borderRadius: "50%",
@@ -41,16 +39,12 @@ const SeedsSelectedList = ({ list }) => {
               src={
                 s.thumbnail !== null && s.thumbnail !== ""
                   ? s.thumbnail
-                  : "https://www.gardeningknowhow.com/wp-content/uploads/2020/04/spinach.jpg"
+                  : "https://placehold.it/250x150?text=Placeholder"
               }
               alt={s.label}
               loading="lazy"
             />
-            <Typography
-              color={"primary.text"}
-              fontSize={"12px"}
-              lineHeight={1.25}
-            >
+            <Typography fontSize={"12px"} lineHeight={1.25}>
               {s.label}
             </Typography>
           </Box>

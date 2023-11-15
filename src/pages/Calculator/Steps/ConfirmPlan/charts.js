@@ -1,218 +1,107 @@
 import Grid from "@mui/material/Grid";
-import { Typography, Box, Link, Button, Modal } from "@mui/material";
-import { Square } from "@mui/icons-material";
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import { Typography, Box } from "@mui/material";
+import { calculatePieChartData } from "../../../../shared/utils/calculate";
 
 import "./../steps.scss";
+import {
+  DSTPieChart,
+  DSTPieChartLabel,
+  DSTPieChartLegend,
+} from "../../../../components/DSTPieChart";
 
-// TODO: build pie chart to a custom component, this should be done in another pr
 const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
-
-  const RADIAN = Math.PI / 180;
-
   const poundsForPurchaseSum = speciesSelection.seedsSelected.reduce(
     (sum, a) => sum + a.poundsForPurchase,
     0
   );
 
-  const plantsPerAcreSum = speciesSelection.seedsSelected.reduce(
-    (sum, a) => sum + parseFloat(a.plantsPerAcre),
-    0
-  );
-  const poundsOfSeedSum = speciesSelection.seedsSelected.reduce(
-    (sum, a) => sum + parseFloat(a.poundsOfSeed),
-    0
-  );
-  const seedsPerAcreSum = speciesSelection.seedsSelected.reduce(
-    (sum, a) => sum + parseFloat(a.seedsPerAcre),
-    0
-  );
+  const { poundsOfSeedArray, plantsPerAcreArray, seedsPerAcreArray } =
+    calculatePieChartData(speciesSelection.seedsSelected);
 
-  const poundsOfSeedArray = [];
-  const plantsPerAcreArray = [];
-  const seedsPerAcreArray = [];
-
-  speciesSelection.seedsSelected.map((s, i) => {
-    plantsPerAcreArray.push({
-      name: s.label,
-      value: s.plantsPerAcre / plantsPerAcreSum,
-    });
-    seedsPerAcreArray.push({
-      name: s.label,
-      value: s.seedsPerAcre / seedsPerAcreSum,
-    });
-    poundsOfSeedArray.push({
-      name: s.label,
-      value: s.poundsOfSeed / poundsOfSeedSum,
-    });
-  });
-
-  const renderCustomizedLabel = ({
-    cx,
-    cy,
-    midAngle,
-    innerRadius,
-    outerRadius,
-    percent,
-    index,
-  }) => {
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
+  const ConfirmPlanChip = ({ label, value }) => {
     return (
-      <text
-        x={x}
-        y={y}
-        fill="white"
-        textAnchor={x > cx ? "start" : "end"}
-        dominantBaseline="central"
-      >
-        {`${(percent * 100).toFixed(0)}%`}
-      </text>
-    );
-  };
-
-  const renderPieChart = (type) => {
-    let chartData;
-    if (type === "plantsPerAcre") {
-      chartData = plantsPerAcreArray;
-    }
-    if (type === "seedsPerAcre") {
-      chartData = seedsPerAcreArray;
-    }
-    if (type === "poundsOfSeed") {
-      chartData = poundsOfSeedArray;
-    }
-    return (
-      <ResponsiveContainer width="100%" height={200}>
-        <PieChart width={400} height={400}>
-          <Pie
-            data={chartData}
-            cx="50%"
-            cy="50%"
-            labelLine={false}
-            label={renderCustomizedLabel}
-            outerRadius={80}
-            fill="#8884d8"
-            dataKey="value"
-          >
-            {chartData.map((entry, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={COLORS[index % COLORS.length]}
-              />
-            ))}
-          </Pie>
-        </PieChart>
-      </ResponsiveContainer>
+      <>
+        <Typography sx={{ fontWeight: 600, minHeight: "45px" }}>
+          {label}
+        </Typography>
+        <Box
+          sx={{
+            bgcolor: "#e7885f",
+            borderRadius: "50%",
+            width: "5rem",
+            height: "5rem",
+            margin: "0 auto 10px auto",
+          }}
+        >
+          <Typography sx={{ pt: "30px", color: "white" }}>{value}</Typography>
+        </Box>
+      </>
     );
   };
 
   return (
-    <Grid container xs={12} sx={{ padding: "0.5rem" }}>
+    <Grid container sx={{ padding: "0.5rem" }}>
       <Grid
         item
         xs={6}
         sx={{
           borderRight: "1px solid #CCCCCC",
           borderBottom: "1px solid #CCCCCC",
-          padding: "10px",
         }}
       >
-        <Typography className="data-circle-label">
-          Amount of mix for 50 acres
-        </Typography>
-        <Box className="data-circle">
-          <Typography>{parseInt(poundsForPurchaseSum) + "lbs"}</Typography>
-        </Box>
+        <ConfirmPlanChip
+          label={"Amount of mix for 50 acres"}
+          value={parseInt(poundsForPurchaseSum) + "lbs"}
+        />
       </Grid>
       <Grid
         item
         xs={6}
         sx={{
           borderBottom: "1px solid #CCCCCC",
-          padding: "10px",
         }}
       >
-        <Typography className="data-circle-label">Price/Acre</Typography>
-        <Box className="data-circle">
-          {/* FIXME: static value here */}
-          <Typography>$35.33</Typography>
-        </Box>
+        {/* FIXME: static value here */}
+        <ConfirmPlanChip label={"Price/Acre"} value={"$35.33"} />
       </Grid>
+
       <Grid
         item
         xs={6}
         md={6}
-        className="pie-chart-container"
         sx={{
           borderRight: "1px solid #CCCCCC",
           borderBottom: "1px solid #CCCCCC",
-          padding: "10px",
+          textAlign: "justify",
         }}
       >
-        {council === "MCCC"
-          ? renderPieChart("plantsPerAcre")
-          : renderPieChart("seedsPerAcre")}
-        <Typography className="mix-ratio-chart-header" sx={{ fontWeight: 600 }}>
-          {council === "MCCC" ? "Pounds of Seed / Acre" : "Seeds Per Acre"}
-        </Typography>
-        <Grid item className="mix-ratio-chart-list-50">
-          {speciesSelection.seedsSelected.map((s, i) => {
-            return (
-              <Grid container xs={12} key={i}>
-                <Grid item xs={2}>
-                  <Square sx={{ color: COLORS[i] }}></Square>
-                </Grid>
-                <Grid item xs={10}>
-                  <Typography
-                    className={matchesMd ? "mix-label-md" : ""}
-                    color={"primary.text"}
-                  >
-                    {s.label}
-                  </Typography>
-                </Grid>
-              </Grid>
-            );
-          })}
-        </Grid>
+        <DSTPieChart chartData={poundsOfSeedArray} />
+        <DSTPieChartLabel>{"Pounds of Seed / Acre"}</DSTPieChartLabel>
+        <DSTPieChartLegend chartData={poundsOfSeedArray} />
       </Grid>
       <Grid
         item
         xs={6}
         md={6}
-        className="pie-chart-container"
         sx={{
           borderBottom: "1px solid #CCCCCC",
-          padding: "10px",
+          textAlign: "justify",
         }}
       >
-        {/* FIXME: the chart rendered seems different than the label? */}
-        {renderPieChart("poundsOfSeed")}
-        <Typography className="mix-ratio-chart-header" sx={{ fontWeight: 600 }}>
+        {/* FIXME: Check all the charts as well as other components */}
+        <DSTPieChart
+          chartData={
+            council === "MCCC" ? plantsPerAcreArray : seedsPerAcreArray
+          }
+        />
+        <DSTPieChartLabel>
           {council === "MCCC" ? "Plants" : "Seeds"} Per Acre{" "}
-        </Typography>
-        <Grid item className="mix-ratio-chart-list-50">
-          {speciesSelection.seedsSelected.map((s, i) => {
-            return (
-              <Grid container xs={12} key={i}>
-                <Grid item xs={2}>
-                  <Square sx={{ color: COLORS[i] }}></Square>
-                </Grid>
-                <Grid item xs={10}>
-                  <Typography
-                    className={matchesMd ? "mix-label-md" : ""}
-                    color={"primary.text"}
-                  >
-                    {s.label}
-                  </Typography>
-                </Grid>
-              </Grid>
-            );
-          })}
-        </Grid>
+        </DSTPieChartLabel>
+        <DSTPieChartLegend
+          chartData={
+            council === "MCCC" ? plantsPerAcreArray : seedsPerAcreArray
+          }
+        />
       </Grid>
     </Grid>
   );

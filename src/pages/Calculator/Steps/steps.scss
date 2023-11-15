@@ -9,238 +9,33 @@ div[class*="map_infobar__"] {
   display: none;
 }
 
-.accordian-container {
-  width: 100%;
-
-  .accordian-summary {
-    background-color: $primary-dark;
-    height: 3rem;
-    p {
-      font-size: 1.25rem;
-      line-height: 1.5rem;
-      font-weight: 600;
-      text-align: justify;
-      color: $primary-text;
-    }
-  }
-  .accordian-details {
-    color: $primary-text;
-    padding: 1rem 0;
+.accordian-summary {
+  background-color: $primary-dark !important;
+  height: 3rem;
+  p {
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+    font-weight: 600;
+    text-align: justify;
   }
 }
-
-.pie-chart-container {
-  text-align: justify;
-  margin: 0 auto;
-}
-.mix-ratio-chart-header {
-  font-weight: 600;
-  text-align: center;
+.accordian-details {
   color: $primary-text;
+  padding: 1rem 0 !important;
+  background-color: #fffff2;
 }
-.mix-ratio-chart-list-50 {
-  margin: 0 auto !important;
-  width: 50% !important;
-  margin-top: 34px !important;
-}
-.mix-ratio-chart-list-100 {
-  margin: 0 auto !important;
-  width: 100% !important;
-  margin-top: 34px !important;
-}
-.mix-ratio-step-header {
+
+.step-header {
   padding: 16px;
   background: #e5e7d5;
-  margin: 30px 0px !important;
+  margin: 1rem 0px !important;
   font-size: 18px !important;
   font-weight: 600 !important;
   text-align: justify !important;
   color: #4f5f30 !important;
 }
-.mix-ratio-form-container {
-  padding: 0px;
-}
-.mix-ratio-form-label {
-  margin-bottom: 20px !important;
-}
 
-/* mix seeding rate */
-
-.mix-seeding-rate-grid-left {
-  height: 150px;
-  border: 1px solid #c7c7c7;
-  border-left: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  p {
-    font-weight: bold;
-  }
-}
-
-.mix-seeding-rate-grid-right {
-  height: 150px;
-  border: 1px solid #c7c7c7;
-  border-right: none;
-  display: flex;
-  flex-direction: column !important;
-  justify-content: center;
-  align-items: center;
-  p {
-    font-weight: bold;
-  }
-}
-
-/* Seed Tag Info */
-
-.seed-tag-info-grid-left {
-  height: 80px;
-  padding-top: 15px;
-  p {
-    font-weight: bold;
-  }
-}
-
-.mix-label-md {
-  margin-top: 5px !important;
-  margin-left: 15px !important;
-  font-size: 10px !important;
-}
-.MuiAccordionDetails-root {
-  background: #fffff2 !important;
-}
-
-.text-field-50 {
-  width: 80% !important;
-}
-.font-15 {
-  font-size: 15px;
-}
-.no-display {
-  opacity: 0%;
-}
 .math-icon {
   margin-top: 15px !important;
   font-weight: 600 !important;
-}
-
-.vertical-slider {
-  margin-top: 70px;
-}
-
-/* Confirm Plan start */
-
-.confirm-plan-form-container {
-  padding: 0px;
-  margin: 10px 0px !important;
-}
-.Mui-expanded {
-  margin: 0px !important;
-}
-
-.confirm-plan-header {
-  padding: 16px;
-  text-align: justify;
-  background: #e5e7d5;
-  margin: 30px 0px !important;
-  margin-bottom: 0px !important;
-  font-size: 18px !important;
-  font-weight: 600 !important;
-  text-align: justify !important;
-  color: #4f5f30 !important;
-}
-.export-button {
-  background-color: #e7885f !important;
-  color: white !important;
-  padding: 7px !important;
-  width: 83px !important;
-  margin: 3px !important;
-  font-size: 12px !important;
-  border-radius: 26px !important;
-}
-.confirm-plan-modal {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  width: 80%;
-  height: 80%;
-  background-color: #fff;
-  border: 2px solid #000;
-  box-shadow: 0px 11px 15px -7px rgb(0 0 0 / 20%),
-    0px 24px 38px 3px rgb(0 0 0 / 14%), 0px 9px 46px 8px rgb(0 0 0 / 12%);
-  padding: 32px;
-}
-/* Confirm Plan end */
-
-/* Steps */
-
-.steps-row-2 {
-  margin-top: 20px;
-}
-
-.data-circle {
-  background-color: #e7885f;
-  color: white;
-  border-radius: 50%;
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 10px auto;
-}
-.data-circle p {
-  padding-top: 30px;
-}
-.data-circle-icon {
-  margin-top: 15px;
-  font-size: 45px !important;
-}
-.data-circle-label {
-  font-size: 15px !important;
-  font-weight: 600 !important;
-  color: $primary-text;
-  min-height: 45px;
-}
-/* .NRCS-result-container  {
-    border-radius: 25px;
-    background: white;
-    padding: 4px 15px; 
-    padding-bottom: 30px;
-    width: 100%;
-    border: 1px solid #ececec; 
-    height: 10px;  
-} */
-
-/* Completed Page start */
-
-.logo-img-50 {
-  width: 50%;
-}
-.logo-img-80 {
-  width: 80%;
-}
-
-.cp-empty-block {
-  width: 100%;
-  height: 150px;
-}
-.cp-empty-block-50 {
-  width: 100%;
-  height: 50px;
-}
-/* Completed Page end */
-
-.custom-tooltip {
-  background-color: white;
-}
-
-/* remove black outline of ALL rechart piechart */
-.recharts-layer {
-  outline: none;
-}
-
-.recharts-layer path {
-  outline: none;
 }

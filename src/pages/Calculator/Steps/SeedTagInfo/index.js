@@ -18,6 +18,17 @@ import {
 } from "../../../../shared/utils/calculate";
 import { NumberTextField } from "./../../../../components/NumberTextField";
 import "./../steps.scss";
+import styled from "@emotion/styled";
+
+const LeftGrid = styled(Grid)({
+  "&.MuiGrid-item": {
+    height: "80px",
+    paddingTop: "15px",
+    "& p": {
+      fontWeight: "bold",
+    },
+  },
+});
 
 const SeedTagInfo = () => {
   const dispatch = useDispatch();
@@ -47,55 +58,21 @@ const SeedTagInfo = () => {
     const value =
       type === "percent" ? convertToPercent(data[key]) : Math.floor(data[key]);
     return (
-      <Grid item xs={6}>
-        <NumberTextField
-          className="text-field-50"
-          disabled={disabled}
-          value={value}
-          handleChange={(e) => {
-            updateSeed(convertToDecimal(e.target.value), key, {
-              ...data,
-              [key]: convertToDecimal(e.target.value),
-            });
-          }}
-        />
-      </Grid>
-    );
-  };
-
-  const renderAccordian = (data) => {
-    return (
-      <Accordion xs={12} className="accordian-container">
-        <AccordionSummary
-          xs={12}
-          expandIcon={<ExpandMoreIcon />}
-          className="accordian-summary"
-        >
-          <Typography>{data.label}</Typography>
-        </AccordionSummary>
-        <AccordionDetails className="accordian-details">
-          <Grid xs={12} container>
-            <Grid item xs={6} className="seed-tag-info-grid-left">
-              <Typography>% Germination: </Typography>
-            </Grid>
-            {renderRightAccordian(
-              "germinationPercentage",
-              data,
-              "percent",
-              false
-            )}
-            <Grid item xs={6} className="seed-tag-info-grid-left">
-              <Typography>% Purity: </Typography>
-            </Grid>
-            {renderRightAccordian("purityPercentage", data, "percent", false)}
-            <Grid item xs={6} className="seed-tag-info-grid-left">
-              <Typography>Seeds per Pound </Typography>
-            </Grid>
-            {/* FIXME: this also turns seeds per pound 100 times larger */}
-            {renderRightAccordian("poundsOfSeed", data, "", true)}
-          </Grid>
-        </AccordionDetails>
-      </Accordion>
+      <>
+        <Grid item xs={4}>
+          <NumberTextField
+            disabled={disabled}
+            value={value}
+            handleChange={(e) => {
+              updateSeed(convertToDecimal(e.target.value), key, {
+                ...data,
+                [key]: convertToDecimal(e.target.value),
+              });
+            }}
+          />
+        </Grid>
+        <Grid item xs={2}></Grid>
+      </>
     );
   };
 
@@ -105,10 +82,43 @@ const SeedTagInfo = () => {
         <Typography variant="h2">Enter seed tag info</Typography>
       </Grid>
 
-      {speciesSelection.seedsSelected.map((s, i) => {
+      {speciesSelection.seedsSelected.map((seed, i) => {
         return (
-          <Grid item xs={12}>
-            {renderAccordian(s)}
+          <Grid item xs={12} key={i}>
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                className="accordian-summary"
+              >
+                <Typography>{seed.label}</Typography>
+              </AccordionSummary>
+              <AccordionDetails className="accordian-details">
+                <Grid container>
+                  <LeftGrid item xs={6}>
+                    <Typography>% Germination: </Typography>
+                  </LeftGrid>
+                  {renderRightAccordian(
+                    "germinationPercentage",
+                    seed,
+                    "percent",
+                    false
+                  )}
+                  <LeftGrid item xs={6}>
+                    <Typography>% Purity: </Typography>
+                  </LeftGrid>
+                  {renderRightAccordian(
+                    "purityPercentage",
+                    seed,
+                    "percent",
+                    false
+                  )}
+                  <LeftGrid item xs={6}>
+                    <Typography>Seeds per Pound </Typography>
+                  </LeftGrid>
+                  {renderRightAccordian("poundsOfSeed", seed, "", true)}
+                </Grid>
+              </AccordionDetails>
+            </Accordion>
           </Grid>
         );
       })}

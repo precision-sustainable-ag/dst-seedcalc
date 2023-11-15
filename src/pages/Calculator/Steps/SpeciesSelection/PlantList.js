@@ -6,10 +6,36 @@ import {
   CardMedia,
   CardContent,
   CardActionArea,
+  Box,
 } from "@mui/material";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
 
 import "./../steps.scss";
+
+const CheckBoxIcon = ({ style }) => {
+  return (
+    <Box sx={style}>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 18 18"
+        fill="none"
+      >
+        <path
+          d="M14 0H4C1.79086 0 0 1.79086 0 4V14C0 16.2091 1.79086 18 4 18H14C16.2091 18 18 16.2091 18 14V4C18 1.79086 16.2091 0 14 0Z"
+          fill="#5992E6"
+        />
+        <path
+          d="M6 9L8.25 11L12 7"
+          stroke="white"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </Box>
+  );
+};
 
 const PlantList = ({
   seedType,
@@ -76,9 +102,7 @@ const PlantList = ({
           )}
 
           <CardContent>
-            <Typography sx={{ color: "primary.text", fontWeight: "bold" }}>
-              {name}
-            </Typography>
+            <Typography sx={{ fontWeight: "bold" }}>{name}</Typography>
           </CardContent>
         </CardActionArea>
       </Card>
@@ -94,8 +118,7 @@ const PlantList = ({
           <Grid item key={i} position={"relative"}>
             {seedsSelected.filter((s) => s.label === seed.label).length > 0 && (
               <CheckBoxIcon
-                sx={{
-                  color: "red",
+                style={{
                   position: "absolute",
                   right: "-0.5rem",
                   top: "0.5rem",

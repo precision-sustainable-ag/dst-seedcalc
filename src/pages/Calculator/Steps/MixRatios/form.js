@@ -1,28 +1,61 @@
 import Grid from "@mui/material/Grid";
-import { Typography } from "@mui/material";
+import { Typography, useTheme, useMediaQuery } from "@mui/material";
 
+import { NumberTextField } from "./../../../../components/NumberTextField";
 import {
   convertToPercent,
   convertToDecimal,
 } from "./../../../../shared/utils/calculate";
-import { NumberTextField } from "./../../../../components/NumberTextField";
 import "./../steps.scss";
 
-const MixRatioSteps = ({
-  seed,
-  council,
-  renderFormLabel,
-  updateSeed,
-  generatePercentInGroup,
-}) => {
+const MixRatioSteps = ({ seed, council, updateSeed, speciesSelection }) => {
+  const theme = useTheme();
+  const matchesMd = useMediaQuery(theme.breakpoints.down("md"));
+
+  const renderFormLabel = (label1, label2, label3) => {
+    return (
+      matchesMd && (
+        <Grid container>
+          <Grid item xs={3}>
+            <Typography sx={{ fontSize: "0.75rem", pb: "1rem" }}>
+              {label1}
+            </Typography>
+          </Grid>
+          <Grid item xs={1}></Grid>
+          <Grid item xs={3}>
+            <Typography sx={{ fontSize: "0.75rem", pb: "1rem" }}>
+              {label2}
+            </Typography>
+          </Grid>
+          <Grid item xs={1}></Grid>
+          <Grid item xs={3}>
+            <Typography sx={{ fontSize: "0.75rem", pb: "1rem" }}>
+              {label3}
+            </Typography>
+          </Grid>
+        </Grid>
+      )
+    );
+  };
+
+  const generatePercentInGroup = (seed) => {
+    const group = seed.group.label;
+    let count = 0;
+    speciesSelection.seedsSelected.map((s, i) => {
+      s.group.label === group && count++;
+    });
+    return 1 / count;
+  };
+
   const percentInGroup = generatePercentInGroup(seed);
+
   return (
-    <Grid container xs={12}>
+    <Grid container>
       {/* NECCC Step 1:  */}
       {council === "NECCC" && (
         <>
           <Grid item xs={12}>
-            <Typography className="mix-ratio-step-header">Step 1: </Typography>
+            <Typography className="step-header">Step 1: </Typography>
           </Grid>
           {renderFormLabel(
             "Mix Seeding Rate PLS",
@@ -31,9 +64,7 @@ const MixRatioSteps = ({
           )}
           <Grid item xs={3}>
             <NumberTextField
-              disabled={false}
-              label="Single Species Seeding Rate PLS"
-              variant="filled"
+              label={matchesMd ? "" : "Single Species Seeding Rate PLS"}
               handleChange={(e) => {
                 updateSeed(e.target.value, "singleSpeciesSeedingRatePLS", seed);
               }}
@@ -43,67 +74,66 @@ const MixRatioSteps = ({
           </Grid>
 
           <Grid item xs={1}>
-            <Typography className="math-icon">x</Typography>
+            <Typography className="math-icon">&#215;</Typography>
           </Grid>
+
           <Grid item xs={3}>
             <NumberTextField
-              label="% in Group"
-              variant="filled"
-              disabled={true}
+              label={matchesMd ? "" : "% in Group"}
+              disabled
               value={Math.round(convertToPercent(percentInGroup))}
             />
           </Grid>
+
           <Grid item xs={1}>
-            <Typography className="math-icon">x</Typography>
+            <Typography className="math-icon">&#215;</Typography>
           </Grid>
+
           <Grid item xs={3}>
             <NumberTextField
-              label="% of Single Species Rate"
-              variant="filled"
-              disabled={false}
+              label={matchesMd ? "" : "% of Single Species Rate"}
               handleChange={(e) => {
                 updateSeed(e.target.value, "percentOfSingleSpeciesRate", seed);
               }}
               value={Math.round(seed.percentOfSingleSpeciesRate)}
             />
-            <Typography>{council === "MCCC" ? "MCCC" : "NECCC"}</Typography>
+            <Typography>NECCC</Typography>
           </Grid>
-          <Grid container className="steps-row-2" xs={12}>
+
+          <Grid container p={"10px"}>
             <Grid item xs={4}>
               <Typography className="math-icon">=</Typography>
             </Grid>
+
             <Grid item xs={7}>
               <NumberTextField
                 label="Mix Seeding Rate"
-                disabled={true}
-                variant="filled"
+                disabled
                 value={seed.mixSeedingRate}
               />
               <Typography>Lbs / Acre</Typography>
             </Grid>
+
             <Grid item xs={1}></Grid>
           </Grid>
         </>
       )}
-      {/* NECCC Step 1 END */}
 
-      {/* MCCC Step 1 START */}
+      {/* MCCC Step 1:  */}
       {council === "MCCC" && (
         <>
           <Grid item xs={12}>
-            <Typography className="mix-ratio-step-header">Step 1:</Typography>
+            <Typography className="step-header">Step 1:</Typography>
           </Grid>
           {renderFormLabel(
             "Single Species Seeding Rate PLS",
             "% of Single Species Rate",
             "Mix Seeding Rate"
           )}
-          <Grid container xs={12} className="mix-ratio-form-container">
+          <Grid container>
             <Grid item xs={3}>
               <NumberTextField
-                disabled={false}
-                label="Single Species Seeding Rate PLS"
-                variant="filled"
+                label={matchesMd ? "" : "Single Species Seeding Rate PLS"}
                 handleChange={(e) => {
                   updateSeed(
                     e.target.value,
@@ -115,14 +145,14 @@ const MixRatioSteps = ({
               />
               <Typography>Lbs / Acre</Typography>
             </Grid>
+
             <Grid item xs={1}>
-              <Typography className="math-icon">X</Typography>
+              <Typography className="math-icon">&#215;</Typography>
             </Grid>
+
             <Grid item xs={3}>
               <NumberTextField
-                label="% of Single Species Rate"
-                variant="filled"
-                disabled={false}
+                label={matchesMd ? "" : "% of Single Species Rate"}
                 handleChange={(e) => {
                   updateSeed(
                     e.target.value,
@@ -132,16 +162,17 @@ const MixRatioSteps = ({
                 }}
                 value={seed.percentOfSingleSpeciesRate}
               />
-              <Typography>{council === "MCCC" ? "MCCC" : "NECCC"}</Typography>
+              <Typography>MCCC</Typography>
             </Grid>
+
             <Grid item xs={1}>
               <Typography className="math-icon">=</Typography>
             </Grid>
+
             <Grid item xs={3}>
               <NumberTextField
-                label="Mix Seeding Rate"
-                disabled={true}
-                variant="filled"
+                label={matchesMd ? "" : "Mix Seeding Rate"}
+                disabled
                 value={seed.mixSeedingRate}
               />
               <Typography>Lbs / Acre</Typography>
@@ -150,110 +181,116 @@ const MixRatioSteps = ({
         </>
       )}
 
-      {/* MCCC Step 1 END */}
-      <Grid item xs={12}>
-        <Typography className="mix-ratio-step-header">Step 2: </Typography>
-      </Grid>
-      {renderFormLabel(
-        "Single Species Seeding Rate PLS",
-        "% of Single Species Rate",
-        "Mix Seeding Rate"
-      )}
-      <Grid item xs={3}>
-        <NumberTextField
-          disabled={true}
-          label="Seeds / Pound"
-          variant="filled"
-          handleChange={(e) => {
-            updateSeed(e.target.value, "seedsPerPound", seed);
-          }}
-          value={seed.seedsPerPound}
-        />
-      </Grid>
-      <Grid item xs={1}>
-        <Typography className="math-icon">X</Typography>
-      </Grid>
-      <Grid item xs={3}>
-        <NumberTextField
-          disabled={true}
-          label="Mix Seeding Rate"
-          variant="filled"
-          value={seed.mixSeedingRate}
-        />
-        <Typography>Lbs / Acre</Typography>
-      </Grid>
-      <Grid item xs={1}>
-        <Typography className="math-icon">=</Typography>
-      </Grid>
-      <Grid item xs={3}>
-        <NumberTextField
-          label="Seeds / Acre"
-          variant="filled"
-          disabled={true}
-          value={seed.seedsPerAcre}
-        />
-      </Grid>
+      {/* Step 2: */}
+      <>
+        <Grid item xs={12}>
+          <Typography className="step-header">Step 2: </Typography>
+        </Grid>
+        {renderFormLabel(
+          "Single Species Seeding Rate PLS",
+          "% of Single Species Rate",
+          "Mix Seeding Rate"
+        )}
+        <Grid item xs={3}>
+          <NumberTextField
+            disabled
+            label={matchesMd ? "" : "Seeds / Pound"}
+            handleChange={(e) => {
+              updateSeed(e.target.value, "seedsPerPound", seed);
+            }}
+            value={seed.seedsPerPound}
+          />
+        </Grid>
+
+        <Grid item xs={1}>
+          <Typography className="math-icon">&#215;</Typography>
+        </Grid>
+
+        <Grid item xs={3}>
+          <NumberTextField
+            disabled
+            label={matchesMd ? "" : "Mix Seeding Rate"}
+            value={seed.mixSeedingRate}
+          />
+          <Typography>Lbs / Acre</Typography>
+        </Grid>
+
+        <Grid item xs={1}>
+          <Typography className="math-icon">=</Typography>
+        </Grid>
+
+        <Grid item xs={3}>
+          <NumberTextField
+            label={matchesMd ? "" : "Seeds / Acre"}
+            disabled
+            value={seed.seedsPerAcre}
+          />
+        </Grid>
+      </>
+
+      {/* NECCC Step 3: */}
       {council === "NECCC" && (
         <>
-          {" "}
           <Grid item xs={12}>
-            <Typography className="mix-ratio-step-header">Step 3: </Typography>
+            <Typography className="step-header">Step 3: </Typography>
           </Grid>
           {renderFormLabel("Seeds/Acre", "Sq. Ft. / Acres", "Plants/Acre")}
           <Grid item xs={3}>
             <NumberTextField
-              label="Seeds / Acre"
-              variant="filled"
-              disabled={true}
+              label={matchesMd ? "" : "Seeds / Acre"}
+              disabled
               value={seed.seedsPerAcre}
             />
           </Grid>
+
           <Grid item xs={1}>
             <Typography className="math-icon">÷</Typography>
           </Grid>
+
           <Grid item xs={3}>
             <NumberTextField
-              label="Sq. Ft./ Acre"
-              variant="filled"
-              disabled={true}
+              label={matchesMd ? "" : "Sq. Ft./ Acre"}
+              disabled
               value={seed.sqFtAcre}
             />
           </Grid>
+
           <Grid item xs={1}>
             <Typography className="math-icon">=</Typography>
           </Grid>
+
           <Grid item xs={3}>
             <NumberTextField
-              label="Seeds / Sq. Ft."
-              variant="filled"
-              disabled={true}
+              label={matchesMd ? "" : "Seeds / Sq. Ft."}
+              disabled
               value={seed.aproxPlantsSqFt}
             />
           </Grid>
         </>
       )}
+
+      {/* MCCC Step 3 & Step 4: */}
       {council === "MCCC" && (
         <>
           <Grid item xs={12}>
-            <Typography className="mix-ratio-step-header">Step 3: </Typography>
+            <Typography className="step-header">Step 3: </Typography>
           </Grid>
           {renderFormLabel("Seeds/Acre", "% Survival", "Plants/Acre")}
           <Grid item xs={3}>
             <NumberTextField
-              label="Seeds / Acre"
-              variant="filled"
-              disabled={true}
+              label={matchesMd ? "" : "Seeds / Acre"}
+              disabled
               value={seed.seedsPerAcre}
             />
           </Grid>
+
           <Grid item xs={1}>
-            <Typography className="math-icon">X</Typography>
+            <Typography className="math-icon">&#215;</Typography>
           </Grid>
+
           <Grid item xs={3}>
             <NumberTextField
-              label="% Survival"
-              variant="filled"
-              disabled={false}
+              label={matchesMd ? "" : "% Survival"}
               handleChange={(e) => {
                 updateSeed(
                   convertToDecimal(e.target.value),
@@ -264,19 +301,21 @@ const MixRatioSteps = ({
               value={convertToPercent(seed.percentChanceOfWinterSurvival)}
             />
           </Grid>
+
           <Grid item xs={1}>
             <Typography className="math-icon">=</Typography>
           </Grid>
+
           <Grid item xs={3}>
             <NumberTextField
-              label="Plants / Acre"
-              variant="filled"
-              disabled={true}
+              label={matchesMd ? "" : "Plants / Acre"}
+              disabled
               value={seed.plantsPerAcre}
             />
           </Grid>
+
           <Grid item xs={12}>
-            <Typography className="mix-ratio-step-header">Step 4: </Typography>
+            <Typography className="step-header">Step 4: </Typography>
           </Grid>
           {renderFormLabel(
             "Plants/Acre",
@@ -285,31 +324,32 @@ const MixRatioSteps = ({
           )}
           <Grid item xs={3}>
             <NumberTextField
-              label="Plants / Acre"
-              variant="filled"
-              disabled={true}
+              label={matchesMd ? "" : "Plants / Acre"}
+              disabled
               value={seed.plantsPerAcre}
             />
           </Grid>
+
           <Grid item xs={1}>
             <Typography className="math-icon">÷</Typography>
           </Grid>
+
           <Grid item xs={3}>
             <NumberTextField
-              label="Sq. Ft./ Acre"
-              variant="filled"
-              disabled={true}
+              label={matchesMd ? "" : "Sq. Ft./ Acre"}
+              disabled
               value={seed.sqFtAcre}
             />
           </Grid>
+
           <Grid item xs={1}>
             <Typography className="math-icon">=</Typography>
           </Grid>
+
           <Grid item xs={3}>
             <NumberTextField
-              label="Aproximate Plants  / Sq. Ft."
-              variant="filled"
-              disabled={true}
+              label={matchesMd ? "" : "Aproximate Plants  / Sq. Ft."}
+              disabled
               value={seed.aproxPlantsSqFt}
             />
             <Typography>Lbs / Acre</Typography>

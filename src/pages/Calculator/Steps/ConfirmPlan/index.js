@@ -15,7 +15,6 @@ import { updateSteps } from "../../../../features/stepSlice/index";
 import { generateNRCSStandards } from "./../../../../shared/utils/NRCS/calculateNRCS";
 import ConfirmPlanCharts from "./charts";
 import "./../steps.scss";
-import SeedsSelectedList from "../../../../components/SeedsSelectedList";
 import { emptyValues } from "../../../../shared/utils/calculate";
 import ConfirmPlanForm from "./form";
 
@@ -99,11 +98,19 @@ const ConfirmPlan = ({ council }) => {
         <Typography variant="h2">Confirm your plan</Typography>
 
         {/* Export */}
-        <Grid container sx={{ marginTop: "5px" }} xs={12}>
+        <Grid container sx={{ marginTop: "5px" }}>
           <Grid item xs={matchesUpMd ? 11 : 9}></Grid>
           <Grid item xs={matchesUpMd ? 1 : 3}>
             <Button
-              className="export-button"
+              sx={{
+                bgcolor: "#e7885f",
+                color: "white",
+                padding: "7px",
+                width: "83px",
+                margin: "3px",
+                fontSize: "12px",
+                borderRadius: "26px",
+              }}
               onClick={() => {
                 handleDownload(
                   [
@@ -130,6 +137,7 @@ const ConfirmPlan = ({ council }) => {
           speciesSelection={speciesSelection}
           matchesMd={matchesMd}
         />
+
         <ConfirmPlanForm updateSeed={updateSeed} data={data} />
       </Grid>
     </Grid>
