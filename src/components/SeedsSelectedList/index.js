@@ -75,7 +75,7 @@ const SeedsSelectedList = ({ list }) => {
                   src={
                     s.thumbnail !== null && s.thumbnail !== ""
                       ? s.thumbnail
-                      : "https://www.gardeningknowhow.com/wp-content/uploads/2020/04/spinach.jpg"
+                      : "https://placehold.it/250x150?text=Placeholder"
                   }
                   alt={s.label}
                   loading="lazy"
