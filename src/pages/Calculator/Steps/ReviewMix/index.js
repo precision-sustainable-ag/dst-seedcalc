@@ -184,7 +184,6 @@ const ReviewMix = ({ council }) => {
                 dataKey="y"
                 name="Mix Seeding Rate"
                 unit=""
-                tick={false}
               />
               <ZAxis dataKey="z" range={[1000, 1449]} name="" unit="" />
 
