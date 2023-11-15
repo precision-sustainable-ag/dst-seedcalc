@@ -1,7 +1,6 @@
 import * as React from "react";
 import Grid from "@mui/material/Grid";
-import { Typography, Link } from "@mui/material";
-import Fade from "@mui/material/Fade";
+import { Typography, Box } from "@mui/material";
 
 import { seedsLabel } from "../../../../shared/data/species";
 import "./../steps.scss";
@@ -24,45 +23,41 @@ const Diversity = ({ diversitySelected }) => {
       <Typography pt={"1rem"} fontWeight={600}>
         Mix Diversity
       </Typography>
-      <Grid
-        container
-        sx={{
-          height: "10px",
-          border: "#e5e5e5 1px solid",
-          margin: "5px 0",
-          borderRadius: "0.6875rem",
-        }}
-      >
-        {diversitySelected &&
-          diversitySelected.length > 0 &&
-          diversitySelected.map((d, i) => {
-            return (
-              <Grid
-                item
-                xs={calculateSize()}
-                bgcolor={COLORS[i]}
-                borderRadius={"0.6875rem"}
-                key={i}
-              ></Grid>
-            );
-          })}
-      </Grid>
-      {diversitySelected &&
-        diversitySelected.length > 0 &&
-        diversitySelected.length === 0 && (
-          <Grid item xs={12}>
-            <Typography fontSize={"0.75rem"}>Select a species</Typography>
-          </Grid>
-        )}
-      {diversitySelected &&
-        diversitySelected.length > 0 &&
+      <Box sx={{ width: "100%", p: "5px 0" }}>
+        <Grid
+          container
+          sx={{
+            height: "10px",
+            border: "#e5e5e5 1px solid",
+            borderRadius: "0.6875rem",
+          }}
+        >
+          {diversitySelected.length > 0 &&
+            diversitySelected.map((d, i) => {
+              return (
+                <Grid
+                  item
+                  xs={calculateSize()}
+                  bgcolor={COLORS[i]}
+                  borderRadius={"0.6875rem"}
+                  key={i}
+                ></Grid>
+              );
+            })}
+        </Grid>
+      </Box>
+
+      {diversitySelected.length === 0 && (
+        <Grid item xs={12}>
+          <Typography fontSize={"0.75rem"}>Select a species</Typography>
+        </Grid>
+      )}
+      {diversitySelected.length > 0 &&
         diversitySelected.map((d, i) => {
           return (
-            <Fade in={true} key={i}>
-              <Grid item xs={calculateSize()}>
-                <Typography fontSize={"0.75rem"}>{seedsLabel[d]}</Typography>
-              </Grid>
-            </Fade>
+            <Grid item xs={calculateSize()} key={i}>
+              <Typography fontSize={"0.75rem"}>{seedsLabel[d]}</Typography>
+            </Grid>
           );
         })}
     </Grid>

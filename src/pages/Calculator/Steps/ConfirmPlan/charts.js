@@ -77,9 +77,7 @@ const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
       >
         <DSTPieChart chartData={poundsOfSeedArray} />
         <DSTPieChartLabel>{"Pounds of Seed / Acre"}</DSTPieChartLabel>
-        <DSTPieChartLegend
-          labels={speciesSelection.seedsSelected.map((seed) => seed.label)}
-        />
+        <DSTPieChartLegend chartData={poundsOfSeedArray} />
       </Grid>
       <Grid
         item
@@ -100,7 +98,9 @@ const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
           {council === "MCCC" ? "Plants" : "Seeds"} Per Acre{" "}
         </DSTPieChartLabel>
         <DSTPieChartLegend
-          labels={speciesSelection.seedsSelected.map((seed) => seed.label)}
+          chartData={
+            council === "MCCC" ? plantsPerAcreArray : seedsPerAcreArray
+          }
         />
       </Grid>
     </Grid>

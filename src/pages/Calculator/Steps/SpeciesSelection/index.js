@@ -20,7 +20,7 @@ import { seedsType, seedsLabel } from "../../../../shared/data/species";
 import { calculateAllMixRatioValues } from "../../../../shared/utils/calculate";
 import { validateForms } from "../../../../shared/utils/format";
 import PlantList from "./PlantList";
-import Diversity from "./Diversity";
+import Diversity from "./diversity";
 import { Spinner } from "@psa/dst.ui.spinner";
 import "./../steps.scss";
 

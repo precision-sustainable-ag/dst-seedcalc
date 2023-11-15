@@ -11,7 +11,6 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   calculateAllMixRatioValues,
-  calculateAllValuesNECCC,
   calculatePieChartData,
 } from "./../../../../shared/utils/calculate";
 import { updateSteps } from "../../../../features/stepSlice";
@@ -51,17 +50,7 @@ const MixRatio = ({ council }) => {
     dispatch(updateSteps(data));
   };
 
-  const handleUpdateAllSteps = (prevData, index) => {
-    let seeds = [...prevData];
-    seeds[index] =
-      council === "MCCC"
-        ? calculateAllMixRatioValues(seeds[index], data)
-        : calculateAllValuesNECCC(seeds[index], data);
-    handleUpdateSteps("seedsSelected", seeds);
-  };
-
   const updateSeed = (val, key, seed) => {
-    // find index of seed, parse a copy, update proper values, & send to Redux
     const index = speciesSelection.seedsSelected.findIndex(
       (s) => s.id === seed.id
     );
@@ -71,11 +60,18 @@ const MixRatio = ({ council }) => {
 
     // create new copy of recently updated Redux state, calculate & update all seed's step data.
     let newData = [...seeds];
-    newData[index] =
-      council === "MCCC"
-        ? calculateAllMixRatioValues(seeds[index], data)
-        : calculateAllValuesNECCC(seeds[index], data);
-    handleUpdateAllSteps(newData, index);
+    newData[index] = calculateAllMixRatioValues(newData[index], data, council);
+    handleUpdateSteps("seedsSelected", newData);
+  };
+
+  const showStep = (val, key, seed) => {
+    // find index of seed, parse a copy, update proper values, & send to Redux
+    const index = speciesSelection.seedsSelected.findIndex(
+      (s) => s.id === seed.id
+    );
+    let seeds = JSON.parse(JSON.stringify(speciesSelection.seedsSelected));
+    seeds[index][key] = val;
+    handleUpdateSteps("seedsSelected", seeds);
   };
 
   //////////////////////////////////////////////////////////
@@ -91,9 +87,7 @@ const MixRatio = ({ council }) => {
       <Grid item xs={6} sx={{ textAlign: "justify" }}>
         <DSTPieChart chartData={poundsOfSeedArray} />
         <DSTPieChartLabel>Pounds of Seed / Acre </DSTPieChartLabel>
-        <DSTPieChartLegend
-          labels={speciesSelection.seedsSelected.map((seed) => seed.label)}
-        />
+        <DSTPieChartLegend chartData={poundsOfSeedArray} />
       </Grid>
 
       <Grid item xs={6} sx={{ textAlign: "justify" }}>
@@ -106,7 +100,9 @@ const MixRatio = ({ council }) => {
           {council === "MCCC" ? "Plants" : "Seeds"} Per Acre{" "}
         </DSTPieChartLabel>
         <DSTPieChartLegend
-          labels={speciesSelection.seedsSelected.map((seed) => seed.label)}
+          chartData={
+            council === "MCCC" ? plantsPerAcreArray : seedsPerAcreArray
+          }
         />
       </Grid>
 
@@ -150,7 +146,7 @@ const MixRatio = ({ council }) => {
                   <Grid item xs={12} pt={"1rem"}>
                     <Button
                       onClick={() => {
-                        updateSeed(!seed.showSteps, "showSteps", seed);
+                        showStep(!seed.showSteps, "showSteps", seed);
                       }}
                       variant="outlined"
                     >

@@ -173,66 +173,12 @@ const ReviewMix = ({ council }) => {
 
     const scatterData = generateScatterData(labels);
 
-    const renderCustomizedScatterLabel = (props) => {
-      const { x, y, width, height, value } = props;
-      const radius = 10;
-
-      return (
-        <g>
-          <circle cx={x + 20} cy={y + 25} r={radius} fill="#E7885F" />
-          <text
-            x={x + 20}
-            y={y + 25}
-            fill="#fff"
-            textAnchor="middle"
-            dominantBaseline="middle"
-          >
-            {value}
-          </text>
-        </g>
-      );
-    };
-
-    const generateDetails = (label) => {
-      if (label === "Single Species Seeding Rate") {
-        return "Single Species Seeding Rate";
-      }
-      if (label === "Added To Mix") {
-        return "Mix seeding rate added to mix";
-      }
-      if (label === "Drilled or Broadcast with Cultipack") {
-        return "Mix seeding rate with drilled";
-      }
-      if (label === "Management Impacts on Mix (+57%)") {
-        return "Mix seeding rate with Management Impact on mix";
-      }
-      if (label === "Bulk Germination and Purity") {
-        return "Bulk Germination and Purity";
-      }
-      return "";
-    };
-
-    const CustomTooltip = (scatterData) => {
-      const { active, payload, label } = scatterData;
-      if (active && payload && payload.length) {
-        return (
-          <div>
-            <p className="label">{`${label} : ${payload[0].value}`}</p>
-            <p className="intro">{generateDetails(label)}</p>
-            <p className="desc">Calculation details</p>
-          </div>
-        );
-      }
-      return null;
-    };
-
     return (
       <Grid container>
         <Grid item xs={12}>
           <ResponsiveContainer width="100%" height={200}>
             <ScatterChart width={400} height={500} position="center">
-              <CartesianGrid strokeDasharray="4" />
-              <XAxis type="number" dataKey="x" name="" unit="" />
+              <XAxis type="number" dataKey="x" name="" unit="" tick={false} />
               <YAxis
                 type="number"
                 dataKey="y"
@@ -240,10 +186,7 @@ const ReviewMix = ({ council }) => {
                 unit=""
               />
               <ZAxis dataKey="z" range={[1000, 1449]} name="" unit="" />
-              <Tooltip
-                cursor={{ strokeDasharray: "50 50" }}
-                // content={CustomTooltip}
-              />
+
               <Scatter
                 name="Mix Seeding Rates"
                 data={scatterData}
@@ -255,7 +198,6 @@ const ReviewMix = ({ council }) => {
                   bottom: 5,
                 }}
               >
-                {/* <LabelList dataKey="x" content={renderCustomizedScatterLabel} /> */}
                 <LabelList dataKey="y" fill="#fff" position="center" />
               </Scatter>
             </ScatterChart>
@@ -290,9 +232,7 @@ const ReviewMix = ({ council }) => {
       <Grid item xs={6} md={6} sx={{ textAlign: "justify" }}>
         <DSTPieChart chartData={poundsOfSeedArray} />
         <DSTPieChartLabel>{"Pounds of Seed / Acre"}</DSTPieChartLabel>
-        <DSTPieChartLegend
-          labels={speciesSelection.seedsSelected.map((seed) => seed.label)}
-        />
+        <DSTPieChartLegend chartData={poundsOfSeedArray} />
       </Grid>
 
       <Grid item xs={6} md={6} sx={{ textAlign: "justify" }}>
@@ -306,7 +246,9 @@ const ReviewMix = ({ council }) => {
         </DSTPieChartLabel>
 
         <DSTPieChartLegend
-          labels={speciesSelection.seedsSelected.map((seed) => seed.label)}
+          chartData={
+            council === "MCCC" ? plantsPerAcreArray : seedsPerAcreArray
+          }
         />
       </Grid>
       {speciesSelection.seedsSelected.map((seed, i) => {

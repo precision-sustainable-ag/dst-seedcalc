@@ -4,7 +4,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
-import { StepButton } from "@mui/material";
+import { StepButton, Tooltip } from "@mui/material";
 import Button from "@mui/material/Button";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
@@ -101,16 +101,29 @@ export const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
             Reset
           </Button>
         ) : (
-          <Button
-            variant="stepper"
-            disabled={availableSteps[activeStep] === true ? false : true}
-            onClick={handleNext}
+          <Tooltip
+            arrow
+            title={
+              activeStep === 0 && !availableSteps[0]
+                ? "Please enter the necessary info below."
+                : activeStep === 1 && !availableSteps[1]
+                ? "Please select at least 2 plants."
+                : ""
+            }
           >
-            {activeStep === calculatorList.length - 1
-              ? "Finish"
-              : calculatorList[activeStep + 1]}{" "}
-            <ArrowForwardIosIcon />
-          </Button>
+            <span>
+              <Button
+                variant="stepper"
+                disabled={availableSteps[activeStep] === true ? false : true}
+                onClick={handleNext}
+              >
+                {activeStep === calculatorList.length - 1
+                  ? "Finish"
+                  : calculatorList[activeStep + 1]}{" "}
+                <ArrowForwardIosIcon />
+              </Button>
+            </span>
+          </Tooltip>
         )}
       </Box>
     </Box>

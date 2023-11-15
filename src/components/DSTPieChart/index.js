@@ -2,6 +2,7 @@ import { Typography, Box, useMediaQuery } from "@mui/material";
 import { Square } from "@mui/icons-material";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import { useTheme } from "@emotion/react";
+import { convertToPercent, roundToDecimal } from "../../shared/utils/calculate";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
@@ -17,7 +18,7 @@ const DSTPieChart = ({ chartData }) => {
     percent,
     index,
   }) => {
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.3;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
@@ -29,14 +30,14 @@ const DSTPieChart = ({ chartData }) => {
         textAnchor={x > cx ? "start" : "end"}
         dominantBaseline="central"
       >
-        {`${(percent * 100).toFixed(0)}%`}
+        {`${(percent * 100).toFixed(1)}%`}
       </text>
     );
   };
 
   return (
     <ResponsiveContainer width="100%" height={200}>
-      <PieChart width={400} height={400}>
+      <PieChart>
         <Pie
           data={chartData}
           cx="50%"
@@ -71,18 +72,34 @@ const DSTPieChartLabel = ({ children }) => {
   );
 };
 
-const DSTPieChartLegend = ({ labels }) => {
+const DSTPieChartLegend = ({ chartData }) => {
   const theme = useTheme();
   const matchesMd = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
-    <Box sx={{ pt: "1.5rem" }}>
-      {labels.map((label, i) => {
+    <Box sx={{ p: "1rem 0" }}>
+      {chartData.map((chartData, i) => {
         return (
-          <Box sx={{ display: "flex", pl: matchesMd ? "25%" : "30%" }} key={i}>
-            <Square sx={{ color: COLORS[i] }}></Square>
-            <Typography fontSize={matchesMd ? "0.75rem" : "1rem"}>
-              {label}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              p: matchesMd ? "0.25rem 2%" : "0.25rem 15%",
+            }}
+            key={i}
+          >
+            <Typography
+              fontSize={matchesMd ? "0.75rem" : "1rem"}
+              sx={{ display: "flex", alignItems: "center" }}
+            >
+              <Square sx={{ color: COLORS[i] }}></Square>
+              {chartData.name}
+            </Typography>
+            <Typography
+              fontSize={matchesMd ? "0.75rem" : "1rem"}
+              sx={{ display: "flex", alignItems: "center" }}
+            >
+              {chartData.value}
             </Typography>
           </Box>
         );
