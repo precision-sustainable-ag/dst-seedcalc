@@ -30,7 +30,7 @@ export const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
 
-  // this completed step is to determine whether each step is completed
+  // this completed step is to determine the latest completed step
   const [completedStep, setCompletedStep] = useState(-1);
 
   //////////////////////////////////////////////////////////
@@ -39,7 +39,7 @@ export const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setCompletedStep(activeStep);
+    setCompletedStep(activeStep > completedStep ? activeStep : completedStep);
   };
 
   const handleBack = () => {
@@ -56,17 +56,13 @@ export const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
       <Stepper activeStep={activeStep} alternativeLabel nonLinear>
         {calculatorList.map((label, index) => {
           return (
-            <Step
-              key={label}
-              completed={index <= completedStep}
-              disabled={completedStep + 1 < index}
-            >
+            <Step key={label} disabled={completedStep + 1 < index}>
               <StepButton
                 onClick={() => setActiveStep(index)}
                 sx={{
                   "& .MuiSvgIcon-root": {
                     color: completedStep + 1 < index ? "" : "#4f5f30",
-                    "&.Mui-completed": {
+                    "&.Mui-active": {
                       color: "#77b400",
                     },
                   },
