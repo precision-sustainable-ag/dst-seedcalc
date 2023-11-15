@@ -4,7 +4,7 @@
 
 import Grid from "@mui/material/Grid";
 import { Typography, Box, Button } from "@mui/material";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   ResponsiveContainer,
@@ -44,11 +44,18 @@ const ReviewMix = ({ council }) => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
   const siteCondition = data.siteCondition;
-  const speciesSelection = data.speciesSelection;
   const seedingMethod = data.seedingMethod;
+  const { selectedSpecies, seedsSelected } = data.speciesSelection;
+
+  const [accordionState, setAccordionState] = useState(
+    seedsSelected.reduce((res, seed) => {
+      res[seed.label] = false;
+      return res;
+    }, {})
+  );
 
   const { poundsOfSeedArray, plantsPerAcreArray, seedsPerAcreArray } =
-    calculatePieChartData(speciesSelection.seedsSelected);
+    calculatePieChartData(seedsSelected);
 
   //////////////////////////////////////////////////////////
   //                      Redux                           //
@@ -73,7 +80,7 @@ const ReviewMix = ({ council }) => {
   };
 
   const initialDataLoad = () => {
-    let seeds = JSON.parse(JSON.stringify(speciesSelection.seedsSelected));
+    let seeds = JSON.parse(JSON.stringify(seedsSelected));
     let newData = [...seeds];
 
     newData.map((s, i) => {
@@ -91,10 +98,8 @@ const ReviewMix = ({ council }) => {
 
   const updateSeed = (val, key, seed) => {
     // find index of seed, parse a copy, update proper values, & send to Redux
-    const index = speciesSelection.seedsSelected.findIndex(
-      (s) => s.id === seed.id
-    );
-    let seeds = JSON.parse(JSON.stringify(speciesSelection.seedsSelected));
+    const index = seedsSelected.findIndex((s) => s.id === seed.id);
+    let seeds = JSON.parse(JSON.stringify(seedsSelected));
     seeds[index][key] = val;
     handleUpdateSteps("seedsSelected", seeds);
     let newData = [...seeds];
@@ -109,15 +114,31 @@ const ReviewMix = ({ council }) => {
   const updateNRCS = async () => {
     // TODO: NRCS calculated here
     const NRCSData = await generateNRCSStandards(
-      speciesSelection.seedsSelected,
+      seedsSelected,
       data.siteCondition
     );
     handleUpdateNRCS("results", NRCSData);
   };
 
+  // handler for click to open accordion
+  const handleExpandAccordion = (label) => {
+    const open = accordionState[label];
+    setAccordionState({ ...accordionState, [label]: !open });
+  };
+
   //////////////////////////////////////////////////////////
   //                    useEffect                         //
   //////////////////////////////////////////////////////////
+
+  useEffect(() => {
+    // expand related accordion based on sidebar click
+    setAccordionState(
+      seedsSelected.reduce((res, seed) => {
+        res[seed.label] = seed.label === selectedSpecies ? true : false;
+        return res;
+      }, {})
+    );
+  }, [selectedSpecies]);
 
   useEffect(() => {
     initialDataLoad();
@@ -251,12 +272,14 @@ const ReviewMix = ({ council }) => {
           }
         />
       </Grid>
-      {speciesSelection.seedsSelected.map((seed, i) => {
+      {seedsSelected.map((seed, i) => {
         return (
           <Grid item xs={12} key={i}>
-            <Accordion xs={12}>
+            <Accordion
+              expanded={accordionState[seed.label]}
+              onChange={() => handleExpandAccordion(seed.label)}
+            >
               <AccordionSummary
-                xs={12}
                 expandIcon={<ExpandMoreIcon />}
                 className="accordian-summary"
               >
@@ -301,7 +324,7 @@ const ReviewMix = ({ council }) => {
                   <Grid item xs={12}>
                     {seed.showSteps && (
                       <ReviewMixSteps
-                        speciesSelection={speciesSelection}
+                        seedsSelected={seedsSelected}
                         council={council}
                         updateSeed={updateSeed}
                         seedingMethod={seedingMethod}

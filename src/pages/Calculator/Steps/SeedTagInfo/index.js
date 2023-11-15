@@ -4,6 +4,7 @@
 
 import * as React from "react";
 import Grid from "@mui/material/Grid";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Typography } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
@@ -33,7 +34,14 @@ const LeftGrid = styled(Grid)({
 const SeedTagInfo = () => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
-  const speciesSelection = data.speciesSelection;
+  const { selectedSpecies, seedsSelected } = data.speciesSelection;
+
+  const [accordionState, setAccordionState] = useState(
+    seedsSelected.reduce((res, seed) => {
+      res[seed.label] = false;
+      return res;
+    }, {})
+  );
 
   const handleUpdateSteps = (key, val) => {
     const data = {
@@ -46,13 +54,27 @@ const SeedTagInfo = () => {
 
   const updateSeed = (val, key1, seed) => {
     // find index of seed, parse a copy, update proper values, & send to Redux
-    const index = speciesSelection.seedsSelected.findIndex(
-      (s) => s.id === seed.id
-    );
-    let data = JSON.parse(JSON.stringify(speciesSelection.seedsSelected));
+    const index = seedsSelected.findIndex((s) => s.id === seed.id);
+    let data = JSON.parse(JSON.stringify(seedsSelected));
     data[index][key1] = val;
     handleUpdateSteps("seedsSelected", data);
   };
+
+  // handler for click to open accordion
+  const handleExpandAccordion = (label) => {
+    const open = accordionState[label];
+    setAccordionState({ ...accordionState, [label]: !open });
+  };
+
+  useEffect(() => {
+    // expand related accordion based on sidebar click
+    setAccordionState(
+      seedsSelected.reduce((res, seed) => {
+        res[seed.label] = seed.label === selectedSpecies ? true : false;
+        return res;
+      }, {})
+    );
+  }, [selectedSpecies]);
 
   const renderRightAccordian = (key, data, type, disabled) => {
     const value =
@@ -82,10 +104,13 @@ const SeedTagInfo = () => {
         <Typography variant="h2">Enter seed tag info</Typography>
       </Grid>
 
-      {speciesSelection.seedsSelected.map((seed, i) => {
+      {seedsSelected.map((seed, i) => {
         return (
           <Grid item xs={12} key={i}>
-            <Accordion>
+            <Accordion
+              expanded={accordionState[seed.label]}
+              onChange={() => handleExpandAccordion(seed.label)}
+            >
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 className="accordian-summary"

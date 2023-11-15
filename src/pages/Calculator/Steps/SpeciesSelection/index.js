@@ -52,6 +52,10 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   //                    State Logic                       //
   //////////////////////////////////////////////////////////
 
+  useEffect(() => {
+    setFilteredSeeds(crops);
+  }, [crops]);
+
   // Filter query logic
   const updateQuery = (e) => {
     const query = e.target.value;
