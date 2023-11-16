@@ -50,79 +50,37 @@ const PlantList = ({
     return seed.group !== null && seed.group.label === seedType;
   });
 
-  const checkPlantingDate = (council, seed, siteDate) => {
+  const checkPlantingDate = (seed) => {
     if (council === "MCCC") return true;
-    // FIXME: this method didn't take crops with 2 RE period into count
-    const startDate = new Date(
-      seed["Planting and Growth Windows"]["Reliable Establishment"]?.[0]
-        .split(" - ")[0]
-        .slice(0, -5)
-    ).getTime();
-    const endDate = new Date(
-      seed["Planting and Growth Windows"]["Reliable Establishment"]?.[0]
-        .split(" - ")[1]
-        .slice(0, -5)
-    ).getTime();
-    const plannedDate = new Date(siteDate.slice(0, -5)).getTime();
-    const pass = plannedDate >= startDate && plannedDate <= endDate;
-    return pass;
-  };
+    const [firstPeriod, secondPeriod] =
+      seed["Planting and Growth Windows"]["Reliable Establishment"];
+    let firstStart, firstEnd, secondStart, secondEnd;
 
-  const SeedCard = ({ name, imgSrc, onSelect, recommended, seedData }) => {
-    const startDate = dayjs(
-      new Date(
-        seedData["Planting and Growth Windows"]["Reliable Establishment"]?.[0]
-          .split(" - ")[0]
-          .slice(0, -5)
-      )
-    ).format("MM/DD");
-    const endDate = dayjs(
-      new Date(
-        seedData["Planting and Growth Windows"]["Reliable Establishment"]?.[0]
-          .split(" - ")[1]
-          .slice(0, -5)
-      )
-    ).format("MM/DD");
+    firstStart = dayjs(dayjs(firstPeriod.split(" - ")[0]).format("MM/DD"));
+    firstEnd = dayjs(dayjs(firstPeriod.split(" - ")[1]).format("MM/DD"));
+    if (secondPeriod) {
+      secondStart = dayjs(dayjs(secondPeriod.split(" - ")[0]).format("MM/DD"));
+      secondEnd = dayjs(dayjs(secondPeriod.split(" - ")[1]).format("MM/DD"));
+    }
 
-    return (
-      <Card
-        sx={{
-          backgroundColor: "transparent",
-          border: "none",
-          boxShadow: "none",
-          width: "160px",
-        }}
-      >
-        <CardActionArea onClick={onSelect} disableRipple>
-          <CardMedia
-            component="img"
-            height={"160px"}
-            image={imgSrc}
-            alt={name}
-            sx={{ border: "2px solid green", borderRadius: "1rem" }}
-          />
-          {!recommended && (
-            <Typography
-              sx={{
-                color: "#DA7059",
-                position: "absolute",
-                top: "1rem",
-                fontStyle: "italic",
-                fontWeight: "bold",
-                bgcolor: "primary.light",
-                opacity: "80%",
-              }}
-            >
-              Recommend Planting Date: {startDate} - {endDate}
-            </Typography>
-          )}
+    const plannedDate = dayjs(dayjs(plantingDate).format("MM/DD"));
 
-          <CardContent>
-            <Typography sx={{ fontWeight: "bold" }}>{name}</Typography>
-          </CardContent>
-        </CardActionArea>
-      </Card>
-    );
+    if (!plannedDate.isBetween(firstStart, firstEnd, "day")) {
+      if (
+        secondStart &&
+        !plannedDate.isBetween(secondStart, secondEnd, "day")
+      ) {
+        return `Seeding date outside of recommended window: ${firstStart.format(
+          "MM/DD"
+        )} - ${firstEnd.format("MM/DD")}, ${secondStart.format(
+          "MM/DD"
+        )} - ${secondEnd.format("MM/DD")}`;
+      } else {
+        return `Seeding date outside of recommended window: ${firstStart.format(
+          "MM/DD"
+        )} - ${firstEnd.format("MM/DD")}`;
+      }
+    }
   };
 
   return (
@@ -142,16 +100,52 @@ const PlantList = ({
                 }}
               />
             )}
-            <SeedCard
-              name={seed.label}
-              imgSrc={
-                seed.thumbnail ??
-                "https://placehold.it/250x150?text=Placeholder"
-              }
-              onSelect={() => updateSeeds(seed, seedType)}
-              recommended={checkPlantingDate(council, seed, plantingDate)}
-              seedData={seed}
-            />
+
+            <Card
+              sx={{
+                backgroundColor: "transparent",
+                border: "none",
+                boxShadow: "none",
+                width: "160px",
+              }}
+            >
+              <CardActionArea
+                onClick={() => updateSeeds(seed, seedType)}
+                disableRipple
+              >
+                <CardMedia
+                  component="img"
+                  height={"160px"}
+                  image={
+                    seed.thumbnail ??
+                    "https://placehold.it/250x150?text=Placeholder"
+                  }
+                  alt={seed.label}
+                  sx={{ border: "2px solid green", borderRadius: "1rem" }}
+                />
+
+                <Typography
+                  sx={{
+                    color: "#DA7059",
+                    position: "absolute",
+                    top: "1rem",
+                    fontStyle: "italic",
+                    fontWeight: "bold",
+                    bgcolor: "primary.light",
+                    opacity: "80%",
+                    fontSize: "0.875rem",
+                  }}
+                >
+                  {checkPlantingDate(seed)}
+                </Typography>
+
+                <CardContent>
+                  <Typography sx={{ fontWeight: "bold" }}>
+                    {seed.label}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
           </Grid>
         ))
       )}
