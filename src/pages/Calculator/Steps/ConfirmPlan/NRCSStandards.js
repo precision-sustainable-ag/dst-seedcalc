@@ -60,9 +60,9 @@ const NRCSItem = ({ title, result, data }) => {
   };
 
   return (
-    <>
-      <Grid xs={0} md={1} />
-      <Grid xs={12} md={10}>
+    <Grid container>
+      <Grid item xs={0} md={1} />
+      <Grid item xs={12} md={10}>
         <Typography
           sx={{
             fontSize: '20px',
@@ -74,10 +74,10 @@ const NRCSItem = ({ title, result, data }) => {
           {title}
         </Typography>
       </Grid>
-      <Grid xs={0} md={1} />
+      <Grid item xs={0} md={1} />
 
-      <Grid xs={0} md={1} />
-      <Grid xs={12} md={10}>
+      <Grid item xs={0} md={1} />
+      <Grid item xs={12} md={10}>
         <Accordion
           expanded={expanded}
           onChange={() => setExpanded(!expanded)}
@@ -103,8 +103,8 @@ const NRCSItem = ({ title, result, data }) => {
           <NRCSAccordionDetails>{renderTable(data)}</NRCSAccordionDetails>
         </Accordion>
       </Grid>
-      <Grid xs={0} md={1} />
-    </>
+      <Grid item xs={0} md={1} />
+    </Grid>
   );
 };
 const NRCSStandards = ({ NRCS }) => (

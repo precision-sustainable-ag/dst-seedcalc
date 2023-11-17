@@ -47,7 +47,7 @@ const PlantList = ({
   const seedsList = filteredSeeds.filter((seed) => seed.group !== null && seed.group.label === seedType);
 
   const checkPlantingDate = (seed) => {
-    if (council === 'MCCC') return true;
+    if (council === 'MCCC') return '';
     const [firstPeriod, secondPeriod] = seed['Planting and Growth Windows']['Reliable Establishment'];
     let firstStart; let firstEnd; let secondStart; let
       secondEnd;

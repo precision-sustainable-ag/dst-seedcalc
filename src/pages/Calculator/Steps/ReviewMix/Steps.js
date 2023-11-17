@@ -107,7 +107,7 @@ const ReviewMixSteps = ({
             <Typography>{council === 'MCCC' ? 'MCCC' : 'NECCC'}</Typography>
           </Grid>
 
-          <Grid container p="10px" xs={12}>
+          <Grid container p="10px">
             <Grid item xs={4}>
               <Typography className="math-icon">=</Typography>
             </Grid>
@@ -288,7 +288,7 @@ const ReviewMixSteps = ({
 
         <Grid item xs={1} />
 
-        <Grid container p="10px" xs={12}>
+        <Grid container p="10px">
           <Grid item xs={4}>
             <Typography className="math-icon">=</Typography>
           </Grid>
@@ -357,7 +357,7 @@ const ReviewMixSteps = ({
           <Typography>Lbs / Acre</Typography>
         </Grid>
 
-        <Grid container p="10px" xs={12}>
+        <Grid container p="10px">
           <Grid item xs={4}>
             <Typography className="math-icon">=</Typography>
           </Grid>
