@@ -46,7 +46,6 @@ export const generatePercentInGroup = (seed, seeds) => {
     if (s.group.label === group) count += 1;
     return undefined;
   });
-  console.log(group, count);
   return 1 / count;
 };
 
