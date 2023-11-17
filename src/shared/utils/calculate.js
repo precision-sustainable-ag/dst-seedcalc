@@ -88,6 +88,7 @@ export const calculateMixRatioMCCC = (step, seed) => {
   }
 };
 
+// FIXME: this calculation is not correct and will cause problems
 export const calculateMixRatioNECCC = (step, seed, { speciesSelection }) => {
   switch (step) {
     case 'step1':
