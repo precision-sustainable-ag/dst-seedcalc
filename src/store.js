@@ -4,8 +4,8 @@ import { stepSlice } from './features/stepSlice/index';
 
 const store = configureStore({
   reducer: {
-    filter: filterSlice,
-    steps: stepSlice,
+    filter: filterSlice.reducer,
+    steps: stepSlice.reducer,
   },
 });
 

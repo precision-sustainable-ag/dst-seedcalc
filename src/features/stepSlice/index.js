@@ -8,7 +8,7 @@ import {
   getSSURGOData,
   getZoneData,
 } from './api';
-import { initialState } from './state';
+import initialState from './state';
 import { soilDrainage } from '../../shared/data/dropdown';
 
 /*
@@ -158,4 +158,5 @@ export const stepSlice = createSlice({
 export const {
   updateModal, clearModal, updateSteps, updateAllSteps,
 } = stepSlice.actions;
-export default stepSlice.reducer;
+
+export default stepSlice;

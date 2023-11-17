@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
-import Grid from "@mui/material/Grid";
-import { Map } from "@psa/dst.ui.map";
-import { Button } from "@mui/material";
-import PlaceIcon from "@mui/icons-material/Place";
-import { useDispatch } from "react-redux";
-import { getZoneData, getSSURGOData } from "../../../../features/stepSlice/api";
-import "./../steps.scss";
+import React, { useEffect } from 'react';
+import Grid from '@mui/material/Grid';
+import { Map } from '@psa/dst.ui.map';
+import { Button } from '@mui/material';
+import PlaceIcon from '@mui/icons-material/Place';
+import { useDispatch } from 'react-redux';
+import { getZoneData, getSSURGOData } from '../../../../features/stepSlice/api';
+import '../steps.scss';
 
 const MapComponent = ({
   handleSteps,
@@ -19,45 +19,46 @@ const MapComponent = ({
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const { latitude, longitude, address, zipCode, county } =
-      selectedToEditSite;
+    const {
+      latitude, longitude, address, zipCode, county,
+    } = selectedToEditSite;
 
     if (
-      latitude === siteCondition.latitude &&
-      longitude === siteCondition.longitude
+      latitude === siteCondition.latitude
+      && longitude === siteCondition.longitude
     ) {
       return;
     }
 
     if (Object.keys(selectedToEditSite).length > 0) {
-      if (siteCondition.council === "MCCC") {
-        const filteredCounty = counties.filter((c) =>
-          county.toLowerCase().includes(c.label.toLowerCase())
-        );
+      if (siteCondition.council === 'MCCC') {
+        const filteredCounty = counties.filter((c) => county.toLowerCase().includes(c.label.toLowerCase()));
         if (filteredCounty.length > 0) {
-          handleUpdateSteps("county", "siteCondition", filteredCounty[0].label);
+          handleUpdateSteps('county', 'siteCondition', filteredCounty[0].label);
         }
       }
-      handleUpdateSteps("latitude", "siteCondition", latitude);
-      handleUpdateSteps("longitude", "siteCondition", longitude);
-      handleUpdateSteps("address", "siteCondition", address);
-      handleUpdateSteps("zipCode", "siteCondition", zipCode);
+      handleUpdateSteps('latitude', 'siteCondition', latitude);
+      handleUpdateSteps('longitude', 'siteCondition', longitude);
+      handleUpdateSteps('address', 'siteCondition', address);
+      handleUpdateSteps('zipCode', 'siteCondition', zipCode);
       dispatch(getZoneData({ zip: zipCode }));
       dispatch(
         getSSURGOData({
           lat: latitude,
           lon: longitude,
-        })
+        }),
       );
     }
   }, [selectedToEditSite]);
 
   return (
     <Grid container>
-      <Grid xs={2} item p={"10px"}>
+      <Grid xs={2} item p="10px">
         {step !== 1 && (
-          <Button variant="contained" onClick={() => handleSteps("back")}>
-            <PlaceIcon /> Select State
+          <Button variant="contained" onClick={() => handleSteps('back')}>
+            <PlaceIcon />
+            {' '}
+            Select State
           </Button>
         )}
       </Grid>

@@ -1,123 +1,118 @@
-//////////////////////////////////////////////////////////
+/// ///////////////////////////////////////////////////////
 //                     Imports                          //
-//////////////////////////////////////////////////////////
+/// ///////////////////////////////////////////////////////
 
-import Grid from "@mui/material/Grid";
-import { Typography, Box, Button } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect, useState } from 'react';
+import Grid from '@mui/material/Grid';
+import { Typography, Button } from '@mui/material';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   ResponsiveContainer,
   ScatterChart,
   Scatter,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
   LabelList,
   ZAxis,
-} from "recharts";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
-import { updateSteps } from "../../../../features/stepSlice";
-import { calculateAllMixValues } from "./../../../../shared/utils/calculate";
-import { generateNRCSStandards } from "../../../../shared/utils/NRCS/calculateNRCS";
-import ReviewMixSteps from "./Steps";
-import { calculatePieChartData } from "./../../../../shared/utils/calculate";
-import "./../steps.scss";
+} from 'recharts';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { updateSteps } from '../../../../features/stepSlice';
+import { calculateAllMixValues, calculatePieChartData } from '../../../../shared/utils/calculate';
+import { generateNRCSStandards } from '../../../../shared/utils/NRCS/calculateNRCS';
+import ReviewMixSteps from './Steps';
+import '../steps.scss';
 import {
   DSTPieChart,
   DSTPieChartLabel,
   DSTPieChartLegend,
-} from "../../../../components/DSTPieChart";
+} from '../../../../components/DSTPieChart';
 import {
   SeedDataChip,
   SeedingRateChip,
-} from "../../../../components/SeedingRateCard";
+} from '../../../../components/SeedingRateCard';
 
 const ReviewMix = ({ council }) => {
   // useSelector for crops & mixRaxio reducer
-
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
-  const siteCondition = data.siteCondition;
-  const seedingMethod = data.seedingMethod;
+  const { siteCondition } = data;
+  const { seedingMethod } = data;
   const { selectedSpecies, seedsSelected } = data.speciesSelection;
 
   const [accordionState, setAccordionState] = useState(
     seedsSelected.reduce((res, seed) => {
       res[seed.label] = false;
       return res;
-    }, {})
+    }, {}),
   );
 
-  const { poundsOfSeedArray, plantsPerAcreArray, seedsPerAcreArray } =
-    calculatePieChartData(seedsSelected);
+  const { poundsOfSeedArray, plantsPerAcreArray, seedsPerAcreArray } = calculatePieChartData(seedsSelected);
 
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
   //                      Redux                           //
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
 
   const handleUpdateSteps = (key, val) => {
-    const data = {
-      type: "speciesSelection",
-      key: key,
+    const newData = {
+      type: 'speciesSelection',
+      key,
       value: val,
     };
-    dispatch(updateSteps(data));
+    dispatch(updateSteps(newData));
   };
 
   const handleUpdateNRCS = (key, val) => {
-    const data = {
-      type: "NRCS",
-      key: key,
+    const newData = {
+      type: 'NRCS',
+      key,
       value: val,
     };
-    dispatch(updateSteps(data));
+    dispatch(updateSteps(newData));
+  };
+
+  const handleUpdateAllSteps = (prevData, index) => {
+    const seeds = [...prevData];
+    seeds[index] = calculateAllMixValues(seeds[index], data);
+    handleUpdateSteps('seedsSelected', seeds);
   };
 
   const initialDataLoad = () => {
-    let seeds = JSON.parse(JSON.stringify(seedsSelected));
-    let newData = [...seeds];
+    const seeds = JSON.parse(JSON.stringify(seedsSelected));
+    const newData = [...seeds];
 
     newData.map((s, i) => {
       const index = i;
       newData[index] = calculateAllMixValues(s, data);
       handleUpdateAllSteps(newData, index);
+      return null;
     });
-  };
-
-  const handleUpdateAllSteps = (prevData, index) => {
-    let seeds = [...prevData];
-    seeds[index] = calculateAllMixValues(seeds[index], data);
-    handleUpdateSteps("seedsSelected", seeds);
   };
 
   const updateSeed = (val, key, seed) => {
     // find index of seed, parse a copy, update proper values, & send to Redux
     const index = seedsSelected.findIndex((s) => s.id === seed.id);
-    let seeds = JSON.parse(JSON.stringify(seedsSelected));
+    const seeds = JSON.parse(JSON.stringify(seedsSelected));
     seeds[index][key] = val;
-    handleUpdateSteps("seedsSelected", seeds);
-    let newData = [...seeds];
+    handleUpdateSteps('seedsSelected', seeds);
+    const newData = [...seeds];
     newData[index] = calculateAllMixValues(seeds[index], data);
     handleUpdateAllSteps(newData, index);
   };
 
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
   //                    State Logic                       //
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
 
   const updateNRCS = async () => {
     // TODO: NRCS calculated here
     const NRCSData = await generateNRCSStandards(
       seedsSelected,
-      data.siteCondition
+      data.siteCondition,
     );
-    handleUpdateNRCS("results", NRCSData);
+    handleUpdateNRCS('results', NRCSData);
   };
 
   // handler for click to open accordion
@@ -126,17 +121,17 @@ const ReviewMix = ({ council }) => {
     setAccordionState({ ...accordionState, [label]: !open });
   };
 
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
   //                    useEffect                         //
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
 
   useEffect(() => {
     // expand related accordion based on sidebar click
     setAccordionState(
       seedsSelected.reduce((res, seed) => {
-        res[seed.label] = seed.label === selectedSpecies ? true : false;
+        res[seed.label] = seed.label === selectedSpecies;
         return res;
-      }, {})
+      }, {}),
     );
   }, [selectedSpecies]);
 
@@ -148,51 +143,52 @@ const ReviewMix = ({ council }) => {
     };
   }, []);
 
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
   //                     Render                           //
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
 
   const renderAccordianChart = (seed) => {
     const labels = [
       {
-        label: "Single Species Seeding Rate",
-        key: "singleSpeciesSeedingRatePLS",
-        val: seed["singleSpeciesSeedingRatePLS"],
+        label: 'Single Species Seeding Rate',
+        key: 'singleSpeciesSeedingRatePLS',
+        val: seed.singleSpeciesSeedingRatePLS,
       },
       {
-        label: "Added to Mix",
-        key: "step2Result",
-        val: seed["step2Result"],
+        label: 'Added to Mix',
+        key: 'step2Result',
+        val: seed.step2Result,
       },
       {
-        label: "Drilled or Broadcast with Cultipack",
-        key: "drilled",
-        val: seed["step2Result"],
+        label: 'Drilled or Broadcast with Cultipack',
+        key: 'drilled',
+        val: seed.step2Result,
       },
       {
         // FIXME: static value here, maybe need to change to dynamic
-        label: "Management Impacts on Mix (+57%)",
-        key: "managementImpactOnMix",
-        val: seed["step3Result"],
+        label: 'Management Impacts on Mix (+57%)',
+        key: 'managementImpactOnMix',
+        val: seed.step3Result,
       },
       {
-        label: "Bulk Germination and Purity",
-        key: "bulkSeedingRate",
-        val: seed["bulkSeedingRate"],
+        label: 'Bulk Germination and Purity',
+        key: 'bulkSeedingRate',
+        val: seed.bulkSeedingRate,
       },
     ];
 
-    const generateScatterData = (labels) => {
-      let results = [];
+    const generateScatterData = () => {
+      const results = [];
       let counter = 0;
-      labels.map((l, i) => {
+      labels.map((l) => {
         counter += 30;
         results.push({ x: counter, y: l.val, z: 400 });
+        return null;
       });
       return results;
     };
 
-    const scatterData = generateScatterData(labels);
+    const scatterData = generateScatterData();
 
     return (
       <Grid container>
@@ -225,22 +221,20 @@ const ReviewMix = ({ council }) => {
           </ResponsiveContainer>
         </Grid>
 
-        {labels.map((l, i) => {
-          return (
-            <Grid
-              container
-              sx={{ backgroundColor: !(i % 2) && "#e3e5d3" }}
-              key={i}
-            >
-              <Grid item sx={{ textAlign: "justify" }} xs={10} pl={1}>
-                {l.label}
-              </Grid>
-              <Grid item xs={2}>
-                {l.val}
-              </Grid>
+        {labels.map((l, i) => (
+          <Grid
+            container
+            sx={{ backgroundColor: !(i % 2) && '#e3e5d3' }}
+            key={i}
+          >
+            <Grid item sx={{ textAlign: 'justify' }} xs={10} pl={1}>
+              {l.label}
             </Grid>
-          );
-        })}
+            <Grid item xs={2}>
+              {l.val}
+            </Grid>
+          </Grid>
+        ))}
       </Grid>
     );
   };
@@ -250,95 +244,96 @@ const ReviewMix = ({ council }) => {
       <Grid item xs={12}>
         <Typography variant="h2">Review your mix</Typography>
       </Grid>
-      <Grid item xs={6} md={6} sx={{ textAlign: "justify" }}>
+      <Grid item xs={6} md={6} sx={{ textAlign: 'justify' }}>
         <DSTPieChart chartData={poundsOfSeedArray} />
-        <DSTPieChartLabel>{"Pounds of Seed / Acre"}</DSTPieChartLabel>
+        <DSTPieChartLabel>Pounds of Seed / Acre</DSTPieChartLabel>
         <DSTPieChartLegend chartData={poundsOfSeedArray} />
       </Grid>
 
-      <Grid item xs={6} md={6} sx={{ textAlign: "justify" }}>
+      <Grid item xs={6} md={6} sx={{ textAlign: 'justify' }}>
         <DSTPieChart
           chartData={
-            council === "MCCC" ? plantsPerAcreArray : seedsPerAcreArray
+            council === 'MCCC' ? plantsPerAcreArray : seedsPerAcreArray
           }
         />
         <DSTPieChartLabel>
-          {council === "MCCC" ? "Plants" : "Seeds"} Per Acre{" "}
+          {council === 'MCCC' ? 'Plants' : 'Seeds'}
+          {' '}
+          Per Acre
+          {' '}
         </DSTPieChartLabel>
 
         <DSTPieChartLegend
           chartData={
-            council === "MCCC" ? plantsPerAcreArray : seedsPerAcreArray
+            council === 'MCCC' ? plantsPerAcreArray : seedsPerAcreArray
           }
         />
       </Grid>
-      {seedsSelected.map((seed, i) => {
-        return (
-          <Grid item xs={12} key={i}>
-            <Accordion
-              expanded={accordionState[seed.label]}
-              onChange={() => handleExpandAccordion(seed.label)}
+      {seedsSelected.map((seed, i) => (
+        <Grid item xs={12} key={i}>
+          <Accordion
+            expanded={accordionState[seed.label]}
+            onChange={() => handleExpandAccordion(seed.label)}
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              className="accordian-summary"
             >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                className="accordian-summary"
-              >
-                <Typography>{seed.label}</Typography>
-              </AccordionSummary>
-              <AccordionDetails className="accordian-details">
-                {renderAccordianChart(seed)}
+              <Typography>{seed.label}</Typography>
+            </AccordionSummary>
+            <AccordionDetails className="accordian-details">
+              {renderAccordianChart(seed)}
 
-                <Grid container>
-                  <Grid item xs={6}>
-                    <SeedingRateChip
-                      label={"Mix Seeding Rate PLS"}
-                      value={Math.floor(seed.singleSpeciesSeedingRatePLS)}
-                    />
-                    <SeedDataChip
-                      label={"Aprox plants per"}
-                      value={Math.floor(seed.plantsPerAcre)}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <SeedingRateChip
-                      label={"Bulk Seeding Rate"}
-                      value={Math.floor(seed.bulkSeedingRate)}
-                    />
-                    <SeedDataChip
-                      label={"Seeds per"}
-                      value={Math.floor(seed.seedsPerAcre)}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} pt={"1rem"}>
-                    <Button
-                      onClick={(e) => {
-                        updateSeed(!seed.showSteps, "showSteps", seed);
-                      }}
-                      variant="outlined"
-                    >
-                      {seed.showSteps ? "Close Steps" : "Change My Rate"}
-                    </Button>
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    {seed.showSteps && (
-                      <ReviewMixSteps
-                        seedsSelected={seedsSelected}
-                        council={council}
-                        updateSeed={updateSeed}
-                        seedingMethod={seedingMethod}
-                        siteCondition={siteCondition}
-                        seed={seed}
-                      />
-                    )}
-                  </Grid>
+              <Grid container>
+                <Grid item xs={6}>
+                  <SeedingRateChip
+                    label="Mix Seeding Rate PLS"
+                    value={Math.floor(seed.singleSpeciesSeedingRatePLS)}
+                  />
+                  <SeedDataChip
+                    label="Aprox plants per"
+                    value={Math.floor(seed.plantsPerAcre)}
+                  />
                 </Grid>
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-        );
-      })}
+                <Grid item xs={6}>
+                  <SeedingRateChip
+                    label="Bulk Seeding Rate"
+                    value={Math.floor(seed.bulkSeedingRate)}
+                  />
+                  <SeedDataChip
+                    label="Seeds per"
+                    value={Math.floor(seed.seedsPerAcre)}
+                  />
+                </Grid>
+
+                <Grid item xs={12} pt="1rem">
+                  <Button
+                    onClick={() => {
+                      updateSeed(!seed.showSteps, 'showSteps', seed);
+                    }}
+                    variant="outlined"
+                  >
+                    {seed.showSteps ? 'Close Steps' : 'Change My Rate'}
+                  </Button>
+                </Grid>
+
+                <Grid item xs={12}>
+                  {seed.showSteps && (
+                  <ReviewMixSteps
+                    seedsSelected={seedsSelected}
+                    council={council}
+                    updateSeed={updateSeed}
+                    seedingMethod={seedingMethod}
+                    siteCondition={siteCondition}
+                    seed={seed}
+                  />
+                  )}
+                </Grid>
+              </Grid>
+            </AccordionDetails>
+          </Accordion>
+        </Grid>
+      ))}
     </Grid>
   );
 };

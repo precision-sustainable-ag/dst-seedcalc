@@ -48,4 +48,4 @@ export const filterSlice = createSlice({
 });
 
 export const { addFilter, deleteFilter } = filterSlice.actions;
-export default filterSlice.reducer;
+export default filterSlice;
