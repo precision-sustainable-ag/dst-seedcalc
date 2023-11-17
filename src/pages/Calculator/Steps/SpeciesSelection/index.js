@@ -99,11 +99,13 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
         firstReliableEstablishmentStart:
           cropDetails.attributes['Planting and Growth Windows'][
             'Reliable Establishment'
-          ]?.values[0] ?? '',
+          ]?.values[0]?.split(' - ')[0]
+            .slice(0, -5) ?? '',
         firstReliableEstablishmentEnd:
           cropDetails.attributes['Planting and Growth Windows'][
             'Reliable Establishment'
-          ]?.values[0] ?? '',
+          ]?.values[0]?.split(' - ')[1]
+            .slice(0, -5) ?? '',
         secondReliableEstablishmentStart:
           council === 'MCCC'
             ? cropDetails.attributes['Planting and Growth Windows'][

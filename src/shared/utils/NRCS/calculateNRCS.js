@@ -39,19 +39,15 @@ export const calculateExpectedWinterSurvival = (seedsSelected) => {
 };
 
 export const calculatePlantingDate = (seed, siteDate) => {
+  const {
+    firstReliableEstablishmentStart, firstReliableEstablishmentEnd,
+    secondReliableEstablishmentStart, secondReliableEstablishmentEnd,
+  } = seed.plantingDates;
   // take planting date from first page, then the seed data's stuff
-  const startDate = new Date(
-    seed.plantingDates.firstReliableEstablishmentStart,
-  ).getTime();
-  const endDate = new Date(
-    seed.plantingDates.firstReliableEstablishmentEnd,
-  ).getTime();
-  const secondStartDate = new Date(
-    seed.plantingDates.secondReliableEstablishmentStart,
-  ).getTime();
-  const secondEndDate = new Date(
-    seed.plantingDates.secondReliableEstablishmentEnd,
-  ).getTime();
+  const startDate = new Date(firstReliableEstablishmentStart).getTime();
+  const endDate = new Date(firstReliableEstablishmentEnd).getTime();
+  const secondStartDate = new Date(secondReliableEstablishmentStart).getTime();
+  const secondEndDate = new Date(secondReliableEstablishmentEnd).getTime();
   const plannedDate = new Date(siteDate.slice(0, -5)).getTime();
   const siteDateMonth = (new Date(siteDate).getMonth() + 1)
     .toString()
@@ -61,11 +57,11 @@ export const calculatePlantingDate = (seed, siteDate) => {
     .padStart(2, '0');
   const formattedSiteDate = `${siteDateMonth}/${siteDateDate}`;
   const pass = (plannedDate >= startDate && plannedDate <= endDate)
-    || (plannedDate >= secondStartDate && plannedDate <= secondEndDate);
+    || (secondStartDate && plannedDate >= secondStartDate && plannedDate <= secondEndDate);
   return {
     label: seed.label,
-    expect: `${seed.plantingDates.firstReliableEstablishmentStart} - ${seed.plantingDates.firstReliableEstablishmentEnd},\
-    ${seed.plantingDates.secondReliableEstablishmentStart} - ${seed.plantingDates.secondReliableEstablishmentEnd}`,
+    expect: `${firstReliableEstablishmentStart} - ${firstReliableEstablishmentEnd}\
+    ${secondStartDate ? `, ${secondReliableEstablishmentStart} - ${secondReliableEstablishmentEnd}` : ''}`,
     result: formattedSiteDate,
     pass,
   };
