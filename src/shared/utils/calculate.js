@@ -1,19 +1,19 @@
 export const calculateInt = (nums, type) => {
   switch (type) {
-    case "add":
+    case 'add':
       return parseFloat(nums[0]) + parseFloat(nums[1]);
-    case "subtract":
+    case 'subtract':
       return parseFloat(nums[0]) - parseFloat(nums[1]);
-    case "multiply":
+    case 'multiply':
       return parseFloat(nums[0]) * parseFloat(nums[1]);
-    case "divide":
+    case 'divide':
       return parseFloat(nums[0]) / parseFloat(nums[1]);
-    case "percentage":
+    case 'percentage':
       return parseFloat(nums[0]) * (parseFloat(nums[1]) / 100);
-    case "percentageDivide":
+    case 'percentageDivide':
       return parseFloat(nums[0] / parseFloat(nums[1]) / 100);
     default:
-      return;
+      return undefined;
   }
 };
 
@@ -23,82 +23,76 @@ export const calculateAveragePercentage = (nums) => {
   return average * 100;
 };
 
-//////////////////////////////////////////////////////////
+export const roundToDecimal = (float, digits) => {
+  const factor = 10 ** digits;
+  return Math.round(float * factor) / factor;
+};
+
+export const convertAcresToSqft = (number) => number * 43560;
+
+export const convertSqftToAcres = (number) => number / 43560;
+
+export const convertToPercent = (num) => (parseFloat(num) * 100).toFixed(1);
+
+export const convertToDecimal = (num) => parseFloat(num) / 100;
+/// ///////////////////////////////////////////////////////
 //                    Mix Ratio                         //
-//////////////////////////////////////////////////////////
+/// ///////////////////////////////////////////////////////
 
-// calculation for mix ratio steps in MCCC/NECCC
-export const calculateAllMixRatioValues = (prevSeed, data, council) => {
-  let seed = { ...prevSeed };
-
-  if (council === "MCCC") {
-    seed.mixSeedingRate = calculateMixRatioMCCC("step1", seed).val.toFixed(2);
-    seed.seedsPerAcre = calculateMixRatioMCCC("step2", seed).val.toFixed(2);
-    seed.plantsPerAcre = calculateMixRatioMCCC("step3", seed).val.toFixed(2);
-    seed.aproxPlantsSqFt = calculateMixRatioMCCC("step4", seed).val.toFixed(2);
-  } else if (council === "NECCC") {
-    seed.mixSeedingRate = calculateMixRatioNECCC(
-      "step1",
-      seed,
-      data
-    ).val.toFixed(2);
-    seed.seedsPerAcre = calculateMixRatioNECCC("step2", seed, data).val.toFixed(
-      2
-    );
-    seed.aproxPlantsSqFt = calculateMixRatioNECCC(
-      "step3",
-      seed,
-      data
-    ).val.toFixed(2);
-  }
-
-  return seed;
+export const generatePercentInGroup = (seed, seeds) => {
+  const group = seed.group.label;
+  let count = 0;
+  seeds.map((s) => {
+    if (s.group.label === group) count += 1;
+    return undefined;
+  });
+  return 1 / count;
 };
 
 export const calculateMixRatioMCCC = (step, seed) => {
   switch (step) {
-    case "step1":
+    case 'step1':
       return {
-        key: "mixSeedingRate",
+        key: 'mixSeedingRate',
         val: calculateInt(
           [
             seed.singleSpeciesSeedingRatePLS,
             convertToDecimal(seed.percentOfSingleSpeciesRate),
           ],
-          "multiply"
+          'multiply',
         ),
       };
-    case "step2":
+    case 'step2':
       return {
-        key: "seedsPerAcre",
+        key: 'seedsPerAcre',
         val: calculateInt(
           [seed.seedsPerPound, seed.mixSeedingRate],
-          "multiply"
+          'multiply',
         ),
       };
-    case "step3":
+    case 'step3':
       return {
-        key: "plantsPerAcre",
+        key: 'plantsPerAcre',
         val: calculateInt(
           [seed.seedsPerAcre, seed.percentChanceOfWinterSurvival],
-          "multiply"
+          'multiply',
         ),
       };
-    case "step4":
+    case 'step4':
       return {
-        key: "aproxPlantsSqFt",
-        val: calculateInt([seed.plantsPerAcre, seed.sqFtAcre], "divide"),
+        key: 'aproxPlantsSqFt',
+        val: calculateInt([seed.plantsPerAcre, seed.sqFtAcre], 'divide'),
       };
     default:
-      return;
+      return undefined;
   }
 };
 
 export const calculateMixRatioNECCC = (step, seed, { speciesSelection }) => {
   switch (step) {
-    case "step1":
+    case 'step1':
       return {
-        key: "mixSeedingRate",
+        key: 'mixSeedingRate',
         val: calculateInt(
           [
             generatePercentInGroup(seed, speciesSelection.seedsSelected),
@@ -107,145 +101,125 @@ export const calculateMixRatioNECCC = (step, seed, { speciesSelection }) => {
                 seed.singleSpeciesSeedingRatePLS,
                 convertToDecimal(seed.percentOfSingleSpeciesRate),
               ],
-              "multiply"
+              'multiply',
             ),
           ],
-          "multiply"
+          'multiply',
         ),
       };
-    case "step2":
+    case 'step2':
       return {
-        key: "seedsPerAcre",
+        key: 'seedsPerAcre',
         val: calculateInt(
           [seed.seedsPerPound, seed.mixSeedingRate],
-          "multiply"
+          'multiply',
         ),
       };
-    case "step3":
+    case 'step3':
       return {
-        key: "aproxPlantsSqFt",
-        val: calculateInt([seed.seedsPerAcre, seed.sqFtAcre], "divide"),
+        key: 'aproxPlantsSqFt',
+        val: calculateInt([seed.seedsPerAcre, seed.sqFtAcre], 'divide'),
       };
     default:
-      return;
+      return undefined;
   }
 };
+// calculation for mix ratio steps in MCCC/NECCC
+export const calculateAllMixRatioValues = (prevSeed, data, council) => {
+  const seed = { ...prevSeed };
 
-//////////////////////////////////////////////////////////
+  if (council === 'MCCC') {
+    seed.mixSeedingRate = calculateMixRatioMCCC('step1', seed).val.toFixed(2);
+    seed.seedsPerAcre = calculateMixRatioMCCC('step2', seed).val.toFixed(2);
+    seed.plantsPerAcre = calculateMixRatioMCCC('step3', seed).val.toFixed(2);
+    seed.aproxPlantsSqFt = calculateMixRatioMCCC('step4', seed).val.toFixed(2);
+  } else if (council === 'NECCC') {
+    seed.mixSeedingRate = calculateMixRatioNECCC(
+      'step1',
+      seed,
+      data,
+    ).val.toFixed(2);
+    seed.seedsPerAcre = calculateMixRatioNECCC('step2', seed, data).val.toFixed(
+      2,
+    );
+    seed.aproxPlantsSqFt = calculateMixRatioNECCC(
+      'step3',
+      seed,
+      data,
+    ).val.toFixed(2);
+  }
+
+  return seed;
+};
+
+/// ///////////////////////////////////////////////////////
 //               Review Mix Logic                       //
-//////////////////////////////////////////////////////////
-
-export const calculateAllMixValues = (prevSeed, data) => {
-  generatePercentInGroup(prevSeed, data.speciesSelection.seedsSelected);
-  let seed = { ...prevSeed };
-  seed.step1Result = calculateReviewMix("step1", seed, data).val.toFixed(2);
-  seed.step2Result = calculateReviewMix("step2", seed, data).val.toFixed(2);
-  seed.step3Result = calculateReviewMix("step3", seed, data).val.toFixed(2);
-  seed.bulkSeedingRate = calculateReviewMix("step4", seed, data).val.toFixed(2);
-  seed.poundsForPurchase = calculateReviewMix("step5", seed, data).val.toFixed(
-    2
-  );
-  return seed;
-};
-
-export const generatePercentInGroup = (seed, seeds) => {
-  const group = seed.group.label;
-  let count = 0;
-  seeds.map((s, i) => {
-    s.group.label === group && count++;
-  });
-  return 1 / count;
-};
-
-export const calculateAllMixValuesNECCC = (prevSeed, data) => {
-  generatePercentInGroup(prevSeed, data.speciesSelection.seedsSelected);
-  let seed = { ...prevSeed };
-  seed.step1Result = calculateReviewMixNECCC("step1", seed, data).val.toFixed(
-    2
-  );
-  seed.step2Result = calculateReviewMixNECCC("step2", seed, data).val.toFixed(
-    2
-  );
-  seed.step3Result = calculateReviewMixNECCC("step3", seed, data).val.toFixed(
-    2
-  );
-  seed.bulkSeedingRate = calculateReviewMixNECCC(
-    "step4",
-    seed,
-    data
-  ).val.toFixed(2);
-  seed.poundsForPurchase = calculateReviewMixNECCC(
-    "step5",
-    seed,
-    data
-  ).val.toFixed(2);
-  return seed;
-};
+/// ///////////////////////////////////////////////////////
 
 export const calculateReviewMix = (
   step,
   seed,
-  { siteCondition, seedingMethod }
+  { siteCondition, seedingMethod },
 ) => {
   switch (step) {
-    case "step1":
+    case 'step1':
       return {
-        key: "step1Result",
+        key: 'step1Result',
         val: calculateInt(
           [
             seed.singleSpeciesSeedingRatePLS,
             convertToDecimal(seed.percentOfSingleSpeciesRate),
           ],
-          "multiply"
+          'multiply',
         ),
       };
-    case "step2":
+    case 'step2':
       return {
-        key: "step2Result",
-        val: calculateInt([seed.step1Result, seed.plantingMethod], "multiply"),
+        key: 'step2Result',
+        val: calculateInt([seed.step1Result, seed.plantingMethod], 'multiply'),
       };
-    case "step3":
+    case 'step3':
       return {
-        key: "step3Result",
+        key: 'step3Result',
         val: calculateInt(
           [
             seed.step2Result,
             calculateInt(
               [seed.step2Result, seedingMethod.managementImpactOnMix],
-              "multiply"
+              'multiply',
             ),
           ],
-          "add"
+          'add',
         ),
       };
-    case "step4":
+    case 'step4':
       return {
-        key: "bulkSeedingRate",
+        key: 'bulkSeedingRate',
         val:
           seed.step3Result / seed.germinationPercentage / seed.purityPercentage,
       };
-    case "step5":
+    case 'step5':
       return {
-        key: "poundsForPurchase",
+        key: 'poundsForPurchase',
         val: calculateInt(
           [seed.bulkSeedingRate, siteCondition.acres],
-          "multiply"
+          'multiply',
         ),
       };
     default:
-      return;
+      return undefined;
   }
 };
 
 export const calculateReviewMixNECCC = (
   step,
   seed,
-  { siteCondition, speciesSelection }
+  { siteCondition, speciesSelection },
 ) => {
   switch (step) {
-    case "step1":
+    case 'step1':
       return {
-        key: "step1Result",
+        key: 'step1Result',
         val: calculateInt(
           [
             generatePercentInGroup(seed, speciesSelection.seedsSelected),
@@ -254,52 +228,90 @@ export const calculateReviewMixNECCC = (
                 seed.singleSpeciesSeedingRatePLS,
                 convertToDecimal(seed.percentOfSingleSpeciesRate),
               ],
-              "multiply"
+              'multiply',
             ),
           ],
-          "multiply"
+          'multiply',
         ),
       };
-    case "step2":
+    case 'step2':
       return {
-        key: "step2Result",
+        key: 'step2Result',
         // FIXME: is this correct?
-        val: calculateInt([seed.seedsPerPound, seed.step1Result], "multiply"),
+        val: calculateInt([seed.seedsPerPound, seed.step1Result], 'multiply'),
       };
-    case "step3":
+    case 'step3':
       return {
-        key: "step3Result",
+        key: 'step3Result',
         val: calculateInt(
           [
             seed.step2Result,
             calculateInt(
               [seed.step2Result, seed.managementImpactOnMix],
-              "percentage"
+              'percentage',
             ),
           ],
-          "subtract"
+          'subtract',
         ),
       };
-    case "step4":
+    case 'step4':
       return {
-        key: "bulkSeedingRate",
+        key: 'bulkSeedingRate',
         val:
-          seed.step3Result /
-          (seed.germinationPercentage / 100) /
-          (seed.purityPercentage / 100),
+          seed.step3Result
+          / (seed.germinationPercentage / 100)
+          / (seed.purityPercentage / 100),
       };
-    case "step5":
+    case 'step5':
       return {
-        key: "poundsForPurchase",
+        key: 'poundsForPurchase',
         val: calculateInt(
           [seed.bulkSeedingRate, siteCondition.acres],
-          "multiply"
+          'multiply',
         ),
       };
     default:
-      return;
+      return undefined;
   }
 };
+export const calculateAllMixValues = (prevSeed, data) => {
+  generatePercentInGroup(prevSeed, data.speciesSelection.seedsSelected);
+  const seed = { ...prevSeed };
+  seed.step1Result = calculateReviewMix('step1', seed, data).val.toFixed(2);
+  seed.step2Result = calculateReviewMix('step2', seed, data).val.toFixed(2);
+  seed.step3Result = calculateReviewMix('step3', seed, data).val.toFixed(2);
+  seed.bulkSeedingRate = calculateReviewMix('step4', seed, data).val.toFixed(2);
+  seed.poundsForPurchase = calculateReviewMix('step5', seed, data).val.toFixed(
+    2,
+  );
+  return seed;
+};
+
+export const calculateAllMixValuesNECCC = (prevSeed, data) => {
+  generatePercentInGroup(prevSeed, data.speciesSelection.seedsSelected);
+  const seed = { ...prevSeed };
+  seed.step1Result = calculateReviewMixNECCC('step1', seed, data).val.toFixed(
+    2,
+  );
+  seed.step2Result = calculateReviewMixNECCC('step2', seed, data).val.toFixed(
+    2,
+  );
+  seed.step3Result = calculateReviewMixNECCC('step3', seed, data).val.toFixed(
+    2,
+  );
+  seed.bulkSeedingRate = calculateReviewMixNECCC(
+    'step4',
+    seed,
+    data,
+  ).val.toFixed(2);
+  seed.poundsForPurchase = calculateReviewMixNECCC(
+    'step5',
+    seed,
+    data,
+  ).val.toFixed(2);
+  return seed;
+};
+
 /* Review mix end */
 
 /* Confirm plan start */
@@ -308,11 +320,11 @@ export const calculateAllConfirmPlan = (prevSeed) => {
   const seed = { ...prevSeed };
   seed.totalPounds = calculateInt(
     [seed.bulkSeedingRate, seed.acres],
-    "multiply"
+    'multiply',
   );
   seed.totalCost = calculateInt(
     [seed.costPerPound, seed.totalPounds],
-    "multiply"
+    'multiply',
   );
   return seed;
 };
@@ -320,64 +332,25 @@ export const calculateAllConfirmPlan = (prevSeed) => {
 
 /* Calculate NRCS start */
 
-export const calculateNRCSStandards = (i, seeds) => {
-  const NRCS = {
-    seedingRate: {
-      type: "number",
-      expect: seeds[i]["MCCC Seeding Rate"] / seeds.length,
-      result: 0,
-    },
-    plantingDate: {
-      type: "boolean",
-      expect: true,
-      result: false,
-    },
-    soilDrainage: {
-      type: "number",
-      expect: 0,
-      result: 0,
-    },
-    expectedWinterSurvival: {
-      type: "string",
-      expect: "",
-      result: 0,
-    },
-  };
-};
-
 /* Calculate NRCS end */
 
 export const isNumeric = (str) => {
-  if (typeof str != "string") return false;
-  return !isNaN(str) && !isNaN(parseFloat(str));
+  if (typeof str !== 'string') return false;
+  return !Number.isNaN(str) && !Number.isNaN(parseFloat(str));
 };
 
-export const convertAcresToSqft = (number) => {
-  return number * 43560;
-};
+// eslint-disable-next-line no-unused-vars
+const convertToFormat = () => new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+});
 
-export const convertSqftToAcres = (number) => {
-  return number / 43560;
-};
-
-export const convertToPercent = (num) => {
-  return (parseFloat(num) * 100).toFixed(1);
-};
-
-export const convertToDecimal = (num) => {
-  return parseFloat(num) / 100;
-};
-
-const convertToFormat = () => {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  });
-};
 const setAll = (obj, val) => {
+  // eslint-disable-next-line no-return-assign
   Object.keys(obj).forEach((k) => (obj[k] = val));
   return obj;
 };
+
 const setNull = (obj) => setAll(obj, null);
 export const emptyValues = (data) => {
   const emptyObj = setNull(data);
@@ -406,9 +379,4 @@ export const calculatePieChartData = (seedsSelected) => {
   });
 
   return { poundsOfSeedArray, plantsPerAcreArray, seedsPerAcreArray };
-};
-
-export const roundToDecimal = (float, digits) => {
-  const factor = Math.pow(10, digits);
-  return Math.round(float * factor) / factor;
 };
