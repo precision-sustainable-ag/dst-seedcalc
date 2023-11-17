@@ -1,27 +1,27 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 const initialState = {
   loading: false,
   value: [
-    { id: "1", title: "title 1", content: "test" },
-    { id: "2", title: "title 2", content: "test" },
+    { id: '1', title: 'title 1', content: 'test' },
+    { id: '2', title: 'title 2', content: 'test' },
   ],
   etc: {},
 };
 export const getPosts = createAsyncThunk(
-  //action type string
-  "filter/getPosts",
+  // action type string
+  'filter/getPosts',
   // callback function
-  async (thunkAPI) => {
+  async () => {
     const res = await fetch(
-      "https://datausa.io/api/data?drilldowns=Nation&measures=Population"
+      'https://datausa.io/api/data?drilldowns=Nation&measures=Population',
     ).then((data) => data.json());
     return res;
-  }
+  },
 );
 
 export const filterSlice = createSlice({
-  name: "filter",
+  name: 'filter',
   initialState,
   reducers: {
     addFilter: (state, action) => {
@@ -42,7 +42,7 @@ export const filterSlice = createSlice({
     [getPosts.rejected]: (state) => {
       state.loading = false;
       state.error = true;
-      state.errormessage = "";
+      state.errormessage = '';
     },
   },
 });

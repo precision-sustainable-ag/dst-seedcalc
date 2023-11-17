@@ -5,7 +5,7 @@ import { ThemeProvider } from '@emotion/react';
 import Calculator from './pages/Calculator';
 import Results from './pages/Results';
 import Home from './pages/Home';
-import { dstTheme } from './shared/themes';
+import dstTheme from './shared/themes';
 
 const App = () => (
   <ThemeProvider theme={dstTheme}>
