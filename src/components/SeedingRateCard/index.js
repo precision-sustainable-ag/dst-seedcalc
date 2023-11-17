@@ -1,27 +1,25 @@
-import { useState } from "react";
-import { Typography, Box, Button } from "@mui/material";
+import React, { useState } from 'react';
+import { Typography, Box, Button } from '@mui/material';
 
-const SeedingRateChip = ({ label, value }) => {
-  return (
-    <>
-      <Typography>{label}</Typography>
-      <Box
-        sx={{
-          width: "50px",
-          height: "50px",
-          padding: "11px",
-          margin: "0 auto",
-          backgroundColor: "#E5E7D5",
-          border: "#C7C7C7 solid 1px",
-          borderRadius: "50%",
-        }}
-      >
-        <Typography>{value}</Typography>
-      </Box>
-      <Typography>Lbs / Acre</Typography>
-    </>
-  );
-};
+const SeedingRateChip = ({ label, value }) => (
+  <>
+    <Typography>{label}</Typography>
+    <Box
+      sx={{
+        width: '50px',
+        height: '50px',
+        padding: '11px',
+        margin: '0 auto',
+        backgroundColor: '#E5E7D5',
+        border: '#C7C7C7 solid 1px',
+        borderRadius: '50%',
+      }}
+    >
+      <Typography>{value}</Typography>
+    </Box>
+    <Typography>Lbs / Acre</Typography>
+  </>
+);
 
 const SeedDataChip = ({ label, value }) => {
   // default value is always seeds/palnts per acre
@@ -42,13 +40,13 @@ const SeedDataChip = ({ label, value }) => {
     <>
       <Box
         sx={{
-          width: "110px",
-          height: "50px",
-          padding: "11px",
-          margin: "0 auto",
-          backgroundColor: "#E5E7D5",
-          border: "#C7C7C7 solid 1px",
-          borderRadius: "16px",
+          width: '110px',
+          height: '50px',
+          padding: '11px',
+          margin: '0 auto',
+          backgroundColor: '#E5E7D5',
+          border: '#C7C7C7 solid 1px',
+          borderRadius: '16px',
         }}
       >
         <Typography>{displayValue}</Typography>
@@ -56,14 +54,14 @@ const SeedDataChip = ({ label, value }) => {
       <Typography>{label}</Typography>
 
       <Button
-        variant={perAcre ? "outlined" : "contained"}
+        variant={perAcre ? 'outlined' : 'contained'}
         onClick={handleClickSqft}
       >
         Sqft
       </Button>
-      {"   "}
+      {'   '}
       <Button
-        variant={perAcre ? "contained" : "outlined"}
+        variant={perAcre ? 'contained' : 'outlined'}
         onClick={handleClickAcre}
       >
         Acres

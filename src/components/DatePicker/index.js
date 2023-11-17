@@ -1,11 +1,11 @@
-import Stack from "@mui/material/Stack";
-import TextField from "@mui/material/TextField";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
-import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
+import React from 'react';
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 
-/* 
+/*
 {
     name: DatePicker
     description: Re-usable Date Picker component,
@@ -17,18 +17,18 @@ import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 }
 */
 
-export const DatePicker = ({ label, value, handleChange }) => {
-  return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Stack spacing={3}>
-        <DesktopDatePicker
-          label={label}
-          inputFormat="MM/DD/YYYY"
-          value={value}
-          onChange={handleChange}
-          renderInput={(params) => <TextField {...params} />}
-        />
-      </Stack>
-    </LocalizationProvider>
-  );
-};
+const DatePicker = ({ label, value, handleChange }) => (
+  <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <Stack spacing={3}>
+      <DesktopDatePicker
+        label={label}
+        inputFormat="MM/DD/YYYY"
+        value={value}
+        onChange={handleChange}
+        renderInput={(params) => <TextField {...params} />}
+      />
+    </Stack>
+  </LocalizationProvider>
+);
+
+export default DatePicker;

@@ -1,4 +1,5 @@
-import { Switch } from "@mui/material";
+import React from 'react';
+import { Switch } from '@mui/material';
 /*
 {
   name: DSTSwitch,
@@ -10,20 +11,19 @@ import { Switch } from "@mui/material";
 }
 */
 
-const label = { inputProps: { "aria-label": "Switch" } };
-export const DSTSwitch = ({ checked, handleChange }) => {
-  return (
-    <Switch
-      {...label}
-      checked={checked}
-      onChange={handleChange}
-      color="default"
-      sx={{
-        "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
-          backgroundColor: "primary.text",
-          opacity: "0.9",
-        },
-      }}
-    />
-  );
-};
+const label = { inputProps: { 'aria-label': 'Switch' } };
+const DSTSwitch = ({ checked, handleChange }) => (
+  <Switch
+    {...label}
+    checked={checked}
+    onChange={handleChange}
+    color="default"
+    sx={{
+      '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+        backgroundColor: 'primary.text',
+        opacity: '0.9',
+      },
+    }}
+  />
+);
+export default DSTSwitch;
