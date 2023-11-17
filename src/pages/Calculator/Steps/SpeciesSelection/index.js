@@ -286,7 +286,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
       // update seedsSelected and diversitySelected
       handleUpdateStore('speciesSelection', 'seedsSelected', [
         ...newList,
-        calculateAllMixRatioValues(newSeed, data, council),
+        calculateAllMixRatioValues(newSeed, [], council),
       ]);
       handleUpdateStore('speciesSelection', 'diversitySelected', [
         ...diversitySelected,
@@ -308,7 +308,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
             percentOfSingleSpeciesRate:
                 (1 / (seedsSelected.length + 1)) * 100,
           }))
-          .map((seed) => calculateAllMixRatioValues(seed, data, council));
+          .map((seed) => calculateAllMixRatioValues(seed, speciesSelection.seedsSelected, council));
         handleUpdateStore('speciesSelection', 'seedsSelected', newList);
         const seedResult = seedsSelected.filter((i) => i.group.label === species).length;
         if (seedResult <= 1) {
@@ -320,14 +320,14 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
         }
       } else {
         // if seed doesn't exist, add seed to seedsSelected, update diversitySelected
-        const newList = seedsSelected.map((s) => ({
+        const newList = [...seedsSelected, newSeed].map((s) => ({
           ...s,
           percentOfSingleSpeciesRate: (1 / (seedsSelected.length + 1)) * 100,
-        }));
+        })).map((seed) => calculateAllMixRatioValues(seed, [...seedsSelected, newSeed], council));
         handleUpdateStore(
           'speciesSelection',
           'seedsSelected',
-          [...newList, newSeed].map((seed) => calculateAllMixRatioValues(seed, data, council)),
+          newList,
         );
         if (!diversitySelected.includes(species)) {
           handleUpdateStore('speciesSelection', 'diversitySelected', [

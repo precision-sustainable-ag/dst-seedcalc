@@ -46,6 +46,7 @@ export const generatePercentInGroup = (seed, seeds) => {
     if (s.group.label === group) count += 1;
     return undefined;
   });
+  console.log(group, count);
   return 1 / count;
 };
 
@@ -89,14 +90,14 @@ export const calculateMixRatioMCCC = (step, seed) => {
 };
 
 // FIXME: this calculation is not correct and will cause problems
-export const calculateMixRatioNECCC = (step, seed, { speciesSelection }) => {
+export const calculateMixRatioNECCC = (step, seed, seedList) => {
   switch (step) {
     case 'step1':
       return {
         key: 'mixSeedingRate',
         val: calculateInt(
           [
-            generatePercentInGroup(seed, speciesSelection.seedsSelected),
+            generatePercentInGroup(seed, seedList),
             calculateInt(
               [
                 seed.singleSpeciesSeedingRatePLS,
@@ -126,7 +127,7 @@ export const calculateMixRatioNECCC = (step, seed, { speciesSelection }) => {
   }
 };
 // calculation for mix ratio steps in MCCC/NECCC
-export const calculateAllMixRatioValues = (prevSeed, data, council) => {
+export const calculateAllMixRatioValues = (prevSeed, seedList, council) => {
   const seed = { ...prevSeed };
 
   if (council === 'MCCC') {
@@ -138,15 +139,15 @@ export const calculateAllMixRatioValues = (prevSeed, data, council) => {
     seed.mixSeedingRate = calculateMixRatioNECCC(
       'step1',
       seed,
-      data,
+      seedList,
     ).val.toFixed(2);
-    seed.seedsPerAcre = calculateMixRatioNECCC('step2', seed, data).val.toFixed(
+    seed.seedsPerAcre = calculateMixRatioNECCC('step2', seed, seedList).val.toFixed(
       2,
     );
     seed.aproxPlantsSqFt = calculateMixRatioNECCC(
       'step3',
       seed,
-      data,
+      seedList,
     ).val.toFixed(2);
   }
 
