@@ -15,6 +15,18 @@
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <!-- Here we load the sdk from seedcal api -->
+    <!-- <script src="https://developapi.covercrop-seedcalc.org/v1/scripts/js/sdk.js"></script> -->
+    <script src="sdk.js"></script>
+
+    <!-- Inlude Axios Package because we like it ;) You can use what ever HTTP request package you prefer. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
+
+    <!-- These scripts are the demo scripts, see imports above for how to import the SDK into your project. -->
+    <script src="printer.js"></script>
+    <script src="runners.js"></script>
+    <script src="main.js"></script>
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
