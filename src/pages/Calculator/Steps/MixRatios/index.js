@@ -27,11 +27,23 @@ import {
 } from '../../../../components/SeedingRateCard';
 
 import '../steps.scss';
+import { adjustProportions, createCalculator, createUserInput } from '../../../../shared/utils/calculator';
+import { setCalculatorRedux } from '../../../../features/calculatorSlice/actions';
 
 const MixRatio = ({ council }) => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
   const { selectedSpecies, seedsSelected } = data.speciesSelection;
+
+  // create seedcalc and try printing data
+  const { soilDrainage, plantingDate, acres } = useSelector((state) => state.siteCondition);
+  const mixRedux = useSelector((state) => state.calculator.seedsSelected);
+  useEffect(() => {
+    const userInput = createUserInput(soilDrainage, plantingDate, acres);
+    const seedingRateCalculator = createCalculator(mixRedux, council, userInput);
+    dispatch(setCalculatorRedux(seedingRateCalculator));
+    mixRedux.forEach((seed) => adjustProportions(seed, seedingRateCalculator));
+  }, []);
 
   // create an key/value pair for the seed and related accordion expanded state
   const [accordionState, setAccordionState] = useState(

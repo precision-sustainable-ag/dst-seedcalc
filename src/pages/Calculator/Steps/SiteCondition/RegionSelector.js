@@ -9,10 +9,10 @@ import statesLatLongDict from '../../../../shared/data/statesLatLongDict';
 import { availableStates } from '../../../../shared/data/dropdown';
 import Dropdown from '../../../../components/Dropdown';
 import DSTImport from '../../../../components/DSTImport';
-import '../steps.scss';
 import {
   setCouncilRedux, setCountyIdRedux, setCountyRedux, setSoilDrainageRedux, setStateRedux,
 } from '../../../../features/siteConditionSlice/actions';
+import '../steps.scss';
 
 const RegionSelector = ({
   stateList,

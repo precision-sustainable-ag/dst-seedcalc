@@ -22,6 +22,7 @@ import { validateForms } from '../../../../shared/utils/format';
 import PlantList from './PlantList';
 import Diversity from './diversity';
 import '../steps.scss';
+import { addSeedRedux } from '../../../../features/calculatorSlice/actions';
 
 const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   // useSelector for crops reducer data
@@ -77,6 +78,8 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
         countyId: data.siteCondition.countyId,
       }),
     );
+    // TODO: new calculator redux here
+    dispatch(addSeedRedux(response.payload.data));
     return response.payload.data;
   };
 

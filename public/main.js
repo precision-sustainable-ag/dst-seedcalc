@@ -205,9 +205,9 @@ async function main() {
   console.log("calculator", calculator);
   window.helpers.calculator = calculator;
 
-  printMix(mix);
-  printUserInput(userInput);
-  printMixOverview(calculator);
+  // printMix(mix);
+  // printUserInput(userInput);
+  // printMixOverview(calculator);
 
   // AdjustProportionsPage_Pea(mix[0], calculator);
   // AdjustProportionsPage_Rapeseed(mix[2], calculator);

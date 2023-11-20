@@ -538,7 +538,6 @@ class Crop {
       o = n.split(".");
     let l = this.raw;
     i && (l = i);
-    // console.log(e, t, i, r);
     for (s of o) {
       if ("object" != typeof l) break;
       if (Object.keys(l).includes(s)) l = l[s];

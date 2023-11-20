@@ -15,7 +15,7 @@ import { isEmptyNull, validateForms } from '../../../../shared/utils/format';
 import SiteConditionForm from './form';
 import RegionSelector from './RegionSelector';
 import MapComponent from './MapComponent';
-import { setCountyIdRedux } from '../../../../features/siteConditionSlice/actions';
+import { setCountyIdRedux, setSoilDrainageRedux } from '../../../../features/siteConditionSlice/actions';
 import '../steps.scss';
 
 const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
@@ -76,6 +76,11 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
       dispatch(setCountyIdRedux(countyId));
     }
   }, [siteCondition.county]);
+
+  // TODO: temporary solution to update new soilD redux
+  useEffect(() => {
+    dispatch(setSoilDrainageRedux(siteCondition.soilDrainage));
+  }, [siteCondition.soilDrainage]);
 
   // set favicon based on redux council value
   useEffect(() => {

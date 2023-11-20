@@ -5,6 +5,10 @@ const calculatorSlice = createSlice({
   name: 'calculator',
   initialState,
   reducers: {
+    setCalculator: (state, { payload }) => {
+      const { calculator } = payload;
+      return { ...state, calculator };
+    },
     addSeed: (state, { payload }) => {
       const { seed } = payload;
       return { ...state, seedsSelected: [...state.seedsSelected, seed] };
@@ -15,5 +19,7 @@ const calculatorSlice = createSlice({
     // },
   },
 });
+
+export const { setCalculator, addSeed } = calculatorSlice.actions;
 
 export default calculatorSlice;

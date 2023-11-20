@@ -1,4 +1,5 @@
 const initialState = {
+  calculator: null,
   seedsSelected: [],
 };
 
