@@ -15,6 +15,7 @@ import { isEmptyNull, validateForms } from '../../../../shared/utils/format';
 import SiteConditionForm from './form';
 import RegionSelector from './RegionSelector';
 import MapComponent from './MapComponent';
+import { setCountyIdRedux } from '../../../../features/siteConditionSlice/actions';
 import '../steps.scss';
 
 const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
@@ -71,6 +72,8 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
         (c) => c.label === siteCondition.county,
       )[0].id;
       handleUpdateSteps('countyId', 'siteCondition', countyId);
+      // TODO: new site redux here
+      dispatch(setCountyIdRedux(countyId));
     }
   }, [siteCondition.county]);
 

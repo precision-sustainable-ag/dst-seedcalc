@@ -6,6 +6,7 @@ import PlaceIcon from '@mui/icons-material/Place';
 import { useDispatch } from 'react-redux';
 import { getZoneData, getSSURGOData } from '../../../../features/stepSlice/api';
 import '../steps.scss';
+import { setCountyRedux } from '../../../../features/siteConditionSlice/actions';
 
 const MapComponent = ({
   handleSteps,
@@ -35,6 +36,8 @@ const MapComponent = ({
         const filteredCounty = counties.filter((c) => county.toLowerCase().includes(c.label.toLowerCase()));
         if (filteredCounty.length > 0) {
           handleUpdateSteps('county', 'siteCondition', filteredCounty[0].label);
+          // TODO: new site redux here
+          dispatch(setCountyRedux(filteredCounty[0].label));
         }
       }
       handleUpdateSteps('latitude', 'siteCondition', latitude);

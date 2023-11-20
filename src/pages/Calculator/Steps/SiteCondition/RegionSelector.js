@@ -10,6 +10,9 @@ import { availableStates } from '../../../../shared/data/dropdown';
 import Dropdown from '../../../../components/Dropdown';
 import DSTImport from '../../../../components/DSTImport';
 import '../steps.scss';
+import {
+  setCouncilRedux, setCountyIdRedux, setCountyRedux, setSoilDrainageRedux, setStateRedux,
+} from '../../../../features/siteConditionSlice/actions';
 
 const RegionSelector = ({
   stateList,
@@ -49,6 +52,11 @@ const RegionSelector = ({
     handleUpdateSteps('county', 'siteCondition', '');
     handleUpdateSteps('countyId', 'siteCondition', '');
     handleUpdateSteps('soilDrainage', 'siteCondition', '');
+    // TODO: new site redux here
+    dispatch(setCountyRedux(''));
+    dispatch(setCountyIdRedux(''));
+    dispatch(setSoilDrainageRedux(''));
+
     // Clear out all seeds selected in Redux
     handleUpdateSteps('seedsSelected', 'speciesSelection', []);
     handleUpdateSteps('diversitySelected', 'speciesSelection', []);
@@ -69,6 +77,9 @@ const RegionSelector = ({
       selectedState.parents[0].shorthand,
     );
     handleUpdateSteps('stateSelected', 'siteCondition', selectedState);
+    // TODO: new site redux here
+    dispatch(setStateRedux(label, selectedState.id));
+    dispatch(setCouncilRedux(selectedState.parents[0].shorthand));
   };
 
   /// ///////////////////////////////////////////////////////

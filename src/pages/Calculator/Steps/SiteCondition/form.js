@@ -15,6 +15,9 @@ import DSTSwitch from '../../../../components/Switch';
 import { soilDrainage } from '../../../../shared/data/dropdown';
 import { getCrops } from '../../../../features/stepSlice/api';
 import '../steps.scss';
+import {
+  setAcresRedux, setCountyRedux, setPlantingDateRedux, setSoilDrainageRedux,
+} from '../../../../features/siteConditionSlice/actions';
 
 const SiteConditionForm = ({
   siteCondition,
@@ -31,9 +34,11 @@ const SiteConditionForm = ({
     handleUpdateSteps('enabled', 'NRCS', !checked);
   };
 
-  const handleRegion = (e) => {
-    const countyId = counties.filter((c) => c.label === e)[0].id;
-    handleUpdateSteps('county', 'siteCondition', e);
+  const handleRegion = (region) => {
+    const countyId = counties.filter((c) => c.label === region)[0].id;
+    handleUpdateSteps('county', 'siteCondition', region);
+    // TODO: new site redux here
+    dispatch(setCountyRedux(region));
     if (countyId !== undefined && countyId !== undefined) {
       dispatch(
         getCrops({
@@ -63,6 +68,8 @@ const SiteConditionForm = ({
           label="Soil Drainage: "
           handleChange={(e) => {
             handleUpdateSteps('soilDrainage', 'siteCondition', e.target.value);
+            // TODO: new site redux here
+            dispatch(setSoilDrainageRedux(e.target.value));
           }}
           size={12}
           items={soilDrainage}
@@ -80,6 +87,8 @@ const SiteConditionForm = ({
               'siteCondition',
               formattedDate,
             );
+            // TODO: new site redux here
+            dispatch(setPlantingDateRedux(formattedDate));
           }}
         />
       </Grid>
@@ -91,6 +100,8 @@ const SiteConditionForm = ({
           disabled={false}
           handleChange={(e) => {
             handleUpdateSteps('acres', 'siteCondition', e.target.value);
+            // TODO: new site redux here
+            dispatch(setAcresRedux(e.target.value));
           }}
           placeholder="Enter your field acres here"
         />
