@@ -1,10 +1,12 @@
-import { configureStore } from "@reduxjs/toolkit";
-import filterSlice from "./features/filterSlice.js";
-import stepSlice from "./features/stepSlice/index.js";
-import locationSlice from "./features/location/locationSlice";
-export const store = configureStore({
+import { configureStore } from '@reduxjs/toolkit';
+import { filterSlice } from './features/filterSlice';
+import { stepSlice } from './features/stepSlice/index';
+
+const store = configureStore({
   reducer: {
-    filter: filterSlice,
-    steps: stepSlice,
+    filter: filterSlice.reducer,
+    steps: stepSlice.reducer,
   },
 });
+
+export default store;

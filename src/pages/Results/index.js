@@ -1,8 +1,8 @@
-import { useSelector, useDispatch } from "react-redux";
-import { useEffect, Fragment } from "react";
-import { Typography } from "@mui/material";
-import "./results.css";
-import { deleteFilter, getPosts } from "./../../features/filterSlice";
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Typography } from '@mui/material';
+import './results.css';
+import { deleteFilter, getPosts } from '../../features/filterSlice';
 
 const Results = () => {
   const dispatch = useDispatch();
@@ -11,28 +11,33 @@ const Results = () => {
     dispatch(getPosts());
   }, []);
 
-  const renderedFilters = filters.map((f, i) => {
-    return (
-      <article key={f.id}>
-        <Fragment>
-          <Typography className="content">
-            id: {f.id} title: {f.title} content: {f.content.substring(0, 100)}
-          </Typography>
-          <button
-            onClick={() => {
-              dispatch(
-                deleteFilter({
-                  id: f.id,
-                })
-              );
-            }}
-          >
-            X
-          </button>
-        </Fragment>
-      </article>
-    );
-  });
+  const renderedFilters = filters.map((f) => (
+    <article key={f.id}>
+      <Typography className="content">
+        id:
+        {' '}
+        {f.id}
+        {' '}
+        title:
+        {f.title}
+        {' '}
+        content:
+        {f.content.substring(0, 100)}
+      </Typography>
+      <button
+        type="button"
+        onClick={() => {
+          dispatch(
+            deleteFilter({
+              id: f.id,
+            }),
+          );
+        }}
+      >
+        X
+      </button>
+    </article>
+  ));
 
   return (
     <section>

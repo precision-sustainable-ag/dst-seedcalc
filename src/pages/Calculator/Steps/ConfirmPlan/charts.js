@@ -1,68 +1,66 @@
-import Grid from "@mui/material/Grid";
-import { Typography, Box } from "@mui/material";
-import { calculatePieChartData } from "../../../../shared/utils/calculate";
+import React from 'react';
+import Grid from '@mui/material/Grid';
+import { Typography, Box } from '@mui/material';
+import { calculatePieChartData } from '../../../../shared/utils/calculate';
 
-import "./../steps.scss";
+import '../steps.scss';
 import {
   DSTPieChart,
   DSTPieChartLabel,
   DSTPieChartLegend,
-} from "../../../../components/DSTPieChart";
+} from '../../../../components/DSTPieChart';
 
-const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
+const ConfirmPlanChip = ({ label, value }) => (
+  <>
+    <Typography sx={{ fontWeight: 600, minHeight: '45px' }}>
+      {label}
+    </Typography>
+    <Box
+      sx={{
+        bgcolor: '#e7885f',
+        borderRadius: '50%',
+        width: '5rem',
+        height: '5rem',
+        margin: '0 auto 10px auto',
+      }}
+    >
+      <Typography sx={{ pt: '30px', color: 'white' }}>{value}</Typography>
+    </Box>
+  </>
+);
+
+const ConfirmPlanCharts = ({ council, speciesSelection }) => {
   const poundsForPurchaseSum = speciesSelection.seedsSelected.reduce(
     (sum, a) => sum + a.poundsForPurchase,
-    0
+    0,
   );
 
-  const { poundsOfSeedArray, plantsPerAcreArray, seedsPerAcreArray } =
-    calculatePieChartData(speciesSelection.seedsSelected);
-
-  const ConfirmPlanChip = ({ label, value }) => {
-    return (
-      <>
-        <Typography sx={{ fontWeight: 600, minHeight: "45px" }}>
-          {label}
-        </Typography>
-        <Box
-          sx={{
-            bgcolor: "#e7885f",
-            borderRadius: "50%",
-            width: "5rem",
-            height: "5rem",
-            margin: "0 auto 10px auto",
-          }}
-        >
-          <Typography sx={{ pt: "30px", color: "white" }}>{value}</Typography>
-        </Box>
-      </>
-    );
-  };
+  const { poundsOfSeedArray, plantsPerAcreArray, seedsPerAcreArray } = calculatePieChartData(speciesSelection.seedsSelected);
 
   return (
-    <Grid container sx={{ padding: "0.5rem" }}>
+    <Grid container sx={{ padding: '0.5rem' }}>
       <Grid
         item
         xs={6}
         sx={{
-          borderRight: "1px solid #CCCCCC",
-          borderBottom: "1px solid #CCCCCC",
+          borderRight: '1px solid #CCCCCC',
+          borderBottom: '1px solid #CCCCCC',
         }}
       >
         <ConfirmPlanChip
-          label={"Amount of mix for 50 acres"}
-          value={parseInt(poundsForPurchaseSum) + "lbs"}
+          label="Amount of mix for 50 acres"
+          value={`${parseInt(poundsForPurchaseSum, 10)}lbs`}
         />
       </Grid>
       <Grid
         item
         xs={6}
         sx={{
-          borderBottom: "1px solid #CCCCCC",
+          borderBottom: '1px solid #CCCCCC',
         }}
       >
         {/* FIXME: static value here */}
-        <ConfirmPlanChip label={"Price/Acre"} value={"$35.33"} />
+        <ConfirmPlanChip label="Price/Acre" value="$35.33" />
       </Grid>
 
       <Grid
@@ -70,13 +68,13 @@ const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
         xs={6}
         md={6}
         sx={{
-          borderRight: "1px solid #CCCCCC",
-          borderBottom: "1px solid #CCCCCC",
-          textAlign: "justify",
+          borderRight: '1px solid #CCCCCC',
+          borderBottom: '1px solid #CCCCCC',
+          textAlign: 'justify',
         }}
       >
         <DSTPieChart chartData={poundsOfSeedArray} />
-        <DSTPieChartLabel>{"Pounds of Seed / Acre"}</DSTPieChartLabel>
+        <DSTPieChartLabel>Pounds of Seed / Acre</DSTPieChartLabel>
         <DSTPieChartLegend chartData={poundsOfSeedArray} />
       </Grid>
       <Grid
@@ -84,22 +82,25 @@ const ConfirmPlanCharts = ({ council, speciesSelection, matchesMd }) => {
         xs={6}
         md={6}
         sx={{
-          borderBottom: "1px solid #CCCCCC",
-          textAlign: "justify",
+          borderBottom: '1px solid #CCCCCC',
+          textAlign: 'justify',
         }}
       >
         {/* FIXME: Check all the charts as well as other components */}
         <DSTPieChart
           chartData={
-            council === "MCCC" ? plantsPerAcreArray : seedsPerAcreArray
+            council === 'MCCC' ? plantsPerAcreArray : seedsPerAcreArray
           }
         />
         <DSTPieChartLabel>
-          {council === "MCCC" ? "Plants" : "Seeds"} Per Acre{" "}
+          {council === 'MCCC' ? 'Plants' : 'Seeds'}
+          {' '}
+          Per Acre
+          {' '}
         </DSTPieChartLabel>
         <DSTPieChartLegend
           chartData={
-            council === "MCCC" ? plantsPerAcreArray : seedsPerAcreArray
+            council === 'MCCC' ? plantsPerAcreArray : seedsPerAcreArray
           }
         />
       </Grid>

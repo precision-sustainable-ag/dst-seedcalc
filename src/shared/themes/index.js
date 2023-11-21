@@ -1,12 +1,12 @@
-import { createTheme } from "@mui/material/styles";
+import { createTheme } from '@mui/material/styles';
 
-export const dstTheme = createTheme({
+const dstTheme = createTheme({
   palette: {
     primary: {
-      main: "#4F5F30",
-      light: "#FFFFF2",
-      dark: "#eff1e0",
-      text: "#4F5F30",
+      main: '#4F5F30',
+      light: '#FFFFF2',
+      dark: '#eff1e0',
+      text: '#4F5F30',
     },
   },
   breakpoints: {
@@ -20,32 +20,32 @@ export const dstTheme = createTheme({
   },
   typography: {
     dstHeader: {
-      fontSize: "1.25rem",
+      fontSize: '1.25rem',
       fontWeight: 800,
-      textShadow: "0px 4px 4px rgba(0, 0, 0, 0.15)",
+      textShadow: '0px 4px 4px rgba(0, 0, 0, 0.15)',
     },
     h2: {
-      fontSize: "1.25rem",
+      fontSize: '1.25rem',
       fontWeight: 800,
-      lineHeight: "1.5rem",
-      paddingTop: "0.75rem",
-      paddingBottom: "0.75rem",
-      backgroundColor: "rgba(79, 95, 48, 0.09)",
+      lineHeight: '1.5rem',
+      paddingTop: '0.75rem',
+      paddingBottom: '0.75rem',
+      backgroundColor: 'rgba(79, 95, 48, 0.09)',
     },
   },
   components: {
     MuiTypography: {
       defaultProps: {
-        color: "#4F5F30",
+        color: '#4F5F30',
       },
     },
     MuiButton: {
       variants: [
         {
-          props: { variant: "stepper" },
+          props: { variant: 'stepper' },
           style: {
-            textTransform: "none",
-            padding: "0.5rem 0",
+            textTransform: 'none',
+            padding: '0.5rem 0',
           },
         },
       ],
@@ -53,9 +53,11 @@ export const dstTheme = createTheme({
     MuiInputBase: {
       styleOverrides: {
         input: {
-          color: "#4F5F30",
+          color: '#4F5F30',
         },
       },
     },
   },
 });
+
+export default dstTheme;

@@ -1,12 +1,13 @@
-import Grid from "@mui/material/Grid";
-import { Typography, useTheme, useMediaQuery } from "@mui/material";
+import React from 'react';
+import Grid from '@mui/material/Grid';
+import { Typography, useTheme, useMediaQuery } from '@mui/material';
 
-import { NumberTextField } from "./../../../../components/NumberTextField";
+import NumberTextField from '../../../../components/NumberTextField';
 import {
   convertToPercent,
   convertToDecimal,
-} from "./../../../../shared/utils/calculate";
-import "./../steps.scss";
+} from '../../../../shared/utils/calculate';
+import '../steps.scss';
 
 const ReviewMixSteps = ({
   seedsSelected,
@@ -17,39 +18,38 @@ const ReviewMixSteps = ({
   seed,
 }) => {
   const theme = useTheme();
-  const matchesMd = useMediaQuery(theme.breakpoints.down("md"));
+  const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
 
-  const renderStepsForm = (label1, label2, label3) => {
-    return (
-      matchesMd && (
-        <Grid container>
-          <Grid item xs={3}>
-            <Typography sx={{ fontSize: "0.75rem", pb: "1rem" }}>
-              {label1}
-            </Typography>
-          </Grid>
-          <Grid item xs={1}></Grid>
-          <Grid item xs={3}>
-            <Typography sx={{ fontSize: "0.75rem", pb: "1rem" }}>
-              {label2}
-            </Typography>
-          </Grid>
-          <Grid item xs={1}></Grid>
-          <Grid item xs={3}>
-            <Typography sx={{ fontSize: "0.75rem", pb: "1rem" }}>
-              {label3}
-            </Typography>
-          </Grid>
-        </Grid>
-      )
-    );
-  };
+  const renderStepsForm = (label1, label2, label3) => (
+    matchesMd && (
+    <Grid container>
+      <Grid item xs={3}>
+        <Typography sx={{ fontSize: '0.75rem', pb: '1rem' }}>
+          {label1}
+        </Typography>
+      </Grid>
+      <Grid item xs={1} />
+      <Grid item xs={3}>
+        <Typography sx={{ fontSize: '0.75rem', pb: '1rem' }}>
+          {label2}
+        </Typography>
+      </Grid>
+      <Grid item xs={1} />
+      <Grid item xs={3}>
+        <Typography sx={{ fontSize: '0.75rem', pb: '1rem' }}>
+          {label3}
+        </Typography>
+      </Grid>
+    </Grid>
+    )
+  );
 
-  const generatePercentInGroup = (seed) => {
-    const group = seed.group.label;
+  const generatePercentInGroup = (seedData) => {
+    const group = seedData.group.label;
     let count = 0;
-    seedsSelected.map((s, i) => {
-      s.group.label === group && count++;
+    seedsSelected.map((s) => {
+      if (s.group.label === group) count += 1;
+      return null;
     });
     return 1 / count;
   };
@@ -59,21 +59,21 @@ const ReviewMixSteps = ({
   return (
     <Grid container>
       {/* NECCC Step 1:  */}
-      {council === "NECCC" && (
+      {council === 'NECCC' && (
         <>
           <Grid item xs={12}>
             <Typography className="step-header">Step 1: </Typography>
           </Grid>
           {renderStepsForm(
-            "Mix Seeding Rate PLS",
-            "% in Group",
-            "% of Single Species Seeding Rate"
+            'Mix Seeding Rate PLS',
+            '% in Group',
+            '% of Single Species Seeding Rate',
           )}
           <Grid item xs={3}>
             <NumberTextField
-              label={matchesMd ? "" : "Single Species Seeding Rate PLS"}
+              label={matchesMd ? '' : 'Single Species Seeding Rate PLS'}
               handleChange={(e) => {
-                updateSeed(e.target.value, "singleSpeciesSeedingRatePLS", seed);
+                updateSeed(e.target.value, 'singleSpeciesSeedingRatePLS', seed);
               }}
               value={seed.singleSpeciesSeedingRatePLS}
             />
@@ -86,7 +86,7 @@ const ReviewMixSteps = ({
 
           <Grid item xs={3}>
             <NumberTextField
-              label={matchesMd ? "" : "% in Group"}
+              label={matchesMd ? '' : '% in Group'}
               disabled
               value={convertToPercent(percentInGroup)}
             />
@@ -98,52 +98,52 @@ const ReviewMixSteps = ({
 
           <Grid item xs={3}>
             <NumberTextField
-              label={matchesMd ? "" : "% of Single Species Rate"}
+              label={matchesMd ? '' : '% of Single Species Rate'}
               handleChange={(e) => {
-                updateSeed(e.target.value, "percentOfSingleSpeciesRate", seed);
+                updateSeed(e.target.value, 'percentOfSingleSpeciesRate', seed);
               }}
               value={seed.percentOfSingleSpeciesRate}
             />
-            <Typography>{council === "MCCC" ? "MCCC" : "NECCC"}</Typography>
+            <Typography>{council === 'MCCC' ? 'MCCC' : 'NECCC'}</Typography>
           </Grid>
 
-          <Grid container p={"10px"} xs={12}>
+          <Grid container p="10px">
             <Grid item xs={4}>
               <Typography className="math-icon">=</Typography>
             </Grid>
 
             <Grid item xs={7}>
               <NumberTextField
-                label={matchesMd ? "" : "Mix Seeding Rate"}
+                label={matchesMd ? '' : 'Mix Seeding Rate'}
                 disabled
                 value={seed.mixSeedingRate}
               />
               <Typography>Lbs / Acre</Typography>
             </Grid>
 
-            <Grid item xs={1}></Grid>
+            <Grid item xs={1} />
           </Grid>
         </>
       )}
 
       {/* MCCC Step 1: */}
-      {council === "MCCC" && (
+      {council === 'MCCC' && (
         <>
           <Grid item xs={12}>
             <Typography className="step-header">Step 1:</Typography>
           </Grid>
           {renderStepsForm(
-            "Single Species Seeding Rate PLS",
-            "% of Single Species Rate",
-            "Mix Seeding Rate"
+            'Single Species Seeding Rate PLS',
+            '% of Single Species Rate',
+            'Mix Seeding Rate',
           )}
           <Grid container>
             <Grid item xs={3}>
               <NumberTextField
                 disabled
-                label={matchesMd ? "" : "Single Species Seeding Rate PLS"}
+                label={matchesMd ? '' : 'Single Species Seeding Rate PLS'}
                 handleChange={(e) => {
-                  updateSeed(e.target.value, "singleSpeciesSeedingRate", seed);
+                  updateSeed(e.target.value, 'singleSpeciesSeedingRate', seed);
                 }}
                 value={seed.singleSpeciesSeedingRate}
               />
@@ -156,18 +156,18 @@ const ReviewMixSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? "" : "% of Single Species Rate"}
+                label={matchesMd ? '' : '% of Single Species Rate'}
                 handleChange={(e) => {
                   updateSeed(
                     e.target.value,
-                    "percentOfSingleSpeciesRate",
-                    seed
+                    'percentOfSingleSpeciesRate',
+                    seed,
                   );
                 }}
                 value={seed.percentOfSingleSpeciesRate}
               />
               <Typography>
-                {council === "MCCC" && "MCCC Recommendation"}
+                {council === 'MCCC' && 'MCCC Recommendation'}
               </Typography>
             </Grid>
 
@@ -177,7 +177,7 @@ const ReviewMixSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? "" : "Mix Seeding Rate"}
+                label={matchesMd ? '' : 'Mix Seeding Rate'}
                 disabled
                 value={seed.step1Result}
               />
@@ -193,14 +193,14 @@ const ReviewMixSteps = ({
           <Typography className="step-header">Step 2: </Typography>
         </Grid>
         {renderStepsForm(
-          "Mix Seeding Rate PLS",
-          "Planting Method",
-          "Mix Seeding Rate PLS"
+          'Mix Seeding Rate PLS',
+          'Planting Method',
+          'Mix Seeding Rate PLS',
         )}
         <Grid item xs={3}>
           <NumberTextField
             disabled
-            label={matchesMd ? "" : "Mix Seeding Rate PLS"}
+            label={matchesMd ? '' : 'Mix Seeding Rate PLS'}
             value={seed.step1Result}
           />
           <Typography>Lbs / Acre</Typography>
@@ -212,7 +212,7 @@ const ReviewMixSteps = ({
 
         <Grid item xs={3}>
           <NumberTextField
-            label={matchesMd ? "" : "Planting Method"}
+            label={matchesMd ? '' : 'Planting Method'}
             value={seed.plantingMethod}
           />
         </Grid>
@@ -223,7 +223,7 @@ const ReviewMixSteps = ({
 
         <Grid item xs={3}>
           <NumberTextField
-            label={matchesMd ? "" : "Mix Seeding Rate PLS"}
+            label={matchesMd ? '' : 'Mix Seeding Rate PLS'}
             disabled
             value={seed.step2Result}
           />
@@ -237,13 +237,13 @@ const ReviewMixSteps = ({
           <Typography className="step-header">Step 3: </Typography>
         </Grid>
         {renderStepsForm(
-          "Mix Seeding Rate PLS",
-          "Mix Seeding Rate PLS",
-          "Management impact on mix"
+          'Mix Seeding Rate PLS',
+          'Mix Seeding Rate PLS',
+          'Management impact on mix',
         )}
         <Grid item xs={3}>
           <NumberTextField
-            label={matchesMd ? "" : "Mix Seeding Rate PLS"}
+            label={matchesMd ? '' : 'Mix Seeding Rate PLS'}
             disabled
             value={seed.step2Result}
           />
@@ -258,10 +258,10 @@ const ReviewMixSteps = ({
 
         <Grid item xs={2}>
           <NumberTextField
-            label={matchesMd ? "" : "Mix Seeding Rate PLS"}
+            label={matchesMd ? '' : 'Mix Seeding Rate PLS'}
             disabled
             handleChange={(e) => {
-              updateSeed(e.target.value, "step2Result", seed);
+              updateSeed(e.target.value, 'step2Result', seed);
             }}
             value={seed.step2Result}
           />
@@ -273,10 +273,10 @@ const ReviewMixSteps = ({
 
         <Grid item xs={2}>
           <NumberTextField
-            label={matchesMd ? "" : "Management Impact on Mix"}
+            label={matchesMd ? '' : 'Management Impact on Mix'}
             disabled
             handleChange={(e) => {
-              updateSeed(e.target.value, "managementImpactOnMix", seed);
+              updateSeed(e.target.value, 'managementImpactOnMix', seed);
             }}
             value={seedingMethod.managementImpactOnMix.toFixed(2)}
           />
@@ -286,23 +286,23 @@ const ReviewMixSteps = ({
           <Typography className="math-icon">)</Typography>
         </Grid>
 
-        <Grid item xs={1}></Grid>
+        <Grid item xs={1} />
 
-        <Grid container p={"10px"} xs={12}>
+        <Grid container p="10px">
           <Grid item xs={4}>
             <Typography className="math-icon">=</Typography>
           </Grid>
 
           <Grid item xs={7}>
             <NumberTextField
-              label={matchesMd ? "" : "Mix Seeding Rate PLS"}
+              label={matchesMd ? '' : 'Mix Seeding Rate PLS'}
               disabled
               value={seed.step3Result}
             />
           </Grid>
         </Grid>
 
-        <Grid item xs={1}></Grid>
+        <Grid item xs={1} />
       </>
 
       {/* Step 4: */}
@@ -310,10 +310,10 @@ const ReviewMixSteps = ({
         <Grid item xs={12}>
           <Typography className="step-header">Step 4: </Typography>
         </Grid>
-        {renderStepsForm("Mix Seeding Rate PLS", "% Germination", "% Purity")}
+        {renderStepsForm('Mix Seeding Rate PLS', '% Germination', '% Purity')}
         <Grid item xs={3}>
           <NumberTextField
-            label={matchesMd ? "" : "Mix Seeding Rate PLS"}
+            label={matchesMd ? '' : 'Mix Seeding Rate PLS'}
             disabled
             value={seed.step3Result}
           />
@@ -326,12 +326,12 @@ const ReviewMixSteps = ({
 
         <Grid item xs={3}>
           <NumberTextField
-            label={matchesMd ? "" : "% Germination"}
+            label={matchesMd ? '' : '% Germination'}
             handleChange={(e) => {
               updateSeed(
                 convertToDecimal(e.target.value),
-                "germinationPercentage",
-                seed
+                'germinationPercentage',
+                seed,
               );
             }}
             value={convertToPercent(seed.germinationPercentage)}
@@ -344,12 +344,12 @@ const ReviewMixSteps = ({
 
         <Grid item xs={3}>
           <NumberTextField
-            label={matchesMd ? "" : "% Purity"}
+            label={matchesMd ? '' : '% Purity'}
             handleChange={(e) => {
               updateSeed(
                 convertToDecimal(e.target.value),
-                "purityPercentage",
-                seed
+                'purityPercentage',
+                seed,
               );
             }}
             value={convertToPercent(seed.purityPercentage)}
@@ -357,20 +357,20 @@ const ReviewMixSteps = ({
           <Typography>Lbs / Acre</Typography>
         </Grid>
 
-        <Grid container p={"10px"} xs={12}>
+        <Grid container p="10px">
           <Grid item xs={4}>
             <Typography className="math-icon">=</Typography>
           </Grid>
 
           <Grid item xs={7}>
             <NumberTextField
-              label={matchesMd ? "" : "Bulk Seeding Rate"}
+              label={matchesMd ? '' : 'Bulk Seeding Rate'}
               disabled
               value={seed.bulkSeedingRate}
             />
           </Grid>
 
-          <Grid item xs={1}></Grid>
+          <Grid item xs={1} />
         </Grid>
       </>
 
@@ -379,10 +379,10 @@ const ReviewMixSteps = ({
         <Grid item xs={12}>
           <Typography className="step-header">Step 5: </Typography>
         </Grid>
-        {renderStepsForm("Bulk Seeding Rate", "Acres", "Pounds for Purchase")}
+        {renderStepsForm('Bulk Seeding Rate', 'Acres', 'Pounds for Purchase')}
         <Grid item xs={3}>
           <NumberTextField
-            label={matchesMd ? "" : "Bulk Seeding Rate"}
+            label={matchesMd ? '' : 'Bulk Seeding Rate'}
             disabled
             value={seed.bulkSeedingRate}
           />
@@ -395,10 +395,10 @@ const ReviewMixSteps = ({
 
         <Grid item xs={3}>
           <NumberTextField
-            label={matchesMd ? "" : "Acres"}
+            label={matchesMd ? '' : 'Acres'}
             disabled
             handleChange={(e) => {
-              updateSeed(e.target.value, "acres", seed);
+              updateSeed(e.target.value, 'acres', seed);
             }}
             value={siteCondition.acres}
           />
@@ -410,7 +410,7 @@ const ReviewMixSteps = ({
 
         <Grid item xs={3}>
           <NumberTextField
-            label={matchesMd ? "" : "Pounds for Purchase"}
+            label={matchesMd ? '' : 'Pounds for Purchase'}
             disabled
             value={seed.poundsForPurchase}
           />
