@@ -1,60 +1,56 @@
-//////////////////////////////////////////////////////////
+/*eslint-disable */
+/// ///////////////////////////////////////////////////////
 //                      Imports                         //
-//////////////////////////////////////////////////////////
+/// ///////////////////////////////////////////////////////
 
-import { useState, useEffect } from "react";
-import Grid from "@mui/material/Grid";
-import { Fragment } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import Papa from "papaparse";
+import { useState, useEffect, Fragment } from 'react';
+import Grid from '@mui/material/Grid';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import Papa from 'papaparse';
 
-import { getLocality } from "../../features/stepSlice/api";
+import { getLocality } from '../../features/stepSlice/api';
 import {
   updateAllSteps,
   updateSteps,
   updateModal,
-} from "../../features/stepSlice";
-import { DSTButton } from "./../../components/Button";
-import { Header } from "./../../components/Header";
-import { Dropdown } from "../../components/Dropdown";
-import "./home.css";
+} from '../../features/stepSlice';
 
 const Home = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState(false);
   const [CSVImport, setCSVImport] = useState([]);
-  const [council, setCouncil] = useState("");
+  const [council, setCouncil] = useState('');
 
   const data = useSelector((state) => state.steps.value);
   const { speciesSelection, siteCondition } = data;
   const [imgPath, setImgPath] = useState(
-    siteCondition?.council === "MCCC" ? "./mccc-logo.png" : "./neccc-logo.png"
+    siteCondition?.council === 'MCCC' ? './mccc-logo.png' : './neccc-logo.png',
   );
-  const seedsSelected = speciesSelection.seedsSelected;
+  const { seedsSelected } = speciesSelection;
 
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
   //                      Redux                           //
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
 
   const handleUpdateSteps = (key, type, val) => {
     dispatch(
       updateSteps({
-        type: type,
-        key: key,
+        type,
+        key,
         value: val,
-      })
+      }),
     );
   };
 
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
   //                      State Logic                     //
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
 
   const handleModal = (type, title, description) => {
-    var payload = {};
-    if (type === "error") {
+    let payload = {};
+    if (type === 'error') {
       payload = {
         value: {
           loading: false,
@@ -62,8 +58,8 @@ const Home = () => {
           success: false,
           errorTitle: title,
           errorMessage: description,
-          successTitle: "",
-          successMessage: "",
+          successTitle: '',
+          successMessage: '',
           isOpen: true,
         },
       };
@@ -73,8 +69,8 @@ const Home = () => {
           loading: false,
           error: true,
           success: true,
-          errorTitle: "",
-          errorMessage: "",
+          errorTitle: '',
+          errorMessage: '',
           successTitle: title,
           successMessage: description,
           isOpen: true,
@@ -84,25 +80,25 @@ const Home = () => {
     dispatch(updateModal(payload));
   };
 
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
   //                  Import Logic                        //
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
 
   const handleFileUpload = (event) => {
     Papa.parse(event.target.files[0], {
       header: true,
       skipEmptyLines: true,
-      complete: function (results) {
+      complete(results) {
         const lastItem = results.data[results.data.length - 1];
-        if (lastItem.label !== "EXT-DATA-OBJECT") {
+        if (lastItem.label !== 'EXT-DATA-OBJECT') {
           handleModal(
-            "error",
-            "Invalid Format",
-            "CSV format invalid. Please try again."
+            'error',
+            'Invalid Format',
+            'CSV format invalid. Please try again.',
           );
         } else {
           const extDataObject = JSON.parse(
-            results.data[results.data.length - 1].extData
+            results.data[results.data.length - 1].extData,
           );
           setCSVImport(extDataObject);
         }
@@ -110,53 +106,48 @@ const Home = () => {
     });
   };
   const handleImportCSV = () => {
-    const type = CSVImport.siteCondition.county.includes("Zone")
-      ? "NECCC"
-      : "MCCC";
+    const type = CSVImport.siteCondition.county.includes('Zone')
+      ? 'NECCC'
+      : 'MCCC';
     dispatch(updateAllSteps({ value: CSVImport }));
-    navigate(`/calculator`);
+    navigate('/calculator');
   };
   const setModal = () => {
     setOpenModal(!openModal);
   };
   const handleCouncil = (e) => {
     setCouncil(e.target.value);
-    const imagePath =
-      e.target.value === "MCCC" ? "./mccc-logo.png" : "./neccc-logo.png";
+    const imagePath = e.target.value === 'MCCC' ? './mccc-logo.png' : './neccc-logo.png';
     setImgPath(imagePath);
   };
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
   //                     useEffect                        //
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
 
   useEffect(() => {
     dispatch(getLocality()).then((res) => {
-      navigate(`/calculator`);
+      navigate('/calculator');
     });
   }, []);
 
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
   //                      Render                          //
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
 
-  const renderHome = () => {
-    return <></>;
-  };
+  const renderHome = () => <></>;
 
   return (
-    <Fragment>
-      <Grid container spacing={2}>
-        <Header
+    <Grid container>
+      {/* <Header
           className="header-container"
           headerVariant="dstHeaderHome"
           text="Seeding Rate Calculator"
           size={12}
-          style={{ mt: 5 }}
-        />
+          // style={{ mt: 5 }}
+        /> */}
 
-        {renderHome()}
-      </Grid>
-    </Fragment>
+      {renderHome()}
+    </Grid>
   );
 };
 

@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 import {
   getCrops,
@@ -7,13 +7,13 @@ import {
   getRegion,
   getSSURGOData,
   getZoneData,
-} from "./api";
-import { initialState } from "./state";
-import { soilDrainage } from "../../shared/data/dropdown";
+} from './api';
+import initialState from './state';
+import { soilDrainage } from '../../shared/data/dropdown';
 
-/* 
+/*
 
-Reducer Documentation: 
+Reducer Documentation:
 
 {
     name: updateSteps
@@ -26,7 +26,7 @@ Reducer Documentation:
 }
 */
 export const stepSlice = createSlice({
-  name: "steps",
+  name: 'steps',
   initialState,
   reducers: {
     updateSteps: (state, { payload }) => {
@@ -56,10 +56,10 @@ export const stepSlice = createSlice({
         loading: false,
         error: false,
         success: false,
-        errorTitle: "",
-        errorMessage: "",
-        successTitle: "",
-        successMessage: "",
+        errorTitle: '',
+        errorMessage: '',
+        successTitle: '',
+        successMessage: '',
         isOpen: false,
       };
       return { ...existingState };
@@ -67,7 +67,7 @@ export const stepSlice = createSlice({
   },
   extraReducers: {
     [getCrops.pending]: (state) => {
-      state.loading = "getCrops";
+      state.loading = 'getCrops';
       state.error = false;
     },
     [getCrops.fulfilled]: (state, { payload }) => {
@@ -83,7 +83,7 @@ export const stepSlice = createSlice({
       state.loading = true;
       state.error = false;
     },
-    [getCropsById.fulfilled]: (state, { payload }) => {
+    [getCropsById.fulfilled]: (state) => {
       state.loading = false;
       state.error = false;
     },
@@ -97,23 +97,22 @@ export const stepSlice = createSlice({
     },
     [getSSURGOData.fulfilled]: (state, { payload }) => {
       state.loading = false;
-      const string = payload.Table[1][2] !== null ? payload.Table[1][2] : "";
+      const string = payload.Table[1][2] !== null ? payload.Table[1][2] : '';
       const checkSoilDrainage = soilDrainage.filter(
-        (a) => a.label.toLowerCase() === string.toLowerCase()
+        (a) => a.label.toLowerCase() === string.toLowerCase(),
       );
-      const dropdownVal =
-        string !== "" && checkSoilDrainage.length > 0
-          ? checkSoilDrainage[0].label
-          : "";
+      const dropdownVal = string !== '' && checkSoilDrainage.length > 0
+        ? checkSoilDrainage[0].label
+        : '';
       state.value.siteCondition.soilDrainage = dropdownVal;
       state.error = false;
     },
-    [getSSURGOData.rejected]: (state, { payload }) => {
+    [getSSURGOData.rejected]: (state) => {
       state.loading = false;
       state.error = true;
     },
     [getLocality.pending]: (state) => {
-      state.loading = "getLocality";
+      state.loading = 'getLocality';
       state.error = false;
     },
     [getLocality.fulfilled]: (state, { payload }) => {
@@ -130,12 +129,7 @@ export const stepSlice = createSlice({
     },
     [getRegion.fulfilled]: (state, { payload }) => {
       state.loading = false;
-      state.value.counties =
-        payload.data.kids.Zones !== undefined
-          ? payload.data.kids.Zones
-          : payload.data.kids.Counties !== undefined
-          ? payload.data.kids.Counties
-          : [];
+      state.value.counties = payload.data.kids.Zones ?? payload.data.kids.Counties ?? [];
       state.error = false;
     },
     [getRegion.rejected]: (state) => {
@@ -149,9 +143,8 @@ export const stepSlice = createSlice({
     [getZoneData.fulfilled]: (state, { payload }) => {
       state.loading = false;
       // only set Zone if not MCCC state.
-      if (state.value.siteCondition.state !== "Indiana") {
-        state.value.siteCondition.county =
-          "Zone " + payload.replace(/[^0-9]/g, "");
+      if (state.value.siteCondition.state !== 'Indiana') {
+        state.value.siteCondition.county = `Zone ${payload.replace(/[^0-9]/g, '')}`;
       }
       state.error = false;
     },
@@ -162,6 +155,8 @@ export const stepSlice = createSlice({
   },
 });
 
-export const { updateModal, clearModal, updateSteps, updateAllSteps } =
-  stepSlice.actions;
-export default stepSlice.reducer;
+export const {
+  updateModal, clearModal, updateSteps, updateAllSteps,
+} = stepSlice.actions;
+
+export default stepSlice;

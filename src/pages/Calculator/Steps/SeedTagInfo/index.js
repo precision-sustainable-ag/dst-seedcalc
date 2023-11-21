@@ -1,168 +1,150 @@
-//////////////////////////////////////////////////////////
+/// ///////////////////////////////////////////////////////
 //                     Imports                          //
-//////////////////////////////////////////////////////////
+/// ///////////////////////////////////////////////////////
 
-import * as React from "react";
-import Grid from "@mui/material/Grid";
-import { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Typography, Box } from "@mui/material";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import React, { useState, useEffect } from 'react';
+import Grid from '@mui/material/Grid';
+import { useSelector, useDispatch } from 'react-redux';
+import { Typography } from '@mui/material';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-import { updateSteps } from "../../../../features/stepSlice";
-import { DSTSwitch } from "./../../../../components/Switch";
-import { seedsList, seedsLabel } from "./../../../../shared/data/species";
+import styled from '@emotion/styled';
+import { updateSteps } from '../../../../features/stepSlice';
 import {
   convertToPercent,
   convertToDecimal,
-} from "../../../../shared/utils/calculate";
-import { NumberTextField } from "./../../../../components/NumberTextField";
-import "./../steps.css";
-import SeedsSelectedList from "../../../../components/SeedsSelectedList";
+} from '../../../../shared/utils/calculate';
+import NumberTextField from '../../../../components/NumberTextField';
+import '../steps.scss';
 
-const SeedTagInfo = ({ council }) => {
-  // themes
-  const theme = useTheme();
+const LeftGrid = styled(Grid)({
+  '&.MuiGrid-item': {
+    height: '80px',
+    paddingTop: '15px',
+    '& p': {
+      fontWeight: 'bold',
+    },
+  },
+});
 
-  // useSelector for crops reducer data
+const SeedTagInfo = () => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
-  const speciesSelection = data.speciesSelection;
-  const seedsSelected = speciesSelection.seedsSelected;
-  const [sameInfoActive, setSameInfoActive] = useState(false);
-  const renderSeedsSelected = () => {
-    return <SeedsSelectedList list={speciesSelection.seedsSelected} />;
-  };
+  const { selectedSpecies, seedsSelected } = data.speciesSelection;
+
+  const [accordionState, setAccordionState] = useState(
+    seedsSelected.reduce((res, seed) => {
+      res[seed.label] = false;
+      return res;
+    }, {}),
+  );
 
   const handleUpdateSteps = (key, val) => {
-    const data = {
-      type: "speciesSelection",
-      key: key,
+    const newData = {
+      type: 'speciesSelection',
+      key,
       value: val,
     };
-    dispatch(updateSteps(data));
+    dispatch(updateSteps(newData));
   };
-  /*  
-      handleSeed checks for whether the sameInfoActive is true/false.
-      If true, loop through all seeds and update values to the same as the current seed being changed.
-      Else, update individual value.
-  */
-  const handleSeed = (val, key1, key2, seed) => {
-    if (sameInfoActive) {
-      let data = JSON.parse(JSON.stringify(speciesSelection.seedsSelected));
-      speciesSelection.seedsSelected.map((s, i) => {
-        data[i]["germinationPercentage"] =
-          key1 === "germinationPercentage" ? val : seed.germinationPercentage;
-        data[i]["purityPercentage"] =
-          key1 === "purityPercentage" ? val : seed.purityPercentage;
-      });
-      handleUpdateSteps("seedsSelected", data);
-    } else {
-      updateSeed(val, key1, key2, seed);
-    }
-  };
-  const updateSeed = (val, key1, key2, seed) => {
+
+  const updateSeed = (val, key1, seed) => {
     // find index of seed, parse a copy, update proper values, & send to Redux
-    const index = speciesSelection.seedsSelected.findIndex(
-      (s) => s.id === seed.id
-    );
-    let data = JSON.parse(JSON.stringify(speciesSelection.seedsSelected));
+    const index = seedsSelected.findIndex((s) => s.id === seed.id);
+    // eslint-disable-next-line no-shadow
+    const data = JSON.parse(JSON.stringify(seedsSelected));
     data[index][key1] = val;
-    handleUpdateSteps("seedsSelected", data);
+    handleUpdateSteps('seedsSelected', data);
   };
 
+  // handler for click to open accordion
+  const handleExpandAccordion = (label) => {
+    const open = accordionState[label];
+    setAccordionState({ ...accordionState, [label]: !open });
+  };
+
+  useEffect(() => {
+    // expand related accordion based on sidebar click
+    setAccordionState(
+      seedsSelected.reduce((res, seed) => {
+        res[seed.label] = seed.label === selectedSpecies;
+        return res;
+      }, {}),
+    );
+  }, [selectedSpecies]);
+
+  // eslint-disable-next-line no-shadow
   const renderRightAccordian = (key, data, type, disabled) => {
-    const value = Math.floor(data[key]);
+    const value = type === 'percent' ? convertToPercent(data[key]) : Math.floor(data[key]);
     return (
-      <Grid item xs={6} className="seed-tag-info-grid-right">
-        <NumberTextField
-          className="text-field-50"
-          id="filled-basic"
-          variant="filled"
-          disabled={disabled}
-          value={convertToPercent(data[key])}
-          handleChange={(e) => {
-            handleSeed(convertToDecimal(e.target.value), key, "", {
-              ...data,
-              [key]: convertToDecimal(e.target.value),
-            });
-          }}
-        />
-      </Grid>
+      <>
+        <Grid item xs={4}>
+          <NumberTextField
+            disabled={disabled}
+            value={value}
+            handleChange={(e) => {
+              updateSeed(convertToDecimal(e.target.value), key, {
+                ...data,
+                [key]: convertToDecimal(e.target.value),
+              });
+            }}
+          />
+        </Grid>
+        <Grid item xs={2} />
+      </>
     );
   };
 
-  const renderAccordian = (data) => {
-    return (
-      <Accordion xs={12} className="accordian-container">
-        <AccordionSummary
-          xs={12}
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography>{data.label}</Typography>
-        </AccordionSummary>
-        <AccordionDetails className="accordian-details">
-          <Grid xs={12} container>
-            <Grid item xs={6} className="seed-tag-info-grid-left">
-              <Typography>% Germination: </Typography>
-            </Grid>
-            {renderRightAccordian(
-              "germinationPercentage",
-              data,
-              "percent",
-              false
-            )}
-            <Grid item xs={6} className="seed-tag-info-grid-left">
-              <Typography>% Purity: </Typography>
-            </Grid>
-            {renderRightAccordian("purityPercentage", data, "percent", false)}
-            <Grid item xs={6} className="seed-tag-info-grid-left">
-              <Typography>Seeds per Pound </Typography>
-            </Grid>
-            {/* FIXME: this also turns seeds per pound 100 times larger */}
-            {renderRightAccordian("poundsOfSeed", data, "", true)}
-          </Grid>
-        </AccordionDetails>
-      </Accordion>
-    );
-  };
-  const handleSwitch = () => {
-    setSameInfoActive(!sameInfoActive);
-  };
   return (
-    <Grid xs={12} container>
-      {seedsSelected.length > 0 && renderSeedsSelected()}
-      <Grid
-        xs={seedsSelected.length > 0 ? 12 : 12}
-        md={seedsSelected.length > 0 ? 11 : 12}
-        item
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Grid item xs={12}>
-          <Typography variant="h2">Enter seed tag info</Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <DSTSwitch checked={sameInfoActive} handleChange={handleSwitch} />{" "}
-          Same Information for All Species
-        </Grid>
-        <Grid item xs={12}>
-          {speciesSelection.seedsSelected.map((s, i) => {
-            return (
-              <Grid xs={12}>
-                <Grid item>{renderAccordian(s)}</Grid>
-              </Grid>
-            );
-          })}
-        </Grid>
+    <Grid container>
+      <Grid item xs={12}>
+        <Typography variant="h2">Enter seed tag info</Typography>
       </Grid>
+
+      {seedsSelected.map((seed, i) => (
+        <Grid item xs={12} key={i}>
+          <Accordion
+            expanded={accordionState[seed.label]}
+            onChange={() => handleExpandAccordion(seed.label)}
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              className="accordian-summary"
+            >
+              <Typography>{seed.label}</Typography>
+            </AccordionSummary>
+            <AccordionDetails className="accordian-details">
+              <Grid container>
+                <LeftGrid item xs={6}>
+                  <Typography>% Germination: </Typography>
+                </LeftGrid>
+                {renderRightAccordian(
+                  'germinationPercentage',
+                  seed,
+                  'percent',
+                  false,
+                )}
+                <LeftGrid item xs={6}>
+                  <Typography>% Purity: </Typography>
+                </LeftGrid>
+                {renderRightAccordian(
+                  'purityPercentage',
+                  seed,
+                  'percent',
+                  false,
+                )}
+                <LeftGrid item xs={6}>
+                  <Typography>Seeds per Pound </Typography>
+                </LeftGrid>
+                {renderRightAccordian('poundsOfSeed', seed, '', true)}
+              </Grid>
+            </AccordionDetails>
+          </Accordion>
+        </Grid>
+      ))}
     </Grid>
   );
 };

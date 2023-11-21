@@ -1,5 +1,5 @@
-import { Switch } from "@mui/material";
-import { Fragment } from "react";
+import React from 'react';
+import { Switch } from '@mui/material';
 /*
 {
   name: DSTSwitch,
@@ -11,16 +11,19 @@ import { Fragment } from "react";
 }
 */
 
-const label = { inputProps: { "aria-label": "Switch" } };
-export const DSTSwitch = ({ checked, handleChange }) => {
-  return (
-    <Fragment>
-      <Switch
-        {...label}
-        checked={checked}
-        onChange={handleChange}
-        color="default"
-      />
-    </Fragment>
-  );
-};
+const label = { inputProps: { 'aria-label': 'Switch' } };
+const DSTSwitch = ({ checked, handleChange }) => (
+  <Switch
+    {...label}
+    checked={checked}
+    onChange={handleChange}
+    color="default"
+    sx={{
+      '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+        backgroundColor: 'primary.text',
+        opacity: '0.9',
+      },
+    }}
+  />
+);
+export default DSTSwitch;

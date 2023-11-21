@@ -1,29 +1,27 @@
-//////////////////////////////////////////////////////////
+/* eslint-disable no-shadow */
+/// ///////////////////////////////////////////////////////
 //                      Imports                         //
-//////////////////////////////////////////////////////////
+/// ///////////////////////////////////////////////////////
 
-import * as React from "react";
-import { useEffect } from "react";
-import Grid from "@mui/material/Grid";
-import { useSelector, useDispatch } from "react-redux";
-import { Typography } from "@mui/material";
-import { useState } from "react";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import React, { useEffect, useState } from 'react';
+import Grid from '@mui/material/Grid';
+import { useSelector, useDispatch } from 'react-redux';
+import { Typography, Box } from '@mui/material';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-import { SearchField } from "../../../../components/SearchField";
-import { updateSteps } from "../../../../features/stepSlice/index";
-import { getCropsById } from "../../../../features/stepSlice/api";
-import { seedsList, seedsLabel } from "../../../../shared/data/species";
-import { calculateAllMixRatioValues } from "../../../../shared/utils/calculate";
-import "./../steps.css";
-import SeedsSelectedList from "./../../../../components/SeedsSelectedList";
-import { validateForms } from "../../../../shared/utils/format";
-import ImageListComponent from "./imageListComponent";
-import Diversity from "./diversity";
-import { Spinner } from "@psa/dst.ui.spinner";
+import { Spinner } from '@psa/dst.ui.spinner';
+import SearchField from '../../../../components/SearchField';
+import { updateSteps } from '../../../../features/stepSlice/index';
+import { getCropsById } from '../../../../features/stepSlice/api';
+import { seedsType, seedsLabel } from '../../../../shared/data/species';
+import { calculateAllMixRatioValues } from '../../../../shared/utils/calculate';
+import { validateForms } from '../../../../shared/utils/format';
+import PlantList from './PlantList';
+import Diversity from './diversity';
+import '../steps.scss';
 
 const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   // useSelector for crops reducer data
@@ -31,46 +29,45 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   const data = useSelector((state) => state.steps.value);
   const loading = useSelector((state) => state.steps.loading);
   const { crops, speciesSelection } = data;
-  const seedsSelected = speciesSelection.seedsSelected;
-  const diversitySelected = speciesSelection.diversitySelected;
+  const { seedsSelected } = speciesSelection;
+  const { diversitySelected } = speciesSelection;
   const [filteredSeeds, setFilteredSeeds] = useState([]);
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
 
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
   //                      Redux                           //
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
 
   const handleUpdateStore = (type, key, val) => {
-    const data = {
-      type: type,
-      key: key,
+    const newData = {
+      type,
+      key,
       value: val,
     };
-    dispatch(updateSteps(data));
+    dispatch(updateSteps(newData));
   };
 
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
   //                    State Logic                       //
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
+
+  useEffect(() => {
+    setFilteredSeeds(crops);
+  }, [crops]);
 
   // Filter query logic
   const updateQuery = (e) => {
-    setQuery(e.target.value);
-    filterSeeds(e.target.value);
+    // eslint-disable-next-line no-shadow
+    const query = e.target.value;
+    setQuery(query);
+    const filtered = query !== ''
+      ? crops.filter((x) => x.label.toLowerCase().includes(query.toLowerCase()))
+      : crops;
+    setFilteredSeeds(filtered);
   };
 
-  // create a data object that specifies the type(data layer 1), the key(data layer 2), & the value for the key.
-
-  const filterSeeds = (query) => {
-    const filter =
-      query !== ""
-        ? crops.filter((x) =>
-            x.label.toLowerCase().includes(query.toLowerCase())
-          )
-        : crops;
-    setFilteredSeeds(filter);
-    handleUpdateStore("speciesSelection", "queryResults", filter);
-  };
+  // create a data object that specifies the type(data layer 1),
+  // the key(data layer 2), & the value for the key.
 
   const retrieveCropDetails = async (id) => {
     const response = await dispatch(
@@ -78,8 +75,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
         cropId: `${id}`,
         regionId: data.siteCondition.stateId,
         countyId: data.siteCondition.countyId,
-        url: "https://developapi.covercrop-selector.org/v2/crops/148?regions=18&context=seed_calc&regions=180",
-      })
+      }),
     );
     return response.payload.data;
   };
@@ -93,7 +89,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
     // default key values per new seed
     const cropDetails = await retrieveCropDetails(seed.id);
 
-    let newSeed = {
+    const newSeed = {
       ...seed,
       ...cropDetails,
       // FIXME: some of the value may not needed in the app
@@ -101,186 +97,163 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
       // FIXME: Soybean (only in NECCC) doen't have Coefficients attr
       plantingDates: {
         firstReliableEstablishmentStart:
-          cropDetails.attributes["Planting and Growth Windows"][
-            "Reliable Establishment"
-          ]?.["values"][0] ?? "",
+          cropDetails.attributes['Planting and Growth Windows'][
+            'Reliable Establishment'
+          ]?.values[0]?.split(' - ')[0]
+            .slice(0, -5) ?? '',
         firstReliableEstablishmentEnd:
-          cropDetails.attributes["Planting and Growth Windows"][
-            "Reliable Establishment"
-          ]?.["values"][0] ?? "",
+          cropDetails.attributes['Planting and Growth Windows'][
+            'Reliable Establishment'
+          ]?.values[0]?.split(' - ')[1]
+            .slice(0, -5) ?? '',
         secondReliableEstablishmentStart:
-          council === "MCCC"
-            ? cropDetails.attributes["Planting and Growth Windows"][
-                "Reliable Establishment"
-              ]?.["values"][1]
-                ?.split(" - ")[0]
-                .slice(0, -5) ?? ""
-            : "",
+          council === 'MCCC'
+            ? cropDetails.attributes['Planting and Growth Windows'][
+              'Reliable Establishment'
+            ]?.values[1]
+              ?.split(' - ')[0]
+              .slice(0, -5) ?? ''
+            : '',
         secondReliableEstablishmentEnd:
-          council === "MCCC"
-            ? cropDetails.attributes["Planting and Growth Windows"][
-                "Reliable Establishment"
-              ]?.["values"][1]
-                ?.split(" - ")[1]
-                .slice(0, -5) ?? ""
-            : "",
+          council === 'MCCC'
+            ? cropDetails.attributes['Planting and Growth Windows'][
+              'Reliable Establishment'
+            ]?.values[1]
+              ?.split(' - ')[1]
+              .slice(0, -5) ?? ''
+            : '',
         earlySeedingDateStart:
-          cropDetails.attributes["Planting and Growth Windows"][
-            "Early Seeding Date"
-          ]?.["values"][0]
-            .split(" - ")[0]
-            .slice(0, -5) ?? "",
+          cropDetails.attributes['Planting and Growth Windows'][
+            'Early Seeding Date'
+          ]?.values[0]
+            .split(' - ')[0]
+            .slice(0, -5) ?? '',
         earlySeedingDateEnd:
-          cropDetails.attributes["Planting and Growth Windows"][
-            "Early Seeding Date"
-          ]?.["values"][0]
-            .split(" - ")[1]
-            .slice(0, -5) ?? "",
+          cropDetails.attributes['Planting and Growth Windows'][
+            'Early Seeding Date'
+          ]?.values[0]
+            .split(' - ')[1]
+            .slice(0, -5) ?? '',
         lateSeedingDateStart:
-          cropDetails.attributes["Planting and Growth Windows"][
-            "Late Seeding Date"
-          ]?.["values"][0]
-            .split(" - ")[0]
-            .slice(0, -5) ?? "",
+          cropDetails.attributes['Planting and Growth Windows'][
+            'Late Seeding Date'
+          ]?.values[0]
+            .split(' - ')[0]
+            .slice(0, -5) ?? '',
         lateSeedingDateEnd:
-          cropDetails.attributes["Planting and Growth Windows"][
-            "Late Seeding Date"
-          ]?.["values"][0]
-            .split(" - ")[1]
-            .slice(0, -5) ?? "",
+          cropDetails.attributes['Planting and Growth Windows'][
+            'Late Seeding Date'
+          ]?.values[0]
+            .split(' - ')[1]
+            .slice(0, -5) ?? '',
       },
       siteConditionPlantingDate: data.siteCondition.plannedPlantingDate,
       soilDrainage: data.siteCondition.soilDrainage,
       singleSpeciesSeedingRate: parseFloat(
-        cropDetails.attributes.Coefficients["Single Species Seeding Rate"]
-          .values[0]
+        cropDetails.attributes.Coefficients['Single Species Seeding Rate']
+          .values[0],
       ),
       singleSpeciesSeedingRatePLS: parseFloat(
-        cropDetails.attributes.Coefficients["Single Species Seeding Rate"]
-          .values[0]
+        cropDetails.attributes.Coefficients['Single Species Seeding Rate']
+          .values[0],
       ),
+      // FIXME: this value is calculated later, should not be calc here
       percentOfSingleSpeciesRate: (1 / (seedsSelected.length + 1)) * 100,
       seedsPound: parseFloat(
-        cropDetails.attributes["Planting"]
-          ? cropDetails.attributes["Planting"]["Seeds Per lb"]["values"][0]
-          : cropDetails.attributes["Planting Information"]["Seed Count"][
-              "values"
-            ][0] // TBD
+        cropDetails.attributes.Planting
+          ? cropDetails.attributes.Planting['Seeds Per lb'].values[0]
+          : cropDetails.attributes['Planting Information']['Seed Count']?.values[0] ?? 0, // TBD
       ),
       mixSeedingRate: 0,
       maxPercentAllowedInMix:
-        council === "MCCC"
-          ? cropDetails.attributes.Coefficients["Max % Allowed in Mix"][
-              "values"
-            ][0]
+        council === 'MCCC'
+          ? cropDetails.attributes.Coefficients['Max % Allowed in Mix'].values[0]
           : 0,
       percentChanceOfWinterSurvival: cropDetails.attributes.Coefficients[
-        "% Chance of Winter Survial"
+        '% Chance of Winter Survial'
       ]
         ? parseFloat(
-            cropDetails.attributes.Coefficients["% Chance of Winter Survial"][
-              "values"
-            ][0]
-          )
+          cropDetails.attributes.Coefficients['% Chance of Winter Survial'].values[0],
+        )
         : 0, // There is a typo in value in API
       sqFtAcre: 43560,
       germinationPercentage:
-        cropDetails.attributes.Coefficients["% Live Seed to Emergence"] !==
-        undefined
+        cropDetails.attributes.Coefficients['% Live Seed to Emergence']
+        !== undefined
           ? parseFloat(
-              cropDetails.attributes.Coefficients["% Live Seed to Emergence"][
-                "values"
-              ][0]
-            )
+            cropDetails.attributes.Coefficients['% Live Seed to Emergence'].values[0],
+          )
           : 0.85, // TBD
       purityPercentage:
-        cropDetails.attributes.Coefficients["Precision Coefficient"] !==
-        undefined
+        cropDetails.attributes.Coefficients['Precision Coefficient']
+        !== undefined
           ? parseFloat(
-              cropDetails.attributes.Coefficients["Precision Coefficient"][
-                "values"
-              ][0]
-            )
+            cropDetails.attributes.Coefficients['Precision Coefficient'].values[0],
+          )
           : 0.95, // TBD
       seedsPerAcre: parseFloat(
-        cropDetails.attributes["Planting"]
-          ? cropDetails.attributes["Planting"]["Seeds Per lb"]["values"][0]
-          : cropDetails.attributes["Planting Information"]["Seed Count"][
-              "values"
-            ][0] // TBD
+        cropDetails.attributes.Planting
+          ? cropDetails.attributes.Planting['Seeds Per lb'].values[0]
+          : cropDetails.attributes['Planting Information']['Seed Count']?.values[0] ?? 0, // TBD
       ),
       poundsOfSeed: parseFloat(
-        cropDetails.attributes["Planting"]
-          ? cropDetails.attributes["Planting"]["Seeds Per lb"]["values"][0]
-          : cropDetails.attributes["Planting Information"]["Seed Count"][
-              "values"
-            ][0] // TBD
+        cropDetails.attributes.Planting
+          ? cropDetails.attributes.Planting['Seeds Per lb'].values[0]
+          : cropDetails.attributes['Planting Information']['Seed Count']?.values[0] ?? 0, // TBD
       ), // TBD
       seedsPerPound: parseFloat(
-        cropDetails.attributes["Planting"]
-          ? cropDetails.attributes["Planting"]["Seeds Per lb"]["values"][0]
-          : cropDetails.attributes["Planting Information"]["Seed Count"][
-              "values"
-            ][0] // TBD
+        cropDetails.attributes.Planting
+          ? cropDetails.attributes.Planting['Seeds Per lb'].values[0]
+          : cropDetails.attributes['Planting Information']['Seed Count']?.values[0] ?? 0, // TBD
       ),
       plantsPerAcre: 0,
       aproxPlantsSqFt: 0,
       broadcast: parseFloat(
-        cropDetails.attributes.Coefficients["Broadcast Coefficient"] !==
-          undefined
-          ? cropDetails.attributes.Coefficients["Broadcast Coefficient"][
-              "values"
-            ][0]
+        cropDetails.attributes.Coefficients['Broadcast Coefficient']
+          !== undefined
+          ? cropDetails.attributes.Coefficients['Broadcast Coefficient'].values[0]
           : cropDetails.attributes.Coefficients[
-              "Broadcast with Cultivation Coefficient"
-            ]
+            'Broadcast with Cultivation Coefficient'
+          ],
       ),
       precision: parseFloat(
-        cropDetails.attributes.Coefficients["Precision Coefficient"] !==
-          undefined
-          ? cropDetails.attributes.Coefficients["Precision Coefficient"][
-              "values"
-            ][0]
-          : 0
+        cropDetails.attributes.Coefficients['Precision Coefficient']
+          !== undefined
+          ? cropDetails.attributes.Coefficients['Precision Coefficient'].values[0]
+          : 0,
       ),
       aerial: parseFloat(
-        cropDetails.attributes.Coefficients["Aerial Coefficient"] !== undefined
-          ? cropDetails.attributes.Coefficients["Aerial Coefficient"][
-              "values"
-            ][0]
-          : 0
+        cropDetails.attributes.Coefficients['Aerial Coefficient'] !== undefined
+          ? cropDetails.attributes.Coefficients['Aerial Coefficient'].values[0]
+          : 0,
       ),
       drilled: parseFloat(
-        cropDetails.attributes.Coefficients["% Live Seed to Emergence"] !==
-          undefined
-          ? cropDetails.attributes.Coefficients["% Live Seed to Emergence"]
-          : 0
+        cropDetails.attributes.Coefficients['% Live Seed to Emergence']
+          !== undefined
+          ? cropDetails.attributes.Coefficients['% Live Seed to Emergence']
+          : 0,
       ), // TBD
       showSteps: false,
       // Review your mix values'
       plantingMethod: 1,
-      plantingMethods: cropDetails.attributes["Planting Information"]
-        ? cropDetails.attributes["Planting Information"]["Planting Methods"][
-            "values"
-          ]
+      plantingMethods: cropDetails.attributes['Planting Information']
+        ? cropDetails.attributes['Planting Information']['Planting Methods'].values
         : [], // TBD
       soilDrainages:
-        cropDetails.attributes["Soil Conditions"]?.["Soil Drainage"][
-          "values"
-        ] ?? [],
+        cropDetails.attributes['Soil Conditions']?.['Soil Drainage'].values ?? [],
       highFertilityMonocultureCoefficient: cropDetails.attributes.Coefficients[
-        "High Fertility Monoculture Coefficient"
+        'High Fertility Monoculture Coefficient'
       ]
         ? cropDetails.attributes.Coefficients[
-            "High Fertility Monoculture Coefficient"
-          ]
+          'High Fertility Monoculture Coefficient'
+        ]
         : 0,
       highFertilityCompetitiveCoefficient: cropDetails.attributes.Coefficients[
-        "High Fertility Competition Coefficient"
+        'High Fertility Competition Coefficient'
       ]
         ? cropDetails.attributes.Coefficients[
-            "High Fertility Competition Coefficient"
-          ]
+          'High Fertility Competition Coefficient'
+        ]
         : 0,
       managementImpactOnMix: 1, // TBD
       mixSeedingRatePLS: 0, // TBD
@@ -303,68 +276,61 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
       totalCost: 0,
       addedToMix: 0,
     };
-    newSeed = calculateAllMixRatioValues(newSeed, data);
-    // three checks:
-    // * seedlength is 0
-    // * seed already exists
-    // * seed doesn't exist
+
     if (seedsSelected.length === 0) {
-      const newList = seedsSelected.map((s, i) => {
-        return {
-          ...s,
-          percentOfSingleSpeciesRate: (1 / (seedsSelected.length + 1)) * 100,
-        };
-      });
-      // update Redux with the seedsSelected and diversitySelected with the new list.
-      handleUpdateStore("speciesSelection", "seedsSelected", [
+      // no seed selected before(this is the first seed selected)
+      const newList = seedsSelected.map((s) => ({
+        ...s,
+        percentOfSingleSpeciesRate: (1 / (seedsSelected.length + 1)) * 100,
+      }));
+      // update seedsSelected and diversitySelected
+      handleUpdateStore('speciesSelection', 'seedsSelected', [
         ...newList,
-        newSeed,
+        calculateAllMixRatioValues(newSeed, [], council),
       ]);
-      handleUpdateStore("speciesSelection", "diversitySelected", [
+      handleUpdateStore('speciesSelection', 'diversitySelected', [
         ...diversitySelected,
         species,
       ]);
       // by default, we want equal amount of percentage of the seed in the mix, so whenever updating
       // the seed list, we'll update the percentage in mix of all seeds.
     } else {
+      // test if seed is selected before(if selected, delete seed from the list, else add it)
       const seedsExist = seedsSelected.find((f) => seed.label === f.label);
-      // if seed does exist, remove seed in seedsSelected, as well as diversitySelected
-      if (typeof seedsExist !== "undefined") {
+      if (seedsExist) {
+        // if seed exist, remove seed in seedsSelected, update diversitySelected
         const filterList = seedsSelected.filter(
-          (item) => item.label !== seed.label
+          (item) => item.label !== seed.label,
         );
-        const newList = filterList.map((n, i) => {
-          return {
+        const newList = filterList
+          .map((n) => ({
             ...n,
-            percentOfSingleSpeciesRate: (1 / (seedsSelected.length + 1)) * 100,
-          };
-        });
-        handleUpdateStore("speciesSelection", "seedsSelected", newList);
-        const seedResult = seedsSelected.filter((i) => {
-          return i.group.label === species;
-        }).length;
+            percentOfSingleSpeciesRate:
+                (1 / (seedsSelected.length + 1)) * 100,
+          }))
+          .map((seed) => calculateAllMixRatioValues(seed, speciesSelection.seedsSelected, council));
+        handleUpdateStore('speciesSelection', 'seedsSelected', newList);
+        const seedResult = seedsSelected.filter((i) => i.group.label === species).length;
         if (seedResult <= 1) {
           handleUpdateStore(
-            "speciesSelection",
-            "diversitySelected",
-            diversitySelected.filter((d) => d !== species)
+            'speciesSelection',
+            'diversitySelected',
+            diversitySelected.filter((d) => d !== species),
           );
         }
       } else {
-        // FIXME: add update for previous crops
-        // if seed doesn't exist, add NRCS, seedsSelected, & diveristySelected
-        const newList = seedsSelected.map((s, i) => {
-          return {
-            ...s,
-            percentOfSingleSpeciesRate: (1 / (seedsSelected.length + 1)) * 100,
-          };
-        });
-        handleUpdateStore("speciesSelection", "seedsSelected", [
-          ...newList,
-          newSeed,
-        ]);
+        // if seed doesn't exist, add seed to seedsSelected, update diversitySelected
+        const newList = [...seedsSelected, newSeed].map((s) => ({
+          ...s,
+          percentOfSingleSpeciesRate: (1 / (seedsSelected.length + 1)) * 100,
+        })).map((seed) => calculateAllMixRatioValues(seed, [...seedsSelected, newSeed], council));
+        handleUpdateStore(
+          'speciesSelection',
+          'seedsSelected',
+          newList,
+        );
         if (!diversitySelected.includes(species)) {
-          handleUpdateStore("speciesSelection", "diversitySelected", [
+          handleUpdateStore('speciesSelection', 'diversitySelected', [
             ...diversitySelected,
             species,
           ]);
@@ -373,93 +339,69 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
     }
   };
 
-  const renderSeedsSelected = () => {
-    return (
-      <>
-        <SeedsSelectedList list={speciesSelection.seedsSelected} />
-      </>
-    );
-  };
-
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
   //                     useEffect                        //
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
 
   useEffect(() => {
-    if (data.crops.length > 0) {
-      setFilteredSeeds(data.crops);
-    }
-  }, [data.crops]);
+    setFilteredSeeds(crops);
+  }, [crops]);
 
   useEffect(() => {
     validateForms(
       speciesSelection.seedsSelected.length > 1,
       1,
       completedStep,
-      setCompletedStep
+      setCompletedStep,
     );
-  }, [speciesSelection]);
+  }, [speciesSelection.seedsSelected]);
 
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
   //                      Render                          //
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
 
   return (
-    <Grid xs={12} container>
-      {seedsSelected.length > 0 && renderSeedsSelected()}
-      <Grid
-        xs={12}
-        md={seedsSelected.length > 0 ? 11 : 12}
-        item
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Grid item xs={12}>
-          <Typography variant="h2">Pick species for the mix.</Typography>
-        </Grid>
-        <Grid item xs={12} padding={15} className="site-condition-container">
-          <SearchField
-            handleChange={updateQuery}
-            value={query}
-            handleFilter={filterSeeds}
-          />
-          <Diversity diversitySelected={diversitySelected} />
-        </Grid>
-        <Grid item xs={12}>
-          <Grid item xs={12}>
-            <Typography>Mix Diversity</Typography>
-          </Grid>
-          {seedsList.map((s, i) => {
-            return (
-              <Grid item xs={12}>
-                <Accordion xs={12} className="accordian-container">
-                  <AccordionSummary
-                    xs={12}
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                  >
-                    <Typography>{seedsLabel[s]}</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails className="accordian-details">
-                    {loading === "getCrops" ? (
-                      <Spinner />
-                    ) : (
-                      <ImageListComponent
-                        seed={s}
-                        filteredSeeds={filteredSeeds}
-                        council={council}
-                        data={data}
-                        updateSeeds={updateSeeds}
-                      />
-                    )}
-                  </AccordionDetails>
-                </Accordion>
-              </Grid>
-            );
-          })}
-        </Grid>
+    <Grid container justifyContent="center">
+      <Grid item xs={12}>
+        <Typography variant="h2">Pick species for the mix.</Typography>
       </Grid>
+      <Grid item xs={11}>
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          flexDirection="column"
+          p="1rem"
+        >
+          <SearchField handleChange={updateQuery} value={query} />
+          <Diversity diversitySelected={diversitySelected} />
+        </Box>
+      </Grid>
+
+      {seedsType.map((seedType, i) => (
+        <Grid item xs={12} key={i}>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              className="accordian-summary"
+            >
+              <Typography>{seedsLabel[seedType]}</Typography>
+            </AccordionSummary>
+            <AccordionDetails className="accordian-details">
+              {loading === 'getCrops' && <Spinner />}
+
+              <PlantList
+                seedType={seedType}
+                filteredSeeds={filteredSeeds}
+                seedsSelected={seedsSelected}
+                updateSeeds={updateSeeds}
+                council={council}
+                plantingDate={data.siteCondition.plannedPlantingDate}
+              />
+            </AccordionDetails>
+          </Accordion>
+        </Grid>
+      ))}
     </Grid>
   );
 };

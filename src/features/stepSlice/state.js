@@ -1,26 +1,25 @@
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 
-export const initialState = {
+const initialState = {
   value: {
     modal: {
       loading: false,
       error: false,
       success: false,
-      errorTitle: "",
-      errorMessage: "",
-      successTitle: "",
-      successMessage: "",
+      errorTitle: '',
+      errorMessage: '',
+      successTitle: '',
+      successMessage: '',
       isOpen: false,
     },
     siteCondition: {
-      state: "",
-      stateId: "",
-      county: "",
-      countyId: "",
-      soilDrainage: "",
-      // FIXME: this value would cause warning in console
-      plannedPlantingDate: dayjs(new Date()),
-      acres: 0,
+      state: '',
+      stateId: '',
+      county: '',
+      countyId: '',
+      soilDrainage: '',
+      plannedPlantingDate: dayjs(new Date()).format('MM/DD/YYYY'),
+      acres: '',
       checkNRCSStandards: false,
       locationSelected: false,
       latitude: 37.75,
@@ -29,11 +28,12 @@ export const initialState = {
       markers: null,
       locationStep: 1,
       zipCode: 0,
-      zone: "",
-      council: "",
+      zone: '',
+      council: '',
     },
     speciesSelection: {
-      queryString: "",
+      queryString: '',
+      selectedSpecies: '',
       queryResults: [],
       diversitySelected: [],
       seedsSelected: [],
@@ -75,7 +75,7 @@ export const initialState = {
       max: 0,
       seedingRateAverage: 0,
       seedingRateCoefficient: 0,
-      type: "Drilled",
+      type: 'Drilled',
     },
     reviewMix: {},
     confirmPlan: {},
@@ -85,3 +85,5 @@ export const initialState = {
   },
   etc: {},
 };
+
+export default initialState;

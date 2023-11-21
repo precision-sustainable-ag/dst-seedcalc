@@ -1,196 +1,188 @@
-//////////////////////////////////////////////////////////
-//                     Imports                          //
-//////////////////////////////////////////////////////////
+/// ///////////////////////////////////////////////////////
+//                    Imports                           //
+/// ///////////////////////////////////////////////////////
 
-import * as React from "react";
-import Grid from "@mui/material/Grid";
-import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Typography, Box } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import React, { useState, useEffect } from 'react';
+import Grid from '@mui/material/Grid';
+import { useSelector, useDispatch } from 'react-redux';
+import { Typography, Box } from '@mui/material';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import styled from '@emotion/styled';
+import { updateSteps } from '../../../../features/stepSlice';
+import { seedingMethods } from '../../../../shared/data/dropdown';
+import Dropdown from '../../../../components/Dropdown';
+import '../steps.scss';
 
-import { VerticalSlider } from "../../../../components/VerticalSlider";
-import "./../steps.css";
-import { updateSteps } from "../../../../features/stepSlice";
-import SeedsSelectedList from "../../../../components/SeedsSelectedList";
+const LeftGrid = styled(Grid)(() => ({
+  '&.MuiGrid-item': {
+    height: '150px',
+    border: '1px solid #c7c7c7',
+    borderLeft: 'none',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    '& p': {
+      fontWeight: 'bold',
+    },
+  },
+}));
+
+const RightGrid = styled(Grid)(() => ({
+  '&.MuiGrid-item': {
+    height: '150px',
+    border: '1px solid #c7c7c7',
+    borderRight: 'none',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    '& .MuiBox-root': {
+      width: '50px',
+      height: '50px',
+      padding: '11px',
+      margin: '0 auto',
+      backgroundColor: '#E5E7D5',
+      border: 'solid 2px',
+      borderRadius: '50%',
+    },
+    '& p': {
+      fontWeight: 'bold',
+    },
+  },
+}));
 
 const SeedingMethod = ({ council }) => {
-  // themes
-  const theme = useTheme();
-  const matchesXs = useMediaQuery(theme.breakpoints.down("xs"));
-  const matchesSm = useMediaQuery(theme.breakpoints.down("sm"));
-  const matchesMd = useMediaQuery(theme.breakpoints.down("md"));
-
   // useSelector for crops reducer data
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
-  const seedingMethod = data.seedingMethod;
-  const speciesSelection = data.speciesSelection;
-  const seedsSelected = speciesSelection.seedsSelected;
+  const { seedingMethod, speciesSelection } = data;
+  const { selectedSpecies, seedsSelected } = speciesSelection;
 
-  const [dataLoaded, toggleDataLoaded] = useState(false);
-  const [min, setMin] = useState(0);
-  const [max, setMax] = useState(0);
-  const [seedingRateCoefficient, setSeedingRateCoefficient] = useState(0);
-  const [seedingRateAverage, setSeedingRateAverage] = useState(0);
+  // create an key/value pair for the seed and related accordion expanded state
+  const [accordionState, setAccordionState] = useState(
+    seedsSelected.reduce((res, seed) => {
+      res[seed.label] = false;
+      return res;
+    }, {}),
+  );
 
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
   //                      Redux                           //
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
 
   const handleUpdateSteps = (key, val) => {
-    const data = {
-      type: "seedingMethod",
-      key: key,
+    const newData = {
+      type: 'seedingMethod',
+      key,
       value: val,
     };
-    dispatch(updateSteps(data));
+    dispatch(updateSteps(newData));
   };
 
-  //////////////////////////////////////////////////////////
-  //                    State Logic                       //
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
+  //                   State Logic                        //
+  /// ///////////////////////////////////////////////////////
 
-  const updateSeedingRateAverage = async () => {
-    let average = 0;
-    seedsSelected.map((s, i) => {
-      average += Math.round(s.mixSeedingRate);
-    });
-    const minimum = average - average / 2;
-    const maximum = average + average / 2;
-    const coefficient =
-      average + (seedingMethod.managementImpactOnMix - 0.5) * average;
-    setMin(minimum);
-    setMax(maximum);
-    setSeedingRateAverage(average);
-    setSeedingRateCoefficient(
-      average + (seedingMethod.managementImpactOnMix - 0.5) * average
-    );
-    toggleDataLoaded(true);
-  };
-  const updateManagementImpactOnMix = (e) => {
-    const percentage = e.target.value / seedingRateAverage - 0.5;
-    setSeedingRateCoefficient(e.target.value);
-    handleUpdateSteps("managementImpactOnMix", percentage);
-  };
-  const clearChart = () => {
-    toggleDataLoaded(false);
-  };
-  const renderSeedsSelected = () => {
-    return <SeedsSelectedList list={speciesSelection.seedsSelected} />;
-  };
-  const renderVerticalSlider = (seedingRate, handleUpdateSteps) => {
-    const marks = [];
-
-    marks.push({ value: min, label: `${min}` });
-    marks.push({ value: seedingRateCoefficient, label: `${seedingRate}` });
-    marks.push({ value: max, label: `${max}` });
-
-    return (
-      <Grid xs={3} container justifyContent="center" alignItems="center">
-        <VerticalSlider
-          marks={marks}
-          value={seedingRate}
-          handleChange={(e) => {
-            updateManagementImpactOnMix(e);
-          }}
-        />
-      </Grid>
-    );
+  const handleSeedingMethod = (e) => {
+    handleUpdateSteps('type', e.target.value);
   };
 
-  //////////////////////////////////////////////////////////
-  //                    useEffect                         //
-  //////////////////////////////////////////////////////////
+  const renderRightAccordian = (type, val) => (
+    <RightGrid item xs={6}>
+      {council === 'NECCC' && type !== 'precision' ? (
+        <Typography>Not Recommended</Typography>
+      ) : (
+        <>
+          <Box>
+            <Typography>{val}</Typography>
+          </Box>
+          <Typography>Lbs / Acre</Typography>
+        </>
+      )}
+    </RightGrid>
+  );
+
+  // handler for click to open accordion
+  const handleExpandAccordion = (label) => {
+    const open = accordionState[label];
+    setAccordionState({ ...accordionState, [label]: !open });
+  };
 
   useEffect(() => {
-    updateSeedingRateAverage();
-    return () => {
-      dataLoaded && clearChart();
-    };
-  }, []);
+    // expand related accordion based on sidebar click
+    setAccordionState(
+      seedsSelected.reduce((res, seed) => {
+        res[seed.label] = seed.label === selectedSpecies;
+        return res;
+      }, {}),
+    );
+  }, [selectedSpecies]);
 
-  //////////////////////////////////////////////////////////
-  //                      Render                          //
-  //////////////////////////////////////////////////////////
+  /// ///////////////////////////////////////////////////////
+  //                    Render                            //
+  /// ///////////////////////////////////////////////////////
 
   return (
-    <Grid xs={12} justify="center" container>
-      {seedsSelected.length > 0 && renderSeedsSelected()}
-      <Grid
-        xs={seedsSelected.length > 0 ? 12 : 12}
-        md={seedsSelected.length > 0 ? 11 : 12}
-        item
-      >
-        <Grid item xs={12}>
-          <Typography variant="h2">Adjust Seeding Rate of Mix</Typography>
-        </Grid>
-        <Grid
-          sx={{ paddingTop: 5 }}
-          container
-          xs={12}
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Grid
-            container
-            xs={4}
-            justifyContent="flex-end"
-            alignItems="flex-end"
-          >
-            <Grid item xs={12}>
-              <Typography>
-                <Box
-                  className="seeding-method-detail-container"
-                  sx={{ marginBottom: "40px" }}
-                >
-                  <Typography>Factors that lower Seeding Rate:</Typography>
-                  <Typography>- Cost Saving</Typography>
-                  <Typography>- Low Biomass</Typography>
-                  <Typography>- Planting Green</Typography>
-                </Box>
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Box
-                className="seeding-method-label-container"
-                sx={{ marginBottom: "40px" }}
-              >
-                <Typography>Calculated Mix Seeding Rate</Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={12}>
-              <Box className="seeding-method-detail-container">
-                <Typography>Factors that may raise Seeding Rate: </Typography>
-                <Typography>- Erosion Control</Typography>
-                <Typography>- Weed Supression</Typography>
-                <Typography>- Grazing</Typography>
-              </Box>
-            </Grid>
-          </Grid>
-          {dataLoaded &&
-            renderVerticalSlider(
-              seedingMethod.mixSeedingRate,
-              handleUpdateSteps
-            )}
-          <Grid container xs={5} sx={{ height: "400px" }}>
-            <Grid item xs={12} justifyContent="flex-start">
-              <Box
-                className="seeding-method-label-container"
-                sx={{ marginBottom: "270px" }}
-              >
-                <Typography>High limit of Mix Seeding Rate</Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={12} justifyContent="flex-end">
-              <Box className="seeding-method-label-container">
-                <Typography>Low limit of Mix Seeding Rate</Typography>
-              </Box>
-            </Grid>
-          </Grid>
-        </Grid>
+    <Grid container>
+      <Grid item xs={12}>
+        <Typography variant="h2">Select Seeding Method</Typography>
       </Grid>
+      <Grid item xs={12} padding="15px" className="">
+        <Dropdown
+          value={seedingMethod.type}
+          label="Seeding Method: "
+          handleChange={handleSeedingMethod}
+          size={12}
+          items={seedingMethods}
+        />
+      </Grid>
+      {seedsSelected.map((seed, i) => (
+        <Grid item xs={12} key={i}>
+          <Accordion
+            expanded={accordionState[seed.label]}
+            onChange={() => handleExpandAccordion(seed.label)}
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              className="accordian-summary"
+            >
+              <Typography>{seed.label}</Typography>
+            </AccordionSummary>
+
+            <AccordionDetails className="accordian-details">
+              <Grid container>
+                <LeftGrid item xs={6}>
+                  <Typography>Precision: </Typography>
+                </LeftGrid>
+                {renderRightAccordian('precision', seed.precision)}
+                <LeftGrid item xs={6}>
+                  <Typography>Drilled: </Typography>
+                </LeftGrid>
+                {renderRightAccordian('drilled', 1)}
+                <LeftGrid item xs={6}>
+                  <Typography>
+                    Broadcast(with Light Incorporation):
+                    {' '}
+                  </Typography>
+                </LeftGrid>
+                {renderRightAccordian('broadcast', seed.broadcast)}
+                <LeftGrid item xs={6}>
+                  <Typography>
+                    Aerial(or broadcast with no Light Incorporation
+                    {' '}
+                    <span style={{ color: 'red' }}>Not Recommended</span>
+                    ):
+                  </Typography>
+                </LeftGrid>
+                {renderRightAccordian('aerial', seed.aerial)}
+              </Grid>
+            </AccordionDetails>
+          </Accordion>
+        </Grid>
+      ))}
     </Grid>
   );
 };

@@ -1,51 +1,93 @@
-import * as React from "react";
-import Grid from "@mui/material/Grid";
-import { useTheme } from "@mui/material/styles";
-import { useState, useEffect, Fragment } from "react";
-import { Typography, Box, Link, useMediaQuery } from "@mui/material";
+import React from 'react';
+import { useTheme } from '@mui/material/styles';
+import {
+  Typography,
+  Box,
+  useMediaQuery,
+  Card,
+  CardActionArea,
+} from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateSteps } from '../../features/stepSlice';
 
 const SeedsSelectedList = ({ list }) => {
   // themes
   const theme = useTheme();
-  const matchesXs = useMediaQuery(theme.breakpoints.down("xs"));
-  const matchesSm = useMediaQuery(theme.breakpoints.down("sm"));
-  const matchesMd = useMediaQuery(theme.breakpoints.down("md"));
+  const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
+
+  const dispatch = useDispatch();
+  const data = useSelector((state) => state.steps.value);
+  const { selectedSpecies } = data.speciesSelection;
+
+  const handleUpdateStore = (type, key, val) => {
+    const newData = {
+      type,
+      key,
+      value: val,
+    };
+    dispatch(updateSteps(newData));
+  };
+
+  const selectSpecies = (species) => {
+    handleUpdateStore(
+      'speciesSelection',
+      'selectedSpecies',
+      selectedSpecies === species ? '' : species,
+    );
+  };
+
   return (
-    <Grid item xs={matchesMd ? 12 : 1}>
-      <Box className="selected-seeds-box">
-        <Grid
-          className="selected-seeds-container"
-          container
-          flexDirection={matchesMd ? "row" : "column"}
-        >
-          {list.map((s, idx) => {
-            return (
-              <Grid item className="selected-seeds-item">
-                <img
-                  className={
-                    matchesXs
-                      ? "left-panel-img-xs"
-                      : matchesSm
-                      ? "left-panel-img-sm"
-                      : matchesMd
-                      ? "left-panel-img-md"
-                      : "left-panel-img"
-                  }
-                  src={
-                    s.thumbnail !== null && s.thumbnail !== ""
+    <Box
+      sx={
+        matchesMd
+          ? {
+            minHeight: '100px',
+            whiteSpace: 'normal',
+            overflowX: 'auto',
+          }
+          : {
+            height: '100%',
+          }
+      }
+      bgcolor="#e5e7d5"
+      border="#c7c7c7 solid 1px"
+      display="flex"
+      flexDirection={matchesMd ? 'row' : 'column'}
+    >
+      {[...list].reverse().map((s, i) => (
+        <Box minWidth={matchesMd ? '120px' : ''} key={i}>
+          <Card
+            sx={{
+              backgroundColor: 'transparent',
+              boxShadow: 'none',
+              cursor: 'pointer',
+            }}
+          >
+            <CardActionArea onClick={() => selectSpecies(s.label)}>
+              <img
+                style={{
+                  borderRadius: '50%',
+                  width: '60px',
+                  height: '60px',
+                  marginTop: '10px',
+                }}
+                src={
+                    s.thumbnail !== null && s.thumbnail !== ''
                       ? s.thumbnail
-                      : "https://www.gardeningknowhow.com/wp-content/uploads/2020/04/spinach.jpg"
+                      : 'https://placehold.it/250x150?text=Placeholder'
                   }
-                  alt={s.label}
-                  loading="lazy"
-                />
-                <Typography className="left-panel-text">{s.label}</Typography>
-              </Grid>
-            );
-          })}{" "}
-        </Grid>
-      </Box>
-    </Grid>
+                alt={s.label}
+                loading="lazy"
+              />
+              <Typography fontSize="12px" lineHeight={1.25}>
+                {s.label}
+              </Typography>
+            </CardActionArea>
+          </Card>
+        </Box>
+      ))}
+      {' '}
+    </Box>
   );
 };
 

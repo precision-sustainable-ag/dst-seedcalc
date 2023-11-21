@@ -1,13 +1,9 @@
-import "./footer.css";
-import { Typography } from "@mui/material";
-import { Fragment } from "react";
+import './footer.css';
+import { Typography } from '@mui/material';
+import React from 'react';
 
-const Footer = () => {
-  return (
-    <Fragment>
-      <Typography>Footer Container Copyright etc.</Typography>
-    </Fragment>
-  );
-};
+const Footer = () => (
+  <Typography>Footer Container Copyright etc.</Typography>
+);
 
 export default Footer;

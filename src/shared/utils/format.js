@@ -1,6 +1,4 @@
-export const isEmptyNull = (val) => {
-  return val == null || val === "";
-};
+export const isEmptyNull = (val) => val == null || val === '';
 
 export const validateForms = (pass, index, completedStep, setCompletedStep) => {
   if (pass) {
