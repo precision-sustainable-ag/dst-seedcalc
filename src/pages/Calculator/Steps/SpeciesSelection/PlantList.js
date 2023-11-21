@@ -11,6 +11,11 @@ import {
 } from '@mui/material';
 
 import '../steps.scss';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  addSeedRedux, setOptionRedux, removeOptionRedux, removeSeedRedux,
+} from '../../../../features/calculatorSlice/actions';
+import { initialOptions } from '../../../../shared/utils/calculator';
 
 const CheckBoxIcon = ({ style }) => (
   <Box sx={style}>
@@ -44,6 +49,13 @@ const PlantList = ({
   council,
   plantingDate,
 }) => {
+  const dispatch = useDispatch();
+
+  // TODO: used for set options for selected seed
+  const { acres, stateId, countyId } = useSelector((state) => state.siteCondition);
+
+  const newSeedsSelected = useSelector((state) => state.calculator.seedsSelected);
+
   const seedsList = filteredSeeds.filter((seed) => seed.group !== null && seed.group.label === seedType);
 
   const checkPlantingDate = (seed) => {
@@ -81,6 +93,24 @@ const PlantList = ({
     return '';
   };
 
+  const handleClick = async (seed) => {
+    const { id: cropId, label: seedName } = seed;
+    // seed not in seedSelected
+    if (newSeedsSelected.filter((s) => s.label === seedName).length === 0) {
+      const url = `https://developapi.covercrop-selector.org/v2/crops/${cropId}?regions=${stateId}&context=seed_calc&regions=${countyId}`;
+      const { data } = await fetch(url).then((res) => res.json());
+      // TODO: new calculator redux here
+      dispatch(addSeedRedux(data));
+      const { label, attributes } = data;
+      const percentSurvival = parseFloat(attributes.Coefficients['% Chance of Winter Survial'].values[0]);
+      // set initial options with acres and survival rate
+      dispatch(setOptionRedux(label, { ...initialOptions, acres, percentSurvival }));
+    } else {
+      dispatch(removeSeedRedux(seedName));
+      dispatch(removeOptionRedux(seedName));
+    }
+  };
+
   return (
     <Grid container spacing="1rem" pl="1rem">
       {seedsList.length === 0 ? (
@@ -108,7 +138,11 @@ const PlantList = ({
               }}
             >
               <CardActionArea
-                onClick={() => updateSeeds(seed, seedType)}
+                onClick={() => {
+                  updateSeeds(seed, seedType);
+                  // updated click function
+                  handleClick(seed);
+                }}
                 disableRipple
               >
                 <CardMedia

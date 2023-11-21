@@ -3,25 +3,49 @@ const createUserInput = (soilDrainage, plantingDate, acres) => ({ soilDrainage, 
 // eslint-disable-next-line no-undef
 const createCalculator = (mix, council, userInput) => new SeedRateCalculator({ mix, council, userInput });
 
-const adjustProportions = (seed, calculator) => {
+const initialOptions = {
+  acres: null,
+  plantingMethod: null,
+  managementImpactOnMix: null,
+  germination: null,
+  purity: null,
+  singleSpeciesSeedingRate: null,
+  percentOfRate: null,
+  seedsPerPound: null,
+  percentSurvival: null,
+  seedsPerAcre: null,
+  plantingMethodModifier: null,
+  mixSeedingRate: null,
+};
+
+const adjustProportions = (seed, calculator, options = {}) => {
   const crop = calculator.getCrop(seed);
-  // loads standardized crop interface,
-  // this is best for when you need to access properties of the crop itself,
-  // because this object will be standardized across all councils.
-  // and provides standard dot notation property accessors.
   const defaultSingleSpeciesSeedingRatePLS = crop.coefficients.singleSpeciesSeedingRate;
-  const defaultMixSeedingRate = calculator.mixSeedingRate(seed, { plantingMethodModifier: 1 });
-  // here you can use either the seed response object, or the crop interface. it does not matter.
-  const seedsPerAcre = calculator.seedsPerAcre(seed);
-  const plantPerAcre = calculator.plantsPerAcre(seed);
-  const plantPerSqft = calculator.plantsPerSqft(seed);
+
+  // const percentSurvival = seed.attributes.Coefficients['% Chance of Winter Survial'].values[0];
+
+  // const options = { plantingMethodModifier: 1, percentSurvival };
+  // TODO: when using these funcs, all the OPTION param should be same since some of them may call others
+  const defaultMixSeedingRate = calculator.mixSeedingRate(seed, options);
+  const seedingRate = calculator.seedingRate(seed, options);
+  const percentOfRate = calculator.getDefaultPercentOfSingleSpeciesSeedingRate(crop, options);
+  const seedsPerAcre = calculator.seedsPerAcre(seed, options);
+  // options in calculating plants per acre
+  const plantPerAcre = calculator.plantsPerAcre(seed, options);
+  const plantPerSqft = calculator.plantsPerSqft(seed, options);
+
   console.log('\n> ', seed.label, '- AdjustProportionsPage');
   console.log('Default Single Species Seeding Rate PLS :', defaultSingleSpeciesSeedingRatePLS);
   console.log('Default mix seeding Rate :', defaultMixSeedingRate);
+  console.log('Percent of Rate :', percentOfRate);
+  console.log('Seeding Rate :', seedingRate);
+
   console.log('Seeds Per Pound :', crop.seedsPerPound);
   console.log('Seeds Per Acre', seedsPerAcre);
   console.log('Plants Per Acre', plantPerAcre);
   console.log('Plants Per Sqft', plantPerSqft);
 };
 
-export { createUserInput, createCalculator, adjustProportions };
+export {
+  createUserInput, createCalculator, initialOptions, adjustProportions,
+};

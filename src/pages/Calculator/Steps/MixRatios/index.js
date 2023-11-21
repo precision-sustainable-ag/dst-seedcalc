@@ -28,7 +28,7 @@ import {
 
 import '../steps.scss';
 import { adjustProportions, createCalculator, createUserInput } from '../../../../shared/utils/calculator';
-import { setCalculatorRedux } from '../../../../features/calculatorSlice/actions';
+// import { setCalculatorRedux } from '../../../../features/calculatorSlice/actions';
 
 const MixRatio = ({ council }) => {
   const dispatch = useDispatch();
@@ -38,10 +38,12 @@ const MixRatio = ({ council }) => {
   // create seedcalc and try printing data
   const { soilDrainage, plantingDate, acres } = useSelector((state) => state.siteCondition);
   const mixRedux = useSelector((state) => state.calculator.seedsSelected);
+
   useEffect(() => {
     const userInput = createUserInput(soilDrainage, plantingDate, acres);
     const seedingRateCalculator = createCalculator(mixRedux, council, userInput);
-    dispatch(setCalculatorRedux(seedingRateCalculator));
+    // TODO: the calculator is not serializable, not sure if it's right to put it in store
+    // dispatch(setCalculatorRedux(seedingRateCalculator));
     mixRedux.forEach((seed) => adjustProportions(seed, seedingRateCalculator));
   }, []);
 

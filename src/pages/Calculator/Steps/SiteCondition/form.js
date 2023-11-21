@@ -101,7 +101,7 @@ const SiteConditionForm = ({
           handleChange={(e) => {
             handleUpdateSteps('acres', 'siteCondition', e.target.value);
             // TODO: new site redux here
-            dispatch(setAcresRedux(e.target.value));
+            dispatch(setAcresRedux(parseInt(e.target.value, 10)));
           }}
           placeholder="Enter your field acres here"
         />

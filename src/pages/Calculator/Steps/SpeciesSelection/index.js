@@ -22,7 +22,6 @@ import { validateForms } from '../../../../shared/utils/format';
 import PlantList from './PlantList';
 import Diversity from './diversity';
 import '../steps.scss';
-import { addSeedRedux } from '../../../../features/calculatorSlice/actions';
 
 const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
   // useSelector for crops reducer data
@@ -79,7 +78,11 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
       }),
     );
     // TODO: new calculator redux here
-    dispatch(addSeedRedux(response.payload.data));
+    // dispatch(addSeedRedux(response.payload.data));
+    // const { label, attributes } = response.payload.data;
+    // const percentSurvival = parseFloat(attributes.Coefficients['% Chance of Winter Survial'].values[0]);
+    // // set initial options with acres and survival rate
+    // dispatch(setOptionRedux(label, { ...initialOptions, acres, percentSurvival }));
     return response.payload.data;
   };
 
