@@ -35,15 +35,16 @@ const adjustProportions = (seed, calculator, options = {}) => {
   const plantPerSqft = calculator.plantsPerSqft(seed, options);
 
   console.log('\n> ', seed.label, '- AdjustProportionsPage');
-  console.log('Default Single Species Seeding Rate PLS :', defaultSingleSpeciesSeedingRatePLS);
-  console.log('Default mix seeding Rate :', defaultMixSeedingRate);
-  console.log('Percent of Rate :', percentOfRate);
-  console.log('Seeding Rate :', seedingRate);
+  console.log('Default Mix Seeding Rate: ', defaultMixSeedingRate);
+  console.log('Default Single Species Seeding Rate PLS * Percent of Rate = Seeding Rate');
+  console.log(defaultSingleSpeciesSeedingRatePLS, ' * ', percentOfRate, ' = ', seedingRate);
 
-  console.log('Seeds Per Pound :', crop.seedsPerPound);
-  console.log('Seeds Per Acre', seedsPerAcre);
-  console.log('Plants Per Acre', plantPerAcre);
-  console.log('Plants Per Sqft', plantPerSqft);
+  console.log('Seeds Per Pound * Seeding Rate = Seeds Per Acre');
+  console.log(crop.seedsPerPound, ' * ', seedingRate, ' = ', seedsPerAcre);
+  console.log('Seeds Per Acre * %Survival = Plants Per Acre');
+  console.log(seedsPerAcre, ' * ', options.percentSurvival, ' = ', plantPerAcre);
+  console.log('Plants Per Acre / Sqft Per Acre = Plants Per Sqft');
+  console.log(plantPerAcre, ' / ', 43560, ' = ', plantPerSqft);
 };
 
 export {
