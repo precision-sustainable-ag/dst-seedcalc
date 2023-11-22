@@ -15,6 +15,7 @@ import { updateSteps } from '../../../../features/stepSlice';
 import { seedingMethods } from '../../../../shared/data/dropdown';
 import Dropdown from '../../../../components/Dropdown';
 import '../steps.scss';
+import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 
 const LeftGrid = styled(Grid)(() => ({
   '&.MuiGrid-item': {
@@ -55,11 +56,15 @@ const RightGrid = styled(Grid)(() => ({
 }));
 
 const SeedingMethod = ({ council }) => {
+  const [methods, setMethods] = useState({});
   // useSelector for crops reducer data
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
   const { seedingMethod, speciesSelection } = data;
   const { selectedSpecies, seedsSelected } = speciesSelection;
+
+  const mixRedux = useSelector((state) => state.calculator.seedsSelected);
+  const options = useSelector((state) => state.calculator.options);
 
   // create an key/value pair for the seed and related accordion expanded state
   const [accordionState, setAccordionState] = useState(
@@ -121,6 +126,34 @@ const SeedingMethod = ({ council }) => {
     );
   }, [selectedSpecies]);
 
+  // initially set all seeding methods
+  // TODO: is the value same for all seeds?
+  // TODO: maybe build this into redux instead of local state
+  useEffect(() => {
+    mixRedux.forEach((seed) => {
+      const coefficients = seed.attributes.Coefficients;
+      const plantingMethods = {
+        Drilled: 1,
+        Precision: parseFloat(coefficients['Precision Coefficient'].values[0]),
+        Broadcast: parseFloat(coefficients['Broadcast Coefficient'].values[0]),
+        Aerial: parseFloat(coefficients['Aerial Coefficient'].values[0]),
+      };
+      setMethods((prev) => ({ ...prev, [seed.label]: plantingMethods }));
+    });
+  }, []);
+
+  // function to handle dropdown and update seed options in redux
+  // FIXME: add initial value, since the onChange function don't run at first
+  // or should it be initialized when initial seed?
+  const updateOptions = (method) => {
+    mixRedux.forEach((seed) => {
+      const prevOption = options[seed.label];
+      const plantingMethod = method;
+      const plantingMethodModifier = methods[seed.label][method];
+      dispatch(setOptionRedux(seed.label, { ...prevOption, plantingMethod, plantingMethodModifier }));
+    });
+  };
+
   /// ///////////////////////////////////////////////////////
   //                    Render                            //
   /// ///////////////////////////////////////////////////////
@@ -134,7 +167,10 @@ const SeedingMethod = ({ council }) => {
         <Dropdown
           value={seedingMethod.type}
           label="Seeding Method: "
-          handleChange={handleSeedingMethod}
+          handleChange={(e) => {
+            handleSeedingMethod(e);
+            updateOptions(e.target.value);
+          }}
           size={12}
           items={seedingMethods}
         />
