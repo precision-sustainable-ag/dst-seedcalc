@@ -47,6 +47,77 @@ const adjustProportions = (seed, calculator, options = {}) => {
   console.log(plantPerAcre, ' / ', 43560, ' = ', plantPerSqft);
 };
 
+const reviewMix = (seed, calculator, options = {}) => {
+  const crop = calculator.getCrop(seed);
+  const singleSpeciesSeedingRate = options.singleSpeciesSeedingRate ?? crop.coefficients.singleSpeciesSeedingRate;
+  const percentOfSingleSpeciesRate = options.percentOfRate ?? calculator.getDefaultPercentOfSingleSpeciesSeedingRate(seed);
+
+  const baseMixSeedingRate = calculator.mixSeedingRate(seed, {
+    singleSpeciesSeedingRate: options.singleSpeciesSeedingRate,
+    percentOfRate: options.percentOfRate,
+    plantingMethodModifier: 1,
+  });
+
+  const mixSeedingRateAfterPlantingMethodModifier = calculator.mixSeedingRate(seed, {
+    singleSpeciesSeedingRate: options.singleSpeciesSeedingRate,
+    percentOfRate: options.percentOfRate,
+    plantingMethod: options.plantingMethod,
+    plantingMethodModifier: options.plantingMethodModifier,
+  });
+
+  const mixSeedingRateAfterManagementImpact = calculator.mixSeedingRate(seed, {
+    singleSpeciesSeedingRate: options.singleSpeciesSeedingRate,
+    percentOfRate: options.percentOfRate,
+    plantingMethod: options.plantingMethod,
+    plantingMethodModifier: options.plantingMethodModifier,
+    managementImpactOnMix: options.managementImpactOnMix,
+  });
+
+  const mixSeedingRateAfterPurityAndGermination = calculator.mixSeedingRate(seed, {
+    singleSpeciesSeedingRate: options.singleSpeciesSeedingRate,
+    percentOfRate: options.percentOfRate,
+    plantingMethod: options.plantingMethod,
+    plantingMethodModifier: options.plantingMethodModifier,
+    managementImpactOnMix: options.managementImpactOnMix,
+    purity: options.purity,
+    germination: options.germination,
+  });
+
+  const bulkSeedingRate = mixSeedingRateAfterPurityAndGermination;
+
+  const poundsForPurchase = calculator.poundsForPurchase(seed, {
+    acres: options.acres,
+    seedingRate: bulkSeedingRate,
+  });
+
+  console.log('\n> ', seed.label, '- ReviewYourMixPage');
+  console.log('1.Single Species Seeding Rate:', singleSpeciesSeedingRate);
+  // console.log('% of single species rate :', percentOfSingleSpeciesRate);
+  console.log('2.Base mix seeding Rate :', baseMixSeedingRate);
+  console.log('3.Mix Seeding rate after planting method modifier', mixSeedingRateAfterPlantingMethodModifier);
+  console.log('4.Mix seeding rate after management impact', mixSeedingRateAfterManagementImpact);
+  console.log('5.Mix seeding rate after germination and purity', mixSeedingRateAfterPurityAndGermination);
+
+  console.log('1.Single Species Seeding Rate * Percent of Rate = Mix Seeding Rate');
+  console.log(singleSpeciesSeedingRate, ' * ', percentOfSingleSpeciesRate, ' = ', baseMixSeedingRate);
+  console.log('2.Mix Seeding Rate * Planting Method = Mix Seeding Rate');
+  console.log(baseMixSeedingRate, ' * ', options.plantingMethodModifier, ' = ', mixSeedingRateAfterPlantingMethodModifier);
+  console.log('3.Mix Seeding Rate + Mix Seeding Rate * Management Impact = Mix Seeding Rate');
+  console.log(
+    mixSeedingRateAfterPlantingMethodModifier,
+    ' + ',
+    mixSeedingRateAfterPlantingMethodModifier,
+    ' * ',
+    options.managementImpactOnMix,
+    ' = ',
+    mixSeedingRateAfterManagementImpact,
+  );
+  console.log('4. Mix Seeding Rate / Germination / Purity = Bulk Seeding Rate');
+  console.log(mixSeedingRateAfterManagementImpact, ' / ', options.purity, ' / ', options.germination, ' = ', mixSeedingRateAfterPurityAndGermination);
+  console.log('5. Bulk Seeding Rate * Acres = Pounds for purchase');
+  console.log(bulkSeedingRate, ' * ', options.acres, ' = ', poundsForPurchase);
+};
+
 export {
-  createUserInput, createCalculator, initialOptions, adjustProportions,
+  createUserInput, createCalculator, initialOptions, adjustProportions, reviewMix,
 };

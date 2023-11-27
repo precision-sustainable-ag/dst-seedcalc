@@ -33,14 +33,19 @@ import {
   SeedDataChip,
   SeedingRateChip,
 } from '../../../../components/SeedingRateCard';
+import { reviewMix } from '../../../../shared/utils/calculator';
 
-const ReviewMix = ({ council }) => {
+// eslint-disable-next-line no-unused-vars
+const ReviewMix = ({ council, calculator }) => {
   // useSelector for crops & mixRaxio reducer
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
   const { siteCondition } = data;
   const { seedingMethod } = data;
   const { selectedSpecies, seedsSelected } = data.speciesSelection;
+
+  const mixRedux = useSelector((state) => state.calculator.seedsSelected);
+  const options = useSelector((state) => state.calculator.options);
 
   const [accordionState, setAccordionState] = useState(
     seedsSelected.reduce((res, seed) => {
@@ -141,6 +146,12 @@ const ReviewMix = ({ council }) => {
     return () => {
       updateNRCS();
     };
+  }, []);
+
+  useEffect(() => {
+    mixRedux.forEach((seed) => {
+      reviewMix(seed, calculator, options[seed.label]);
+    });
   }, []);
 
   /// ///////////////////////////////////////////////////////

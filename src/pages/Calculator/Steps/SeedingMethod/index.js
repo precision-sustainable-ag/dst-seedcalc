@@ -139,6 +139,12 @@ const SeedingMethod = ({ council }) => {
         Aerial: parseFloat(coefficients['Aerial Coefficient'].values[0]),
       };
       setMethods((prev) => ({ ...prev, [seed.label]: plantingMethods }));
+      // initial set planting method to drilled
+      const prevOption = options[seed.label];
+      dispatch(setOptionRedux(
+        seed.label,
+        { ...prevOption, plantingMethod: 'Drilled', plantingMethodModifier: 1 },
+      ));
     });
   }, []);
 

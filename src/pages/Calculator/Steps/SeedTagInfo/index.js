@@ -43,6 +43,7 @@ const SeedTagInfo = () => {
     }, {}),
   );
 
+  const mixRedux = useSelector((state) => state.calculator.seedsSelected);
   const options = useSelector((state) => state.calculator.options);
 
   const handleUpdateSteps = (key, val) => {
@@ -63,13 +64,12 @@ const SeedTagInfo = () => {
     handleUpdateSteps('seedsSelected', data);
   };
 
-  const updateGerminationAndPurity = (key, seedLabel, value) => {
-    const prevOption = options[seedLabel];
-    if (key === 'germinationPercentage') {
-      dispatch(setOptionRedux(seedLabel, { ...prevOption, germination: value / 100 }));
-    } else if (key === 'purityPercentage') {
-      dispatch(setOptionRedux(seedLabel, { ...prevOption, purity: value / 100 }));
-    }
+  const updateGermination = (seedLabel, value) => {
+    dispatch(setOptionRedux(seedLabel, { ...options[seedLabel], germination: value }));
+  };
+
+  const updatePurity = (seedLabel, value) => {
+    dispatch(setOptionRedux(seedLabel, { ...options[seedLabel], purity: value }));
   };
 
   // handler for click to open accordion
@@ -77,6 +77,19 @@ const SeedTagInfo = () => {
     const open = accordionState[label];
     setAccordionState({ ...accordionState, [label]: !open });
   };
+
+  // initially set germination and purity
+  useEffect(() => {
+    mixRedux.forEach((seed) => {
+      const germination = parseFloat(
+        seed.attributes.Coefficients['% Live Seed to Emergence'].values[0] ?? 0.85,
+      );
+      const purity = parseFloat(
+        seed.attributes.Coefficients['Precision Coefficient'].values[0] ?? 0.95,
+      );
+      dispatch(setOptionRedux(seed.label, { ...options[seed.label], germination, purity }));
+    });
+  }, []);
 
   useEffect(() => {
     // expand related accordion based on sidebar click
@@ -104,7 +117,11 @@ const SeedTagInfo = () => {
                 [key]: convertToDecimal(e.target.value),
               });
               // TODO: new calculator redux here
-              updateGerminationAndPurity(key, data.label, e.target.value);
+              if (key === 'germinationPercentage') {
+                updateGermination(data.label, parseInt(e.target.value, 10) / 100);
+              } else if (key === 'purityPercentage') {
+                updatePurity(data.label, parseInt(e.target.value, 10) / 100);
+              }
             }}
           />
         </Grid>

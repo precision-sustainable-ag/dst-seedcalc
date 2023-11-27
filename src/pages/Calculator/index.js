@@ -32,6 +32,8 @@ const Calculator = () => {
   const error = useSelector((state) => state.steps.error);
   const type = data.siteCondition.council;
 
+  // TODO: initially set calculator here
+  const [calculator, setCalculator] = useState(null);
   const [activeStep, setActiveStep] = useState(0);
   // this completedStep is to determine whether the next button is clickable on each page
   const [completedStep, setCompletedStep] = useState([...completedList]);
@@ -69,57 +71,39 @@ const Calculator = () => {
         return (
           <MixRatio
             council={type}
-            completedStep={completedStep}
-            setCompletedStep={setCompletedStep}
+            setCalculator={setCalculator}
           />
         );
       case 'Mix Seeding Rate':
         return (
-          <MixSeedingRate
-            council={type}
-            completedStep={completedStep}
-            setCompletedStep={setCompletedStep}
-          />
+          <MixSeedingRate />
         );
       case 'Seeding Method':
         return (
           <SeedingMethod
             council={type}
-            completedStep={completedStep}
-            setCompletedStep={setCompletedStep}
           />
         );
       case 'Seed Tag Info':
         return (
-          <SeedTagInfo
-            council={type}
-            completedStep={completedStep}
-            setCompletedStep={setCompletedStep}
-          />
+          <SeedTagInfo />
         );
       case 'Review Mix':
         return (
           <ReviewMix
             council={type}
-            completedStep={completedStep}
-            setCompletedStep={setCompletedStep}
+            calculator={calculator}
           />
         );
       case 'Confirm Plan':
         return (
           <ConfirmPlan
             council={type}
-            completedStep={completedStep}
-            setCompletedStep={setCompletedStep}
           />
         );
       case 'Finish':
         return (
-          <CompletedPage
-            council={type}
-            completedStep={completedStep}
-            setCompletedStep={setCompletedStep}
-          />
+          <CompletedPage />
         );
       default:
         return null;
