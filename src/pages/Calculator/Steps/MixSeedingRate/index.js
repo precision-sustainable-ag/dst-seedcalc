@@ -14,6 +14,7 @@ import { MenuRounded } from '@mui/icons-material';
 
 import { updateSteps } from '../../../../features/stepSlice';
 import '../steps.scss';
+import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 
 const CustomThumb = (props) => {
   const { children, ...other } = props;
@@ -116,6 +117,9 @@ const MixSeedingRate = () => {
   const [seedingRateAverage, setSeedingRateAverage] = useState(0);
   const [marks, setMarks] = useState([]);
 
+  const mixRedux = useSelector((state) => state.calculator.seedsSelected);
+  const options = useSelector((state) => state.calculator.options);
+
   /// ///////////////////////////////////////////////////////
   //                      Redux                           //
   /// ///////////////////////////////////////////////////////
@@ -129,6 +133,13 @@ const MixSeedingRate = () => {
     dispatch(updateSteps(newData));
   };
 
+  const updateMixSeedingRate = (mixSeedingRate) => {
+    mixRedux.forEach((seed) => {
+      const prevOptions = options[seed.label];
+      dispatch(setOptionRedux(seed.label, { ...prevOptions, mixSeedingRate }));
+    });
+  };
+
   /// ///////////////////////////////////////////////////////
   //                    State Logic                       //
   /// ///////////////////////////////////////////////////////
@@ -136,6 +147,8 @@ const MixSeedingRate = () => {
   const updateManagementImpactOnMix = () => {
     const percentage = seedingRateCoefficient / seedingRateAverage - 0.5;
     handleUpdateSteps('managementImpactOnMix', percentage);
+    // TODO: new calculator redux here, but the calculation method should be investigated
+    updateMixSeedingRate(seedingRateCoefficient);
   };
 
   /// ///////////////////////////////////////////////////////
@@ -143,6 +156,7 @@ const MixSeedingRate = () => {
   /// ///////////////////////////////////////////////////////
 
   useEffect(() => {
+    // TODO: investigate calculation for min and max
     const average = Math.round(
       seedsSelected.reduce(
         (total, seed) => total + parseFloat(seed.mixSeedingRate),

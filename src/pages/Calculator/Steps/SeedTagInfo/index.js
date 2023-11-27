@@ -19,6 +19,7 @@ import {
 } from '../../../../shared/utils/calculate';
 import NumberTextField from '../../../../components/NumberTextField';
 import '../steps.scss';
+import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 
 const LeftGrid = styled(Grid)({
   '&.MuiGrid-item': {
@@ -42,6 +43,8 @@ const SeedTagInfo = () => {
     }, {}),
   );
 
+  const options = useSelector((state) => state.calculator.options);
+
   const handleUpdateSteps = (key, val) => {
     const newData = {
       type: 'speciesSelection',
@@ -58,6 +61,15 @@ const SeedTagInfo = () => {
     const data = JSON.parse(JSON.stringify(seedsSelected));
     data[index][key1] = val;
     handleUpdateSteps('seedsSelected', data);
+  };
+
+  const updateGerminationAndPurity = (key, seedLabel, value) => {
+    const prevOption = options[seedLabel];
+    if (key === 'germinationPercentage') {
+      dispatch(setOptionRedux(seedLabel, { ...prevOption, germination: value / 100 }));
+    } else if (key === 'purityPercentage') {
+      dispatch(setOptionRedux(seedLabel, { ...prevOption, purity: value / 100 }));
+    }
   };
 
   // handler for click to open accordion
@@ -82,6 +94,7 @@ const SeedTagInfo = () => {
     return (
       <>
         <Grid item xs={4}>
+          {/* FIXME: the number field of percent could overflow */}
           <NumberTextField
             disabled={disabled}
             value={value}
@@ -90,6 +103,8 @@ const SeedTagInfo = () => {
                 ...data,
                 [key]: convertToDecimal(e.target.value),
               });
+              // TODO: new calculator redux here
+              updateGerminationAndPurity(key, data.label, e.target.value);
             }}
           />
         </Grid>
