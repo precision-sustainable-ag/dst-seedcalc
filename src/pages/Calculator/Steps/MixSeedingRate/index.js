@@ -13,8 +13,8 @@ import { useTheme } from '@mui/material/styles';
 import { MenuRounded } from '@mui/icons-material';
 
 import { updateSteps } from '../../../../features/stepSlice';
-import '../steps.scss';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
+import '../steps.scss';
 
 const CustomThumb = (props) => {
   const { children, ...other } = props;
@@ -133,10 +133,10 @@ const MixSeedingRate = () => {
     dispatch(updateSteps(newData));
   };
 
-  const updateMixSeedingRate = (mixSeedingRate) => {
+  const updateManagementImpact = (managementImpactOnMix) => {
     mixRedux.forEach((seed) => {
       const prevOptions = options[seed.label];
-      dispatch(setOptionRedux(seed.label, { ...prevOptions, mixSeedingRate }));
+      dispatch(setOptionRedux(seed.label, { ...prevOptions, managementImpactOnMix }));
     });
   };
 
@@ -148,15 +148,15 @@ const MixSeedingRate = () => {
     const percentage = seedingRateCoefficient / seedingRateAverage - 0.5;
     handleUpdateSteps('managementImpactOnMix', percentage);
     // TODO: new calculator redux here, but the calculation method should be investigated
-    updateMixSeedingRate(seedingRateCoefficient);
+    updateManagementImpact(percentage);
   };
 
   /// ///////////////////////////////////////////////////////
   //                    useEffect                         //
   /// ///////////////////////////////////////////////////////
 
+  // TODO: maybe save the marks in a useMemo so it would not change every rerender
   useEffect(() => {
-    // TODO: investigate calculation for min and max
     const average = Math.round(
       seedsSelected.reduce(
         (total, seed) => total + parseFloat(seed.mixSeedingRate),

@@ -1,8 +1,6 @@
 import {
-  setCalculator, addSeed, removeSeed, setOption, removeOption,
+  addSeed, removeSeed, setOption, removeOption,
 } from './index';
-
-export const setCalculatorRedux = (calculator) => (dispatch) => dispatch(setCalculator({ calculator }));
 
 export const addSeedRedux = (seed) => (dispatch) => dispatch(addSeed({ seed }));
 
