@@ -145,7 +145,7 @@ const MixSeedingRate = () => {
   /// ///////////////////////////////////////////////////////
 
   const updateManagementImpactOnMix = () => {
-    const percentage = seedingRateCoefficient / seedingRateAverage - 0.5;
+    const percentage = parseFloat((seedingRateCoefficient / seedingRateAverage - 1).toFixed(2));
     handleUpdateSteps('managementImpactOnMix', percentage);
     // TODO: new calculator redux here, but the calculation method should be investigated
     updateManagementImpact(percentage);
@@ -187,6 +187,8 @@ const MixSeedingRate = () => {
       },
     ]);
     toggleDataLoaded(true);
+    // initially set management impact to 0
+    updateManagementImpact(0);
   }, []);
 
   /// ///////////////////////////////////////////////////////

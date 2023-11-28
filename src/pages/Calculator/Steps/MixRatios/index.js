@@ -28,6 +28,7 @@ import {
 
 import '../steps.scss';
 import { adjustProportions, createCalculator, createUserInput } from '../../../../shared/utils/calculator';
+import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 
 const MixRatio = ({ council, setCalculator }) => {
   const dispatch = useDispatch();
@@ -44,7 +45,10 @@ const MixRatio = ({ council, setCalculator }) => {
     const seedingRateCalculator = createCalculator(mixRedux, council, userInput);
     setCalculator(seedingRateCalculator);
     mixRedux.forEach((seed) => {
-      adjustProportions(seed, seedingRateCalculator, options[seed.label]);
+      // FIXME: updated percentOfRate here, this is a temporary workaround for MCCC
+      const newOption = { ...options[seed.label], percentOfRate: 1 / mixRedux.length };
+      dispatch(setOptionRedux(seed.label, newOption));
+      adjustProportions(seed, seedingRateCalculator, newOption);
     });
   }, []);
 

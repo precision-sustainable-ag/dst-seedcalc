@@ -127,7 +127,6 @@ const SeedingMethod = ({ council }) => {
   }, [selectedSpecies]);
 
   // initially set all seeding methods
-  // TODO: is the value same for all seeds?
   // TODO: maybe build this into redux instead of local state
   useEffect(() => {
     mixRedux.forEach((seed) => {
@@ -149,8 +148,6 @@ const SeedingMethod = ({ council }) => {
   }, []);
 
   // function to handle dropdown and update seed options in redux
-  // FIXME: add initial value, since the onChange function don't run at first
-  // or should it be initialized when initial seed?
   const updateOptions = (method) => {
     mixRedux.forEach((seed) => {
       const prevOption = options[seed.label];
