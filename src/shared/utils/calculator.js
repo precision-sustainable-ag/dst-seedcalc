@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const createUserInput = (soilDrainage, plantingDate, acres) => ({ soilDrainage, plantingDate, acres });
 
 // eslint-disable-next-line no-undef
@@ -116,6 +117,106 @@ const reviewMix = (seed, calculator, options = {}) => {
   console.log(bulkSeedingRate, ' * ', options.acres, ' = ', poundsForPurchase);
 };
 
+const checkNRCS = (seeds, calculator, options) => {
+  // build options for NRCS
+  // const NRCSOptions = {};
+  // seeds.forEach((seed) => {
+  //   NRCSOptions[seed.id] = options[seed.label];
+  // });
+  // console.log(NRCSOptions);
+
+  // manually calculate percent in mix, the result is same as sdk
+  const calculatePercentInMix = () => {
+    const result = {};
+    let sumSeedsPerAcre = 0;
+    seeds.forEach((seed) => {
+      const seedsPerAcre = calculator.seedsPerAcre(seed, options[seed.label]);
+      sumSeedsPerAcre += seedsPerAcre;
+      result[seed.label] = seedsPerAcre;
+    });
+    seeds.forEach((seed) => {
+      result[seed.label] /= sumSeedsPerAcre;
+    });
+    return result;
+  };
+
+  const seedsPercentInMix = calculatePercentInMix();
+  // console.log('seedsPercentInMix', seedsPercentInMix);
+
+  const checkSeedingRate = () => {
+    console.log('-----------Seeding Rate:');
+    seeds.forEach((seed) => {
+      const seedOption = options[seed.label];
+      const baseSeedingRate = calculator.seedingRate(seed, {
+        singleSpeciesSeedingRate: seedOption?.singleSpeciesSeedingRate,
+      });
+      const finalSeedingRate = calculator.seedingRate(seed, seedOption);
+      const UPPER_LIMIT = baseSeedingRate * 2.5;
+      const LOWER_LIMIT = baseSeedingRate * 0.5;
+      console.log(
+        seed.label,
+        finalSeedingRate,
+        LOWER_LIMIT,
+        UPPER_LIMIT,
+        calculator.nrcs.isValidSeedingRate(seed, seedOption),
+      );
+    });
+  };
+
+  const checkPlantingDate = () => {
+    // FIXME: frontend checks for reliable establishment, while sdk checks more, early and late seeding
+    console.log('-----------Planting Date:');
+    seeds.forEach((seed) => {
+      const { plannedPlantingDate } = options[seed.label];
+
+      console.log(seed.label, plannedPlantingDate);
+    });
+  };
+
+  const checkRatio = () => {
+    console.log('-----------Ratio(Percent In Mix):');
+    seeds.forEach((seed) => {
+      const percentInMix = calculator.percentInMix(seed, options);
+      const maxInMix = parseFloat(seed.attributes.Coefficients['Max % Allowed in Mix'].values[0]);
+      console.log(seed.label, percentInMix, maxInMix);
+      const result = calculator.nrcs.isValidPercentInMix(seed, options);
+      console.log(result);
+    });
+    // TODO: the result is same
+    // seeds.forEach((seed) => {
+    //   const percentInMix = seedsPercentInMix[seed.label];
+    //   const maxInMix = parseFloat(seed.attributes.Coefficients['Max % Allowed in Mix'].values[0]);
+    //   console.log(seed.label, percentInMix, '<=', maxInMix, percentInMix <= maxInMix);
+    // });
+  };
+
+  const checkSoilDrainage = () => {
+    console.log('-----------Soil Drainage:');
+    seeds.forEach((seed) => {
+      const { soilDrainage } = options[seed.label];
+      const soilDrainages = seed.attributes['Soil Conditions']?.['Soil Drainage'].values ?? [];
+      console.log(seed.label, soilDrainage, soilDrainages, soilDrainages.indexOf(soilDrainage) > -1);
+    });
+  };
+
+  const checkWinterSurvival = (threshold = 0.5) => {
+    console.log('-----------Winter Survivability:');
+    let chanceOfMixSurvival = 0.00;
+    seeds.forEach((seed) => {
+      const percentInMix = calculator.percentInMix(seed, options);
+      const winterSurvivability = options[seed.label].percentSurvival;
+      chanceOfMixSurvival += percentInMix * winterSurvivability;
+    });
+    console.log(chanceOfMixSurvival, '>=', 0.5, chanceOfMixSurvival >= 0.5);
+  };
+
+  // checkSeedingRate();
+  checkPlantingDate();
+  // checkRatio();
+  // checkSoilDrainage();
+  // checkWinterSurvival();
+};
+
 export {
-  createUserInput, createCalculator, initialOptions, adjustProportions, reviewMix,
+  createUserInput, createCalculator, initialOptions, adjustProportions, reviewMix, checkNRCS,
 };

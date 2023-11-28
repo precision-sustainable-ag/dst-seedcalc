@@ -52,7 +52,9 @@ const PlantList = ({
   const dispatch = useDispatch();
 
   // TODO: used for set options for selected seed
-  const { acres, stateId, countyId } = useSelector((state) => state.siteCondition);
+  const {
+    acres, stateId, countyId, soilDrainage, plannedPlantingDate,
+  } = useSelector((state) => state.siteCondition);
 
   const newSeedsSelected = useSelector((state) => state.calculator.seedsSelected);
 
@@ -104,7 +106,9 @@ const PlantList = ({
       const { label, attributes } = data;
       const percentSurvival = parseFloat(attributes.Coefficients['% Chance of Winter Survial'].values[0]);
       // set initial options with acres and survival rate
-      dispatch(setOptionRedux(label, { ...initialOptions, acres, percentSurvival }));
+      dispatch(setOptionRedux(label, {
+        ...initialOptions, acres, percentSurvival, soilDrainage, plannedPlantingDate,
+      }));
     } else {
       dispatch(removeSeedRedux(seedName));
       dispatch(removeOptionRedux(seedName));

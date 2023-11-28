@@ -16,8 +16,9 @@ import { generateNRCSStandards } from '../../../../shared/utils/NRCS/calculateNR
 import ConfirmPlanCharts from './charts';
 import '../steps.scss';
 import ConfirmPlanForm from './form';
+import { checkNRCS } from '../../../../shared/utils/calculator';
 
-const ConfirmPlan = ({ council }) => {
+const ConfirmPlan = ({ council, calculator }) => {
   // themes
   const theme = useTheme();
   const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
@@ -27,6 +28,9 @@ const ConfirmPlan = ({ council }) => {
 
   const data = useSelector((state) => state.steps.value);
   const { speciesSelection } = data;
+
+  const mixRedux = useSelector((state) => state.calculator.seedsSelected);
+  const options = useSelector((state) => state.calculator.options);
 
   /// ///////////////////////////////////////////////////////
   //                      Redux                           //
@@ -86,6 +90,11 @@ const ConfirmPlan = ({ council }) => {
   useEffect(() => {
     initialDataLoad();
     generateNRCSStandards(speciesSelection.seedsSelected, data.siteCondition);
+  }, []);
+
+  // SDK NRCS calculated here
+  useEffect(() => {
+    checkNRCS(mixRedux, calculator, options);
   }, []);
 
   /// ///////////////////////////////////////////////////////

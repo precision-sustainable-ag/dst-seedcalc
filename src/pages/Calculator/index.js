@@ -99,6 +99,7 @@ const Calculator = () => {
         return (
           <ConfirmPlan
             council={type}
+            calculator={calculator}
           />
         );
       case 'Finish':
