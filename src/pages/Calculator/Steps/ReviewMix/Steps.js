@@ -16,6 +16,7 @@ const ReviewMixSteps = ({
   seedingMethod,
   siteCondition,
   seed,
+  handleFormValueChange,
 }) => {
   const theme = useTheme();
   const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
@@ -142,9 +143,6 @@ const ReviewMixSteps = ({
               <NumberTextField
                 disabled
                 label={matchesMd ? '' : 'Single Species Seeding Rate PLS'}
-                handleChange={(e) => {
-                  updateSeed(e.target.value, 'singleSpeciesSeedingRate', seed);
-                }}
                 value={seed.singleSpeciesSeedingRate}
               />
               <Typography>Lbs / Acre</Typography>
@@ -163,6 +161,7 @@ const ReviewMixSteps = ({
                     'percentOfSingleSpeciesRate',
                     seed,
                   );
+                  handleFormValueChange(seed, 'percentOfRate', parseFloat(e.target.value) / 100);
                 }}
                 value={seed.percentOfSingleSpeciesRate}
               />
@@ -213,7 +212,11 @@ const ReviewMixSteps = ({
         <Grid item xs={3}>
           <NumberTextField
             label={matchesMd ? '' : 'Planting Method'}
+            // FIXME: this is a static value, need to modify
             value={seed.plantingMethod}
+            handleChange={(e) => {
+              handleFormValueChange(seed, 'plantingMethodModifier', parseFloat(e.target.value));
+            }}
           />
         </Grid>
 
@@ -260,9 +263,6 @@ const ReviewMixSteps = ({
           <NumberTextField
             label={matchesMd ? '' : 'Mix Seeding Rate PLS'}
             disabled
-            handleChange={(e) => {
-              updateSeed(e.target.value, 'step2Result', seed);
-            }}
             value={seed.step2Result}
           />
         </Grid>
@@ -275,9 +275,6 @@ const ReviewMixSteps = ({
           <NumberTextField
             label={matchesMd ? '' : 'Management Impact on Mix'}
             disabled
-            handleChange={(e) => {
-              updateSeed(e.target.value, 'managementImpactOnMix', seed);
-            }}
             value={seedingMethod.managementImpactOnMix.toFixed(2)}
           />
         </Grid>
@@ -333,6 +330,7 @@ const ReviewMixSteps = ({
                 'germinationPercentage',
                 seed,
               );
+              handleFormValueChange(seed, 'germination', parseFloat(e.target.value) / 100);
             }}
             value={convertToPercent(seed.germinationPercentage)}
           />
@@ -351,6 +349,7 @@ const ReviewMixSteps = ({
                 'purityPercentage',
                 seed,
               );
+              handleFormValueChange(seed, 'purity', parseFloat(e.target.value) / 100);
             }}
             value={convertToPercent(seed.purityPercentage)}
           />

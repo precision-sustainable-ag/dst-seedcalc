@@ -1,4 +1,7 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable no-unused-vars */
+import dayjs from 'dayjs';
+
 const createUserInput = (soilDrainage, plantingDate, acres) => ({ soilDrainage, plantingDate, acres });
 
 // eslint-disable-next-line no-undef
@@ -21,7 +24,8 @@ const initialOptions = {
 
 const adjustProportions = (seed, calculator, options = {}) => {
   const crop = calculator.getCrop(seed);
-  const defaultSingleSpeciesSeedingRatePLS = crop.coefficients.singleSpeciesSeedingRate;
+  const defaultSingleSpeciesSeedingRatePLS = options.singleSpeciesSeedingRate
+  ?? crop.coefficients.singleSpeciesSeedingRate;
 
   // TODO: when using these funcs, all the OPTION param should be same since some of them may call others
   // FIXME: the mixSeedingRate is not correct here
@@ -112,7 +116,7 @@ const reviewMix = (seed, calculator, options = {}) => {
     seedingRateAfterManagementImpact,
   );
   console.log('4. Seeding Rate / Germination / Purity = Bulk Seeding Rate');
-  console.log(seedingRateAfterManagementImpact, ' / ', options.purity, ' / ', options.germination, ' = ', seedingRateAfterPurityAndGermination);
+  console.log(seedingRateAfterManagementImpact, ' / ', options.germination, ' / ', options.purity, ' = ', seedingRateAfterPurityAndGermination);
   console.log('5. Bulk Seeding Rate * Acres = Pounds for purchase');
   console.log(bulkSeedingRate, ' * ', options.acres, ' = ', poundsForPurchase);
 };
@@ -147,6 +151,7 @@ const checkNRCS = (seeds, calculator, options) => {
     console.log('-----------Seeding Rate:');
     seeds.forEach((seed) => {
       const seedOption = options[seed.label];
+      // FIXME: need verification because this calculation didn't consider percent
       const baseSeedingRate = calculator.seedingRate(seed, {
         singleSpeciesSeedingRate: seedOption?.singleSpeciesSeedingRate,
       });
@@ -155,8 +160,11 @@ const checkNRCS = (seeds, calculator, options) => {
       const LOWER_LIMIT = baseSeedingRate * 0.5;
       console.log(
         seed.label,
+        'result:',
         finalSeedingRate,
+        ', expect: ',
         LOWER_LIMIT,
+        '<= result <=',
         UPPER_LIMIT,
         calculator.nrcs.isValidSeedingRate(seed, seedOption),
       );
@@ -167,9 +175,24 @@ const checkNRCS = (seeds, calculator, options) => {
     // FIXME: frontend checks for reliable establishment, while sdk checks more, early and late seeding
     console.log('-----------Planting Date:');
     seeds.forEach((seed) => {
-      const { plannedPlantingDate } = options[seed.label];
+      const plannedDate = dayjs(options[seed.label].plannedPlantingDate).format('MM/DD');
+      const [firstStart, firstEnd, secondStart, secondEnd] = getPlantingDate(seed);
+      let result;
+      if (dayjs(plannedDate).isBetween(firstStart, firstEnd, 'day')) result = true;
+      else if (secondStart && dayjs(plannedDate).isBetween(secondStart, secondEnd, 'day')) result = true;
+      else result = false;
 
-      console.log(seed.label, plannedPlantingDate);
+      console.log(
+        seed.label,
+        ', planned:',
+        plannedDate,
+        ', RE:',
+        firstStart,
+        '-',
+        firstEnd,
+        secondStart ? `${secondStart} - ${secondEnd}` : '',
+        result,
+      );
     });
   };
 
@@ -211,10 +234,22 @@ const checkNRCS = (seeds, calculator, options) => {
   };
 
   // checkSeedingRate();
-  checkPlantingDate();
+  // checkPlantingDate();
   // checkRatio();
   // checkSoilDrainage();
   // checkWinterSurvival();
+};
+
+const getPlantingDate = (seed) => {
+  const [firstPeriod, secondPeriod] = seed.attributes['Planting and Growth Windows']['Reliable Establishment'].values;
+  let secondStart; let secondEnd;
+  const firstStart = dayjs(firstPeriod.split(' - ')[0]).format('MM/DD');
+  const firstEnd = dayjs(firstPeriod.split(' - ')[1]).format('MM/DD');
+  if (secondPeriod) {
+    secondStart = dayjs(secondPeriod.split(' - ')[0]).format('MM/DD');
+    secondEnd = dayjs(secondPeriod.split(' - ')[1]).format('MM/DD');
+  }
+  return [firstStart, firstEnd, secondStart, secondEnd];
 };
 
 export {

@@ -10,7 +10,7 @@ import {
 import '../steps.scss';
 
 const MixRatioSteps = ({
-  seed, council, updateSeed, seedsSelected,
+  seed, council, updateSeed, seedsSelected, handleFormValueChange,
 }) => {
   const theme = useTheme();
   const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
@@ -142,6 +142,7 @@ const MixRatioSteps = ({
                     'singleSpeciesSeedingRatePLS',
                     seed,
                   );
+                  handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
                 }}
                 value={seed.singleSpeciesSeedingRatePLS}
               />
@@ -161,6 +162,7 @@ const MixRatioSteps = ({
                     'percentOfSingleSpeciesRate',
                     seed,
                   );
+                  handleFormValueChange(seed, 'percentOfRate', parseFloat(e.target.value) / 100);
                 }}
                 value={seed.percentOfSingleSpeciesRate}
               />
@@ -299,6 +301,7 @@ const MixRatioSteps = ({
                   'percentChanceOfWinterSurvival',
                   seed,
                 );
+                handleFormValueChange(seed, 'percentSurvival', parseFloat(e.target.value) / 100);
               }}
               value={convertToPercent(seed.percentChanceOfWinterSurvival)}
             />

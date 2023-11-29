@@ -30,7 +30,8 @@ import '../steps.scss';
 import { adjustProportions, createCalculator, createUserInput } from '../../../../shared/utils/calculator';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 
-const MixRatio = ({ council, setCalculator }) => {
+const MixRatio = ({ council, calculator, setCalculator }) => {
+  const [prevOptions, setPrevOptions] = useState({});
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
   const { selectedSpecies, seedsSelected } = data.speciesSelection;
@@ -40,6 +41,7 @@ const MixRatio = ({ council, setCalculator }) => {
   const mixRedux = useSelector((state) => state.calculator.seedsSelected);
   const options = useSelector((state) => state.calculator.options);
 
+  // initialize calculator, set initial options
   useEffect(() => {
     const userInput = createUserInput(soilDrainage, plantingDate, acres);
     const seedingRateCalculator = createCalculator(mixRedux, council, userInput);
@@ -51,6 +53,17 @@ const MixRatio = ({ council, setCalculator }) => {
       adjustProportions(seed, seedingRateCalculator, newOption);
     });
   }, []);
+
+  // run adjust proportions on options change
+  useEffect(() => {
+    if (!calculator) return;
+    mixRedux.forEach((seed) => {
+      if (options[seed.label] !== prevOptions[seed.label]) {
+        adjustProportions(seed, calculator, options[seed.label]);
+      }
+    });
+    setPrevOptions(options);
+  }, [options]);
 
   // create an key/value pair for the seed and related accordion expanded state
   const [accordionState, setAccordionState] = useState(
@@ -85,6 +98,11 @@ const MixRatio = ({ council, setCalculator }) => {
     const newData = [...seeds];
     newData[index] = calculateAllMixRatioValues(newData[index], data, council);
     handleUpdateSteps('seedsSelected', newData);
+  };
+
+  // function to handle form value change, update options
+  const handleFormValueChange = (seed, option, value) => {
+    dispatch(setOptionRedux(seed.label, { ...options[seed.label], [option]: value }));
   };
 
   const showStep = (val, key, seed) => {
@@ -203,6 +221,7 @@ const MixRatio = ({ council, setCalculator }) => {
                     council={council}
                     seedsSelected={seedsSelected}
                     updateSeed={updateSeed}
+                    handleFormValueChange={handleFormValueChange}
                   />
                   )}
                 </Grid>

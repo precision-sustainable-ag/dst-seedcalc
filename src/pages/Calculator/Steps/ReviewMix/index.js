@@ -34,6 +34,7 @@ import {
   SeedingRateChip,
 } from '../../../../components/SeedingRateCard';
 import { reviewMix } from '../../../../shared/utils/calculator';
+import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 
 // eslint-disable-next-line no-unused-vars
 const ReviewMix = ({ council, calculator }) => {
@@ -46,6 +47,8 @@ const ReviewMix = ({ council, calculator }) => {
 
   const mixRedux = useSelector((state) => state.calculator.seedsSelected);
   const options = useSelector((state) => state.calculator.options);
+
+  const [prevOptions, setPrevOptions] = useState({});
 
   const [accordionState, setAccordionState] = useState(
     seedsSelected.reduce((res, seed) => {
@@ -120,6 +123,11 @@ const ReviewMix = ({ council, calculator }) => {
     handleUpdateNRCS('results', NRCSData);
   };
 
+  // function to handle form value change, update options
+  const handleFormValueChange = (seed, option, value) => {
+    dispatch(setOptionRedux(seed.label, { ...options[seed.label], [option]: value }));
+  };
+
   // handler for click to open accordion
   const handleExpandAccordion = (label) => {
     const open = accordionState[label];
@@ -148,11 +156,15 @@ const ReviewMix = ({ council, calculator }) => {
     };
   }, []);
 
+  // run reviewMix on options change
   useEffect(() => {
     mixRedux.forEach((seed) => {
-      reviewMix(seed, calculator, options[seed.label]);
+      if (options[seed.label] !== prevOptions[seed.label]) {
+        reviewMix(seed, calculator, options[seed.label]);
+      }
     });
-  }, []);
+    setPrevOptions(options);
+  }, [options]);
 
   /// ///////////////////////////////////////////////////////
   //                     Render                           //
@@ -337,6 +349,7 @@ const ReviewMix = ({ council, calculator }) => {
                     seedingMethod={seedingMethod}
                     siteCondition={siteCondition}
                     seed={seed}
+                    handleFormValueChange={handleFormValueChange}
                   />
                   )}
                 </Grid>
