@@ -129,32 +129,36 @@ const SeedingMethod = ({ council }) => {
   // initially set all seeding methods
   // TODO: maybe build this into redux instead of local state
   useEffect(() => {
-    mixRedux.forEach((seed) => {
-      const coefficients = seed.attributes.Coefficients;
-      const plantingMethods = {
-        Drilled: 1,
-        Precision: parseFloat(coefficients['Precision Coefficient'].values[0]),
-        Broadcast: parseFloat(coefficients['Broadcast Coefficient'].values[0]),
-        Aerial: parseFloat(coefficients['Aerial Coefficient'].values[0]),
-      };
-      setMethods((prev) => ({ ...prev, [seed.label]: plantingMethods }));
-      // initial set planting method to drilled
-      const prevOption = options[seed.label];
-      dispatch(setOptionRedux(
-        seed.label,
-        { ...prevOption, plantingMethod: 'Drilled', plantingMethodModifier: 1 },
-      ));
-    });
+    if (council === 'MCCC') {
+      mixRedux.forEach((seed) => {
+        const coefficients = seed.attributes.Coefficients;
+        const plantingMethods = {
+          Drilled: 1,
+          Precision: parseFloat(coefficients['Precision Coefficient'].values[0]),
+          Broadcast: parseFloat(coefficients['Broadcast Coefficient'].values[0]),
+          Aerial: parseFloat(coefficients['Aerial Coefficient'].values[0]),
+        };
+        setMethods((prev) => ({ ...prev, [seed.label]: plantingMethods }));
+        // initial set planting method to drilled
+        const prevOption = options[seed.label];
+        dispatch(setOptionRedux(
+          seed.label,
+          { ...prevOption, plantingMethod: 'Drilled', plantingMethodModifier: 1 },
+        ));
+      });
+    }
   }, []);
 
   // function to handle dropdown and update seed options in redux
   const updateOptions = (method) => {
-    mixRedux.forEach((seed) => {
-      const prevOption = options[seed.label];
-      const plantingMethod = method;
-      const plantingMethodModifier = methods[seed.label][method];
-      dispatch(setOptionRedux(seed.label, { ...prevOption, plantingMethod, plantingMethodModifier }));
-    });
+    if (council === 'MCCC') {
+      mixRedux.forEach((seed) => {
+        const prevOption = options[seed.label];
+        const plantingMethod = method;
+        const plantingMethodModifier = methods[seed.label][method];
+        dispatch(setOptionRedux(seed.label, { ...prevOption, plantingMethod, plantingMethodModifier }));
+      });
+    }
   };
 
   /// ///////////////////////////////////////////////////////

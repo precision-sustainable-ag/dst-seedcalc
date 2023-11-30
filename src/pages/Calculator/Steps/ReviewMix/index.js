@@ -33,7 +33,7 @@ import {
   SeedDataChip,
   SeedingRateChip,
 } from '../../../../components/SeedingRateCard';
-import { reviewMix } from '../../../../shared/utils/calculator';
+import { reviewMix, reviewMixNECCC } from '../../../../shared/utils/calculator';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 
 // eslint-disable-next-line no-unused-vars
@@ -160,7 +160,8 @@ const ReviewMix = ({ council, calculator }) => {
   useEffect(() => {
     mixRedux.forEach((seed) => {
       if (options[seed.label] !== prevOptions[seed.label]) {
-        reviewMix(seed, calculator, options[seed.label]);
+        if (council === 'MCCC') reviewMix(seed, calculator, options[seed.label]);
+        else if (council === 'NECCC') reviewMixNECCC(seed, calculator, options[seed.label]);
       }
     });
     setPrevOptions(options);

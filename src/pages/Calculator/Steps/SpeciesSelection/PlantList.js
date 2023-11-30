@@ -104,10 +104,12 @@ const PlantList = ({
       // TODO: new calculator redux here
       dispatch(addSeedRedux(data));
       const { label, attributes } = data;
-      const percentSurvival = parseFloat(attributes.Coefficients['% Chance of Winter Survial'].values[0]);
-      // set initial options with acres and survival rate
+      const percentSurvival = council === 'MCCC'
+        ? parseFloat(attributes.Coefficients['% Chance of Winter Survial'].values[0])
+        : '';
+      // set initial options
       dispatch(setOptionRedux(label, {
-        ...initialOptions, acres, percentSurvival, soilDrainage, plannedPlantingDate,
+        ...initialOptions, acres, soilDrainage, plannedPlantingDate, percentSurvival,
       }));
     } else {
       dispatch(removeSeedRedux(seedName));

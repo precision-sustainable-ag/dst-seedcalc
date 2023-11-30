@@ -69,6 +69,7 @@ const MixRatioSteps = ({
               label={matchesMd ? '' : 'Single Species Seeding Rate PLS'}
               handleChange={(e) => {
                 updateSeed(e.target.value, 'singleSpeciesSeedingRatePLS', seed);
+                handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
               }}
               value={seed.singleSpeciesSeedingRatePLS}
             />
@@ -96,6 +97,8 @@ const MixRatioSteps = ({
               label={matchesMd ? '' : '% of Single Species Rate'}
               handleChange={(e) => {
                 updateSeed(e.target.value, 'percentOfSingleSpeciesRate', seed);
+                // TODO: need verification
+                // handleFormValueChange(seed, 'percentOfRate', parseFloat(e.target.value) / 100);
               }}
               value={Math.round(seed.percentOfSingleSpeciesRate)}
             />
@@ -137,11 +140,7 @@ const MixRatioSteps = ({
               <NumberTextField
                 label={matchesMd ? '' : 'Single Species Seeding Rate PLS'}
                 handleChange={(e) => {
-                  updateSeed(
-                    e.target.value,
-                    'singleSpeciesSeedingRatePLS',
-                    seed,
-                  );
+                  updateSeed(e.target.value, 'singleSpeciesSeedingRatePLS', seed);
                   handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
                 }}
                 value={seed.singleSpeciesSeedingRatePLS}
@@ -157,11 +156,7 @@ const MixRatioSteps = ({
               <NumberTextField
                 label={matchesMd ? '' : '% of Single Species Rate'}
                 handleChange={(e) => {
-                  updateSeed(
-                    e.target.value,
-                    'percentOfSingleSpeciesRate',
-                    seed,
-                  );
+                  updateSeed(e.target.value, 'percentOfSingleSpeciesRate', seed);
                   handleFormValueChange(seed, 'percentOfRate', parseFloat(e.target.value) / 100);
                 }}
                 value={seed.percentOfSingleSpeciesRate}

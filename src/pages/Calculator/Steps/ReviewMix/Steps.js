@@ -75,6 +75,7 @@ const ReviewMixSteps = ({
               label={matchesMd ? '' : 'Single Species Seeding Rate PLS'}
               handleChange={(e) => {
                 updateSeed(e.target.value, 'singleSpeciesSeedingRatePLS', seed);
+                handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
               }}
               value={seed.singleSpeciesSeedingRatePLS}
             />

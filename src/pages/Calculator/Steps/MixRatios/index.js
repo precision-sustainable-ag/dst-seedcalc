@@ -27,16 +27,19 @@ import {
 } from '../../../../components/SeedingRateCard';
 
 import '../steps.scss';
-import { adjustProportions, createCalculator, createUserInput } from '../../../../shared/utils/calculator';
+import {
+  adjustProportions, adjustProportionsNECCC, createCalculator, createUserInput,
+} from '../../../../shared/utils/calculator';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 
 const MixRatio = ({ council, calculator, setCalculator }) => {
+  const [initCalculator, setInitCalculator] = useState(false);
   const [prevOptions, setPrevOptions] = useState({});
+
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
   const { selectedSpecies, seedsSelected } = data.speciesSelection;
 
-  // create seedcalc and try printing data
   const { soilDrainage, plantingDate, acres } = useSelector((state) => state.siteCondition);
   const mixRedux = useSelector((state) => state.calculator.seedsSelected);
   const options = useSelector((state) => state.calculator.options);
@@ -48,22 +51,26 @@ const MixRatio = ({ council, calculator, setCalculator }) => {
     setCalculator(seedingRateCalculator);
     mixRedux.forEach((seed) => {
       // FIXME: updated percentOfRate here, this is a temporary workaround for MCCC
-      const newOption = { ...options[seed.label], percentOfRate: 1 / mixRedux.length };
+      const newOption = {
+        ...options[seed.label],
+        percentOfRate: council === 'MCCC' ? 1 / mixRedux.length : null,
+      };
       dispatch(setOptionRedux(seed.label, newOption));
-      adjustProportions(seed, seedingRateCalculator, newOption);
     });
+    setInitCalculator(true);
   }, []);
 
   // run adjust proportions on options change
   useEffect(() => {
-    if (!calculator) return;
+    if (!initCalculator) return;
     mixRedux.forEach((seed) => {
       if (options[seed.label] !== prevOptions[seed.label]) {
-        adjustProportions(seed, calculator, options[seed.label]);
+        if (council === 'MCCC') adjustProportions(seed, calculator, options[seed.label]);
+        else if (council === 'NECCC') adjustProportionsNECCC(seed, calculator, options[seed.label]);
       }
     });
     setPrevOptions(options);
-  }, [options]);
+  }, [options, initCalculator]);
 
   // create an key/value pair for the seed and related accordion expanded state
   const [accordionState, setAccordionState] = useState(

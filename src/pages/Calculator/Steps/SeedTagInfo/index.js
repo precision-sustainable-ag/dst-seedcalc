@@ -81,11 +81,12 @@ const SeedTagInfo = () => {
   // initially set germination and purity
   useEffect(() => {
     mixRedux.forEach((seed) => {
+      // FIXME: use 0.85 and 0.95 as default value(applies to NECCC)
       const germination = parseFloat(
-        seed.attributes.Coefficients['% Live Seed to Emergence'].values[0] ?? 0.85,
+        seed.attributes.Coefficients['% Live Seed to Emergence']?.values[0] ?? 0.85,
       );
       const purity = parseFloat(
-        seed.attributes.Coefficients['Precision Coefficient'].values[0] ?? 0.95,
+        seed.attributes.Coefficients['Precision Coefficient']?.values[0] ?? 0.95,
       );
       dispatch(setOptionRedux(seed.label, { ...options[seed.label], germination, purity }));
     });
