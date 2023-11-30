@@ -54,7 +54,8 @@ export const seedingMethods = [
   { label: 'Broadcast' },
   { label: 'Aerial' },
 ];
-export const soilFertility = ['Low-Medium', 'High'];
+
+export const soilFertility = [{ label: 'Low' }, { label: 'High' }];
 
 // TODO: Add API to retrieve City, State, & Countries
 

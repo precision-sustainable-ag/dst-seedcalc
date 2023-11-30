@@ -53,7 +53,7 @@ const PlantList = ({
 
   // TODO: used for set options for selected seed
   const {
-    acres, stateId, countyId, soilDrainage, plannedPlantingDate,
+    acres, stateId, countyId, soilDrainage, plannedPlantingDate, soilFertility,
   } = useSelector((state) => state.siteCondition);
 
   const newSeedsSelected = useSelector((state) => state.calculator.seedsSelected);
@@ -109,7 +109,12 @@ const PlantList = ({
         : '';
       // set initial options
       dispatch(setOptionRedux(label, {
-        ...initialOptions, acres, soilDrainage, plannedPlantingDate, percentSurvival,
+        ...initialOptions,
+        acres,
+        soilDrainage,
+        plannedPlantingDate,
+        percentSurvival,
+        soilFertility: soilFertility.toLowerCase(),
       }));
     } else {
       dispatch(removeSeedRedux(seedName));

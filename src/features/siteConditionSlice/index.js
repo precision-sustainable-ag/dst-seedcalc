@@ -38,6 +38,10 @@ const siteConditionSlice = createSlice({
       const { council } = payload;
       return { ...state, council };
     },
+    updateSoilFertility: (state, { payload }) => {
+      const { soilFertility } = payload;
+      return { ...state, soilFertility };
+    },
   },
   // extraReducers: (builder) => {
   //   builder
@@ -62,7 +66,7 @@ const siteConditionSlice = createSlice({
 
 export const {
   updateState, updateCounty, updateCountyId, updateSoilDrainage,
-  updatePlantingDate, updateAcres, checkNRCS, updateCouncil,
+  updatePlantingDate, updateAcres, checkNRCS, updateCouncil, updateSoilFertility,
 } = siteConditionSlice.actions;
 
 export default siteConditionSlice;

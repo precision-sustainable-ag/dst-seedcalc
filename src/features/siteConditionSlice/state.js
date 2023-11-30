@@ -10,6 +10,7 @@ const initialState = {
   acres: '',
   checkNRCSStandards: false,
   council: '',
+  soilFertility: '',
 };
 
 export default initialState;

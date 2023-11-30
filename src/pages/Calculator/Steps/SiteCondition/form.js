@@ -6,17 +6,17 @@ import React, { useState } from 'react';
 import { Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import DatePicker from '../../../../components/DatePicker';
 import Dropdown from '../../../../components/Dropdown';
 import NumberTextField from '../../../../components/NumberTextField';
 import DSTSwitch from '../../../../components/Switch';
-import { soilDrainage } from '../../../../shared/data/dropdown';
+import { soilDrainage, soilFertility } from '../../../../shared/data/dropdown';
 import { getCrops } from '../../../../features/stepSlice/api';
 import '../steps.scss';
 import {
-  setAcresRedux, setCountyRedux, setPlantingDateRedux, setSoilDrainageRedux,
+  setAcresRedux, setCountyRedux, setPlantingDateRedux, setSoilDrainageRedux, setSoilFertilityRedux,
 } from '../../../../features/siteConditionSlice/actions';
 
 const SiteConditionForm = ({
@@ -28,6 +28,7 @@ const SiteConditionForm = ({
 }) => {
   const [checked, setChecked] = useState(NRCS.enabled);
   const dispatch = useDispatch();
+  const newSiteCondition = useSelector((state) => state.siteCondition);
 
   const handleSwitch = () => {
     setChecked(!checked);
@@ -117,6 +118,24 @@ const SiteConditionForm = ({
         >
           <Typography fontSize="1.25rem">Check NRCS Standards: </Typography>
           <DSTSwitch checked={checked} handleChange={handleSwitch} />
+        </Grid>
+      )}
+
+      {council === 'NECCC' && (
+        <Grid
+          item
+          xs={6}
+          p="10px"
+        >
+          <Dropdown
+            value={newSiteCondition.soilFertility}
+            label="Soil Fertility: "
+            handleChange={(e) => {
+              dispatch(setSoilFertilityRedux(e.target.value));
+            }}
+            size={12}
+            items={soilFertility}
+          />
         </Grid>
       )}
     </>
