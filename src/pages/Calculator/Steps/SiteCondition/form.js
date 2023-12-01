@@ -124,7 +124,8 @@ const SiteConditionForm = ({
       {council === 'NECCC' && (
         <Grid
           item
-          xs={6}
+          xs={12}
+          md={6}
           p="10px"
         >
           <Dropdown

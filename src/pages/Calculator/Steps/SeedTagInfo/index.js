@@ -81,6 +81,8 @@ const SeedTagInfo = () => {
   // initially set germination and purity
   useEffect(() => {
     mixRedux.forEach((seed) => {
+      // not set default value if redux value already exist
+      if (options[seed.label].germination && options[seed.label].purity) return;
       // FIXME: use 0.85 and 0.95 as default value(applies to NECCC)
       const germination = parseFloat(
         seed.attributes.Coefficients['% Live Seed to Emergence']?.values[0] ?? 0.85,

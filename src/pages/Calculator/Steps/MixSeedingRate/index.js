@@ -188,6 +188,8 @@ const MixSeedingRate = () => {
     ]);
     toggleDataLoaded(true);
     // initially set management impact to 0
+    // if this value has been set before, do not set again
+    if (options[mixRedux[0].label].managementImpactOnMix) return;
     updateManagementImpact(0);
   }, []);
 

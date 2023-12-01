@@ -131,6 +131,8 @@ const SeedingMethod = ({ council }) => {
   useEffect(() => {
     if (council === 'MCCC') {
       mixRedux.forEach((seed) => {
+        if (options[seed.label].plantingMethod
+          && options[seed.label].plantingMethodModifier) return;
         const coefficients = seed.attributes.Coefficients;
         const plantingMethods = {
           Drilled: 1,
