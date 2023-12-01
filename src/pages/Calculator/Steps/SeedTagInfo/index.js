@@ -105,8 +105,13 @@ const SeedTagInfo = () => {
   }, [selectedSpecies]);
 
   // eslint-disable-next-line no-shadow
-  const renderRightAccordian = (key, data, type, disabled) => {
-    const value = type === 'percent' ? convertToPercent(data[key]) : Math.floor(data[key]);
+  const renderRightAccordian = (key, seed, type, disabled) => {
+    let newValue;
+    if (key === 'germinationPercentage') newValue = options[seed.label].germination;
+    else if (key === 'purityPercentage') newValue = options[seed.label].purity;
+    // FIXME: temporary, need to use calculator to get this
+    else if (key === 'poundsOfSeed') newValue = seed[key];
+    const value = type === 'percent' ? convertToPercent(newValue) : Math.floor(newValue);
     return (
       <>
         <Grid item xs={4}>
@@ -116,14 +121,14 @@ const SeedTagInfo = () => {
             value={value}
             handleChange={(e) => {
               updateSeed(convertToDecimal(e.target.value), key, {
-                ...data,
+                ...seed,
                 [key]: convertToDecimal(e.target.value),
               });
               // TODO: new calculator redux here
               if (key === 'germinationPercentage') {
-                updateGermination(data.label, parseInt(e.target.value, 10) / 100);
+                updateGermination(seed.label, parseInt(e.target.value, 10) / 100);
               } else if (key === 'purityPercentage') {
-                updatePurity(data.label, parseInt(e.target.value, 10) / 100);
+                updatePurity(seed.label, parseInt(e.target.value, 10) / 100);
               }
             }}
           />

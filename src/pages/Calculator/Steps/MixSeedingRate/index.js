@@ -156,6 +156,7 @@ const MixSeedingRate = () => {
   /// ///////////////////////////////////////////////////////
 
   // TODO: maybe save the marks in a useMemo so it would not change every rerender
+  // FIXME: need verification for calaulating these
   useEffect(() => {
     const average = Math.round(
       seedsSelected.reduce(

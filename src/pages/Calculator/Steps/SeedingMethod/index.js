@@ -12,7 +12,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import styled from '@emotion/styled';
 import { updateSteps } from '../../../../features/stepSlice';
-import { seedingMethods } from '../../../../shared/data/dropdown';
+import { seedingMethods, seedingMethodsNECCC } from '../../../../shared/data/dropdown';
 import Dropdown from '../../../../components/Dropdown';
 import '../steps.scss';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
@@ -23,11 +23,8 @@ const LeftGrid = styled(Grid)(() => ({
     border: '1px solid #c7c7c7',
     borderLeft: 'none',
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    '& p': {
-      fontWeight: 'bold',
-    },
   },
 }));
 
@@ -43,11 +40,13 @@ const RightGrid = styled(Grid)(() => ({
     '& .MuiBox-root': {
       width: '50px',
       height: '50px',
-      padding: '11px',
       margin: '0 auto',
       backgroundColor: '#E5E7D5',
       border: 'solid 2px',
       borderRadius: '50%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     '& p': {
       fontWeight: 'bold',
@@ -95,19 +94,33 @@ const SeedingMethod = ({ council }) => {
     handleUpdateSteps('type', e.target.value);
   };
 
-  const renderRightAccordian = (type, val) => (
-    <RightGrid item xs={6}>
-      {council === 'NECCC' && type !== 'precision' ? (
-        <Typography>Not Recommended</Typography>
-      ) : (
-        <>
-          <Box>
-            <Typography>{val}</Typography>
-          </Box>
-          <Typography>Lbs / Acre</Typography>
-        </>
-      )}
-    </RightGrid>
+  const renderMethod = (type, val, comment) => (
+    <>
+      <LeftGrid item xs={6}>
+        <Box textAlign="left" pl="25%">
+          <Typography fontWeight="bold">
+            {
+            type === 'BroadcastwithCultivation' || type === 'BroadcastwithoutCultivation'
+              ? 'Broadcast' : type
+            }
+          </Typography>
+          <Typography fontSize="0.75rem">{comment}</Typography>
+        </Box>
+      </LeftGrid>
+      <RightGrid item xs={6}>
+        {!val ? (
+          <Typography color="#D84727">Not Recommended</Typography>
+        ) : (
+          <>
+            <Box>
+              <Typography sx={{ width: '50px' }}>{val}</Typography>
+            </Box>
+            <Typography>Lbs / Acre</Typography>
+          </>
+        )}
+      </RightGrid>
+
+    </>
   );
 
   // handler for click to open accordion
@@ -128,39 +141,46 @@ const SeedingMethod = ({ council }) => {
 
   // initially set all seeding methods
   // TODO: maybe build this into redux instead of local state
+  //       OR init all the data in Species Selection or Mix Ratio page
   useEffect(() => {
-    if (council === 'MCCC') {
-      mixRedux.forEach((seed) => {
-        if (options[seed.label].plantingMethod
+    mixRedux.forEach((seed) => {
+      const coefficients = seed.attributes.Coefficients;
+      const plantingMethods = council === 'MCCC' ? {
+        Drilled: 1,
+        Precision: parseFloat(coefficients['Precision Coefficient']?.values[0]) || null,
+        Broadcast: parseFloat(coefficients['Broadcast Coefficient']?.values[0]) || null,
+        Aerial: parseFloat(coefficients['Aerial Coefficient']?.values[0]) || null,
+      } : {
+        // TODO: drilled need to investigate, not in seed api
+        Drilled: 1,
+        BroadcastwithCultivation:
+        parseFloat(coefficients['Broadcast with Cultivation Coefficient']?.values[0]) || null,
+        BroadcastwithoutCultivation:
+        parseFloat(coefficients['Broadcast without Cultivation Coefficient']?.values[0]) || null,
+        Aerial: parseFloat(coefficients['Aerial Coefficient']?.values[0]) || null,
+      };
+      setMethods((prev) => ({ ...prev, [seed.label]: plantingMethods }));
+
+      // initial set planting method to drilled
+      if (options[seed.label].plantingMethod
           && options[seed.label].plantingMethodModifier) return;
-        const coefficients = seed.attributes.Coefficients;
-        const plantingMethods = {
-          Drilled: 1,
-          Precision: parseFloat(coefficients['Precision Coefficient'].values[0]),
-          Broadcast: parseFloat(coefficients['Broadcast Coefficient'].values[0]),
-          Aerial: parseFloat(coefficients['Aerial Coefficient'].values[0]),
-        };
-        setMethods((prev) => ({ ...prev, [seed.label]: plantingMethods }));
-        // initial set planting method to drilled
-        const prevOption = options[seed.label];
-        dispatch(setOptionRedux(
-          seed.label,
-          { ...prevOption, plantingMethod: 'Drilled', plantingMethodModifier: 1 },
-        ));
-      });
-    }
+      dispatch(setOptionRedux(
+        seed.label,
+        { ...options[seed.label], plantingMethod: 'Drilled', plantingMethodModifier: 1 },
+      ));
+    });
   }, []);
 
   // function to handle dropdown and update seed options in redux
   const updateOptions = (method) => {
-    if (council === 'MCCC') {
-      mixRedux.forEach((seed) => {
-        const prevOption = options[seed.label];
-        const plantingMethod = method;
-        const plantingMethodModifier = methods[seed.label][method];
-        dispatch(setOptionRedux(seed.label, { ...prevOption, plantingMethod, plantingMethodModifier }));
-      });
-    }
+    if (method === 'Broadcast(With Cultivation)') method = 'BroadcastwithCultivation';
+    else if (method === 'Broadcast(With No Cultivation)') method = 'BroadcastwithoutCultivation';
+    mixRedux.forEach((seed) => {
+      const prevOption = options[seed.label];
+      const plantingMethod = method;
+      const plantingMethodModifier = methods[seed.label][method];
+      dispatch(setOptionRedux(seed.label, { ...prevOption, plantingMethod, plantingMethodModifier }));
+    });
   };
 
   /// ///////////////////////////////////////////////////////
@@ -181,9 +201,10 @@ const SeedingMethod = ({ council }) => {
             updateOptions(e.target.value);
           }}
           size={12}
-          items={seedingMethods}
+          items={council === 'MCCC' ? seedingMethods : seedingMethodsNECCC}
         />
       </Grid>
+      {/* TODO: replace seedSelected with new redux state */}
       {seedsSelected.map((seed, i) => (
         <Grid item xs={12} key={i}>
           <Accordion
@@ -199,30 +220,40 @@ const SeedingMethod = ({ council }) => {
 
             <AccordionDetails className="accordian-details">
               <Grid container>
-                <LeftGrid item xs={6}>
-                  <Typography>Precision: </Typography>
-                </LeftGrid>
-                {renderRightAccordian('precision', seed.precision)}
-                <LeftGrid item xs={6}>
-                  <Typography>Drilled: </Typography>
-                </LeftGrid>
-                {renderRightAccordian('drilled', 1)}
-                <LeftGrid item xs={6}>
-                  <Typography>
-                    Broadcast(with Light Incorporation):
-                    {' '}
-                  </Typography>
-                </LeftGrid>
-                {renderRightAccordian('broadcast', seed.broadcast)}
-                <LeftGrid item xs={6}>
-                  <Typography>
-                    Aerial(or broadcast with no Light Incorporation
-                    {' '}
-                    <span style={{ color: 'red' }}>Not Recommended</span>
-                    ):
-                  </Typography>
-                </LeftGrid>
-                {renderRightAccordian('aerial', seed.aerial)}
+                {council === 'MCCC'
+                  && (
+                  <>
+                    {renderMethod('Precision', methods[seed.label]?.Precision)}
+                    {renderMethod('Drilled', methods[seed.label]?.Drilled)}
+                    {renderMethod(
+                      'Broadcast',
+                      methods[seed.label]?.Broadcast,
+                      'with Light Incorporation',
+                    )}
+                    {renderMethod(
+                      'Aerial',
+                      methods[seed.label]?.Aerial,
+                      'or broadcast with no Light Incorporation',
+                    )}
+                  </>
+                  )}
+                {council === 'NECCC'
+                  && (
+                  <>
+                    {renderMethod('Drilled', methods[seed.label]?.Drilled)}
+                    {renderMethod(
+                      'BroadcastwithCultivation',
+                      methods[seed.label]?.BroadcastwithCultivation,
+                      'with Cultivation, No Packing',
+                    )}
+                    {renderMethod(
+                      'BroadcastwithoutCultivation',
+                      methods[seed.label]?.BroadcastwithoutCultivation,
+                      'with No Cultivation, No Packing',
+                    )}
+                    {renderMethod('Aerial', methods[seed.label]?.Aerial)}
+                  </>
+                  )}
               </Grid>
             </AccordionDetails>
           </Accordion>
