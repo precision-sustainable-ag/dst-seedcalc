@@ -32,6 +32,21 @@ import {
 } from '../../../../shared/utils/calculator';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 
+const defaultResultMCCC = {
+  step1: { defaultSingleSpeciesSeedingRatePLS: 0, percentOfRate: 0, seedingRate: 0 },
+  step2: { seedsPerPound: 0, seedingRate: 0, seedsPerAcre: 0 },
+  step3: { seedsPerAcre: 0, percentSurvival: 0, plantsPerAcre: 0 },
+  step4: { plantPerAcre: 0, sqftPerAcre: 43560, plantPerSqft: 0 },
+};
+
+const defaultResultNECCC = {
+  step1: {
+    defaultSingleSpeciesSeedingRatePLS: 0, soilFertilityModifer: 0, sumGroupInMix: 0, seedingRate: 0,
+  },
+  step2: { seedsPerPound: 0, seedingRate: 0, seedsPerAcre: 0 },
+  step3: { seedsPerAcre: 0, sqftPerAcre: 43560, seedsPerSqft: 0 },
+};
+
 const MixRatio = ({ council, calculator, setCalculator }) => {
   const [initCalculator, setInitCalculator] = useState(false);
   const [prevOptions, setPrevOptions] = useState({});
@@ -43,6 +58,14 @@ const MixRatio = ({ council, calculator, setCalculator }) => {
   const { soilDrainage, plantingDate, acres } = useSelector((state) => state.siteCondition);
   const mixRedux = useSelector((state) => state.calculator.seedsSelected);
   const options = useSelector((state) => state.calculator.options);
+
+  const [calculatorResult, setCalculatorResult] = useState(
+    mixRedux.reduce((res, seed) => {
+      res[seed.label] = council === 'MCCC' ? defaultResultMCCC : defaultResultNECCC;
+      return res;
+    }, {}),
+  );
+  console.log('calculatorResult', calculatorResult);
 
   // initialize calculator, set initial options
   useEffect(() => {
@@ -65,8 +88,10 @@ const MixRatio = ({ council, calculator, setCalculator }) => {
     if (!initCalculator) return;
     mixRedux.forEach((seed) => {
       if (options[seed.label] !== prevOptions[seed.label]) {
-        if (council === 'MCCC') adjustProportions(seed, calculator, options[seed.label]);
-        else if (council === 'NECCC') adjustProportionsNECCC(seed, calculator, options[seed.label]);
+        let result;
+        if (council === 'MCCC') result = adjustProportions(seed, calculator, options[seed.label]);
+        else if (council === 'NECCC') result = adjustProportionsNECCC(seed, calculator, options[seed.label]);
+        setCalculatorResult((prev) => ({ ...prev, [seed.label]: result }));
       }
     });
     setPrevOptions(options);
@@ -80,7 +105,11 @@ const MixRatio = ({ council, calculator, setCalculator }) => {
     }, {}),
   );
 
-  const { poundsOfSeedArray, plantsPerAcreArray, seedsPerAcreArray } = calculatePieChartData(seedsSelected);
+  const {
+    plantsPerAcreArray,
+    seedsPerAcreArray,
+    seedingRateArray,
+  } = calculatePieChartData(seedsSelected, calculatorResult);
 
   /// ///////////////////////////////////////////////////////
   //                      Redux                           //
@@ -147,9 +176,9 @@ const MixRatio = ({ council, calculator, setCalculator }) => {
       </Grid>
 
       <Grid item xs={6} sx={{ textAlign: 'justify' }}>
-        <DSTPieChart chartData={poundsOfSeedArray} />
+        <DSTPieChart chartData={seedingRateArray} />
         <DSTPieChartLabel>Pounds of Seed / Acre </DSTPieChartLabel>
-        <DSTPieChartLegend chartData={poundsOfSeedArray} />
+        <DSTPieChartLegend chartData={seedingRateArray} />
       </Grid>
 
       <Grid item xs={6} sx={{ textAlign: 'justify' }}>
@@ -159,10 +188,8 @@ const MixRatio = ({ council, calculator, setCalculator }) => {
           }
         />
         <DSTPieChartLabel>
-          {council === 'MCCC' ? 'Plants' : 'Seeds'}
-          {' '}
+          {council === 'MCCC' ? 'Plants ' : 'Seeds '}
           Per Acre
-          {' '}
         </DSTPieChartLabel>
         <DSTPieChartLegend
           chartData={
@@ -189,24 +216,26 @@ const MixRatio = ({ council, calculator, setCalculator }) => {
                 <Grid item xs={6}>
                   <SeedingRateChip
                     label="Default Single Species Seeding Rate PLS"
-                    value={Math.floor(seed.singleSpeciesSeedingRatePLS)}
+                    value={
+                      calculatorResult[seed.label].step1.defaultSingleSpeciesSeedingRatePLS
+                    }
                   />
                   {council === 'MCCC' && (
                   <SeedDataChip
                     label="Aprox plants per"
-                    value={Math.floor(seed.plantsPerAcre)}
+                    value={calculatorResult[seed.label].step3.plantsPerAcre}
                   />
                   )}
                 </Grid>
 
                 <Grid item xs={6}>
                   <SeedingRateChip
-                    label="Default Mix Seeding Rate PLS"
-                    value={Math.round(seed.mixSeedingRate)}
+                    label="Default Seeding Rate in Mix"
+                    value={calculatorResult[seed.label].step1.seedingRate}
                   />
                   <SeedDataChip
                     label="Seeds per"
-                    value={Math.floor(seed.seedsPerAcre)}
+                    value={calculatorResult[seed.label].step2.seedsPerAcre}
                   />
                 </Grid>
 
@@ -229,6 +258,7 @@ const MixRatio = ({ council, calculator, setCalculator }) => {
                     seedsSelected={seedsSelected}
                     updateSeed={updateSeed}
                     handleFormValueChange={handleFormValueChange}
+                    calculatorResult={calculatorResult[seed.label]}
                   />
                   )}
                 </Grid>

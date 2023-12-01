@@ -29,14 +29,13 @@ const adjustProportions = (seed, calculator, options = {}) => {
   ?? crop.coefficients.singleSpeciesSeedingRate;
 
   // TODO: when using these funcs, all the OPTION param should be same since some of them may call others
-  // FIXME: the mixSeedingRate is not correct here
   // const defaultMixSeedingRate = calculator.mixSeedingRate(seed, options);
 
   const seedingRate = calculator.seedingRate(seed, options);
   const seedsPerAcre = calculator.seedsPerAcre(seed, options);
   // options in calculating plants per acre
-  const plantPerAcre = calculator.plantsPerAcre(seed, options);
-  const plantPerSqft = calculator.plantsPerSqft(seed, options);
+  const plantsPerAcre = calculator.plantsPerAcre(seed, options);
+  const plantsPerSqft = calculator.plantsPerSqft(seed, options);
 
   console.log('\n> ', seed.label, '- AdjustProportionsPage');
   console.log('Step 1: Default Single Species Seeding Rate PLS * Percent of Rate = Seeding Rate');
@@ -45,9 +44,16 @@ const adjustProportions = (seed, calculator, options = {}) => {
   console.log('Step 2: Seeds Per Pound * Seeding Rate = Seeds Per Acre');
   console.log(crop.seedsPerPound, ' * ', seedingRate, ' = ', seedsPerAcre);
   console.log('Step 3: Seeds Per Acre * %Survival = Plants Per Acre');
-  console.log(seedsPerAcre, ' * ', options.percentSurvival, ' = ', plantPerAcre);
+  console.log(seedsPerAcre, ' * ', options.percentSurvival, ' = ', plantsPerAcre);
   console.log('Step 4: Plants Per Acre / Sqft Per Acre = Plants Per Sqft');
-  console.log(plantPerAcre, ' / ', 43560, ' = ', plantPerSqft);
+  console.log(plantsPerAcre, ' / ', 43560, ' = ', plantsPerSqft);
+  const result = {
+    step1: { defaultSingleSpeciesSeedingRatePLS, percentOfRate: options.percentOfRate, seedingRate },
+    step2: { seedsPerPound: crop.seedsPerPound, seedingRate, seedsPerAcre },
+    step3: { seedsPerAcre, percentSurvival: options.percentSurvival, plantsPerAcre },
+    step4: { plantsPerAcre, sqftPerAcre: 43560, plantsPerSqft },
+  };
+  return result;
 };
 
 const adjustProportionsNECCC = (seed, calculator, options = {}) => {
@@ -56,7 +62,7 @@ const adjustProportionsNECCC = (seed, calculator, options = {}) => {
   ?? crop.coefficients.singleSpeciesSeedingRate;
   // FIXME: soil fertility not defined
 
-  const soilFertilityModifer = calculator.soilFertilityModifier(crop, options);
+  const soilFertilityModifier = calculator.soilFertilityModifier(crop, options);
   const { group } = crop;
   const sumGroupInMix = calculator.speciesInMix[group];
   const percentOfRate = calculator.getDefaultPercentOfSingleSpeciesSeedingRate(crop, options);
@@ -72,18 +78,24 @@ const adjustProportionsNECCC = (seed, calculator, options = {}) => {
   console.log(
     defaultSingleSpeciesSeedingRatePLS,
     ' * ',
-    soilFertilityModifer,
+    soilFertilityModifier,
     '/',
     sumGroupInMix,
     ' = ',
     seedingRate,
   );
-
   console.log('Step 2: Seeds Per Pound * Seeding Rate = Seeds Per Acre');
   console.log(crop.seedsPerPound, ' * ', seedingRate, ' = ', seedsPerAcre);
-
   console.log('Step 3: Seeds Per Acre / Sqft Per Acre = Seeds Per Sqft');
   console.log(seedsPerAcre, ' / ', 43560, ' = ', seedsPerSqft);
+  const result = {
+    step1: {
+      defaultSingleSpeciesSeedingRatePLS, soilFertilityModifier, sumGroupInMix, seedingRate,
+    },
+    step2: { seedsPerPound: crop.seedsPerPound, seedingRate, seedsPerAcre },
+    step3: { seedsPerAcre, sqftPerAcre: 43560, seedsPerSqft },
+  };
+  return result;
 };
 
 const reviewMix = (seed, calculator, options = {}) => {

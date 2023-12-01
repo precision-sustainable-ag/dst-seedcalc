@@ -32,9 +32,12 @@ export const convertAcresToSqft = (number) => number * 43560;
 
 export const convertSqftToAcres = (number) => number / 43560;
 
-export const convertToPercent = (num) => (parseFloat(num) * 100).toFixed(1);
+export const convertToPercent = (num) => Number((parseFloat(num) * 100).toFixed(1));
 
 export const convertToDecimal = (num) => parseFloat(num) / 100;
+
+export const twoDigit = (value) => Number(value.toFixed(2));
+
 /// ///////////////////////////////////////////////////////
 //                    Mix Ratio                         //
 /// ///////////////////////////////////////////////////////
@@ -358,26 +361,45 @@ export const emptyValues = (data) => {
   return emptyObj;
 };
 
-export const calculatePieChartData = (seedsSelected) => {
+export const calculatePieChartData = (seedsSelected, calculatorResult) => {
   const poundsOfSeedArray = [];
   const plantsPerAcreArray = [];
   const seedsPerAcreArray = [];
+  const seedingRateArray = [];
 
-  seedsSelected.forEach((s) => {
-    poundsOfSeedArray.push({
-      name: s.label,
-      value: parseFloat(s.poundsOfSeed),
-    });
-    plantsPerAcreArray.push({
-      name: s.label,
-      // FIXME: not sure why the value is per acre while this is per sqft
-      value: parseFloat(s.aproxPlantsSqFt),
+  // seedsSelected.forEach((s) => {
+  //   poundsOfSeedArray.push({
+  //     name: s.label,
+  //     value: parseFloat(s.poundsOfSeed),
+  //   });
+  //   plantsPerAcreArray.push({
+  //     name: s.label,
+  //     // FIXME: not sure why the value is per acre while this is per sqft
+  //     value: parseFloat(s.aproxPlantsSqFt),
+  //   });
+  //   seedsPerAcreArray.push({
+  //     name: s.label,
+  //     value: parseFloat(s.seedsPerAcre),
+  //   });
+  // });
+
+  const seeds = Object.keys(calculatorResult);
+  seeds.forEach((seed) => {
+    seedingRateArray.push({
+      name: seed,
+      value: calculatorResult[seed].step1.seedingRate,
     });
     seedsPerAcreArray.push({
-      name: s.label,
-      value: parseFloat(s.seedsPerAcre),
+      name: seed,
+      value: calculatorResult[seed].step2.seedsPerAcre,
+    });
+    plantsPerAcreArray.push({
+      name: seed,
+      value: calculatorResult[seed].step3.plantsPerAcre,
     });
   });
 
-  return { poundsOfSeedArray, plantsPerAcreArray, seedsPerAcreArray };
+  return {
+    poundsOfSeedArray, plantsPerAcreArray, seedsPerAcreArray, seedingRateArray,
+  };
 };

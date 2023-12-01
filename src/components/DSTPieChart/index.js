@@ -5,6 +5,7 @@ import {
   PieChart, Pie, Cell, ResponsiveContainer,
 } from 'recharts';
 import { useTheme } from '@emotion/react';
+import { twoDigit } from '../../shared/utils/calculate';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
@@ -95,7 +96,7 @@ const DSTPieChartLegend = ({ chartData }) => {
             fontSize={matchesMd ? '0.75rem' : '1rem'}
             sx={{ display: 'flex', alignItems: 'center' }}
           >
-            {data.value}
+            {twoDigit(data.value)}
           </Typography>
         </Box>
       ))}
