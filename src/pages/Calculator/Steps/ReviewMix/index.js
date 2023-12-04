@@ -20,7 +20,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { updateSteps } from '../../../../features/stepSlice';
-import { calculateAllMixValues, calculatePieChartData } from '../../../../shared/utils/calculate';
+import { calculateAllMixValues, twoDigit } from '../../../../shared/utils/calculate';
 import { generateNRCSStandards } from '../../../../shared/utils/NRCS/calculateNRCS';
 import ReviewMixSteps from './Steps';
 import '../steps.scss';
@@ -33,8 +33,36 @@ import {
   SeedDataChip,
   SeedingRateChip,
 } from '../../../../components/SeedingRateCard';
-import { reviewMix, reviewMixNECCC } from '../../../../shared/utils/calculator';
+import { reviewMix, reviewMixNECCC, calculatePieChartData } from '../../../../shared/utils/calculator';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
+
+const defaultResultMCCC = {
+  step1: { singleSpeciesSeedingRate: 0, percentOfRate: 0, seedingRate: 0 },
+  step2: { seedingRate: 0, plantingMethodModifier: 0, seedingRateAfterPlantingMethodModifier: 0 },
+  step3: { seedingRate: 0, managementImpactOnMix: 0, seedingRateAfterManagementImpact: 0 },
+  step4: {
+    seedingRateAfterManagementImpact: 0, germination: 0, purity: 0, bulkSeedingRate: 0,
+  },
+  step5: { bulkSeedingRate: 0, acres: 0, poundsForPurchase: 0 },
+};
+
+const defaultResultNECCC = {
+  step1: {
+    singleSpeciesSeedingRate: 0, soilFertilityModifer: 0, sumGroupInMix: 0, seedingRate: 0,
+  },
+  step2: { seedingRate: 0, plantingMethodModifier: 0, seedingRateAfterPlantingMethodModifier: 0 },
+  step3: { seedingRate: 0, managementImpactOnMix: 0, seedingRateAfterManagementImpact: 0 },
+  step4: {
+    seedingRateAfterManagementImpact: 0, germination: 0, purity: 0, bulkSeedingRate: 0,
+  },
+  step5: { bulkSeedingRate: 0, acres: 0, poundsForPurchase: 0 },
+};
+
+const defaultPieChartData = {
+  seedingRateArray: [],
+  plantsPerAcreArray: [],
+  seedsPerAcreArray: [],
+};
 
 // eslint-disable-next-line no-unused-vars
 const ReviewMix = ({ council, calculator }) => {
@@ -48,7 +76,16 @@ const ReviewMix = ({ council, calculator }) => {
   const mixRedux = useSelector((state) => state.calculator.seedsSelected);
   const options = useSelector((state) => state.calculator.options);
 
+  const [calculatorResult, setCalculatorResult] = useState(
+    mixRedux.reduce((res, seed) => {
+      res[seed.label] = council === 'MCCC' ? defaultResultMCCC : defaultResultNECCC;
+      return res;
+    }, {}),
+  );
+  // console.log('calculatorResult', calculatorResult);
   const [prevOptions, setPrevOptions] = useState({});
+  const [piechartData, setPieChartData] = useState(defaultPieChartData);
+  // console.log('piechartData', piechartData);
 
   const [accordionState, setAccordionState] = useState(
     seedsSelected.reduce((res, seed) => {
@@ -56,8 +93,6 @@ const ReviewMix = ({ council, calculator }) => {
       return res;
     }, {}),
   );
-
-  const { poundsOfSeedArray, plantsPerAcreArray, seedsPerAcreArray } = calculatePieChartData(seedsSelected);
 
   /// ///////////////////////////////////////////////////////
   //                      Redux                           //
@@ -160,10 +195,19 @@ const ReviewMix = ({ council, calculator }) => {
   useEffect(() => {
     mixRedux.forEach((seed) => {
       if (options[seed.label] !== prevOptions[seed.label]) {
-        if (council === 'MCCC') reviewMix(seed, calculator, options[seed.label]);
-        else if (council === 'NECCC') reviewMixNECCC(seed, calculator, options[seed.label]);
+        let result;
+        if (council === 'MCCC') result = reviewMix(seed, calculator, options[seed.label]);
+        else if (council === 'NECCC') result = reviewMixNECCC(seed, calculator, options[seed.label]);
+        setCalculatorResult((prev) => ({ ...prev, [seed.label]: result }));
       }
     });
+    // calculate piechart data
+    const {
+      seedingRateArray,
+      plantsPerAcreArray,
+      seedsPerAcreArray,
+    } = calculatePieChartData(mixRedux, calculator, options);
+    setPieChartData({ seedingRateArray, plantsPerAcreArray, seedsPerAcreArray });
     setPrevOptions(options);
   }, [options]);
 
@@ -176,28 +220,28 @@ const ReviewMix = ({ council, calculator }) => {
       {
         label: 'Single Species Seeding Rate',
         key: 'singleSpeciesSeedingRatePLS',
-        val: seed.singleSpeciesSeedingRatePLS,
+        val: calculatorResult[seed.label].step1.singleSpeciesSeedingRate,
       },
       {
         label: 'Added to Mix',
         key: 'step2Result',
-        val: seed.step2Result,
+        val: calculatorResult[seed.label].step2.seedingRate,
       },
       {
         label: 'Drilled or Broadcast with Cultipack',
         key: 'drilled',
-        val: seed.step2Result,
+        val: calculatorResult[seed.label].step2.seedingRateAfterPlantingMethodModifier,
       },
       {
         // FIXME: static value here, maybe need to change to dynamic
-        label: 'Management Impacts on Mix (+57%)',
+        label: `Management Impacts on Mix (${calculatorResult[seed.label].step3.managementImpactOnMix})`,
         key: 'managementImpactOnMix',
-        val: seed.step3Result,
+        val: calculatorResult[seed.label].step3.seedingRateAfterManagementImpact,
       },
       {
         label: 'Bulk Germination and Purity',
         key: 'bulkSeedingRate',
-        val: seed.bulkSeedingRate,
+        val: calculatorResult[seed.label].step4.bulkSeedingRate,
       },
     ];
 
@@ -206,7 +250,7 @@ const ReviewMix = ({ council, calculator }) => {
       let counter = 0;
       labels.map((l) => {
         counter += 30;
-        results.push({ x: counter, y: l.val, z: 400 });
+        results.push({ x: counter, y: twoDigit(l.val), z: 400 });
         return null;
       });
       return results;
@@ -255,7 +299,7 @@ const ReviewMix = ({ council, calculator }) => {
               {l.label}
             </Grid>
             <Grid item xs={2}>
-              {l.val}
+              {twoDigit(l.val)}
             </Grid>
           </Grid>
         ))}
@@ -269,15 +313,15 @@ const ReviewMix = ({ council, calculator }) => {
         <Typography variant="h2">Review your mix</Typography>
       </Grid>
       <Grid item xs={6} md={6} sx={{ textAlign: 'justify' }}>
-        <DSTPieChart chartData={poundsOfSeedArray} />
+        <DSTPieChart chartData={piechartData.seedingRateArray} />
         <DSTPieChartLabel>Pounds of Seed / Acre</DSTPieChartLabel>
-        <DSTPieChartLegend chartData={poundsOfSeedArray} />
+        <DSTPieChartLegend chartData={piechartData.seedingRateArray} />
       </Grid>
 
       <Grid item xs={6} md={6} sx={{ textAlign: 'justify' }}>
         <DSTPieChart
           chartData={
-            council === 'MCCC' ? plantsPerAcreArray : seedsPerAcreArray
+            council === 'MCCC' ? piechartData.plantsPerAcreArray : piechartData.seedsPerAcreArray
           }
         />
         <DSTPieChartLabel>
@@ -289,7 +333,7 @@ const ReviewMix = ({ council, calculator }) => {
 
         <DSTPieChartLegend
           chartData={
-            council === 'MCCC' ? plantsPerAcreArray : seedsPerAcreArray
+            council === 'MCCC' ? piechartData.plantsPerAcreArray : piechartData.seedsPerAcreArray
           }
         />
       </Grid>
@@ -311,22 +355,22 @@ const ReviewMix = ({ council, calculator }) => {
               <Grid container>
                 <Grid item xs={6}>
                   <SeedingRateChip
-                    label="Mix Seeding Rate PLS"
-                    value={Math.floor(seed.singleSpeciesSeedingRatePLS)}
+                    label="Seeding Rate in Mix PLS"
+                    value={calculatorResult[seed.label].step2.seedingRate}
                   />
                   <SeedDataChip
                     label="Aprox plants per"
-                    value={Math.floor(seed.plantsPerAcre)}
+                    value={piechartData.plantsPerAcreArray.filter((slice) => slice.name === seed.label)[0]?.value ?? 0}
                   />
                 </Grid>
                 <Grid item xs={6}>
                   <SeedingRateChip
                     label="Bulk Seeding Rate"
-                    value={Math.floor(seed.bulkSeedingRate)}
+                    value={calculatorResult[seed.label].step4.bulkSeedingRate}
                   />
                   <SeedDataChip
                     label="Seeds per"
-                    value={Math.floor(seed.seedsPerAcre)}
+                    value={piechartData.seedsPerAcreArray.filter((slice) => slice.name === seed.label)[0]?.value ?? 0}
                   />
                 </Grid>
 
@@ -351,6 +395,7 @@ const ReviewMix = ({ council, calculator }) => {
                     siteCondition={siteCondition}
                     seed={seed}
                     handleFormValueChange={handleFormValueChange}
+                    calculatorResult={calculatorResult[seed.label]}
                   />
                   )}
                 </Grid>

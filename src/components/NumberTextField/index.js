@@ -1,5 +1,6 @@
 import React from 'react';
 import TextField from '@mui/material/TextField';
+import { twoDigit } from '../../shared/utils/calculate';
 
 const NumberTextField = ({
   value,
@@ -12,7 +13,7 @@ const NumberTextField = ({
   <TextField
     fullWidth
     className={className}
-    value={value}
+    value={twoDigit(value)}
     label={label}
     onChange={handleChange}
     InputLabelProps={{

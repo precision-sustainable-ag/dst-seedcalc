@@ -106,9 +106,9 @@ const SeedTagInfo = () => {
 
   // eslint-disable-next-line no-shadow
   const renderRightAccordian = (key, seed, type, disabled) => {
-    let newValue;
-    if (key === 'germinationPercentage') newValue = options[seed.label].germination;
-    else if (key === 'purityPercentage') newValue = options[seed.label].purity;
+    let newValue = 0;
+    if (key === 'germinationPercentage') newValue = options[seed.label].germination ?? 0.85;
+    else if (key === 'purityPercentage') newValue = options[seed.label].purity ?? 0.9;
     // FIXME: temporary, need to use calculator to get this
     else if (key === 'poundsOfSeed') newValue = seed[key];
     const value = type === 'percent' ? convertToPercent(newValue) : Math.floor(newValue);

@@ -4,7 +4,7 @@ import { Typography, useTheme, useMediaQuery } from '@mui/material';
 
 import NumberTextField from '../../../../components/NumberTextField';
 import {
-  convertToPercent, twoDigit,
+  convertToPercent,
 } from '../../../../shared/utils/calculate';
 import '../steps.scss';
 
@@ -52,7 +52,7 @@ const MixRatioSteps = ({
             <Typography className="step-header">Step 1: </Typography>
           </Grid>
           {renderFormLabel(
-            'Mix Seeding Rate PLS',
+            'Single Species Seeding Rate PLS',
             'Soil Fertility Modifier',
             'Sum Species Of Group In Mix',
           )}
@@ -62,7 +62,7 @@ const MixRatioSteps = ({
               handleChange={(e) => {
                 handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
               }}
-              value={twoDigit(step1.defaultSingleSpeciesSeedingRatePLS)}
+              value={step1.defaultSingleSpeciesSeedingRatePLS}
             />
             <Typography>Lbs / Acre</Typography>
           </Grid>
@@ -75,7 +75,7 @@ const MixRatioSteps = ({
             <NumberTextField
               label={matchesMd ? '' : 'Soil Fertility Modifier'}
               disabled
-              value={twoDigit(step1.soilFertilityModifier)}
+              value={step1.soilFertilityModifier}
             />
           </Grid>
 
@@ -91,7 +91,7 @@ const MixRatioSteps = ({
               // handleChange={(e) => {
               //   handleFormValueChange(seed, 'percentOfRate', parseFloat(e.target.value) / 100);
               // }}
-              value={twoDigit(step1.sumGroupInMix)}
+              value={step1.sumGroupInMix}
             />
             <Typography>NECCC</Typography>
           </Grid>
@@ -105,7 +105,7 @@ const MixRatioSteps = ({
               <NumberTextField
                 label="Seeding Rate In Mix"
                 disabled
-                value={twoDigit(step1.seedingRate)}
+                value={step1.seedingRate}
               />
               <Typography>Lbs / Acre</Typography>
             </Grid>
@@ -133,7 +133,7 @@ const MixRatioSteps = ({
                 handleChange={(e) => {
                   handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
                 }}
-                value={twoDigit(step1.defaultSingleSpeciesSeedingRatePLS)}
+                value={step1.defaultSingleSpeciesSeedingRatePLS}
               />
               <Typography>Lbs / Acre</Typography>
             </Grid>
@@ -148,7 +148,7 @@ const MixRatioSteps = ({
                 handleChange={(e) => {
                   handleFormValueChange(seed, 'percentOfRate', parseFloat(e.target.value) / 100);
                 }}
-                value={twoDigit(convertToPercent(step1.percentOfRate))}
+                value={convertToPercent(step1.percentOfRate)}
               />
               <Typography>MCCC</Typography>
             </Grid>
@@ -161,7 +161,7 @@ const MixRatioSteps = ({
               <NumberTextField
                 label={matchesMd ? '' : 'Seeding Rate In Mix'}
                 disabled
-                value={twoDigit(step1.seedingRate)}
+                value={step1.seedingRate}
               />
               <Typography>Lbs / Acre</Typography>
             </Grid>
@@ -183,7 +183,7 @@ const MixRatioSteps = ({
           <NumberTextField
             disabled
             label={matchesMd ? '' : 'Seeds / Pound'}
-            value={twoDigit(step2.seedsPerPound)}
+            value={step2.seedsPerPound}
           />
         </Grid>
 
@@ -195,7 +195,7 @@ const MixRatioSteps = ({
           <NumberTextField
             disabled
             label={matchesMd ? '' : 'Seeding Rate In Mix'}
-            value={twoDigit(step2.seedingRate)}
+            value={step2.seedingRate}
           />
           <Typography>Lbs / Acre</Typography>
         </Grid>
@@ -208,7 +208,7 @@ const MixRatioSteps = ({
           <NumberTextField
             label={matchesMd ? '' : 'Seeds / Acre'}
             disabled
-            value={twoDigit(step2.seedsPerAcre)}
+            value={step2.seedsPerAcre}
           />
         </Grid>
       </>
@@ -224,7 +224,7 @@ const MixRatioSteps = ({
             <NumberTextField
               label={matchesMd ? '' : 'Seeds / Acre'}
               disabled
-              value={twoDigit(step3.seedsPerAcre)}
+              value={step3.seedsPerAcre}
             />
           </Grid>
 
@@ -236,7 +236,7 @@ const MixRatioSteps = ({
             <NumberTextField
               label={matchesMd ? '' : 'Sq. Ft./ Acre'}
               disabled
-              value={twoDigit(step3.sqftPerAcre)}
+              value={step3.sqftPerAcre}
             />
           </Grid>
 
@@ -248,7 +248,7 @@ const MixRatioSteps = ({
             <NumberTextField
               label={matchesMd ? '' : 'Seeds / Sq. Ft.'}
               disabled
-              value={twoDigit(step3.seedsPerSqft)}
+              value={step3.seedsPerSqft}
             />
           </Grid>
         </>
@@ -265,7 +265,7 @@ const MixRatioSteps = ({
             <NumberTextField
               label={matchesMd ? '' : 'Seeds / Acre'}
               disabled
-              value={twoDigit(step3.seedsPerAcre)}
+              value={step3.seedsPerAcre}
             />
           </Grid>
 
@@ -279,7 +279,7 @@ const MixRatioSteps = ({
               handleChange={(e) => {
                 handleFormValueChange(seed, 'percentSurvival', parseFloat(e.target.value) / 100);
               }}
-              value={twoDigit(convertToPercent(step3.percentSurvival))}
+              value={convertToPercent(step3.percentSurvival)}
             />
           </Grid>
 
@@ -291,7 +291,7 @@ const MixRatioSteps = ({
             <NumberTextField
               label={matchesMd ? '' : 'Plants / Acre'}
               disabled
-              value={twoDigit(step3.plantsPerAcre)}
+              value={step3.plantsPerAcre}
             />
           </Grid>
 
@@ -307,7 +307,7 @@ const MixRatioSteps = ({
             <NumberTextField
               label={matchesMd ? '' : 'Plants / Acre'}
               disabled
-              value={twoDigit(step4.plantsPerAcre)}
+              value={step4.plantsPerAcre}
             />
           </Grid>
 
@@ -319,7 +319,7 @@ const MixRatioSteps = ({
             <NumberTextField
               label={matchesMd ? '' : 'Sq. Ft./ Acre'}
               disabled
-              value={twoDigit(step4.sqftPerAcre)}
+              value={step4.sqftPerAcre}
             />
           </Grid>
 
@@ -331,7 +331,7 @@ const MixRatioSteps = ({
             <NumberTextField
               label={matchesMd ? '' : 'Aproximate Plants / Sq.Ft.'}
               disabled
-              value={twoDigit(step4.plantsPerSqft)}
+              value={step4.plantsPerSqft}
             />
             <Typography>Lbs / Acre</Typography>
           </Grid>

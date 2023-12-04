@@ -167,6 +167,20 @@ const reviewMix = (seed, calculator, options = {}) => {
   console.log(seedingRateAfterManagementImpact, ' / ', options.germination, ' / ', options.purity, ' = ', seedingRateAfterPurityAndGermination);
   console.log('5. Bulk Seeding Rate * Acres = Pounds for purchase');
   console.log(bulkSeedingRate, ' * ', options.acres, ' = ', poundsForPurchase);
+  const result = {
+    step1: { singleSpeciesSeedingRate, percentOfRate: percentOfSingleSpeciesRate, seedingRate: baseSeedingRate },
+    step2: { seedingRate: baseSeedingRate, plantingMethodModifier: options.plantingMethodModifier, seedingRateAfterPlantingMethodModifier },
+    step3: {
+      seedingRate: seedingRateAfterPlantingMethodModifier,
+      managementImpactOnMix: options.managementImpactOnMix,
+      seedingRateAfterManagementImpact,
+    },
+    step4: {
+      seedingRateAfterManagementImpact, germination: options.germination, purity: options.purity, bulkSeedingRate,
+    },
+    step5: { bulkSeedingRate, acres: options.acres, poundsForPurchase },
+  };
+  return result;
 };
 
 const reviewMixNECCC = (seed, calculator, options = {}) => {
@@ -249,6 +263,22 @@ const reviewMixNECCC = (seed, calculator, options = {}) => {
   console.log(seedingRateAfterManagementImpact, ' / ', options.germination, ' / ', options.purity, ' = ', seedingRateAfterPurityAndGermination);
   console.log('5. Bulk Seeding Rate * Acres = Pounds for purchase');
   console.log(bulkSeedingRate, ' * ', options.acres, ' = ', poundsForPurchase);
+  const result = {
+    step1: {
+      singleSpeciesSeedingRate, soilFertilityModifer, sumGroupInMix, seedingRate,
+    },
+    step2: { seedingRate, plantingMethodModifier: options.plantingMethodModifier, seedingRateAfterPlantingMethodModifier },
+    step3: {
+      seedingRate: seedingRateAfterPlantingMethodModifier,
+      managementImpactOnMix: options.managementImpactOnMix,
+      seedingRateAfterManagementImpact,
+    },
+    step4: {
+      seedingRateAfterManagementImpact, germination: options.germination, purity: options.purity, bulkSeedingRate,
+    },
+    step5: { bulkSeedingRate, acres: options.acres, poundsForPurchase },
+  };
+  return result;
 };
 
 const checkNRCS = (seeds, calculator, options) => {
@@ -382,7 +412,28 @@ const getPlantingDate = (seed) => {
   return [firstStart, firstEnd, secondStart, secondEnd];
 };
 
+const calculatePieChartData = (seeds, calculator, options = {}) => {
+  const seedingRateArray = [];
+  const plantsPerAcreArray = [];
+  const seedsPerAcreArray = [];
+  seeds.forEach((seed) => {
+    seedingRateArray.push({
+      name: seed.label,
+      value: calculator.seedingRate(seed, options[seed.label]),
+    });
+    seedsPerAcreArray.push({
+      name: seed.label,
+      value: calculator.seedsPerAcre(seed, options[seed.label]),
+    });
+    plantsPerAcreArray.push({
+      name: seed.label,
+      value: calculator.plantsPerAcre(seed, options[seed.label]),
+    });
+  });
+  return { seedingRateArray, seedsPerAcreArray, plantsPerAcreArray };
+};
+
 export {
   createUserInput, createCalculator, initialOptions, adjustProportions,
-  adjustProportionsNECCC, reviewMix, reviewMixNECCC, checkNRCS,
+  adjustProportionsNECCC, reviewMix, reviewMixNECCC, checkNRCS, calculatePieChartData,
 };

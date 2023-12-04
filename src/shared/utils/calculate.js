@@ -1,3 +1,5 @@
+/*eslint-disable */
+
 export const calculateInt = (nums, type) => {
   switch (type) {
     case 'add':
@@ -36,7 +38,7 @@ export const convertToPercent = (num) => Number((parseFloat(num) * 100).toFixed(
 
 export const convertToDecimal = (num) => parseFloat(num) / 100;
 
-export const twoDigit = (value) => Number(value.toFixed(2));
+export const twoDigit = (value) => Number(parseFloat(value).toFixed(2));
 
 /// ///////////////////////////////////////////////////////
 //                    Mix Ratio                         //
@@ -367,37 +369,37 @@ export const calculatePieChartData = (seedsSelected, calculatorResult) => {
   const seedsPerAcreArray = [];
   const seedingRateArray = [];
 
-  // seedsSelected.forEach((s) => {
-  //   poundsOfSeedArray.push({
-  //     name: s.label,
-  //     value: parseFloat(s.poundsOfSeed),
-  //   });
-  //   plantsPerAcreArray.push({
-  //     name: s.label,
-  //     // FIXME: not sure why the value is per acre while this is per sqft
-  //     value: parseFloat(s.aproxPlantsSqFt),
-  //   });
-  //   seedsPerAcreArray.push({
-  //     name: s.label,
-  //     value: parseFloat(s.seedsPerAcre),
-  //   });
-  // });
-
-  const seeds = Object.keys(calculatorResult);
-  seeds.forEach((seed) => {
-    seedingRateArray.push({
-      name: seed,
-      value: calculatorResult[seed].step1.seedingRate,
-    });
-    seedsPerAcreArray.push({
-      name: seed,
-      value: calculatorResult[seed].step2.seedsPerAcre,
+  seedsSelected.forEach((s) => {
+    poundsOfSeedArray.push({
+      name: s.label,
+      value: parseFloat(s.poundsOfSeed),
     });
     plantsPerAcreArray.push({
-      name: seed,
-      value: calculatorResult[seed].step3.plantsPerAcre,
+      name: s.label,
+      // FIXME: not sure why the value is per acre while this is per sqft
+      value: parseFloat(s.aproxPlantsSqFt),
+    });
+    seedsPerAcreArray.push({
+      name: s.label,
+      value: parseFloat(s.seedsPerAcre),
     });
   });
+
+  // const seeds = Object.keys(calculatorResult);
+  // seeds.forEach((seed) => {
+  //   seedingRateArray.push({
+  //     name: seed,
+  //     value: calculatorResult[seed].step1.seedingRate,
+  //   });
+  //   seedsPerAcreArray.push({
+  //     name: seed,
+  //     value: calculatorResult[seed].step2.seedsPerAcre,
+  //   });
+  //   plantsPerAcreArray.push({
+  //     name: seed,
+  //     value: calculatorResult[seed].step3.plantsPerAcre,
+  //   });
+  // });
 
   return {
     poundsOfSeedArray, plantsPerAcreArray, seedsPerAcreArray, seedingRateArray,

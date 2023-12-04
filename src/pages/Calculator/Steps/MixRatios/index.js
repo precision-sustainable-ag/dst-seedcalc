@@ -12,7 +12,6 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   calculateAllMixRatioValues,
-  calculatePieChartData,
 } from '../../../../shared/utils/calculate';
 import { updateSteps } from '../../../../features/stepSlice';
 import MixRatioSteps from './form';
@@ -28,7 +27,7 @@ import {
 
 import '../steps.scss';
 import {
-  adjustProportions, adjustProportionsNECCC, createCalculator, createUserInput,
+  adjustProportions, adjustProportionsNECCC, createCalculator, createUserInput, calculatePieChartData,
 } from '../../../../shared/utils/calculator';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 
@@ -45,6 +44,12 @@ const defaultResultNECCC = {
   },
   step2: { seedsPerPound: 0, seedingRate: 0, seedsPerAcre: 0 },
   step3: { seedsPerAcre: 0, sqftPerAcre: 43560, seedsPerSqft: 0 },
+};
+
+const defaultPieChartData = {
+  seedingRateArray: [],
+  plantsPerAcreArray: [],
+  seedsPerAcreArray: [],
 };
 
 const MixRatio = ({ council, calculator, setCalculator }) => {
@@ -65,7 +70,8 @@ const MixRatio = ({ council, calculator, setCalculator }) => {
       return res;
     }, {}),
   );
-  console.log('calculatorResult', calculatorResult);
+  // console.log('calculatorResult', calculatorResult);
+  const [piechartData, setPieChartData] = useState(defaultPieChartData);
 
   // initialize calculator, set initial options
   useEffect(() => {
@@ -94,6 +100,13 @@ const MixRatio = ({ council, calculator, setCalculator }) => {
         setCalculatorResult((prev) => ({ ...prev, [seed.label]: result }));
       }
     });
+    // calculate piechart data
+    const {
+      seedingRateArray,
+      plantsPerAcreArray,
+      seedsPerAcreArray,
+    } = calculatePieChartData(mixRedux, calculator, options);
+    setPieChartData({ seedingRateArray, plantsPerAcreArray, seedsPerAcreArray });
     setPrevOptions(options);
   }, [options, initCalculator]);
 
@@ -104,12 +117,6 @@ const MixRatio = ({ council, calculator, setCalculator }) => {
       return res;
     }, {}),
   );
-
-  const {
-    plantsPerAcreArray,
-    seedsPerAcreArray,
-    seedingRateArray,
-  } = calculatePieChartData(seedsSelected, calculatorResult);
 
   /// ///////////////////////////////////////////////////////
   //                      Redux                           //
@@ -176,15 +183,15 @@ const MixRatio = ({ council, calculator, setCalculator }) => {
       </Grid>
 
       <Grid item xs={6} sx={{ textAlign: 'justify' }}>
-        <DSTPieChart chartData={seedingRateArray} />
+        <DSTPieChart chartData={piechartData.seedingRateArray} />
         <DSTPieChartLabel>Pounds of Seed / Acre </DSTPieChartLabel>
-        <DSTPieChartLegend chartData={seedingRateArray} />
+        <DSTPieChartLegend chartData={piechartData.seedingRateArray} />
       </Grid>
 
       <Grid item xs={6} sx={{ textAlign: 'justify' }}>
         <DSTPieChart
           chartData={
-            council === 'MCCC' ? plantsPerAcreArray : seedsPerAcreArray
+            council === 'MCCC' ? piechartData.plantsPerAcreArray : piechartData.seedsPerAcreArray
           }
         />
         <DSTPieChartLabel>
@@ -193,7 +200,7 @@ const MixRatio = ({ council, calculator, setCalculator }) => {
         </DSTPieChartLabel>
         <DSTPieChartLegend
           chartData={
-            council === 'MCCC' ? plantsPerAcreArray : seedsPerAcreArray
+            council === 'MCCC' ? piechartData.plantsPerAcreArray : piechartData.seedsPerAcreArray
           }
         />
       </Grid>

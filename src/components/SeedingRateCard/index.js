@@ -35,12 +35,12 @@ const SeedDataChip = ({ label, value }) => {
 
   const handleClickSqft = () => {
     setperAcre(false);
-    setDisplayValue(parseFloat((value / 43560).toFixed(2)));
+    setDisplayValue(twoDigit(value / 43560));
   };
 
   const handleClickAcre = () => {
     setperAcre(true);
-    setDisplayValue(value);
+    setDisplayValue(twoDigit(value));
   };
 
   return (
