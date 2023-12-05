@@ -54,7 +54,6 @@ const Calculator = () => {
       case 'Site Conditions':
         return (
           <SiteCondition
-            council={type}
             completedStep={completedStep}
             setCompletedStep={setCompletedStep}
           />
@@ -62,7 +61,6 @@ const Calculator = () => {
       case 'Species Selection':
         return (
           <SpeciesSelection
-            council={type}
             completedStep={completedStep}
             setCompletedStep={setCompletedStep}
           />

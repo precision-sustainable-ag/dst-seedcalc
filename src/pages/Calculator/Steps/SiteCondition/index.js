@@ -17,8 +17,9 @@ import RegionSelector from './RegionSelector';
 import MapComponent from './MapComponent';
 import { setCountyIdRedux } from '../../../../features/siteConditionSlice/actions';
 import '../steps.scss';
+import { getCropsNew } from '../../../../features/calculatorSlice/api';
 
-const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
+const SiteCondition = ({ completedStep, setCompletedStep }) => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps);
   const { siteCondition } = data.value;
@@ -78,7 +79,7 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
       // TODO: new site redux here
       dispatch(setCountyIdRedux(countyId));
     }
-  }, [siteCondition.county]);
+  }, [newSiteCondition.county]);
 
   // set favicon based on redux council value
   useEffect(() => {
@@ -103,6 +104,7 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
     // call getCrops api to get all crops from countyId
     if (checkNextStep) {
       dispatch(getCrops({ regionId: newSiteCondition.countyId }));
+      dispatch(getCropsNew({ regionId: newSiteCondition.countyId }));
     }
   }, [newSiteCondition]);
 
@@ -146,7 +148,7 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
 
       <SiteConditionForm
         handleUpdateSteps={handleUpdateSteps}
-        council={council}
+        council={newSiteCondition.council}
         counties={counties}
       />
     </Grid>

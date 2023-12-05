@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import initialState from './state';
+import { getCropsNew } from './api';
 
 const calculatorSlice = createSlice({
   name: 'calculator',
@@ -27,11 +28,32 @@ const calculatorSlice = createSlice({
       const { [seedLabel]: removedOption, ...restOptions } = state.options;
       return { ...state, options: { ...restOptions } };
     },
+    updateDiversity: (state, { payload }) => {
+      const { diversity } = payload;
+      return { ...state, diversitySelected: diversity };
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getCropsNew.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(getCropsNew.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        // console.log('getCrops', payload);
+        state.crops = payload.data;
+        state.error = false;
+      })
+      .addCase(getCropsNew.rejected, (state) => {
+        state.loading = false;
+        state.error = true;
+      });
   },
 });
 
 export const {
-  addSeed, removeSeed, setOption, removeOption,
+  addSeed, removeSeed, setOption, removeOption, updateDiversity,
 } = calculatorSlice.actions;
 
 export default calculatorSlice;

@@ -23,14 +23,16 @@ import PlantList from './PlantList';
 import Diversity from './diversity';
 import '../steps.scss';
 
-const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
+const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
   // useSelector for crops reducer data
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
-  const loading = useSelector((state) => state.steps.loading);
+  const loading = useSelector((state) => state.calculator.loading);
   const { crops, speciesSelection } = data;
   const { seedsSelected } = speciesSelection;
   const { diversitySelected } = speciesSelection;
+  const { council } = useSelector((state) => state.siteCondition);
+
   const [filteredSeeds, setFilteredSeeds] = useState([]);
   const [query, setQuery] = useState('');
 
@@ -68,7 +70,6 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
 
   // create a data object that specifies the type(data layer 1),
   // the key(data layer 2), & the value for the key.
-
   const retrieveCropDetails = async (id) => {
     const response = await dispatch(
       getCropsById({
@@ -77,12 +78,6 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
         countyId: data.siteCondition.countyId,
       }),
     );
-    // TODO: new calculator redux here
-    // dispatch(addSeedRedux(response.payload.data));
-    // const { label, attributes } = response.payload.data;
-    // const percentSurvival = parseFloat(attributes.Coefficients['% Chance of Winter Survial'].values[0]);
-    // // set initial options with acres and survival rate
-    // dispatch(setOptionRedux(label, { ...initialOptions, acres, percentSurvival }));
     return response.payload.data;
   };
 
@@ -394,7 +389,7 @@ const SpeciesSelection = ({ council, completedStep, setCompletedStep }) => {
               <Typography>{seedsLabel[seedType]}</Typography>
             </AccordionSummary>
             <AccordionDetails className="accordian-details">
-              {loading === 'getCrops' && <Spinner />}
+              {loading && <Spinner />}
 
               <PlantList
                 seedType={seedType}

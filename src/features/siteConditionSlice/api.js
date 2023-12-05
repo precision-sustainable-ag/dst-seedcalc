@@ -1,6 +1,15 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 // TODO: consume the return value in component, maybe move all thunks into a single slice with dataloading
+export const getLocality = createAsyncThunk(
+  'steps/getLocality',
+  async () => {
+    const url = 'https://developapi.covercrop-selector.org/v2/regions?locality=state&context=seed_calc';
+    const res = await fetch(url).then((data) => data.json());
+    return res.data;
+  },
+);
+
 export const getRegion = createAsyncThunk(
   'steps/getRegion',
   async ({ stateId }) => {
