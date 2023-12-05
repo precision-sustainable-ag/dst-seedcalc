@@ -22,16 +22,20 @@ import { validateForms } from '../../../../shared/utils/format';
 import PlantList from './PlantList';
 import Diversity from './diversity';
 import '../steps.scss';
+import { updateDiversityRedux } from '../../../../features/calculatorSlice/actions';
 
 const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
   // useSelector for crops reducer data
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
-  const loading = useSelector((state) => state.calculator.loading);
-  const { crops, speciesSelection } = data;
-  const { seedsSelected } = speciesSelection;
-  const { diversitySelected } = speciesSelection;
+  const { speciesSelection } = data;
+  const { seedsSelected, diversitySelected } = speciesSelection;
+  // TODO: new redux here
+
+  const { loading, crops } = useSelector((state) => state.calculator);
   const { council } = useSelector((state) => state.siteCondition);
+  const newSeedsSelected = useSelector((state) => state.calculator.seedsSelected);
+  const newDiversitySelected = useSelector((state) => state.calculator.diversitySelected);
 
   const [filteredSeeds, setFilteredSeeds] = useState([]);
   const [query, setQuery] = useState('');
@@ -53,13 +57,8 @@ const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
   //                    State Logic                       //
   /// ///////////////////////////////////////////////////////
 
-  useEffect(() => {
-    setFilteredSeeds(crops);
-  }, [crops]);
-
   // Filter query logic
   const updateQuery = (e) => {
-    // eslint-disable-next-line no-shadow
     const query = e.target.value;
     setQuery(query);
     const filtered = query !== ''
@@ -348,14 +347,24 @@ const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
     setFilteredSeeds(crops);
   }, [crops]);
 
+  // update diversity selected
+  useEffect(() => {
+    let diversity = [];
+    newSeedsSelected.forEach((seed) => {
+      diversity.push(seed.group.label);
+    });
+    diversity = diversity.filter((group, index) => diversity.indexOf(group) === index);
+    dispatch(updateDiversityRedux(diversity));
+  }, [newSeedsSelected]);
+
   useEffect(() => {
     validateForms(
-      speciesSelection.seedsSelected.length > 1,
+      newSeedsSelected.length > 1,
       1,
       completedStep,
       setCompletedStep,
     );
-  }, [speciesSelection.seedsSelected]);
+  }, [newSeedsSelected]);
 
   /// ///////////////////////////////////////////////////////
   //                      Render                          //
@@ -375,7 +384,7 @@ const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
           p="1rem"
         >
           <SearchField handleChange={updateQuery} value={query} />
-          <Diversity diversitySelected={diversitySelected} />
+          <Diversity diversitySelected={newDiversitySelected} />
         </Box>
       </Grid>
 
@@ -394,10 +403,7 @@ const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
               <PlantList
                 seedType={seedType}
                 filteredSeeds={filteredSeeds}
-                seedsSelected={seedsSelected}
                 updateSeeds={updateSeeds}
-                council={council}
-                plantingDate={data.siteCondition.plannedPlantingDate}
               />
             </AccordionDetails>
           </Accordion>

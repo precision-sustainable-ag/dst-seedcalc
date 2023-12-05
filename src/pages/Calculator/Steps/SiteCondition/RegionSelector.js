@@ -19,7 +19,6 @@ const RegionSelector = ({
   stateList,
   handleSteps,
   handleUpdateSteps,
-  step,
   setCounties,
 }) => {
   const [isImported, setIsImported] = useState(false);
@@ -97,7 +96,6 @@ const RegionSelector = ({
   //                      useEffect                       //
   /// ///////////////////////////////////////////////////////
 
-  // update selectedState based on map state selection
   useEffect(() => {
     if (Object.keys(mapState).length !== 0) {
       const st = stateList.filter(
@@ -140,7 +138,7 @@ const RegionSelector = ({
       >
         <Button
           disabled={
-            !(Object.keys(selectedState).length !== 0 && step !== 2)
+            !(newSiteCondition.state)
           }
           variant="contained"
           onClick={() => handleSteps('next')}

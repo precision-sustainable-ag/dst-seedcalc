@@ -62,16 +62,14 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
 
   // initially get states data
   useEffect(() => {
-    if (data.value.states.length === 0) {
-      dispatch(getLocality()).then((res) => {
-        setStateList(res.payload);
-      });
-    }
+    dispatch(getLocality()).then((res) => {
+      setStateList(res.payload);
+    });
   }, []);
 
   // Ensure that county id is updated to the current county
   useEffect(() => {
-    if (siteCondition.county !== '') {
+    if (newSiteCondition.county !== '' && counties.length > 0) {
       const countyId = counties.filter(
         (c) => c.label === siteCondition.county,
       )[0].id;
@@ -79,7 +77,7 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
       // TODO: new site redux here
       dispatch(setCountyIdRedux(countyId));
     }
-  }, [newSiteCondition.county]);
+  }, [newSiteCondition.county, counties]);
 
   // set favicon based on redux council value
   useEffect(() => {
@@ -127,12 +125,10 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
               stateList={stateList}
               handleSteps={handleSteps}
               handleUpdateSteps={handleUpdateSteps}
-              step={step}
               setCounties={setCounties}
             />
           ) : step === 2 ? (
             <MapComponent
-              step={step}
               handleSteps={handleSteps}
               selectedToEditSite={selectedToEditSite}
               setSelectedToEditSite={setSelectedToEditSite}

@@ -11,7 +11,6 @@ import { soilDrainage } from '../../../../shared/data/dropdown';
 
 const MapComponent = ({
   handleSteps,
-  step,
   selectedToEditSite,
   setSelectedToEditSite,
   siteCondition,
@@ -66,13 +65,11 @@ const MapComponent = ({
   return (
     <Grid container>
       <Grid xs={2} item p="10px">
-        {step !== 1 && (
-          <Button variant="contained" onClick={() => handleSteps('back')}>
-            <PlaceIcon />
-            {' '}
-            Select State
-          </Button>
-        )}
+        <Button variant="contained" onClick={() => handleSteps('back')}>
+          <PlaceIcon />
+          {' '}
+          Select State
+        </Button>
       </Grid>
 
       <Grid xs={12} md={12} item>

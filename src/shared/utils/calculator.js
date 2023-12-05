@@ -435,5 +435,6 @@ const calculatePieChartData = (seeds, calculator, options = {}) => {
 
 export {
   createUserInput, createCalculator, initialOptions, adjustProportions,
-  adjustProportionsNECCC, reviewMix, reviewMixNECCC, checkNRCS, calculatePieChartData,
+  adjustProportionsNECCC, reviewMix, reviewMixNECCC, checkNRCS,
+  getPlantingDate, calculatePieChartData,
 };

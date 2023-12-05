@@ -44,38 +44,29 @@ const CheckBoxIcon = ({ style }) => (
 const PlantList = ({
   seedType,
   filteredSeeds,
-  seedsSelected,
   updateSeeds,
-  council,
-  plantingDate,
 }) => {
   const dispatch = useDispatch();
 
-  // TODO: used for set options for selected seed
   const {
-    acres, stateId, countyId, soilDrainage, plannedPlantingDate, soilFertility,
+    acres, stateId, countyId, soilDrainage, plannedPlantingDate, soilFertility, council,
   } = useSelector((state) => state.siteCondition);
 
-  const newSeedsSelected = useSelector((state) => state.calculator.seedsSelected);
+  const seedsSelected = useSelector((state) => state.calculator.seedsSelected);
 
   const seedsList = filteredSeeds.filter((seed) => seed.group !== null && seed.group.label === seedType);
 
   const checkPlantingDate = (seed) => {
     if (council === 'MCCC') return '';
     const [firstPeriod, secondPeriod] = seed['Planting and Growth Windows']['Reliable Establishment'];
-    let firstStart; let firstEnd; let secondStart; let
-      secondEnd;
-
-    // eslint-disable-next-line prefer-const
-    firstStart = dayjs(dayjs(firstPeriod.split(' - ')[0]).format('MM/DD'));
-    // eslint-disable-next-line prefer-const
-    firstEnd = dayjs(dayjs(firstPeriod.split(' - ')[1]).format('MM/DD'));
+    let secondStart; let secondEnd;
+    const firstStart = dayjs(dayjs(firstPeriod.split(' - ')[0]).format('MM/DD'));
+    const firstEnd = dayjs(dayjs(firstPeriod.split(' - ')[1]).format('MM/DD'));
     if (secondPeriod) {
       secondStart = dayjs(dayjs(secondPeriod.split(' - ')[0]).format('MM/DD'));
       secondEnd = dayjs(dayjs(secondPeriod.split(' - ')[1]).format('MM/DD'));
     }
-
-    const plannedDate = dayjs(dayjs(plantingDate).format('MM/DD'));
+    const plannedDate = dayjs(dayjs(plannedPlantingDate).format('MM/DD'));
 
     if (!plannedDate.isBetween(firstStart, firstEnd, 'day')) {
       if (
@@ -97,8 +88,8 @@ const PlantList = ({
 
   const handleClick = async (seed) => {
     const { id: cropId, label: seedName } = seed;
-    // seed not in seedSelected
-    if (newSeedsSelected.filter((s) => s.label === seedName).length === 0) {
+    // if seed not in seedSelected, add it
+    if (seedsSelected.filter((s) => s.label === seedName).length === 0) {
       const url = `https://developapi.covercrop-selector.org/v2/crops/${cropId}?regions=${stateId}&context=seed_calc&regions=${countyId}`;
       const { data } = await fetch(url).then((res) => res.json());
       // TODO: new calculator redux here
@@ -117,6 +108,7 @@ const PlantList = ({
         soilFertility: soilFertility.toLowerCase(),
       }));
     } else {
+    // if seed already in seedSelected, del it
       dispatch(removeSeedRedux(seedName));
       dispatch(removeOptionRedux(seedName));
     }
