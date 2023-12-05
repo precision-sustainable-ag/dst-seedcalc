@@ -1,6 +1,6 @@
 import {
   updateState, updateCounty, updateCountyId, updateSoilDrainage,
-  updatePlantingDate, updateAcres, checkNRCS, updateCouncil, updateSoilFertility,
+  updatePlantingDate, updateAcres, checkNRCS, updateCouncil, updateSoilFertility, updateLatlon,
 } from './index';
 
 export const setStateRedux = (state, stateId) => (dispatch) => {
@@ -37,4 +37,8 @@ export const setCouncilRedux = (council) => (dispatch) => {
 
 export const setSoilFertilityRedux = (soilFertility) => (dispatch) => {
   dispatch(updateSoilFertility({ soilFertility }));
+};
+
+export const updateLatlonRedux = (latlon) => (dispatch) => {
+  dispatch(updateLatlon({ latlon }));
 };

@@ -15,20 +15,21 @@ import { isEmptyNull, validateForms } from '../../../../shared/utils/format';
 import SiteConditionForm from './form';
 import RegionSelector from './RegionSelector';
 import MapComponent from './MapComponent';
-import { setCountyIdRedux, setSoilDrainageRedux } from '../../../../features/siteConditionSlice/actions';
+import { setCountyIdRedux } from '../../../../features/siteConditionSlice/actions';
 import '../steps.scss';
 
 const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps);
   const { siteCondition } = data.value;
-  const { counties } = data.value;
-  const { NRCS } = data.value;
+  // TODO: new redux state here
+  const newSiteCondition = useSelector((state) => state.siteCondition);
 
   // Location state
-  const stateList = data.value.states;
   const [selectedToEditSite, setSelectedToEditSite] = useState({});
-  const [step, setStep] = useState(siteCondition.locationStep);
+  const [step, setStep] = useState(1);
+  const [stateList, setStateList] = useState([]);
+  const [counties, setCounties] = useState([]);
 
   /// ///////////////////////////////////////////////////////
   //                      Redux                           //
@@ -61,7 +62,9 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
   // initially get states data
   useEffect(() => {
     if (data.value.states.length === 0) {
-      dispatch(getLocality());
+      dispatch(getLocality()).then((res) => {
+        setStateList(res.payload);
+      });
     }
   }, []);
 
@@ -77,36 +80,31 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
     }
   }, [siteCondition.county]);
 
-  // TODO: temporary solution to update new soilD redux
-  useEffect(() => {
-    dispatch(setSoilDrainageRedux(siteCondition.soilDrainage));
-  }, [siteCondition.soilDrainage]);
-
   // set favicon based on redux council value
   useEffect(() => {
     const favicon = document.getElementById('favicon');
-    if (siteCondition.council === 'MCCC') {
+    if (newSiteCondition.council === 'MCCC') {
       favicon.href = 'favicons/mccc-favicon.ico';
-    } else if (siteCondition.council === 'NECCC') {
+    } else if (newSiteCondition.council === 'NECCC') {
       favicon.href = 'favicons/neccc-favicon.ico';
-    } else if (siteCondition.council === '') {
+    } else if (newSiteCondition.council === '') {
       favicon.href = 'PSALogo.png';
     }
-  }, [siteCondition.council]);
+  }, [newSiteCondition.council]);
 
   // validate all information on this page is selected, then call getCrops api
   useEffect(() => {
-    const checkNextStep = !isEmptyNull(siteCondition.state)
-      && !isEmptyNull(siteCondition.soilDrainage)
-      && !isEmptyNull(siteCondition.acres)
-      && siteCondition.acres > 0
-      && !isEmptyNull(siteCondition.county);
+    const checkNextStep = !isEmptyNull(newSiteCondition.state)
+      && !isEmptyNull(newSiteCondition.soilDrainage)
+      && !isEmptyNull(newSiteCondition.acres)
+      && newSiteCondition.acres > 0
+      && !isEmptyNull(newSiteCondition.county);
     validateForms(checkNextStep, 0, completedStep, setCompletedStep);
     // call getCrops api to get all crops from countyId
     if (checkNextStep) {
-      dispatch(getCrops({ regionId: siteCondition.countyId }));
+      dispatch(getCrops({ regionId: newSiteCondition.countyId }));
     }
-  }, [siteCondition]);
+  }, [newSiteCondition]);
 
   /// ///////////////////////////////////////////////////////
   //                      Render                          //
@@ -117,7 +115,7 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
       <Grid item xs={12}>
         <Typography variant="h2">Tell us about your planting site</Typography>
       </Grid>
-      {/* <Grid item xs={12} sx={{ height: "1000px" }}></Grid> */}
+      {/* FIXME: this should be updated with new redux */}
       {data.loading === 'getLocality' ? (
         <Spinner />
       ) : (
@@ -126,9 +124,9 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
             <RegionSelector
               stateList={stateList}
               handleSteps={handleSteps}
-              siteCondition={siteCondition}
               handleUpdateSteps={handleUpdateSteps}
               step={step}
+              setCounties={setCounties}
             />
           ) : step === 2 ? (
             <MapComponent
@@ -146,17 +144,11 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
         </Grid>
       )}
 
-      <Grid container>
-        <SiteConditionForm
-          siteCondition={siteCondition}
-          handleSteps={handleSteps}
-          step={step}
-          handleUpdateSteps={handleUpdateSteps}
-          council={council}
-          counties={counties}
-          NRCS={NRCS}
-        />
-      </Grid>
+      <SiteConditionForm
+        handleUpdateSteps={handleUpdateSteps}
+        council={council}
+        counties={counties}
+      />
     </Grid>
   );
 };

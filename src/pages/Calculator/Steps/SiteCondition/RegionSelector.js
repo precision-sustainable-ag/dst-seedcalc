@@ -3,27 +3,30 @@ import Grid from '@mui/material/Grid';
 import { Button } from '@mui/material';
 import { RegionSelectorMap } from '@psa/dst.ui.region-selector-map';
 import PlaceIcon from '@mui/icons-material/Place';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getRegion } from '../../../../features/stepSlice/api';
 import statesLatLongDict from '../../../../shared/data/statesLatLongDict';
 import { availableStates } from '../../../../shared/data/dropdown';
 import Dropdown from '../../../../components/Dropdown';
 import DSTImport from '../../../../components/DSTImport';
 import {
-  setCouncilRedux, setCountyIdRedux, setCountyRedux, setSoilDrainageRedux, setStateRedux,
+  checkNRCSRedux, setCouncilRedux, setCountyIdRedux, setCountyRedux,
+  setSoilDrainageRedux, setSoilFertilityRedux, setStateRedux, updateLatlonRedux,
 } from '../../../../features/siteConditionSlice/actions';
 import '../steps.scss';
 
 const RegionSelector = ({
   stateList,
   handleSteps,
-  siteCondition,
   handleUpdateSteps,
   step,
+  setCounties,
 }) => {
   const [isImported, setIsImported] = useState(false);
   const [mapState, setMapState] = useState({});
   const [selectedState, setSelectedState] = useState({});
+
+  const newSiteCondition = useSelector((state) => state.siteCondition);
 
   const dispatch = useDispatch();
 
@@ -46,7 +49,12 @@ const RegionSelector = ({
     if (isImported) return;
     setIsImported(false);
     // Retrieve region
-    dispatch(getRegion({ stateId: selectedState.id }));
+    dispatch(getRegion({ stateId: selectedState.id })).then((res) => {
+      // set counties/regions
+      const council = selectedState.parents[0].shorthand;
+      if (council === 'MCCC') setCounties(res.payload.data.kids.Counties);
+      else if (council === 'NECCC') setCounties(res.payload.data.kids.Zones);
+    });
 
     // Clear all the rest forms value
     handleUpdateSteps('county', 'siteCondition', '');
@@ -56,6 +64,8 @@ const RegionSelector = ({
     dispatch(setCountyRedux(''));
     dispatch(setCountyIdRedux(''));
     dispatch(setSoilDrainageRedux(''));
+    dispatch(setSoilFertilityRedux(''));
+    dispatch(checkNRCSRedux(false));
 
     // Clear out all seeds selected in Redux
     handleUpdateSteps('seedsSelected', 'speciesSelection', []);
@@ -78,6 +88,7 @@ const RegionSelector = ({
     );
     handleUpdateSteps('stateSelected', 'siteCondition', selectedState);
     // TODO: new site redux here
+    dispatch(updateLatlonRedux(statesLatLongDict[label]));
     dispatch(setStateRedux(label, selectedState.id));
     dispatch(setCouncilRedux(selectedState.parents[0].shorthand));
   };
@@ -102,7 +113,7 @@ const RegionSelector = ({
   useEffect(() => {
     if (
       Object.keys(selectedState).length !== 0
-      && selectedState.label !== siteCondition.state
+      && selectedState.label !== newSiteCondition.state
     ) {
       updateStateRedux();
     }
@@ -142,7 +153,7 @@ const RegionSelector = ({
       <Grid xs={12} md={12} item>
         <RegionSelectorMap
           selectorFunction={setMapState}
-          selectedState={siteCondition.stateSelected.label || ''}
+          selectedState={newSiteCondition.state || ''}
           availableStates={availableStates}
           initWidth="100%"
           initHeight="360px"

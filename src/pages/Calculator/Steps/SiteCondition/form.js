@@ -16,23 +16,23 @@ import { soilDrainage, soilFertility } from '../../../../shared/data/dropdown';
 import { getCrops } from '../../../../features/stepSlice/api';
 import '../steps.scss';
 import {
+  checkNRCSRedux,
   setAcresRedux, setCountyRedux, setPlantingDateRedux, setSoilDrainageRedux, setSoilFertilityRedux,
 } from '../../../../features/siteConditionSlice/actions';
 
 const SiteConditionForm = ({
-  siteCondition,
   handleUpdateSteps,
   council,
   counties,
-  NRCS,
 }) => {
-  const [checked, setChecked] = useState(NRCS.enabled);
+  const [checked, setChecked] = useState(false);
   const dispatch = useDispatch();
   const newSiteCondition = useSelector((state) => state.siteCondition);
 
   const handleSwitch = () => {
     setChecked(!checked);
     handleUpdateSteps('enabled', 'NRCS', !checked);
+    dispatch(checkNRCSRedux(checked));
   };
 
   const handleRegion = (region) => {
@@ -53,7 +53,7 @@ const SiteConditionForm = ({
     <>
       <Grid item xs={12} md={6} p="10px">
         <Dropdown
-          value={siteCondition.county}
+          value={newSiteCondition.county}
           label={
             council === 'MCCC' ? 'County: ' : 'USDA Plant Hardiness Zone: '
           }
@@ -65,7 +65,7 @@ const SiteConditionForm = ({
 
       <Grid item xs={12} md={6} p="10px">
         <Dropdown
-          value={siteCondition.soilDrainage}
+          value={newSiteCondition.soilDrainage}
           label="Soil Drainage: "
           handleChange={(e) => {
             handleUpdateSteps('soilDrainage', 'siteCondition', e.target.value);
@@ -80,7 +80,7 @@ const SiteConditionForm = ({
       <Grid item xs={12} md={6} p="10px">
         <DatePicker
           label="Planned Planting Date: "
-          value={siteCondition.plannedPlantingDate}
+          value={newSiteCondition.plannedPlantingDate}
           handleChange={(e) => {
             const formattedDate = dayjs(e).format('MM/DD/YYYY');
             handleUpdateSteps(
@@ -96,7 +96,7 @@ const SiteConditionForm = ({
 
       <Grid item xs={12} md={6} p="10px">
         <NumberTextField
-          value={siteCondition.acres}
+          value={newSiteCondition.acres}
           label="Acres"
           disabled={false}
           handleChange={(e) => {

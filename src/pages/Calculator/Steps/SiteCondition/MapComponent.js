@@ -3,10 +3,11 @@ import Grid from '@mui/material/Grid';
 import { Map } from '@psa/dst.ui.map';
 import { Button } from '@mui/material';
 import PlaceIcon from '@mui/icons-material/Place';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getZoneData, getSSURGOData } from '../../../../features/stepSlice/api';
+import { setCountyRedux, setSoilDrainageRedux, updateLatlonRedux } from '../../../../features/siteConditionSlice/actions';
 import '../steps.scss';
-import { setCountyRedux } from '../../../../features/siteConditionSlice/actions';
+import { soilDrainage } from '../../../../shared/data/dropdown';
 
 const MapComponent = ({
   handleSteps,
@@ -18,18 +19,12 @@ const MapComponent = ({
   counties,
 }) => {
   const dispatch = useDispatch();
+  const newSiteCondition = useSelector((state) => state.siteCondition);
 
   useEffect(() => {
     const {
       latitude, longitude, address, zipCode, county,
     } = selectedToEditSite;
-
-    if (
-      latitude === siteCondition.latitude
-      && longitude === siteCondition.longitude
-    ) {
-      return;
-    }
 
     if (Object.keys(selectedToEditSite).length > 0) {
       if (siteCondition.council === 'MCCC') {
@@ -44,13 +39,27 @@ const MapComponent = ({
       handleUpdateSteps('longitude', 'siteCondition', longitude);
       handleUpdateSteps('address', 'siteCondition', address);
       handleUpdateSteps('zipCode', 'siteCondition', zipCode);
-      dispatch(getZoneData({ zip: zipCode }));
+      // TODO: new site redux here
+      dispatch(updateLatlonRedux([latitude, longitude]));
+      dispatch(getZoneData({ zip: zipCode })).then((res) => {
+        // update zone data for NECCC
+        if (newSiteCondition.council === 'NECCC') {
+          dispatch(setCountyRedux(`Zone ${res.payload.replace(/[^0-9]/g, '')}`));
+        }
+      });
       dispatch(
         getSSURGOData({
           lat: latitude,
           lon: longitude,
         }),
-      );
+      ).then((res) => {
+        // update soil drainage redux
+        const value = res.payload.Table[1][2] ?? '';
+        const soilDrainageValue = soilDrainage.filter(
+          (slice) => slice.label.toLowerCase() === value.toLowerCase(),
+        )[0]?.label ?? '';
+        dispatch(setSoilDrainageRedux(soilDrainageValue));
+      });
     }
   }, [selectedToEditSite]);
 
@@ -72,8 +81,8 @@ const MapComponent = ({
           initWidth="100%"
           padding="20px"
           initHeight="360px"
-          initLat={siteCondition.latitude}
-          initLon={siteCondition.longitude}
+          initLat={newSiteCondition.latlon[0]}
+          initLon={newSiteCondition.latlon[1]}
           initStartZoom={12}
           initMinZoom={4}
           initMaxZoom={18}

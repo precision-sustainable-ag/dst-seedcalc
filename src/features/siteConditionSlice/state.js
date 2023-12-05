@@ -7,10 +7,11 @@ const initialState = {
   countyId: '',
   soilDrainage: '',
   plannedPlantingDate: dayjs(new Date()).format('MM/DD/YYYY'),
-  acres: '',
+  acres: 0,
   checkNRCSStandards: false,
   council: '',
   soilFertility: '',
+  latlon: [],
 };
 
 export default initialState;
