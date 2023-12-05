@@ -14,12 +14,14 @@ import {
   setSoilDrainageRedux, setSoilFertilityRedux, setStateRedux, updateLatlonRedux,
 } from '../../../../features/siteConditionSlice/actions';
 import '../steps.scss';
+import { getRegionNew } from '../../../../features/siteConditionSlice/api';
+import { updateDiversityRedux } from '../../../../features/calculatorSlice/actions';
+import { clearOptions, clearSeeds } from '../../../../features/calculatorSlice';
 
 const RegionSelector = ({
   stateList,
   handleSteps,
   handleUpdateSteps,
-  setCounties,
 }) => {
   const [isImported, setIsImported] = useState(false);
   const [mapState, setMapState] = useState({});
@@ -48,12 +50,8 @@ const RegionSelector = ({
     if (isImported) return;
     setIsImported(false);
     // Retrieve region
-    dispatch(getRegion({ stateId: selectedState.id })).then((res) => {
-      // set counties/regions
-      const council = selectedState.parents[0].shorthand;
-      if (council === 'MCCC') setCounties(res.payload.data.kids.Counties);
-      else if (council === 'NECCC') setCounties(res.payload.data.kids.Zones);
-    });
+    dispatch(getRegion({ stateId: selectedState.id }));
+    dispatch(getRegionNew({ stateId: selectedState.id }));
 
     // Clear all the rest forms value
     handleUpdateSteps('county', 'siteCondition', '');
@@ -69,6 +67,10 @@ const RegionSelector = ({
     // Clear out all seeds selected in Redux
     handleUpdateSteps('seedsSelected', 'speciesSelection', []);
     handleUpdateSteps('diversitySelected', 'speciesSelection', []);
+    // TODO: new site redux here
+    dispatch(clearSeeds());
+    dispatch(updateDiversityRedux([]));
+    dispatch(clearOptions());
 
     // Update siteCondition Redux
     const { label } = selectedState;

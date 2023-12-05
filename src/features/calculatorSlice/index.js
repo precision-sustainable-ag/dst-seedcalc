@@ -32,6 +32,8 @@ const calculatorSlice = createSlice({
       const { diversity } = payload;
       return { ...state, diversitySelected: diversity };
     },
+    clearSeeds: (state) => ({ ...state, seedsSelected: [] }),
+    clearOptions: (state) => ({ ...state, options: {} }),
   },
   extraReducers: (builder) => {
     builder
@@ -53,7 +55,7 @@ const calculatorSlice = createSlice({
 });
 
 export const {
-  addSeed, removeSeed, setOption, removeOption, updateDiversity,
+  addSeed, removeSeed, setOption, removeOption, updateDiversity, clearSeeds, clearOptions,
 } = calculatorSlice.actions;
 
 export default calculatorSlice;

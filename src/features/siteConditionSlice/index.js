@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import initialState from './state';
-// import { getZoneData } from './api';
+import { getLocalityNew, getRegionNew } from './api';
 
 const siteConditionSlice = createSlice({
   name: 'siteCondition',
@@ -47,25 +47,35 @@ const siteConditionSlice = createSlice({
       return { ...state, latlon };
     },
   },
-  // extraReducers: (builder) => {
-  //   builder
-  //     .addCase([getZoneData.pending], (state) => {
-  //       state.loading = true;
-  //       state.error = false;
-  //     })
-  //     .addCase([getZoneData.fulfilled], (state, { payload }) => {
-  //       state.loading = false;
-  //       // only set Zone if not MCCC state.
-  //       if (state.value.siteCondition.state !== 'Indiana') {
-  //         state.value.siteCondition.county = `Zone ${payload.replace(/[^0-9]/g, '')}`;
-  //       }
-  //       state.error = false;
-  //     })
-  //     .addCase([getZoneData.rejected], (state) => {
-  //       state.loading = false;
-  //       state.error = true;
-  //     });
-  // },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getLocalityNew.pending, (state) => {
+        state.loading = 'getLocality';
+        state.error = false;
+      })
+      .addCase(getLocalityNew.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.states = payload;
+        state.error = false;
+      })
+      .addCase(getLocalityNew.rejected, (state) => {
+        state.loading = false;
+        state.error = true;
+      })
+      .addCase(getRegionNew.pending, (state) => {
+        state.loading = 'getRegion';
+        state.error = false;
+      })
+      .addCase(getRegionNew.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.counties = payload.data.kids.Zones ?? payload.data.kids.Counties ?? [];
+        state.error = false;
+      })
+      .addCase(getRegionNew.rejected, (state) => {
+        state.loading = false;
+        state.error = true;
+      });
+  },
 });
 
 export const {

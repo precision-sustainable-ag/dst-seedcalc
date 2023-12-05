@@ -58,6 +58,8 @@ const PlantList = ({
 
   const checkPlantingDate = (seed) => {
     if (council === 'MCCC') return '';
+    // FIXME: temp workaround, need check what plant have this problem
+    if (!seed['Planting and Growth Windows']['Reliable Establishment']) return '';
     const [firstPeriod, secondPeriod] = seed['Planting and Growth Windows']['Reliable Establishment'];
     let secondStart; let secondEnd;
     const firstStart = dayjs(dayjs(firstPeriod.split(' - ')[0]).format('MM/DD'));

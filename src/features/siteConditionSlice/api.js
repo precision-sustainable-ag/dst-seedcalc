@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 // TODO: consume the return value in component, maybe move all thunks into a single slice with dataloading
-export const getLocality = createAsyncThunk(
-  'steps/getLocality',
+export const getLocalityNew = createAsyncThunk(
+  'siteCondition/getLocality',
   async () => {
     const url = 'https://developapi.covercrop-selector.org/v2/regions?locality=state&context=seed_calc';
     const res = await fetch(url).then((data) => data.json());
@@ -10,8 +10,8 @@ export const getLocality = createAsyncThunk(
   },
 );
 
-export const getRegion = createAsyncThunk(
-  'steps/getRegion',
+export const getRegionNew = createAsyncThunk(
+  'siteCondition/getRegion',
   async ({ stateId }) => {
     const url = `https://developapi.covercrop-selector.org/v2/regions/${stateId}`;
     const res = await fetch(url).then((data) => data.json());
@@ -20,7 +20,7 @@ export const getRegion = createAsyncThunk(
 );
 
 export const getSSURGOData = createAsyncThunk(
-  'steps/getSSURGOData',
+  'siteCondition/getSSURGOData',
   async ({ lat, lon }) => {
     // eslint-disable-next-line max-len
     const soilDataQuery = `SELECT mu.mukey AS MUKEY, mu.muname AS mapUnitName, muag.drclassdcd AS drainageClass, muag.flodfreqdcd AS floodingFrequency, mp.mupolygonkey as MPKEY
@@ -51,7 +51,7 @@ export const getSSURGOData = createAsyncThunk(
 );
 
 export const getZoneData = createAsyncThunk(
-  'steps/getZoneData',
+  'siteCondition/getZoneData',
   async ({ zip }) => {
     const url = `https://phzmapi.org/${zip}.json`;
     const res = await fetch(url).then((data) => data.json());

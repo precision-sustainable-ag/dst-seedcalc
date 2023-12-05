@@ -18,6 +18,7 @@ import MapComponent from './MapComponent';
 import { setCountyIdRedux } from '../../../../features/siteConditionSlice/actions';
 import '../steps.scss';
 import { getCropsNew } from '../../../../features/calculatorSlice/api';
+import { getLocalityNew } from '../../../../features/siteConditionSlice/api';
 
 const SiteCondition = ({ completedStep, setCompletedStep }) => {
   const dispatch = useDispatch();
@@ -29,8 +30,8 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
   // Location state
   const [selectedToEditSite, setSelectedToEditSite] = useState({});
   const [step, setStep] = useState(1);
-  const [stateList, setStateList] = useState([]);
-  const [counties, setCounties] = useState([]);
+  const stateList = useSelector((state) => state.siteCondition.states);
+  const { counties } = useSelector((state) => state.siteCondition);
 
   /// ///////////////////////////////////////////////////////
   //                      Redux                           //
@@ -62,9 +63,8 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
 
   // initially get states data
   useEffect(() => {
-    dispatch(getLocality()).then((res) => {
-      setStateList(res.payload);
-    });
+    dispatch(getLocality());
+    dispatch(getLocalityNew());
   }, []);
 
   // Ensure that county id is updated to the current county
@@ -125,7 +125,6 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
               stateList={stateList}
               handleSteps={handleSteps}
               handleUpdateSteps={handleUpdateSteps}
-              setCounties={setCounties}
             />
           ) : step === 2 ? (
             <MapComponent

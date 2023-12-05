@@ -14,6 +14,8 @@ const initialState = {
   latlon: [],
   loading: false,
   error: false,
+  states: [],
+  counties: [],
 };
 
 export default initialState;
