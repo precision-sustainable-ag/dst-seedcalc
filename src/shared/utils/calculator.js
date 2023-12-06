@@ -249,10 +249,8 @@ const reviewMixNECCC = (seed, calculator, options = {}) => {
   );
   console.log('2.Seeding Rate * Planting Method = Seeding Rate');
   console.log(seedingRate, ' * ', options.plantingMethodModifier, ' = ', seedingRateAfterPlantingMethodModifier);
-  console.log('3.Seeding Rate + Seeding Rate * Management Impact = Seeding Rate');
+  console.log('3. Seeding Rate * Management Impact = Seeding Rate');
   console.log(
-    seedingRateAfterPlantingMethodModifier,
-    ' + ',
     seedingRateAfterPlantingMethodModifier,
     ' * ',
     options.managementImpactOnMix,

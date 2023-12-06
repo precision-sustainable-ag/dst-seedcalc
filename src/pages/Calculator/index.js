@@ -86,10 +86,7 @@ const Calculator = () => {
         );
       case 'Review Mix':
         return (
-          <ReviewMix
-            council={type}
-            calculator={calculator}
-          />
+          <ReviewMix calculator={calculator} />
         );
       case 'Confirm Plan':
         return (

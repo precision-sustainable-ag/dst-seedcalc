@@ -114,7 +114,7 @@ const MixSeedingRate = ({ calculator }) => {
   /// ///////////////////////////////////////////////////////
 
   const updateManagementImpactOnMix = () => {
-    const managementImpactOnMix = parseFloat((adjustedMixSeedingRate / mixSeedingRate - 1).toFixed(2));
+    const managementImpactOnMix = parseFloat((adjustedMixSeedingRate / mixSeedingRate).toFixed(2));
     // TODO: new calculator redux here, but the calculation method should be investigated
     seedsSelected.forEach((seed) => {
       const prevOptions = options[seed.label];
@@ -133,6 +133,8 @@ const MixSeedingRate = ({ calculator }) => {
     if (!mixSeedingRate) {
       seedsSelected.forEach((seed) => {
         sum += calculator.seedingRate(seed, options[seed.label]);
+        // initially set managementImpact to 1
+        dispatch(setOptionRedux(seed.label, { ...options[seed.label], managementImpactOnMix: 1 }));
       });
       dispatch(setMixSeedingRateRedux(Math.round(sum)));
     }
@@ -157,10 +159,6 @@ const MixSeedingRate = ({ calculator }) => {
         label: 'High Limit',
       },
     ]);
-    // initially set management impact to 0
-    // if this value has been set before, do not set again
-    if (options[seedsSelected[0].label].managementImpactOnMix) return;
-    updateManagementImpactOnMix();
   }, []);
 
   /// ///////////////////////////////////////////////////////

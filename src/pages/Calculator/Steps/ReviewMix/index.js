@@ -65,16 +65,15 @@ const defaultPieChartData = {
 };
 
 // eslint-disable-next-line no-unused-vars
-const ReviewMix = ({ council, calculator }) => {
+const ReviewMix = ({ calculator }) => {
   // useSelector for crops & mixRaxio reducer
   const dispatch = useDispatch();
   const data = useSelector((state) => state.steps.value);
-  const { siteCondition } = data;
-  const { seedingMethod } = data;
-  const { selectedSpecies, seedsSelected } = data.speciesSelection;
+  const { seedsSelected } = data.speciesSelection;
 
+  const { council } = useSelector((state) => state.siteCondition);
+  const { sideBarSelection, options } = useSelector((state) => state.calculator);
   const mixRedux = useSelector((state) => state.calculator.seedsSelected);
-  const options = useSelector((state) => state.calculator.options);
 
   const [calculatorResult, setCalculatorResult] = useState(
     mixRedux.reduce((res, seed) => {
@@ -82,11 +81,9 @@ const ReviewMix = ({ council, calculator }) => {
       return res;
     }, {}),
   );
-  // console.log('calculatorResult', calculatorResult);
   const [prevOptions, setPrevOptions] = useState({});
   const [piechartData, setPieChartData] = useState(defaultPieChartData);
-  // console.log('piechartData', piechartData);
-
+  console.log('pieChartData', piechartData);
   const [accordionState, setAccordionState] = useState(
     seedsSelected.reduce((res, seed) => {
       res[seed.label] = false;
@@ -163,7 +160,6 @@ const ReviewMix = ({ council, calculator }) => {
     dispatch(setOptionRedux(seed.label, { ...options[seed.label], [option]: value }));
   };
 
-  // handler for click to open accordion
   const handleExpandAccordion = (label) => {
     const open = accordionState[label];
     setAccordionState({ ...accordionState, [label]: !open });
@@ -177,11 +173,11 @@ const ReviewMix = ({ council, calculator }) => {
     // expand related accordion based on sidebar click
     setAccordionState(
       seedsSelected.reduce((res, seed) => {
-        res[seed.label] = seed.label === selectedSpecies;
+        res[seed.label] = seed.label === sideBarSelection;
         return res;
       }, {}),
     );
-  }, [selectedSpecies]);
+  }, [sideBarSelection]);
 
   useEffect(() => {
     initialDataLoad();
@@ -388,11 +384,8 @@ const ReviewMix = ({ council, calculator }) => {
                 <Grid item xs={12}>
                   {seed.showSteps && (
                   <ReviewMixSteps
-                    seedsSelected={seedsSelected}
                     council={council}
                     updateSeed={updateSeed}
-                    seedingMethod={seedingMethod}
-                    siteCondition={siteCondition}
                     seed={seed}
                     handleFormValueChange={handleFormValueChange}
                     calculatorResult={calculatorResult[seed.label]}

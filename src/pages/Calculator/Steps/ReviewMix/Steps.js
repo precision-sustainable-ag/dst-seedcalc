@@ -234,25 +234,10 @@ const ReviewMixSteps = ({
         </Grid>
         {renderStepsForm(
           'Seeding Rate in Mix',
-          'Seeding Rate in Mix',
           'Management impact on mix',
+          'Seeding Rate in Mix',
         )}
         <Grid item xs={3}>
-          <NumberTextField
-            label={matchesMd ? '' : 'Seeding Rate in Mix'}
-            disabled
-            value={step3.seedingRate}
-          />
-        </Grid>
-
-        <Grid item xs={1}>
-          <Typography className="math-icon">+</Typography>
-        </Grid>
-        <Grid item xs={1}>
-          <Typography className="math-icon">(</Typography>
-        </Grid>
-
-        <Grid item xs={2}>
           <NumberTextField
             label={matchesMd ? '' : 'Seeding Rate in Mix'}
             disabled
@@ -264,7 +249,7 @@ const ReviewMixSteps = ({
           <Typography className="math-icon">&#215;</Typography>
         </Grid>
 
-        <Grid item xs={2}>
+        <Grid item xs={3}>
           <NumberTextField
             label={matchesMd ? '' : 'Management Impact on Mix'}
             disabled
@@ -273,23 +258,15 @@ const ReviewMixSteps = ({
         </Grid>
 
         <Grid item xs={1}>
-          <Typography className="math-icon">)</Typography>
+          <Typography className="math-icon">=</Typography>
         </Grid>
 
-        <Grid item xs={1} />
-
-        <Grid container p="10px">
-          <Grid item xs={4}>
-            <Typography className="math-icon">=</Typography>
-          </Grid>
-
-          <Grid item xs={7}>
-            <NumberTextField
-              label={matchesMd ? '' : 'Seeding Rate in Mix'}
-              disabled
-              value={step3.seedingRateAfterManagementImpact}
-            />
-          </Grid>
+        <Grid item xs={3}>
+          <NumberTextField
+            label={matchesMd ? '' : 'Seeding Rate in Mix'}
+            disabled
+            value={step3.seedingRateAfterManagementImpact}
+          />
         </Grid>
 
         <Grid item xs={1} />
