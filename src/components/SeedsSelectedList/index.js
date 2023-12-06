@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateSteps } from '../../features/stepSlice';
+import { selectSidebarSeedRedux } from '../../features/calculatorSlice/actions';
 
 const SeedsSelectedList = ({ list }) => {
   // themes
@@ -28,12 +29,13 @@ const SeedsSelectedList = ({ list }) => {
     dispatch(updateSteps(newData));
   };
 
-  const selectSpecies = (species) => {
+  const selectSpecies = (seed) => {
     handleUpdateStore(
       'speciesSelection',
       'selectedSpecies',
-      selectedSpecies === species ? '' : species,
+      selectedSpecies === seed ? '' : seed,
     );
+    dispatch(selectSidebarSeedRedux(selectedSpecies === seed ? '' : seed));
   };
 
   return (

@@ -10,10 +10,6 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {
-  calculateAllMixRatioValues,
-} from '../../../../shared/utils/calculate';
-import { updateSteps } from '../../../../features/stepSlice';
 import MixRatioSteps from './form';
 import {
   DSTPieChart,
@@ -24,12 +20,11 @@ import {
   SeedDataChip,
   SeedingRateChip,
 } from '../../../../components/SeedingRateCard';
-
-import '../steps.scss';
 import {
   adjustProportions, adjustProportionsNECCC, createCalculator, createUserInput, calculatePieChartData,
 } from '../../../../shared/utils/calculator';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
+import '../steps.scss';
 
 const defaultResultMCCC = {
   step1: { defaultSingleSpeciesSeedingRatePLS: 0, percentOfRate: 0, seedingRate: 0 },
@@ -52,37 +47,50 @@ const defaultPieChartData = {
   seedsPerAcreArray: [],
 };
 
-const MixRatio = ({ council, calculator, setCalculator }) => {
+const MixRatio = ({ calculator, setCalculator }) => {
   const [initCalculator, setInitCalculator] = useState(false);
   const [prevOptions, setPrevOptions] = useState({});
+  const [piechartData, setPieChartData] = useState(defaultPieChartData);
 
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.steps.value);
-  const { selectedSpecies, seedsSelected } = data.speciesSelection;
-
-  const { soilDrainage, plantingDate, acres } = useSelector((state) => state.siteCondition);
-  const mixRedux = useSelector((state) => state.calculator.seedsSelected);
+  const { seedsSelected, sideBarSelection } = useSelector((state) => state.calculator);
+  const {
+    council, soilDrainage, plantingDate, acres,
+  } = useSelector((state) => state.siteCondition);
   const options = useSelector((state) => state.calculator.options);
 
   const [calculatorResult, setCalculatorResult] = useState(
-    mixRedux.reduce((res, seed) => {
+    seedsSelected.reduce((res, seed) => {
       res[seed.label] = council === 'MCCC' ? defaultResultMCCC : defaultResultNECCC;
       return res;
     }, {}),
   );
-  // console.log('calculatorResult', calculatorResult);
-  const [piechartData, setPieChartData] = useState(defaultPieChartData);
+
+  // create an key/value pair for the seed and related accordion expanded state
+  const [accordionState, setAccordionState] = useState(
+    seedsSelected.reduce((res, seed) => {
+      res[seed.label] = false;
+      return res;
+    }, {}),
+  );
+
+  const [showSteps, setShowSteps] = useState(
+    seedsSelected.reduce((res, seed) => {
+      res[seed.label] = false;
+      return res;
+    }, {}),
+  );
 
   // initialize calculator, set initial options
   useEffect(() => {
     const userInput = createUserInput(soilDrainage, plantingDate, acres);
-    const seedingRateCalculator = createCalculator(mixRedux, council, userInput);
+    const seedingRateCalculator = createCalculator(seedsSelected, council, userInput);
     setCalculator(seedingRateCalculator);
-    mixRedux.forEach((seed) => {
+    seedsSelected.forEach((seed) => {
       // FIXME: updated percentOfRate here, this is a temporary workaround for MCCC
       const newOption = {
         ...options[seed.label],
-        percentOfRate: council === 'MCCC' ? 1 / mixRedux.length : null,
+        percentOfRate: council === 'MCCC' ? 1 / seedsSelected.length : null,
       };
       dispatch(setOptionRedux(seed.label, newOption));
     });
@@ -92,7 +100,7 @@ const MixRatio = ({ council, calculator, setCalculator }) => {
   // run adjust proportions on options change
   useEffect(() => {
     if (!initCalculator) return;
-    mixRedux.forEach((seed) => {
+    seedsSelected.forEach((seed) => {
       if (options[seed.label] !== prevOptions[seed.label]) {
         let result;
         if (council === 'MCCC') result = adjustProportions(seed, calculator, options[seed.label]);
@@ -105,55 +113,28 @@ const MixRatio = ({ council, calculator, setCalculator }) => {
       seedingRateArray,
       plantsPerAcreArray,
       seedsPerAcreArray,
-    } = calculatePieChartData(mixRedux, calculator, options);
+    } = calculatePieChartData(seedsSelected, calculator, options);
     setPieChartData({ seedingRateArray, plantsPerAcreArray, seedsPerAcreArray });
     setPrevOptions(options);
   }, [options, initCalculator]);
 
-  // create an key/value pair for the seed and related accordion expanded state
-  const [accordionState, setAccordionState] = useState(
-    seedsSelected.reduce((res, seed) => {
-      res[seed.label] = false;
-      return res;
-    }, {}),
-  );
+  // expand related accordion based on sidebar click
+  useEffect(() => {
+    setAccordionState(
+      seedsSelected.reduce((res, seed) => {
+        res[seed.label] = seed.label === sideBarSelection;
+        return res;
+      }, {}),
+    );
+  }, [sideBarSelection]);
 
   /// ///////////////////////////////////////////////////////
   //                      Redux                           //
   /// ///////////////////////////////////////////////////////
 
-  const handleUpdateSteps = (key, val) => {
-    const newData = {
-      type: 'speciesSelection',
-      key,
-      value: val,
-    };
-    dispatch(updateSteps(newData));
-  };
-
-  const updateSeed = (val, key, seed) => {
-    const index = seedsSelected.findIndex((s) => s.id === seed.id);
-    const seeds = JSON.parse(JSON.stringify(seedsSelected));
-    seeds[index][key] = val;
-    handleUpdateSteps('seedsSelected', seeds);
-
-    // create new copy of recently updated Redux state, calculate & update all seed's step data.
-    const newData = [...seeds];
-    newData[index] = calculateAllMixRatioValues(newData[index], data, council);
-    handleUpdateSteps('seedsSelected', newData);
-  };
-
   // function to handle form value change, update options
   const handleFormValueChange = (seed, option, value) => {
     dispatch(setOptionRedux(seed.label, { ...options[seed.label], [option]: value }));
-  };
-
-  const showStep = (val, key, seed) => {
-    // find index of seed, parse a copy, update proper values, & send to Redux
-    const index = seedsSelected.findIndex((s) => s.id === seed.id);
-    const seeds = JSON.parse(JSON.stringify(seedsSelected));
-    seeds[index][key] = val;
-    handleUpdateSteps('seedsSelected', seeds);
   };
 
   // handler for click to open accordion
@@ -161,16 +142,6 @@ const MixRatio = ({ council, calculator, setCalculator }) => {
     const open = accordionState[label];
     setAccordionState({ ...accordionState, [label]: !open });
   };
-
-  useEffect(() => {
-    // expand related accordion based on sidebar click
-    setAccordionState(
-      seedsSelected.reduce((res, seed) => {
-        res[seed.label] = seed.label === selectedSpecies;
-        return res;
-      }, {}),
-    );
-  }, [selectedSpecies]);
 
   /// ///////////////////////////////////////////////////////
   //                      Render                          //
@@ -249,21 +220,19 @@ const MixRatio = ({ council, calculator, setCalculator }) => {
                 <Grid item xs={12} pt="1rem">
                   <Button
                     onClick={() => {
-                      showStep(!seed.showSteps, 'showSteps', seed);
+                      setShowSteps({ ...showSteps, [seed.label]: !showSteps[seed.label] });
                     }}
                     variant="outlined"
                   >
-                    {seed.showSteps ? 'Close Steps' : 'Change My Rate'}
+                    {showSteps[seed.label] ? 'Close Steps' : 'Change My Rate'}
                   </Button>
                 </Grid>
 
                 <Grid item xs={12}>
-                  {seed.showSteps && (
+                  {showSteps[seed.label] && (
                   <MixRatioSteps
                     seed={seed}
                     council={council}
-                    seedsSelected={seedsSelected}
-                    updateSeed={updateSeed}
                     handleFormValueChange={handleFormValueChange}
                     calculatorResult={calculatorResult[seed.label]}
                   />

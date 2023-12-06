@@ -32,8 +32,13 @@ const calculatorSlice = createSlice({
       const { diversity } = payload;
       return { ...state, diversitySelected: diversity };
     },
+    // TODO: create an action for reinitialize calculator and siteCondition
     clearSeeds: (state) => ({ ...state, seedsSelected: [] }),
     clearOptions: (state) => ({ ...state, options: {} }),
+    selectSidebarSeed: (state, { payload }) => {
+      const { seed } = payload;
+      return { ...state, sideBarSelection: seed };
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -55,7 +60,8 @@ const calculatorSlice = createSlice({
 });
 
 export const {
-  addSeed, removeSeed, setOption, removeOption, updateDiversity, clearSeeds, clearOptions,
+  addSeed, removeSeed, setOption, removeOption, updateDiversity,
+  clearSeeds, clearOptions, selectSidebarSeed,
 } = calculatorSlice.actions;
 
 export default calculatorSlice;

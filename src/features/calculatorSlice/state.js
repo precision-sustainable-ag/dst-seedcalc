@@ -5,6 +5,7 @@ const initialState = {
   crops: [],
   loading: false,
   error: false,
+  sideBarSelection: '',
 };
 
 export default initialState;

@@ -68,7 +68,6 @@ const Calculator = () => {
       case 'Mix Ratios':
         return (
           <MixRatio
-            council={type}
             calculator={calculator}
             setCalculator={setCalculator}
           />
