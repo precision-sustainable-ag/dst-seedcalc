@@ -72,15 +72,13 @@ const Calculator = () => {
             setCalculator={setCalculator}
           />
         );
-      case 'Mix Seeding Rate':
-        return (
-          <MixSeedingRate />
-        );
       case 'Seeding Method':
         return (
-          <SeedingMethod
-            council={type}
-          />
+          <SeedingMethod />
+        );
+      case 'Mix Seeding Rate':
+        return (
+          <MixSeedingRate calculator={calculator} />
         );
       case 'Seed Tag Info':
         return (

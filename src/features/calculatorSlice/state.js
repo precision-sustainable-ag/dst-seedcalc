@@ -6,6 +6,7 @@ const initialState = {
   loading: false,
   error: false,
   sideBarSelection: '',
+  mixSeedingRate: null,
 };
 
 export default initialState;

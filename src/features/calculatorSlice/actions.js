@@ -1,5 +1,5 @@
 import {
-  addSeed, removeSeed, setOption, removeOption, updateDiversity, selectSidebarSeed,
+  addSeed, removeSeed, setOption, removeOption, updateDiversity, selectSidebarSeed, setMixSeedingRate,
 } from './index';
 
 export const addSeedRedux = (seed) => (dispatch) => dispatch(addSeed({ seed }));
@@ -13,3 +13,5 @@ export const removeOptionRedux = (seedLabel) => (dispatch) => dispatch(removeOpt
 export const updateDiversityRedux = (diversity) => (dispatch) => dispatch(updateDiversity({ diversity }));
 
 export const selectSidebarSeedRedux = (seed) => (dispatch) => dispatch(selectSidebarSeed({ seed }));
+
+export const setMixSeedingRateRedux = (mixSeedingRate) => (dispatch) => dispatch(setMixSeedingRate({ mixSeedingRate }));

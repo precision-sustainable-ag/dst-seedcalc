@@ -11,7 +11,6 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import styled from '@emotion/styled';
-import { updateSteps } from '../../../../features/stepSlice';
 import { seedingMethods, seedingMethodsNECCC } from '../../../../shared/data/dropdown';
 import Dropdown from '../../../../components/Dropdown';
 import '../steps.scss';
@@ -54,16 +53,13 @@ const RightGrid = styled(Grid)(() => ({
   },
 }));
 
-const SeedingMethod = ({ council }) => {
+const SeedingMethod = () => {
   const [methods, setMethods] = useState({});
   // useSelector for crops reducer data
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.steps.value);
-  const { seedingMethod, speciesSelection } = data;
-  const { selectedSpecies, seedsSelected } = speciesSelection;
 
-  const mixRedux = useSelector((state) => state.calculator.seedsSelected);
-  const options = useSelector((state) => state.calculator.options);
+  const { council } = useSelector((state) => state.siteCondition);
+  const { seedsSelected, sideBarSelection, options } = useSelector((state) => state.calculator);
 
   // create an key/value pair for the seed and related accordion expanded state
   const [accordionState, setAccordionState] = useState(
@@ -74,25 +70,76 @@ const SeedingMethod = ({ council }) => {
   );
 
   /// ///////////////////////////////////////////////////////
-  //                      Redux                           //
-  /// ///////////////////////////////////////////////////////
-
-  const handleUpdateSteps = (key, val) => {
-    const newData = {
-      type: 'seedingMethod',
-      key,
-      value: val,
-    };
-    dispatch(updateSteps(newData));
-  };
-
-  /// ///////////////////////////////////////////////////////
   //                   State Logic                        //
   /// ///////////////////////////////////////////////////////
 
-  const handleSeedingMethod = (e) => {
-    handleUpdateSteps('type', e.target.value);
+  // handler for click to open accordion
+  const handleExpandAccordion = (label) => {
+    const open = accordionState[label];
+    setAccordionState({ ...accordionState, [label]: !open });
   };
+
+  // function to handle dropdown and update seed options in redux
+  const updateOptions = (method) => {
+    if (method === 'Broadcast(With Cultivation)') method = 'BroadcastwithCultivation';
+    else if (method === 'Broadcast(With No Cultivation)') method = 'BroadcastwithoutCultivation';
+    seedsSelected.forEach((seed) => {
+      const prevOption = options[seed.label];
+      const plantingMethod = method;
+      const plantingMethodModifier = methods[seed.label][method];
+      dispatch(setOptionRedux(seed.label, { ...prevOption, plantingMethod, plantingMethodModifier }));
+    });
+  };
+
+  /// ///////////////////////////////////////////////////////
+  //                    useEffect                            //
+  /// ///////////////////////////////////////////////////////
+
+  // initially set all seeding methods
+  // TODO: maybe build this into redux instead of local state
+  //       OR init all the data in Species Selection or Mix Ratio page
+  useEffect(() => {
+    seedsSelected.forEach((seed) => {
+      const coefficients = seed.attributes.Coefficients;
+      const plantingMethods = council === 'MCCC' ? {
+        Drilled: 1,
+        Precision: parseFloat(coefficients['Precision Coefficient']?.values[0]) || null,
+        Broadcast: parseFloat(coefficients['Broadcast Coefficient']?.values[0]) || null,
+        Aerial: parseFloat(coefficients['Aerial Coefficient']?.values[0]) || null,
+      } : {
+        // TODO: drilled need to investigate, not in seed api
+        Drilled: 1,
+        BroadcastwithCultivation:
+        parseFloat(coefficients['Broadcast with Cultivation Coefficient']?.values[0]) || null,
+        BroadcastwithoutCultivation:
+        parseFloat(coefficients['Broadcast without Cultivation Coefficient']?.values[0]) || null,
+        Aerial: parseFloat(coefficients['Aerial Coefficient']?.values[0]) || null,
+      };
+      setMethods((prev) => ({ ...prev, [seed.label]: plantingMethods }));
+
+      // initial set planting method to drilled
+      if (options[seed.label].plantingMethod
+          && options[seed.label].plantingMethodModifier) return;
+      dispatch(setOptionRedux(
+        seed.label,
+        { ...options[seed.label], plantingMethod: 'Drilled', plantingMethodModifier: 1 },
+      ));
+    });
+  }, []);
+
+  useEffect(() => {
+    // expand related accordion based on sidebar click
+    setAccordionState(
+      seedsSelected.reduce((res, seed) => {
+        res[seed.label] = seed.label === sideBarSelection;
+        return res;
+      }, {}),
+    );
+  }, [sideBarSelection]);
+
+  /// ///////////////////////////////////////////////////////
+  //                    Render                            //
+  /// ///////////////////////////////////////////////////////
 
   const renderMethod = (type, val, comment) => (
     <>
@@ -123,70 +170,6 @@ const SeedingMethod = ({ council }) => {
     </>
   );
 
-  // handler for click to open accordion
-  const handleExpandAccordion = (label) => {
-    const open = accordionState[label];
-    setAccordionState({ ...accordionState, [label]: !open });
-  };
-
-  useEffect(() => {
-    // expand related accordion based on sidebar click
-    setAccordionState(
-      seedsSelected.reduce((res, seed) => {
-        res[seed.label] = seed.label === selectedSpecies;
-        return res;
-      }, {}),
-    );
-  }, [selectedSpecies]);
-
-  // initially set all seeding methods
-  // TODO: maybe build this into redux instead of local state
-  //       OR init all the data in Species Selection or Mix Ratio page
-  useEffect(() => {
-    mixRedux.forEach((seed) => {
-      const coefficients = seed.attributes.Coefficients;
-      const plantingMethods = council === 'MCCC' ? {
-        Drilled: 1,
-        Precision: parseFloat(coefficients['Precision Coefficient']?.values[0]) || null,
-        Broadcast: parseFloat(coefficients['Broadcast Coefficient']?.values[0]) || null,
-        Aerial: parseFloat(coefficients['Aerial Coefficient']?.values[0]) || null,
-      } : {
-        // TODO: drilled need to investigate, not in seed api
-        Drilled: 1,
-        BroadcastwithCultivation:
-        parseFloat(coefficients['Broadcast with Cultivation Coefficient']?.values[0]) || null,
-        BroadcastwithoutCultivation:
-        parseFloat(coefficients['Broadcast without Cultivation Coefficient']?.values[0]) || null,
-        Aerial: parseFloat(coefficients['Aerial Coefficient']?.values[0]) || null,
-      };
-      setMethods((prev) => ({ ...prev, [seed.label]: plantingMethods }));
-
-      // initial set planting method to drilled
-      if (options[seed.label].plantingMethod
-          && options[seed.label].plantingMethodModifier) return;
-      dispatch(setOptionRedux(
-        seed.label,
-        { ...options[seed.label], plantingMethod: 'Drilled', plantingMethodModifier: 1 },
-      ));
-    });
-  }, []);
-
-  // function to handle dropdown and update seed options in redux
-  const updateOptions = (method) => {
-    if (method === 'Broadcast(With Cultivation)') method = 'BroadcastwithCultivation';
-    else if (method === 'Broadcast(With No Cultivation)') method = 'BroadcastwithoutCultivation';
-    mixRedux.forEach((seed) => {
-      const prevOption = options[seed.label];
-      const plantingMethod = method;
-      const plantingMethodModifier = methods[seed.label][method];
-      dispatch(setOptionRedux(seed.label, { ...prevOption, plantingMethod, plantingMethodModifier }));
-    });
-  };
-
-  /// ///////////////////////////////////////////////////////
-  //                    Render                            //
-  /// ///////////////////////////////////////////////////////
-
   return (
     <Grid container>
       <Grid item xs={12}>
@@ -194,10 +177,9 @@ const SeedingMethod = ({ council }) => {
       </Grid>
       <Grid item xs={12} padding="15px" className="">
         <Dropdown
-          value={seedingMethod.type}
+          value={options[seedsSelected[0].label].plantingMethod ?? ''}
           label="Seeding Method: "
           handleChange={(e) => {
-            handleSeedingMethod(e);
             updateOptions(e.target.value);
           }}
           size={12}

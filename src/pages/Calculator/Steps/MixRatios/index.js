@@ -53,11 +53,10 @@ const MixRatio = ({ calculator, setCalculator }) => {
   const [piechartData, setPieChartData] = useState(defaultPieChartData);
 
   const dispatch = useDispatch();
-  const { seedsSelected, sideBarSelection } = useSelector((state) => state.calculator);
+  const { seedsSelected, sideBarSelection, options } = useSelector((state) => state.calculator);
   const {
     council, soilDrainage, plantingDate, acres,
   } = useSelector((state) => state.siteCondition);
-  const options = useSelector((state) => state.calculator.options);
 
   const [calculatorResult, setCalculatorResult] = useState(
     seedsSelected.reduce((res, seed) => {

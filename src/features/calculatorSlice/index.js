@@ -39,6 +39,10 @@ const calculatorSlice = createSlice({
       const { seed } = payload;
       return { ...state, sideBarSelection: seed };
     },
+    setMixSeedingRate: (state, { payload }) => {
+      const { mixSeedingRate } = payload;
+      return { ...state, mixSeedingRate };
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -61,7 +65,7 @@ const calculatorSlice = createSlice({
 
 export const {
   addSeed, removeSeed, setOption, removeOption, updateDiversity,
-  clearSeeds, clearOptions, selectSidebarSeed,
+  clearSeeds, clearOptions, selectSidebarSeed, setMixSeedingRate,
 } = calculatorSlice.actions;
 
 export default calculatorSlice;

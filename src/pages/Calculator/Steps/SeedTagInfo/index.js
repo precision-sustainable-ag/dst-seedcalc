@@ -12,14 +12,10 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import styled from '@emotion/styled';
-import { updateSteps } from '../../../../features/stepSlice';
-import {
-  convertToPercent,
-  convertToDecimal,
-} from '../../../../shared/utils/calculate';
+import { convertToPercent } from '../../../../shared/utils/calculate';
 import NumberTextField from '../../../../components/NumberTextField';
-import '../steps.scss';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
+import '../steps.scss';
 
 const LeftGrid = styled(Grid)({
   '&.MuiGrid-item': {
@@ -33,8 +29,7 @@ const LeftGrid = styled(Grid)({
 
 const SeedTagInfo = () => {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.steps.value);
-  const { selectedSpecies, seedsSelected } = data.speciesSelection;
+  const { sideBarSelection, seedsSelected, options } = useSelector((state) => state.calculator);
 
   const [accordionState, setAccordionState] = useState(
     seedsSelected.reduce((res, seed) => {
@@ -42,27 +37,6 @@ const SeedTagInfo = () => {
       return res;
     }, {}),
   );
-
-  const mixRedux = useSelector((state) => state.calculator.seedsSelected);
-  const options = useSelector((state) => state.calculator.options);
-
-  const handleUpdateSteps = (key, val) => {
-    const newData = {
-      type: 'speciesSelection',
-      key,
-      value: val,
-    };
-    dispatch(updateSteps(newData));
-  };
-
-  const updateSeed = (val, key1, seed) => {
-    // find index of seed, parse a copy, update proper values, & send to Redux
-    const index = seedsSelected.findIndex((s) => s.id === seed.id);
-    // eslint-disable-next-line no-shadow
-    const data = JSON.parse(JSON.stringify(seedsSelected));
-    data[index][key1] = val;
-    handleUpdateSteps('seedsSelected', data);
-  };
 
   const updateGermination = (seedLabel, value) => {
     dispatch(setOptionRedux(seedLabel, { ...options[seedLabel], germination: value }));
@@ -72,7 +46,6 @@ const SeedTagInfo = () => {
     dispatch(setOptionRedux(seedLabel, { ...options[seedLabel], purity: value }));
   };
 
-  // handler for click to open accordion
   const handleExpandAccordion = (label) => {
     const open = accordionState[label];
     setAccordionState({ ...accordionState, [label]: !open });
@@ -80,7 +53,7 @@ const SeedTagInfo = () => {
 
   // initially set germination and purity
   useEffect(() => {
-    mixRedux.forEach((seed) => {
+    seedsSelected.forEach((seed) => {
       // not set default value if redux value already exist
       if (options[seed.label].germination && options[seed.label].purity) return;
       // FIXME: use 0.85 and 0.95 as default value(applies to NECCC)
@@ -98,45 +71,11 @@ const SeedTagInfo = () => {
     // expand related accordion based on sidebar click
     setAccordionState(
       seedsSelected.reduce((res, seed) => {
-        res[seed.label] = seed.label === selectedSpecies;
+        res[seed.label] = seed.label === sideBarSelection;
         return res;
       }, {}),
     );
-  }, [selectedSpecies]);
-
-  // eslint-disable-next-line no-shadow
-  const renderRightAccordian = (key, seed, type, disabled) => {
-    let newValue = 0;
-    if (key === 'germinationPercentage') newValue = options[seed.label].germination ?? 0.85;
-    else if (key === 'purityPercentage') newValue = options[seed.label].purity ?? 0.9;
-    // FIXME: temporary, need to use calculator to get this
-    else if (key === 'poundsOfSeed') newValue = seed[key];
-    const value = type === 'percent' ? convertToPercent(newValue) : Math.floor(newValue);
-    return (
-      <>
-        <Grid item xs={4}>
-          {/* FIXME: the number field of percent could overflow */}
-          <NumberTextField
-            disabled={disabled}
-            value={value}
-            handleChange={(e) => {
-              updateSeed(convertToDecimal(e.target.value), key, {
-                ...seed,
-                [key]: convertToDecimal(e.target.value),
-              });
-              // TODO: new calculator redux here
-              if (key === 'germinationPercentage') {
-                updateGermination(seed.label, parseInt(e.target.value, 10) / 100);
-              } else if (key === 'purityPercentage') {
-                updatePurity(seed.label, parseInt(e.target.value, 10) / 100);
-              }
-            }}
-          />
-        </Grid>
-        <Grid item xs={2} />
-      </>
-    );
-  };
+  }, [sideBarSelection]);
 
   return (
     <Grid container>
@@ -158,28 +97,43 @@ const SeedTagInfo = () => {
             </AccordionSummary>
             <AccordionDetails className="accordian-details">
               <Grid container>
+
                 <LeftGrid item xs={6}>
                   <Typography>% Germination: </Typography>
                 </LeftGrid>
-                {renderRightAccordian(
-                  'germinationPercentage',
-                  seed,
-                  'percent',
-                  false,
-                )}
+                <Grid item xs={4}>
+                  <NumberTextField
+                    value={convertToPercent(options[seed.label].germination ?? 0.85)}
+                    handleChange={(e) => {
+                      updateGermination(seed.label, parseInt(e.target.value, 10) / 100);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={2} />
+
                 <LeftGrid item xs={6}>
                   <Typography>% Purity: </Typography>
                 </LeftGrid>
-                {renderRightAccordian(
-                  'purityPercentage',
-                  seed,
-                  'percent',
-                  false,
-                )}
+                <Grid item xs={4}>
+                  <NumberTextField
+                    value={convertToPercent(options[seed.label].purity ?? 0.9)}
+                    handleChange={(e) => {
+                      updatePurity(seed.label, parseInt(e.target.value, 10) / 100);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={2} />
+
                 <LeftGrid item xs={6}>
                   <Typography>Seeds per Pound </Typography>
                 </LeftGrid>
-                {renderRightAccordian('poundsOfSeed', seed, '', true)}
+                <Grid item xs={4}>
+                  <NumberTextField
+                    disabled
+                    value={parseInt(seed.attributes['Planting Information']['Seed Count'].values[0], 10)}
+                  />
+                </Grid>
+                <Grid item xs={2} />
               </Grid>
             </AccordionDetails>
           </Accordion>
