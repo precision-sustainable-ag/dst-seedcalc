@@ -19,9 +19,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { updateSteps } from '../../../../features/stepSlice';
-import { calculateAllMixValues, twoDigit } from '../../../../shared/utils/calculate';
-import { generateNRCSStandards } from '../../../../shared/utils/NRCS/calculateNRCS';
+import { twoDigit } from '../../../../shared/utils/calculate';
 import ReviewMixSteps from './Steps';
 import '../steps.scss';
 import {
@@ -66,24 +64,21 @@ const defaultPieChartData = {
 
 // eslint-disable-next-line no-unused-vars
 const ReviewMix = ({ calculator }) => {
-  // useSelector for crops & mixRaxio reducer
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.steps.value);
-  const { seedsSelected } = data.speciesSelection;
 
   const { council } = useSelector((state) => state.siteCondition);
-  const { sideBarSelection, options } = useSelector((state) => state.calculator);
-  const mixRedux = useSelector((state) => state.calculator.seedsSelected);
+  const { seedsSelected, sideBarSelection, options } = useSelector((state) => state.calculator);
+
+  const [prevOptions, setPrevOptions] = useState({});
+  const [piechartData, setPieChartData] = useState(defaultPieChartData);
 
   const [calculatorResult, setCalculatorResult] = useState(
-    mixRedux.reduce((res, seed) => {
+    seedsSelected.reduce((res, seed) => {
       res[seed.label] = council === 'MCCC' ? defaultResultMCCC : defaultResultNECCC;
       return res;
     }, {}),
   );
-  const [prevOptions, setPrevOptions] = useState({});
-  const [piechartData, setPieChartData] = useState(defaultPieChartData);
-  console.log('pieChartData', piechartData);
+
   const [accordionState, setAccordionState] = useState(
     seedsSelected.reduce((res, seed) => {
       res[seed.label] = false;
@@ -91,69 +86,16 @@ const ReviewMix = ({ calculator }) => {
     }, {}),
   );
 
-  /// ///////////////////////////////////////////////////////
-  //                      Redux                           //
-  /// ///////////////////////////////////////////////////////
-
-  const handleUpdateSteps = (key, val) => {
-    const newData = {
-      type: 'speciesSelection',
-      key,
-      value: val,
-    };
-    dispatch(updateSteps(newData));
-  };
-
-  const handleUpdateNRCS = (key, val) => {
-    const newData = {
-      type: 'NRCS',
-      key,
-      value: val,
-    };
-    dispatch(updateSteps(newData));
-  };
-
-  const handleUpdateAllSteps = (prevData, index) => {
-    const seeds = [...prevData];
-    seeds[index] = calculateAllMixValues(seeds[index], data);
-    handleUpdateSteps('seedsSelected', seeds);
-  };
-
-  const initialDataLoad = () => {
-    const seeds = JSON.parse(JSON.stringify(seedsSelected));
-    const newData = [...seeds];
-
-    newData.map((s, i) => {
-      const index = i;
-      newData[index] = calculateAllMixValues(s, data);
-      handleUpdateAllSteps(newData, index);
-      return null;
-    });
-  };
-
-  const updateSeed = (val, key, seed) => {
-    // find index of seed, parse a copy, update proper values, & send to Redux
-    const index = seedsSelected.findIndex((s) => s.id === seed.id);
-    const seeds = JSON.parse(JSON.stringify(seedsSelected));
-    seeds[index][key] = val;
-    handleUpdateSteps('seedsSelected', seeds);
-    const newData = [...seeds];
-    newData[index] = calculateAllMixValues(seeds[index], data);
-    handleUpdateAllSteps(newData, index);
-  };
+  const [showSteps, setShowSteps] = useState(
+    seedsSelected.reduce((res, seed) => {
+      res[seed.label] = false;
+      return res;
+    }, {}),
+  );
 
   /// ///////////////////////////////////////////////////////
   //                    State Logic                       //
   /// ///////////////////////////////////////////////////////
-
-  const updateNRCS = async () => {
-    // TODO: NRCS calculated here
-    const NRCSData = await generateNRCSStandards(
-      seedsSelected,
-      data.siteCondition,
-    );
-    handleUpdateNRCS('results', NRCSData);
-  };
 
   // function to handle form value change, update options
   const handleFormValueChange = (seed, option, value) => {
@@ -169,8 +111,8 @@ const ReviewMix = ({ calculator }) => {
   //                    useEffect                         //
   /// ///////////////////////////////////////////////////////
 
+  // expand related accordion based on sidebar click
   useEffect(() => {
-    // expand related accordion based on sidebar click
     setAccordionState(
       seedsSelected.reduce((res, seed) => {
         res[seed.label] = seed.label === sideBarSelection;
@@ -179,17 +121,9 @@ const ReviewMix = ({ calculator }) => {
     );
   }, [sideBarSelection]);
 
-  useEffect(() => {
-    initialDataLoad();
-    // FIXME: possible issues in useEffect return: state maybe unupdated value
-    return () => {
-      updateNRCS();
-    };
-  }, []);
-
   // run reviewMix on options change
   useEffect(() => {
-    mixRedux.forEach((seed) => {
+    seedsSelected.forEach((seed) => {
       if (options[seed.label] !== prevOptions[seed.label]) {
         let result;
         if (council === 'MCCC') result = reviewMix(seed, calculator, options[seed.label]);
@@ -202,7 +136,7 @@ const ReviewMix = ({ calculator }) => {
       seedingRateArray,
       plantsPerAcreArray,
       seedsPerAcreArray,
-    } = calculatePieChartData(mixRedux, calculator, options);
+    } = calculatePieChartData(seedsSelected, calculator, options);
     setPieChartData({ seedingRateArray, plantsPerAcreArray, seedsPerAcreArray });
     setPrevOptions(options);
   }, [options]);
@@ -373,19 +307,18 @@ const ReviewMix = ({ calculator }) => {
                 <Grid item xs={12} pt="1rem">
                   <Button
                     onClick={() => {
-                      updateSeed(!seed.showSteps, 'showSteps', seed);
+                      setShowSteps({ ...showSteps, [seed.label]: !showSteps[seed.label] });
                     }}
                     variant="outlined"
                   >
-                    {seed.showSteps ? 'Close Steps' : 'Change My Rate'}
+                    {showSteps[seed.label] ? 'Close Steps' : 'Change My Rate'}
                   </Button>
                 </Grid>
 
                 <Grid item xs={12}>
-                  {seed.showSteps && (
+                  {showSteps[seed.label] && (
                   <ReviewMixSteps
                     council={council}
-                    updateSeed={updateSeed}
                     seed={seed}
                     handleFormValueChange={handleFormValueChange}
                     calculatorResult={calculatorResult[seed.label]}

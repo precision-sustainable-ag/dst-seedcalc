@@ -5,13 +5,11 @@ import { Typography, useTheme, useMediaQuery } from '@mui/material';
 import NumberTextField from '../../../../components/NumberTextField';
 import {
   convertToPercent,
-  convertToDecimal,
 } from '../../../../shared/utils/calculate';
 import '../steps.scss';
 
 const ReviewMixSteps = ({
   council,
-  updateSeed,
   seed,
   handleFormValueChange,
   calculatorResult,
@@ -44,7 +42,6 @@ const ReviewMixSteps = ({
   );
 
   const {
-    // eslint-disable-next-line no-unused-vars
     step1, step2, step3, step4, step5,
   } = calculatorResult;
 
@@ -67,7 +64,6 @@ const ReviewMixSteps = ({
             <NumberTextField
               label={matchesMd ? '' : 'Single Species Seeding Rate PLS'}
               handleChange={(e) => {
-                updateSeed(e.target.value, 'singleSpeciesSeedingRatePLS', seed);
                 handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
               }}
               value={step1.singleSpeciesSeedingRate}
@@ -94,9 +90,6 @@ const ReviewMixSteps = ({
           <Grid item xs={3}>
             <NumberTextField
               label={matchesMd ? '' : 'Sum Species Of Group In Mix'}
-              // handleChange={(e) => {
-              //   updateSeed(e.target.value, 'percentOfSingleSpeciesRate', seed);
-              // }}
               value={step1.sumGroupInMix}
             />
             <Typography>{council === 'MCCC' ? 'MCCC' : 'NECCC'}</Typography>
@@ -150,14 +143,9 @@ const ReviewMixSteps = ({
               <NumberTextField
                 label={matchesMd ? '' : '% of Single Species Rate'}
                 handleChange={(e) => {
-                  updateSeed(
-                    e.target.value,
-                    'percentOfSingleSpeciesRate',
-                    seed,
-                  );
                   handleFormValueChange(seed, 'percentOfRate', parseFloat(e.target.value) / 100);
                 }}
-                value={step1.percentOfRate}
+                value={convertToPercent(step1.percentOfRate)}
               />
               <Typography>
                 {council === 'MCCC' && 'MCCC Recommendation'}
@@ -295,11 +283,6 @@ const ReviewMixSteps = ({
           <NumberTextField
             label={matchesMd ? '' : '% Germination'}
             handleChange={(e) => {
-              updateSeed(
-                convertToDecimal(e.target.value),
-                'germinationPercentage',
-                seed,
-              );
               handleFormValueChange(seed, 'germination', parseFloat(e.target.value) / 100);
             }}
             value={convertToPercent(step4.germination)}
@@ -314,11 +297,6 @@ const ReviewMixSteps = ({
           <NumberTextField
             label={matchesMd ? '' : '% Purity'}
             handleChange={(e) => {
-              updateSeed(
-                convertToDecimal(e.target.value),
-                'purityPercentage',
-                seed,
-              );
               handleFormValueChange(seed, 'purity', parseFloat(e.target.value) / 100);
             }}
             value={convertToPercent(step4.purity)}
@@ -366,9 +344,6 @@ const ReviewMixSteps = ({
           <NumberTextField
             label={matchesMd ? '' : 'Acres'}
             disabled
-            handleChange={(e) => {
-              updateSeed(e.target.value, 'acres', seed);
-            }}
             value={step5.acres}
           />
         </Grid>
