@@ -7,6 +7,7 @@ const initialState = {
   error: false,
   sideBarSelection: '',
   mixSeedingRate: null,
+  reviewMixResult: {},
 };
 
 export default initialState;

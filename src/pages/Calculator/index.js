@@ -30,7 +30,6 @@ import StepsList from '../../components/StepsList';
 const Calculator = () => {
   const data = useSelector((state) => state.steps.value);
   const error = useSelector((state) => state.steps.error);
-  const type = data.siteCondition.council;
 
   // TODO: initially set calculator here
   const [calculator, setCalculator] = useState(null);
@@ -90,10 +89,7 @@ const Calculator = () => {
         );
       case 'Confirm Plan':
         return (
-          <ConfirmPlan
-            council={type}
-            calculator={calculator}
-          />
+          <ConfirmPlan calculator={calculator} />
         );
       case 'Finish':
         return (

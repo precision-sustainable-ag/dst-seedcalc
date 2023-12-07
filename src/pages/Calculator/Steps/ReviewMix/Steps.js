@@ -45,8 +45,6 @@ const ReviewMixSteps = ({
     step1, step2, step3, step4, step5,
   } = calculatorResult;
 
-  console.log('calculatorResult', calculatorResult);
-
   return (
     <Grid container>
       {/* NECCC Step 1:  */}

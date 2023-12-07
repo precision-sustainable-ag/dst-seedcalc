@@ -1,14 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import { Typography, Box } from '@mui/material';
-import { calculatePieChartData } from '../../../../shared/utils/calculate';
-
-import '../steps.scss';
+import { useSelector } from 'react-redux';
+import { calculatePieChartData } from '../../../../shared/utils/calculator';
 import {
   DSTPieChart,
   DSTPieChartLabel,
   DSTPieChartLegend,
 } from '../../../../components/DSTPieChart';
+import '../steps.scss';
+
+const defaultPieChartData = {
+  seedingRateArray: [],
+  plantsPerAcreArray: [],
+  seedsPerAcreArray: [],
+};
 
 const ConfirmPlanChip = ({ label, value }) => (
   <>
@@ -29,13 +35,25 @@ const ConfirmPlanChip = ({ label, value }) => (
   </>
 );
 
-const ConfirmPlanCharts = ({ council, speciesSelection }) => {
+const ConfirmPlanCharts = ({ council, speciesSelection, calculator }) => {
+  const { seedsSelected, options } = useSelector((state) => state.calculator);
+
   const poundsForPurchaseSum = speciesSelection.seedsSelected.reduce(
     (sum, a) => sum + a.poundsForPurchase,
     0,
   );
 
-  const { poundsOfSeedArray, plantsPerAcreArray, seedsPerAcreArray } = calculatePieChartData(speciesSelection.seedsSelected);
+  const [piechartData, setPieChartData] = useState(defaultPieChartData);
+
+  useEffect(() => {
+    // calculate piechart data
+    const {
+      seedingRateArray,
+      plantsPerAcreArray,
+      seedsPerAcreArray,
+    } = calculatePieChartData(seedsSelected, calculator, options);
+    setPieChartData({ seedingRateArray, plantsPerAcreArray, seedsPerAcreArray });
+  }, []);
 
   return (
     <Grid container sx={{ padding: '0.5rem' }}>
@@ -59,7 +77,7 @@ const ConfirmPlanCharts = ({ council, speciesSelection }) => {
           borderBottom: '1px solid #CCCCCC',
         }}
       >
-        {/* FIXME: static value here */}
+        {/* FIXME: price not defined */}
         <ConfirmPlanChip label="Price/Acre" value="$35.33" />
       </Grid>
 
@@ -73,9 +91,9 @@ const ConfirmPlanCharts = ({ council, speciesSelection }) => {
           textAlign: 'justify',
         }}
       >
-        <DSTPieChart chartData={poundsOfSeedArray} />
+        <DSTPieChart chartData={piechartData.seedingRateArray} />
         <DSTPieChartLabel>Pounds of Seed / Acre</DSTPieChartLabel>
-        <DSTPieChartLegend chartData={poundsOfSeedArray} />
+        <DSTPieChartLegend chartData={piechartData.seedingRateArray} />
       </Grid>
       <Grid
         item
@@ -89,7 +107,7 @@ const ConfirmPlanCharts = ({ council, speciesSelection }) => {
         {/* FIXME: Check all the charts as well as other components */}
         <DSTPieChart
           chartData={
-            council === 'MCCC' ? plantsPerAcreArray : seedsPerAcreArray
+            council === 'MCCC' ? piechartData.plantsPerAcreArray : piechartData.seedsPerAcreArray
           }
         />
         <DSTPieChartLabel>
@@ -100,7 +118,7 @@ const ConfirmPlanCharts = ({ council, speciesSelection }) => {
         </DSTPieChartLabel>
         <DSTPieChartLegend
           chartData={
-            council === 'MCCC' ? plantsPerAcreArray : seedsPerAcreArray
+            council === 'MCCC' ? piechartData.plantsPerAcreArray : piechartData.seedsPerAcreArray
           }
         />
       </Grid>

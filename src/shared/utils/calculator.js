@@ -21,6 +21,7 @@ const initialOptions = {
   seedsPerAcre: null,
   plantingMethodModifier: null,
   mixSeedingRate: null,
+  costPerPound: null,
 };
 
 const adjustProportions = (seed, calculator, options = {}) => {
@@ -279,6 +280,14 @@ const reviewMixNECCC = (seed, calculator, options = {}) => {
   return result;
 };
 
+const confirmPlan = (bulkSeedingRate, acres, costPerPound) => {
+  const totalPounds = bulkSeedingRate * acres;
+  const totalCost = costPerPound * totalPounds;
+  return {
+    bulkSeedingRate, acres, costPerPound, totalPounds, totalCost,
+  };
+};
+
 const checkNRCS = (seeds, calculator, options) => {
   // build options for NRCS
   // const NRCSOptions = {};
@@ -433,6 +442,6 @@ const calculatePieChartData = (seeds, calculator, options = {}) => {
 
 export {
   createUserInput, createCalculator, initialOptions, adjustProportions,
-  adjustProportionsNECCC, reviewMix, reviewMixNECCC, checkNRCS,
+  adjustProportionsNECCC, reviewMix, reviewMixNECCC, confirmPlan, checkNRCS,
   getPlantingDate, calculatePieChartData,
 };

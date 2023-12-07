@@ -32,7 +32,7 @@ import {
   SeedingRateChip,
 } from '../../../../components/SeedingRateCard';
 import { reviewMix, reviewMixNECCC, calculatePieChartData } from '../../../../shared/utils/calculator';
-import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
+import { setOptionRedux, setReviewMixResultRedux } from '../../../../features/calculatorSlice/actions';
 
 const defaultResultMCCC = {
   step1: { singleSpeciesSeedingRate: 0, percentOfRate: 0, seedingRate: 0 },
@@ -130,6 +130,11 @@ const ReviewMix = ({ calculator }) => {
         else if (council === 'NECCC') result = reviewMixNECCC(seed, calculator, options[seed.label]);
         setCalculatorResult((prev) => ({ ...prev, [seed.label]: result }));
       }
+    });
+    // save result in redux
+    setCalculatorResult((prev) => {
+      dispatch(setReviewMixResultRedux(prev));
+      return prev;
     });
     // calculate piechart data
     const {
