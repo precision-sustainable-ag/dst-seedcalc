@@ -32,7 +32,7 @@ const siteConditionSlice = createSlice({
     },
     checkNRCS: (state, { payload }) => {
       const { checkNRCS } = payload;
-      return { ...state, checkNRCS };
+      return { ...state, checkNRCSStandards: checkNRCS };
     },
     updateCouncil: (state, { payload }) => {
       const { council } = payload;

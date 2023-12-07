@@ -32,7 +32,7 @@ const SiteConditionForm = ({
   const handleSwitch = () => {
     setChecked(!checked);
     handleUpdateSteps('enabled', 'NRCS', !checked);
-    dispatch(checkNRCSRedux(checked));
+    dispatch(checkNRCSRedux(!checked));
   };
 
   const handleRegion = (region) => {

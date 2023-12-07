@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 /* eslint-disable no-multi-str */
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-unused-vars */
@@ -289,32 +290,10 @@ const confirmPlan = (bulkSeedingRate, acres, costPerPound) => {
 };
 
 const checkNRCS = (seeds, calculator, options) => {
-  // build options for NRCS
-  // const NRCSOptions = {};
-  // seeds.forEach((seed) => {
-  //   NRCSOptions[seed.id] = options[seed.label];
-  // });
-  // console.log(NRCSOptions);
-
-  // manually calculate percent in mix, the result is same as sdk
-  const calculatePercentInMix = () => {
-    const result = {};
-    let sumSeedsPerAcre = 0;
-    seeds.forEach((seed) => {
-      const seedsPerAcre = calculator.seedsPerAcre(seed, options[seed.label]);
-      sumSeedsPerAcre += seedsPerAcre;
-      result[seed.label] = seedsPerAcre;
-    });
-    seeds.forEach((seed) => {
-      result[seed.label] /= sumSeedsPerAcre;
-    });
-    return result;
-  };
-
-  const seedsPercentInMix = calculatePercentInMix();
-  // console.log('seedsPercentInMix', seedsPercentInMix);
+  const result = {};
 
   const checkSeedingRate = () => {
+    const seedingRate = [];
     console.log('-----------Seeding Rate:');
     seeds.forEach((seed) => {
       const seedOption = options[seed.label];
@@ -335,20 +314,28 @@ const checkNRCS = (seeds, calculator, options) => {
         UPPER_LIMIT,
         calculator.nrcs.isValidSeedingRate(seed, seedOption),
       );
+      seedingRate.push({
+        label: seed.label,
+        result: finalSeedingRate,
+        expect: `${LOWER_LIMIT} ≤ result ≤ ${UPPER_LIMIT}`,
+        pass: calculator.nrcs.isValidSeedingRate(seed, seedOption).passed,
+      });
     });
+    result.seedingRate = seedingRate;
   };
 
   const checkPlantingDate = () => {
+    const plantingDate = [];
     // FIXME: frontend checks for reliable establishment, while sdk checks more, early and late seeding
     console.log('-----------Planting Date:');
     seeds.forEach((seed) => {
       const plannedDate = dayjs(options[seed.label].plannedPlantingDate).format('MM/DD');
       const [firstStart, firstEnd, secondStart, secondEnd] = getPlantingDate(seed);
+      // eslint-disable-next-line no-shadow
       let result;
       if (dayjs(plannedDate).isBetween(firstStart, firstEnd, 'day')) result = true;
       else if (secondStart && dayjs(plannedDate).isBetween(secondStart, secondEnd, 'day')) result = true;
       else result = false;
-
       console.log(
         seed.label,
         ', planned:',
@@ -360,10 +347,18 @@ const checkNRCS = (seeds, calculator, options) => {
         secondStart ? `${secondStart} - ${secondEnd}` : '',
         result,
       );
+      plantingDate.push({
+        label: seed.label,
+        result: plannedDate,
+        expect: `${firstStart}-${firstEnd}${secondStart ? `${secondStart}-${secondEnd}` : ''}`,
+        pass: result,
+      });
     });
+    result.plantingDate = plantingDate;
   };
 
   const checkRatio = () => {
+    const ratio = [];
     console.log('-----------Ratio(Percent In Mix):');
     seeds.forEach((seed) => {
       const percentInMix = calculator.percentInMix(seed, options);
@@ -371,25 +366,35 @@ const checkNRCS = (seeds, calculator, options) => {
       console.log(seed.label, percentInMix, maxInMix);
       const result = calculator.nrcs.isValidPercentInMix(seed, options);
       console.log(result);
+      ratio.push({
+        label: seed.label,
+        result: percentInMix,
+        expect: `≤${maxInMix}`,
+        pass: result.passed,
+      });
     });
-    // TODO: the result is same
-    // seeds.forEach((seed) => {
-    //   const percentInMix = seedsPercentInMix[seed.label];
-    //   const maxInMix = parseFloat(seed.attributes.Coefficients['Max % Allowed in Mix'].values[0]);
-    //   console.log(seed.label, percentInMix, '<=', maxInMix, percentInMix <= maxInMix);
-    // });
+    result.ratio = ratio;
   };
 
   const checkSoilDrainage = () => {
+    const soilDrainageResult = [];
     console.log('-----------Soil Drainage:');
     seeds.forEach((seed) => {
       const { soilDrainage } = options[seed.label];
       const soilDrainages = seed.attributes['Soil Conditions']?.['Soil Drainage'].values ?? [];
       console.log(seed.label, soilDrainage, soilDrainages, soilDrainages.indexOf(soilDrainage) > -1);
+      soilDrainageResult.push({
+        label: seed.label,
+        result: `${soilDrainage}`,
+        expect: `${soilDrainages.join(',')}`,
+        pass: soilDrainages.indexOf(soilDrainage) > -1,
+      });
     });
+    result.soilDrainageResult = soilDrainageResult;
   };
 
   const checkWinterSurvival = (threshold = 0.5) => {
+    const winterSurvival = [];
     console.log('-----------Winter Survivability:');
     let chanceOfMixSurvival = 0.00;
     seeds.forEach((seed) => {
@@ -398,13 +403,22 @@ const checkNRCS = (seeds, calculator, options) => {
       chanceOfMixSurvival += percentInMix * winterSurvivability;
     });
     console.log(chanceOfMixSurvival, '>=', 0.5, chanceOfMixSurvival >= 0.5);
+    winterSurvival.push({
+      label: 'Mix winter survival rate',
+      result: chanceOfMixSurvival,
+      expect: '≥ 0.5',
+      pass: chanceOfMixSurvival >= 0.5,
+    });
+    result.winterSurvival = winterSurvival;
   };
 
-  // checkSeedingRate();
-  // checkPlantingDate();
-  // checkRatio();
-  // checkSoilDrainage();
-  // checkWinterSurvival();
+  checkSeedingRate();
+  checkPlantingDate();
+  checkRatio();
+  checkSoilDrainage();
+  checkWinterSurvival();
+  console.log('result', result);
+  return result;
 };
 
 const getPlantingDate = (seed) => {

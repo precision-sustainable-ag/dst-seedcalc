@@ -44,6 +44,8 @@ const ConfirmPlan = ({ calculator }) => {
   );
   // console.log('calculatorResult', calculatorResult);
 
+  const [nrcsResult, setNrcsResult] = useState({});
+
   /// ///////////////////////////////////////////////////////
   //                   State Logic                        //
   /// ///////////////////////////////////////////////////////
@@ -66,7 +68,6 @@ const ConfirmPlan = ({ calculator }) => {
           // FIXME: initializa cost per pound, this value is not defined
           options[seed.label].costPerPound ?? 0.42,
         );
-        console.log(seed.label, result);
         setCalculatorResult((prev) => ({ ...prev, [seed.label]: result }));
       }
     });
@@ -75,7 +76,7 @@ const ConfirmPlan = ({ calculator }) => {
 
   // SDK NRCS calculated here
   useEffect(() => {
-    checkNRCS(seedsSelected, calculator, options);
+    setNrcsResult(checkNRCS(seedsSelected, calculator, options));
   }, []);
 
   /// ///////////////////////////////////////////////////////
@@ -129,6 +130,7 @@ const ConfirmPlan = ({ calculator }) => {
         />
 
         <ConfirmPlanForm
+          nrcsResult={nrcsResult}
           seedsSelected={seedsSelected}
           calculatorResult={calculatorResult}
           options={options}

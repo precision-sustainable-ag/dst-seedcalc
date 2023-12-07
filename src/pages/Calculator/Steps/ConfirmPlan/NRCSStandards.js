@@ -12,52 +12,54 @@ import styled from '@emotion/styled';
 import DSTTable from '../../../../components/DSTTable';
 import '../steps.scss';
 
-const NRCSItem = ({ title, result, data }) => {
-  const NRCSAccordionSummary = styled(AccordionSummary)(({ theme }) => ({
-    '&.MuiAccordionSummary-root': {
-      minHeight: '1.5rem',
-      padding: '0.3125rem 1rem',
-      backgroundColor: theme.palette.primary.dark,
+const NRCSAccordionSummary = styled(AccordionSummary)(({ theme }) => ({
+  '&.MuiAccordionSummary-root': {
+    minHeight: '1.5rem',
+    padding: '0.3125rem 1rem',
+    backgroundColor: theme.palette.primary.dark,
+    color: theme.palette.primary.text,
+    '.MuiAccordionSummary-content': {
+      margin: '0',
+    },
+    '&.Mui-expanded': {
+      minHeight: '2rem',
+    },
+    '.MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
+      transform: 'rotate(0deg) !important',
+    },
+  },
+}));
+
+const NRCSAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
+  '&.MuiAccordionDetails-root': {
+    padding: ' 2%',
+    'th,td': {
       color: theme.palette.primary.text,
-      '.MuiAccordionSummary-content': {
-        margin: '0',
-      },
-      '&.Mui-expanded': {
-        minHeight: '2rem',
-      },
-      '.MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
-        transform: 'rotate(0deg) !important',
-      },
     },
-  }));
+  },
+}));
 
-  const NRCSAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
-    '&.MuiAccordionDetails-root': {
-      padding: ' 2%',
-      'th,td': {
-        color: theme.palette.primary.text,
-      },
-    },
-  }));
-
+const NRCSItem = ({ title, result }) => {
   const [expanded, setExpanded] = useState(false);
 
   const renderTable = (tableData) => {
     // eslint-disable-next-line no-shadow
-    const createData = (label, expect, result, pass) => ({
-      label, expect, result, pass,
+    const createData = (label, result, expect, pass) => ({
+      label, result, expect, pass,
     });
 
-    const rows = tableData.seeds.map((d) => createData(
-      d.label,
-      d.expect,
-      d.result,
-      d.pass ? 'passed' : 'failed',
+    const rows = tableData.map((data) => createData(
+      data.label,
+      data.result,
+      data.expect,
+      data.pass ? 'passed' : 'failed',
     ));
 
     const cells = ['label', 'result', 'expect', 'pass'];
-    return <DSTTable rows={rows} createData={createData} cells={cells} />;
+    return <DSTTable rows={rows} cells={cells} />;
   };
+
+  const pass = result.filter((res) => !res.pass).length === 0;
 
   return (
     <Grid container>
@@ -91,60 +93,62 @@ const NRCSItem = ({ title, result, data }) => {
               </Typography>
               )}
           >
-            {result ? (
+            {pass ? (
               <CheckIcon sx={{ color: 'green' }} />
             ) : (
               <ClearIcon sx={{ color: 'red' }} />
             )}
             <Typography sx={{ float: 'left', marginLeft: '5px' }}>
-              {result ? 'passed' : 'failed'}
+              {pass ? 'passed' : 'failed'}
             </Typography>
           </NRCSAccordionSummary>
-          <NRCSAccordionDetails>{renderTable(data)}</NRCSAccordionDetails>
+          <NRCSAccordionDetails>{renderTable(result)}</NRCSAccordionDetails>
         </Accordion>
       </Grid>
       <Grid item xs={0} md={1} />
     </Grid>
   );
 };
-const NRCSStandards = ({ NRCS }) => (
+
+const NRCSStandards = ({ nrcsResult }) => (
+
   <>
     <Grid item xs={12}>
       <Typography sx={{ fontWeight: 600, fontSize: '20px', margin: '20px' }}>
         Indiana NRCS Standards
       </Typography>
     </Grid>
+    {Object.keys(nrcsResult).length > 0
+    && (
+      <>
+        <NRCSItem
+          title="Seeding Rate"
+          result={nrcsResult.seedingRate}
+        />
 
-    <NRCSItem
-      title="Seeding Rate"
-      result={NRCS.results.seedingRate.value}
-      data={NRCS.results.seedingRate}
-    />
+        <NRCSItem
+          title="Planting Date"
+          result={nrcsResult.plantingDate}
+        />
 
-    <NRCSItem
-      title="Planting Date"
-      result={NRCS.results.plantingDate.value}
-      data={NRCS.results.plantingDate}
-    />
+        <NRCSItem
+          title="Ratio"
+          result={nrcsResult.ratio}
+        />
 
-    <NRCSItem
-      title="Ratio"
-      result={NRCS.results.ratio.value}
-      data={NRCS.results.ratio}
-    />
+        <NRCSItem
+          title="Soil Drainage"
+          result={nrcsResult.soilDrainageResult}
+        />
 
-    <NRCSItem
-      title="Soil Drainage"
-      result={NRCS.results.soilDrainage.value}
-      data={NRCS.results.soilDrainage}
-    />
-
-    <NRCSItem
-      title="Expected Winter Survival"
-      result={NRCS.results.expectedWinterSurvival.value}
-      data={NRCS.results.expectedWinterSurvival}
-    />
+        <NRCSItem
+          title="Expected Winter Survival"
+          result={nrcsResult.winterSurvival}
+        />
+      </>
+    )}
   </>
+
 );
 
 export default NRCSStandards;

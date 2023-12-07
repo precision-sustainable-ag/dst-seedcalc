@@ -14,12 +14,10 @@ import '../steps.scss';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 
 const ConfirmPlanForm = ({
-  seedsSelected, calculatorResult, options
+  nrcsResult, seedsSelected, calculatorResult, options
 }) => {
   const theme = useTheme();
   const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
-
-  console.log('options', options)
 
   const dispatch = useDispatch();
 
@@ -194,7 +192,7 @@ const ConfirmPlanForm = ({
   return (
     <Grid container color="primary.text">
       {/* NRCS Standards */}
-      {/* {checkNRCSStandards && <NRCSStandards NRCS={NRCS} />} */}
+      {checkNRCSStandards && <NRCSStandards nrcsResult={nrcsResult} />}
       <Grid item xs={12}>
         {seedsSelected.map((seed, i) => (
           <Grid container key={i}>
