@@ -11,8 +11,10 @@ import {
 import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
 import { MenuRounded } from '@mui/icons-material';
-
-import { setMixSeedingRateRedux, setOptionRedux } from '../../../../features/calculatorSlice/actions';
+import {
+  setAdjustedMixSeedingRateRedux,
+  setMixSeedingRateRedux, setOptionRedux,
+} from '../../../../features/calculatorSlice/actions';
 import '../steps.scss';
 
 const CustomThumb = (props) => {
@@ -107,7 +109,10 @@ const MixSeedingRate = ({ calculator }) => {
   const [adjustedMixSeedingRate, setAdjustedMixSeedingRate] = useState(0);
   const [marks, setMarks] = useState([]);
 
-  const { seedsSelected, options, mixSeedingRate } = useSelector((state) => state.calculator);
+  const {
+    seedsSelected, options, mixSeedingRate,
+    adjustedMixSeedingRate: adjustedRate,
+  } = useSelector((state) => state.calculator);
 
   /// ///////////////////////////////////////////////////////
   //                    State Logic                       //
@@ -120,6 +125,7 @@ const MixSeedingRate = ({ calculator }) => {
       const prevOptions = options[seed.label];
       dispatch(setOptionRedux(seed.label, { ...prevOptions, managementImpactOnMix }));
     });
+    dispatch(setAdjustedMixSeedingRateRedux(adjustedMixSeedingRate));
   };
 
   /// ///////////////////////////////////////////////////////
@@ -141,17 +147,18 @@ const MixSeedingRate = ({ calculator }) => {
 
     const minimum = Math.round(sum - sum / 2);
     const maximum = Math.round(sum + sum / 2);
-    const adjustedRate = Math.round(sum);
+    const calculatedRate = Math.round(sum);
     setMin(minimum);
     setMax(maximum);
-    setAdjustedMixSeedingRate(adjustedRate);
+    if (!adjustedRate) setAdjustedMixSeedingRate(calculatedRate);
+    else setAdjustedMixSeedingRate(adjustedRate);
     setMarks([
       {
         value: minimum,
         label: 'Low Limit',
       },
       {
-        value: adjustedRate,
+        value: calculatedRate,
         label: 'Calculated',
       },
       {

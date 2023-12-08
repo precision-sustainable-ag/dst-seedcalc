@@ -32,7 +32,8 @@ const Calculator = () => {
   // FIXME: this error is not working now
   const error = useSelector((state) => state.steps.error);
 
-  // TODO: initially set calculator here
+  const { seedsSelected } = useSelector((state) => state.calculator);
+  // initially set calculator here
   const [calculator, setCalculator] = useState(null);
   const [activeStep, setActiveStep] = useState(0);
   // this completedStep is to determine whether the next button is clickable on each page
@@ -210,7 +211,7 @@ const Calculator = () => {
               : {}
           }
         >
-          <SeedsSelectedList list={data.speciesSelection.seedsSelected} />
+          <SeedsSelectedList list={seedsSelected} />
         </Grid>
       )}
 

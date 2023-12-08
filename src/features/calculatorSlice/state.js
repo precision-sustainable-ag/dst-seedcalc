@@ -7,6 +7,7 @@ const initialState = {
   error: false,
   sideBarSelection: '',
   mixSeedingRate: null,
+  adjustedMixSeedingRate: null,
   reviewMixResult: {},
 };
 

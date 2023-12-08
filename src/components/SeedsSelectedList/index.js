@@ -8,7 +8,6 @@ import {
   CardActionArea,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateSteps } from '../../features/stepSlice';
 import { selectSidebarSeedRedux } from '../../features/calculatorSlice/actions';
 
 const SeedsSelectedList = ({ list }) => {
@@ -17,25 +16,11 @@ const SeedsSelectedList = ({ list }) => {
   const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
 
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.steps.value);
-  const { selectedSpecies } = data.speciesSelection;
 
-  const handleUpdateStore = (type, key, val) => {
-    const newData = {
-      type,
-      key,
-      value: val,
-    };
-    dispatch(updateSteps(newData));
-  };
+  const { sideBarSelection } = useSelector((state) => state.calculator);
 
   const selectSpecies = (seed) => {
-    handleUpdateStore(
-      'speciesSelection',
-      'selectedSpecies',
-      selectedSpecies === seed ? '' : seed,
-    );
-    dispatch(selectSidebarSeedRedux(selectedSpecies === seed ? '' : seed));
+    dispatch(selectSidebarSeedRedux(sideBarSelection === seed ? '' : seed));
   };
 
   return (

@@ -4,7 +4,7 @@ import { Map } from '@psa/dst.ui.map';
 import { Button } from '@mui/material';
 import PlaceIcon from '@mui/icons-material/Place';
 import { useDispatch, useSelector } from 'react-redux';
-import { getZoneData, getSSURGOData } from '../../../../features/stepSlice/api';
+import { getZoneData, getSSURGOData } from '../../../../features/siteConditionSlice/api';
 import { setCountyRedux, setSoilDrainageRedux, updateLatlonRedux } from '../../../../features/siteConditionSlice/actions';
 import '../steps.scss';
 import { soilDrainage } from '../../../../shared/data/dropdown';
