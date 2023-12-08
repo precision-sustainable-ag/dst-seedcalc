@@ -35,13 +35,8 @@ const ConfirmPlanChip = ({ label, value }) => (
   </>
 );
 
-const ConfirmPlanCharts = ({ council, speciesSelection, calculator }) => {
+const ConfirmPlanCharts = ({ council, calculator }) => {
   const { seedsSelected, options } = useSelector((state) => state.calculator);
-
-  const poundsForPurchaseSum = speciesSelection.seedsSelected.reduce(
-    (sum, a) => sum + a.poundsForPurchase,
-    0,
-  );
 
   const [piechartData, setPieChartData] = useState(defaultPieChartData);
 
@@ -67,7 +62,7 @@ const ConfirmPlanCharts = ({ council, speciesSelection, calculator }) => {
       >
         <ConfirmPlanChip
           label="Amount of mix for 50 acres"
-          value={`${parseInt(poundsForPurchaseSum, 10)}lbs`}
+          value={`${'Not Defined yet'}lbs`}
         />
       </Grid>
       <Grid

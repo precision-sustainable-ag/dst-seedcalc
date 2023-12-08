@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import {
-  addSeed, removeSeed, setOption, removeOption, updateDiversity, selectSidebarSeed, setMixSeedingRate, setReviewMixResult, setAdjustedMixSeedingRate,
+  addSeed, removeSeed, setOption, removeOption, updateDiversity, selectSidebarSeed, setMixSeedingRate, setReviewMixResult, setAdjustedMixSeedingRate, importFromCSV,
 } from './index';
 
 export const addSeedRedux = (seed) => (dispatch) => dispatch(addSeed({ seed }));
@@ -20,3 +20,5 @@ export const setMixSeedingRateRedux = (mixSeedingRate) => (dispatch) => dispatch
 export const setAdjustedMixSeedingRateRedux = (adjustedMixSeedingRate) => (dispatch) => dispatch(setAdjustedMixSeedingRate({ adjustedMixSeedingRate }));
 
 export const setReviewMixResultRedux = (reviewMixResult) => (dispatch) => dispatch(setReviewMixResult({ reviewMixResult }));
+
+export const importFromCSVCalculator = (csvData) => (dispatch) => dispatch(importFromCSV({ csvData }));

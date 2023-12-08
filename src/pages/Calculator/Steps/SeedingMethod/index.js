@@ -107,7 +107,6 @@ const SeedingMethod = () => {
         Broadcast: parseFloat(coefficients['Broadcast Coefficient']?.values[0]) || null,
         Aerial: parseFloat(coefficients['Aerial Coefficient']?.values[0]) || null,
       } : {
-        // TODO: drilled need to investigate, not in seed api
         Drilled: 1,
         BroadcastwithCultivation:
         parseFloat(coefficients['Broadcast with Cultivation Coefficient']?.values[0]) || null,
@@ -117,13 +116,17 @@ const SeedingMethod = () => {
       };
       setMethods((prev) => ({ ...prev, [seed.label]: plantingMethods }));
 
+      console.log(
+        options[seed.label].plantingMethod,
+        options[seed.label].plantingMethodModifier,
+      );
       // initial set planting method to drilled
-      if (options[seed.label].plantingMethod
-          && options[seed.label].plantingMethodModifier) return;
-      dispatch(setOptionRedux(
-        seed.label,
-        { ...options[seed.label], plantingMethod: 'Drilled', plantingMethodModifier: 1 },
-      ));
+      if (options[seed.label].plantingMethod === null) {
+        dispatch(setOptionRedux(
+          seed.label,
+          { ...options[seed.label], plantingMethod: 'Drilled', plantingMethodModifier: 1 },
+        ));
+      }
     });
   }, []);
 

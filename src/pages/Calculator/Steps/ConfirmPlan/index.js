@@ -9,7 +9,6 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { Typography, Button } from '@mui/material';
 import { useSelector } from 'react-redux';
 
-import { emptyValues } from '../../../../shared/utils/calculate';
 import { handleDownload } from '../../../../shared/utils/exportExcel';
 import ConfirmPlanCharts from './charts';
 import '../steps.scss';
@@ -28,11 +27,10 @@ const ConfirmPlan = ({ calculator }) => {
   const theme = useTheme();
   const matchesUpMd = useMediaQuery(theme.breakpoints.up('md'));
 
-  const data = useSelector((state) => state.steps.value);
-  const { speciesSelection } = data;
-
-  const { council } = useSelector((state) => state.siteCondition);
-  const { seedsSelected, options, reviewMixResult } = useSelector((state) => state.calculator);
+  const siteCondition = useSelector((state) => state.siteCondition);
+  const calculatorRedux = useSelector((state) => state.calculator);
+  const { council, checkNRCSStandards } = siteCondition;
+  const { seedsSelected, options, reviewMixResult } = calculatorRedux;
 
   const [prevOptions, setPrevOptions] = useState({});
 
@@ -45,15 +43,6 @@ const ConfirmPlan = ({ calculator }) => {
   // console.log('calculatorResult', calculatorResult);
 
   const [nrcsResult, setNrcsResult] = useState({});
-
-  /// ///////////////////////////////////////////////////////
-  //                   State Logic                        //
-  /// ///////////////////////////////////////////////////////
-
-  const generateSeedNull = () => {
-    const seed = { ...speciesSelection.seedsSelected[1] };
-    return emptyValues(seed);
-  };
 
   /// ///////////////////////////////////////////////////////
   //                     useEffect                        //
@@ -76,7 +65,9 @@ const ConfirmPlan = ({ calculator }) => {
 
   // SDK NRCS calculated here
   useEffect(() => {
-    setNrcsResult(checkNRCS(seedsSelected, calculator, options));
+    if (checkNRCSStandards) {
+      setNrcsResult(checkNRCS(seedsSelected, calculator, options));
+    }
   }, []);
 
   /// ///////////////////////////////////////////////////////
@@ -105,11 +96,13 @@ const ConfirmPlan = ({ calculator }) => {
               onClick={() => {
                 handleDownload(
                   [
-                    ...speciesSelection.seedsSelected,
                     {
-                      ...generateSeedNull(),
-                      label: 'EXT-DATA-OBJECT',
-                      extData: JSON.stringify(data),
+                      label: 'SITE-CONDITION',
+                      extData: JSON.stringify(siteCondition),
+                    },
+                    {
+                      label: 'CALCULATOR',
+                      extData: JSON.stringify(calculatorRedux),
                     },
                   ],
                   council,
@@ -125,7 +118,6 @@ const ConfirmPlan = ({ calculator }) => {
 
         <ConfirmPlanCharts
           council={council}
-          speciesSelection={speciesSelection}
           calculator={calculator}
         />
 

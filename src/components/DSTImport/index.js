@@ -5,9 +5,9 @@ import Papa from 'papaparse';
 import {
   Box, Grid, Modal, Typography, Button,
 } from '@mui/material';
-
 import { useDispatch } from 'react-redux';
-import { updateAllSteps, updateModal } from '../../features/stepSlice';
+import { importFromCSVCalculator } from '../../features/calculatorSlice/actions';
+import { importFromCSVSite } from '../../features/siteConditionSlice/actions';
 
 const modalStyle = {
   position: 'absolute',
@@ -33,66 +33,52 @@ const DSTImport = ({ setIsImported }) => {
   //                  Import Logic                        //
   /// ///////////////////////////////////////////////////////
 
-  // show a modal to handle failure import
-  const handleModal = (type, title, description) => {
-    const payload = {
-      value: {
-        loading: false,
-        error: true,
-        success: type !== 'error',
-        errorTitle: title,
-        errorMessage: description,
-        successTitle: title,
-        successMessage: description,
-        isOpen: true,
-      },
-    };
-    dispatch(updateModal(payload));
-  };
+  // // show a modal to handle failure import
+  // const handleModal = (type, title, description) => {
+  //   const payload = {
+  //     value: {
+  //       loading: false,
+  //       error: true,
+  //       success: type !== 'error',
+  //       errorTitle: title,
+  //       errorMessage: description,
+  //       successTitle: title,
+  //       successMessage: description,
+  //       isOpen: true,
+  //     },
+  //   };
+  //   dispatch(updateModal(payload));
+  // };
 
   const handleFileUpload = (event) => {
     Papa.parse(event.target.files[0], {
       header: true,
       skipEmptyLines: true,
       complete(results) {
-        const lastItem = results.data[results.data.length - 1];
-        // TODO: not sure how to test error import
-        if (lastItem.label !== 'EXT-DATA-OBJECT') {
-          handleModal(
-            'error',
-            'Invalid Format',
-            'CSV format invalid. Please try again.',
-          );
-        } else {
-          const extDataObject = JSON.parse(
-            results.data[results.data.length - 1].extData,
-          );
-          setCSVImport(extDataObject);
-          setIsImported(true);
-        }
+        const siteCondition = JSON.parse(results.data[0].extData);
+        const calculator = JSON.parse(results.data[1].extData);
+        setCSVImport([siteCondition, calculator]);
+        setIsImported(true);
       },
     });
   };
 
-  const setModal = () => {
-    setOpenModal(!openModal);
-  };
-
   const handleImportCSV = () => {
     if (CSVImport === null) {
-      setModal();
+      setOpenModal(!openModal);
       return;
     }
-    dispatch(updateAllSteps({ value: CSVImport }));
+    dispatch(importFromCSVSite(CSVImport[0]));
+    dispatch(importFromCSVCalculator(CSVImport[1]));
     navigate('/calculator');
-    setModal();
+    setOpenModal(!openModal);
   };
 
   return (
     <>
       <Modal
         open={openModal}
-        onClose={setModal}
+        onClose={() => setOpenModal(!openModal)}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -128,7 +114,7 @@ const DSTImport = ({ setIsImported }) => {
       </Modal>
       <Button
         variant="contained"
-        onClick={setModal}
+        onClick={() => setOpenModal(!openModal)}
         sx={{ textDecoration: 'none', margin: '1rem' }}
       >
         Import previous calculation

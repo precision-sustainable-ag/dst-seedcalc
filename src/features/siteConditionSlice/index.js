@@ -46,6 +46,10 @@ const siteConditionSlice = createSlice({
       const { latlon } = payload;
       return { ...state, latlon };
     },
+    importFromCSV: (state, { payload }) => {
+      const { csvData } = payload;
+      return { ...csvData };
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -81,7 +85,7 @@ const siteConditionSlice = createSlice({
 export const {
   updateState, updateCounty, updateCountyId, updateSoilDrainage,
   updatePlantingDate, updateAcres, checkNRCS, updateCouncil, updateSoilFertility,
-  updateLatlon,
+  updateLatlon, importFromCSV,
 } = siteConditionSlice.actions;
 
 export default siteConditionSlice;
