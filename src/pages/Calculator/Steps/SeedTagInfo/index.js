@@ -29,6 +29,7 @@ const LeftGrid = styled(Grid)({
 
 const SeedTagInfo = () => {
   const dispatch = useDispatch();
+  const { council } = useSelector((state) => state.siteCondition);
   const { sideBarSelection, seedsSelected, options } = useSelector((state) => state.calculator);
 
   const [accordionState, setAccordionState] = useState(
@@ -130,7 +131,9 @@ const SeedTagInfo = () => {
                 <Grid item xs={4}>
                   <NumberTextField
                     disabled
-                    value={parseInt(seed.attributes['Planting Information']['Seed Count'].values[0], 10)}
+                    value={parseInt(council === 'MCCC'
+                      ? seed.attributes['Planting Information']['Seed Count'].values[0]
+                      : seed.attributes.Planting['Seeds Per lb'].values[0], 10)}
                   />
                 </Grid>
                 <Grid item xs={2} />

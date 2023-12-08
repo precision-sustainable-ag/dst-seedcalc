@@ -29,6 +29,7 @@ import StepsList from '../../components/StepsList';
 
 const Calculator = () => {
   const data = useSelector((state) => state.steps.value);
+  // FIXME: this error is not working now
   const error = useSelector((state) => state.steps.error);
 
   // TODO: initially set calculator here
@@ -123,7 +124,7 @@ const Calculator = () => {
   }, []);
 
   useEffect(() => {
-    setShowAlert(error);
+    if (error) setShowAlert(error);
   }, [error]);
 
   return (

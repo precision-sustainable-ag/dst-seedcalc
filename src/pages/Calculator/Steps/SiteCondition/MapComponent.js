@@ -13,36 +13,27 @@ const MapComponent = ({
   handleSteps,
   selectedToEditSite,
   setSelectedToEditSite,
-  siteCondition,
-  handleUpdateSteps,
   counties,
 }) => {
   const dispatch = useDispatch();
-  const newSiteCondition = useSelector((state) => state.siteCondition);
+  const siteCondition = useSelector((state) => state.siteCondition);
 
   useEffect(() => {
     const {
-      latitude, longitude, address, zipCode, county,
+      latitude, longitude, zipCode, county,
     } = selectedToEditSite;
 
     if (Object.keys(selectedToEditSite).length > 0) {
       if (siteCondition.council === 'MCCC') {
         const filteredCounty = counties.filter((c) => county.toLowerCase().includes(c.label.toLowerCase()));
         if (filteredCounty.length > 0) {
-          handleUpdateSteps('county', 'siteCondition', filteredCounty[0].label);
-          // TODO: new site redux here
           dispatch(setCountyRedux(filteredCounty[0].label));
         }
       }
-      handleUpdateSteps('latitude', 'siteCondition', latitude);
-      handleUpdateSteps('longitude', 'siteCondition', longitude);
-      handleUpdateSteps('address', 'siteCondition', address);
-      handleUpdateSteps('zipCode', 'siteCondition', zipCode);
-      // TODO: new site redux here
       dispatch(updateLatlonRedux([latitude, longitude]));
       dispatch(getZoneData({ zip: zipCode })).then((res) => {
         // update zone data for NECCC
-        if (newSiteCondition.council === 'NECCC') {
+        if (siteCondition.council === 'NECCC') {
           dispatch(setCountyRedux(`Zone ${res.payload.replace(/[^0-9]/g, '')}`));
         }
       });
@@ -78,8 +69,8 @@ const MapComponent = ({
           initWidth="100%"
           padding="20px"
           initHeight="360px"
-          initLat={newSiteCondition.latlon[0]}
-          initLon={newSiteCondition.latlon[1]}
+          initLat={siteCondition.latlon[0]}
+          initLon={siteCondition.latlon[1]}
           initStartZoom={12}
           initMinZoom={4}
           initMaxZoom={18}

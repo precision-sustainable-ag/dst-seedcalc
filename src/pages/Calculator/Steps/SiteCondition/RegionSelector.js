@@ -4,7 +4,6 @@ import { Button } from '@mui/material';
 import { RegionSelectorMap } from '@psa/dst.ui.region-selector-map';
 import PlaceIcon from '@mui/icons-material/Place';
 import { useDispatch, useSelector } from 'react-redux';
-import { getRegion } from '../../../../features/stepSlice/api';
 import statesLatLongDict from '../../../../shared/data/statesLatLongDict';
 import { availableStates } from '../../../../shared/data/dropdown';
 import Dropdown from '../../../../components/Dropdown';
@@ -13,15 +12,14 @@ import {
   checkNRCSRedux, setCouncilRedux, setCountyIdRedux, setCountyRedux,
   setSoilDrainageRedux, setSoilFertilityRedux, setStateRedux, updateLatlonRedux,
 } from '../../../../features/siteConditionSlice/actions';
-import '../steps.scss';
 import { getRegionNew } from '../../../../features/siteConditionSlice/api';
 import { updateDiversityRedux } from '../../../../features/calculatorSlice/actions';
 import { clearOptions, clearSeeds } from '../../../../features/calculatorSlice';
+import '../steps.scss';
 
 const RegionSelector = ({
   stateList,
   handleSteps,
-  handleUpdateSteps,
 }) => {
   const [isImported, setIsImported] = useState(false);
   const [mapState, setMapState] = useState({});
@@ -50,14 +48,9 @@ const RegionSelector = ({
     if (isImported) return;
     setIsImported(false);
     // Retrieve region
-    dispatch(getRegion({ stateId: selectedState.id }));
     dispatch(getRegionNew({ stateId: selectedState.id }));
 
     // Clear all the rest forms value
-    handleUpdateSteps('county', 'siteCondition', '');
-    handleUpdateSteps('countyId', 'siteCondition', '');
-    handleUpdateSteps('soilDrainage', 'siteCondition', '');
-    // TODO: new site redux here
     dispatch(setCountyRedux(''));
     dispatch(setCountyIdRedux(''));
     dispatch(setSoilDrainageRedux(''));
@@ -65,30 +58,12 @@ const RegionSelector = ({
     dispatch(checkNRCSRedux(false));
 
     // Clear out all seeds selected in Redux
-    handleUpdateSteps('seedsSelected', 'speciesSelection', []);
-    handleUpdateSteps('diversitySelected', 'speciesSelection', []);
-    // TODO: new site redux here
     dispatch(clearSeeds());
     dispatch(updateDiversityRedux([]));
     dispatch(clearOptions());
 
     // Update siteCondition Redux
     const { label } = selectedState;
-    handleUpdateSteps('latitude', 'siteCondition', statesLatLongDict[label][0]);
-    handleUpdateSteps(
-      'longitude',
-      'siteCondition',
-      statesLatLongDict[label][1],
-    );
-    handleUpdateSteps('state', 'siteCondition', label);
-    handleUpdateSteps('stateId', 'siteCondition', selectedState.id);
-    handleUpdateSteps(
-      'council',
-      'siteCondition',
-      selectedState.parents[0].shorthand,
-    );
-    handleUpdateSteps('stateSelected', 'siteCondition', selectedState);
-    // TODO: new site redux here
     dispatch(updateLatlonRedux(statesLatLongDict[label]));
     dispatch(setStateRedux(label, selectedState.id));
     dispatch(setCouncilRedux(selectedState.parents[0].shorthand));

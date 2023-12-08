@@ -81,8 +81,8 @@ const SeedingMethod = () => {
 
   // function to handle dropdown and update seed options in redux
   const updateOptions = (method) => {
-    if (method === 'Broadcast(With Cultivation)') method = 'BroadcastwithCultivation';
-    else if (method === 'Broadcast(With No Cultivation)') method = 'BroadcastwithoutCultivation';
+    // if (method === 'Broadcast(With Cultivation)') method = 'BroadcastwithCultivation';
+    // else if (method === 'Broadcast(With No Cultivation)') method = 'BroadcastwithoutCultivation';
     seedsSelected.forEach((seed) => {
       const prevOption = options[seed.label];
       const plantingMethod = method;

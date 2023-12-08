@@ -21,7 +21,6 @@ import {
 } from '../../../../features/siteConditionSlice/actions';
 
 const SiteConditionForm = ({
-  handleUpdateSteps,
   council,
   counties,
 }) => {
@@ -31,14 +30,11 @@ const SiteConditionForm = ({
 
   const handleSwitch = () => {
     setChecked(!checked);
-    handleUpdateSteps('enabled', 'NRCS', !checked);
     dispatch(checkNRCSRedux(!checked));
   };
 
   const handleRegion = (region) => {
     const countyId = counties.filter((c) => c.label === region)[0].id;
-    handleUpdateSteps('county', 'siteCondition', region);
-    // TODO: new site redux here
     dispatch(setCountyRedux(region));
     if (countyId !== undefined && countyId !== undefined) {
       dispatch(
@@ -68,8 +64,6 @@ const SiteConditionForm = ({
           value={newSiteCondition.soilDrainage}
           label="Soil Drainage: "
           handleChange={(e) => {
-            handleUpdateSteps('soilDrainage', 'siteCondition', e.target.value);
-            // TODO: new site redux here
             dispatch(setSoilDrainageRedux(e.target.value));
           }}
           size={12}
@@ -83,12 +77,6 @@ const SiteConditionForm = ({
           value={newSiteCondition.plannedPlantingDate}
           handleChange={(e) => {
             const formattedDate = dayjs(e).format('MM/DD/YYYY');
-            handleUpdateSteps(
-              'plannedPlantingDate',
-              'siteCondition',
-              formattedDate,
-            );
-            // TODO: new site redux here
             dispatch(setPlantingDateRedux(formattedDate));
           }}
         />
@@ -100,8 +88,6 @@ const SiteConditionForm = ({
           label="Acres"
           disabled={false}
           handleChange={(e) => {
-            handleUpdateSteps('acres', 'siteCondition', e.target.value);
-            // TODO: new site redux here
             dispatch(setAcresRedux(parseInt(e.target.value, 10)));
           }}
           placeholder="Enter your field acres here"

@@ -44,7 +44,6 @@ const CheckBoxIcon = ({ style }) => (
 const PlantList = ({
   seedType,
   filteredSeeds,
-  updateSeeds,
 }) => {
   const dispatch = useDispatch();
 
@@ -144,7 +143,6 @@ const PlantList = ({
             >
               <CardActionArea
                 onClick={() => {
-                  updateSeeds(seed, seedType);
                   // updated click function
                   handleClick(seed);
                 }}

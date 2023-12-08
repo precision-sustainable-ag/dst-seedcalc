@@ -8,6 +8,7 @@ export const jsonToCSV = (data) => {
 };
 
 export const handleDownload = (data, council) => {
+  console.log('redux data', data);
   const csvData = jsonToCSV(data);
   const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8' });
   saveAs(blob, `data_${council}.csv`);
