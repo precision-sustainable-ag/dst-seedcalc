@@ -30,7 +30,7 @@ const ConfirmPlan = ({ calculator }) => {
   const siteCondition = useSelector((state) => state.siteCondition);
   const calculatorRedux = useSelector((state) => state.calculator);
   const { council, checkNRCSStandards } = siteCondition;
-  const { seedsSelected, options, reviewMixResult } = calculatorRedux;
+  const { seedsSelected, options, bulkSeedingRate } = calculatorRedux;
 
   const [prevOptions, setPrevOptions] = useState({});
 
@@ -52,7 +52,7 @@ const ConfirmPlan = ({ calculator }) => {
     seedsSelected.forEach((seed) => {
       if (options[seed.label] !== prevOptions[seed.label]) {
         const result = confirmPlan(
-          reviewMixResult[seed.label].step5.bulkSeedingRate,
+          bulkSeedingRate[seed.label],
           options[seed.label].acres,
           // FIXME: initializa cost per pound, this value is not defined
           options[seed.label].costPerPound ?? 0.42,

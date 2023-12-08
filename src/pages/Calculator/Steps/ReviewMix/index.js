@@ -32,7 +32,7 @@ import {
   SeedingRateChip,
 } from '../../../../components/SeedingRateCard';
 import { reviewMix, reviewMixNECCC, calculatePieChartData } from '../../../../shared/utils/calculator';
-import { setOptionRedux, setReviewMixResultRedux } from '../../../../features/calculatorSlice/actions';
+import { setBulkSeedingRateRedux, setOptionRedux } from '../../../../features/calculatorSlice/actions';
 
 const defaultResultMCCC = {
   step1: { singleSpeciesSeedingRate: 0, percentOfRate: 0, seedingRate: 0 },
@@ -67,7 +67,9 @@ const ReviewMix = ({ calculator }) => {
   const dispatch = useDispatch();
 
   const { council } = useSelector((state) => state.siteCondition);
-  const { seedsSelected, sideBarSelection, options } = useSelector((state) => state.calculator);
+  const {
+    seedsSelected, sideBarSelection, options,
+  } = useSelector((state) => state.calculator);
 
   const [prevOptions, setPrevOptions] = useState({});
   const [piechartData, setPieChartData] = useState(defaultPieChartData);
@@ -131,11 +133,6 @@ const ReviewMix = ({ calculator }) => {
         setCalculatorResult((prev) => ({ ...prev, [seed.label]: result }));
       }
     });
-    // save result in redux
-    setCalculatorResult((prev) => {
-      dispatch(setReviewMixResultRedux(prev));
-      return prev;
-    });
     // calculate piechart data
     const {
       seedingRateArray,
@@ -145,6 +142,14 @@ const ReviewMix = ({ calculator }) => {
     setPieChartData({ seedingRateArray, plantsPerAcreArray, seedsPerAcreArray });
     setPrevOptions(options);
   }, [options]);
+
+  useEffect(() => {
+    let result = {};
+    seedsSelected.forEach((seed) => {
+      result = { ...result, [seed.label]: calculatorResult[seed.label].step5.bulkSeedingRate };
+    });
+    dispatch(setBulkSeedingRateRedux(result));
+  }, [calculatorResult]);
 
   /// ///////////////////////////////////////////////////////
   //                     Render                           //

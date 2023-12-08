@@ -116,10 +116,6 @@ const SeedingMethod = () => {
       };
       setMethods((prev) => ({ ...prev, [seed.label]: plantingMethods }));
 
-      console.log(
-        options[seed.label].plantingMethod,
-        options[seed.label].plantingMethodModifier,
-      );
       // initial set planting method to drilled
       if (options[seed.label].plantingMethod === null) {
         dispatch(setOptionRedux(

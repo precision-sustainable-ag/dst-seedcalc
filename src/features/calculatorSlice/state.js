@@ -8,7 +8,7 @@ const initialState = {
   sideBarSelection: '',
   mixSeedingRate: null,
   adjustedMixSeedingRate: null,
-  reviewMixResult: {},
+  bulkSeedingRate: {},
 };
 
 export default initialState;
