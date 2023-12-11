@@ -143,13 +143,6 @@ const reviewMix = (seed, calculator, options = {}) => {
   });
 
   console.log('\n> ', seed.label, '- ReviewYourMixPage');
-  // console.log('1.Single Species Seeding Rate:', singleSpeciesSeedingRate);
-  // // console.log('% of single species rate :', percentOfSingleSpeciesRate);
-  // console.log('2.Base mix seeding Rate :', baseseedingRate);
-  // console.log('3.Mix Seeding rate after planting method modifier', seedingRateAfterPlantingMethodModifier);
-  // console.log('4.Mix seeding rate after management impact', seedingRateAfterManagementImpact);
-  // console.log('5.Mix seeding rate after germination and purity', seedingRateAfterPurityAndGermination);
-
   console.log('1.Single Species Seeding Rate * Percent of Rate = Seeding Rate');
   console.log(singleSpeciesSeedingRate, ' * ', percentOfSingleSpeciesRate, ' = ', baseSeedingRate);
   console.log('2.Seeding Rate * Planting Method = Seeding Rate');
@@ -230,12 +223,6 @@ const reviewMixNECCC = (seed, calculator, options = {}) => {
   });
 
   console.log('\n> ', seed.label, '- ReviewYourMixPage');
-  // console.log('1.Single Species Seeding Rate:', singleSpeciesSeedingRate);
-  // console.log('2.Base mix seeding Rate :', baseseedingRate);
-  // console.log('3.Mix Seeding rate after planting method modifier', seedingRateAfterPlantingMethodModifier);
-  // console.log('4.Mix seeding rate after management impact', seedingRateAfterManagementImpact);
-  // console.log('5.Mix seeding rate after germination and purity', seedingRateAfterPurityAndGermination);
-
   console.log('Step 1: Default Single Species Seeding Rate PLS *\
   Soil Fertility Modifier / Sum Species Of Group in Mix = Seeding Rate');
   console.log(
