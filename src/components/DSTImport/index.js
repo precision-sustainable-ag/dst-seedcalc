@@ -33,23 +33,6 @@ const DSTImport = ({ setIsImported }) => {
   //                  Import Logic                        //
   /// ///////////////////////////////////////////////////////
 
-  // // show a modal to handle failure import
-  // const handleModal = (type, title, description) => {
-  //   const payload = {
-  //     value: {
-  //       loading: false,
-  //       error: true,
-  //       success: type !== 'error',
-  //       errorTitle: title,
-  //       errorMessage: description,
-  //       successTitle: title,
-  //       successMessage: description,
-  //       isOpen: true,
-  //     },
-  //   };
-  //   dispatch(updateModal(payload));
-  // };
-
   const handleFileUpload = (event) => {
     Papa.parse(event.target.files[0], {
       header: true,
@@ -102,9 +85,7 @@ const DSTImport = ({ setIsImported }) => {
             <Grid xs={4} item>
               <Button
                 sx={{ marginTop: '15px' }}
-                onClick={(e) => {
-                  handleImportCSV(e);
-                }}
+                onClick={handleImportCSV}
               >
                 Import CSV
               </Button>

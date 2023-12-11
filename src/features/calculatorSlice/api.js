@@ -10,12 +10,3 @@ export const getCropsNew = createAsyncThunk(
     return res;
   },
 );
-
-// export const getCropsById = createAsyncThunk(
-//   'calculator/getCropsById',
-//   async ({ cropId, regionId, countyId }) => {
-//     const url = `https://developapi.covercrop-selector.org/v2/crops/${cropId}?regions=${regionId}&context=seed_calc&regions=${countyId}`;
-//     const res = await fetch(url).then((data) => data.json());
-//     return res;
-//   },
-// );

@@ -29,7 +29,6 @@ import StepsList from '../../components/StepsList';
 
 const Calculator = () => {
   const data = useSelector((state) => state.steps.value);
-  // FIXME: this error is not working now
   const siteConditionError = useSelector((state) => state.siteCondition.error);
   const calculatorError = useSelector((state) => state.calculator.error);
 
