@@ -64,7 +64,6 @@ const calculatorSlice = createSlice({
       })
       .addCase(getCropsNew.fulfilled, (state, { payload }) => {
         state.loading = false;
-        // console.log('getCrops', payload);
         state.crops = payload.data;
         state.error = false;
       })
