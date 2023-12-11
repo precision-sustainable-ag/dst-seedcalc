@@ -87,6 +87,7 @@ const ReviewMixSteps = ({
 
           <Grid item xs={3}>
             <NumberTextField
+              disabled
               label={matchesMd ? '' : 'Sum Species Of Group In Mix'}
               value={step1.sumGroupInMix}
             />
@@ -192,7 +193,7 @@ const ReviewMixSteps = ({
         <Grid item xs={3}>
           <NumberTextField
             label={matchesMd ? '' : 'Planting Method'}
-            value={step2.plantingMethodModifier}
+            value={step2.plantingMethodModifier ?? 1}
             handleChange={(e) => {
               handleFormValueChange(seed, 'plantingMethodModifier', parseFloat(e.target.value));
             }}

@@ -1,7 +1,3 @@
-/// ///////////////////////////////////////////////////////
-//                      Imports                         //
-/// ///////////////////////////////////////////////////////
-
 import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
@@ -40,7 +36,6 @@ const ConfirmPlan = ({ calculator }) => {
       return res;
     }, {}),
   );
-  // console.log('calculatorResult', calculatorResult);
 
   const [nrcsResult, setNrcsResult] = useState({});
 

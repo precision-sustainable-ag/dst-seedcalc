@@ -62,7 +62,6 @@ const adjustProportionsNECCC = (seed, calculator, options = {}) => {
   const crop = calculator.getCrop(seed);
   const defaultSingleSpeciesSeedingRatePLS = options.singleSpeciesSeedingRate
   ?? crop.coefficients.singleSpeciesSeedingRate;
-  // FIXME: soil fertility not defined
 
   const soilFertilityModifier = calculator.soilFertilityModifier(crop, options);
   const { group } = crop;
@@ -188,7 +187,6 @@ const reviewMix = (seed, calculator, options = {}) => {
 const reviewMixNECCC = (seed, calculator, options = {}) => {
   const crop = calculator.getCrop(seed);
   const singleSpeciesSeedingRate = options.singleSpeciesSeedingRate ?? crop.coefficients.singleSpeciesSeedingRate;
-  // FIXME: soil fertility not defined
   const soilFertilityModifer = calculator.soilFertilityModifier(crop, options);
   const { group } = crop;
   const sumGroupInMix = calculator.speciesInMix[group];

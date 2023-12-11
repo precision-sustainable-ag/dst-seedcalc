@@ -87,7 +87,6 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
       <Grid item xs={12}>
         <Typography variant="h2">Tell us about your planting site</Typography>
       </Grid>
-      {/* FIXME: this should be updated with new redux */}
       {loading === 'getLocality' ? (
         <Spinner />
       ) : (

@@ -17,21 +17,6 @@ const App = () => (
         overflowX: 'hidden',
       }}
     >
-      {/* TODO: modal not used now */}
-      {/* <DSTModal
-          isOpen={modalState.isOpen}
-          setModal={handleModal}
-          handleClose={handleModal}
-          title={
-            modalState.error ? modalState.errorTitle : modalState.successTitle
-          }
-          description={
-            modalState.error
-              ? modalState.errorMessage
-              : modalState.successMessage
-          }
-          style={{}}
-        /> */}
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />

@@ -93,7 +93,6 @@ export const calculateMixRatioMCCC = (step, seed) => {
   }
 };
 
-// FIXME: this calculation is not correct and will cause problems
 export const calculateMixRatioNECCC = (step, seed, seedList) => {
   switch (step) {
     case 'step1':
@@ -243,7 +242,6 @@ export const calculateReviewMixNECCC = (
     case 'step2':
       return {
         key: 'step2Result',
-        // FIXME: is this correct?
         val: calculateInt([seed.seedsPerPound, seed.step1Result], 'multiply'),
       };
     case 'step3':
@@ -376,7 +374,6 @@ export const calculatePieChartData = (seedsSelected, calculatorResult) => {
     });
     plantsPerAcreArray.push({
       name: s.label,
-      // FIXME: not sure why the value is per acre while this is per sqft
       value: parseFloat(s.aproxPlantsSqFt),
     });
     seedsPerAcreArray.push({

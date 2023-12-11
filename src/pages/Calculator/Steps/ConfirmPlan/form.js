@@ -103,11 +103,10 @@ const ConfirmPlanForm = ({
           />
         </Grid>
         <Grid item xs={3}>
-          {' '}
+          {/* FIXME: investigate usage of the switch */}
           <DSTSwitch
             checked={seed.confirmToggle}
             handleChange={() => {
-              updateSeed(!seed.confirmToggle, 'confirmToggle', seed);
             }}
           />
         </Grid>

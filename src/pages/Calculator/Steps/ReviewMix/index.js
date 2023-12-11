@@ -173,7 +173,6 @@ const ReviewMix = ({ calculator }) => {
         val: calculatorResult[seed.label].step2.seedingRateAfterPlantingMethodModifier,
       },
       {
-        // FIXME: static value here, maybe need to change to dynamic
         label: `Management Impacts on Mix (${calculatorResult[seed.label].step3.managementImpactOnMix})`,
         key: 'managementImpactOnMix',
         val: calculatorResult[seed.label].step3.seedingRateAfterManagementImpact,

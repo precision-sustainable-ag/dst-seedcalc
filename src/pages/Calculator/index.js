@@ -30,7 +30,8 @@ import StepsList from '../../components/StepsList';
 const Calculator = () => {
   const data = useSelector((state) => state.steps.value);
   // FIXME: this error is not working now
-  const error = useSelector((state) => state.steps.error);
+  const siteConditionError = useSelector((state) => state.siteCondition.error);
+  const calculatorError = useSelector((state) => state.calculator.error);
 
   const { seedsSelected } = useSelector((state) => state.calculator);
   // initially set calculator here
@@ -125,8 +126,8 @@ const Calculator = () => {
   }, []);
 
   useEffect(() => {
-    if (error) setShowAlert(error);
-  }, [error]);
+    if (siteConditionError || calculatorError) setShowAlert(true);
+  }, [siteConditionError, calculatorError]);
 
   return (
     <Grid container justifyContent="center">

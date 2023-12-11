@@ -36,9 +36,9 @@ const ConfirmPlanChip = ({ label, value }) => (
 );
 
 const ConfirmPlanCharts = ({ council, calculator }) => {
-  const { seedsSelected, options } = useSelector((state) => state.calculator);
-
   const [piechartData, setPieChartData] = useState(defaultPieChartData);
+
+  const { seedsSelected, options, mixSeedingRate } = useSelector((state) => state.calculator);
 
   useEffect(() => {
     // calculate piechart data
@@ -62,7 +62,8 @@ const ConfirmPlanCharts = ({ council, calculator }) => {
       >
         <ConfirmPlanChip
           label="Amount of mix for 50 acres"
-          value={`${'Not Defined yet'}lbs`}
+          // FIXME: temporary, need verification
+          value={`${mixSeedingRate * 50}lbs`}
         />
       </Grid>
       <Grid
