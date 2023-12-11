@@ -132,20 +132,23 @@ const Calculator = () => {
   return (
     <Grid container justifyContent="center">
       <Grid item style={{ position: 'fixed', top: '0px', zIndex: 1000 }}>
-        <FadeAlert
-          showAlert={showAlert}
-          action={(
-            <IconButton
-              aria-label="close"
-              color="inherit"
-              size="small"
-              onClick={() => setShowAlert(false)}
-            >
-              <CloseIcon fontSize="inherit" />
-            </IconButton>
+        {showAlert
+          && (
+          <FadeAlert
+            showAlert={showAlert}
+            action={(
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => setShowAlert(false)}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            )}
+            message="Network Error - Try again later or refresh the page!"
+          />
           )}
-          message="Network Error - Try again later or refresh the page!"
-        />
       </Grid>
       <Grid
         item

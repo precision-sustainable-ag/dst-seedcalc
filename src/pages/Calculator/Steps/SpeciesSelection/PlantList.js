@@ -93,7 +93,6 @@ const PlantList = ({
     if (seedsSelected.filter((s) => s.label === seedName).length === 0) {
       const url = `https://developapi.covercrop-selector.org/v2/crops/${cropId}?regions=${stateId}&context=seed_calc&regions=${countyId}`;
       const { data } = await fetch(url).then((res) => res.json());
-      // TODO: new calculator redux here
       dispatch(addSeedRedux(data));
       const { label, attributes } = data;
       const percentSurvival = council === 'MCCC'

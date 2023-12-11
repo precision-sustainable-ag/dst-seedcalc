@@ -1,6 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-// TODO: consume the return value in component, maybe move all thunks into a single slice with dataloading
 export const getLocalityNew = createAsyncThunk(
   'siteCondition/getLocality',
   async () => {

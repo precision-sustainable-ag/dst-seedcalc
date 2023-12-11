@@ -291,7 +291,7 @@ const ReviewMix = ({ calculator }) => {
             <AccordionDetails className="accordian-details">
               {renderAccordianChart(seed)}
 
-              <Grid container>
+              <Grid container pt="1rem">
                 <Grid item xs={6}>
                   <SeedingRateChip
                     label="Seeding Rate in Mix PLS"

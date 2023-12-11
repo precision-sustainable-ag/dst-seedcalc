@@ -105,7 +105,6 @@ export const stepSlice = createSlice({
         ? checkSoilDrainage[0].label
         : '';
       state.value.siteCondition.soilDrainage = dropdownVal;
-      // TODO: update new soilD here / return a soilD value
       state.error = false;
     },
     [getSSURGOData.rejected]: (state) => {

@@ -19,21 +19,21 @@ const ReviewMixSteps = ({
 
   const renderStepsForm = (label1, label2, label3) => (
     matchesMd && (
-    <Grid container>
+    <Grid container justifyContent="space-evenly">
       <Grid item xs={3}>
-        <Typography sx={{ fontSize: '0.75rem', pb: '1rem' }}>
+        <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
           {label1}
         </Typography>
       </Grid>
       <Grid item xs={1} />
       <Grid item xs={3}>
-        <Typography sx={{ fontSize: '0.75rem', pb: '1rem' }}>
+        <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
           {label2}
         </Typography>
       </Grid>
       <Grid item xs={1} />
       <Grid item xs={3}>
-        <Typography sx={{ fontSize: '0.75rem', pb: '1rem' }}>
+        <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
           {label3}
         </Typography>
       </Grid>
@@ -58,42 +58,43 @@ const ReviewMixSteps = ({
             'Soil Fertility Modifier',
             'Sum Species Of Group In Mix',
           )}
-          <Grid item xs={3}>
-            <NumberTextField
-              label={matchesMd ? '' : 'Single Species Seeding Rate PLS'}
-              handleChange={(e) => {
-                handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
-              }}
-              value={step1.singleSpeciesSeedingRate}
-            />
-            <Typography>Lbs / Acre</Typography>
-          </Grid>
+          <Grid container justifyContent="space-evenly">
+            <Grid item xs={3}>
+              <NumberTextField
+                label={matchesMd ? '' : 'Single Species Seeding Rate PLS'}
+                handleChange={(e) => {
+                  handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
+                }}
+                value={step1.singleSpeciesSeedingRate}
+              />
+              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
+            </Grid>
 
-          <Grid item xs={1}>
-            <Typography className="math-icon">&#215;</Typography>
-          </Grid>
+            <Grid item xs={1}>
+              <Typography className="math-icon">&#215;</Typography>
+            </Grid>
 
-          <Grid item xs={3}>
-            <NumberTextField
-              label={matchesMd ? '' : 'Soil Fertility Modifier'}
-              disabled
-              value={step1.soilFertilityModifer}
-            />
-          </Grid>
+            <Grid item xs={3}>
+              <NumberTextField
+                label={matchesMd ? '' : 'Soil Fertility Modifier'}
+                disabled
+                value={step1.soilFertilityModifer}
+              />
+            </Grid>
 
-          <Grid item xs={1}>
-            <Typography className="math-icon">÷</Typography>
-          </Grid>
+            <Grid item xs={1}>
+              <Typography className="math-icon">÷</Typography>
+            </Grid>
 
-          <Grid item xs={3}>
-            <NumberTextField
-              disabled
-              label={matchesMd ? '' : 'Sum Species Of Group In Mix'}
-              value={step1.sumGroupInMix}
-            />
-            <Typography>{council === 'MCCC' ? 'MCCC' : 'NECCC'}</Typography>
+            <Grid item xs={3}>
+              <NumberTextField
+                disabled
+                label={matchesMd ? '' : 'Sum Species Of Group In Mix'}
+                value={step1.sumGroupInMix}
+              />
+              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>{council === 'MCCC' ? 'MCCC' : 'NECCC'}</Typography>
+            </Grid>
           </Grid>
-
           <Grid container p="10px">
             <Grid item xs={4}>
               <Typography className="math-icon">=</Typography>
@@ -105,7 +106,7 @@ const ReviewMixSteps = ({
                 disabled
                 value={step1.seedingRate}
               />
-              <Typography>Lbs / Acre</Typography>
+              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
             </Grid>
 
             <Grid item xs={1} />
@@ -124,14 +125,14 @@ const ReviewMixSteps = ({
             '% of Single Species Rate',
             'Seeding Rate in Mix',
           )}
-          <Grid container>
+          <Grid container justifyContent="space-evenly">
             <Grid item xs={3}>
               <NumberTextField
                 disabled
                 label={matchesMd ? '' : 'Single Species Seeding Rate PLS'}
                 value={step1.singleSpeciesSeedingRate}
               />
-              <Typography>Lbs / Acre</Typography>
+              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
             </Grid>
 
             <Grid item xs={1}>
@@ -146,7 +147,7 @@ const ReviewMixSteps = ({
                 }}
                 value={convertToPercent(step1.percentOfRate)}
               />
-              <Typography>
+              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>
                 {council === 'MCCC' && 'MCCC Recommendation'}
               </Typography>
             </Grid>
@@ -161,8 +162,9 @@ const ReviewMixSteps = ({
                 disabled
                 value={step1.seedingRate}
               />
-              <Typography>Lbs / Acre</Typography>
+              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
             </Grid>
+
           </Grid>
         </>
       )}
@@ -177,40 +179,42 @@ const ReviewMixSteps = ({
           'Planting Method',
           'Seeding Rate in Mix',
         )}
-        <Grid item xs={3}>
-          <NumberTextField
-            disabled
-            label={matchesMd ? '' : 'Seeding Rate in Mix'}
-            value={step2.seedingRate}
-          />
-          <Typography>Lbs / Acre</Typography>
-        </Grid>
+        <Grid container justifyContent="space-evenly">
+          <Grid item xs={3}>
+            <NumberTextField
+              disabled
+              label={matchesMd ? '' : 'Seeding Rate in Mix'}
+              value={step2.seedingRate}
+            />
+            <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
+          </Grid>
 
-        <Grid item xs={1}>
-          <Typography className="math-icon">&#215;</Typography>
-        </Grid>
+          <Grid item xs={1}>
+            <Typography className="math-icon">&#215;</Typography>
+          </Grid>
 
-        <Grid item xs={3}>
-          <NumberTextField
-            label={matchesMd ? '' : 'Planting Method'}
-            value={step2.plantingMethodModifier ?? 1}
-            handleChange={(e) => {
-              handleFormValueChange(seed, 'plantingMethodModifier', parseFloat(e.target.value));
-            }}
-          />
-        </Grid>
+          <Grid item xs={3}>
+            <NumberTextField
+              label={matchesMd ? '' : 'Planting Method'}
+              value={step2.plantingMethodModifier ?? 1}
+              handleChange={(e) => {
+                handleFormValueChange(seed, 'plantingMethodModifier', parseFloat(e.target.value));
+              }}
+            />
+          </Grid>
 
-        <Grid item xs={1}>
-          <Typography className="math-icon">=</Typography>
-        </Grid>
+          <Grid item xs={1}>
+            <Typography className="math-icon">=</Typography>
+          </Grid>
 
-        <Grid item xs={3}>
-          <NumberTextField
-            label={matchesMd ? '' : 'Seeding Rate in Mix'}
-            disabled
-            value={step2.seedingRateAfterPlantingMethodModifier}
-          />
-          <Typography>Lbs / Acre</Typography>
+          <Grid item xs={3}>
+            <NumberTextField
+              label={matchesMd ? '' : 'Seeding Rate in Mix'}
+              disabled
+              value={step2.seedingRateAfterPlantingMethodModifier}
+            />
+            <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
+          </Grid>
         </Grid>
       </>
 
@@ -224,38 +228,39 @@ const ReviewMixSteps = ({
           'Management impact on mix',
           'Seeding Rate in Mix',
         )}
-        <Grid item xs={3}>
-          <NumberTextField
-            label={matchesMd ? '' : 'Seeding Rate in Mix'}
-            disabled
-            value={step3.seedingRate}
-          />
-        </Grid>
+        <Grid container justifyContent="space-evenly">
+          <Grid item xs={3}>
+            <NumberTextField
+              label={matchesMd ? '' : 'Seeding Rate in Mix'}
+              disabled
+              value={step3.seedingRate}
+            />
+          </Grid>
 
-        <Grid item xs={1}>
-          <Typography className="math-icon">&#215;</Typography>
-        </Grid>
+          <Grid item xs={1}>
+            <Typography className="math-icon">&#215;</Typography>
+          </Grid>
 
-        <Grid item xs={3}>
-          <NumberTextField
-            label={matchesMd ? '' : 'Management Impact on Mix'}
-            disabled
-            value={step3.managementImpactOnMix}
-          />
-        </Grid>
+          <Grid item xs={3}>
+            <NumberTextField
+              label={matchesMd ? '' : 'Management Impact on Mix'}
+              disabled
+              value={step3.managementImpactOnMix}
+            />
+          </Grid>
 
-        <Grid item xs={1}>
-          <Typography className="math-icon">=</Typography>
-        </Grid>
+          <Grid item xs={1}>
+            <Typography className="math-icon">=</Typography>
+          </Grid>
 
-        <Grid item xs={3}>
-          <NumberTextField
-            label={matchesMd ? '' : 'Seeding Rate in Mix'}
-            disabled
-            value={step3.seedingRateAfterManagementImpact}
-          />
+          <Grid item xs={3}>
+            <NumberTextField
+              label={matchesMd ? '' : 'Seeding Rate in Mix'}
+              disabled
+              value={step3.seedingRateAfterManagementImpact}
+            />
+          </Grid>
         </Grid>
-
         <Grid item xs={1} />
       </>
 
@@ -265,44 +270,45 @@ const ReviewMixSteps = ({
           <Typography className="step-header">Step 4: </Typography>
         </Grid>
         {renderStepsForm('Seeding Rate in Mix', '% Germination', '% Purity')}
-        <Grid item xs={3}>
-          <NumberTextField
-            label={matchesMd ? '' : 'Seeding Rate in Mix'}
-            disabled
-            value={step4.seedingRateAfterManagementImpact}
-          />
-          <Typography>Lbs / Acre</Typography>
-        </Grid>
+        <Grid container justifyContent="space-evenly">
+          <Grid item xs={3}>
+            <NumberTextField
+              label={matchesMd ? '' : 'Seeding Rate in Mix'}
+              disabled
+              value={step4.seedingRateAfterManagementImpact}
+            />
+            <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
+          </Grid>
 
-        <Grid item xs={1}>
-          <Typography className="math-icon">÷</Typography>
-        </Grid>
+          <Grid item xs={1}>
+            <Typography className="math-icon">÷</Typography>
+          </Grid>
 
-        <Grid item xs={3}>
-          <NumberTextField
-            label={matchesMd ? '' : '% Germination'}
-            handleChange={(e) => {
-              handleFormValueChange(seed, 'germination', parseFloat(e.target.value) / 100);
-            }}
-            value={convertToPercent(step4.germination)}
-          />
-        </Grid>
+          <Grid item xs={3}>
+            <NumberTextField
+              label={matchesMd ? '' : '% Germination'}
+              handleChange={(e) => {
+                handleFormValueChange(seed, 'germination', parseFloat(e.target.value) / 100);
+              }}
+              value={convertToPercent(step4.germination)}
+            />
+          </Grid>
 
-        <Grid item xs={1}>
-          <Typography className="math-icon">÷</Typography>
-        </Grid>
+          <Grid item xs={1}>
+            <Typography className="math-icon">÷</Typography>
+          </Grid>
 
-        <Grid item xs={3}>
-          <NumberTextField
-            label={matchesMd ? '' : '% Purity'}
-            handleChange={(e) => {
-              handleFormValueChange(seed, 'purity', parseFloat(e.target.value) / 100);
-            }}
-            value={convertToPercent(step4.purity)}
-          />
-          <Typography>Lbs / Acre</Typography>
+          <Grid item xs={3}>
+            <NumberTextField
+              label={matchesMd ? '' : '% Purity'}
+              handleChange={(e) => {
+                handleFormValueChange(seed, 'purity', parseFloat(e.target.value) / 100);
+              }}
+              value={convertToPercent(step4.purity)}
+            />
+            <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
+          </Grid>
         </Grid>
-
         <Grid container p="10px">
           <Grid item xs={4}>
             <Typography className="math-icon">=</Typography>
@@ -326,38 +332,41 @@ const ReviewMixSteps = ({
           <Typography className="step-header">Step 5: </Typography>
         </Grid>
         {renderStepsForm('Bulk Seeding Rate', 'Acres', 'Pounds for Purchase')}
-        <Grid item xs={3}>
-          <NumberTextField
-            label={matchesMd ? '' : 'Bulk Seeding Rate'}
-            disabled
-            value={step5.bulkSeedingRate}
-          />
-          <Typography>Lbs / Acre</Typography>
-        </Grid>
+        <Grid container justifyContent="space-evenly">
+          <Grid item xs={3}>
+            <NumberTextField
+              label={matchesMd ? '' : 'Bulk Seeding Rate'}
+              disabled
+              value={step5.bulkSeedingRate}
+            />
+            <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
+          </Grid>
 
-        <Grid item xs={1}>
-          <Typography className="math-icon">&#215;</Typography>
-        </Grid>
+          <Grid item xs={1}>
+            <Typography className="math-icon">&#215;</Typography>
+          </Grid>
 
-        <Grid item xs={3}>
-          <NumberTextField
-            label={matchesMd ? '' : 'Acres'}
-            disabled
-            value={step5.acres}
-          />
-        </Grid>
+          <Grid item xs={3}>
+            <NumberTextField
+              label={matchesMd ? '' : 'Acres'}
+              disabled
+              value={step5.acres}
+            />
+          </Grid>
 
-        <Grid item xs={1}>
-          <Typography className="math-icon">=</Typography>
-        </Grid>
+          <Grid item xs={1}>
+            <Typography className="math-icon">=</Typography>
+          </Grid>
 
-        <Grid item xs={3}>
-          <NumberTextField
-            label={matchesMd ? '' : 'Pounds for Purchase'}
-            disabled
-            value={step5.poundsForPurchase}
-          />
-          <Typography>Lbs / Acre</Typography>
+          <Grid item xs={3}>
+            <NumberTextField
+              label={matchesMd ? '' : 'Pounds for Purchase'}
+              disabled
+              value={step5.poundsForPurchase}
+            />
+            <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
+          </Grid>
+
         </Grid>
       </>
     </Grid>

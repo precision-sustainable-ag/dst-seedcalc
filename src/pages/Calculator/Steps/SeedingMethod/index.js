@@ -185,7 +185,6 @@ const SeedingMethod = () => {
           items={council === 'MCCC' ? seedingMethods : seedingMethodsNECCC}
         />
       </Grid>
-      {/* TODO: replace seedSelected with new redux state */}
       {seedsSelected.map((seed, i) => (
         <Grid item xs={12} key={i}>
           <Accordion
