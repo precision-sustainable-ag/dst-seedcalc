@@ -28,8 +28,8 @@ import { calculatorList, completedList } from '../../shared/data/dropdown';
 import StepsList from '../../components/StepsList';
 
 const Calculator = () => {
-  const data = useSelector((state) => state.steps.value);
-  const siteConditionError = useSelector((state) => state.siteCondition.error);
+  const siteCondition = useSelector((state) => state.siteCondition);
+  const { error: siteConditionError } = siteCondition;
   const calculatorError = useSelector((state) => state.calculator.error);
 
   const { seedsSelected } = useSelector((state) => state.calculator);
@@ -103,9 +103,9 @@ const Calculator = () => {
   };
 
   const headerLogo = () => {
-    if (data.siteCondition.council === '') return './PSALogo.png';
-    if (data.siteCondition.council === 'MCCC') return './mccc-logo.png';
-    if (data.siteCondition.council === 'NECCC') return './neccc-logo.png';
+    if (siteCondition.council === '') return './PSALogo.png';
+    if (siteCondition.council === 'MCCC') return './mccc-logo.png';
+    if (siteCondition.council === 'NECCC') return './neccc-logo.png';
     return undefined;
   };
 
@@ -159,7 +159,7 @@ const Calculator = () => {
         alignItems="center"
       >
         <img
-          alt={data.siteCondition.council}
+          alt={siteCondition.council}
           src={headerLogo()}
           height="75px"
         />
