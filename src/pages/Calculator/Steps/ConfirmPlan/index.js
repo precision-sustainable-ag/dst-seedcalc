@@ -49,8 +49,7 @@ const ConfirmPlan = ({ calculator }) => {
         const result = confirmPlan(
           bulkSeedingRate[seed.label],
           options[seed.label].acres,
-          // FIXME: initializa cost per pound, this value is not defined
-          options[seed.label].costPerPound ?? 0.42,
+          options[seed.label].costPerPound ?? 0,
         );
         setCalculatorResult((prev) => ({ ...prev, [seed.label]: result }));
       }

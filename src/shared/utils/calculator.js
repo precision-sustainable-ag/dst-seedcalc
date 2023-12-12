@@ -3,6 +3,7 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-unused-vars */
 import dayjs from 'dayjs';
+import { twoDigit } from './calculate';
 
 const createUserInput = (soilDrainage, plantingDate, acres) => ({ soilDrainage, plantingDate, acres });
 
@@ -33,11 +34,11 @@ const adjustProportions = (seed, calculator, options = {}) => {
   // TODO: when using these funcs, all the OPTION param should be same since some of them may call others
   // const defaultMixSeedingRate = calculator.mixSeedingRate(seed, options);
 
-  const seedingRate = calculator.seedingRate(seed, options);
-  const seedsPerAcre = calculator.seedsPerAcre(seed, options);
+  const seedingRate = twoDigit(calculator.seedingRate(seed, options));
+  const seedsPerAcre = twoDigit(calculator.seedsPerAcre(seed, options));
   // options in calculating plants per acre
-  const plantsPerAcre = calculator.plantsPerAcre(seed, options);
-  const plantsPerSqft = calculator.plantsPerSqft(seed, options);
+  const plantsPerAcre = twoDigit(calculator.plantsPerAcre(seed, options));
+  const plantsPerSqft = twoDigit(calculator.plantsPerSqft(seed, options));
 
   console.log('\n> ', seed.label, '- AdjustProportionsPage');
   console.log('Step 1: Default Single Species Seeding Rate PLS * Percent of Rate = Seeding Rate');
@@ -66,14 +67,12 @@ const adjustProportionsNECCC = (seed, calculator, options = {}) => {
   const soilFertilityModifier = calculator.soilFertilityModifier(crop, options);
   const { group } = crop;
   const sumGroupInMix = calculator.speciesInMix[group];
-  const percentOfRate = calculator.getDefaultPercentOfSingleSpeciesSeedingRate(crop, options);
 
-  const seedingRate = calculator.seedingRate(seed, options);
-  const seedsPerAcre = calculator.seedsPerAcre(seed, options);
-  const seedsPerSqft = seedsPerAcre / 43560;
+  const seedingRate = twoDigit(calculator.seedingRate(seed, options));
+  const seedsPerAcre = twoDigit(calculator.seedsPerAcre(seed, options));
+  const seedsPerSqft = twoDigit(seedsPerAcre / 43560);
 
   console.log('\n> ', seed.label, '- AdjustProportionsPage');
-  console.log('percentOfRate', percentOfRate);
   console.log('Step 1: Default Single Species Seeding Rate PLS *\
   Soil Fertility Modifier / Sum Species Of Group in Mix = Seeding Rate');
   console.log(
@@ -104,28 +103,28 @@ const reviewMix = (seed, calculator, options = {}) => {
   const singleSpeciesSeedingRate = options.singleSpeciesSeedingRate ?? crop.coefficients.singleSpeciesSeedingRate;
   const percentOfSingleSpeciesRate = options.percentOfRate ?? calculator.getDefaultPercentOfSingleSpeciesSeedingRate(seed);
 
-  const baseSeedingRate = calculator.seedingRate(seed, {
+  const baseSeedingRate = twoDigit(calculator.seedingRate(seed, {
     singleSpeciesSeedingRate: options.singleSpeciesSeedingRate,
     percentOfRate: options.percentOfRate,
     plantingMethodModifier: 1,
-  });
+  }));
 
-  const seedingRateAfterPlantingMethodModifier = calculator.seedingRate(seed, {
+  const seedingRateAfterPlantingMethodModifier = twoDigit(calculator.seedingRate(seed, {
     singleSpeciesSeedingRate: options.singleSpeciesSeedingRate,
     percentOfRate: options.percentOfRate,
     plantingMethod: options.plantingMethod,
     plantingMethodModifier: options.plantingMethodModifier,
-  });
+  }));
 
-  const seedingRateAfterManagementImpact = calculator.seedingRate(seed, {
+  const seedingRateAfterManagementImpact = twoDigit(calculator.seedingRate(seed, {
     singleSpeciesSeedingRate: options.singleSpeciesSeedingRate,
     percentOfRate: options.percentOfRate,
     plantingMethod: options.plantingMethod,
     plantingMethodModifier: options.plantingMethodModifier,
     managementImpactOnMix: options.managementImpactOnMix,
-  });
+  }));
 
-  const seedingRateAfterPurityAndGermination = calculator.seedingRate(seed, {
+  const seedingRateAfterPurityAndGermination = twoDigit(calculator.seedingRate(seed, {
     singleSpeciesSeedingRate: options.singleSpeciesSeedingRate,
     percentOfRate: options.percentOfRate,
     plantingMethod: options.plantingMethod,
@@ -133,14 +132,14 @@ const reviewMix = (seed, calculator, options = {}) => {
     managementImpactOnMix: options.managementImpactOnMix,
     purity: options.purity,
     germination: options.germination,
-  });
+  }));
 
   const bulkSeedingRate = seedingRateAfterPurityAndGermination;
 
-  const poundsForPurchase = calculator.poundsForPurchase(seed, {
+  const poundsForPurchase = twoDigit(calculator.poundsForPurchase(seed, {
     acres: options.acres,
     seedingRate: bulkSeedingRate,
-  });
+  }));
 
   console.log('\n> ', seed.label, '- ReviewYourMixPage');
   console.log('1.Single Species Seeding Rate * Percent of Rate = Seeding Rate');
@@ -185,27 +184,27 @@ const reviewMixNECCC = (seed, calculator, options = {}) => {
   const sumGroupInMix = calculator.speciesInMix[group];
   const percentOfRate = calculator.getDefaultPercentOfSingleSpeciesSeedingRate(crop, options);
 
-  const seedingRate = calculator.seedingRate(seed, {
+  const seedingRate = twoDigit(calculator.seedingRate(seed, {
     singleSpeciesSeedingRate: options.singleSpeciesSeedingRate,
     percentOfRate,
-  });
+  }));
 
-  const seedingRateAfterPlantingMethodModifier = calculator.seedingRate(seed, {
+  const seedingRateAfterPlantingMethodModifier = twoDigit(calculator.seedingRate(seed, {
     singleSpeciesSeedingRate: options.singleSpeciesSeedingRate,
     percentOfRate,
     plantingMethod: options.plantingMethod,
     plantingMethodModifier: options.plantingMethodModifier,
-  });
+  }));
 
-  const seedingRateAfterManagementImpact = calculator.seedingRate(seed, {
+  const seedingRateAfterManagementImpact = twoDigit(calculator.seedingRate(seed, {
     singleSpeciesSeedingRate: options.singleSpeciesSeedingRate,
     percentOfRate,
     plantingMethod: options.plantingMethod,
     plantingMethodModifier: options.plantingMethodModifier,
     managementImpactOnMix: options.managementImpactOnMix,
-  });
+  }));
 
-  const seedingRateAfterPurityAndGermination = calculator.seedingRate(seed, {
+  const seedingRateAfterPurityAndGermination = twoDigit(calculator.seedingRate(seed, {
     singleSpeciesSeedingRate: options.singleSpeciesSeedingRate,
     percentOfRate,
     plantingMethod: options.plantingMethod,
@@ -213,14 +212,14 @@ const reviewMixNECCC = (seed, calculator, options = {}) => {
     managementImpactOnMix: options.managementImpactOnMix,
     purity: options.purity,
     germination: options.germination,
-  });
+  }));
 
   const bulkSeedingRate = seedingRateAfterPurityAndGermination;
 
-  const poundsForPurchase = calculator.poundsForPurchase(seed, {
+  const poundsForPurchase = twoDigit(calculator.poundsForPurchase(seed, {
     acres: options.acres,
     seedingRate: bulkSeedingRate,
-  });
+  }));
 
   console.log('\n> ', seed.label, '- ReviewYourMixPage');
   console.log('Step 1: Default Single Species Seeding Rate PLS *\
@@ -267,8 +266,8 @@ const reviewMixNECCC = (seed, calculator, options = {}) => {
 };
 
 const confirmPlan = (bulkSeedingRate, acres, costPerPound) => {
-  const totalPounds = bulkSeedingRate * acres;
-  const totalCost = costPerPound * totalPounds;
+  const totalPounds = twoDigit(bulkSeedingRate * acres);
+  const totalCost = twoDigit(costPerPound * totalPounds);
   return {
     bulkSeedingRate, acres, costPerPound, totalPounds, totalCost,
   };

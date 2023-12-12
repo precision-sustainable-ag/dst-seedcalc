@@ -12,7 +12,6 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import styled from '@emotion/styled';
-import { convertToPercent } from '../../../../shared/utils/calculate';
 import NumberTextField from '../../../../components/NumberTextField';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 import '../steps.scss';
@@ -104,9 +103,9 @@ const SeedTagInfo = () => {
                 </LeftGrid>
                 <Grid item xs={4}>
                   <NumberTextField
-                    value={convertToPercent(options[seed.label].germination ?? 0.85)}
+                    value={(options[seed.label].germination ?? 0.85) * 100}
                     handleChange={(e) => {
-                      updateGermination(seed.label, parseInt(e.target.value, 10) / 100);
+                      updateGermination(seed.label, parseFloat(e.target.value) / 100);
                     }}
                   />
                 </Grid>
@@ -117,9 +116,9 @@ const SeedTagInfo = () => {
                 </LeftGrid>
                 <Grid item xs={4}>
                   <NumberTextField
-                    value={convertToPercent(options[seed.label].purity ?? 0.9)}
+                    value={(options[seed.label].purity ?? 0.9) * 100}
                     handleChange={(e) => {
-                      updatePurity(seed.label, parseInt(e.target.value, 10) / 100);
+                      updatePurity(seed.label, parseFloat(e.target.value) / 100);
                     }}
                   />
                 </Grid>
@@ -131,9 +130,9 @@ const SeedTagInfo = () => {
                 <Grid item xs={4}>
                   <NumberTextField
                     disabled
-                    value={parseInt(council === 'MCCC'
+                    value={parseFloat(council === 'MCCC'
                       ? seed.attributes['Planting Information']['Seed Count'].values[0]
-                      : seed.attributes.Planting['Seeds Per lb'].values[0], 10)}
+                      : seed.attributes.Planting['Seeds Per lb'].values[0])}
                   />
                 </Grid>
                 <Grid item xs={2} />

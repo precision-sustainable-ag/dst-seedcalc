@@ -1,24 +1,23 @@
 import React from 'react';
 import TextField from '@mui/material/TextField';
-import { twoDigit } from '../../shared/utils/calculate';
 
 const NumberTextField = ({
   value,
   label,
   handleChange,
-  className,
   disabled,
   placeholder,
+  InputProps,
 }) => (
   <TextField
     fullWidth
-    className={className}
-    value={twoDigit(value)}
+    value={value}
     label={label}
     onChange={handleChange}
     InputLabelProps={{
       shrink: true,
     }}
+    InputProps={InputProps}
     type="number"
     placeholder={placeholder}
     disabled={disabled}

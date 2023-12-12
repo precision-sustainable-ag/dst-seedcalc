@@ -91,25 +91,18 @@ const ConfirmPlanForm = ({
       </Grid>
 
       <Grid container sx={{ p: '0.625rem' }}>
-        <Grid item xs={3}>
-          {/* <Typography>Cost / Pound</Typography> */}
-        </Grid>
+        <Grid item xs={3} />
         <Grid item xs={1} />
         <Grid item xs={3}>
           <NumberTextField
             label="Cost/Pound"
-            disabled
             value={result.costPerPound}
+            handleChange={(e) => dispatch(
+              setOptionRedux(seed.label, {...options[seed.label], costPerPound: e.target.value})
+            )}
           />
         </Grid>
-        <Grid item xs={3}>
-          {/* FIXME: investigate usage of the switch */}
-          <DSTSwitch
-            checked={seed.confirmToggle}
-            handleChange={() => {
-            }}
-          />
-        </Grid>
+        <Grid item xs={3} />
       </Grid>
 
       <Grid container sx={{ p: '0.625rem' }}>

@@ -88,7 +88,7 @@ const SiteConditionForm = ({
           label="Acres"
           disabled={false}
           handleChange={(e) => {
-            dispatch(setAcresRedux(parseInt(e.target.value, 10)));
+            dispatch(setAcresRedux(parseFloat(e.target.value)));
           }}
           placeholder="Enter your field acres here"
         />

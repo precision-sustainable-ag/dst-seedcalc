@@ -225,7 +225,7 @@ const ReviewMixSteps = ({
         </Grid>
         {renderStepsForm(
           'Seeding Rate in Mix',
-          'Management impact on mix',
+          'Management impact on Mix',
           'Seeding Rate in Mix',
         )}
         <Grid container justifyContent="space-evenly">
@@ -245,7 +245,7 @@ const ReviewMixSteps = ({
             <NumberTextField
               label={matchesMd ? '' : 'Management Impact on Mix'}
               disabled
-              value={step3.managementImpactOnMix}
+              value={step3.managementImpactOnMix ?? 1}
             />
           </Grid>
 
