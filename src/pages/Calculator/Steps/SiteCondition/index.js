@@ -13,7 +13,7 @@ import { isEmptyNull, validateForms } from '../../../../shared/utils/format';
 import SiteConditionForm from './form';
 import RegionSelector from './RegionSelector';
 import MapComponent from './MapComponent';
-import { setCountyIdRedux } from '../../../../features/siteConditionSlice/actions';
+import { setCountyIdRedux, setCountyRedux } from '../../../../features/siteConditionSlice/actions';
 import { getCropsNew } from '../../../../features/calculatorSlice/api';
 import { getLocalityNew } from '../../../../features/siteConditionSlice/api';
 import '../steps.scss';
@@ -49,10 +49,16 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
   // Ensure that county id is updated to the current county
   useEffect(() => {
     if (siteCondition.county !== '' && counties.length > 0) {
-      const countyId = counties.filter(
-        (c) => c.label === siteCondition.county,
-      )[0].id;
-      dispatch(setCountyIdRedux(countyId));
+      // FIXME: temporary workaround for areas in zone 8(MD, DE and NJ), will update in the future
+      if (siteCondition.county === 'Zone 8') {
+        dispatch(setCountyRedux('Zone 7'));
+        dispatch(setCountyIdRedux(4));
+      } else {
+        const countyId = counties.filter(
+          (c) => c.label === siteCondition.county,
+        )[0].id;
+        dispatch(setCountyIdRedux(countyId));
+      }
     }
   }, [siteCondition.county, counties]);
 

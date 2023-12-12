@@ -73,7 +73,6 @@ const ConfirmPlanCharts = ({ council, calculator }) => {
           borderBottom: '1px solid #CCCCCC',
         }}
       >
-        {/* FIXME: price not defined */}
         <ConfirmPlanChip label="Price/Acre" value="$35.33" />
       </Grid>
 
