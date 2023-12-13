@@ -90,7 +90,7 @@ const MixRatioSteps = ({
                 label={matchesMd ? '' : 'Sum Species Of Group In Mix'}
                 value={step1.sumGroupInMix}
               />
-              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>NECCC</Typography>
+              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>NECCC Recommendation</Typography>
             </Grid>
           </Grid>
 
@@ -146,7 +146,7 @@ const MixRatioSteps = ({
                 disabled
                 value={convertToPercent(step1.percentOfRate)}
               />
-              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>MCCC</Typography>
+              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>MCCC Recommendation</Typography>
             </Grid>
 
             <Grid item xs={1}>
@@ -336,7 +336,6 @@ const MixRatioSteps = ({
                 disabled
                 value={step4.plantsPerSqft}
               />
-              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
             </Grid>
           </Grid>
         </>

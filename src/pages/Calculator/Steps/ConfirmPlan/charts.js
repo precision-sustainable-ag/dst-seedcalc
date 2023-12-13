@@ -9,6 +9,7 @@ import {
   DSTPieChartLegend,
 } from '../../../../components/DSTPieChart';
 import '../steps.scss';
+import { twoDigit } from '../../../../shared/utils/calculate';
 
 const defaultPieChartData = {
   seedingRateArray: [],
@@ -35,9 +36,10 @@ const ConfirmPlanChip = ({ label, value }) => (
   </>
 );
 
-const ConfirmPlanCharts = ({ council, calculator }) => {
+const ConfirmPlanCharts = ({ council, calculator, calculatorResult }) => {
   const [piechartData, setPieChartData] = useState(defaultPieChartData);
 
+  const { acres } = useSelector((state) => state.siteCondition);
   const { seedsSelected, options, mixSeedingRate } = useSelector((state) => state.calculator);
 
   useEffect(() => {
@@ -49,6 +51,11 @@ const ConfirmPlanCharts = ({ council, calculator }) => {
     } = calculatePieChartData(seedsSelected, calculator, options);
     setPieChartData({ seedingRateArray, plantsPerAcreArray, seedsPerAcreArray });
   }, []);
+
+  const calculateTotalPricePerAcre = () => {
+    const totalCost = seedsSelected.reduce((total, seed) => total + calculatorResult[seed.label].totalCost, 0);
+    return twoDigit(totalCost / acres);
+  };
 
   return (
     <Grid container sx={{ padding: '0.5rem' }}>
@@ -73,7 +80,7 @@ const ConfirmPlanCharts = ({ council, calculator }) => {
           borderBottom: '1px solid #CCCCCC',
         }}
       >
-        <ConfirmPlanChip label="Price/Acre" value="$35.33" />
+        <ConfirmPlanChip label="Price/Acre" value={`$${calculateTotalPricePerAcre()}`} />
       </Grid>
 
       <Grid

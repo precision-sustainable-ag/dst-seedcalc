@@ -92,7 +92,9 @@ const ReviewMixSteps = ({
                 label={matchesMd ? '' : 'Sum Species Of Group In Mix'}
                 value={step1.sumGroupInMix}
               />
-              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>{council === 'MCCC' ? 'MCCC' : 'NECCC'}</Typography>
+              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>
+                NECCC Recommendation
+              </Typography>
             </Grid>
           </Grid>
           <Grid container p="10px">
@@ -141,14 +143,12 @@ const ReviewMixSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
+                disabled
                 label={matchesMd ? '' : '% of Single Species Rate'}
-                handleChange={(e) => {
-                  handleFormValueChange(seed, 'percentOfRate', parseFloat(e.target.value) / 100);
-                }}
                 value={convertToPercent(step1.percentOfRate)}
               />
               <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>
-                {council === 'MCCC' && 'MCCC Recommendation'}
+                MCCC Recommendation
               </Typography>
             </Grid>
 
@@ -235,6 +235,7 @@ const ReviewMixSteps = ({
               disabled
               value={step3.seedingRate}
             />
+            <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
           </Grid>
 
           <Grid item xs={1}>
@@ -259,6 +260,7 @@ const ReviewMixSteps = ({
               disabled
               value={step3.seedingRateAfterManagementImpact}
             />
+            <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
           </Grid>
         </Grid>
         <Grid item xs={1} />
@@ -306,7 +308,6 @@ const ReviewMixSteps = ({
               }}
               value={convertToPercent(step4.purity)}
             />
-            <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
           </Grid>
         </Grid>
         <Grid container p="10px">
@@ -364,7 +365,6 @@ const ReviewMixSteps = ({
               disabled
               value={step5.poundsForPurchase}
             />
-            <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
           </Grid>
 
         </Grid>

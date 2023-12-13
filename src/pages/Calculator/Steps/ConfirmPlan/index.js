@@ -73,7 +73,7 @@ const ConfirmPlan = ({ calculator }) => {
       <Grid item xs={12}>
         <Typography variant="h2">Confirm your plan</Typography>
 
-        {/* Export */}
+        {/* Export Button */}
         <Grid container sx={{ marginTop: '5px' }}>
           <Grid item xs={matchesUpMd ? 11 : 9} />
           <Grid item xs={matchesUpMd ? 1 : 3}>
@@ -113,6 +113,7 @@ const ConfirmPlan = ({ calculator }) => {
         <ConfirmPlanCharts
           council={council}
           calculator={calculator}
+          calculatorResult={calculatorResult}
         />
 
         <ConfirmPlanForm

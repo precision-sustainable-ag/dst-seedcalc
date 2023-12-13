@@ -1,5 +1,4 @@
-/* eslint-disable */
-import React, { useState,useEffect,Fragment } from 'react';
+import React, { Fragment } from 'react';
 import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -7,14 +6,14 @@ import { Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import NumberTextField from '../../../../components/NumberTextField';
 import DSTTextField from '../../../../components/DSTTextField';
-import DSTSwitch from '../../../../components/Switch';
 import NRCSStandards from './NRCSStandards';
 
 import '../steps.scss';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
+import { setAcresRedux } from '../../../../features/siteConditionSlice/actions';
 
 const ConfirmPlanForm = ({
-  nrcsResult, seedsSelected, calculatorResult, options
+  nrcsResult, seedsSelected, calculatorResult, options,
 }) => {
   const theme = useTheme();
   const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
@@ -50,94 +49,97 @@ const ConfirmPlanForm = ({
   const renderConfirmPlanForm = (seed) => {
     const result = calculatorResult[seed.label];
     return (
-    <Grid container>
-      <Grid container sx={{ p: '0.625rem' }}>
-        {renderStepsForm('Bulk Lbs / Acre', 'Acres', 'Total Pounds')}
-        <Grid item xs={3}>
-          <NumberTextField
-            disabled
-            label={matchesMd ? '' : 'Bulk Lbs / Acre'}
-            value={result.bulkSeedingRate}
-          />
+      <Grid container>
+        <Grid container sx={{ p: '0.625rem' }}>
+          {renderStepsForm('Bulk Lbs / Acre', 'Acres', 'Total Pounds')}
+          <Grid item xs={3}>
+            <NumberTextField
+              disabled
+              label={matchesMd ? '' : 'Bulk Lbs / Acre'}
+              value={result.bulkSeedingRate}
+            />
+          </Grid>
+
+          <Grid item xs={1}>
+            <Typography className="math-icon">&#215;</Typography>
+          </Grid>
+
+          <Grid item xs={3}>
+            <NumberTextField
+              label={matchesMd ? '' : 'Acres'}
+              handleChange={(e) => {
+                dispatch(setAcresRedux(parseFloat(e.target.value)));
+                seedsSelected.forEach((s) => {
+                  dispatch(setOptionRedux(s.label, { ...options[s.label], acres: e.target.value }));
+                });
+              }}
+              value={result.acres}
+            />
+          </Grid>
+
+          <Grid item xs={1}>
+            <Typography className="math-icon">=</Typography>
+          </Grid>
+
+          <Grid item xs={3}>
+            <NumberTextField
+              label={matchesMd ? '' : 'Total Pounds'}
+              disabled
+              value={result.totalPounds}
+            />
+          </Grid>
+
+          <Grid item xs={1} />
         </Grid>
 
-        <Grid item xs={1}>
-          <Typography className="math-icon">&#215;</Typography>
+        <Grid container sx={{ p: '0.625rem' }}>
+          <Grid item xs={3} />
+          <Grid item xs={1} />
+          <Grid item xs={3}>
+            <NumberTextField
+              label="Cost/Pound"
+              value={result.costPerPound}
+              handleChange={(e) => dispatch(
+                setOptionRedux(seed.label, { ...options[seed.label], costPerPound: e.target.value }),
+              )}
+            />
+          </Grid>
+          <Grid item xs={3} />
         </Grid>
 
-        <Grid item xs={3}>
-          <NumberTextField
-            label={matchesMd ? '' : 'Acres'}
-            handleChange={(e) => {
-              dispatch(setOptionRedux(seed.label, {...options[seed.label], acres: e.target.value}))
-            }}
-            value={result.acres}
-          />
+        <Grid container sx={{ p: '0.625rem' }}>
+          {renderStepsForm('Cost/Pound', 'Total Pounds', 'Total Cost')}
+          <Grid item xs={3}>
+            <NumberTextField
+              disabled
+              label={matchesMd ? '' : 'Cost/Pound'}
+              value={result.costPerPound}
+            />
+          </Grid>
+          <Grid item xs={1}>
+            <Typography className="math-icon">&#215;</Typography>
+          </Grid>
+          <Grid item xs={3}>
+            <NumberTextField
+              disabled
+              label={matchesMd ? '' : 'Total Pounds'}
+              value={result.totalPounds}
+            />
+          </Grid>
+          <Grid item xs={1}>
+            <Typography className="math-icon">=</Typography>
+          </Grid>
+          <Grid item xs={3}>
+            <NumberTextField
+              label={matchesMd ? '' : 'Total Cost'}
+              disabled
+              value={result.totalCost}
+            />
+          </Grid>
         </Grid>
-
-        <Grid item xs={1}>
-          <Typography className="math-icon">=</Typography>
-        </Grid>
-
-        <Grid item xs={3}>
-          <NumberTextField
-            label={matchesMd ? '' : 'Total Pounds'}
-            disabled
-            value={result.totalPounds}
-          />
-        </Grid>
-
-        <Grid item xs={1} />
       </Grid>
-
-      <Grid container sx={{ p: '0.625rem' }}>
-        <Grid item xs={3} />
-        <Grid item xs={1} />
-        <Grid item xs={3}>
-          <NumberTextField
-            label="Cost/Pound"
-            value={result.costPerPound}
-            handleChange={(e) => dispatch(
-              setOptionRedux(seed.label, {...options[seed.label], costPerPound: e.target.value})
-            )}
-          />
-        </Grid>
-        <Grid item xs={3} />
-      </Grid>
-
-      <Grid container sx={{ p: '0.625rem' }}>
-        {renderStepsForm('Cost/Pound', 'Total Pounds', 'Total Cost')}
-        <Grid item xs={3}>
-          <NumberTextField
-            disabled
-            label={matchesMd ? '' : 'Cost/Pound'}
-            value={result.costPerPound}
-          />
-        </Grid>
-        <Grid item xs={1}>
-          <Typography className="math-icon">&#215;</Typography>
-        </Grid>
-        <Grid item xs={3}>
-          <NumberTextField
-            disabled
-            label={matchesMd ? '' : 'Total Pounds'}
-            value={result.totalPounds}
-          />
-        </Grid>
-        <Grid item xs={1}>
-          <Typography className="math-icon">=</Typography>
-        </Grid>
-        <Grid item xs={3}>
-          <NumberTextField
-            label={matchesMd ? '' : 'Total Cost'}
-            disabled
-            value={result.totalCost}
-          />
-        </Grid>
-      </Grid>
-    </Grid>
-  );
-  }
+    );
+  };
 
   const renderTotalCostOfMix = () => {
     const totalCostOfMix = seedsSelected.reduce(
@@ -149,26 +151,24 @@ const ConfirmPlanForm = ({
         <Grid item xs={12}>
           <Typography className="step-header">Total Cost of mix:</Typography>
         </Grid>
-        
-        {seedsSelected.map((seed, i) => {
-            return (
-              <Fragment key={i}>
-                <Grid item xs={3} sx={{ p: '0.625rem' }}>
-                  <DSTTextField
-                    label={`${seed.label}`}
-                    disabled
-                    value={`$${calculatorResult[seed.label].totalCost.toFixed(2)}`}
-                  />
-                  {' '}
-                </Grid>
-                <Grid item xs={1} sx={{ p: '0.625rem' }}>
-                  <Typography className="math-icon">
-                    {i !== seedsSelected.length - 1 ? '+' : '='}
-                  </Typography>
-                </Grid>
-              </Fragment>
-            );
-        })}
+
+        {seedsSelected.map((seed, i) => (
+          <Fragment key={i}>
+            <Grid item xs={3} sx={{ p: '0.625rem' }}>
+              <DSTTextField
+                label={`${seed.label}`}
+                disabled
+                value={`$${calculatorResult[seed.label].totalCost.toFixed(2)}`}
+              />
+              {' '}
+            </Grid>
+            <Grid item xs={1} sx={{ p: '0.625rem' }}>
+              <Typography className="math-icon">
+                {i !== seedsSelected.length - 1 ? '+' : '='}
+              </Typography>
+            </Grid>
+          </Fragment>
+        ))}
         <Grid item xs={6} sx={{ p: '0.625rem' }}>
           <DSTTextField
             label="Total Cost of Mix"
