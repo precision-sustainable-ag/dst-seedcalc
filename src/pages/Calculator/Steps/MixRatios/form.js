@@ -90,7 +90,6 @@ const MixRatioSteps = ({
                 label={matchesMd ? '' : 'Sum Species Of Group In Mix'}
                 value={step1.sumGroupInMix}
               />
-              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>NECCC Recommendation</Typography>
             </Grid>
           </Grid>
 

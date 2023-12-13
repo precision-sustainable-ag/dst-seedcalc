@@ -106,9 +106,9 @@ const SeedingMethod = () => {
         Aerial: parseFloat(coefficients['Aerial Coefficient']?.values[0]) || null,
       } : {
         Drilled: 1,
-        BroadcastwithCultivation:
+        'Broadcast(With Cultivation)':
         parseFloat(coefficients['Broadcast with Cultivation Coefficient']?.values[0]) || null,
-        BroadcastwithoutCultivation:
+        'Broadcast(With No Cultivation)':
         parseFloat(coefficients['Broadcast without Cultivation Coefficient']?.values[0]) || null,
         Aerial: parseFloat(coefficients['Aerial Coefficient']?.values[0]) || null,
       };
@@ -221,12 +221,12 @@ const SeedingMethod = () => {
                     {renderMethod('Drilled', methods[seed.label]?.Drilled)}
                     {renderMethod(
                       'BroadcastwithCultivation',
-                      methods[seed.label]?.BroadcastwithCultivation,
+                      methods[seed.label]?.['Broadcast(With Cultivation)'],
                       'with Cultivation, No Packing',
                     )}
                     {renderMethod(
                       'BroadcastwithoutCultivation',
-                      methods[seed.label]?.BroadcastwithoutCultivation,
+                      methods[seed.label]?.['Broadcast(With No Cultivation)'],
                       'with No Cultivation, No Packing',
                     )}
                     {renderMethod('Aerial', methods[seed.label]?.Aerial)}
