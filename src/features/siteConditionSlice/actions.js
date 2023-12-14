@@ -1,48 +1,27 @@
 import {
   updateState, updateCounty, updateCountyId, updateSoilDrainage,
-  updatePlantingDate, updateAcres, checkNRCS, updateCouncil, updateSoilFertility, updateLatlon, importFromCSV,
+  updatePlantingDate, updateAcres, checkNRCS, updateCouncil,
+  updateSoilFertility, updateLatlon, importFromCSV,
 } from './index';
 
-export const setStateRedux = (state, stateId) => (dispatch) => {
-  dispatch(updateState({ state, stateId }));
-};
+export const setStateRedux = (state, stateId) => updateState({ state, stateId });
 
-export const setCountyRedux = (county) => (dispatch) => {
-  dispatch(updateCounty({ county }));
-};
+export const setCountyRedux = (county) => updateCounty({ county });
 
-export const setCountyIdRedux = (countyId) => (dispatch) => {
-  dispatch(updateCountyId({ countyId }));
-};
+export const setCountyIdRedux = (countyId) => updateCountyId({ countyId });
 
-export const setSoilDrainageRedux = (soilDrainage) => (dispatch) => {
-  dispatch(updateSoilDrainage({ soilDrainage }));
-};
+export const setSoilDrainageRedux = (soilDrainage) => updateSoilDrainage({ soilDrainage });
 
-export const setPlantingDateRedux = (plantingDate) => (dispatch) => {
-  dispatch(updatePlantingDate({ plantingDate }));
-};
+export const setPlantingDateRedux = (plantingDate) => updatePlantingDate({ plantingDate });
 
-export const setAcresRedux = (acres) => (dispatch) => {
-  dispatch(updateAcres({ acres }));
-};
+export const setAcresRedux = (acres) => updateAcres({ acres });
 
-export const checkNRCSRedux = (check) => (dispatch) => {
-  dispatch(checkNRCS({ checkNRCS: check }));
-};
+export const checkNRCSRedux = (check) => checkNRCS({ checkNRCS: check });
 
-export const setCouncilRedux = (council) => (dispatch) => {
-  dispatch(updateCouncil({ council }));
-};
+export const setCouncilRedux = (council) => updateCouncil({ council });
 
-export const setSoilFertilityRedux = (soilFertility) => (dispatch) => {
-  dispatch(updateSoilFertility({ soilFertility }));
-};
+export const setSoilFertilityRedux = (soilFertility) => updateSoilFertility({ soilFertility });
 
-export const updateLatlonRedux = (latlon) => (dispatch) => {
-  dispatch(updateLatlon({ latlon }));
-};
+export const updateLatlonRedux = (latlon) => updateLatlon({ latlon });
 
-export const importFromCSVSite = (csvData) => (dispatch) => {
-  dispatch(importFromCSV({ csvData }));
-};
+export const importFromCSVSite = (csvData) => importFromCSV({ csvData });

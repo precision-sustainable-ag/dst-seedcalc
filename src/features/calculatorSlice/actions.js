@@ -5,22 +5,22 @@ import {
   setAdjustedMixSeedingRate, importFromCSV, setBulkSeedingRate,
 } from './index';
 
-export const addSeedRedux = (seed) => (dispatch) => dispatch(addSeed({ seed }));
+export const addSeedRedux = (seed) => addSeed({ seed });
 
-export const removeSeedRedux = (seedName) => (dispatch) => dispatch(removeSeed({ seedName }));
+export const removeSeedRedux = (seedName) => removeSeed({ seedName });
 
-export const setOptionRedux = (seedLabel, option) => (dispatch) => dispatch(setOption({ seedLabel, option }));
+export const setOptionRedux = (seedLabel, option) => setOption({ seedLabel, option });
 
-export const removeOptionRedux = (seedLabel) => (dispatch) => dispatch(removeOption({ seedLabel }));
+export const removeOptionRedux = (seedLabel) => removeOption({ seedLabel });
 
-export const updateDiversityRedux = (diversity) => (dispatch) => dispatch(updateDiversity({ diversity }));
+export const updateDiversityRedux = (diversity) => updateDiversity({ diversity });
 
-export const selectSidebarSeedRedux = (seed) => (dispatch) => dispatch(selectSidebarSeed({ seed }));
+export const selectSidebarSeedRedux = (seed) => selectSidebarSeed({ seed });
 
-export const setMixSeedingRateRedux = (mixSeedingRate) => (dispatch) => dispatch(setMixSeedingRate({ mixSeedingRate }));
+export const setMixSeedingRateRedux = (mixSeedingRate) => setMixSeedingRate({ mixSeedingRate });
 
-export const setAdjustedMixSeedingRateRedux = (adjustedMixSeedingRate) => (dispatch) => dispatch(setAdjustedMixSeedingRate({ adjustedMixSeedingRate }));
+export const setAdjustedMixSeedingRateRedux = (adjustedMixSeedingRate) => setAdjustedMixSeedingRate({ adjustedMixSeedingRate });
 
-export const setBulkSeedingRateRedux = (bulkSeedingRate) => (dispatch) => dispatch(setBulkSeedingRate({ bulkSeedingRate }));
+export const setBulkSeedingRateRedux = (bulkSeedingRate) => setBulkSeedingRate({ bulkSeedingRate });
 
-export const importFromCSVCalculator = (csvData) => (dispatch) => dispatch(importFromCSV({ csvData }));
+export const importFromCSVCalculator = (csvData) => importFromCSV({ csvData });

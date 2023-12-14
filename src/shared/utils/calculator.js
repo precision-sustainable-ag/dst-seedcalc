@@ -285,10 +285,10 @@ const checkNRCS = (seeds, calculator, options) => {
     seeds.forEach((seed) => {
       const seedOption = options[seed.label];
       // FIXME: need verification because this calculation didn't consider percent
-      const baseSeedingRate = calculator.seedingRate(seed, {
+      const baseSeedingRate = twoDigit(calculator.seedingRate(seed, {
         singleSpeciesSeedingRate: seedOption?.singleSpeciesSeedingRate,
-      });
-      const finalSeedingRate = calculator.seedingRate(seed, seedOption);
+      }));
+      const finalSeedingRate = twoDigit(calculator.seedingRate(seed, seedOption));
       const UPPER_LIMIT = baseSeedingRate * 2.5;
       const LOWER_LIMIT = baseSeedingRate * 0.5;
       console.log(
@@ -348,7 +348,7 @@ const checkNRCS = (seeds, calculator, options) => {
     const ratio = [];
     console.log('-----------Ratio(Percent In Mix):');
     seeds.forEach((seed) => {
-      const percentInMix = calculator.percentInMix(seed, options);
+      const percentInMix = twoDigit(calculator.percentInMix(seed, options));
       const maxInMix = parseFloat(seed.attributes.Coefficients['Max % Allowed in Mix'].values[0]);
       console.log(seed.label, percentInMix, maxInMix);
       const result = calculator.nrcs.isValidPercentInMix(seed, options);
@@ -389,6 +389,7 @@ const checkNRCS = (seeds, calculator, options) => {
       const winterSurvivability = options[seed.label].percentSurvival;
       chanceOfMixSurvival += percentInMix * winterSurvivability;
     });
+    chanceOfMixSurvival = twoDigit(chanceOfMixSurvival);
     console.log(chanceOfMixSurvival, '>=', 0.5, chanceOfMixSurvival >= 0.5);
     winterSurvival.push({
       label: 'Mix winter survival rate',
@@ -404,7 +405,6 @@ const checkNRCS = (seeds, calculator, options) => {
   checkRatio();
   checkSoilDrainage();
   checkWinterSurvival();
-  console.log('result', result);
   return result;
 };
 
