@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Typography, Box, Button } from '@mui/material';
-import { twoDigit } from '../../shared/utils/calculate';
+import { twoDigit } from '../../shared/utils/calculator';
 
 const SeedingRateChip = ({ label, value }) => (
   <>

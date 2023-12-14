@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import { Typography, Box } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { calculatePieChartData } from '../../../../shared/utils/calculator';
+import { calculatePieChartData, twoDigit } from '../../../../shared/utils/calculator';
 import {
   DSTPieChart,
   DSTPieChartLabel,
   DSTPieChartLegend,
 } from '../../../../components/DSTPieChart';
 import '../steps.scss';
-import { twoDigit } from '../../../../shared/utils/calculate';
 
 const defaultPieChartData = {
   seedingRateArray: [],

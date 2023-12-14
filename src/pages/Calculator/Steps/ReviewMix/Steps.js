@@ -3,9 +3,7 @@ import Grid from '@mui/material/Grid';
 import { Typography, useTheme, useMediaQuery } from '@mui/material';
 
 import NumberTextField from '../../../../components/NumberTextField';
-import {
-  convertToPercent,
-} from '../../../../shared/utils/calculate';
+import { convertToPercent } from '../../../../shared/utils/calculator';
 import '../steps.scss';
 
 const ReviewMixSteps = ({

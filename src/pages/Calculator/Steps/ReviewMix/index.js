@@ -19,7 +19,9 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { twoDigit } from '../../../../shared/utils/calculate';
+import {
+  twoDigit, reviewMix, reviewMixNECCC, calculatePieChartData,
+} from '../../../../shared/utils/calculator';
 import ReviewMixSteps from './Steps';
 import '../steps.scss';
 import {
@@ -31,7 +33,6 @@ import {
   SeedDataChip,
   SeedingRateChip,
 } from '../../../../components/SeedingRateCard';
-import { reviewMix, reviewMixNECCC, calculatePieChartData } from '../../../../shared/utils/calculator';
 import { setBulkSeedingRateRedux, setOptionRedux } from '../../../../features/calculatorSlice/actions';
 
 const defaultResultMCCC = {

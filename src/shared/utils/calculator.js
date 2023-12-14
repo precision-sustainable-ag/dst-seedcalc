@@ -3,7 +3,10 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-unused-vars */
 import dayjs from 'dayjs';
-import { twoDigit } from './calculate';
+
+const convertToPercent = (num) => Number((parseFloat(num) * 100).toFixed(1));
+
+const twoDigit = (value) => Number(parseFloat(value).toFixed(2));
 
 const createUserInput = (soilDrainage, plantingDate, acres) => ({ soilDrainage, plantingDate, acres });
 
@@ -439,6 +442,7 @@ const calculatePieChartData = (seeds, calculator, options = {}) => {
 };
 
 export {
+  convertToPercent, twoDigit,
   createUserInput, createCalculator, initialOptions, adjustProportions,
   adjustProportionsNECCC, reviewMix, reviewMixNECCC, confirmPlan, checkNRCS,
   getPlantingDate, calculatePieChartData,
