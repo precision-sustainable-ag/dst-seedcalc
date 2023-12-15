@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable no-shadow */
 /* eslint-disable no-multi-str */
 /* eslint-disable no-use-before-define */
@@ -289,8 +290,8 @@ const checkNRCS = (seeds, calculator, options) => {
         singleSpeciesSeedingRate: seedOption?.singleSpeciesSeedingRate,
       }));
       const finalSeedingRate = twoDigit(calculator.seedingRate(seed, seedOption));
-      const UPPER_LIMIT = baseSeedingRate * 2.5;
-      const LOWER_LIMIT = baseSeedingRate * 0.5;
+      const UPPER_LIMIT = twoDigit(baseSeedingRate * 2.5);
+      const LOWER_LIMIT = twoDigit(baseSeedingRate * 0.5);
       console.log(
         seed.label,
         'result:',
@@ -369,12 +370,13 @@ const checkNRCS = (seeds, calculator, options) => {
     seeds.forEach((seed) => {
       const { soilDrainage } = options[seed.label];
       const soilDrainages = seed.attributes['Soil Conditions']?.['Soil Drainage'].values ?? [];
-      console.log(seed.label, soilDrainage, soilDrainages, soilDrainages.indexOf(soilDrainage) > -1);
+      const pass = soilDrainages.map((s) => s.toLowerCase()).indexOf(soilDrainage.toLowerCase()) > -1;
+      console.log(seed.label, soilDrainage, soilDrainages, pass);
       soilDrainageResult.push({
         label: seed.label,
         result: `${soilDrainage}`,
         expect: `${soilDrainages.join(',')}`,
-        pass: soilDrainages.indexOf(soilDrainage) > -1,
+        pass,
       });
     });
     result.soilDrainageResult = soilDrainageResult;
@@ -390,12 +392,12 @@ const checkNRCS = (seeds, calculator, options) => {
       chanceOfMixSurvival += percentInMix * winterSurvivability;
     });
     chanceOfMixSurvival = twoDigit(chanceOfMixSurvival);
-    console.log(chanceOfMixSurvival, '>=', 0.5, chanceOfMixSurvival >= 0.5);
+    console.log(chanceOfMixSurvival, '>=', threshold, chanceOfMixSurvival >= threshold);
     winterSurvival.push({
       label: 'Mix winter survival rate',
       result: chanceOfMixSurvival,
       expect: '≥ 0.5',
-      pass: chanceOfMixSurvival >= 0.5,
+      pass: chanceOfMixSurvival >= threshold,
     });
     result.winterSurvival = winterSurvival;
   };

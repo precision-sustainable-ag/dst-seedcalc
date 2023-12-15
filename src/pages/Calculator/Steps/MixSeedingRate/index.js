@@ -132,14 +132,12 @@ const MixSeedingRate = ({ calculator }) => {
   //                    useEffect                         //
   /// ///////////////////////////////////////////////////////
 
-  // FIXME: need verification for calaulating these
   useEffect(() => {
     let sum = mixSeedingRate;
     // if first time visit this page, calculate initial mix seeding rate
     if (!mixSeedingRate) {
       seedsSelected.forEach((seed) => {
         sum += calculator.seedingRate(seed, options[seed.label]);
-        // initially set managementImpact to 1
         dispatch(setOptionRedux(seed.label, { ...options[seed.label], managementImpactOnMix: 1 }));
       });
       dispatch(setMixSeedingRateRedux(Math.round(sum)));
