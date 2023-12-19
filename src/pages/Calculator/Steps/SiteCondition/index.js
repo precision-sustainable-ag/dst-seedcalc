@@ -9,39 +9,23 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { Spinner } from '@psa/dst.ui.spinner';
-import { getCrops, getLocality } from '../../../../features/stepSlice/api';
-import { updateSteps } from '../../../../features/stepSlice/index';
 import { isEmptyNull, validateForms } from '../../../../shared/utils/format';
 import SiteConditionForm from './form';
 import RegionSelector from './RegionSelector';
 import MapComponent from './MapComponent';
+import { setCountyIdRedux, setCountyRedux } from '../../../../features/siteConditionSlice/actions';
+import { getCropsNew } from '../../../../features/calculatorSlice/api';
+import { getLocalityNew } from '../../../../features/siteConditionSlice/api';
 import '../steps.scss';
 
-const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
+const SiteCondition = ({ completedStep, setCompletedStep }) => {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.steps);
-  const { siteCondition } = data.value;
-  const { counties } = data.value;
-  const { NRCS } = data.value;
 
   // Location state
-  const stateList = data.value.states;
+  const [step, setStep] = useState(1);
   const [selectedToEditSite, setSelectedToEditSite] = useState({});
-  const [step, setStep] = useState(siteCondition.locationStep);
-
-  /// ///////////////////////////////////////////////////////
-  //                      Redux                           //
-  /// ///////////////////////////////////////////////////////
-
-  // update redux value
-  const handleUpdateSteps = (key, type, val) => {
-    const newData = {
-      type,
-      key,
-      value: val,
-    };
-    dispatch(updateSteps(newData));
-  };
+  const siteCondition = useSelector((state) => state.siteCondition);
+  const { states, counties, loading } = siteCondition;
 
   /// ///////////////////////////////////////////////////////
   //                   State Logic                        //
@@ -59,20 +43,24 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
 
   // initially get states data
   useEffect(() => {
-    if (data.value.states.length === 0) {
-      dispatch(getLocality());
-    }
+    if (states.length === 0) dispatch(getLocalityNew());
   }, []);
 
   // Ensure that county id is updated to the current county
   useEffect(() => {
-    if (siteCondition.county !== '') {
-      const countyId = counties.filter(
-        (c) => c.label === siteCondition.county,
-      )[0].id;
-      handleUpdateSteps('countyId', 'siteCondition', countyId);
+    if (siteCondition.county !== '' && counties.length > 0) {
+      // FIXME: temporary workaround for areas in zone 8(MD, DE and NJ), will update in the future
+      if (siteCondition.county === 'Zone 8') {
+        dispatch(setCountyRedux('Zone 7'));
+        dispatch(setCountyIdRedux(4));
+      } else {
+        const countyId = counties.filter(
+          (c) => c.label === siteCondition.county,
+        )[0].id;
+        dispatch(setCountyIdRedux(countyId));
+      }
     }
-  }, [siteCondition.county]);
+  }, [siteCondition.county, counties]);
 
   // set favicon based on redux council value
   useEffect(() => {
@@ -96,40 +84,29 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
     validateForms(checkNextStep, 0, completedStep, setCompletedStep);
     // call getCrops api to get all crops from countyId
     if (checkNextStep) {
-      dispatch(getCrops({ regionId: siteCondition.countyId }));
+      dispatch(getCropsNew({ regionId: siteCondition.countyId }));
     }
   }, [siteCondition]);
-
-  /// ///////////////////////////////////////////////////////
-  //                      Render                          //
-  /// ///////////////////////////////////////////////////////
 
   return (
     <Grid container justifyContent="center">
       <Grid item xs={12}>
         <Typography variant="h2">Tell us about your planting site</Typography>
       </Grid>
-      {/* <Grid item xs={12} sx={{ height: "1000px" }}></Grid> */}
-      {data.loading === 'getLocality' ? (
+      {loading === 'getLocality' ? (
         <Spinner />
       ) : (
         <Grid xs={12} lg={8} item>
           {step === 1 ? (
             <RegionSelector
-              stateList={stateList}
+              stateList={states}
               handleSteps={handleSteps}
-              siteCondition={siteCondition}
-              handleUpdateSteps={handleUpdateSteps}
-              step={step}
             />
           ) : step === 2 ? (
             <MapComponent
-              step={step}
               handleSteps={handleSteps}
               selectedToEditSite={selectedToEditSite}
               setSelectedToEditSite={setSelectedToEditSite}
-              siteCondition={siteCondition}
-              handleUpdateSteps={handleUpdateSteps}
               counties={counties}
             />
           ) : (
@@ -138,17 +115,10 @@ const SiteCondition = ({ council, completedStep, setCompletedStep }) => {
         </Grid>
       )}
 
-      <Grid container>
-        <SiteConditionForm
-          siteCondition={siteCondition}
-          handleSteps={handleSteps}
-          step={step}
-          handleUpdateSteps={handleUpdateSteps}
-          council={council}
-          counties={counties}
-          NRCS={NRCS}
-        />
-      </Grid>
+      <SiteConditionForm
+        council={siteCondition.council}
+        counties={counties}
+      />
     </Grid>
   );
 };

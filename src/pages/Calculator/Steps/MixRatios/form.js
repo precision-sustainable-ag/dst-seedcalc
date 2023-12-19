@@ -3,35 +3,32 @@ import Grid from '@mui/material/Grid';
 import { Typography, useTheme, useMediaQuery } from '@mui/material';
 
 import NumberTextField from '../../../../components/NumberTextField';
-import {
-  convertToPercent,
-  convertToDecimal,
-} from '../../../../shared/utils/calculate';
+import { convertToPercent } from '../../../../shared/utils/calculator';
 import '../steps.scss';
 
 const MixRatioSteps = ({
-  seed, council, updateSeed, seedsSelected,
+  seed, council, handleFormValueChange, calculatorResult,
 }) => {
   const theme = useTheme();
   const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
 
   const renderFormLabel = (label1, label2, label3) => (
     matchesMd && (
-    <Grid container>
+    <Grid container justifyContent="space-evenly">
       <Grid item xs={3}>
-        <Typography sx={{ fontSize: '0.75rem', pb: '1rem' }}>
+        <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
           {label1}
         </Typography>
       </Grid>
       <Grid item xs={1} />
       <Grid item xs={3}>
-        <Typography sx={{ fontSize: '0.75rem', pb: '1rem' }}>
+        <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
           {label2}
         </Typography>
       </Grid>
       <Grid item xs={1} />
       <Grid item xs={3}>
-        <Typography sx={{ fontSize: '0.75rem', pb: '1rem' }}>
+        <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
           {label3}
         </Typography>
       </Grid>
@@ -39,17 +36,10 @@ const MixRatioSteps = ({
     )
   );
 
-  const generatePercentInGroup = (seedData) => {
-    const group = seedData.group.label;
-    let count = 0;
-    seedsSelected.map((s) => {
-      if (s.group.label === group) count += 1;
-      return null;
-    });
-    return 1 / count;
-  };
-
-  const percentInGroup = generatePercentInGroup(seed);
+  const {
+    // eslint-disable-next-line no-unused-vars
+    step1, step2, step3, step4,
+  } = calculatorResult;
 
   return (
     <Grid container>
@@ -60,46 +50,45 @@ const MixRatioSteps = ({
             <Typography className="step-header">Step 1: </Typography>
           </Grid>
           {renderFormLabel(
-            'Mix Seeding Rate PLS',
-            '% in Group',
-            '% of Single Species Seeding Rate',
+            'Single Species Seeding Rate PLS',
+            'Soil Fertility Modifier',
+            'Sum Species Of Group In Mix',
           )}
-          <Grid item xs={3}>
-            <NumberTextField
-              label={matchesMd ? '' : 'Single Species Seeding Rate PLS'}
-              handleChange={(e) => {
-                updateSeed(e.target.value, 'singleSpeciesSeedingRatePLS', seed);
-              }}
-              value={seed.singleSpeciesSeedingRatePLS}
-            />
-            <Typography>Lbs / Acre</Typography>
-          </Grid>
+          <Grid container justifyContent="space-evenly">
+            <Grid item xs={3}>
+              <NumberTextField
+                label={matchesMd ? '' : 'Single Species Seeding Rate PLS'}
+                handleChange={(e) => {
+                  handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
+                }}
+                value={step1.defaultSingleSpeciesSeedingRatePLS}
+              />
+              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
+            </Grid>
 
-          <Grid item xs={1}>
-            <Typography className="math-icon">&#215;</Typography>
-          </Grid>
+            <Grid item xs={1}>
+              <Typography className="math-icon">&#215;</Typography>
+            </Grid>
 
-          <Grid item xs={3}>
-            <NumberTextField
-              label={matchesMd ? '' : '% in Group'}
-              disabled
-              value={Math.round(convertToPercent(percentInGroup))}
-            />
-          </Grid>
+            <Grid item xs={3}>
+              <NumberTextField
+                label={matchesMd ? '' : 'Soil Fertility Modifier'}
+                disabled
+                value={step1.soilFertilityModifier}
+              />
+            </Grid>
 
-          <Grid item xs={1}>
-            <Typography className="math-icon">&#215;</Typography>
-          </Grid>
+            <Grid item xs={1}>
+              <Typography className="math-icon">÷</Typography>
+            </Grid>
 
-          <Grid item xs={3}>
-            <NumberTextField
-              label={matchesMd ? '' : '% of Single Species Rate'}
-              handleChange={(e) => {
-                updateSeed(e.target.value, 'percentOfSingleSpeciesRate', seed);
-              }}
-              value={Math.round(seed.percentOfSingleSpeciesRate)}
-            />
-            <Typography>NECCC</Typography>
+            <Grid item xs={3}>
+              <NumberTextField
+                disabled
+                label={matchesMd ? '' : 'Sum Species Of Group In Mix'}
+                value={step1.sumGroupInMix}
+              />
+            </Grid>
           </Grid>
 
           <Grid container p="10px">
@@ -109,11 +98,11 @@ const MixRatioSteps = ({
 
             <Grid item xs={7}>
               <NumberTextField
-                label="Mix Seeding Rate"
+                label="Seeding Rate In Mix"
                 disabled
-                value={seed.mixSeedingRate}
+                value={step1.seedingRate}
               />
-              <Typography>Lbs / Acre</Typography>
+              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
             </Grid>
 
             <Grid item xs={1} />
@@ -130,22 +119,18 @@ const MixRatioSteps = ({
           {renderFormLabel(
             'Single Species Seeding Rate PLS',
             '% of Single Species Rate',
-            'Mix Seeding Rate',
+            'Seeding Rate In Mix',
           )}
-          <Grid container>
+          <Grid container justifyContent="space-evenly">
             <Grid item xs={3}>
               <NumberTextField
                 label={matchesMd ? '' : 'Single Species Seeding Rate PLS'}
                 handleChange={(e) => {
-                  updateSeed(
-                    e.target.value,
-                    'singleSpeciesSeedingRatePLS',
-                    seed,
-                  );
+                  handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
                 }}
-                value={seed.singleSpeciesSeedingRatePLS}
+                value={step1.defaultSingleSpeciesSeedingRatePLS}
               />
-              <Typography>Lbs / Acre</Typography>
+              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
             </Grid>
 
             <Grid item xs={1}>
@@ -155,16 +140,10 @@ const MixRatioSteps = ({
             <Grid item xs={3}>
               <NumberTextField
                 label={matchesMd ? '' : '% of Single Species Rate'}
-                handleChange={(e) => {
-                  updateSeed(
-                    e.target.value,
-                    'percentOfSingleSpeciesRate',
-                    seed,
-                  );
-                }}
-                value={seed.percentOfSingleSpeciesRate}
+                disabled
+                value={convertToPercent(step1.percentOfRate)}
               />
-              <Typography>MCCC</Typography>
+              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>MCCC Recommendation</Typography>
             </Grid>
 
             <Grid item xs={1}>
@@ -173,11 +152,11 @@ const MixRatioSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Mix Seeding Rate'}
+                label={matchesMd ? '' : 'Seeding Rate In Mix'}
                 disabled
-                value={seed.mixSeedingRate}
+                value={step1.seedingRate}
               />
-              <Typography>Lbs / Acre</Typography>
+              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
             </Grid>
           </Grid>
         </>
@@ -189,44 +168,43 @@ const MixRatioSteps = ({
           <Typography className="step-header">Step 2: </Typography>
         </Grid>
         {renderFormLabel(
-          'Single Species Seeding Rate PLS',
-          '% of Single Species Rate',
-          'Mix Seeding Rate',
+          'Seeds / Pound',
+          'Seeding Rate In Mix',
+          'Seeds / Acre',
         )}
-        <Grid item xs={3}>
-          <NumberTextField
-            disabled
-            label={matchesMd ? '' : 'Seeds / Pound'}
-            handleChange={(e) => {
-              updateSeed(e.target.value, 'seedsPerPound', seed);
-            }}
-            value={seed.seedsPerPound}
-          />
-        </Grid>
+        <Grid container justifyContent="space-evenly">
+          <Grid item xs={3}>
+            <NumberTextField
+              disabled
+              label={matchesMd ? '' : 'Seeds / Pound'}
+              value={step2.seedsPerPound}
+            />
+          </Grid>
 
-        <Grid item xs={1}>
-          <Typography className="math-icon">&#215;</Typography>
-        </Grid>
+          <Grid item xs={1}>
+            <Typography className="math-icon">&#215;</Typography>
+          </Grid>
 
-        <Grid item xs={3}>
-          <NumberTextField
-            disabled
-            label={matchesMd ? '' : 'Mix Seeding Rate'}
-            value={seed.mixSeedingRate}
-          />
-          <Typography>Lbs / Acre</Typography>
-        </Grid>
+          <Grid item xs={3}>
+            <NumberTextField
+              disabled
+              label={matchesMd ? '' : 'Seeding Rate In Mix'}
+              value={step2.seedingRate}
+            />
+            <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
+          </Grid>
 
-        <Grid item xs={1}>
-          <Typography className="math-icon">=</Typography>
-        </Grid>
+          <Grid item xs={1}>
+            <Typography className="math-icon">=</Typography>
+          </Grid>
 
-        <Grid item xs={3}>
-          <NumberTextField
-            label={matchesMd ? '' : 'Seeds / Acre'}
-            disabled
-            value={seed.seedsPerAcre}
-          />
+          <Grid item xs={3}>
+            <NumberTextField
+              label={matchesMd ? '' : 'Seeds / Acre'}
+              disabled
+              value={step2.seedsPerAcre}
+            />
+          </Grid>
         </Grid>
       </>
 
@@ -236,37 +214,39 @@ const MixRatioSteps = ({
           <Grid item xs={12}>
             <Typography className="step-header">Step 3: </Typography>
           </Grid>
-          {renderFormLabel('Seeds/Acre', 'Sq. Ft. / Acres', 'Plants/Acre')}
-          <Grid item xs={3}>
-            <NumberTextField
-              label={matchesMd ? '' : 'Seeds / Acre'}
-              disabled
-              value={seed.seedsPerAcre}
-            />
-          </Grid>
+          {renderFormLabel('Seeds / Acre', 'Sq. Ft. / Acres', 'Seeds / Sq. Ft.')}
+          <Grid container justifyContent="space-evenly">
+            <Grid item xs={3}>
+              <NumberTextField
+                label={matchesMd ? '' : 'Seeds / Acre'}
+                disabled
+                value={step3.seedsPerAcre}
+              />
+            </Grid>
 
-          <Grid item xs={1}>
-            <Typography className="math-icon">÷</Typography>
-          </Grid>
+            <Grid item xs={1}>
+              <Typography className="math-icon">÷</Typography>
+            </Grid>
 
-          <Grid item xs={3}>
-            <NumberTextField
-              label={matchesMd ? '' : 'Sq. Ft./ Acre'}
-              disabled
-              value={seed.sqFtAcre}
-            />
-          </Grid>
+            <Grid item xs={3}>
+              <NumberTextField
+                label={matchesMd ? '' : 'Sq. Ft./ Acre'}
+                disabled
+                value={step3.sqftPerAcre}
+              />
+            </Grid>
 
-          <Grid item xs={1}>
-            <Typography className="math-icon">=</Typography>
-          </Grid>
+            <Grid item xs={1}>
+              <Typography className="math-icon">=</Typography>
+            </Grid>
 
-          <Grid item xs={3}>
-            <NumberTextField
-              label={matchesMd ? '' : 'Seeds / Sq. Ft.'}
-              disabled
-              value={seed.aproxPlantsSqFt}
-            />
+            <Grid item xs={3}>
+              <NumberTextField
+                label={matchesMd ? '' : 'Seeds / Sq. Ft.'}
+                disabled
+                value={step3.seedsPerSqft}
+              />
+            </Grid>
           </Grid>
         </>
       )}
@@ -277,84 +257,83 @@ const MixRatioSteps = ({
           <Grid item xs={12}>
             <Typography className="step-header">Step 3: </Typography>
           </Grid>
-          {renderFormLabel('Seeds/Acre', '% Survival', 'Plants/Acre')}
-          <Grid item xs={3}>
-            <NumberTextField
-              label={matchesMd ? '' : 'Seeds / Acre'}
-              disabled
-              value={seed.seedsPerAcre}
-            />
-          </Grid>
+          {renderFormLabel('Seeds / Acre', '% Survival', 'Plants / Acre')}
+          <Grid container justifyContent="space-evenly">
+            <Grid item xs={3}>
+              <NumberTextField
+                label={matchesMd ? '' : 'Seeds / Acre'}
+                disabled
+                value={step3.seedsPerAcre}
+              />
+            </Grid>
 
-          <Grid item xs={1}>
-            <Typography className="math-icon">&#215;</Typography>
-          </Grid>
+            <Grid item xs={1}>
+              <Typography className="math-icon">&#215;</Typography>
+            </Grid>
 
-          <Grid item xs={3}>
-            <NumberTextField
-              label={matchesMd ? '' : '% Survival'}
-              handleChange={(e) => {
-                updateSeed(
-                  convertToDecimal(e.target.value),
-                  'percentChanceOfWinterSurvival',
-                  seed,
-                );
-              }}
-              value={convertToPercent(seed.percentChanceOfWinterSurvival)}
-            />
-          </Grid>
+            <Grid item xs={3}>
+              <NumberTextField
+                label={matchesMd ? '' : '% Survival'}
+                handleChange={(e) => {
+                  handleFormValueChange(seed, 'percentSurvival', parseFloat(e.target.value) / 100);
+                }}
+                value={convertToPercent(step3.percentSurvival)}
+              />
+            </Grid>
 
-          <Grid item xs={1}>
-            <Typography className="math-icon">=</Typography>
-          </Grid>
+            <Grid item xs={1}>
+              <Typography className="math-icon">=</Typography>
+            </Grid>
 
-          <Grid item xs={3}>
-            <NumberTextField
-              label={matchesMd ? '' : 'Plants / Acre'}
-              disabled
-              value={seed.plantsPerAcre}
-            />
+            <Grid item xs={3}>
+              <NumberTextField
+                label={matchesMd ? '' : 'Plants / Acre'}
+                disabled
+                value={step3.plantsPerAcre}
+              />
+            </Grid>
           </Grid>
 
           <Grid item xs={12}>
             <Typography className="step-header">Step 4: </Typography>
           </Grid>
           {renderFormLabel(
-            'Plants/Acre',
-            'Sq.Ft./Acre',
-            'Aproximate Plants/Sq.Ft.',
+            'Plants / Acre',
+            'Sq.Ft. / Acre',
+            'Aproximate Plants / Sq.Ft.',
           )}
-          <Grid item xs={3}>
-            <NumberTextField
-              label={matchesMd ? '' : 'Plants / Acre'}
-              disabled
-              value={seed.plantsPerAcre}
-            />
-          </Grid>
+          <Grid container justifyContent="space-evenly">
+            <Grid item xs={3}>
+              <NumberTextField
+                label={matchesMd ? '' : 'Plants / Acre'}
+                disabled
+                value={step4.plantsPerAcre}
+              />
+            </Grid>
 
-          <Grid item xs={1}>
-            <Typography className="math-icon">÷</Typography>
-          </Grid>
+            <Grid item xs={1}>
+              <Typography className="math-icon">÷</Typography>
+            </Grid>
 
-          <Grid item xs={3}>
-            <NumberTextField
-              label={matchesMd ? '' : 'Sq. Ft./ Acre'}
-              disabled
-              value={seed.sqFtAcre}
-            />
-          </Grid>
+            <Grid item xs={3}>
+              <NumberTextField
+                label={matchesMd ? '' : 'Sq. Ft./ Acre'}
+                disabled
+                value={step4.sqftPerAcre}
+              />
+            </Grid>
 
-          <Grid item xs={1}>
-            <Typography className="math-icon">=</Typography>
-          </Grid>
+            <Grid item xs={1}>
+              <Typography className="math-icon">=</Typography>
+            </Grid>
 
-          <Grid item xs={3}>
-            <NumberTextField
-              label={matchesMd ? '' : 'Aproximate Plants  / Sq. Ft.'}
-              disabled
-              value={seed.aproxPlantsSqFt}
-            />
-            <Typography>Lbs / Acre</Typography>
+            <Grid item xs={3}>
+              <NumberTextField
+                label={matchesMd ? '' : 'Aproximate Plants / Sq.Ft.'}
+                disabled
+                value={step4.plantsPerSqft}
+              />
+            </Grid>
           </Grid>
         </>
       )}

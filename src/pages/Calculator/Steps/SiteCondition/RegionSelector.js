@@ -3,24 +3,29 @@ import Grid from '@mui/material/Grid';
 import { Button } from '@mui/material';
 import { RegionSelectorMap } from '@psa/dst.ui.region-selector-map';
 import PlaceIcon from '@mui/icons-material/Place';
-import { useDispatch } from 'react-redux';
-import { getRegion } from '../../../../features/stepSlice/api';
+import { useDispatch, useSelector } from 'react-redux';
 import statesLatLongDict from '../../../../shared/data/statesLatLongDict';
 import { availableStates } from '../../../../shared/data/dropdown';
 import Dropdown from '../../../../components/Dropdown';
 import DSTImport from '../../../../components/DSTImport';
+import {
+  checkNRCSRedux, setCouncilRedux, setCountyIdRedux, setCountyRedux,
+  setSoilDrainageRedux, setSoilFertilityRedux, setStateRedux, updateLatlonRedux,
+} from '../../../../features/siteConditionSlice/actions';
+import { getRegionNew } from '../../../../features/siteConditionSlice/api';
+import { updateDiversityRedux } from '../../../../features/calculatorSlice/actions';
+import { clearOptions, clearSeeds } from '../../../../features/calculatorSlice';
 import '../steps.scss';
 
 const RegionSelector = ({
   stateList,
   handleSteps,
-  siteCondition,
-  handleUpdateSteps,
-  step,
 }) => {
   const [isImported, setIsImported] = useState(false);
   const [mapState, setMapState] = useState({});
   const [selectedState, setSelectedState] = useState({});
+
+  const newSiteCondition = useSelector((state) => state.siteCondition);
 
   const dispatch = useDispatch();
 
@@ -43,39 +48,31 @@ const RegionSelector = ({
     if (isImported) return;
     setIsImported(false);
     // Retrieve region
-    dispatch(getRegion({ stateId: selectedState.id }));
+    dispatch(getRegionNew({ stateId: selectedState.id }));
 
     // Clear all the rest forms value
-    handleUpdateSteps('county', 'siteCondition', '');
-    handleUpdateSteps('countyId', 'siteCondition', '');
-    handleUpdateSteps('soilDrainage', 'siteCondition', '');
+    dispatch(setCountyRedux(''));
+    dispatch(setCountyIdRedux(''));
+    dispatch(setSoilDrainageRedux(''));
+    dispatch(setSoilFertilityRedux(''));
+    dispatch(checkNRCSRedux(false));
+
     // Clear out all seeds selected in Redux
-    handleUpdateSteps('seedsSelected', 'speciesSelection', []);
-    handleUpdateSteps('diversitySelected', 'speciesSelection', []);
+    dispatch(clearSeeds());
+    dispatch(updateDiversityRedux([]));
+    dispatch(clearOptions());
 
     // Update siteCondition Redux
     const { label } = selectedState;
-    handleUpdateSteps('latitude', 'siteCondition', statesLatLongDict[label][0]);
-    handleUpdateSteps(
-      'longitude',
-      'siteCondition',
-      statesLatLongDict[label][1],
-    );
-    handleUpdateSteps('state', 'siteCondition', label);
-    handleUpdateSteps('stateId', 'siteCondition', selectedState.id);
-    handleUpdateSteps(
-      'council',
-      'siteCondition',
-      selectedState.parents[0].shorthand,
-    );
-    handleUpdateSteps('stateSelected', 'siteCondition', selectedState);
+    dispatch(updateLatlonRedux(statesLatLongDict[label]));
+    dispatch(setStateRedux(label, selectedState.id));
+    dispatch(setCouncilRedux(selectedState.parents[0].shorthand));
   };
 
   /// ///////////////////////////////////////////////////////
   //                      useEffect                       //
   /// ///////////////////////////////////////////////////////
 
-  // update selectedState based on map state selection
   useEffect(() => {
     if (Object.keys(mapState).length !== 0) {
       const st = stateList.filter(
@@ -91,7 +88,7 @@ const RegionSelector = ({
   useEffect(() => {
     if (
       Object.keys(selectedState).length !== 0
-      && selectedState.label !== siteCondition.state
+      && selectedState.label !== newSiteCondition.state
     ) {
       updateStateRedux();
     }
@@ -118,7 +115,7 @@ const RegionSelector = ({
       >
         <Button
           disabled={
-            !(Object.keys(selectedState).length !== 0 && step !== 2)
+            !(newSiteCondition.state)
           }
           variant="contained"
           onClick={() => handleSteps('next')}
@@ -131,7 +128,7 @@ const RegionSelector = ({
       <Grid xs={12} md={12} item>
         <RegionSelectorMap
           selectorFunction={setMapState}
-          selectedState={siteCondition.stateSelected.label || ''}
+          selectedState={newSiteCondition.state || ''}
           availableStates={availableStates}
           initWidth="100%"
           initHeight="360px"

@@ -10,11 +10,6 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {
-  calculateAllMixRatioValues,
-  calculatePieChartData,
-} from '../../../../shared/utils/calculate';
-import { updateSteps } from '../../../../features/stepSlice';
 import MixRatioSteps from './form';
 import {
   DSTPieChart,
@@ -25,13 +20,50 @@ import {
   SeedDataChip,
   SeedingRateChip,
 } from '../../../../components/SeedingRateCard';
-
+import {
+  adjustProportions, adjustProportionsNECCC, createCalculator, createUserInput, calculatePieChartData,
+} from '../../../../shared/utils/calculator';
+import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 import '../steps.scss';
 
-const MixRatio = ({ council }) => {
+const defaultResultMCCC = {
+  step1: { defaultSingleSpeciesSeedingRatePLS: 0, percentOfRate: 0, seedingRate: 0 },
+  step2: { seedsPerPound: 0, seedingRate: 0, seedsPerAcre: 0 },
+  step3: { seedsPerAcre: 0, percentSurvival: 0, plantsPerAcre: 0 },
+  step4: { plantPerAcre: 0, sqftPerAcre: 43560, plantPerSqft: 0 },
+};
+
+const defaultResultNECCC = {
+  step1: {
+    defaultSingleSpeciesSeedingRatePLS: 0, soilFertilityModifer: 0, sumGroupInMix: 0, seedingRate: 0,
+  },
+  step2: { seedsPerPound: 0, seedingRate: 0, seedsPerAcre: 0 },
+  step3: { seedsPerAcre: 0, sqftPerAcre: 43560, seedsPerSqft: 0 },
+};
+
+const defaultPieChartData = {
+  seedingRateArray: [],
+  plantsPerAcreArray: [],
+  seedsPerAcreArray: [],
+};
+
+const MixRatio = ({ calculator, setCalculator }) => {
+  const [initCalculator, setInitCalculator] = useState(false);
+  const [prevOptions, setPrevOptions] = useState({});
+  const [piechartData, setPieChartData] = useState(defaultPieChartData);
+
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.steps.value);
-  const { selectedSpecies, seedsSelected } = data.speciesSelection;
+  const { seedsSelected, sideBarSelection, options } = useSelector((state) => state.calculator);
+  const {
+    council, soilDrainage, plantingDate, acres,
+  } = useSelector((state) => state.siteCondition);
+
+  const [calculatorResult, setCalculatorResult] = useState(
+    seedsSelected.reduce((res, seed) => {
+      res[seed.label] = council === 'MCCC' ? defaultResultMCCC : defaultResultNECCC;
+      return res;
+    }, {}),
+  );
 
   // create an key/value pair for the seed and related accordion expanded state
   const [accordionState, setAccordionState] = useState(
@@ -41,39 +73,67 @@ const MixRatio = ({ council }) => {
     }, {}),
   );
 
-  const { poundsOfSeedArray, plantsPerAcreArray, seedsPerAcreArray } = calculatePieChartData(seedsSelected);
+  const [showSteps, setShowSteps] = useState(
+    seedsSelected.reduce((res, seed) => {
+      res[seed.label] = false;
+      return res;
+    }, {}),
+  );
+
+  // initialize calculator, set initial options
+  useEffect(() => {
+    const userInput = createUserInput(soilDrainage, plantingDate, acres);
+    const seedingRateCalculator = createCalculator(seedsSelected, council, userInput);
+    setCalculator(seedingRateCalculator);
+    seedsSelected.forEach((seed) => {
+      // FIXME: updated percentOfRate here, this is a temporary workaround for MCCC
+      const newOption = {
+        ...options[seed.label],
+        percentOfRate: council === 'MCCC' ? 1 / seedsSelected.length : null,
+      };
+      dispatch(setOptionRedux(seed.label, newOption));
+    });
+    setInitCalculator(true);
+  }, []);
+
+  // run adjust proportions on options change
+  useEffect(() => {
+    if (!initCalculator) return;
+    seedsSelected.forEach((seed) => {
+      if (options[seed.label] !== prevOptions[seed.label]) {
+        let result;
+        if (council === 'MCCC') result = adjustProportions(seed, calculator, options[seed.label]);
+        else if (council === 'NECCC') result = adjustProportionsNECCC(seed, calculator, options[seed.label]);
+        setCalculatorResult((prev) => ({ ...prev, [seed.label]: result }));
+      }
+    });
+    // calculate piechart data
+    const {
+      seedingRateArray,
+      plantsPerAcreArray,
+      seedsPerAcreArray,
+    } = calculatePieChartData(seedsSelected, calculator, options);
+    setPieChartData({ seedingRateArray, plantsPerAcreArray, seedsPerAcreArray });
+    setPrevOptions(options);
+  }, [options, initCalculator]);
+
+  // expand related accordion based on sidebar click
+  useEffect(() => {
+    setAccordionState(
+      seedsSelected.reduce((res, seed) => {
+        res[seed.label] = seed.label === sideBarSelection;
+        return res;
+      }, {}),
+    );
+  }, [sideBarSelection]);
 
   /// ///////////////////////////////////////////////////////
   //                      Redux                           //
   /// ///////////////////////////////////////////////////////
 
-  const handleUpdateSteps = (key, val) => {
-    const newData = {
-      type: 'speciesSelection',
-      key,
-      value: val,
-    };
-    dispatch(updateSteps(newData));
-  };
-
-  const updateSeed = (val, key, seed) => {
-    const index = seedsSelected.findIndex((s) => s.id === seed.id);
-    const seeds = JSON.parse(JSON.stringify(seedsSelected));
-    seeds[index][key] = val;
-    handleUpdateSteps('seedsSelected', seeds);
-
-    // create new copy of recently updated Redux state, calculate & update all seed's step data.
-    const newData = [...seeds];
-    newData[index] = calculateAllMixRatioValues(newData[index], data, council);
-    handleUpdateSteps('seedsSelected', newData);
-  };
-
-  const showStep = (val, key, seed) => {
-    // find index of seed, parse a copy, update proper values, & send to Redux
-    const index = seedsSelected.findIndex((s) => s.id === seed.id);
-    const seeds = JSON.parse(JSON.stringify(seedsSelected));
-    seeds[index][key] = val;
-    handleUpdateSteps('seedsSelected', seeds);
+  // function to handle form value change, update options
+  const handleFormValueChange = (seed, option, value) => {
+    dispatch(setOptionRedux(seed.label, { ...options[seed.label], [option]: value }));
   };
 
   // handler for click to open accordion
@@ -81,16 +141,6 @@ const MixRatio = ({ council }) => {
     const open = accordionState[label];
     setAccordionState({ ...accordionState, [label]: !open });
   };
-
-  useEffect(() => {
-    // expand related accordion based on sidebar click
-    setAccordionState(
-      seedsSelected.reduce((res, seed) => {
-        res[seed.label] = seed.label === selectedSpecies;
-        return res;
-      }, {}),
-    );
-  }, [selectedSpecies]);
 
   /// ///////////////////////////////////////////////////////
   //                      Render                          //
@@ -103,26 +153,24 @@ const MixRatio = ({ council }) => {
       </Grid>
 
       <Grid item xs={6} sx={{ textAlign: 'justify' }}>
-        <DSTPieChart chartData={poundsOfSeedArray} />
+        <DSTPieChart chartData={piechartData.seedingRateArray} />
         <DSTPieChartLabel>Pounds of Seed / Acre </DSTPieChartLabel>
-        <DSTPieChartLegend chartData={poundsOfSeedArray} />
+        <DSTPieChartLegend chartData={piechartData.seedingRateArray} />
       </Grid>
 
       <Grid item xs={6} sx={{ textAlign: 'justify' }}>
         <DSTPieChart
           chartData={
-            council === 'MCCC' ? plantsPerAcreArray : seedsPerAcreArray
+            council === 'MCCC' ? piechartData.plantsPerAcreArray : piechartData.seedsPerAcreArray
           }
         />
         <DSTPieChartLabel>
-          {council === 'MCCC' ? 'Plants' : 'Seeds'}
-          {' '}
+          {council === 'MCCC' ? 'Plants ' : 'Seeds '}
           Per Acre
-          {' '}
         </DSTPieChartLabel>
         <DSTPieChartLegend
           chartData={
-            council === 'MCCC' ? plantsPerAcreArray : seedsPerAcreArray
+            council === 'MCCC' ? piechartData.plantsPerAcreArray : piechartData.seedsPerAcreArray
           }
         />
       </Grid>
@@ -145,45 +193,47 @@ const MixRatio = ({ council }) => {
                 <Grid item xs={6}>
                   <SeedingRateChip
                     label="Default Single Species Seeding Rate PLS"
-                    value={Math.floor(seed.singleSpeciesSeedingRatePLS)}
+                    value={
+                      calculatorResult[seed.label].step1.defaultSingleSpeciesSeedingRatePLS
+                    }
                   />
                   {council === 'MCCC' && (
                   <SeedDataChip
                     label="Aprox plants per"
-                    value={Math.floor(seed.plantsPerAcre)}
+                    value={calculatorResult[seed.label].step3.plantsPerAcre}
                   />
                   )}
                 </Grid>
 
                 <Grid item xs={6}>
                   <SeedingRateChip
-                    label="Default Mix Seeding Rate PLS"
-                    value={Math.round(seed.mixSeedingRate)}
+                    label="Default Seeding Rate in Mix"
+                    value={calculatorResult[seed.label].step1.seedingRate}
                   />
                   <SeedDataChip
                     label="Seeds per"
-                    value={Math.floor(seed.seedsPerAcre)}
+                    value={calculatorResult[seed.label].step2.seedsPerAcre}
                   />
                 </Grid>
 
                 <Grid item xs={12} pt="1rem">
                   <Button
                     onClick={() => {
-                      showStep(!seed.showSteps, 'showSteps', seed);
+                      setShowSteps({ ...showSteps, [seed.label]: !showSteps[seed.label] });
                     }}
                     variant="outlined"
                   >
-                    {seed.showSteps ? 'Close Steps' : 'Change My Rate'}
+                    {showSteps[seed.label] ? 'Close Steps' : 'Change My Rate'}
                   </Button>
                 </Grid>
 
                 <Grid item xs={12}>
-                  {seed.showSteps && (
+                  {showSteps[seed.label] && (
                   <MixRatioSteps
                     seed={seed}
                     council={council}
-                    seedsSelected={seedsSelected}
-                    updateSeed={updateSeed}
+                    handleFormValueChange={handleFormValueChange}
+                    calculatorResult={calculatorResult[seed.label]}
                   />
                   )}
                 </Grid>
