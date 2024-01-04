@@ -11,6 +11,11 @@ import {
 } from '@mui/material';
 
 import '../steps.scss';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  addSeedRedux, setOptionRedux, removeOptionRedux, removeSeedRedux,
+} from '../../../../features/calculatorSlice/actions';
+import { initialOptions } from '../../../../shared/utils/calculator';
 
 const CheckBoxIcon = ({ style }) => (
   <Box sx={style}>
@@ -39,29 +44,30 @@ const CheckBoxIcon = ({ style }) => (
 const PlantList = ({
   seedType,
   filteredSeeds,
-  seedsSelected,
-  updateSeeds,
-  council,
-  plantingDate,
 }) => {
+  const dispatch = useDispatch();
+
+  const {
+    acres, stateId, countyId, soilDrainage, plannedPlantingDate, soilFertility, council,
+  } = useSelector((state) => state.siteCondition);
+
+  const seedsSelected = useSelector((state) => state.calculator.seedsSelected);
+
   const seedsList = filteredSeeds.filter((seed) => seed.group !== null && seed.group.label === seedType);
 
   const checkPlantingDate = (seed) => {
     if (council === 'MCCC') return '';
+    // FIXME: temp workaround, need check what plant have this problem
+    if (!seed['Planting and Growth Windows']['Reliable Establishment']) return '';
     const [firstPeriod, secondPeriod] = seed['Planting and Growth Windows']['Reliable Establishment'];
-    let firstStart; let firstEnd; let secondStart; let
-      secondEnd;
-
-    // eslint-disable-next-line prefer-const
-    firstStart = dayjs(dayjs(firstPeriod.split(' - ')[0]).format('MM/DD'));
-    // eslint-disable-next-line prefer-const
-    firstEnd = dayjs(dayjs(firstPeriod.split(' - ')[1]).format('MM/DD'));
+    let secondStart; let secondEnd;
+    const firstStart = dayjs(dayjs(firstPeriod.split(' - ')[0]).format('MM/DD'));
+    const firstEnd = dayjs(dayjs(firstPeriod.split(' - ')[1]).format('MM/DD'));
     if (secondPeriod) {
       secondStart = dayjs(dayjs(secondPeriod.split(' - ')[0]).format('MM/DD'));
       secondEnd = dayjs(dayjs(secondPeriod.split(' - ')[1]).format('MM/DD'));
     }
-
-    const plannedDate = dayjs(dayjs(plantingDate).format('MM/DD'));
+    const plannedDate = dayjs(dayjs(plannedPlantingDate).format('MM/DD'));
 
     if (!plannedDate.isBetween(firstStart, firstEnd, 'day')) {
       if (
@@ -79,6 +85,33 @@ const PlantList = ({
       )} - ${firstEnd.format('MM/DD')}`;
     }
     return '';
+  };
+
+  const handleClick = async (seed) => {
+    const { id: cropId, label: seedName } = seed;
+    // if seed not in seedSelected, add it
+    if (seedsSelected.filter((s) => s.label === seedName).length === 0) {
+      const url = `https://developapi.covercrop-selector.org/v2/crops/${cropId}?regions=${stateId}&context=seed_calc&regions=${countyId}`;
+      const { data } = await fetch(url).then((res) => res.json());
+      dispatch(addSeedRedux(data));
+      const { label, attributes } = data;
+      const percentSurvival = council === 'MCCC'
+        ? parseFloat(attributes.Coefficients['% Chance of Winter Survial'].values[0])
+        : '';
+      // set initial options
+      dispatch(setOptionRedux(label, {
+        ...initialOptions,
+        acres,
+        soilDrainage,
+        plannedPlantingDate,
+        percentSurvival,
+        soilFertility: soilFertility.toLowerCase(),
+      }));
+    } else {
+    // if seed already in seedSelected, del it
+      dispatch(removeSeedRedux(seedName));
+      dispatch(removeOptionRedux(seedName));
+    }
   };
 
   return (
@@ -108,7 +141,10 @@ const PlantList = ({
               }}
             >
               <CardActionArea
-                onClick={() => updateSeeds(seed, seedType)}
+                onClick={() => {
+                  // updated click function
+                  handleClick(seed);
+                }}
                 disableRipple
               >
                 <CardMedia

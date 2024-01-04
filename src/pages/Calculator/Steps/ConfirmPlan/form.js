@@ -3,19 +3,24 @@ import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { Typography } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
 import NumberTextField from '../../../../components/NumberTextField';
 import DSTTextField from '../../../../components/DSTTextField';
-import DSTSwitch from '../../../../components/Switch';
-
 import NRCSStandards from './NRCSStandards';
+
 import '../steps.scss';
+import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
+import { setAcresRedux } from '../../../../features/siteConditionSlice/actions';
 
-const ConfirmPlanForm = ({ updateSeed, data }) => {
-  const { seedsSelected } = data.speciesSelection;
-  const { NRCS } = data;
-
+const ConfirmPlanForm = ({
+  nrcsResult, seedsSelected, calculatorResult, options,
+}) => {
   const theme = useTheme();
   const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
+
+  const dispatch = useDispatch();
+
+  const { checkNRCSStandards } = useSelector((state) => state.siteCondition);
 
   const renderStepsForm = (label1, label2, label3) => (
     matchesMd && (
@@ -41,112 +46,104 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
     )
   );
 
-  const renderConfirmPlanForm = (seed) => (
-    <Grid container>
-      <Grid container sx={{ p: '0.625rem' }}>
-        {renderStepsForm('Bulk Lbs / Acre', 'Acres', 'Total Pounds')}
-        <Grid item xs={3}>
-          <NumberTextField
-            disabled
-            label={matchesMd ? '' : 'Bulk Lbs / Acre'}
-            handleChange={(e) => {
-              updateSeed(e.target.value, 'bulkSeedingRate', seed);
-            }}
-            value={seed.bulkSeedingRate}
-          />
+  const renderConfirmPlanForm = (seed) => {
+    const result = calculatorResult[seed.label];
+    return (
+      <Grid container>
+        <Grid container sx={{ p: '0.625rem' }}>
+          {renderStepsForm('Bulk Lbs / Acre', 'Acres', 'Total Pounds')}
+          <Grid item xs={3}>
+            <NumberTextField
+              disabled
+              label={matchesMd ? '' : 'Bulk Lbs / Acre'}
+              value={result.bulkSeedingRate}
+            />
+          </Grid>
+
+          <Grid item xs={1}>
+            <Typography className="math-icon">&#215;</Typography>
+          </Grid>
+
+          <Grid item xs={3}>
+            <NumberTextField
+              label={matchesMd ? '' : 'Acres'}
+              handleChange={(e) => {
+                dispatch(setAcresRedux(parseFloat(e.target.value)));
+                seedsSelected.forEach((s) => {
+                  dispatch(setOptionRedux(s.label, { ...options[s.label], acres: e.target.value }));
+                });
+              }}
+              value={result.acres}
+            />
+          </Grid>
+
+          <Grid item xs={1}>
+            <Typography className="math-icon">=</Typography>
+          </Grid>
+
+          <Grid item xs={3}>
+            <NumberTextField
+              label={matchesMd ? '' : 'Total Pounds'}
+              disabled
+              value={result.totalPounds}
+            />
+          </Grid>
+
+          <Grid item xs={1} />
         </Grid>
 
-        <Grid item xs={1}>
-          <Typography className="math-icon">&#215;</Typography>
+        <Grid container sx={{ p: '0.625rem' }}>
+          <Grid item xs={3} />
+          <Grid item xs={1} />
+          <Grid item xs={3}>
+            <NumberTextField
+              label="Cost/Pound"
+              value={result.costPerPound}
+              handleChange={(e) => dispatch(
+                setOptionRedux(seed.label, { ...options[seed.label], costPerPound: e.target.value }),
+              )}
+            />
+          </Grid>
+          <Grid item xs={3} />
         </Grid>
 
-        <Grid item xs={3}>
-          <NumberTextField
-            label={matchesMd ? '' : 'Acres'}
-            handleChange={(e) => {
-              updateSeed(e.target.value, 'acres', seed);
-            }}
-            value={seed.acres}
-          />
-        </Grid>
-
-        <Grid item xs={1}>
-          <Typography className="math-icon">=</Typography>
-        </Grid>
-
-        <Grid item xs={3}>
-          <NumberTextField
-            label={matchesMd ? '' : 'Total Pounds'}
-            disabled
-            value={seed.totalPounds}
-          />
-        </Grid>
-
-        <Grid item xs={1} />
-      </Grid>
-
-      <Grid container sx={{ p: '0.625rem' }}>
-        <Grid item xs={3}>
-          {/* <Typography>Cost / Pound</Typography> */}
-        </Grid>
-        <Grid item xs={1} />
-        <Grid item xs={3}>
-          <NumberTextField
-            label="Cost/Pound"
-            disabled
-            value={seed.costPerPound}
-          />
-        </Grid>
-        <Grid item xs={3}>
-          {' '}
-          <DSTSwitch
-            checked={seed.confirmToggle}
-            handleChange={() => {
-              updateSeed(!seed.confirmToggle, 'confirmToggle', seed);
-            }}
-          />
-        </Grid>
-      </Grid>
-
-      <Grid container sx={{ p: '0.625rem' }}>
-        {renderStepsForm('Cost/Pound', 'Total Pounds', 'Total Cost')}
-        <Grid item xs={3}>
-          <NumberTextField
-            disabled
-            label={matchesMd ? '' : 'Cost/Pound'}
-            handleChange={(e) => {
-              updateSeed(e.target.value, 'costPerPound', seed);
-            }}
-            value={seed.costPerPound}
-          />
-        </Grid>
-        <Grid item xs={1}>
-          <Typography className="math-icon">&#215;</Typography>
-        </Grid>
-        <Grid item xs={3}>
-          <NumberTextField
-            disabled
-            label={matchesMd ? '' : 'Total Pounds'}
-            value={seed.totalPounds}
-          />
-        </Grid>
-        <Grid item xs={1}>
-          <Typography className="math-icon">=</Typography>
-        </Grid>
-        <Grid item xs={3}>
-          <DSTTextField
-            label={matchesMd ? '' : 'Total Cost'}
-            disabled
-            value={`$${seed.totalCost.toFixed(2)}`}
-          />
+        <Grid container sx={{ p: '0.625rem' }}>
+          {renderStepsForm('Cost/Pound', 'Total Pounds', 'Total Cost')}
+          <Grid item xs={3}>
+            <NumberTextField
+              disabled
+              label={matchesMd ? '' : 'Cost/Pound'}
+              value={result.costPerPound}
+            />
+          </Grid>
+          <Grid item xs={1}>
+            <Typography className="math-icon">&#215;</Typography>
+          </Grid>
+          <Grid item xs={3}>
+            <NumberTextField
+              disabled
+              label={matchesMd ? '' : 'Total Pounds'}
+              value={result.totalPounds}
+            />
+          </Grid>
+          <Grid item xs={1}>
+            <Typography className="math-icon">=</Typography>
+          </Grid>
+          <Grid item xs={3}>
+            <NumberTextField
+              label={matchesMd ? '' : 'Total Cost'}
+              disabled
+              value={result.totalCost}
+            />
+          </Grid>
         </Grid>
       </Grid>
-    </Grid>
-  );
+    );
+  };
 
   const renderTotalCostOfMix = () => {
     const totalCostOfMix = seedsSelected.reduce(
-      (sum, a) => sum + a.totalCost,
+      (total, seed) => total + calculatorResult[seed.label].totalCost,
       0,
     );
     return (
@@ -154,40 +151,24 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
         <Grid item xs={12}>
           <Typography className="step-header">Total Cost of mix:</Typography>
         </Grid>
-        <Grid item xs={3} sx={{ p: '0.625rem' }}>
-          <DSTTextField
-            label={`${seedsSelected[0].label}`}
-            //
-            disabled
-            value={`$${seedsSelected[0].totalCost.toFixed(2)}`}
-          />
-          {' '}
-        </Grid>
-        <Grid item xs={1} sx={{ p: '0.625rem' }}>
-          <Typography className="math-icon">+</Typography>
-        </Grid>
-        {seedsSelected.map((s, i) => {
-          if (i !== 0) {
-            return (
-              <Fragment key={i}>
-                <Grid item xs={3} sx={{ p: '0.625rem' }}>
-                  <DSTTextField
-                    label={`${s.label}`}
-                    disabled
-                    value={`$${s.totalCost.toFixed(2)}`}
-                  />
-                  {' '}
-                </Grid>
-                <Grid item xs={1} sx={{ p: '0.625rem' }}>
-                  <Typography className="math-icon">
-                    {i !== seedsSelected.length - 1 ? '+' : '='}
-                  </Typography>
-                </Grid>
-              </Fragment>
-            );
-          }
-          return null;
-        })}
+
+        {seedsSelected.map((seed, i) => (
+          <Fragment key={i}>
+            <Grid item xs={3} sx={{ p: '0.625rem' }}>
+              <DSTTextField
+                label={`${seed.label}`}
+                disabled
+                value={`$${calculatorResult[seed.label].totalCost.toFixed(2)}`}
+              />
+              {' '}
+            </Grid>
+            <Grid item xs={1} sx={{ p: '0.625rem' }}>
+              <Typography className="math-icon">
+                {i !== seedsSelected.length - 1 ? '+' : '='}
+              </Typography>
+            </Grid>
+          </Fragment>
+        ))}
         <Grid item xs={6} sx={{ p: '0.625rem' }}>
           <DSTTextField
             label="Total Cost of Mix"
@@ -203,7 +184,7 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
   return (
     <Grid container color="primary.text">
       {/* NRCS Standards */}
-      {NRCS.enabled && <NRCSStandards NRCS={NRCS} />}
+      {checkNRCSStandards && <NRCSStandards nrcsResult={nrcsResult} />}
       <Grid item xs={12}>
         {seedsSelected.map((seed, i) => (
           <Grid container key={i}>
@@ -215,7 +196,7 @@ const ConfirmPlanForm = ({ updateSeed, data }) => {
             </Grid>
           </Grid>
         ))}
-        {renderTotalCostOfMix(data)}
+        {renderTotalCostOfMix()}
       </Grid>
     </Grid>
   );

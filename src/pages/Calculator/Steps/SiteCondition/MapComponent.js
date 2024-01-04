@@ -3,64 +3,64 @@ import Grid from '@mui/material/Grid';
 import { Map } from '@psa/dst.ui.map';
 import { Button } from '@mui/material';
 import PlaceIcon from '@mui/icons-material/Place';
-import { useDispatch } from 'react-redux';
-import { getZoneData, getSSURGOData } from '../../../../features/stepSlice/api';
+import { useDispatch, useSelector } from 'react-redux';
+import { getZoneData, getSSURGOData } from '../../../../features/siteConditionSlice/api';
+import { setCountyRedux, setSoilDrainageRedux, updateLatlonRedux } from '../../../../features/siteConditionSlice/actions';
 import '../steps.scss';
+import { soilDrainage } from '../../../../shared/data/dropdown';
 
 const MapComponent = ({
   handleSteps,
-  step,
   selectedToEditSite,
   setSelectedToEditSite,
-  siteCondition,
-  handleUpdateSteps,
   counties,
 }) => {
   const dispatch = useDispatch();
+  const siteCondition = useSelector((state) => state.siteCondition);
 
   useEffect(() => {
     const {
-      latitude, longitude, address, zipCode, county,
+      latitude, longitude, zipCode, county,
     } = selectedToEditSite;
-
-    if (
-      latitude === siteCondition.latitude
-      && longitude === siteCondition.longitude
-    ) {
-      return;
-    }
 
     if (Object.keys(selectedToEditSite).length > 0) {
       if (siteCondition.council === 'MCCC') {
         const filteredCounty = counties.filter((c) => county.toLowerCase().includes(c.label.toLowerCase()));
         if (filteredCounty.length > 0) {
-          handleUpdateSteps('county', 'siteCondition', filteredCounty[0].label);
+          dispatch(setCountyRedux(filteredCounty[0].label));
         }
       }
-      handleUpdateSteps('latitude', 'siteCondition', latitude);
-      handleUpdateSteps('longitude', 'siteCondition', longitude);
-      handleUpdateSteps('address', 'siteCondition', address);
-      handleUpdateSteps('zipCode', 'siteCondition', zipCode);
-      dispatch(getZoneData({ zip: zipCode }));
+      dispatch(updateLatlonRedux([latitude, longitude]));
+      dispatch(getZoneData({ zip: zipCode })).then((res) => {
+        // update zone data for NECCC
+        if (siteCondition.council === 'NECCC') {
+          dispatch(setCountyRedux(`Zone ${res.payload.replace(/[^0-9]/g, '')}`));
+        }
+      });
       dispatch(
         getSSURGOData({
           lat: latitude,
           lon: longitude,
         }),
-      );
+      ).then((res) => {
+        // update soil drainage redux
+        const value = res.payload.Table[1][2] ?? '';
+        const soilDrainageValue = soilDrainage.filter(
+          (slice) => slice.label.toLowerCase() === value.toLowerCase(),
+        )[0]?.label ?? '';
+        dispatch(setSoilDrainageRedux(soilDrainageValue));
+      });
     }
   }, [selectedToEditSite]);
 
   return (
     <Grid container>
       <Grid xs={2} item p="10px">
-        {step !== 1 && (
-          <Button variant="contained" onClick={() => handleSteps('back')}>
-            <PlaceIcon />
-            {' '}
-            Select State
-          </Button>
-        )}
+        <Button variant="contained" onClick={() => handleSteps('back')}>
+          <PlaceIcon />
+          {' '}
+          Select State
+        </Button>
       </Grid>
 
       <Grid xs={12} md={12} item>
@@ -69,8 +69,8 @@ const MapComponent = ({
           initWidth="100%"
           padding="20px"
           initHeight="360px"
-          initLat={siteCondition.latitude}
-          initLon={siteCondition.longitude}
+          initLat={siteCondition.latlon[0]}
+          initLon={siteCondition.latlon[1]}
           initStartZoom={12}
           initMinZoom={4}
           initMaxZoom={18}

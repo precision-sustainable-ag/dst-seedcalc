@@ -6,34 +6,36 @@ import React, { useState } from 'react';
 import { Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import DatePicker from '../../../../components/DatePicker';
 import Dropdown from '../../../../components/Dropdown';
 import NumberTextField from '../../../../components/NumberTextField';
 import DSTSwitch from '../../../../components/Switch';
-import { soilDrainage } from '../../../../shared/data/dropdown';
+import { soilDrainage, soilFertility } from '../../../../shared/data/dropdown';
 import { getCrops } from '../../../../features/stepSlice/api';
 import '../steps.scss';
+import {
+  checkNRCSRedux,
+  setAcresRedux, setCountyRedux, setPlantingDateRedux, setSoilDrainageRedux, setSoilFertilityRedux,
+} from '../../../../features/siteConditionSlice/actions';
 
 const SiteConditionForm = ({
-  siteCondition,
-  handleUpdateSteps,
   council,
   counties,
-  NRCS,
 }) => {
-  const [checked, setChecked] = useState(NRCS.enabled);
+  const [checked, setChecked] = useState(false);
   const dispatch = useDispatch();
+  const newSiteCondition = useSelector((state) => state.siteCondition);
 
   const handleSwitch = () => {
     setChecked(!checked);
-    handleUpdateSteps('enabled', 'NRCS', !checked);
+    dispatch(checkNRCSRedux(!checked));
   };
 
-  const handleRegion = (e) => {
-    const countyId = counties.filter((c) => c.label === e)[0].id;
-    handleUpdateSteps('county', 'siteCondition', e);
+  const handleRegion = (region) => {
+    const countyId = counties.filter((c) => c.label === region)[0].id;
+    dispatch(setCountyRedux(region));
     if (countyId !== undefined && countyId !== undefined) {
       dispatch(
         getCrops({
@@ -47,7 +49,7 @@ const SiteConditionForm = ({
     <>
       <Grid item xs={12} md={6} p="10px">
         <Dropdown
-          value={siteCondition.county}
+          value={newSiteCondition.county}
           label={
             council === 'MCCC' ? 'County: ' : 'USDA Plant Hardiness Zone: '
           }
@@ -59,10 +61,10 @@ const SiteConditionForm = ({
 
       <Grid item xs={12} md={6} p="10px">
         <Dropdown
-          value={siteCondition.soilDrainage}
+          value={newSiteCondition.soilDrainage}
           label="Soil Drainage: "
           handleChange={(e) => {
-            handleUpdateSteps('soilDrainage', 'siteCondition', e.target.value);
+            dispatch(setSoilDrainageRedux(e.target.value));
           }}
           size={12}
           items={soilDrainage}
@@ -72,25 +74,21 @@ const SiteConditionForm = ({
       <Grid item xs={12} md={6} p="10px">
         <DatePicker
           label="Planned Planting Date: "
-          value={siteCondition.plannedPlantingDate}
+          value={newSiteCondition.plannedPlantingDate}
           handleChange={(e) => {
             const formattedDate = dayjs(e).format('MM/DD/YYYY');
-            handleUpdateSteps(
-              'plannedPlantingDate',
-              'siteCondition',
-              formattedDate,
-            );
+            dispatch(setPlantingDateRedux(formattedDate));
           }}
         />
       </Grid>
 
       <Grid item xs={12} md={6} p="10px">
         <NumberTextField
-          value={siteCondition.acres}
+          value={newSiteCondition.acres}
           label="Acres"
           disabled={false}
           handleChange={(e) => {
-            handleUpdateSteps('acres', 'siteCondition', e.target.value);
+            dispatch(setAcresRedux(parseFloat(e.target.value)));
           }}
           placeholder="Enter your field acres here"
         />
@@ -106,6 +104,25 @@ const SiteConditionForm = ({
         >
           <Typography fontSize="1.25rem">Check NRCS Standards: </Typography>
           <DSTSwitch checked={checked} handleChange={handleSwitch} />
+        </Grid>
+      )}
+
+      {council === 'NECCC' && (
+        <Grid
+          item
+          xs={12}
+          md={6}
+          p="10px"
+        >
+          <Dropdown
+            value={newSiteCondition.soilFertility}
+            label="Soil Fertility: "
+            handleChange={(e) => {
+              dispatch(setSoilFertilityRedux(e.target.value));
+            }}
+            size={12}
+            items={soilFertility}
+          />
         </Grid>
       )}
     </>

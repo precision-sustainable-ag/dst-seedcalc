@@ -11,10 +11,10 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import styled from '@emotion/styled';
-import { updateSteps } from '../../../../features/stepSlice';
-import { seedingMethods } from '../../../../shared/data/dropdown';
+import { seedingMethods, seedingMethodsNECCC } from '../../../../shared/data/dropdown';
 import Dropdown from '../../../../components/Dropdown';
 import '../steps.scss';
+import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 
 const LeftGrid = styled(Grid)(() => ({
   '&.MuiGrid-item': {
@@ -22,11 +22,8 @@ const LeftGrid = styled(Grid)(() => ({
     border: '1px solid #c7c7c7',
     borderLeft: 'none',
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    '& p': {
-      fontWeight: 'bold',
-    },
   },
 }));
 
@@ -42,11 +39,13 @@ const RightGrid = styled(Grid)(() => ({
     '& .MuiBox-root': {
       width: '50px',
       height: '50px',
-      padding: '11px',
       margin: '0 auto',
       backgroundColor: '#E5E7D5',
       border: 'solid 2px',
       borderRadius: '50%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     '& p': {
       fontWeight: 'bold',
@@ -54,12 +53,13 @@ const RightGrid = styled(Grid)(() => ({
   },
 }));
 
-const SeedingMethod = ({ council }) => {
+const SeedingMethod = () => {
+  const [methods, setMethods] = useState({});
   // useSelector for crops reducer data
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.steps.value);
-  const { seedingMethod, speciesSelection } = data;
-  const { selectedSpecies, seedsSelected } = speciesSelection;
+
+  const { council } = useSelector((state) => state.siteCondition);
+  const { seedsSelected, sideBarSelection, options } = useSelector((state) => state.calculator);
 
   // create an key/value pair for the seed and related accordion expanded state
   const [accordionState, setAccordionState] = useState(
@@ -70,40 +70,8 @@ const SeedingMethod = ({ council }) => {
   );
 
   /// ///////////////////////////////////////////////////////
-  //                      Redux                           //
-  /// ///////////////////////////////////////////////////////
-
-  const handleUpdateSteps = (key, val) => {
-    const newData = {
-      type: 'seedingMethod',
-      key,
-      value: val,
-    };
-    dispatch(updateSteps(newData));
-  };
-
-  /// ///////////////////////////////////////////////////////
   //                   State Logic                        //
   /// ///////////////////////////////////////////////////////
-
-  const handleSeedingMethod = (e) => {
-    handleUpdateSteps('type', e.target.value);
-  };
-
-  const renderRightAccordian = (type, val) => (
-    <RightGrid item xs={6}>
-      {council === 'NECCC' && type !== 'precision' ? (
-        <Typography>Not Recommended</Typography>
-      ) : (
-        <>
-          <Box>
-            <Typography>{val}</Typography>
-          </Box>
-          <Typography>Lbs / Acre</Typography>
-        </>
-      )}
-    </RightGrid>
-  );
 
   // handler for click to open accordion
   const handleExpandAccordion = (label) => {
@@ -111,19 +79,93 @@ const SeedingMethod = ({ council }) => {
     setAccordionState({ ...accordionState, [label]: !open });
   };
 
+  // function to handle dropdown and update seed options in redux
+  const updateOptions = (method) => {
+    seedsSelected.forEach((seed) => {
+      const prevOption = options[seed.label];
+      const plantingMethod = method;
+      const plantingMethodModifier = methods[seed.label][method];
+      dispatch(setOptionRedux(seed.label, { ...prevOption, plantingMethod, plantingMethodModifier }));
+    });
+  };
+
+  /// ///////////////////////////////////////////////////////
+  //                    useEffect                            //
+  /// ///////////////////////////////////////////////////////
+
+  // initially set all seeding methods
+  // TODO: maybe build this into redux instead of local state
+  //       OR init all the data in Species Selection or Mix Ratio page
+  useEffect(() => {
+    seedsSelected.forEach((seed) => {
+      const coefficients = seed.attributes.Coefficients;
+      const plantingMethods = council === 'MCCC' ? {
+        Drilled: 1,
+        Precision: parseFloat(coefficients['Precision Coefficient']?.values[0]) || null,
+        Broadcast: parseFloat(coefficients['Broadcast Coefficient']?.values[0]) || null,
+        Aerial: parseFloat(coefficients['Aerial Coefficient']?.values[0]) || null,
+      } : {
+        Drilled: 1,
+        'Broadcast(With Cultivation)':
+        parseFloat(coefficients['Broadcast with Cultivation Coefficient']?.values[0]) || null,
+        'Broadcast(With No Cultivation)':
+        parseFloat(coefficients['Broadcast without Cultivation Coefficient']?.values[0]) || null,
+        Aerial: parseFloat(coefficients['Aerial Coefficient']?.values[0]) || null,
+      };
+      setMethods((prev) => ({ ...prev, [seed.label]: plantingMethods }));
+
+      // initial set planting method to drilled
+      if (options[seed.label].plantingMethod === null) {
+        dispatch(setOptionRedux(
+          seed.label,
+          { ...options[seed.label], plantingMethod: 'Drilled', plantingMethodModifier: 1 },
+        ));
+      }
+    });
+  }, []);
+
   useEffect(() => {
     // expand related accordion based on sidebar click
     setAccordionState(
       seedsSelected.reduce((res, seed) => {
-        res[seed.label] = seed.label === selectedSpecies;
+        res[seed.label] = seed.label === sideBarSelection;
         return res;
       }, {}),
     );
-  }, [selectedSpecies]);
+  }, [sideBarSelection]);
 
   /// ///////////////////////////////////////////////////////
   //                    Render                            //
   /// ///////////////////////////////////////////////////////
+
+  const renderMethod = (type, val, comment) => (
+    <>
+      <LeftGrid item xs={6}>
+        <Box textAlign="left" pl="25%">
+          <Typography fontWeight="bold">
+            {
+            type === 'BroadcastwithCultivation' || type === 'BroadcastwithoutCultivation'
+              ? 'Broadcast' : type
+            }
+          </Typography>
+          <Typography fontSize="0.75rem">{comment}</Typography>
+        </Box>
+      </LeftGrid>
+      <RightGrid item xs={6}>
+        {!val ? (
+          <Typography color="#D84727">Not Recommended</Typography>
+        ) : (
+          <>
+            <Box>
+              <Typography sx={{ width: '50px' }}>{val}</Typography>
+            </Box>
+            <Typography>Lbs / Acre</Typography>
+          </>
+        )}
+      </RightGrid>
+
+    </>
+  );
 
   return (
     <Grid container>
@@ -132,11 +174,13 @@ const SeedingMethod = ({ council }) => {
       </Grid>
       <Grid item xs={12} padding="15px" className="">
         <Dropdown
-          value={seedingMethod.type}
+          value={options[seedsSelected[0].label].plantingMethod ?? ''}
           label="Seeding Method: "
-          handleChange={handleSeedingMethod}
+          handleChange={(e) => {
+            updateOptions(e.target.value);
+          }}
           size={12}
-          items={seedingMethods}
+          items={council === 'MCCC' ? seedingMethods : seedingMethodsNECCC}
         />
       </Grid>
       {seedsSelected.map((seed, i) => (
@@ -154,30 +198,40 @@ const SeedingMethod = ({ council }) => {
 
             <AccordionDetails className="accordian-details">
               <Grid container>
-                <LeftGrid item xs={6}>
-                  <Typography>Precision: </Typography>
-                </LeftGrid>
-                {renderRightAccordian('precision', seed.precision)}
-                <LeftGrid item xs={6}>
-                  <Typography>Drilled: </Typography>
-                </LeftGrid>
-                {renderRightAccordian('drilled', 1)}
-                <LeftGrid item xs={6}>
-                  <Typography>
-                    Broadcast(with Light Incorporation):
-                    {' '}
-                  </Typography>
-                </LeftGrid>
-                {renderRightAccordian('broadcast', seed.broadcast)}
-                <LeftGrid item xs={6}>
-                  <Typography>
-                    Aerial(or broadcast with no Light Incorporation
-                    {' '}
-                    <span style={{ color: 'red' }}>Not Recommended</span>
-                    ):
-                  </Typography>
-                </LeftGrid>
-                {renderRightAccordian('aerial', seed.aerial)}
+                {council === 'MCCC'
+                  && (
+                  <>
+                    {renderMethod('Precision', methods[seed.label]?.Precision)}
+                    {renderMethod('Drilled', methods[seed.label]?.Drilled)}
+                    {renderMethod(
+                      'Broadcast',
+                      methods[seed.label]?.Broadcast,
+                      'with Light Incorporation',
+                    )}
+                    {renderMethod(
+                      'Aerial',
+                      methods[seed.label]?.Aerial,
+                      'or broadcast with no Light Incorporation',
+                    )}
+                  </>
+                  )}
+                {council === 'NECCC'
+                  && (
+                  <>
+                    {renderMethod('Drilled', methods[seed.label]?.Drilled)}
+                    {renderMethod(
+                      'BroadcastwithCultivation',
+                      methods[seed.label]?.['Broadcast(With Cultivation)'],
+                      'with Cultivation, No Packing',
+                    )}
+                    {renderMethod(
+                      'BroadcastwithoutCultivation',
+                      methods[seed.label]?.['Broadcast(With No Cultivation)'],
+                      'with No Cultivation, No Packing',
+                    )}
+                    {renderMethod('Aerial', methods[seed.label]?.Aerial)}
+                  </>
+                  )}
               </Grid>
             </AccordionDetails>
           </Accordion>

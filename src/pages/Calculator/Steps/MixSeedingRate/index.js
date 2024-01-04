@@ -11,8 +11,10 @@ import {
 import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
 import { MenuRounded } from '@mui/icons-material';
-
-import { updateSteps } from '../../../../features/stepSlice';
+import {
+  setAdjustedMixSeedingRateRedux,
+  setMixSeedingRateRedux, setOptionRedux,
+} from '../../../../features/calculatorSlice/actions';
 import '../steps.scss';
 
 const CustomThumb = (props) => {
@@ -98,44 +100,32 @@ const MixSeedingTypography = styled(Typography)(({ theme }) => ({
   borderRadius: '1rem',
 }));
 
-const MixSeedingRate = () => {
-  // themes
+const MixSeedingRate = ({ calculator }) => {
   const theme = useTheme();
-
-  // useSelector for crops reducer data
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.steps.value);
-  const { seedingMethod } = data;
-  const { speciesSelection } = data;
-  const { seedsSelected } = speciesSelection;
 
-  const [dataLoaded, toggleDataLoaded] = useState(false);
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(0);
-  const [seedingRateCoefficient, setSeedingRateCoefficient] = useState(0);
-  const [seedingRateAverage, setSeedingRateAverage] = useState(0);
+  const [adjustedMixSeedingRate, setAdjustedMixSeedingRate] = useState(0);
   const [marks, setMarks] = useState([]);
 
-  /// ///////////////////////////////////////////////////////
-  //                      Redux                           //
-  /// ///////////////////////////////////////////////////////
-
-  const handleUpdateSteps = (key, val) => {
-    const newData = {
-      type: 'seedingMethod',
-      key,
-      value: val,
-    };
-    dispatch(updateSteps(newData));
-  };
+  const {
+    seedsSelected, options, mixSeedingRate,
+    adjustedMixSeedingRate: adjustedRate,
+  } = useSelector((state) => state.calculator);
 
   /// ///////////////////////////////////////////////////////
   //                    State Logic                       //
   /// ///////////////////////////////////////////////////////
 
   const updateManagementImpactOnMix = () => {
-    const percentage = seedingRateCoefficient / seedingRateAverage - 0.5;
-    handleUpdateSteps('managementImpactOnMix', percentage);
+    const managementImpactOnMix = parseFloat((adjustedMixSeedingRate / mixSeedingRate).toFixed(2));
+    // TODO: new calculator redux here, but the calculation method should be investigated
+    seedsSelected.forEach((seed) => {
+      const prevOptions = options[seed.label];
+      dispatch(setOptionRedux(seed.label, { ...prevOptions, managementImpactOnMix }));
+    });
+    dispatch(setAdjustedMixSeedingRateRedux(adjustedMixSeedingRate));
   };
 
   /// ///////////////////////////////////////////////////////
@@ -143,28 +133,30 @@ const MixSeedingRate = () => {
   /// ///////////////////////////////////////////////////////
 
   useEffect(() => {
-    const average = Math.round(
-      seedsSelected.reduce(
-        (total, seed) => total + parseFloat(seed.mixSeedingRate),
-        0,
-      ),
-    );
-    const minimum = Math.round(average - average / 2);
-    const maximum = Math.round(average + average / 2);
-    const coefficient = Math.round(
-      average + (seedingMethod.managementImpactOnMix - 0.5) * average,
-    );
+    let sum = mixSeedingRate;
+    // if first time visit this page, calculate initial mix seeding rate
+    if (!mixSeedingRate) {
+      seedsSelected.forEach((seed) => {
+        sum += calculator.seedingRate(seed, options[seed.label]);
+        dispatch(setOptionRedux(seed.label, { ...options[seed.label], managementImpactOnMix: 1 }));
+      });
+      dispatch(setMixSeedingRateRedux(Math.round(sum)));
+    }
+
+    const minimum = Math.round(sum - sum / 2);
+    const maximum = Math.round(sum + sum / 2);
+    const calculatedRate = Math.round(sum);
     setMin(minimum);
     setMax(maximum);
-    setSeedingRateAverage(average);
-    setSeedingRateCoefficient(coefficient);
+    if (!adjustedRate) setAdjustedMixSeedingRate(calculatedRate);
+    else setAdjustedMixSeedingRate(adjustedRate);
     setMarks([
       {
         value: minimum,
         label: 'Low Limit',
       },
       {
-        value: coefficient,
+        value: calculatedRate,
         label: 'Calculated',
       },
       {
@@ -172,7 +164,6 @@ const MixSeedingRate = () => {
         label: 'High Limit',
       },
     ]);
-    toggleDataLoaded(true);
   }, []);
 
   /// ///////////////////////////////////////////////////////
@@ -224,37 +215,34 @@ const MixSeedingRate = () => {
           minHeight="28rem"
           pl="3rem"
         >
-          {dataLoaded && (
-            <Stack sx={{ height: '100%' }}>
-              <Typography
-                width="30px"
-                fontWeight="bold"
-                fontSize="1.25rem"
-              >
-                {max}
-              </Typography>
-              <MixSeedingSlider
-                orientation="vertical"
-                min={min}
-                max={max}
-                value={seedingRateCoefficient}
-                valueLabelDisplay="on"
-                onChange={(e) => setSeedingRateCoefficient(e.target.value)}
-                onChangeCommitted={updateManagementImpactOnMix}
-                marks={marks}
-                coefficient={seedingRateCoefficient}
-                theme={theme}
-                slots={{ thumb: CustomThumb }}
-              />
-              <Typography
-                width="30px"
-                fontWeight="bold"
-                fontSize="1.25rem"
-              >
-                {min}
-              </Typography>
-            </Stack>
-          )}
+          <Stack sx={{ height: '100%' }}>
+            <Typography
+              width="30px"
+              fontWeight="bold"
+              fontSize="1.25rem"
+            >
+              {max}
+            </Typography>
+            <MixSeedingSlider
+              orientation="vertical"
+              min={min}
+              max={max}
+              value={adjustedMixSeedingRate}
+              valueLabelDisplay="on"
+              onChange={(e) => setAdjustedMixSeedingRate(e.target.value)}
+              onChangeCommitted={updateManagementImpactOnMix}
+              marks={marks}
+              theme={theme}
+              slots={{ thumb: CustomThumb }}
+            />
+            <Typography
+              width="30px"
+              fontWeight="bold"
+              fontSize="1.25rem"
+            >
+              {min}
+            </Typography>
+          </Stack>
         </Grid>
       </Grid>
     </Grid>

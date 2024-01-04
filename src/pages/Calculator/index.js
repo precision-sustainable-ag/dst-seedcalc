@@ -28,10 +28,13 @@ import { calculatorList, completedList } from '../../shared/data/dropdown';
 import StepsList from '../../components/StepsList';
 
 const Calculator = () => {
-  const data = useSelector((state) => state.steps.value);
-  const error = useSelector((state) => state.steps.error);
-  const type = data.siteCondition.council;
+  const siteCondition = useSelector((state) => state.siteCondition);
+  const { error: siteConditionError } = siteCondition;
+  const calculatorError = useSelector((state) => state.calculator.error);
 
+  const { seedsSelected } = useSelector((state) => state.calculator);
+  // initially set calculator here
+  const [calculator, setCalculator] = useState(null);
   const [activeStep, setActiveStep] = useState(0);
   // this completedStep is to determine whether the next button is clickable on each page
   const [completedStep, setCompletedStep] = useState([...completedList]);
@@ -52,7 +55,6 @@ const Calculator = () => {
       case 'Site Conditions':
         return (
           <SiteCondition
-            council={type}
             completedStep={completedStep}
             setCompletedStep={setCompletedStep}
           />
@@ -60,7 +62,6 @@ const Calculator = () => {
       case 'Species Selection':
         return (
           <SpeciesSelection
-            council={type}
             completedStep={completedStep}
             setCompletedStep={setCompletedStep}
           />
@@ -68,58 +69,33 @@ const Calculator = () => {
       case 'Mix Ratios':
         return (
           <MixRatio
-            council={type}
-            completedStep={completedStep}
-            setCompletedStep={setCompletedStep}
-          />
-        );
-      case 'Mix Seeding Rate':
-        return (
-          <MixSeedingRate
-            council={type}
-            completedStep={completedStep}
-            setCompletedStep={setCompletedStep}
+            calculator={calculator}
+            setCalculator={setCalculator}
           />
         );
       case 'Seeding Method':
         return (
-          <SeedingMethod
-            council={type}
-            completedStep={completedStep}
-            setCompletedStep={setCompletedStep}
-          />
+          <SeedingMethod />
+        );
+      case 'Mix Seeding Rate':
+        return (
+          <MixSeedingRate calculator={calculator} />
         );
       case 'Seed Tag Info':
         return (
-          <SeedTagInfo
-            council={type}
-            completedStep={completedStep}
-            setCompletedStep={setCompletedStep}
-          />
+          <SeedTagInfo />
         );
       case 'Review Mix':
         return (
-          <ReviewMix
-            council={type}
-            completedStep={completedStep}
-            setCompletedStep={setCompletedStep}
-          />
+          <ReviewMix calculator={calculator} />
         );
       case 'Confirm Plan':
         return (
-          <ConfirmPlan
-            council={type}
-            completedStep={completedStep}
-            setCompletedStep={setCompletedStep}
-          />
+          <ConfirmPlan calculator={calculator} />
         );
       case 'Finish':
         return (
-          <CompletedPage
-            council={type}
-            completedStep={completedStep}
-            setCompletedStep={setCompletedStep}
-          />
+          <CompletedPage />
         );
       default:
         return null;
@@ -127,9 +103,9 @@ const Calculator = () => {
   };
 
   const headerLogo = () => {
-    if (data.siteCondition.council === '') return './PSALogo.png';
-    if (data.siteCondition.council === 'MCCC') return './mccc-logo.png';
-    if (data.siteCondition.council === 'NECCC') return './neccc-logo.png';
+    if (siteCondition.council === '') return './PSALogo.png';
+    if (siteCondition.council === 'MCCC') return './mccc-logo.png';
+    if (siteCondition.council === 'NECCC') return './neccc-logo.png';
     return undefined;
   };
 
@@ -149,26 +125,29 @@ const Calculator = () => {
   }, []);
 
   useEffect(() => {
-    setShowAlert(error);
-  }, [error]);
+    if (siteConditionError || calculatorError) setShowAlert(true);
+  }, [siteConditionError, calculatorError]);
 
   return (
     <Grid container justifyContent="center">
       <Grid item style={{ position: 'fixed', top: '0px', zIndex: 1000 }}>
-        <FadeAlert
-          showAlert={showAlert}
-          action={(
-            <IconButton
-              aria-label="close"
-              color="inherit"
-              size="small"
-              onClick={() => setShowAlert(false)}
-            >
-              <CloseIcon fontSize="inherit" />
-            </IconButton>
+        {showAlert
+          && (
+          <FadeAlert
+            showAlert={showAlert}
+            action={(
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => setShowAlert(false)}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            )}
+            message="Network Error - Try again later or refresh the page!"
+          />
           )}
-          message="Network Error - Try again later or refresh the page!"
-        />
       </Grid>
       <Grid
         item
@@ -180,7 +159,7 @@ const Calculator = () => {
         alignItems="center"
       >
         <img
-          alt={data.siteCondition.council}
+          alt={siteCondition.council}
           src={headerLogo()}
           height="75px"
         />
@@ -235,7 +214,7 @@ const Calculator = () => {
               : {}
           }
         >
-          <SeedsSelectedList list={data.speciesSelection.seedsSelected} />
+          <SeedsSelectedList list={seedsSelected} />
         </Grid>
       )}
 

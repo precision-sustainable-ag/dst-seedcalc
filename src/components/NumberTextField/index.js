@@ -5,19 +5,19 @@ const NumberTextField = ({
   value,
   label,
   handleChange,
-  className,
   disabled,
   placeholder,
+  InputProps,
 }) => (
   <TextField
     fullWidth
-    className={className}
     value={value}
     label={label}
     onChange={handleChange}
     InputLabelProps={{
       shrink: true,
     }}
+    InputProps={InputProps}
     type="number"
     placeholder={placeholder}
     disabled={disabled}

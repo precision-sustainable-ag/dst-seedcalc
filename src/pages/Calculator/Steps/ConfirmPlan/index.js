@@ -1,91 +1,67 @@
-/// ///////////////////////////////////////////////////////
-//                      Imports                         //
-/// ///////////////////////////////////////////////////////
-
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { Typography, Button } from '@mui/material';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import { calculateAllConfirmPlan, emptyValues } from '../../../../shared/utils/calculate';
 import { handleDownload } from '../../../../shared/utils/exportExcel';
-import { updateSteps } from '../../../../features/stepSlice/index';
-import { generateNRCSStandards } from '../../../../shared/utils/NRCS/calculateNRCS';
 import ConfirmPlanCharts from './charts';
 import '../steps.scss';
 import ConfirmPlanForm from './form';
+import { checkNRCS, confirmPlan } from '../../../../shared/utils/calculator';
 
-const ConfirmPlan = ({ council }) => {
-  // themes
+const defaultResult = {
+  bulkSeedingRate: 0,
+  acres: 0,
+  totalPounds: 0,
+  costPerPound: 0,
+  totalCost: 0,
+};
+
+const ConfirmPlan = ({ calculator }) => {
   const theme = useTheme();
-  const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
   const matchesUpMd = useMediaQuery(theme.breakpoints.up('md'));
-  // useSelector for crops &  reducer
-  const dispatch = useDispatch();
 
-  const data = useSelector((state) => state.steps.value);
-  const { speciesSelection } = data;
+  const siteCondition = useSelector((state) => state.siteCondition);
+  const calculatorRedux = useSelector((state) => state.calculator);
+  const { council, checkNRCSStandards } = siteCondition;
+  const { seedsSelected, options, bulkSeedingRate } = calculatorRedux;
 
-  /// ///////////////////////////////////////////////////////
-  //                      Redux                           //
-  /// ///////////////////////////////////////////////////////
-  const handleUpdateSteps = (key, val) => {
-    const newData = {
-      type: 'speciesSelection',
-      key,
-      value: val,
-    };
-    dispatch(updateSteps(newData));
-  };
+  const [prevOptions, setPrevOptions] = useState({});
 
-  const handleUpdateAllSteps = (prevData, index) => {
-    const newData = [...prevData];
-    newData[index] = calculateAllConfirmPlan(newData[index]);
-    handleUpdateSteps('seedsSelected', newData);
-  };
+  const [calculatorResult, setCalculatorResult] = useState(
+    seedsSelected.reduce((res, seed) => {
+      res[seed.label] = defaultResult;
+      return res;
+    }, {}),
+  );
 
-  const initialDataLoad = () => {
-    const newData = [...JSON.parse(JSON.stringify(speciesSelection.seedsSelected))];
-    speciesSelection.seedsSelected.map((s, i) => {
-      newData[i] = calculateAllConfirmPlan(s);
-      handleUpdateAllSteps(newData, i);
-      return null;
-    });
-  };
-
-  const updateSeed = (val, key, seed) => {
-    // find index of seed, parse a copy, update proper values, & send to Redux
-    const index = speciesSelection.seedsSelected.findIndex(
-      (s) => s.id === seed.id,
-    );
-    // eslint-disable-next-line no-shadow
-    const data = JSON.parse(JSON.stringify(speciesSelection.seedsSelected));
-    data[index][key] = val;
-    handleUpdateSteps('seedsSelected', data);
-    const newData = [...data];
-    newData[index] = calculateAllConfirmPlan(data[index]);
-    handleUpdateAllSteps(newData, index);
-  };
-
-  /// ///////////////////////////////////////////////////////
-  //                   State Logic                        //
-  /// ///////////////////////////////////////////////////////
-
-  const generateSeedNull = () => {
-    const seed = { ...speciesSelection.seedsSelected[1] };
-    return emptyValues(seed);
-  };
+  const [nrcsResult, setNrcsResult] = useState({});
 
   /// ///////////////////////////////////////////////////////
   //                     useEffect                        //
   /// ///////////////////////////////////////////////////////
 
-  // FIXME: this useEffect seems didn't update anything in redux devtools
   useEffect(() => {
-    initialDataLoad();
-    generateNRCSStandards(speciesSelection.seedsSelected, data.siteCondition);
+    seedsSelected.forEach((seed) => {
+      if (options[seed.label] !== prevOptions[seed.label]) {
+        const result = confirmPlan(
+          bulkSeedingRate[seed.label],
+          options[seed.label].acres,
+          options[seed.label].costPerPound ?? 0,
+        );
+        setCalculatorResult((prev) => ({ ...prev, [seed.label]: result }));
+      }
+    });
+    setPrevOptions(options);
+  }, [options]);
+
+  // SDK NRCS calculated here
+  useEffect(() => {
+    if (checkNRCSStandards) {
+      setNrcsResult(checkNRCS(seedsSelected, calculator, options));
+    }
   }, []);
 
   /// ///////////////////////////////////////////////////////
@@ -97,7 +73,7 @@ const ConfirmPlan = ({ council }) => {
       <Grid item xs={12}>
         <Typography variant="h2">Confirm your plan</Typography>
 
-        {/* Export */}
+        {/* Export Button */}
         <Grid container sx={{ marginTop: '5px' }}>
           <Grid item xs={matchesUpMd ? 11 : 9} />
           <Grid item xs={matchesUpMd ? 1 : 3}>
@@ -114,11 +90,13 @@ const ConfirmPlan = ({ council }) => {
               onClick={() => {
                 handleDownload(
                   [
-                    ...speciesSelection.seedsSelected,
                     {
-                      ...generateSeedNull(),
-                      label: 'EXT-DATA-OBJECT',
-                      extData: JSON.stringify(data),
+                      label: 'SITE-CONDITION',
+                      extData: JSON.stringify(siteCondition),
+                    },
+                    {
+                      label: 'CALCULATOR',
+                      extData: JSON.stringify(calculatorRedux),
                     },
                   ],
                   council,
@@ -134,11 +112,16 @@ const ConfirmPlan = ({ council }) => {
 
         <ConfirmPlanCharts
           council={council}
-          speciesSelection={speciesSelection}
-          matchesMd={matchesMd}
+          calculator={calculator}
+          calculatorResult={calculatorResult}
         />
 
-        <ConfirmPlanForm updateSeed={updateSeed} data={data} />
+        <ConfirmPlanForm
+          nrcsResult={nrcsResult}
+          seedsSelected={seedsSelected}
+          calculatorResult={calculatorResult}
+          options={options}
+        />
       </Grid>
     </Grid>
   );
