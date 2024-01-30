@@ -16,12 +16,9 @@ import {
   DSTPieChartLabel,
   DSTPieChartLegend,
 } from '../../../../components/DSTPieChart';
+import SeedDataTable from '../../../../components/SeedDataTable';
 import {
-  SeedDataChip,
-  SeedingRateChip,
-} from '../../../../components/SeedingRateCard';
-import {
-  adjustProportions, adjustProportionsNECCC, createCalculator, createUserInput, calculatePieChartData,
+  adjustProportions, adjustProportionsNECCC, createCalculator, createUserInput, calculatePieChartData, twoDigit,
 } from '../../../../shared/utils/calculator';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 import '../steps.scss';
@@ -79,6 +76,28 @@ const MixRatio = ({ calculator, setCalculator }) => {
       return res;
     }, {}),
   );
+
+  const buildSeedData = (seed) => [
+    {
+      label: 'Default Single Species Seeding Rate PLS',
+      value: `${calculatorResult[seed].step1.defaultSingleSpeciesSeedingRatePLS} Lbs/Acre`,
+    },
+    {
+      label: 'Default Seeding Rate in Mix',
+      value: `${calculatorResult[seed].step1.seedingRate} Lbs/Acre`,
+    }, {
+      label: 'Approx plants per acre',
+      value: council === 'MCCC' ? calculatorResult[seed].step3.plantsPerAcre : '',
+    }, {
+      label: 'Approx plants per sqft',
+      value: council === 'MCCC' ? twoDigit(calculatorResult[seed].step3.plantsPerAcre / 43560) : '',
+    }, {
+      label: 'Approx seeds per acre',
+      value: calculatorResult[seed].step2.seedsPerAcre,
+    }, {
+      label: 'Approx seeds per sqft',
+      value: twoDigit(calculatorResult[seed].step2.seedsPerAcre / 43560),
+    }];
 
   // initialize calculator, set initial options
   useEffect(() => {
@@ -190,31 +209,12 @@ const MixRatio = ({ calculator, setCalculator }) => {
 
             <AccordionDetails className="accordian-details">
               <Grid container>
-                <Grid item xs={6}>
-                  <SeedingRateChip
-                    label="Default Single Species Seeding Rate PLS"
-                    value={
-                      calculatorResult[seed.label].step1.defaultSingleSpeciesSeedingRatePLS
-                    }
-                  />
-                  {council === 'MCCC' && (
-                  <SeedDataChip
-                    label="Aprox plants per"
-                    value={calculatorResult[seed.label].step3.plantsPerAcre}
-                  />
-                  )}
-                </Grid>
+                <Grid item xs={0} md={3} />
 
-                <Grid item xs={6}>
-                  <SeedingRateChip
-                    label="Default Seeding Rate in Mix"
-                    value={calculatorResult[seed.label].step1.seedingRate}
-                  />
-                  <SeedDataChip
-                    label="Seeds per"
-                    value={calculatorResult[seed.label].step2.seedsPerAcre}
-                  />
+                <Grid item xs={12} md={6} pt="1rem">
+                  <SeedDataTable data={buildSeedData(seed.label)} />
                 </Grid>
+                <Grid item xs={0} md={3} />
 
                 <Grid item xs={12} pt="1rem">
                   <Button

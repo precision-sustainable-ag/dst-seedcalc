@@ -29,10 +29,7 @@ import {
   DSTPieChartLabel,
   DSTPieChartLegend,
 } from '../../../../components/DSTPieChart';
-import {
-  SeedDataChip,
-  SeedingRateChip,
-} from '../../../../components/SeedingRateCard';
+import SeedDataTable from '../../../../components/SeedDataTable';
 import { setBulkSeedingRateRedux, setOptionRedux } from '../../../../features/calculatorSlice/actions';
 
 const defaultResultMCCC = {
@@ -109,6 +106,28 @@ const ReviewMix = ({ calculator }) => {
     const open = accordionState[label];
     setAccordionState({ ...accordionState, [label]: !open });
   };
+
+  const buildSeedData = (seed) => [
+    {
+      label: 'Seeding Rate in Mix PLS',
+      value: `${calculatorResult[seed].step2.seedingRate} Lbs/Acre`,
+    },
+    {
+      label: 'Bulk Seeding Rate',
+      value: `${calculatorResult[seed].step4.bulkSeedingRate} Lbs/Acre`,
+    }, {
+      label: 'Approx plants per acre',
+      value: twoDigit(piechartData.plantsPerAcreArray.filter((slice) => slice.name === seed)[0]?.value ?? 0),
+    }, {
+      label: 'Approx plants per sqft',
+      value: twoDigit((piechartData.plantsPerAcreArray.filter((slice) => slice.name === seed)[0]?.value ?? 0) / 43560),
+    }, {
+      label: 'Approx seeds per acre',
+      value: twoDigit(piechartData.seedsPerAcreArray.filter((slice) => slice.name === seed)[0]?.value ?? 0),
+    }, {
+      label: 'Approx seeds per sqft',
+      value: twoDigit((piechartData.seedsPerAcreArray.filter((slice) => slice.name === seed)[0]?.value ?? 0) / 43560),
+    }];
 
   /// ///////////////////////////////////////////////////////
   //                    useEffect                         //
@@ -293,26 +312,13 @@ const ReviewMix = ({ calculator }) => {
               {renderAccordianChart(seed)}
 
               <Grid container pt="1rem">
-                <Grid item xs={6}>
-                  <SeedingRateChip
-                    label="Seeding Rate in Mix PLS"
-                    value={calculatorResult[seed.label].step2.seedingRate}
-                  />
-                  <SeedDataChip
-                    label="Aprox plants per"
-                    value={piechartData.plantsPerAcreArray.filter((slice) => slice.name === seed.label)[0]?.value ?? 0}
-                  />
+
+                <Grid item xs={0} md={3} />
+
+                <Grid item xs={12} md={6} pt="1rem">
+                  <SeedDataTable data={buildSeedData(seed.label)} />
                 </Grid>
-                <Grid item xs={6}>
-                  <SeedingRateChip
-                    label="Bulk Seeding Rate"
-                    value={calculatorResult[seed.label].step4.bulkSeedingRate}
-                  />
-                  <SeedDataChip
-                    label="Seeds per"
-                    value={piechartData.seedsPerAcreArray.filter((slice) => slice.name === seed.label)[0]?.value ?? 0}
-                  />
-                </Grid>
+                <Grid item xs={0} md={3} />
 
                 <Grid item xs={12} pt="1rem">
                   <Button
