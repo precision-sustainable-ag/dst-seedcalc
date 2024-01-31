@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -47,6 +48,7 @@ const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
   };
 
   const handleReset = () => {
+    // TODO: add function to clear redux
     setActiveStep(0);
     setCompletedStep(-1);
   };
@@ -98,13 +100,15 @@ const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
           <Tooltip
             arrow
             title={
-              // eslint-disable-next-line no-nested-ternary
               activeStep === 0 && !availableSteps[0]
                 ? 'Please enter the necessary info below.'
                 : activeStep === 1 && !availableSteps[1]
                   ? 'Please select at least 2 plants.'
-                  : ''
+                  : activeStep === 5 && !availableSteps[5]
+                    ? 'Please make selection for all seeds'
+                    : ''
             }
+            open
           >
             <span>
               <Button

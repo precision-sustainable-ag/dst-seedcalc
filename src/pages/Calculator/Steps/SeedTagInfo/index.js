@@ -17,6 +17,7 @@ import styled from '@emotion/styled';
 import NumberTextField from '../../../../components/NumberTextField';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 import '../steps.scss';
+import { validateForms } from '../../../../shared/utils/format';
 
 const LeftGrid = styled(Grid)({
   '&.MuiGrid-item': {
@@ -28,7 +29,7 @@ const LeftGrid = styled(Grid)({
   },
 });
 
-const SeedTagInfo = () => {
+const SeedTagInfo = ({ completedStep, setCompletedStep }) => {
   const dispatch = useDispatch();
   const { council } = useSelector((state) => state.siteCondition);
   const { seedsSelected, options } = useSelector((state) => state.calculator);
@@ -86,6 +87,14 @@ const SeedTagInfo = () => {
       dispatch(setOptionRedux(seed.label, { ...options[seed.label], germination, purity }));
     });
   }, []);
+
+  useEffect(() => {
+    let complete = true;
+    seedsSelected.forEach((seed) => {
+      complete &&= haveSeedTagInfo[seed.label];
+    });
+    validateForms(complete, 5, completedStep, setCompletedStep);
+  }, [haveSeedTagInfo]);
 
   return (
     <Grid container>
