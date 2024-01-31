@@ -5,11 +5,13 @@
 import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import { useSelector, useDispatch } from 'react-redux';
-import { Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 
 import styled from '@emotion/styled';
 import NumberTextField from '../../../../components/NumberTextField';
@@ -34,6 +36,13 @@ const SeedTagInfo = () => {
   const [accordionState, setAccordionState] = useState(
     seedsSelected.reduce((res, seed) => {
       res[seed.label] = true;
+      return res;
+    }, {}),
+  );
+
+  const [haveSeedTagInfo, setHaveSeedTagInfo] = useState(
+    seedsSelected.reduce((res, seed) => {
+      res[seed.label] = false;
       return res;
     }, {}),
   );
@@ -97,47 +106,80 @@ const SeedTagInfo = () => {
               <Typography>{seed.label}</Typography>
             </AccordionSummary>
             <AccordionDetails className="accordian-details">
-              <Grid container>
 
-                <LeftGrid item xs={6}>
-                  <Typography>% Germination: </Typography>
-                </LeftGrid>
-                <Grid item xs={4}>
-                  <NumberTextField
-                    value={(options[seed.label].germination ?? 0.85) * 100}
-                    handleChange={(e) => {
-                      updateGermination(seed.label, parseFloat(e.target.value) / 100);
-                    }}
-                  />
+              {haveSeedTagInfo[seed.label] === false
+                && (
+                <Grid container sx={{ padding: '1rem 0' }}>
+                  <Grid item xs={12} md={8}>
+                    <Typography>
+                      {`Do you have seed tag info for ${seed.label}?`}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} md={4} display="flex" justifyContent="center" gap="1rem">
+                    <Button
+                      variant="outlined"
+                      onClick={() => setHaveSeedTagInfo({ ...haveSeedTagInfo, [seed.label]: true })}
+                    >
+                      Yes
+                      {' '}
+                      <CheckIcon color="primary.dark" />
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      onClick={() => setHaveSeedTagInfo({ ...haveSeedTagInfo, [seed.label]: true })}
+                    >
+                      No
+                      {' '}
+                      <CloseIcon color="error" />
+                    </Button>
+                  </Grid>
                 </Grid>
-                <Grid item xs={2} />
+                )}
+              {haveSeedTagInfo[seed.label] === true
+                && (
+                <Grid container>
 
-                <LeftGrid item xs={6}>
-                  <Typography>% Purity: </Typography>
-                </LeftGrid>
-                <Grid item xs={4}>
-                  <NumberTextField
-                    value={(options[seed.label].purity ?? 0.9) * 100}
-                    handleChange={(e) => {
-                      updatePurity(seed.label, parseFloat(e.target.value) / 100);
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={2} />
+                  <LeftGrid item xs={6}>
+                    <Typography>% Germination: </Typography>
+                  </LeftGrid>
+                  <Grid item xs={4}>
+                    <NumberTextField
+                      value={(options[seed.label].germination ?? 0.85) * 100}
+                      handleChange={(e) => {
+                        updateGermination(seed.label, parseFloat(e.target.value) / 100);
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={2} />
 
-                <LeftGrid item xs={6}>
-                  <Typography>Seeds per Pound </Typography>
-                </LeftGrid>
-                <Grid item xs={4}>
-                  <NumberTextField
-                    value={seedsPerPound(seed)}
-                    handleChange={(e) => {
-                      updateSeedsPerPound(seed.label, parseFloat(e.target.value));
-                    }}
-                  />
+                  <LeftGrid item xs={6}>
+                    <Typography>% Purity: </Typography>
+                  </LeftGrid>
+                  <Grid item xs={4}>
+                    <NumberTextField
+                      value={(options[seed.label].purity ?? 0.9) * 100}
+                      handleChange={(e) => {
+                        updatePurity(seed.label, parseFloat(e.target.value) / 100);
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={2} />
+
+                  <LeftGrid item xs={6}>
+                    <Typography>Seeds per Pound </Typography>
+                  </LeftGrid>
+                  <Grid item xs={4}>
+                    <NumberTextField
+                      value={seedsPerPound(seed)}
+                      handleChange={(e) => {
+                        updateSeedsPerPound(seed.label, parseFloat(e.target.value));
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={2} />
                 </Grid>
-                <Grid item xs={2} />
-              </Grid>
+                )}
+
             </AccordionDetails>
           </Accordion>
         </Grid>
