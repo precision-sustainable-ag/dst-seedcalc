@@ -58,9 +58,10 @@ const MixRatioSteps = ({
             <Grid item xs={3}>
               <NumberTextField
                 label={matchesMd ? '' : 'Single Species Seeding Rate PLS'}
-                handleChange={(e) => {
-                  handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
-                }}
+                disabled
+                // handleChange={(e) => {
+                //   handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
+                // }}
                 value={step1.defaultSingleSpeciesSeedingRatePLS}
               />
               <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
@@ -125,9 +126,7 @@ const MixRatioSteps = ({
             <Grid item xs={3}>
               <NumberTextField
                 label={matchesMd ? '' : 'Single Species Seeding Rate PLS'}
-                handleChange={(e) => {
-                  handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
-                }}
+                disabled
                 value={step1.defaultSingleSpeciesSeedingRatePLS}
               />
               <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
@@ -140,7 +139,9 @@ const MixRatioSteps = ({
             <Grid item xs={3}>
               <NumberTextField
                 label={matchesMd ? '' : '% of Single Species Rate'}
-                disabled
+                handleChange={(e) => {
+                  handleFormValueChange(seed, 'percentOfRate', parseFloat(e.target.value) / 100);
+                }}
                 value={convertToPercent(step1.percentOfRate)}
               />
               <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>MCCC Recommendation</Typography>
