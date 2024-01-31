@@ -29,11 +29,11 @@ const LeftGrid = styled(Grid)({
 const SeedTagInfo = () => {
   const dispatch = useDispatch();
   const { council } = useSelector((state) => state.siteCondition);
-  const { sideBarSelection, seedsSelected, options } = useSelector((state) => state.calculator);
+  const { seedsSelected, options } = useSelector((state) => state.calculator);
 
   const [accordionState, setAccordionState] = useState(
     seedsSelected.reduce((res, seed) => {
-      res[seed.label] = false;
+      res[seed.label] = true;
       return res;
     }, {}),
   );
@@ -44,6 +44,17 @@ const SeedTagInfo = () => {
 
   const updatePurity = (seedLabel, value) => {
     dispatch(setOptionRedux(seedLabel, { ...options[seedLabel], purity: value }));
+  };
+
+  const updateSeedsPerPound = (seedLabel, value) => {
+    dispatch(setOptionRedux(seedLabel, { ...options[seedLabel], seedsPerPound: value }));
+  };
+
+  const seedsPerPound = (seed) => {
+    if (options[seed.label].seedsPerPound) return options[seed.label].seedsPerPound;
+    if (council === 'MCCC') return seed.attributes['Planting Information']['Seed Count'].values[0];
+    if (council === 'NECCC') return seed.attributes.Planting['Seeds Per lb'].values[0];
+    return '';
   };
 
   const handleExpandAccordion = (label) => {
@@ -66,16 +77,6 @@ const SeedTagInfo = () => {
       dispatch(setOptionRedux(seed.label, { ...options[seed.label], germination, purity }));
     });
   }, []);
-
-  useEffect(() => {
-    // expand related accordion based on sidebar click
-    setAccordionState(
-      seedsSelected.reduce((res, seed) => {
-        res[seed.label] = seed.label === sideBarSelection;
-        return res;
-      }, {}),
-    );
-  }, [sideBarSelection]);
 
   return (
     <Grid container>
@@ -129,10 +130,10 @@ const SeedTagInfo = () => {
                 </LeftGrid>
                 <Grid item xs={4}>
                   <NumberTextField
-                    disabled
-                    value={parseFloat(council === 'MCCC'
-                      ? seed.attributes['Planting Information']['Seed Count'].values[0]
-                      : seed.attributes.Planting['Seeds Per lb'].values[0])}
+                    value={seedsPerPound(seed)}
+                    handleChange={(e) => {
+                      updateSeedsPerPound(seed.label, parseFloat(e.target.value));
+                    }}
                   />
                 </Grid>
                 <Grid item xs={2} />
