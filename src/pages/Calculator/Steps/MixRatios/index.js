@@ -16,12 +16,10 @@ import {
   DSTPieChartLabel,
   DSTPieChartLegend,
 } from '../../../../components/DSTPieChart';
-import {
-  SeedDataChip,
-  SeedingRateChip,
-} from '../../../../components/SeedingRateCard';
+import SeedingRateCard from '../../../../components/SeedingRateCard';
 import {
   adjustProportions, adjustProportionsNECCC, createCalculator, createUserInput, calculatePieChartData,
+  calculatePlantsandSeedsPerAcre,
 } from '../../../../shared/utils/calculator';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 import '../steps.scss';
@@ -65,6 +63,13 @@ const MixRatio = ({ calculator, setCalculator }) => {
     }, {}),
   );
 
+  const [seedData, setSeedData] = useState(seedsSelected.reduce((res, seed) => {
+    res[seed.label] = {
+      defaultPlant: 0, defaultSeed: 0, adjustedPlant: 0, adjustedSeed: 0,
+    };
+    return res;
+  }, {}));
+
   // create an key/value pair for the seed and related accordion expanded state
   const [accordionState, setAccordionState] = useState(
     seedsSelected.reduce((res, seed) => {
@@ -95,7 +100,6 @@ const MixRatio = ({ calculator, setCalculator }) => {
     });
     setInitCalculator(true);
   }, []);
-
   // run adjust proportions on options change
   useEffect(() => {
     if (!initCalculator) return;
@@ -105,6 +109,22 @@ const MixRatio = ({ calculator, setCalculator }) => {
         if (council === 'MCCC') result = adjustProportions(seed, calculator, options[seed.label]);
         else if (council === 'NECCC') result = adjustProportionsNECCC(seed, calculator, options[seed.label]);
         setCalculatorResult((prev) => ({ ...prev, [seed.label]: result }));
+        const {
+          plants, seeds, adjustedPlants, adjustedSeeds,
+        } = calculatePlantsandSeedsPerAcre(
+          seed,
+          calculator,
+          options[seed.label],
+        );
+        setSeedData((prev) => ({
+          ...prev,
+          [seed.label]: {
+            defaultPlant: plants,
+            defaultSeed: seeds,
+            adjustedPlant: adjustedPlants,
+            adjustedSeed: adjustedSeeds,
+          },
+        }));
       }
     });
     // calculate piechart data
@@ -190,29 +210,22 @@ const MixRatio = ({ calculator, setCalculator }) => {
 
             <AccordionDetails className="accordian-details">
               <Grid container>
+
                 <Grid item xs={6}>
-                  <SeedingRateChip
-                    label="Default Single Species Seeding Rate PLS"
-                    value={
-                      calculatorResult[seed.label].step1.defaultSingleSpeciesSeedingRatePLS
-                    }
+                  <SeedingRateCard
+                    seedingRateLabel="Default Single Species Seeding Rate PLS"
+                    seedingRateValue={calculatorResult[seed.label].step1.defaultSingleSpeciesSeedingRatePLS}
+                    plantValue={seedData[seed.label].defaultPlant}
+                    seedValue={seedData[seed.label].defaultSeed}
                   />
-                  {council === 'MCCC' && (
-                  <SeedDataChip
-                    label="Aprox plants per"
-                    value={calculatorResult[seed.label].step3.plantsPerAcre}
-                  />
-                  )}
                 </Grid>
 
                 <Grid item xs={6}>
-                  <SeedingRateChip
-                    label="Default Seeding Rate in Mix"
-                    value={calculatorResult[seed.label].step1.seedingRate}
-                  />
-                  <SeedDataChip
-                    label="Seeds per"
-                    value={calculatorResult[seed.label].step2.seedsPerAcre}
+                  <SeedingRateCard
+                    seedingRateLabel="Default Seeding Rate in Mix"
+                    seedingRateValue={calculatorResult[seed.label].step1.seedingRate}
+                    plantValue={seedData[seed.label].adjustedPlant}
+                    seedValue={seedData[seed.label].adjustedSeed}
                   />
                 </Grid>
 

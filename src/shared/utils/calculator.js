@@ -443,9 +443,20 @@ const calculatePieChartData = (seeds, calculator, options = {}) => {
   return { seedingRateArray, seedsPerAcreArray, plantsPerAcreArray };
 };
 
+const calculatePlantsandSeedsPerAcre = (seed, calculator, options) => {
+  const plants = calculator.plantsPerAcre(seed, { ...options, percentOfRate: 1 });
+  const seeds = calculator.seedsPerAcre(seed, { ...options, percentOfRate: 1 });
+  const adjustedPlants = calculator.plantsPerAcre(seed, options);
+  const adjustedSeeds = calculator.seedsPerAcre(seed, options);
+  console.log(seed.label, plants, seeds, adjustedPlants, adjustedSeeds);
+  return {
+    plants, seeds, adjustedPlants, adjustedSeeds,
+  };
+};
+
 export {
   convertToPercent, twoDigit,
   createUserInput, createCalculator, initialOptions, adjustProportions,
   adjustProportionsNECCC, reviewMix, reviewMixNECCC, confirmPlan, checkNRCS,
-  getPlantingDate, calculatePieChartData,
+  getPlantingDate, calculatePieChartData, calculatePlantsandSeedsPerAcre,
 };

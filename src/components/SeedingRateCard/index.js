@@ -24,23 +24,23 @@ const SeedingRateChip = ({ label, value }) => (
   </>
 );
 
-const SeedDataChip = ({ label, value }) => {
+const SeedDataChip = ({ plant, seed }) => {
   // default value is always seeds/palnts per acre
-  const [displayValue, setDisplayValue] = useState(value);
+  const [displayValue, setDisplayValue] = useState({ plant, seed });
   const [perAcre, setperAcre] = useState(true);
 
   useEffect(() => {
-    setDisplayValue(twoDigit(value));
-  }, [value]);
+    setDisplayValue({ plant: twoDigit(plant), seed: twoDigit(seed) });
+  }, [plant, seed]);
 
   const handleClickSqft = () => {
     setperAcre(false);
-    setDisplayValue(twoDigit(value / 43560));
+    setDisplayValue({ plant: twoDigit(plant / 43560), seed: twoDigit(seed / 43560) });
   };
 
   const handleClickAcre = () => {
     setperAcre(true);
-    setDisplayValue(twoDigit(value));
+    setDisplayValue({ plant: twoDigit(plant), seed: twoDigit(seed) });
   };
 
   return (
@@ -56,9 +56,9 @@ const SeedDataChip = ({ label, value }) => {
           borderRadius: '16px',
         }}
       >
-        <Typography>{displayValue}</Typography>
+        <Typography>{displayValue.plant}</Typography>
       </Box>
-      <Typography>{label}</Typography>
+      <Typography>Approx Plants Per</Typography>
 
       <Button
         variant={perAcre ? 'outlined' : 'contained'}
@@ -73,8 +73,48 @@ const SeedDataChip = ({ label, value }) => {
       >
         Acres
       </Button>
+
+      <Box
+        sx={{
+          width: '110px',
+          height: '50px',
+          padding: '11px',
+          margin: '0 auto',
+          backgroundColor: '#E5E7D5',
+          border: '#C7C7C7 solid 1px',
+          borderRadius: '16px',
+        }}
+      >
+        <Typography>{displayValue.seed}</Typography>
+      </Box>
+      <Typography>Seeds Per</Typography>
+
+      <Button
+        variant={perAcre ? 'outlined' : 'contained'}
+        onClick={handleClickSqft}
+      >
+        Sqft
+      </Button>
+      {'   '}
+      <Button
+        variant={perAcre ? 'contained' : 'outlined'}
+        onClick={handleClickAcre}
+      >
+        Acres
+      </Button>
+
     </>
   );
 };
 
+const SeedingRateCard = ({
+  seedingRateLabel, seedingRateValue, plantValue, seedValue,
+}) => (
+  <>
+    <SeedingRateChip label={seedingRateLabel} value={seedingRateValue} />
+    <SeedDataChip plant={plantValue} seed={seedValue} />
+  </>
+);
+
 export { SeedingRateChip, SeedDataChip };
+export default SeedingRateCard;
