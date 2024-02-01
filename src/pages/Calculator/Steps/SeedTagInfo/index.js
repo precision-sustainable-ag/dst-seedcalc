@@ -41,12 +41,7 @@ const SeedTagInfo = ({ completedStep, setCompletedStep }) => {
     }, {}),
   );
 
-  const [haveSeedTagInfo, setHaveSeedTagInfo] = useState(
-    seedsSelected.reduce((res, seed) => {
-      res[seed.label] = false;
-      return res;
-    }, {}),
-  );
+  const [haveSeedTagInfo, setHaveSeedTagInfo] = useState(false);
 
   const updateGermination = (seedLabel, value) => {
     dispatch(setOptionRedux(seedLabel, { ...options[seedLabel], germination: value }));
@@ -89,63 +84,50 @@ const SeedTagInfo = ({ completedStep, setCompletedStep }) => {
   }, []);
 
   useEffect(() => {
-    let complete = true;
-    seedsSelected.forEach((seed) => {
-      complete &&= haveSeedTagInfo[seed.label];
-    });
-    validateForms(complete, 5, completedStep, setCompletedStep);
+    validateForms(haveSeedTagInfo, 5, completedStep, setCompletedStep);
   }, [haveSeedTagInfo]);
 
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Typography variant="h2">Enter seed tag info</Typography>
+        <Typography variant="h2">{haveSeedTagInfo ? 'Enter seed tag info' : 'Do you have seed tag info?'}</Typography>
       </Grid>
-
-      {seedsSelected.map((seed, i) => (
-        <Grid item xs={12} key={i}>
-          <Accordion
-            expanded={accordionState[seed.label]}
-            onChange={() => handleExpandAccordion(seed.label)}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              className="accordian-summary"
+      {haveSeedTagInfo === false
+        && (
+        <Grid container sx={{ padding: '1rem' }}>
+          <Grid item xs={12} display="flex" justifyContent="center" gap="1rem">
+            <Button
+              variant="outlined"
+              onClick={() => setHaveSeedTagInfo(true)}
             >
-              <Typography>{seed.label}</Typography>
-            </AccordionSummary>
-            <AccordionDetails className="accordian-details">
+              Yes
+              <CheckIcon color="primary.dark" />
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => setHaveSeedTagInfo(true)}
+            >
+              No
+              <CloseIcon color="error" />
+            </Button>
+          </Grid>
+        </Grid>
+        )}
+      {haveSeedTagInfo === true
+        && (seedsSelected.map((seed, i) => (
+          <Grid item xs={12} key={i}>
+            <Accordion
+              expanded={accordionState[seed.label]}
+              onChange={() => handleExpandAccordion(seed.label)}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                className="accordian-summary"
+              >
+                <Typography>{seed.label}</Typography>
+              </AccordionSummary>
+              <AccordionDetails className="accordian-details">
 
-              {haveSeedTagInfo[seed.label] === false
-                && (
-                <Grid container sx={{ padding: '1rem 0' }}>
-                  <Grid item xs={12} md={8}>
-                    <Typography>
-                      {`Do you have seed tag info for ${seed.label}?`}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={12} md={4} display="flex" justifyContent="center" gap="1rem">
-                    <Button
-                      variant="outlined"
-                      onClick={() => setHaveSeedTagInfo({ ...haveSeedTagInfo, [seed.label]: true })}
-                    >
-                      Yes
-                      {' '}
-                      <CheckIcon color="primary.dark" />
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      onClick={() => setHaveSeedTagInfo({ ...haveSeedTagInfo, [seed.label]: true })}
-                    >
-                      No
-                      {' '}
-                      <CloseIcon color="error" />
-                    </Button>
-                  </Grid>
-                </Grid>
-                )}
-              {haveSeedTagInfo[seed.label] === true
-                && (
                 <Grid container>
 
                   <LeftGrid item xs={6}>
@@ -187,12 +169,11 @@ const SeedTagInfo = ({ completedStep, setCompletedStep }) => {
                   </Grid>
                   <Grid item xs={2} />
                 </Grid>
-                )}
 
-            </AccordionDetails>
-          </Accordion>
-        </Grid>
-      ))}
+              </AccordionDetails>
+            </Accordion>
+          </Grid>
+        )))}
     </Grid>
   );
 };

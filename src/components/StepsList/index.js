@@ -105,7 +105,7 @@ const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
                 : activeStep === 1 && !availableSteps[1]
                   ? 'Please select at least 2 plants.'
                   : activeStep === 5 && !availableSteps[5]
-                    ? 'Please make selection for all seeds'
+                    ? 'Please make a selection.'
                     : ''
             }
             open
