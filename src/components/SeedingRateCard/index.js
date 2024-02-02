@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Typography, Box, Button } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
 import { twoDigit } from '../../shared/utils/calculator';
+import { selectUnitRedux } from '../../features/calculatorSlice/actions';
 
 const SeedingRateChip = ({ label, value }) => (
   <>
@@ -27,21 +29,19 @@ const SeedingRateChip = ({ label, value }) => (
 const SeedDataChip = ({ plant, seed }) => {
   // default value is always seeds/palnts per acre
   const [displayValue, setDisplayValue] = useState({ plant, seed });
-  const [perAcre, setperAcre] = useState(true);
+
+  const unit = useSelector((state) => state.calculator.unit);
+
+  // eslint-disable-next-line no-nested-ternary
+  const unitText = unit === 'acre' ? 'Acre' : unit === 'sqft' ? 'SqFt' : '';
 
   useEffect(() => {
-    setDisplayValue({ plant: twoDigit(plant), seed: twoDigit(seed) });
-  }, [plant, seed]);
-
-  const handleClickSqft = () => {
-    setperAcre(false);
-    setDisplayValue({ plant: twoDigit(plant / 43560), seed: twoDigit(seed / 43560) });
-  };
-
-  const handleClickAcre = () => {
-    setperAcre(true);
-    setDisplayValue({ plant: twoDigit(plant), seed: twoDigit(seed) });
-  };
+    if (unit === 'sqft') {
+      setDisplayValue({ plant: twoDigit(plant / 43560), seed: twoDigit(seed / 43560) });
+    } else if (unit === 'acre') {
+      setDisplayValue({ plant: twoDigit(plant), seed: twoDigit(seed) });
+    }
+  }, [plant, seed, unit]);
 
   return (
     <>
@@ -58,21 +58,11 @@ const SeedDataChip = ({ plant, seed }) => {
       >
         <Typography>{displayValue.plant}</Typography>
       </Box>
-      <Typography>Approx Plants Per</Typography>
-
-      <Button
-        variant={perAcre ? 'outlined' : 'contained'}
-        onClick={handleClickSqft}
-      >
-        Sqft
-      </Button>
-      {'   '}
-      <Button
-        variant={perAcre ? 'contained' : 'outlined'}
-        onClick={handleClickAcre}
-      >
-        Acres
-      </Button>
+      <Typography>
+        Approx Plants Per
+        {' '}
+        <span style={{ fontWeight: 'bold' }}>{unitText}</span>
+      </Typography>
 
       <Box
         sx={{
@@ -87,22 +77,37 @@ const SeedDataChip = ({ plant, seed }) => {
       >
         <Typography>{displayValue.seed}</Typography>
       </Box>
-      <Typography>Seeds Per</Typography>
+      <Typography>
+        Seeds Per
+        {' '}
+        <span style={{ fontWeight: 'bold' }}>{unitText}</span>
+      </Typography>
 
+    </>
+  );
+};
+
+const UnitSelection = () => {
+  const unit = useSelector((state) => state.calculator.unit);
+  const dispatch = useDispatch();
+  return (
+    <>
+      <Typography>
+        Select data unit:
+      </Typography>
       <Button
-        variant={perAcre ? 'outlined' : 'contained'}
-        onClick={handleClickSqft}
+        variant={unit === 'acre' ? 'outlined' : 'contained'}
+        onClick={() => dispatch(selectUnitRedux('sqft'))}
       >
         Sqft
       </Button>
-      {'   '}
+      {'  '}
       <Button
-        variant={perAcre ? 'contained' : 'outlined'}
-        onClick={handleClickAcre}
+        variant={unit === 'acre' ? 'contained' : 'outlined'}
+        onClick={() => dispatch(selectUnitRedux('acre'))}
       >
-        Acres
+        Acre
       </Button>
-
     </>
   );
 };
@@ -116,5 +121,5 @@ const SeedingRateCard = ({
   </>
 );
 
-export { SeedingRateChip, SeedDataChip };
+export { SeedingRateChip, SeedDataChip, UnitSelection };
 export default SeedingRateCard;

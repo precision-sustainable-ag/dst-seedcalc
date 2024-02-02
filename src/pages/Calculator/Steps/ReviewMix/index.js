@@ -30,7 +30,7 @@ import {
   DSTPieChartLabel,
   DSTPieChartLegend,
 } from '../../../../components/DSTPieChart';
-import SeedingRateCard from '../../../../components/SeedingRateCard';
+import SeedingRateCard, { UnitSelection } from '../../../../components/SeedingRateCard';
 import { setBulkSeedingRateRedux, setOptionRedux } from '../../../../features/calculatorSlice/actions';
 
 const defaultResultMCCC = {
@@ -332,6 +332,9 @@ const ReviewMix = ({ calculator }) => {
                     plantValue={seedData[seed.label].adjustedPlant}
                     seedValue={seedData[seed.label].adjustedSeed}
                   />
+                </Grid>
+                <Grid item xs={12}>
+                  <UnitSelection />
                 </Grid>
 
                 <Grid item xs={12} pt="1rem">
