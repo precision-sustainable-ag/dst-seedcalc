@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -104,8 +105,11 @@ const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
                 ? 'Please enter the necessary info below.'
                 : activeStep === 1 && !availableSteps[1]
                   ? 'Please select at least 2 plants.'
-                  : ''
+                  : activeStep === 5 && !availableSteps[5]
+                    ? 'Please make a selection.'
+                    : ''
             }
+          open
         >
           <span>
             <Button
