@@ -4,7 +4,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
-import { Typography, Button } from '@mui/material';
+import { Typography, Button, Alert } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -51,6 +51,7 @@ const MixRatio = ({ calculator, setCalculator }) => {
   const [initCalculator, setInitCalculator] = useState(false);
   const [prevOptions, setPrevOptions] = useState({});
   const [piechartData, setPieChartData] = useState(defaultPieChartData);
+  const [showAlert, setShowAlert] = useState(true);
 
   const dispatch = useDispatch();
   const { seedsSelected, sideBarSelection, options } = useSelector((state) => state.calculator);
@@ -150,6 +151,15 @@ const MixRatio = ({ calculator, setCalculator }) => {
     <Grid container>
       <Grid item xs={12}>
         <Typography variant="h2">Review Proportions</Typography>
+      </Grid>
+
+      <Grid item xs={12}>
+        {showAlert && (
+        <Alert severity="warning" onClose={() => setShowAlert(false)}>
+          Disclaimer: This is a starting mix based on averages, but not a recommendation. Adjust as needed based on your rotation.
+        </Alert>
+        )}
+
       </Grid>
 
       <Grid item xs={6} sx={{ textAlign: 'justify' }}>

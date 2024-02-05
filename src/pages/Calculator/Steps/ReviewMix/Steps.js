@@ -60,9 +60,10 @@ const ReviewMixSteps = ({
             <Grid item xs={3}>
               <NumberTextField
                 label={matchesMd ? '' : 'Single Species Seeding Rate PLS'}
-                handleChange={(e) => {
-                  handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
-                }}
+                // handleChange={(e) => {
+                //   handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
+                // }}
+                disabled
                 value={step1.singleSpeciesSeedingRate}
               />
               <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
@@ -138,8 +139,10 @@ const ReviewMixSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                disabled
                 label={matchesMd ? '' : '% of Single Species Rate'}
+                handleChange={(e) => {
+                  handleFormValueChange(seed, 'percentOfRate', parseFloat(e.target.value) / 100);
+                }}
                 value={convertToPercent(step1.percentOfRate)}
               />
               <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>
