@@ -59,6 +59,7 @@ const calculatorSlice = createSlice({
       const { unit } = payload;
       return { ...state, unit };
     },
+    resetCalculator: () => initialState,
   },
   extraReducers: (builder) => {
     builder
@@ -82,7 +83,6 @@ export const {
   addSeed, removeSeed, setOption, removeOption, updateDiversity,
   clearSeeds, clearOptions, selectSidebarSeed, setMixSeedingRate,
   setBulkSeedingRate, setAdjustedMixSeedingRate, importFromCSV,
-  selectUnit,
 } = calculatorSlice.actions;
 
 export default calculatorSlice;
