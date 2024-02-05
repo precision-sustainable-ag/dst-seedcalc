@@ -83,6 +83,7 @@ export const {
   addSeed, removeSeed, setOption, removeOption, updateDiversity,
   clearSeeds, clearOptions, selectSidebarSeed, setMixSeedingRate,
   setBulkSeedingRate, setAdjustedMixSeedingRate, importFromCSV,
+  selectUnit, resetCalculator,
 } = calculatorSlice.actions;
 
 export default calculatorSlice;
