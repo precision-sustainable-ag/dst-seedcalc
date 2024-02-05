@@ -1,30 +1,65 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Box, Button } from '@mui/material';
+import {
+  Typography, Box, Button, Tooltip,
+} from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
+import HelpIcon from '@mui/icons-material/Help';
 import { twoDigit } from '../../shared/utils/calculator';
 import { selectUnitRedux } from '../../features/calculatorSlice/actions';
 
-const SeedingRateChip = ({ label, value }) => (
-  <>
-    <Typography>{label}</Typography>
-    <Box
-      sx={{
-        width: '50px',
-        height: '50px',
-        margin: '0 auto',
-        backgroundColor: '#E5E7D5',
-        border: '#C7C7C7 solid 1px',
-        borderRadius: '50%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <Typography>{twoDigit(value)}</Typography>
-    </Box>
-    <Typography>Lbs / Acre</Typography>
-  </>
-);
+const tooltipMCCC = {
+  mixSeedingRate: 'Seeding Rate in Mix = Default Single Species Seeding Rate PLS * Percent of Rate',
+};
+
+const tooltipNECCC = {
+  mixSeedingRate: 'Seeding Rate in Mix = Default Single Species Seeding Rate PLS *  Soil Fertility Modifier / Sum Species Of Group in Mix',
+};
+
+const SeedingRateChip = ({ label, value, showTooltip }) => {
+  const council = useSelector((state) => state.siteCondition.council);
+  return (
+    <>
+      <Typography display="flex" alignItems="center" justifyContent="center">
+        {label}
+        {showTooltip !== false && (
+        <Tooltip
+          title={(
+            <>
+              <Typography>
+                How is this calculated?
+              </Typography>
+              <Typography>
+                {council === 'MCCC' ? tooltipMCCC[showTooltip] : tooltipNECCC[showTooltip]}
+              </Typography>
+            </>
+        )}
+          arrow
+          enterTouchDelay={0}
+        >
+          <HelpIcon />
+        </Tooltip>
+        )}
+
+      </Typography>
+      <Box
+        sx={{
+          width: '50px',
+          height: '50px',
+          margin: '0 auto',
+          backgroundColor: '#E5E7D5',
+          border: '#C7C7C7 solid 1px',
+          borderRadius: '50%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Typography>{twoDigit(value)}</Typography>
+      </Box>
+      <Typography>Lbs / Acre</Typography>
+    </>
+  );
+};
 
 const SeedDataChip = ({ plant, seed }) => {
   // default value is always seeds/palnts per acre
@@ -113,10 +148,10 @@ const UnitSelection = () => {
 };
 
 const SeedingRateCard = ({
-  seedingRateLabel, seedingRateValue, plantValue, seedValue,
+  seedingRateLabel, seedingRateValue, plantValue, seedValue, showTooltip = false,
 }) => (
   <>
-    <SeedingRateChip label={seedingRateLabel} value={seedingRateValue} />
+    <SeedingRateChip label={seedingRateLabel} value={seedingRateValue} showTooltip={showTooltip} />
     <SeedDataChip plant={plantValue} seed={seedValue} />
   </>
 );

@@ -226,6 +226,7 @@ const MixRatio = ({ calculator, setCalculator }) => {
                     seedingRateValue={calculatorResult[seed.label].step1.seedingRate}
                     plantValue={seedData[seed.label].adjustedPlant}
                     seedValue={seedData[seed.label].adjustedSeed}
+                    showTooltip="mixSeedingRate"
                   />
                 </Grid>
                 <Grid item xs={12}>
