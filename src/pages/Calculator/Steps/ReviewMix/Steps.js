@@ -49,7 +49,7 @@ const ReviewMixSteps = ({
       {council === 'NECCC' && (
         <>
           <Grid item xs={12}>
-            <Typography className="step-header">Step 1: </Typography>
+            <Typography className="step-header">Step 1: Default Seeding Rate in Mix</Typography>
           </Grid>
           {renderStepsForm(
             'Single Species Seeding Rate PLS',
@@ -115,7 +115,7 @@ const ReviewMixSteps = ({
       {council === 'MCCC' && (
         <>
           <Grid item xs={12}>
-            <Typography className="step-header">Step 1:</Typography>
+            <Typography className="step-header">Step 1: Default Seeding Rate in Mix</Typography>
           </Grid>
           {renderStepsForm(
             'Single Species Seeding Rate PLS',
@@ -169,7 +169,7 @@ const ReviewMixSteps = ({
       {/* Step 2: */}
       <>
         <Grid item xs={12}>
-          <Typography className="step-header">Step 2: </Typography>
+          <Typography className="step-header">Step 2: Adjust By Seeding Method</Typography>
         </Grid>
         {renderStepsForm(
           'Seeding Rate in Mix',
@@ -218,7 +218,7 @@ const ReviewMixSteps = ({
       {/* Step 3: */}
       <>
         <Grid item xs={12}>
-          <Typography className="step-header">Step 3: </Typography>
+          <Typography className="step-header">Step 3: Adjust By Management Impact</Typography>
         </Grid>
         {renderStepsForm(
           'Seeding Rate in Mix',
@@ -266,7 +266,7 @@ const ReviewMixSteps = ({
       {/* Step 4: */}
       <>
         <Grid item xs={12}>
-          <Typography className="step-header">Step 4: </Typography>
+          <Typography className="step-header">Step 4: Bulk Seeding Rate</Typography>
         </Grid>
         {renderStepsForm('Seeding Rate in Mix', '% Germination', '% Purity')}
         <Grid container justifyContent="space-evenly">
@@ -327,7 +327,7 @@ const ReviewMixSteps = ({
       {/* Step 5: */}
       <>
         <Grid item xs={12}>
-          <Typography className="step-header">Step 5: </Typography>
+          <Typography className="step-header">Step 5: Pounds for Purchase</Typography>
         </Grid>
         {renderStepsForm('Bulk Seeding Rate', 'Acres', 'Pounds for Purchase')}
         <Grid container justifyContent="space-evenly">
