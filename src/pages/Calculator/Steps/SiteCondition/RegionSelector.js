@@ -131,10 +131,10 @@ const RegionSelector = ({
           selectedState={newSiteCondition.state || ''}
           availableStates={availableStates}
           initWidth="100%"
-          initHeight="360px"
+          initHeight="300px"
           initLon={-78}
           initLat={43}
-          initStartZoom={4}
+          initStartZoom={3.5}
         />
         <DSTImport setIsImported={setIsImported} />
       </Grid>
