@@ -1,4 +1,3 @@
-/* eslint-disable */
 /// ///////////////////////////////////////////////////////
 //                      Imports                         //
 /// ///////////////////////////////////////////////////////
@@ -26,6 +25,34 @@ import {
 
 const needTileDrainage = ['Very Poorly Drained', 'Poorly Drained', 'Somewhat Poorly Drained'];
 
+const getTileDrainage = (council, currentDrainage) => {
+  if (council === 'MCCC') {
+    switch (currentDrainage) {
+      case 'Very Poorly Drained':
+        return 'Somewhat Poorly Drained';
+      case 'Poorly Drained':
+        return 'Moderately Well Drained';
+      case 'Somewhat Poorly Drained':
+        return 'Moderately Well Drained';
+      default:
+        return '';
+    }
+  }
+  if (council === 'NECCC') {
+    switch (currentDrainage) {
+      case 'Very Poorly Drained':
+        return 'Poorly Drained';
+      case 'Poorly Drained':
+        return 'Somewhat Poorly Drained';
+      case 'Somewhat Poorly Drained':
+        return 'Moderately Well Drained';
+      default:
+        return '';
+    }
+  }
+  return '';
+};
+
 const SiteConditionForm = ({
   council,
   counties,
@@ -49,13 +76,35 @@ const SiteConditionForm = ({
     }
   };
 
+  const handleSoilDrainage = (e) => {
+    console.log('handleSoilDrainage');
+    setSoilDrainagePrev(e.target.value);
+    dispatch(setSoilDrainageRedux(e.target.value));
+    dispatch(updateTileDrainageRedux(false));
+  };
+
   const handleTileDrainage = () => {
+    console.log('handleTileDrainage');
     dispatch(updateTileDrainageRedux(!tileDrainage));
-    // update soil drainage
   };
 
   useEffect(() => {
-  }, [soilDrainage, tileDrainage]);
+    if (!tileDrainage) {
+      setSoilDrainagePrev(soilDrainage);
+    }
+  }, [soilDrainage]);
+
+  useEffect(() => {
+    if (tileDrainage) {
+      console.log('soilDrainage', soilDrainage);
+      const newDrainage = getTileDrainage(council, soilDrainage);
+      console.log('newDrainage', newDrainage);
+      dispatch(setSoilDrainageRedux(newDrainage));
+    }
+    if (!tileDrainage && soilDrainagePrev !== '') {
+      dispatch(setSoilDrainageRedux(soilDrainagePrev));
+    }
+  }, [tileDrainage]);
 
   return (
     <>
@@ -75,11 +124,9 @@ const SiteConditionForm = ({
       {/* Soil Drainage */}
       <Grid item xs={12} md={6} p="10px">
         <Dropdown
-          value={soilDrainage}
+          value={soilDrainagePrev}
           label="Soil Drainage: "
-          handleChange={(e) => {
-            dispatch(setSoilDrainageRedux(e.target.value));
-          }}
+          handleChange={handleSoilDrainage}
           size={12}
           items={soilDrainageValues}
         />
@@ -88,40 +135,42 @@ const SiteConditionForm = ({
       {/* Tile Drainage */}
       <Grid item xs={12} md={6} p="10px">
         <Grid container alignItems="center">
-          <Grid item direction="column" xs={4}>
-            <Grid item>
-              <Typography>
-                Tile drainage
-                <Tooltip
-                  type="text"
-                  title={(
-                    <Typography color="primary.light">
-                      Indicate if the field of interest has tile installed.
-                      If you have selected very poorly to somewhat poorly drained soils,
-                      selecting “yes” will increase your drainage class.
-                    </Typography>
-                )}
-                >
-                  <InfoIcon fontSize="1rem" />
-                </Tooltip>
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Typography display="inline">
-                No
-              </Typography>
-              <DSTSwitch
-                checked={tileDrainage}
-                handleChange={handleTileDrainage}
-                disabled={needTileDrainage.indexOf(soilDrainage) === -1}
-              />
-              <Typography display="inline">
-                Yes
-              </Typography>
+          <Grid item xs={4}>
+            <Grid container direction="column">
+              <Grid item>
+                <Typography>
+                  Tile drainage
+                  <Tooltip
+                    type="text"
+                    title={(
+                      <Typography color="primary.light">
+                        Indicate if the field of interest has tile installed.
+                        If you have selected very poorly to somewhat poorly drained soils,
+                        selecting “yes” will increase your drainage class.
+                      </Typography>
+                  )}
+                  >
+                    <InfoIcon fontSize="1rem" />
+                  </Tooltip>
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography display="inline">
+                  No
+                </Typography>
+                <DSTSwitch
+                  checked={tileDrainage}
+                  handleChange={handleTileDrainage}
+                  disabled={!tileDrainage && (needTileDrainage.indexOf(soilDrainage) === -1 || council === '')}
+                />
+                <Typography display="inline">
+                  Yes
+                </Typography>
+              </Grid>
             </Grid>
           </Grid>
           <Grid item xs={8}>
-            {needTileDrainage.indexOf(soilDrainage) === -1
+            {!tileDrainage && (needTileDrainage.indexOf(soilDrainage) === -1 || council === '')
               ? <Typography>Tile Drainage not available.</Typography>
               : (
                 tileDrainage && (

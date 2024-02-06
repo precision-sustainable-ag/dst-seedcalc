@@ -5,7 +5,9 @@ import { Button } from '@mui/material';
 import PlaceIcon from '@mui/icons-material/Place';
 import { useDispatch, useSelector } from 'react-redux';
 import { getZoneData, getSSURGOData } from '../../../../features/siteConditionSlice/api';
-import { setCountyRedux, setSoilDrainageRedux, updateLatlonRedux } from '../../../../features/siteConditionSlice/actions';
+import {
+  setCountyRedux, setSoilDrainageRedux, updateLatlonRedux, updateTileDrainageRedux,
+} from '../../../../features/siteConditionSlice/actions';
 import '../steps.scss';
 import { soilDrainageValues } from '../../../../shared/data/dropdown';
 
@@ -49,6 +51,7 @@ const MapComponent = ({
           (slice) => slice.label.toLowerCase() === value.toLowerCase(),
         )[0]?.label ?? '';
         dispatch(setSoilDrainageRedux(soilDrainageValue));
+        dispatch(updateTileDrainageRedux(false));
       });
     }
   }, [selectedToEditSite]);
