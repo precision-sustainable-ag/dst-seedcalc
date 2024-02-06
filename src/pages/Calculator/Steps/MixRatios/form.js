@@ -58,10 +58,9 @@ const MixRatioSteps = ({
             <Grid item xs={3}>
               <NumberTextField
                 label={matchesMd ? '' : 'Single Species Seeding Rate PLS'}
-                disabled
-                // handleChange={(e) => {
-                //   handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
-                // }}
+                handleChange={(e) => {
+                  handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
+                }}
                 value={step1.defaultSingleSpeciesSeedingRatePLS}
               />
               <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
