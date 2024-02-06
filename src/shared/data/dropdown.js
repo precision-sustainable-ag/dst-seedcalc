@@ -35,7 +35,7 @@ export const availableStates = [
   'West Virginia',
 ];
 
-export const soilDrainage = [
+export const soilDrainageValues = [
   { label: 'Very Poorly Drained' },
   { label: 'Poorly Drained' },
   { label: 'Somewhat Poorly Drained' },
@@ -62,7 +62,7 @@ export const seedingMethodsNECCC = [
   { label: 'Aerial' },
 ];
 
-export const soilFertility = [{ label: 'Low' }, { label: 'High' }];
+export const soilFertilityValues = [{ label: 'Low' }, { label: 'High' }];
 
 // TODO: Add API to retrieve City, State, & Countries
 

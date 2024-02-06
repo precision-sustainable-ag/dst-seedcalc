@@ -9,7 +9,7 @@ import {
   getZoneData,
 } from './api';
 import initialState from './state';
-import { soilDrainage } from '../../shared/data/dropdown';
+import { soilDrainageValues as soilDrainage } from '../../shared/data/dropdown';
 
 /*
 

@@ -1,8 +1,9 @@
+/* eslint-disable */
 /// ///////////////////////////////////////////////////////
 //                      Imports                         //
 /// ///////////////////////////////////////////////////////
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Typography, Tooltip,
 } from '@mui/material';
@@ -15,26 +16,26 @@ import DatePicker from '../../../../components/DatePicker';
 import Dropdown from '../../../../components/Dropdown';
 import NumberTextField from '../../../../components/NumberTextField';
 import DSTSwitch from '../../../../components/Switch';
-import { soilDrainage, soilFertility } from '../../../../shared/data/dropdown';
+import { soilDrainageValues, soilFertilityValues } from '../../../../shared/data/dropdown';
 import { getCrops } from '../../../../features/stepSlice/api';
 import '../steps.scss';
 import {
   checkNRCSRedux,
-  setAcresRedux, setCountyRedux, setPlantingDateRedux, setSoilDrainageRedux, setSoilFertilityRedux,
+  setAcresRedux, setCountyRedux, setPlantingDateRedux, setSoilDrainageRedux, setSoilFertilityRedux, updateTileDrainageRedux,
 } from '../../../../features/siteConditionSlice/actions';
+
+const needTileDrainage = ['Very Poorly Drained', 'Poorly Drained', 'Somewhat Poorly Drained'];
 
 const SiteConditionForm = ({
   council,
   counties,
 }) => {
-  const [checked, setChecked] = useState(false);
+  const [soilDrainagePrev, setSoilDrainagePrev] = useState('');
   const dispatch = useDispatch();
-  const newSiteCondition = useSelector((state) => state.siteCondition);
-
-  const handleSwitch = () => {
-    setChecked(!checked);
-    dispatch(checkNRCSRedux(!checked));
-  };
+  const {
+    soilDrainage, tileDrainage, county, plannedPlantingDate,
+    acres, soilFertility, checkNRCSStandards,
+  } = useSelector((state) => state.siteCondition);
 
   const handleRegion = (region) => {
     const countyId = counties.filter((c) => c.label === region)[0].id;
@@ -48,11 +49,20 @@ const SiteConditionForm = ({
     }
   };
 
+  const handleTileDrainage = () => {
+    dispatch(updateTileDrainageRedux(!tileDrainage));
+    // update soil drainage
+  };
+
+  useEffect(() => {
+  }, [soilDrainage, tileDrainage]);
+
   return (
     <>
+      {/* County / Zone */}
       <Grid item xs={12} md={6} p="10px">
         <Dropdown
-          value={newSiteCondition.county}
+          value={county}
           label={
             council === 'MCCC' ? 'County: ' : 'USDA Plant Hardiness Zone: '
           }
@@ -62,19 +72,20 @@ const SiteConditionForm = ({
         />
       </Grid>
 
+      {/* Soil Drainage */}
       <Grid item xs={12} md={6} p="10px">
         <Dropdown
-          value={newSiteCondition.soilDrainage}
+          value={soilDrainage}
           label="Soil Drainage: "
           handleChange={(e) => {
             dispatch(setSoilDrainageRedux(e.target.value));
           }}
           size={12}
-          items={soilDrainage}
+          items={soilDrainageValues}
         />
       </Grid>
 
-      {newSiteCondition.soilDrainage !== '' && (
+      {/* Tile Drainage */}
       <Grid item xs={12} md={6} p="10px">
         <Grid container alignItems="center">
           <Grid item direction="column" xs={4}>
@@ -84,7 +95,7 @@ const SiteConditionForm = ({
                 <Tooltip
                   type="text"
                   title={(
-                    <Typography>
+                    <Typography color="primary.light">
                       Indicate if the field of interest has tile installed.
                       If you have selected very poorly to somewhat poorly drained soils,
                       selecting “yes” will increase your drainage class.
@@ -100,10 +111,9 @@ const SiteConditionForm = ({
                 No
               </Typography>
               <DSTSwitch
-                checked
-                handleChange={() => {
-
-                }}
+                checked={tileDrainage}
+                handleChange={handleTileDrainage}
+                disabled={needTileDrainage.indexOf(soilDrainage) === -1}
               />
               <Typography display="inline">
                 Yes
@@ -111,18 +121,27 @@ const SiteConditionForm = ({
             </Grid>
           </Grid>
           <Grid item xs={8}>
-            <Typography>Your improved drainage class is: </Typography>
-            <Typography fontWeight="bold">Well Drained</Typography>
+            {needTileDrainage.indexOf(soilDrainage) === -1
+              ? <Typography>Tile Drainage not available.</Typography>
+              : (
+                tileDrainage && (
+                <>
+                  <Typography>Your improved drainage class is: </Typography>
+                  <Typography fontWeight="bold">{soilDrainage}</Typography>
+                </>
+                )
+              )}
+
           </Grid>
         </Grid>
 
       </Grid>
-      )}
 
+      {/* Planting Date */}
       <Grid item xs={12} md={6} p="10px">
         <DatePicker
           label="Planned Planting Date: "
-          value={newSiteCondition.plannedPlantingDate}
+          value={plannedPlantingDate}
           handleChange={(e) => {
             const formattedDate = dayjs(e).format('MM/DD/YYYY');
             dispatch(setPlantingDateRedux(formattedDate));
@@ -130,9 +149,10 @@ const SiteConditionForm = ({
         />
       </Grid>
 
+      {/* Acres */}
       <Grid item xs={12} md={6} p="10px">
         <NumberTextField
-          value={newSiteCondition.acres}
+          value={acres}
           label="Acres"
           disabled={false}
           handleChange={(e) => {
@@ -142,6 +162,7 @@ const SiteConditionForm = ({
         />
       </Grid>
 
+      {/* NRCS Standards */}
       {council === 'MCCC' && (
         <Grid
           item
@@ -151,10 +172,16 @@ const SiteConditionForm = ({
           justifyContent="center"
         >
           <Typography fontSize="1.25rem">Check NRCS Standards: </Typography>
-          <DSTSwitch checked={checked} handleChange={handleSwitch} />
+          <DSTSwitch
+            checked={checkNRCSStandards}
+            handleChange={() => {
+              dispatch(checkNRCSRedux(!checkNRCSStandards));
+            }}
+          />
         </Grid>
       )}
 
+      {/* Soil Fertility */}
       {council === 'NECCC' && (
         <Grid
           item
@@ -162,13 +189,13 @@ const SiteConditionForm = ({
           p="10px"
         >
           <Dropdown
-            value={newSiteCondition.soilFertility}
+            value={soilFertility}
             label="Soil Fertility: "
             handleChange={(e) => {
               dispatch(setSoilFertilityRedux(e.target.value));
             }}
             size={12}
-            items={soilFertility}
+            items={soilFertilityValues}
           />
         </Grid>
       )}

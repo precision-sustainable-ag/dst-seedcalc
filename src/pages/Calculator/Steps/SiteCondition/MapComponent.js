@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getZoneData, getSSURGOData } from '../../../../features/siteConditionSlice/api';
 import { setCountyRedux, setSoilDrainageRedux, updateLatlonRedux } from '../../../../features/siteConditionSlice/actions';
 import '../steps.scss';
-import { soilDrainage } from '../../../../shared/data/dropdown';
+import { soilDrainageValues } from '../../../../shared/data/dropdown';
 
 const MapComponent = ({
   handleSteps,
@@ -45,7 +45,7 @@ const MapComponent = ({
       ).then((res) => {
         // update soil drainage redux
         const value = res.payload.Table[1][2] ?? '';
-        const soilDrainageValue = soilDrainage.filter(
+        const soilDrainageValue = soilDrainageValues.filter(
           (slice) => slice.label.toLowerCase() === value.toLowerCase(),
         )[0]?.label ?? '';
         dispatch(setSoilDrainageRedux(soilDrainageValue));
