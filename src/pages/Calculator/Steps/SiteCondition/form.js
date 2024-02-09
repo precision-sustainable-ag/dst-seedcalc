@@ -15,7 +15,9 @@ import DatePicker from '../../../../components/DatePicker';
 import Dropdown from '../../../../components/Dropdown';
 import NumberTextField from '../../../../components/NumberTextField';
 import DSTSwitch from '../../../../components/Switch';
-import { soilDrainageValues, soilFertilityValues } from '../../../../shared/data/dropdown';
+import {
+  soilDrainagesMCCC, soilDrainagesNECCC, soilFertilityValues,
+} from '../../../../shared/data/dropdown';
 import { getCrops } from '../../../../features/stepSlice/api';
 import '../steps.scss';
 import {
@@ -128,7 +130,8 @@ const SiteConditionForm = ({
           label="Soil Drainage: "
           handleChange={handleSoilDrainage}
           size={12}
-          items={soilDrainageValues}
+          // eslint-disable-next-line no-nested-ternary
+          items={council === 'MCCC' ? soilDrainagesMCCC : council === 'NECCC' ? soilDrainagesNECCC : []}
         />
       </Grid>
 

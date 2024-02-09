@@ -48,6 +48,27 @@ export const soilDrainageValues = [
   { label: 'Well Drained Muck' },
 ];
 
+export const soilDrainagesNECCC = [
+  { label: 'Very Poorly Drained' },
+  { label: 'Poorly Drained' },
+  { label: 'Somewhat Poorly Drained' },
+  { label: 'Moderately Well Drained' },
+  { label: 'Well Drained' },
+  { label: 'Somewhat Excessively Drained' },
+  { label: 'Excessively Drained' },
+];
+
+export const soilDrainagesMCCC = [
+  { label: 'Very Poorly Drained' },
+  { label: 'Poorly Drained' },
+  { label: 'Somewhat Poorly Drained' },
+  { label: 'Moderately Well Drained' },
+  { label: 'Well Drained' },
+  { label: 'Excessively Drained' },
+  { label: 'Saturated Muck' },
+  { label: 'Well Drained Muck' },
+];
+
 export const seedingMethods = [
   { label: 'Precision' },
   { label: 'Drilled' },
