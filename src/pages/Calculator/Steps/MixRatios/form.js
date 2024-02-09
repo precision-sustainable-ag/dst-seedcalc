@@ -47,7 +47,7 @@ const MixRatioSteps = ({
       {council === 'NECCC' && (
         <>
           <Grid item xs={12}>
-            <Typography className="step-header">Step 1: </Typography>
+            <Typography className="step-header">Step 1: Default Seeding Rate in Mix</Typography>
           </Grid>
           {renderFormLabel(
             'Single Species Seeding Rate PLS',
@@ -58,10 +58,9 @@ const MixRatioSteps = ({
             <Grid item xs={3}>
               <NumberTextField
                 label={matchesMd ? '' : 'Single Species Seeding Rate PLS'}
-                disabled
-                // handleChange={(e) => {
-                //   handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
-                // }}
+                handleChange={(e) => {
+                  handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
+                }}
                 value={step1.defaultSingleSpeciesSeedingRatePLS}
               />
               <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
@@ -115,7 +114,7 @@ const MixRatioSteps = ({
       {council === 'MCCC' && (
         <>
           <Grid item xs={12}>
-            <Typography className="step-header">Step 1:</Typography>
+            <Typography className="step-header">Step 1: Default Seeding Rate in Mix</Typography>
           </Grid>
           {renderFormLabel(
             'Single Species Seeding Rate PLS',
@@ -166,7 +165,7 @@ const MixRatioSteps = ({
       {/* Step 2: */}
       <>
         <Grid item xs={12}>
-          <Typography className="step-header">Step 2: </Typography>
+          <Typography className="step-header">Step 2: Seeds Per Acre</Typography>
         </Grid>
         {renderFormLabel(
           'Seeds / Pound',
@@ -213,7 +212,7 @@ const MixRatioSteps = ({
       {council === 'NECCC' && (
         <>
           <Grid item xs={12}>
-            <Typography className="step-header">Step 3: </Typography>
+            <Typography className="step-header">Step 3: Seeds per SqFt</Typography>
           </Grid>
           {renderFormLabel('Seeds / Acre', 'Sq. Ft. / Acres', 'Seeds / Sq. Ft.')}
           <Grid container justifyContent="space-evenly">
@@ -256,7 +255,7 @@ const MixRatioSteps = ({
       {council === 'MCCC' && (
         <>
           <Grid item xs={12}>
-            <Typography className="step-header">Step 3: </Typography>
+            <Typography className="step-header">Step 3: Plants Per Acre</Typography>
           </Grid>
           {renderFormLabel('Seeds / Acre', '% Survival', 'Plants / Acre')}
           <Grid container justifyContent="space-evenly">
@@ -296,7 +295,7 @@ const MixRatioSteps = ({
           </Grid>
 
           <Grid item xs={12}>
-            <Typography className="step-header">Step 4: </Typography>
+            <Typography className="step-header">Step 4: Approximate Plants Per SqFt</Typography>
           </Grid>
           {renderFormLabel(
             'Plants / Acre',
