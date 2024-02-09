@@ -59,6 +59,7 @@ export const soilDrainagesNECCC = [
 ];
 
 export const soilDrainagesMCCC = [
+  { label: 'None' },
   { label: 'Very Poorly Drained' },
   { label: 'Poorly Drained' },
   { label: 'Somewhat Poorly Drained' },
