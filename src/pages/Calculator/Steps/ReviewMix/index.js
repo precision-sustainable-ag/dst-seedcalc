@@ -21,6 +21,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   twoDigit, reviewMix, reviewMixNECCC, calculatePieChartData,
+  calculatePlantsandSeedsPerAcre,
 } from '../../../../shared/utils/calculator';
 import ReviewMixSteps from './Steps';
 import '../steps.scss';
@@ -29,10 +30,7 @@ import {
   DSTPieChartLabel,
   DSTPieChartLegend,
 } from '../../../../components/DSTPieChart';
-import {
-  SeedDataChip,
-  SeedingRateChip,
-} from '../../../../components/SeedingRateCard';
+import SeedingRateCard, { UnitSelection } from '../../../../components/SeedingRateCard';
 import { setBulkSeedingRateRedux, setOptionRedux } from '../../../../features/calculatorSlice/actions';
 
 const defaultResultMCCC = {
@@ -81,6 +79,13 @@ const ReviewMix = ({ calculator }) => {
       return res;
     }, {}),
   );
+
+  const [seedData, setSeedData] = useState(seedsSelected.reduce((res, seed) => {
+    res[seed.label] = {
+      defaultPlant: 0, defaultSeed: 0, adjustedPlant: 0, adjustedSeed: 0,
+    };
+    return res;
+  }, {}));
 
   const [accordionState, setAccordionState] = useState(
     seedsSelected.reduce((res, seed) => {
@@ -132,6 +137,24 @@ const ReviewMix = ({ calculator }) => {
         if (council === 'MCCC') result = reviewMix(seed, calculator, options[seed.label]);
         else if (council === 'NECCC') result = reviewMixNECCC(seed, calculator, options[seed.label]);
         setCalculatorResult((prev) => ({ ...prev, [seed.label]: result }));
+        const {
+          plants, seeds, adjustedPlants, adjustedSeeds,
+        } = calculatePlantsandSeedsPerAcre(
+          seed,
+          calculator,
+          options[seed.label],
+          result.step2.seedingRate,
+          result.step4.bulkSeedingRate,
+        );
+        setSeedData((prev) => ({
+          ...prev,
+          [seed.label]: {
+            defaultPlant: plants,
+            defaultSeed: seeds,
+            adjustedPlant: adjustedPlants,
+            adjustedSeed: adjustedSeeds,
+          },
+        }));
       }
     });
     // calculate piechart data
@@ -294,24 +317,24 @@ const ReviewMix = ({ calculator }) => {
 
               <Grid container pt="1rem">
                 <Grid item xs={6}>
-                  <SeedingRateChip
-                    label="Seeding Rate in Mix PLS"
-                    value={calculatorResult[seed.label].step2.seedingRate}
-                  />
-                  <SeedDataChip
-                    label="Aprox plants per"
-                    value={piechartData.plantsPerAcreArray.filter((slice) => slice.name === seed.label)[0]?.value ?? 0}
+                  <SeedingRateCard
+                    seedingRateLabel="Seeding Rate in Mix PLS"
+                    seedingRateValue={calculatorResult[seed.label].step2.seedingRate}
+                    plantValue={seedData[seed.label].defaultPlant}
+                    seedValue={seedData[seed.label].defaultSeed}
                   />
                 </Grid>
+
                 <Grid item xs={6}>
-                  <SeedingRateChip
-                    label="Bulk Seeding Rate"
-                    value={calculatorResult[seed.label].step4.bulkSeedingRate}
+                  <SeedingRateCard
+                    seedingRateLabel="Bulk Seeding Rate"
+                    seedingRateValue={calculatorResult[seed.label].step4.bulkSeedingRate}
+                    plantValue={seedData[seed.label].adjustedPlant}
+                    seedValue={seedData[seed.label].adjustedSeed}
                   />
-                  <SeedDataChip
-                    label="Seeds per"
-                    value={piechartData.seedsPerAcreArray.filter((slice) => slice.name === seed.label)[0]?.value ?? 0}
-                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <UnitSelection />
                 </Grid>
 
                 <Grid item xs={12} pt="1rem">
