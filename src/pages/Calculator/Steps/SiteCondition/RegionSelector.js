@@ -10,7 +10,7 @@ import Dropdown from '../../../../components/Dropdown';
 import DSTImport from '../../../../components/DSTImport';
 import {
   checkNRCSRedux, setCouncilRedux, setCountyIdRedux, setCountyRedux,
-  setSoilDrainageRedux, setSoilFertilityRedux, setStateRedux, updateLatlonRedux,
+  setSoilDrainageRedux, setSoilFertilityRedux, setStateRedux, updateLatlonRedux, updateTileDrainageRedux,
 } from '../../../../features/siteConditionSlice/actions';
 import { getRegionNew } from '../../../../features/siteConditionSlice/api';
 import { updateDiversityRedux } from '../../../../features/calculatorSlice/actions';
@@ -54,6 +54,7 @@ const RegionSelector = ({
     dispatch(setCountyRedux(''));
     dispatch(setCountyIdRedux(''));
     dispatch(setSoilDrainageRedux(''));
+    dispatch(updateTileDrainageRedux(false));
     dispatch(setSoilFertilityRedux(''));
     dispatch(checkNRCSRedux(false));
 
@@ -131,10 +132,10 @@ const RegionSelector = ({
           selectedState={newSiteCondition.state || ''}
           availableStates={availableStates}
           initWidth="100%"
-          initHeight="360px"
+          initHeight="300px"
           initLon={-78}
           initLat={43}
-          initStartZoom={4}
+          initStartZoom={3.5}
         />
         <DSTImport setIsImported={setIsImported} />
       </Grid>

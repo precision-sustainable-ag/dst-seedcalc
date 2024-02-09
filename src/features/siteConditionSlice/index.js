@@ -50,6 +50,11 @@ const siteConditionSlice = createSlice({
       const { csvData } = payload;
       return { ...csvData };
     },
+    updateTileDrainage: (state, { payload }) => {
+      const { tileDrainage } = payload;
+      return { ...state, tileDrainage };
+    },
+
   },
   extraReducers: (builder) => {
     builder
@@ -85,7 +90,7 @@ const siteConditionSlice = createSlice({
 export const {
   updateState, updateCounty, updateCountyId, updateSoilDrainage,
   updatePlantingDate, updateAcres, checkNRCS, updateCouncil, updateSoilFertility,
-  updateLatlon, importFromCSV,
+  updateLatlon, importFromCSV, updateTileDrainage,
 } = siteConditionSlice.actions;
 
 export default siteConditionSlice;
