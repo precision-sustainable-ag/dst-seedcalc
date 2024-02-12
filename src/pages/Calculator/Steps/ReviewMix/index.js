@@ -279,23 +279,20 @@ const ReviewMix = ({ calculator }) => {
         />
       </Grid>
 
-      {council === 'MCCC' && (
-        <Grid item xs={6} sx={{ textAlign: 'justify' }}>
+      <Grid item xs={6} sx={{ textAlign: 'justify' }}>
+        {council === 'MCCC' && (
           <DSTPieChart
             chartData={piechartData.plantsPerSqftArray}
             label="Plants Per Sqft"
           />
-        </Grid>
-      )}
-
-      {council === 'NECCC' && (
-        <Grid item xs={6} sx={{ textAlign: 'justify' }}>
-          <DSTPieChart
-            chartData={piechartData.seedsPerSqftArray}
-            label="Seeds Per Sqft"
-          />
-        </Grid>
-      )}
+        )}
+        {council === 'NECCC' && (
+        <DSTPieChart
+          chartData={piechartData.seedsPerSqftArray}
+          label="Seeds Per Sqft"
+        />
+        )}
+      </Grid>
 
       {seedsSelected.map((seed, i) => (
         <Grid item xs={12} key={i}>
