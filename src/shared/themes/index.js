@@ -57,14 +57,6 @@ const dstTheme = createTheme({
         },
       },
     },
-    MuiTooltip: {
-      styleOverrides: {
-        tooltip: {
-          backgroundColor: '#eff1e0',
-        },
-      },
-
-    },
   },
 });
 
