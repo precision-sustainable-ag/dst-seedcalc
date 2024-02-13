@@ -61,7 +61,7 @@ const ConfirmPlanForm = ({
           </Grid>
 
           <Grid item xs={1}>
-            <Typography className="math-icon">&#215;</Typography>
+            <Typography variant="mathIcon">&#215;</Typography>
           </Grid>
 
           <Grid item xs={3}>
@@ -78,7 +78,7 @@ const ConfirmPlanForm = ({
           </Grid>
 
           <Grid item xs={1}>
-            <Typography className="math-icon">=</Typography>
+            <Typography variant="mathIcon">=</Typography>
           </Grid>
 
           <Grid item xs={3}>
@@ -117,7 +117,7 @@ const ConfirmPlanForm = ({
             />
           </Grid>
           <Grid item xs={1}>
-            <Typography className="math-icon">&#215;</Typography>
+            <Typography variant="mathIcon">&#215;</Typography>
           </Grid>
           <Grid item xs={3}>
             <NumberTextField
@@ -127,7 +127,7 @@ const ConfirmPlanForm = ({
             />
           </Grid>
           <Grid item xs={1}>
-            <Typography className="math-icon">=</Typography>
+            <Typography variant="mathIcon">=</Typography>
           </Grid>
           <Grid item xs={3}>
             <NumberTextField
@@ -149,7 +149,7 @@ const ConfirmPlanForm = ({
     return (
       <Grid container>
         <Grid item xs={12}>
-          <Typography className="step-header">Total Cost of mix:</Typography>
+          <Typography variant="stepHeader">Total Cost of mix:</Typography>
         </Grid>
 
         {seedsSelected.map((seed, i) => (
@@ -163,7 +163,7 @@ const ConfirmPlanForm = ({
               {' '}
             </Grid>
             <Grid item xs={1} sx={{ p: '0.625rem' }}>
-              <Typography className="math-icon">
+              <Typography variant="mathIcon">
                 {i !== seedsSelected.length - 1 ? '+' : '='}
               </Typography>
             </Grid>
@@ -189,7 +189,7 @@ const ConfirmPlanForm = ({
         {seedsSelected.map((seed, i) => (
           <Grid container key={i}>
             <Grid item xs={12}>
-              <Typography className="step-header">{seed.label}</Typography>
+              <Typography variant="stepHeader">{seed.label}</Typography>
             </Grid>
             <Grid item xs={12}>
               {renderConfirmPlanForm(seed)}

@@ -49,7 +49,7 @@ const ReviewMixSteps = ({
       {council === 'NECCC' && (
         <>
           <Grid item xs={12}>
-            <Typography className="step-header">Step 1: Default Seeding Rate in Mix</Typography>
+            <Typography variant="stepHeader">Step 1: Default Seeding Rate in Mix</Typography>
           </Grid>
           {renderStepsForm(
             'Single Species Seeding Rate PLS',
@@ -69,7 +69,7 @@ const ReviewMixSteps = ({
             </Grid>
 
             <Grid item xs={1}>
-              <Typography className="math-icon">&#215;</Typography>
+              <Typography variant="mathIcon">&#215;</Typography>
             </Grid>
 
             <Grid item xs={3}>
@@ -81,7 +81,7 @@ const ReviewMixSteps = ({
             </Grid>
 
             <Grid item xs={1}>
-              <Typography className="math-icon">÷</Typography>
+              <Typography variant="mathIcon">÷</Typography>
             </Grid>
 
             <Grid item xs={3}>
@@ -94,7 +94,7 @@ const ReviewMixSteps = ({
           </Grid>
           <Grid container p="10px">
             <Grid item xs={4}>
-              <Typography className="math-icon">=</Typography>
+              <Typography variant="mathIcon">=</Typography>
             </Grid>
 
             <Grid item xs={7}>
@@ -115,7 +115,7 @@ const ReviewMixSteps = ({
       {council === 'MCCC' && (
         <>
           <Grid item xs={12}>
-            <Typography className="step-header">Step 1: Default Seeding Rate in Mix</Typography>
+            <Typography variant="stepHeader">Step 1: Default Seeding Rate in Mix</Typography>
           </Grid>
           {renderStepsForm(
             'Single Species Seeding Rate PLS',
@@ -133,7 +133,7 @@ const ReviewMixSteps = ({
             </Grid>
 
             <Grid item xs={1}>
-              <Typography className="math-icon">&#215;</Typography>
+              <Typography variant="mathIcon">&#215;</Typography>
             </Grid>
 
             <Grid item xs={3}>
@@ -150,7 +150,7 @@ const ReviewMixSteps = ({
             </Grid>
 
             <Grid item xs={1}>
-              <Typography className="math-icon">=</Typography>
+              <Typography variant="mathIcon">=</Typography>
             </Grid>
 
             <Grid item xs={3}>
@@ -169,7 +169,7 @@ const ReviewMixSteps = ({
       {/* Step 2: */}
       <>
         <Grid item xs={12}>
-          <Typography className="step-header">Step 2: Adjust By Seeding Method</Typography>
+          <Typography variant="stepHeader">Step 2: Adjust By Seeding Method</Typography>
         </Grid>
         {renderStepsForm(
           'Seeding Rate in Mix',
@@ -187,7 +187,7 @@ const ReviewMixSteps = ({
           </Grid>
 
           <Grid item xs={1}>
-            <Typography className="math-icon">&#215;</Typography>
+            <Typography variant="mathIcon">&#215;</Typography>
           </Grid>
 
           <Grid item xs={3}>
@@ -201,7 +201,7 @@ const ReviewMixSteps = ({
           </Grid>
 
           <Grid item xs={1}>
-            <Typography className="math-icon">=</Typography>
+            <Typography variant="mathIcon">=</Typography>
           </Grid>
 
           <Grid item xs={3}>
@@ -218,7 +218,7 @@ const ReviewMixSteps = ({
       {/* Step 3: */}
       <>
         <Grid item xs={12}>
-          <Typography className="step-header">Step 3: Adjust By Management Impact</Typography>
+          <Typography variant="stepHeader">Step 3: Adjust By Management Impact</Typography>
         </Grid>
         {renderStepsForm(
           'Seeding Rate in Mix',
@@ -236,7 +236,7 @@ const ReviewMixSteps = ({
           </Grid>
 
           <Grid item xs={1}>
-            <Typography className="math-icon">&#215;</Typography>
+            <Typography variant="mathIcon">&#215;</Typography>
           </Grid>
 
           <Grid item xs={3}>
@@ -248,7 +248,7 @@ const ReviewMixSteps = ({
           </Grid>
 
           <Grid item xs={1}>
-            <Typography className="math-icon">=</Typography>
+            <Typography variant="mathIcon">=</Typography>
           </Grid>
 
           <Grid item xs={3}>
@@ -266,7 +266,7 @@ const ReviewMixSteps = ({
       {/* Step 4: */}
       <>
         <Grid item xs={12}>
-          <Typography className="step-header">Step 4: Bulk Seeding Rate</Typography>
+          <Typography variant="stepHeader">Step 4: Bulk Seeding Rate</Typography>
         </Grid>
         {renderStepsForm('Seeding Rate in Mix', '% Germination', '% Purity')}
         <Grid container justifyContent="space-evenly">
@@ -280,7 +280,7 @@ const ReviewMixSteps = ({
           </Grid>
 
           <Grid item xs={1}>
-            <Typography className="math-icon">÷</Typography>
+            <Typography variant="mathIcon">÷</Typography>
           </Grid>
 
           <Grid item xs={3}>
@@ -294,7 +294,7 @@ const ReviewMixSteps = ({
           </Grid>
 
           <Grid item xs={1}>
-            <Typography className="math-icon">÷</Typography>
+            <Typography variant="mathIcon">÷</Typography>
           </Grid>
 
           <Grid item xs={3}>
@@ -309,7 +309,7 @@ const ReviewMixSteps = ({
         </Grid>
         <Grid container p="10px">
           <Grid item xs={4}>
-            <Typography className="math-icon">=</Typography>
+            <Typography variant="mathIcon">=</Typography>
           </Grid>
 
           <Grid item xs={7}>
@@ -327,7 +327,7 @@ const ReviewMixSteps = ({
       {/* Step 5: */}
       <>
         <Grid item xs={12}>
-          <Typography className="step-header">Step 5: Pounds for Purchase</Typography>
+          <Typography variant="stepHeader">Step 5: Pounds for Purchase</Typography>
         </Grid>
         {renderStepsForm('Bulk Seeding Rate', 'Acres', 'Pounds for Purchase')}
         <Grid container justifyContent="space-evenly">
@@ -341,7 +341,7 @@ const ReviewMixSteps = ({
           </Grid>
 
           <Grid item xs={1}>
-            <Typography className="math-icon">&#215;</Typography>
+            <Typography variant="mathIcon">&#215;</Typography>
           </Grid>
 
           <Grid item xs={3}>
@@ -353,7 +353,7 @@ const ReviewMixSteps = ({
           </Grid>
 
           <Grid item xs={1}>
-            <Typography className="math-icon">=</Typography>
+            <Typography variant="mathIcon">=</Typography>
           </Grid>
 
           <Grid item xs={3}>

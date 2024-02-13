@@ -32,11 +32,31 @@ const dstTheme = createTheme({
       paddingBottom: '0.75rem',
       backgroundColor: 'rgba(79, 95, 48, 0.09)',
     },
+    mathIcon: {
+      marginTop: '15px',
+      fontWeight: 600,
+      lineHeight: '1.5',
+      fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
+    },
+    stepHeader: {
+      fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
+      lineHeight: '1.5',
+      padding: '1rem',
+      background: '#e5e7d5',
+      margin: '1rem 0px',
+      fontSize: '18px',
+      fontWeight: 600,
+      textAlign: 'justify',
+    },
   },
   components: {
     MuiTypography: {
       defaultProps: {
         color: '#4F5F30',
+        variantMapping: {
+          mathIcon: 'p',
+          stepHeader: 'p',
+        },
       },
     },
     MuiButton: {

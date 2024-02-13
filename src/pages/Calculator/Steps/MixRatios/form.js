@@ -47,7 +47,7 @@ const MixRatioSteps = ({
       {council === 'NECCC' && (
         <>
           <Grid item xs={12}>
-            <Typography className="step-header">Step 1: Default Seeding Rate in Mix</Typography>
+            <Typography variant="stepHeader">Step 1: Default Seeding Rate in Mix</Typography>
           </Grid>
           {renderFormLabel(
             'Single Species Seeding Rate PLS',
@@ -67,7 +67,7 @@ const MixRatioSteps = ({
             </Grid>
 
             <Grid item xs={1}>
-              <Typography className="math-icon">&#215;</Typography>
+              <Typography variant="mathIcon">&#215;</Typography>
             </Grid>
 
             <Grid item xs={3}>
@@ -79,7 +79,7 @@ const MixRatioSteps = ({
             </Grid>
 
             <Grid item xs={1}>
-              <Typography className="math-icon">÷</Typography>
+              <Typography variant="mathIcon">÷</Typography>
             </Grid>
 
             <Grid item xs={3}>
@@ -93,7 +93,7 @@ const MixRatioSteps = ({
 
           <Grid container p="10px">
             <Grid item xs={4}>
-              <Typography className="math-icon">=</Typography>
+              <Typography variant="mathIcon">=</Typography>
             </Grid>
 
             <Grid item xs={7}>
@@ -114,7 +114,7 @@ const MixRatioSteps = ({
       {council === 'MCCC' && (
         <>
           <Grid item xs={12}>
-            <Typography className="step-header">Step 1: Default Seeding Rate in Mix</Typography>
+            <Typography variant="stepHeader">Step 1: Default Seeding Rate in Mix</Typography>
           </Grid>
           {renderFormLabel(
             'Single Species Seeding Rate PLS',
@@ -132,7 +132,7 @@ const MixRatioSteps = ({
             </Grid>
 
             <Grid item xs={1}>
-              <Typography className="math-icon">&#215;</Typography>
+              <Typography variant="mathIcon">&#215;</Typography>
             </Grid>
 
             <Grid item xs={3}>
@@ -147,7 +147,7 @@ const MixRatioSteps = ({
             </Grid>
 
             <Grid item xs={1}>
-              <Typography className="math-icon">=</Typography>
+              <Typography variant="mathIcon">=</Typography>
             </Grid>
 
             <Grid item xs={3}>
@@ -165,7 +165,7 @@ const MixRatioSteps = ({
       {/* Step 2: */}
       <>
         <Grid item xs={12}>
-          <Typography className="step-header">Step 2: Seeds Per Acre</Typography>
+          <Typography variant="stepHeader">Step 2: Seeds Per Acre</Typography>
         </Grid>
         {renderFormLabel(
           'Seeds / Pound',
@@ -182,7 +182,7 @@ const MixRatioSteps = ({
           </Grid>
 
           <Grid item xs={1}>
-            <Typography className="math-icon">&#215;</Typography>
+            <Typography variant="mathIcon">&#215;</Typography>
           </Grid>
 
           <Grid item xs={3}>
@@ -195,7 +195,7 @@ const MixRatioSteps = ({
           </Grid>
 
           <Grid item xs={1}>
-            <Typography className="math-icon">=</Typography>
+            <Typography variant="mathIcon">=</Typography>
           </Grid>
 
           <Grid item xs={3}>
@@ -212,7 +212,7 @@ const MixRatioSteps = ({
       {council === 'NECCC' && (
         <>
           <Grid item xs={12}>
-            <Typography className="step-header">Step 3: Seeds per SqFt</Typography>
+            <Typography variant="stepHeader">Step 3: Seeds per SqFt</Typography>
           </Grid>
           {renderFormLabel('Seeds / Acre', 'Sq. Ft. / Acres', 'Seeds / Sq. Ft.')}
           <Grid container justifyContent="space-evenly">
@@ -225,7 +225,7 @@ const MixRatioSteps = ({
             </Grid>
 
             <Grid item xs={1}>
-              <Typography className="math-icon">÷</Typography>
+              <Typography variant="mathIcon">÷</Typography>
             </Grid>
 
             <Grid item xs={3}>
@@ -237,7 +237,7 @@ const MixRatioSteps = ({
             </Grid>
 
             <Grid item xs={1}>
-              <Typography className="math-icon">=</Typography>
+              <Typography variant="mathIcon">=</Typography>
             </Grid>
 
             <Grid item xs={3}>
@@ -255,7 +255,7 @@ const MixRatioSteps = ({
       {council === 'MCCC' && (
         <>
           <Grid item xs={12}>
-            <Typography className="step-header">Step 3: Plants Per Acre</Typography>
+            <Typography variant="stepHeader">Step 3: Plants Per Acre</Typography>
           </Grid>
           {renderFormLabel('Seeds / Acre', '% Survival', 'Plants / Acre')}
           <Grid container justifyContent="space-evenly">
@@ -268,7 +268,7 @@ const MixRatioSteps = ({
             </Grid>
 
             <Grid item xs={1}>
-              <Typography className="math-icon">&#215;</Typography>
+              <Typography variant="mathIcon">&#215;</Typography>
             </Grid>
 
             <Grid item xs={3}>
@@ -282,7 +282,7 @@ const MixRatioSteps = ({
             </Grid>
 
             <Grid item xs={1}>
-              <Typography className="math-icon">=</Typography>
+              <Typography variant="mathIcon">=</Typography>
             </Grid>
 
             <Grid item xs={3}>
@@ -295,7 +295,7 @@ const MixRatioSteps = ({
           </Grid>
 
           <Grid item xs={12}>
-            <Typography className="step-header">Step 4: Approximate Plants Per SqFt</Typography>
+            <Typography variant="stepHeader">Step 4: Approximate Plants Per SqFt</Typography>
           </Grid>
           {renderFormLabel(
             'Plants / Acre',
@@ -312,7 +312,7 @@ const MixRatioSteps = ({
             </Grid>
 
             <Grid item xs={1}>
-              <Typography className="math-icon">÷</Typography>
+              <Typography variant="mathIcon">÷</Typography>
             </Grid>
 
             <Grid item xs={3}>
@@ -324,7 +324,7 @@ const MixRatioSteps = ({
             </Grid>
 
             <Grid item xs={1}>
-              <Typography className="math-icon">=</Typography>
+              <Typography variant="mathIcon">=</Typography>
             </Grid>
 
             <Grid item xs={3}>
