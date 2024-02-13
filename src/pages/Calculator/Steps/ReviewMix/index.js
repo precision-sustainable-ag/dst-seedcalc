@@ -18,7 +18,6 @@ import {
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   twoDigit, reviewMix, reviewMixNECCC, calculatePieChartData,
   calculatePlantsandSeedsPerAcre,
@@ -307,7 +306,7 @@ const ReviewMix = ({ calculator }) => {
             onChange={() => handleExpandAccordion(seed.label)}
           >
             <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
+              expandIcon={<Typography sx={{ textDecoration: 'underline' }}>Show Details</Typography>}
               className="accordian-summary"
             >
               <Typography>{seed.label}</Typography>

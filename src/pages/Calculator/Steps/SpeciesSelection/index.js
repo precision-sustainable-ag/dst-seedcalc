@@ -10,7 +10,6 @@ import { Typography, Box } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import { Spinner } from '@psa/dst.ui.spinner';
 import SearchField from '../../../../components/SearchField';
@@ -100,7 +99,7 @@ const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
         <Grid item xs={12} key={i}>
           <Accordion>
             <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
+              expandIcon={<Typography sx={{ textDecoration: 'underline' }}>Show Details</Typography>}
               className="accordian-summary"
             >
               <Typography>{seedsLabel[seedType]}</Typography>

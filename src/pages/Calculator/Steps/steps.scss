@@ -9,22 +9,6 @@ div[class*="map_infobar__"] {
   display: none;
 }
 
-.accordian-summary {
-  background-color: $primary-dark !important;
-  height: 3rem;
-  p {
-    font-size: 1.25rem;
-    line-height: 1.5rem;
-    font-weight: 600;
-    text-align: justify;
-  }
-}
-.accordian-details {
-  color: $primary-text;
-  padding: 1rem 0 !important;
-  background-color: #fffff2;
-}
-
 .step-header {
   padding: 16px;
   background: #e5e7d5;
