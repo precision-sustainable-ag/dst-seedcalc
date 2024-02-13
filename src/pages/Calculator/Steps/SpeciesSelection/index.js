@@ -31,6 +31,13 @@ const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
   const [filteredSeeds, setFilteredSeeds] = useState([]);
   const [query, setQuery] = useState('');
 
+  const [accordionState, setAccordionState] = useState(
+    seedsType.reduce((res, type) => {
+      res[type] = false;
+      return res;
+    }, {}),
+  );
+
   /// ///////////////////////////////////////////////////////
   //                    State Logic                       //
   /// ///////////////////////////////////////////////////////
@@ -43,6 +50,11 @@ const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
       ? crops.filter((x) => x.label.toLowerCase().includes(query.toLowerCase()))
       : crops;
     setFilteredSeeds(filtered);
+  };
+
+  const handleExpandAccordion = (type) => {
+    const open = accordionState[type];
+    setAccordionState({ ...accordionState, [type]: !open });
   };
 
   /// ///////////////////////////////////////////////////////
@@ -97,14 +109,21 @@ const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
 
       {seedsType.map((seedType, i) => (
         <Grid item xs={12} key={i}>
-          <Accordion>
+          <Accordion
+            expanded={accordionState[seedType]}
+            onChange={() => handleExpandAccordion(seedType)}
+          >
             <AccordionSummary
-              expandIcon={<Typography sx={{ textDecoration: 'underline' }}>Show Details</Typography>}
-              className="accordian-summary"
+              expandIcon={(
+                <Typography sx={{ textDecoration: 'underline' }}>
+                  {accordionState[seedType] ? 'Hide ' : 'Show '}
+                  Details
+                </Typography>
+              )}
             >
               <Typography>{seedsLabel[seedType]}</Typography>
             </AccordionSummary>
-            <AccordionDetails className="accordian-details">
+            <AccordionDetails>
               {loading && <Spinner />}
 
               <PlantList

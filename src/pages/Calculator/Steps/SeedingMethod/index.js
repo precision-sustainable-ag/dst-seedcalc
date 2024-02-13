@@ -189,13 +189,16 @@ const SeedingMethod = () => {
             onChange={() => handleExpandAccordion(seed.label)}
           >
             <AccordionSummary
-              expandIcon={<Typography sx={{ textDecoration: 'underline' }}>Show Details</Typography>}
-              className="accordian-summary"
+              expandIcon={(
+                <Typography sx={{ textDecoration: 'underline' }}>
+                  {accordionState[seed.label] ? 'Hide ' : 'Show '}
+                  Details
+                </Typography>
+              )}
             >
               <Typography>{seed.label}</Typography>
             </AccordionSummary>
-
-            <AccordionDetails className="accordian-details">
+            <AccordionDetails>
               <Grid container>
                 {council === 'MCCC'
                   && (

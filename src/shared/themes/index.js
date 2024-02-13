@@ -87,6 +87,7 @@ const dstTheme = createTheme({
     MuiAccordionDetails: {
       styleOverrides: {
         root: {
+          color: '#4F5F30',
           padding: '1rem 0',
           backgroundColor: '#fffff2',
         },
