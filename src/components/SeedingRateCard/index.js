@@ -15,12 +15,59 @@ const tooltipNECCC = {
   mixSeedingRate: 'Seeding Rate in Mix = Default Single Species Seeding Rate PLS *  Soil Fertility Modifier / Sum Species Of Group in Mix',
 };
 
-const SeedingRateChip = ({ label, value, showTooltip }) => {
+const UnitSelection = () => {
+  const unit = useSelector((state) => state.calculator.unit);
+  const dispatch = useDispatch();
+  return (
+    <>
+      <Typography>
+        Select data unit:
+      </Typography>
+      <Button
+        variant={unit === 'acre' ? 'outlined' : 'contained'}
+        onClick={() => dispatch(selectUnitRedux('sqft'))}
+      >
+        Sqft
+      </Button>
+      {'  '}
+      <Button
+        variant={unit === 'acre' ? 'contained' : 'outlined'}
+        onClick={() => dispatch(selectUnitRedux('acre'))}
+      >
+        Acre
+      </Button>
+    </>
+  );
+};
+
+const SeedingRateCard = ({
+  seedingRateLabel, seedingRateValue, plantValue, seedValue, showTooltip = false,
+}) => {
+  // default value is always seeds/palnts per acre
+  const [displayValue, setDisplayValue] = useState({ plantValue, seedValue, seedingRateValue });
+
   const council = useSelector((state) => state.siteCondition.council);
+  const unit = useSelector((state) => state.calculator.unit);
+
+  // eslint-disable-next-line no-nested-ternary
+  const unitText = unit === 'acre' ? 'Acre' : unit === 'sqft' ? 'SqFt' : '';
+
+  useEffect(() => {
+    if (unit === 'sqft') {
+      setDisplayValue({
+        plantValue: plantValue / 43560,
+        seedValue: seedValue / 43560,
+        seedingRateValue: seedingRateValue / 43560,
+      });
+    } else if (unit === 'acre') {
+      setDisplayValue({ plantValue, seedValue, seedingRateValue });
+    }
+  }, [plantValue, seedValue, seedingRateValue, unit]);
+
   return (
     <>
       <Typography display="flex" alignItems="center" justifyContent="center">
-        {label}
+        {seedingRateLabel}
         {showTooltip !== false && (
         <Tooltip
           title={(
@@ -54,32 +101,14 @@ const SeedingRateChip = ({ label, value, showTooltip }) => {
           alignItems: 'center',
         }}
       >
-        <Typography>{twoDigit(value)}</Typography>
+        <Typography>{ displayValue.seedingRateValue}</Typography>
       </Box>
-      <Typography>Lbs / Acre</Typography>
-    </>
-  );
-};
+      <Typography>
+        Lbs /
+        {' '}
+        <span style={{ fontWeight: 'bold' }}>{unitText}</span>
+      </Typography>
 
-const SeedDataChip = ({ plant, seed }) => {
-  // default value is always seeds/palnts per acre
-  const [displayValue, setDisplayValue] = useState({ plant, seed });
-
-  const unit = useSelector((state) => state.calculator.unit);
-
-  // eslint-disable-next-line no-nested-ternary
-  const unitText = unit === 'acre' ? 'Acre' : unit === 'sqft' ? 'SqFt' : '';
-
-  useEffect(() => {
-    if (unit === 'sqft') {
-      setDisplayValue({ plant: twoDigit(plant / 43560), seed: twoDigit(seed / 43560) });
-    } else if (unit === 'acre') {
-      setDisplayValue({ plant: twoDigit(plant), seed: twoDigit(seed) });
-    }
-  }, [plant, seed, unit]);
-
-  return (
-    <>
       <Box
         sx={{
           width: '110px',
@@ -91,7 +120,7 @@ const SeedDataChip = ({ plant, seed }) => {
           borderRadius: '16px',
         }}
       >
-        <Typography>{displayValue.plant}</Typography>
+        <Typography>{twoDigit(displayValue.plantValue)}</Typography>
       </Box>
       <Typography>
         Approx Plants Per
@@ -110,51 +139,16 @@ const SeedDataChip = ({ plant, seed }) => {
           borderRadius: '16px',
         }}
       >
-        <Typography>{displayValue.seed}</Typography>
+        <Typography>{twoDigit(displayValue.seedValue)}</Typography>
       </Box>
       <Typography>
         Seeds Per
         {' '}
         <span style={{ fontWeight: 'bold' }}>{unitText}</span>
       </Typography>
-
     </>
   );
 };
 
-const UnitSelection = () => {
-  const unit = useSelector((state) => state.calculator.unit);
-  const dispatch = useDispatch();
-  return (
-    <>
-      <Typography>
-        Select data unit:
-      </Typography>
-      <Button
-        variant={unit === 'acre' ? 'outlined' : 'contained'}
-        onClick={() => dispatch(selectUnitRedux('sqft'))}
-      >
-        Sqft
-      </Button>
-      {'  '}
-      <Button
-        variant={unit === 'acre' ? 'contained' : 'outlined'}
-        onClick={() => dispatch(selectUnitRedux('acre'))}
-      >
-        Acre
-      </Button>
-    </>
-  );
-};
-
-const SeedingRateCard = ({
-  seedingRateLabel, seedingRateValue, plantValue, seedValue, showTooltip = false,
-}) => (
-  <>
-    <SeedingRateChip label={seedingRateLabel} value={seedingRateValue} showTooltip={showTooltip} />
-    <SeedDataChip plant={plantValue} seed={seedValue} />
-  </>
-);
-
-export { SeedingRateChip, SeedDataChip, UnitSelection };
+export { UnitSelection };
 export default SeedingRateCard;
