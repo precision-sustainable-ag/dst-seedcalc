@@ -242,7 +242,7 @@ const MixRatio = ({ calculator, setCalculator }) => {
 
                 <Grid item xs={6}>
                   <SeedingRateCard
-                    seedingRateLabel="Default Seeding Rate in Mix"
+                    seedingRateLabel="Seeding Rate in Mix"
                     seedingRateValue={calculatorResult[seed.label].step1.seedingRate}
                     plantValue={seedData[seed.label].adjustedPlant}
                     seedValue={seedData[seed.label].adjustedSeed}
