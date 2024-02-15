@@ -12,17 +12,21 @@ import InfoIcon from '@mui/icons-material/Info';
 import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import DatePicker from '../../../../components/DatePicker';
+
 import Dropdown from '../../../../components/Dropdown';
 import NumberTextField from '../../../../components/NumberTextField';
 import DSTSwitch from '../../../../components/Switch';
 import {
   soilDrainagesMCCC, soilDrainagesNECCC, soilFertilityValues,
 } from '../../../../shared/data/dropdown';
+// FIXME: old api here
 import { getCrops } from '../../../../features/stepSlice/api';
 import '../steps.scss';
 import {
   checkNRCSRedux,
-  setAcresRedux, setCountyRedux, setPlantingDateRedux, setSoilDrainageRedux, setSoilFertilityRedux, updateTileDrainageRedux,
+  // setCouncilRedux, setCountyIdRedux, setStateRedux, updateLatlonRedux,
+  setAcresRedux, setCountyRedux, setPlantingDateRedux, setSoilDrainageRedux,
+  setSoilFertilityRedux, updateTileDrainageRedux,
 } from '../../../../features/siteConditionSlice/actions';
 
 const needTileDrainage = ['Very Poorly Drained', 'Poorly Drained', 'Somewhat Poorly Drained'];
@@ -61,7 +65,9 @@ const SiteConditionForm = ({
   stateList,
   setStep,
 }) => {
+  // const [selectedState, setSelectedState] = useState({});
   const [soilDrainagePrev, setSoilDrainagePrev] = useState('');
+
   const dispatch = useDispatch();
   const {
     state, soilDrainage, tileDrainage, county, plannedPlantingDate,
@@ -87,13 +93,40 @@ const SiteConditionForm = ({
     dispatch(updateTileDrainageRedux(false));
   };
 
+  // const updateState = () => {
+  //   // if the state data comes from csv import do not do this to refresh the state
+  //   // if (isImported) return;
+  //   // setIsImported(false);
+  //   // Retrieve region
+  //   dispatch(getRegion({ stateId: selectedState.id }));
+
+  //   // Clear all the rest forms value
+  //   dispatch(setCountyRedux(''));
+  //   dispatch(setCountyIdRedux(''));
+  //   dispatch(setSoilDrainageRedux(''));
+  //   dispatch(updateTileDrainageRedux(false));
+  //   dispatch(setSoilFertilityRedux(''));
+  //   dispatch(checkNRCSRedux(false));
+
+  //   // Clear out all seeds selected in Redux
+  //   dispatch(clearSeeds());
+  //   dispatch(updateDiversityRedux([]));
+  //   dispatch(clearOptions());
+
+  //   // Update siteCondition Redux
+  //   const { label } = selectedState;
+  //   dispatch(updateLatlonRedux(statesLatLongDict[label]));
+  //   dispatch(setStateRedux(label, selectedState.id));
+  //   dispatch(setCouncilRedux(selectedState.parents[0].shorthand));
+  // };
+
   const handleTileDrainage = () => {
     console.log('handleTileDrainage');
     dispatch(updateTileDrainageRedux(!tileDrainage));
   };
 
-  // const handleStateDropdown = (val) => {
-  //   const stateSelected = stateList.filter((s) => s.label === val)[0];
+  // const handleState = (state) => {
+  //   const stateSelected = stateList.filter((s) => s.label === state)[0];
   //   setSelectedState(stateSelected);
   // };
 
@@ -116,20 +149,28 @@ const SiteConditionForm = ({
   }, [tileDrainage]);
 
   return (
-    <>
-      <Button variant="contained" onClick={() => setStep(1)}>Back</Button>
+    <Grid container>
+
+      <Grid item xs={12} margin="1rem">
+        <Button variant="contained" onClick={() => setStep(1)}>Back</Button>
+      </Grid>
+
       {/* State */}
-      <Grid item xs={8} md={10} p="10px">
+      <Grid item xs={0} md={3} />
+      <Grid item xs={12} md={6} p="10px">
         <Dropdown
           value={state}
           label="State: "
-          handleChange={() => {}}
+          handleChange={() => { }}
           size={12}
           items={stateList}
         />
       </Grid>
+      <Grid item xs={0} md={3} />
+
       {/* County / Zone */}
-      <Grid item xs={11} md={6} p="10px">
+      <Grid item xs={0} md={3} />
+      <Grid item xs={12} md={6} p="10px">
         <Dropdown
           value={county}
           label={
@@ -140,8 +181,10 @@ const SiteConditionForm = ({
           items={counties}
         />
       </Grid>
+      <Grid item xs={0} md={3} />
 
       {/* Soil Drainage */}
+      <Grid item xs={0} md={3} />
       <Grid item xs={12} md={6} p="10px">
         <Dropdown
           value={soilDrainagePrev}
@@ -152,8 +195,10 @@ const SiteConditionForm = ({
           items={council === 'MCCC' ? soilDrainagesMCCC : council === 'NECCC' ? soilDrainagesNECCC : []}
         />
       </Grid>
+      <Grid item xs={0} md={3} />
 
       {/* Tile Drainage */}
+      <Grid item xs={0} md={3} />
       <Grid item xs={12} md={6} p="10px">
         <Grid container alignItems="center">
           <Grid item xs={4}>
@@ -206,8 +251,10 @@ const SiteConditionForm = ({
         </Grid>
 
       </Grid>
+      <Grid item xs={0} md={3} />
 
       {/* Planting Date */}
+      <Grid item xs={0} md={3} />
       <Grid item xs={12} md={6} p="10px">
         <DatePicker
           label="Planned Planting Date: "
@@ -218,8 +265,10 @@ const SiteConditionForm = ({
           }}
         />
       </Grid>
+      <Grid item xs={0} md={3} />
 
       {/* Acres */}
+      <Grid item xs={0} md={3} />
       <Grid item xs={12} md={6} p="10px">
         <NumberTextField
           value={acres}
@@ -231,12 +280,15 @@ const SiteConditionForm = ({
           placeholder="Enter your field acres here"
         />
       </Grid>
+      <Grid item xs={0} md={3} />
 
       {/* NRCS Standards */}
+      <Grid item xs={0} md={3} />
       {council === 'MCCC' && (
         <Grid
           item
-          xs={6}
+          xs={12}
+          md={6}
           p="1rem"
           display="flex"
           justifyContent="center"
@@ -255,8 +307,9 @@ const SiteConditionForm = ({
       {council === 'NECCC' && (
         <Grid
           item
-          xs={6}
-          p="10px"
+          xs={12}
+          md={6}
+          p="1rem"
         >
           <Dropdown
             value={soilFertility}
@@ -269,7 +322,8 @@ const SiteConditionForm = ({
           />
         </Grid>
       )}
-    </>
+      <Grid item xs={0} md={3} />
+    </Grid>
   );
 };
 

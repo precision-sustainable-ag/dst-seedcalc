@@ -12,9 +12,7 @@ import {
   checkNRCSRedux, setCouncilRedux, setCountyIdRedux, setCountyRedux,
   setSoilDrainageRedux, setSoilFertilityRedux, setStateRedux, updateLatlonRedux, updateTileDrainageRedux,
 } from '../../../../features/siteConditionSlice/actions';
-import { updateDiversityRedux } from '../../../../features/calculatorSlice/actions';
-import { clearOptions, clearSeeds } from '../../../../features/calculatorSlice';
-import { getRegionNew, getZoneData, getSSURGOData } from '../../../../features/siteConditionSlice/api';
+import { getRegion, getZoneData, getSSURGOData } from '../../../../features/siteConditionSlice/api';
 
 import '../steps.scss';
 
@@ -30,34 +28,28 @@ const Map = ({
   const [currentMap, setCurrentMap] = useState(maps.region);
   const [isImported, setIsImported] = useState(false);
   const [mapState, setMapState] = useState({});
-  const [selectedState, setSelectedState] = useState({});
   const [selectedToEditSite, setSelectedToEditSite] = useState({});
-  const siteCondition = useSelector((state) => state.siteCondition);
 
+  const siteCondition = useSelector((state) => state.siteCondition);
   const { counties } = siteCondition;
 
   const dispatch = useDispatch();
 
   // update redux based on selectedState change
-  const updateStateRedux = () => {
+  const updateStateRedux = (selectedState) => {
     // if the state data comes from csv import do not do this to refresh the state
     if (isImported) return;
     setIsImported(false);
-    // Retrieve region
-    dispatch(getRegionNew({ stateId: selectedState.id }));
+    // Retrieve region/counties
+    dispatch(getRegion({ stateId: selectedState.id }));
 
-    // Clear all the rest forms value
+    // // Clear all the rest forms value
     dispatch(setCountyRedux(''));
     dispatch(setCountyIdRedux(''));
     dispatch(setSoilDrainageRedux(''));
     dispatch(updateTileDrainageRedux(false));
     dispatch(setSoilFertilityRedux(''));
     dispatch(checkNRCSRedux(false));
-
-    // Clear out all seeds selected in Redux
-    dispatch(clearSeeds());
-    dispatch(updateDiversityRedux([]));
-    dispatch(clearOptions());
 
     // Update siteCondition Redux
     const { label } = selectedState;
@@ -66,26 +58,17 @@ const Map = ({
     dispatch(setCouncilRedux(selectedState.parents[0].shorthand));
   };
 
+  // update state redux based on map state change
   useEffect(() => {
     if (Object.keys(mapState).length !== 0) {
       const st = stateList.filter(
         (s) => s.label === mapState.properties.STATE_NAME,
       );
-      if (st.length > 0) {
-        setSelectedState(st[0]);
+      if (st.length > 0 && st[0].label !== siteCondition.state) {
+        updateStateRedux(st[0]);
       }
     }
   }, [mapState]);
-
-  // handle selectedState change based on dropdown selection or map selection
-  useEffect(() => {
-    if (
-      Object.keys(selectedState).length !== 0
-      && selectedState.label !== siteCondition.state
-    ) {
-      updateStateRedux();
-    }
-  }, [selectedState]);
 
   useEffect(() => {
     const {
@@ -93,19 +76,18 @@ const Map = ({
     } = selectedToEditSite;
 
     if (Object.keys(selectedToEditSite).length > 0) {
+      // update county/zone for MCCC/NECCC
       if (siteCondition.council === 'MCCC') {
         const filteredCounty = counties.filter((c) => county.toLowerCase().includes(c.label.toLowerCase()));
         if (filteredCounty.length > 0) {
           dispatch(setCountyRedux(filteredCounty[0].label));
         }
+      } else if (siteCondition.council === 'NECCC') {
+        dispatch(getZoneData({ zip: zipCode })).then((res) => {
+          dispatch(setCountyRedux(`Zone ${res.payload.replace(/[^0-9]/g, '')}`));
+        });
       }
       dispatch(updateLatlonRedux([latitude, longitude]));
-      dispatch(getZoneData({ zip: zipCode })).then((res) => {
-        // update zone data for NECCC
-        if (siteCondition.council === 'NECCC') {
-          dispatch(setCountyRedux(`Zone ${res.payload.replace(/[^0-9]/g, '')}`));
-        }
-      });
       dispatch(
         getSSURGOData({
           lat: latitude,
@@ -125,8 +107,8 @@ const Map = ({
 
   return (
     <Grid container>
+
       <Grid xs={12} item margin="1rem">
-        <Button variant="contained" onClick={() => { setStep(1); }}>Back</Button>
         <Button
           disabled={
             !(siteCondition.state)
@@ -138,19 +120,25 @@ const Map = ({
           <PlaceIcon />
         </Button>
       </Grid>
+
       <Grid xs={12} md={12} item>
         {currentMap === maps.region
           ? (
-            <RegionSelectorMap
-              selectorFunction={setMapState}
-              selectedState={siteCondition.state || ''}
-              availableStates={availableStates}
-              initWidth="100%"
-              initHeight="360px"
-              initLon={-78}
-              initLat={43}
-              initStartZoom={4}
-            />
+            <>
+              <RegionSelectorMap
+                selectorFunction={setMapState}
+                selectedState={siteCondition.state || ''}
+                availableStates={availableStates}
+                initWidth="100%"
+                initHeight="360px"
+                initLon={-78}
+                initLat={43}
+                initStartZoom={4}
+              />
+              <Grid item mxs={12} margin="1rem">
+                <Button variant="contained" onClick={() => setStep(1)}>Back</Button>
+              </Grid>
+            </>
           )
           : (
             <>
@@ -174,7 +162,9 @@ const Map = ({
                 hasMarkerPopup
                 hasMarkerMovable
               />
-              <Button variant="contained" onClick={() => setStep(3)}>Edit Details</Button>
+              <Grid item mxs={12} margin="1rem">
+                <Button variant="contained" onClick={() => setStep(3)}>Edit Details</Button>
+              </Grid>
             </>
           )}
       </Grid>

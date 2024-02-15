@@ -12,8 +12,7 @@ import { Spinner } from '@psa/dst.ui.spinner';
 import { isEmptyNull, validateForms } from '../../../../shared/utils/format';
 import { setCountyIdRedux, setCountyRedux } from '../../../../features/siteConditionSlice/actions';
 import { getCropsNew } from '../../../../features/calculatorSlice/api';
-import { getLocalityNew } from '../../../../features/siteConditionSlice/api';
-// import DSTImport from '../../../../components/DSTImport';
+import { getLocality } from '../../../../features/siteConditionSlice/api';
 
 import '../steps.scss';
 import SiteConditionForm from './form';
@@ -30,7 +29,7 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
 
   // initially get states data
   useEffect(() => {
-    if (states.length === 0) dispatch(getLocalityNew());
+    if (states.length === 0) dispatch(getLocality());
   }, []);
 
   // Ensure that county id is updated to the current county

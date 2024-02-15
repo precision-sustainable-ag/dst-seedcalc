@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import initialState from './state';
-import { getLocalityNew, getRegionNew } from './api';
+import { getLocality, getRegion } from './api';
 
 const siteConditionSlice = createSlice({
   name: 'siteCondition',
@@ -54,33 +54,32 @@ const siteConditionSlice = createSlice({
       const { tileDrainage } = payload;
       return { ...state, tileDrainage };
     },
-
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getLocalityNew.pending, (state) => {
+      .addCase(getLocality.pending, (state) => {
         state.loading = 'getLocality';
         state.error = false;
       })
-      .addCase(getLocalityNew.fulfilled, (state, { payload }) => {
+      .addCase(getLocality.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.states = payload;
         state.error = false;
       })
-      .addCase(getLocalityNew.rejected, (state) => {
+      .addCase(getLocality.rejected, (state) => {
         state.loading = false;
         state.error = true;
       })
-      .addCase(getRegionNew.pending, (state) => {
+      .addCase(getRegion.pending, (state) => {
         state.loading = 'getRegion';
         state.error = false;
       })
-      .addCase(getRegionNew.fulfilled, (state, { payload }) => {
+      .addCase(getRegion.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.counties = payload.data.kids.Zones ?? payload.data.kids.Counties ?? [];
         state.error = false;
       })
-      .addCase(getRegionNew.rejected, (state) => {
+      .addCase(getRegion.rejected, (state) => {
         state.loading = false;
         state.error = true;
       });
