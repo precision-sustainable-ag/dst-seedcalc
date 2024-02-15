@@ -11,7 +11,7 @@ import {
 import '../steps.scss';
 import { soilDrainageValues } from '../../../../shared/data/dropdown';
 
-const MapComponent = ({
+const EditSiteDetails = ({
   handleSteps,
   selectedToEditSite,
   setSelectedToEditSite,
@@ -92,4 +92,4 @@ const MapComponent = ({
   );
 };
 
-export default MapComponent;
+export default EditSiteDetails;

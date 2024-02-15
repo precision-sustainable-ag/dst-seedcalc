@@ -6,7 +6,7 @@ import PlaceIcon from '@mui/icons-material/Place';
 import { useDispatch, useSelector } from 'react-redux';
 import statesLatLongDict from '../../../../shared/data/statesLatLongDict';
 import { availableStates } from '../../../../shared/data/dropdown';
-import Dropdown from '../../../../components/Dropdown';
+// import Dropdown from '../../../../components/Dropdown';
 import DSTImport from '../../../../components/DSTImport';
 import {
   checkNRCSRedux, setCouncilRedux, setCountyIdRedux, setCountyRedux,
@@ -17,7 +17,7 @@ import { updateDiversityRedux } from '../../../../features/calculatorSlice/actio
 import { clearOptions, clearSeeds } from '../../../../features/calculatorSlice';
 import '../steps.scss';
 
-const RegionSelector = ({
+const SelectState = ({
   stateList,
   handleSteps,
 }) => {
@@ -33,10 +33,10 @@ const RegionSelector = ({
   //                      State Logic                     //
   /// ///////////////////////////////////////////////////////
 
-  const handleStateDropdown = (val) => {
-    const stateSelected = stateList.filter((s) => s.label === val)[0];
-    setSelectedState(stateSelected);
-  };
+  // const handleStateDropdown = (val) => {
+  //   const stateSelected = stateList.filter((s) => s.label === val)[0];
+  //   setSelectedState(stateSelected);
+  // };
 
   /// ///////////////////////////////////////////////////////
   //                      Redux                           //
@@ -97,7 +97,7 @@ const RegionSelector = ({
 
   return (
     <Grid container>
-      <Grid item xs={8} md={10} p="10px">
+      {/* <Grid item xs={8} md={10} p="10px">
         <Dropdown
           value={selectedState.label || ''}
           label="State: "
@@ -105,14 +105,11 @@ const RegionSelector = ({
           size={12}
           items={stateList}
         />
-      </Grid>
+      </Grid> */}
       <Grid
-        xs={4}
-        md={2}
+        xs={12}
         item
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
+        margin="1rem"
       >
         <Button
           disabled={
@@ -121,7 +118,7 @@ const RegionSelector = ({
           variant="contained"
           onClick={() => handleSteps('next')}
         >
-          Mark Location
+          Enter Site Details
           {' '}
           <PlaceIcon />
         </Button>
@@ -143,4 +140,4 @@ const RegionSelector = ({
   );
 };
 
-export default RegionSelector;
+export default SelectState;

@@ -10,9 +10,9 @@ import { Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { Spinner } from '@psa/dst.ui.spinner';
 import { isEmptyNull, validateForms } from '../../../../shared/utils/format';
-import SiteConditionForm from './form';
-import RegionSelector from './RegionSelector';
-import MapComponent from './MapComponent';
+// import SiteConditionForm from './form';
+import SelectState from './SelectState';
+import EditSiteDetails from './EditSiteDetails';
 import { setCountyIdRedux, setCountyRedux } from '../../../../features/siteConditionSlice/actions';
 import { getCropsNew } from '../../../../features/calculatorSlice/api';
 import { getLocalityNew } from '../../../../features/siteConditionSlice/api';
@@ -98,12 +98,12 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
       ) : (
         <Grid xs={12} lg={8} item>
           {step === 1 ? (
-            <RegionSelector
+            <SelectState
               stateList={states}
               handleSteps={handleSteps}
             />
           ) : step === 2 ? (
-            <MapComponent
+            <EditSiteDetails
               handleSteps={handleSteps}
               selectedToEditSite={selectedToEditSite}
               setSelectedToEditSite={setSelectedToEditSite}
@@ -115,10 +115,10 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
         </Grid>
       )}
 
-      <SiteConditionForm
+      {/* <SiteConditionForm
         council={siteCondition.council}
         counties={counties}
-      />
+      /> */}
     </Grid>
   );
 };
