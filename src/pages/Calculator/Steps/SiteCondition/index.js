@@ -6,40 +6,27 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { Spinner } from '@psa/dst.ui.spinner';
 import { isEmptyNull, validateForms } from '../../../../shared/utils/format';
-// import SiteConditionForm from './form';
-import SelectState from './SelectState';
-import EditSiteDetails from './EditSiteDetails';
 import { setCountyIdRedux, setCountyRedux } from '../../../../features/siteConditionSlice/actions';
 import { getCropsNew } from '../../../../features/calculatorSlice/api';
 import { getLocalityNew } from '../../../../features/siteConditionSlice/api';
+// import DSTImport from '../../../../components/DSTImport';
+
 import '../steps.scss';
+import SiteConditionForm from './form';
+import Map from './Map';
 
 const SiteCondition = ({ completedStep, setCompletedStep }) => {
   const dispatch = useDispatch();
 
   // Location state
   const [step, setStep] = useState(1);
-  const [selectedToEditSite, setSelectedToEditSite] = useState({});
+  // const [isImported, setIsImported] = useState(false);
   const siteCondition = useSelector((state) => state.siteCondition);
   const { states, counties, loading } = siteCondition;
-
-  /// ///////////////////////////////////////////////////////
-  //                   State Logic                        //
-  /// ///////////////////////////////////////////////////////
-
-  // handle steps for the map
-  const handleSteps = (type) => {
-    type === 'next' ? setStep(step + 1) : setStep(step - 1);
-    type === 'back' && setSelectedToEditSite({});
-  };
-
-  /// ///////////////////////////////////////////////////////
-  //                     useEffect                        //
-  /// ///////////////////////////////////////////////////////
 
   // initially get states data
   useEffect(() => {
@@ -93,32 +80,38 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
       <Grid item xs={12}>
         <Typography variant="h2">Tell us about your planting site</Typography>
       </Grid>
-      {loading === 'getLocality' ? (
-        <Spinner />
-      ) : (
-        <Grid xs={12} lg={8} item>
-          {step === 1 ? (
-            <SelectState
-              stateList={states}
-              handleSteps={handleSteps}
-            />
+      <Grid xs={12} lg={8} item>
+        {loading === 'getLocality' ? (
+          <Spinner />
+        ) : (
+          step === 1 ? (
+            <>
+              <Typography>
+                Would you like to manually enter your site conditions
+                or use your location to prepopulate them?
+              </Typography>
+              <Button variant="contained" onClick={() => setStep(2)}>Map</Button>
+              <Button variant="contained" onClick={() => setStep(3)}>Manually Enter</Button>
+              {/* <DSTImport setIsImported={setIsImported} /> */}
+            </>
           ) : step === 2 ? (
-            <EditSiteDetails
-              handleSteps={handleSteps}
-              selectedToEditSite={selectedToEditSite}
-              setSelectedToEditSite={setSelectedToEditSite}
+            <Map
+              stateList={states}
+              setStep={setStep}
+            />
+          ) : step === 3 ? (
+            <SiteConditionForm
+              council={siteCondition.council}
               counties={counties}
+              stateList={states}
+              setStep={setStep}
             />
           ) : (
             null
-          )}
-        </Grid>
-      )}
+          )
 
-      {/* <SiteConditionForm
-        council={siteCondition.council}
-        counties={counties}
-      /> */}
+        )}
+      </Grid>
     </Grid>
   );
 };

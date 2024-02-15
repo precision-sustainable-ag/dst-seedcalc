@@ -33,11 +33,6 @@ const SelectState = ({
   //                      State Logic                     //
   /// ///////////////////////////////////////////////////////
 
-  // const handleStateDropdown = (val) => {
-  //   const stateSelected = stateList.filter((s) => s.label === val)[0];
-  //   setSelectedState(stateSelected);
-  // };
-
   /// ///////////////////////////////////////////////////////
   //                      Redux                           //
   /// ///////////////////////////////////////////////////////
@@ -97,20 +92,7 @@ const SelectState = ({
 
   return (
     <Grid container>
-      {/* <Grid item xs={8} md={10} p="10px">
-        <Dropdown
-          value={selectedState.label || ''}
-          label="State: "
-          handleChange={(e) => handleStateDropdown(e.target.value)}
-          size={12}
-          items={stateList}
-        />
-      </Grid> */}
-      <Grid
-        xs={12}
-        item
-        margin="1rem"
-      >
+      <Grid xs={12} item margin="1rem">
         <Button
           disabled={
             !(newSiteCondition.state)
@@ -119,7 +101,6 @@ const SelectState = ({
           onClick={() => handleSteps('next')}
         >
           Enter Site Details
-          {' '}
           <PlaceIcon />
         </Button>
       </Grid>
@@ -129,10 +110,10 @@ const SelectState = ({
           selectedState={newSiteCondition.state || ''}
           availableStates={availableStates}
           initWidth="100%"
-          initHeight="300px"
+          initHeight="360px"
           initLon={-78}
           initLat={43}
-          initStartZoom={3.5}
+          initStartZoom={4}
         />
         <DSTImport setIsImported={setIsImported} />
       </Grid>

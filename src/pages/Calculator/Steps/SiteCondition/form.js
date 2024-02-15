@@ -4,11 +4,11 @@
 
 import React, { useEffect, useState } from 'react';
 import {
+  Button,
   Typography, Tooltip,
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import InfoIcon from '@mui/icons-material/Info';
-
 import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import DatePicker from '../../../../components/DatePicker';
@@ -58,13 +58,15 @@ const getTileDrainage = (council, currentDrainage) => {
 const SiteConditionForm = ({
   council,
   counties,
+  stateList,
+  setStep,
 }) => {
   const [soilDrainagePrev, setSoilDrainagePrev] = useState('');
   const dispatch = useDispatch();
   const {
-    soilDrainage, tileDrainage, county, plannedPlantingDate,
+    state, soilDrainage, tileDrainage, county, plannedPlantingDate,
     acres, soilFertility, checkNRCSStandards,
-  } = useSelector((state) => state.siteCondition);
+  } = useSelector((s) => s.siteCondition);
 
   const handleRegion = (region) => {
     const countyId = counties.filter((c) => c.label === region)[0].id;
@@ -90,6 +92,11 @@ const SiteConditionForm = ({
     dispatch(updateTileDrainageRedux(!tileDrainage));
   };
 
+  // const handleStateDropdown = (val) => {
+  //   const stateSelected = stateList.filter((s) => s.label === val)[0];
+  //   setSelectedState(stateSelected);
+  // };
+
   useEffect(() => {
     if (!tileDrainage) {
       setSoilDrainagePrev(soilDrainage);
@@ -110,8 +117,19 @@ const SiteConditionForm = ({
 
   return (
     <>
+      <Button variant="contained" onClick={() => setStep(1)}>Back</Button>
+      {/* State */}
+      <Grid item xs={8} md={10} p="10px">
+        <Dropdown
+          value={state}
+          label="State: "
+          handleChange={() => {}}
+          size={12}
+          items={stateList}
+        />
+      </Grid>
       {/* County / Zone */}
-      <Grid item xs={12} md={6} p="10px">
+      <Grid item xs={11} md={6} p="10px">
         <Dropdown
           value={county}
           label={
