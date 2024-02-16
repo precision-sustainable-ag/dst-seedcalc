@@ -2,7 +2,7 @@
 //                      Imports                         //
 /// ///////////////////////////////////////////////////////
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Button,
   Typography, Tooltip,
@@ -65,8 +65,6 @@ const SiteConditionForm = ({
   stateList,
   setStep,
 }) => {
-  // const [selectedState, setSelectedState] = useState({});
-
   const dispatch = useDispatch();
   const {
     state, soilDrainage, tileDrainage, county, plannedPlantingDate,
@@ -76,10 +74,17 @@ const SiteConditionForm = ({
   const [soilDrainagePrev, setSoilDrainagePrev] = useState(soilDrainage);
 
   const handleSoilDrainage = (e) => {
-    console.log('handleSoilDrainage');
     setSoilDrainagePrev(e.target.value);
     dispatch(setSoilDrainageRedux(e.target.value));
     dispatch(updateTileDrainageRedux(false));
+  };
+
+  const handleTileDrainage = () => {
+    dispatch(updateTileDrainageRedux(!tileDrainage));
+    if (!tileDrainage) {
+      const newDrainage = getTileDrainage(council, soilDrainage);
+      dispatch(setSoilDrainageRedux(newDrainage));
+    }
   };
 
   const updateState = (selectedState) => {
@@ -110,37 +115,13 @@ const SiteConditionForm = ({
     dispatch(setCouncilRedux(selectedState.parents[0].shorthand));
   };
 
-  const handleTileDrainage = () => {
-    console.log('handleTileDrainage');
-    dispatch(updateTileDrainageRedux(!tileDrainage));
-  };
-
   const handleState = (stateName) => {
     const stateSelected = stateList.filter((s) => s.label === stateName)[0];
     updateState(stateSelected);
   };
 
-  useEffect(() => {
-    if (!tileDrainage) {
-      setSoilDrainagePrev(soilDrainage);
-    }
-  }, [soilDrainage]);
-
-  useEffect(() => {
-    if (tileDrainage) {
-      console.log('soilDrainage', soilDrainage);
-      const newDrainage = getTileDrainage(council, soilDrainage);
-      console.log('newDrainage', newDrainage);
-      dispatch(setSoilDrainageRedux(newDrainage));
-    }
-    if (!tileDrainage && soilDrainagePrev !== '') {
-      dispatch(setSoilDrainageRedux(soilDrainagePrev));
-    }
-  }, [tileDrainage]);
-
   return (
     <Grid container>
-
       <Grid item xs={12} margin="1rem">
         <Button variant="contained" onClick={() => setStep(1)}>Back</Button>
       </Grid>
