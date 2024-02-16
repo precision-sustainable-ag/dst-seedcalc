@@ -9,28 +9,71 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Button, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { Spinner } from '@psa/dst.ui.spinner';
+import { RegionSelectorMap } from '@psa/dst.ui.region-selector-map';
 import { isEmptyNull, validateForms } from '../../../../shared/utils/format';
-import { setCountyIdRedux, setCountyRedux } from '../../../../features/siteConditionSlice/actions';
 import { getCropsNew } from '../../../../features/calculatorSlice/api';
-import { getLocality } from '../../../../features/siteConditionSlice/api';
+import { getLocality, getRegion } from '../../../../features/siteConditionSlice/api';
+import {
+  checkNRCSRedux, setCouncilRedux, setCountyIdRedux, setCountyRedux,
+  setSoilDrainageRedux, setSoilFertilityRedux, setStateRedux, updateLatlonRedux, updateTileDrainageRedux,
+} from '../../../../features/siteConditionSlice/actions';
+import statesLatLongDict from '../../../../shared/data/statesLatLongDict';
 
 import '../steps.scss';
 import SiteConditionForm from './form';
 import Map from './Map';
+import { availableStates } from '../../../../shared/data/dropdown';
 
 const SiteCondition = ({ completedStep, setCompletedStep }) => {
   const dispatch = useDispatch();
 
   // Location state
   const [step, setStep] = useState(1);
-  // const [isImported, setIsImported] = useState(false);
+  const [mapState, setMapState] = useState({});
+  const [isImported, setIsImported] = useState(false);
+
   const siteCondition = useSelector((state) => state.siteCondition);
   const { states, counties, loading } = siteCondition;
+
+  // update redux based on selectedState change
+  const updateStateRedux = (selectedState) => {
+    // if the state data comes from csv import do not do this to refresh the state
+    if (isImported) return;
+    setIsImported(false);
+    // Retrieve region/counties
+    dispatch(getRegion({ stateId: selectedState.id }));
+
+    // // Clear all the rest forms value
+    dispatch(setCountyRedux(''));
+    dispatch(setCountyIdRedux(''));
+    dispatch(setSoilDrainageRedux(''));
+    dispatch(updateTileDrainageRedux(false));
+    dispatch(setSoilFertilityRedux(''));
+    dispatch(checkNRCSRedux(false));
+
+    // Update siteCondition Redux
+    const { label } = selectedState;
+    dispatch(updateLatlonRedux(statesLatLongDict[label]));
+    dispatch(setStateRedux(label, selectedState.id));
+    dispatch(setCouncilRedux(selectedState.parents[0].shorthand));
+  };
 
   // initially get states data
   useEffect(() => {
     if (states.length === 0) dispatch(getLocality());
   }, []);
+
+  // update state redux based on map state change
+  useEffect(() => {
+    if (Object.keys(mapState).length !== 0) {
+      const st = states.filter(
+        (s) => s.label === mapState.properties.STATE_NAME,
+      );
+      if (st.length > 0 && st[0].label !== siteCondition.state) {
+        updateStateRedux(st[0]);
+      }
+    }
+  }, [mapState]);
 
   // Ensure that county id is updated to the current county
   useEffect(() => {
@@ -85,6 +128,16 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
         ) : (
           step === 1 ? (
             <>
+              <RegionSelectorMap
+                selectorFunction={setMapState}
+                selectedState={siteCondition.state || ''}
+                availableStates={availableStates}
+                initWidth="100%"
+                initHeight="360px"
+                initLon={-78}
+                initLat={43}
+                initStartZoom={4}
+              />
               <Typography>
                 Would you like to manually enter your site conditions
                 or use your location to prepopulate them?
@@ -95,7 +148,6 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
             </>
           ) : step === 2 ? (
             <Map
-              stateList={states}
               setStep={setStep}
             />
           ) : step === 3 ? (
