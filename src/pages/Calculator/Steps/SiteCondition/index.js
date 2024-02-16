@@ -108,7 +108,6 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
           ) : (
             null
           )
-
         )}
       </Grid>
     </Grid>

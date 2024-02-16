@@ -19,15 +19,15 @@ import DSTSwitch from '../../../../components/Switch';
 import {
   soilDrainagesMCCC, soilDrainagesNECCC, soilFertilityValues,
 } from '../../../../shared/data/dropdown';
-// FIXME: old api here
-import { getCrops } from '../../../../features/stepSlice/api';
-import '../steps.scss';
 import {
   checkNRCSRedux,
-  // setCouncilRedux, setCountyIdRedux, setStateRedux, updateLatlonRedux,
+  setCouncilRedux, setCountyIdRedux, setStateRedux, updateLatlonRedux,
   setAcresRedux, setCountyRedux, setPlantingDateRedux, setSoilDrainageRedux,
   setSoilFertilityRedux, updateTileDrainageRedux,
 } from '../../../../features/siteConditionSlice/actions';
+import { getRegion } from '../../../../features/siteConditionSlice/api';
+import statesLatLongDict from '../../../../shared/data/statesLatLongDict';
+import '../steps.scss';
 
 const needTileDrainage = ['Very Poorly Drained', 'Poorly Drained', 'Somewhat Poorly Drained'];
 
@@ -66,7 +66,6 @@ const SiteConditionForm = ({
   setStep,
 }) => {
   // const [selectedState, setSelectedState] = useState({});
-  const [soilDrainagePrev, setSoilDrainagePrev] = useState('');
 
   const dispatch = useDispatch();
   const {
@@ -74,17 +73,7 @@ const SiteConditionForm = ({
     acres, soilFertility, checkNRCSStandards,
   } = useSelector((s) => s.siteCondition);
 
-  const handleRegion = (region) => {
-    const countyId = counties.filter((c) => c.label === region)[0].id;
-    dispatch(setCountyRedux(region));
-    if (countyId !== undefined && countyId !== undefined) {
-      dispatch(
-        getCrops({
-          regionId: countyId,
-        }),
-      );
-    }
-  };
+  const [soilDrainagePrev, setSoilDrainagePrev] = useState(soilDrainage);
 
   const handleSoilDrainage = (e) => {
     console.log('handleSoilDrainage');
@@ -93,42 +82,43 @@ const SiteConditionForm = ({
     dispatch(updateTileDrainageRedux(false));
   };
 
-  // const updateState = () => {
-  //   // if the state data comes from csv import do not do this to refresh the state
-  //   // if (isImported) return;
-  //   // setIsImported(false);
-  //   // Retrieve region
-  //   dispatch(getRegion({ stateId: selectedState.id }));
+  const updateState = (selectedState) => {
+    // if the state data comes from csv import do not do this to refresh the state
+    // if (isImported) return;
+    // setIsImported(false);
+    // Retrieve region
+    dispatch(getRegion({ stateId: selectedState.id }));
 
-  //   // Clear all the rest forms value
-  //   dispatch(setCountyRedux(''));
-  //   dispatch(setCountyIdRedux(''));
-  //   dispatch(setSoilDrainageRedux(''));
-  //   dispatch(updateTileDrainageRedux(false));
-  //   dispatch(setSoilFertilityRedux(''));
-  //   dispatch(checkNRCSRedux(false));
+    // Clear all the rest forms value
+    dispatch(setCountyRedux(''));
+    dispatch(setCountyIdRedux(''));
+    dispatch(setSoilDrainageRedux(''));
+    dispatch(updateTileDrainageRedux(false));
+    dispatch(setSoilFertilityRedux(''));
+    dispatch(checkNRCSRedux(false));
 
-  //   // Clear out all seeds selected in Redux
-  //   dispatch(clearSeeds());
-  //   dispatch(updateDiversityRedux([]));
-  //   dispatch(clearOptions());
+    // TODO: these are temporarily commented, not sure if need to use in the future
+    // // Clear out all seeds selected in Redux
+    // dispatch(clearSeeds());
+    // dispatch(updateDiversityRedux([]));
+    // dispatch(clearOptions());
 
-  //   // Update siteCondition Redux
-  //   const { label } = selectedState;
-  //   dispatch(updateLatlonRedux(statesLatLongDict[label]));
-  //   dispatch(setStateRedux(label, selectedState.id));
-  //   dispatch(setCouncilRedux(selectedState.parents[0].shorthand));
-  // };
+    // Update siteCondition Redux
+    const { label } = selectedState;
+    dispatch(updateLatlonRedux(statesLatLongDict[label]));
+    dispatch(setStateRedux(label, selectedState.id));
+    dispatch(setCouncilRedux(selectedState.parents[0].shorthand));
+  };
 
   const handleTileDrainage = () => {
     console.log('handleTileDrainage');
     dispatch(updateTileDrainageRedux(!tileDrainage));
   };
 
-  // const handleState = (state) => {
-  //   const stateSelected = stateList.filter((s) => s.label === state)[0];
-  //   setSelectedState(stateSelected);
-  // };
+  const handleState = (stateName) => {
+    const stateSelected = stateList.filter((s) => s.label === stateName)[0];
+    updateState(stateSelected);
+  };
 
   useEffect(() => {
     if (!tileDrainage) {
@@ -161,7 +151,7 @@ const SiteConditionForm = ({
         <Dropdown
           value={state}
           label="State: "
-          handleChange={() => { }}
+          handleChange={(e) => handleState(e.target.value)}
           size={12}
           items={stateList}
         />
@@ -176,7 +166,7 @@ const SiteConditionForm = ({
           label={
             council === 'MCCC' ? 'County: ' : 'USDA Plant Hardiness Zone: '
           }
-          handleChange={(e) => handleRegion(e.target.value)}
+          handleChange={(e) => dispatch(setCountyRedux(e.target.value))}
           size={12}
           items={counties}
         />
@@ -289,7 +279,7 @@ const SiteConditionForm = ({
           item
           xs={12}
           md={6}
-          p="1rem"
+          p="10px"
           display="flex"
           justifyContent="center"
         >
@@ -309,7 +299,7 @@ const SiteConditionForm = ({
           item
           xs={12}
           md={6}
-          p="1rem"
+          p="10px"
         >
           <Dropdown
             value={soilFertility}

@@ -70,6 +70,7 @@ const Map = ({
     }
   }, [mapState]);
 
+  // update county/zone, latlon, soil drainage based on address
   useEffect(() => {
     const {
       latitude, longitude, zipCode, county,
