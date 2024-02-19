@@ -61,36 +61,31 @@ const Map = ({
 
   return (
     <Grid container>
-
       <Grid xs={12} md={12} item>
-
-        <>
-          <MapComponent
-            setAddress={setSelectedToEditSite}
-            initWidth="100%"
-            padding="20px"
-            initHeight="360px"
-            initLat={siteCondition.latlon[0]}
-            initLon={siteCondition.latlon[1]}
-            initStartZoom={12}
-            initMinZoom={4}
-            initMaxZoom={18}
-            hasSearchBar
-            hasMarker
-            hasNavigation
-            hasCoordBar
-            hasDrawing
-            hasGeolocate
-            hasFullScreen
-            hasMarkerPopup
-            hasMarkerMovable
-          />
-          <Grid item mxs={12} margin="1rem">
-            <Button variant="contained" onClick={() => setStep(1)}>Back</Button>
-            <Button variant="contained" onClick={() => setStep(3)}>Edit Details</Button>
-          </Grid>
-        </>
-
+        <MapComponent
+          setAddress={setSelectedToEditSite}
+          initWidth="100%"
+          padding="20px"
+          initHeight="360px"
+          initLat={siteCondition.latlon[0]}
+          initLon={siteCondition.latlon[1]}
+          initStartZoom={12}
+          initMinZoom={4}
+          initMaxZoom={18}
+          hasSearchBar
+          hasMarker
+          hasNavigation
+          hasCoordBar
+          hasDrawing
+          hasGeolocate
+          hasFullScreen
+          hasMarkerPopup
+          hasMarkerMovable
+        />
+        <Grid item xs={12} p="1rem">
+          <Button variant="contained" onClick={() => setStep(1)} sx={{ margin: '1rem' }}>Back</Button>
+          <Button variant="contained" onClick={() => setStep(3)} sx={{ margin: '1rem' }}>Edit Details</Button>
+        </Grid>
       </Grid>
     </Grid>
   );

@@ -14,7 +14,7 @@ import { isEmptyNull, validateForms } from '../../../../shared/utils/format';
 import { getCropsNew } from '../../../../features/calculatorSlice/api';
 import { getLocality, getRegion } from '../../../../features/siteConditionSlice/api';
 import {
-  checkNRCSRedux, setCouncilRedux, setCountyIdRedux, setCountyRedux,
+  checkNRCSRedux, setAcresRedux, setCouncilRedux, setCountyIdRedux, setCountyRedux,
   setSoilDrainageRedux, setSoilFertilityRedux, setStateRedux, updateLatlonRedux, updateTileDrainageRedux,
 } from '../../../../features/siteConditionSlice/actions';
 import statesLatLongDict from '../../../../shared/data/statesLatLongDict';
@@ -48,6 +48,7 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
     dispatch(setCountyIdRedux(''));
     dispatch(setSoilDrainageRedux(''));
     dispatch(updateTileDrainageRedux(false));
+    dispatch(setAcresRedux(0));
     dispatch(setSoilFertilityRedux(''));
     dispatch(checkNRCSRedux(false));
 
@@ -138,12 +139,26 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
                 initLat={43}
                 initStartZoom={4}
               />
-              <Typography>
-                Would you like to manually enter your site conditions
-                or use your location to prepopulate them?
-              </Typography>
-              <Button variant="contained" onClick={() => setStep(2)}>Map</Button>
-              <Button variant="contained" onClick={() => setStep(3)}>Manually Enter</Button>
+              {
+                Object.keys(mapState).length > 0
+                  ? (
+                    <Grid item xs={12} p="1rem">
+                      <Typography>
+                        Would you like to manually enter your site conditions
+                        or use your location to prepopulate them?
+                      </Typography>
+                      <Button variant="contained" onClick={() => setStep(2)} sx={{ margin: '1rem' }}>Map</Button>
+                      <Button variant="contained" onClick={() => setStep(3)} sx={{ margin: '1rem' }}>Manually Enter</Button>
+                    </Grid>
+                  )
+                  : (
+                    <Grid item xs={12} p="1rem">
+                      <Typography fontWeight="bold">
+                        Please select your state above.
+                      </Typography>
+                    </Grid>
+                  )
+              }
               {/* <DSTImport setIsImported={setIsImported} /> */}
             </>
           ) : step === 2 ? (
