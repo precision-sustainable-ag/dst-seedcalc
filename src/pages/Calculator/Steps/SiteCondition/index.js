@@ -20,6 +20,7 @@ import {
 import statesLatLongDict from '../../../../shared/data/statesLatLongDict';
 
 import '../steps.scss';
+import DSTImport from '../../../../components/DSTImport';
 import SiteConditionForm from './form';
 import Map from './Map';
 import { availableStates } from '../../../../shared/data/dropdown';
@@ -159,7 +160,7 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
                     </Grid>
                   )
               }
-              {/* <DSTImport setIsImported={setIsImported} /> */}
+              <DSTImport setIsImported={setIsImported} />
             </>
           ) : step === 2 ? (
             <Map
