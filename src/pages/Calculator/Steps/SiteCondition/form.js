@@ -122,9 +122,6 @@ const SiteConditionForm = ({
 
   return (
     <Grid container>
-      <Grid item xs={12} margin="1rem">
-        <Button variant="contained" onClick={() => setStep(1)}>Back</Button>
-      </Grid>
 
       {/* State */}
       <Grid item xs={0} md={3} />
@@ -294,6 +291,11 @@ const SiteConditionForm = ({
         </Grid>
       )}
       <Grid item xs={0} md={3} />
+
+      <Grid item xs={12} margin="1rem">
+        <Button variant="contained" onClick={() => setStep(1)}>Back</Button>
+      </Grid>
+
     </Grid>
   );
 };
