@@ -424,23 +424,23 @@ const getPlantingDate = (seed) => {
 
 const calculatePieChartData = (seeds, calculator, options = {}) => {
   const seedingRateArray = [];
-  const plantsPerAcreArray = [];
-  const seedsPerAcreArray = [];
+  const plantsPerSqftArray = [];
+  const seedsPerSqftArray = [];
   seeds.forEach((seed) => {
     seedingRateArray.push({
       name: seed.label,
       value: calculator.seedingRate(seed, options[seed.label]),
     });
-    seedsPerAcreArray.push({
+    seedsPerSqftArray.push({
       name: seed.label,
-      value: calculator.seedsPerAcre(seed, options[seed.label]),
+      value: calculator.seedsPerAcre(seed, options[seed.label]) / 43560,
     });
-    plantsPerAcreArray.push({
+    plantsPerSqftArray.push({
       name: seed.label,
-      value: calculator.plantsPerAcre(seed, options[seed.label]),
+      value: calculator.plantsPerSqft(seed, options[seed.label]),
     });
   });
-  return { seedingRateArray, seedsPerAcreArray, plantsPerAcreArray };
+  return { seedingRateArray, seedsPerSqftArray, plantsPerSqftArray };
 };
 
 const calculatePlantsandSeedsPerAcre = (seed, calculator, options, seedingRate = null, adjustedSeedingRate = null) => {

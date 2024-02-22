@@ -1,5 +1,7 @@
 import React from 'react';
-import { Typography, Box, useMediaQuery } from '@mui/material';
+import {
+  Typography, Box, useMediaQuery,
+} from '@mui/material';
 import { Square } from '@mui/icons-material';
 import {
   PieChart, Pie, Cell, ResponsiveContainer,
@@ -36,28 +38,35 @@ const PieChartLabel = ({
   );
 };
 
-const DSTPieChart = ({ chartData }) => (
-  <ResponsiveContainer width="100%" height={200}>
-    <PieChart>
-      <Pie
-        data={chartData}
-        cx="50%"
-        cy="50%"
-        labelLine={false}
-        label={PieChartLabel}
-        outerRadius={80}
-        fill="#8884d8"
-        dataKey="value"
-      >
-        {chartData.map((entry, index) => (
-          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-        ))}
-      </Pie>
-    </PieChart>
-  </ResponsiveContainer>
+const DSTPieChart = ({
+  chartData, label,
+}) => (
+  <>
+    <ResponsiveContainer width="100%" height={200}>
+      <PieChart>
+        <Pie
+          data={chartData}
+          cx="50%"
+          cy="50%"
+          labelLine={false}
+          label={PieChartLabel}
+          outerRadius={80}
+          fill="#8884d8"
+          dataKey="value"
+        >
+          {chartData.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          ))}
+        </Pie>
+      </PieChart>
+    </ResponsiveContainer>
+
+    <DSTPieChartLabel label={label} />
+    <DSTPieChartLegend chartData={chartData} />
+  </>
 );
 
-const DSTPieChartLabel = ({ children }) => (
+const DSTPieChartLabel = ({ label }) => (
   <Typography
     sx={{
       textAlign: 'center',
@@ -66,7 +75,7 @@ const DSTPieChartLabel = ({ children }) => (
       fontWeight: 600,
     }}
   >
-    {children}
+    {label}
   </Typography>
 );
 
@@ -104,4 +113,6 @@ const DSTPieChartLegend = ({ chartData }) => {
   );
 };
 
-export { DSTPieChart, DSTPieChartLabel, DSTPieChartLegend };
+export {
+  DSTPieChart, DSTPieChartLabel, DSTPieChartLegend,
+};
