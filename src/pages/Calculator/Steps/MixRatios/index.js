@@ -1,3 +1,4 @@
+/* eslint-disable no-multi-str */
 /// ///////////////////////////////////////////////////////
 //                     Imports                          //
 /// ///////////////////////////////////////////////////////
@@ -9,6 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
+import InfoIcon from '@mui/icons-material/Info';
 import MixRatioSteps from './form';
 import { DSTPieChart } from '../../../../components/DSTPieChart';
 import SeedingRateCard, { UnitSelection } from '../../../../components/SeedingRateCard';
@@ -45,6 +47,7 @@ const MixRatio = ({ calculator, setCalculator }) => {
   const [prevOptions, setPrevOptions] = useState({});
   const [piechartData, setPieChartData] = useState(defaultPieChartData);
   const [showAlert, setShowAlert] = useState(true);
+  const [updatedForm, setUpdatedForm] = useState(false);
 
   const dispatch = useDispatch();
   const { seedsSelected, sideBarSelection, options } = useSelector((state) => state.calculator);
@@ -150,6 +153,7 @@ const MixRatio = ({ calculator, setCalculator }) => {
 
   // function to handle form value change, update options
   const handleFormValueChange = (seed, option, value) => {
+    setUpdatedForm(true);
     dispatch(setOptionRedux(seed.label, { ...options[seed.label], [option]: value }));
   };
 
@@ -171,9 +175,11 @@ const MixRatio = ({ calculator, setCalculator }) => {
 
       <Grid item xs={12}>
         {showAlert && (
-        <Alert severity="warning" onClose={() => setShowAlert(false)}>
-          Disclaimer: This is a starting mix based on averages,
-          but not a recommendation. Adjust as needed based on your rotation.
+        <Alert severity="success" onClose={() => setShowAlert(false)} icon={<InfoIcon />}>
+          {updatedForm ? 'You now have a custom mix.'
+            : 'This is a starting mix based on averages, but not a recommendation. \
+            Adjust via the dropdown below as needed based on your goals.'}
+
         </Alert>
         )}
 
@@ -232,7 +238,7 @@ const MixRatio = ({ calculator, setCalculator }) => {
 
                 <Grid item xs={6}>
                   <SeedingRateCard
-                    seedingRateLabel="Default Seeding Rate in Mix"
+                    seedingRateLabel="Seeding Rate in Mix"
                     seedingRateValue={calculatorResult[seed.label].step1.seedingRate}
                     plantValue={seedData[seed.label].adjustedPlant}
                     seedValue={seedData[seed.label].adjustedSeed}

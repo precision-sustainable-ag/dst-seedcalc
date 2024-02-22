@@ -47,23 +47,22 @@ const MixRatioSteps = ({
       {council === 'NECCC' && (
         <>
           <Grid item xs={12}>
-            <Typography variant="stepHeader">Step 1: Default Seeding Rate in Mix</Typography>
+            <Typography variant="stepHeader">Seeding Rate in Mix</Typography>
           </Grid>
           {renderFormLabel(
-            'Single Species Seeding Rate PLS',
+            'Single Species Seeding Rate PLS (Lbs / Acre)',
             'Soil Fertility Modifier',
-            'Sum Species Of Group In Mix',
+            'Sum Species Of Group In Mix (Lbs / Acre)',
           )}
           <Grid container justifyContent="space-evenly">
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Single Species Seeding Rate PLS'}
+                label={matchesMd ? '' : 'Single Species Seeding Rate PLS (Lbs / Acre)'}
                 handleChange={(e) => {
                   handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
                 }}
                 value={step1.defaultSingleSpeciesSeedingRatePLS}
               />
-              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
             </Grid>
 
             <Grid item xs={1}>
@@ -98,11 +97,10 @@ const MixRatioSteps = ({
 
             <Grid item xs={7}>
               <NumberTextField
-                label="Seeding Rate In Mix"
+                label="Seeding Rate In Mix (Lbs / Acre)"
                 disabled
                 value={step1.seedingRate}
               />
-              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
             </Grid>
 
             <Grid item xs={1} />
@@ -114,21 +112,20 @@ const MixRatioSteps = ({
       {council === 'MCCC' && (
         <>
           <Grid item xs={12}>
-            <Typography variant="stepHeader">Step 1: Default Seeding Rate in Mix</Typography>
+            <Typography variant="stepHeader">Seeding Rate in Mix</Typography>
           </Grid>
           {renderFormLabel(
-            'Single Species Seeding Rate PLS',
+            'Single Species Seeding Rate PLS (Lbs / Acre)',
             '% of Single Species Rate',
-            'Seeding Rate In Mix',
+            'Seeding Rate In Mix (Lbs / Acre)',
           )}
           <Grid container justifyContent="space-evenly">
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Single Species Seeding Rate PLS'}
+                label={matchesMd ? '' : 'Single Species Seeding Rate PLS (Lbs / Acre)'}
                 disabled
                 value={step1.defaultSingleSpeciesSeedingRatePLS}
               />
-              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
             </Grid>
 
             <Grid item xs={1}>
@@ -143,7 +140,6 @@ const MixRatioSteps = ({
                 }}
                 value={convertToPercent(step1.percentOfRate)}
               />
-              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>MCCC Recommendation</Typography>
             </Grid>
 
             <Grid item xs={1}>
@@ -152,11 +148,10 @@ const MixRatioSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Seeding Rate In Mix'}
+                label={matchesMd ? '' : 'Seeding Rate In Mix (Lbs / Acre)'}
                 disabled
                 value={step1.seedingRate}
               />
-              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
             </Grid>
           </Grid>
         </>
@@ -165,11 +160,11 @@ const MixRatioSteps = ({
       {/* Step 2: */}
       <>
         <Grid item xs={12}>
-          <Typography variant="stepHeader">Step 2: Seeds Per Acre</Typography>
+          <Typography variant="stepHeader">Seeds Per Acre</Typography>
         </Grid>
         {renderFormLabel(
           'Seeds / Pound',
-          'Seeding Rate In Mix',
+          'Seeding Rate In Mix (Lbs / Acre)',
           'Seeds / Acre',
         )}
         <Grid container justifyContent="space-evenly">
@@ -188,10 +183,9 @@ const MixRatioSteps = ({
           <Grid item xs={3}>
             <NumberTextField
               disabled
-              label={matchesMd ? '' : 'Seeding Rate In Mix'}
+              label={matchesMd ? '' : 'Seeding Rate In Mix (Lbs / Acre)'}
               value={step2.seedingRate}
             />
-            <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
           </Grid>
 
           <Grid item xs={1}>
@@ -212,7 +206,7 @@ const MixRatioSteps = ({
       {council === 'NECCC' && (
         <>
           <Grid item xs={12}>
-            <Typography variant="stepHeader">Step 3: Seeds per SqFt</Typography>
+            <Typography variant="stepHeader">Seeds per SqFt</Typography>
           </Grid>
           {renderFormLabel('Seeds / Acre', 'Sq. Ft. / Acres', 'Seeds / Sq. Ft.')}
           <Grid container justifyContent="space-evenly">
@@ -255,7 +249,7 @@ const MixRatioSteps = ({
       {council === 'MCCC' && (
         <>
           <Grid item xs={12}>
-            <Typography variant="stepHeader">Step 3: Plants Per Acre</Typography>
+            <Typography variant="stepHeader">Plants Per Acre</Typography>
           </Grid>
           {renderFormLabel('Seeds / Acre', '% Survival', 'Plants / Acre')}
           <Grid container justifyContent="space-evenly">
@@ -295,7 +289,7 @@ const MixRatioSteps = ({
           </Grid>
 
           <Grid item xs={12}>
-            <Typography variant="stepHeader">Step 4: Approximate Plants Per SqFt</Typography>
+            <Typography variant="stepHeader">Approximate Plants Per SqFt</Typography>
           </Grid>
           {renderFormLabel(
             'Plants / Acre',
