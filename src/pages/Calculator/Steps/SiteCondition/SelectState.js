@@ -6,7 +6,7 @@ import PlaceIcon from '@mui/icons-material/Place';
 import { useDispatch, useSelector } from 'react-redux';
 import statesLatLongDict from '../../../../shared/data/statesLatLongDict';
 import { availableStates } from '../../../../shared/data/dropdown';
-import Dropdown from '../../../../components/Dropdown';
+// import Dropdown from '../../../../components/Dropdown';
 import DSTImport from '../../../../components/DSTImport';
 import {
   checkNRCSRedux, setCouncilRedux, setCountyIdRedux, setCountyRedux,
@@ -17,7 +17,7 @@ import { updateDiversityRedux } from '../../../../features/calculatorSlice/actio
 import { clearOptions, clearSeeds } from '../../../../features/calculatorSlice';
 import '../steps.scss';
 
-const RegionSelector = ({
+const SelectState = ({
   stateList,
   handleSteps,
 }) => {
@@ -32,11 +32,6 @@ const RegionSelector = ({
   /// ///////////////////////////////////////////////////////
   //                      State Logic                     //
   /// ///////////////////////////////////////////////////////
-
-  const handleStateDropdown = (val) => {
-    const stateSelected = stateList.filter((s) => s.label === val)[0];
-    setSelectedState(stateSelected);
-  };
 
   /// ///////////////////////////////////////////////////////
   //                      Redux                           //
@@ -97,23 +92,7 @@ const RegionSelector = ({
 
   return (
     <Grid container>
-      <Grid item xs={8} md={10} p="10px">
-        <Dropdown
-          value={selectedState.label || ''}
-          label="State: "
-          handleChange={(e) => handleStateDropdown(e.target.value)}
-          size={12}
-          items={stateList}
-        />
-      </Grid>
-      <Grid
-        xs={4}
-        md={2}
-        item
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
+      <Grid xs={12} item margin="1rem">
         <Button
           disabled={
             !(newSiteCondition.state)
@@ -121,8 +100,7 @@ const RegionSelector = ({
           variant="contained"
           onClick={() => handleSteps('next')}
         >
-          Mark Location
-          {' '}
+          Enter Site Details
           <PlaceIcon />
         </Button>
       </Grid>
@@ -132,10 +110,10 @@ const RegionSelector = ({
           selectedState={newSiteCondition.state || ''}
           availableStates={availableStates}
           initWidth="100%"
-          initHeight="300px"
+          initHeight="360px"
           initLon={-78}
           initLat={43}
-          initStartZoom={3.5}
+          initStartZoom={4}
         />
         <DSTImport setIsImported={setIsImported} />
       </Grid>
@@ -143,4 +121,4 @@ const RegionSelector = ({
   );
 };
 
-export default RegionSelector;
+export default SelectState;

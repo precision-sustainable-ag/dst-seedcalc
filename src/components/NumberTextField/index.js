@@ -21,6 +21,7 @@ const NumberTextField = ({
     type="number"
     placeholder={placeholder}
     disabled={disabled}
+    sx={{ backgroundColor: disabled ? 'WhiteSmoke' : '' }}
   />
 );
 

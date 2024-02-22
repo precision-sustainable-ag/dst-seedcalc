@@ -53,7 +53,7 @@ const DSTImport = ({ setIsImported }) => {
     }
     dispatch(importFromCSVSite(CSVImport[0]));
     dispatch(importFromCSVCalculator(CSVImport[1]));
-    navigate('/calculator');
+    navigate('/');
     setOpenModal(!openModal);
   };
 

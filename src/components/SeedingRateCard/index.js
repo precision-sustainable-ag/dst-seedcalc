@@ -77,10 +77,10 @@ const SeedingRateCard = ({
         <Tooltip
           title={(
             <>
-              <Typography>
+              <Typography style={{ color: '#FFFFF2' }}>
                 How is this calculated?
               </Typography>
-              <Typography>
+              <Typography style={{ color: '#FFFFF2' }}>
                 {council === 'MCCC' ? tooltipMCCC[showTooltip] : tooltipNECCC[showTooltip]}
               </Typography>
             </>
