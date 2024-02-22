@@ -47,7 +47,7 @@ const MixRatioSteps = ({
       {council === 'NECCC' && (
         <>
           <Grid item xs={12}>
-            <Typography variant="stepHeader">Step 1: Seeding Rate in Mix</Typography>
+            <Typography variant="stepHeader">Seeding Rate in Mix</Typography>
           </Grid>
           {renderFormLabel(
             'Single Species Seeding Rate PLS (Lbs / Acre)',
@@ -112,7 +112,7 @@ const MixRatioSteps = ({
       {council === 'MCCC' && (
         <>
           <Grid item xs={12}>
-            <Typography variant="stepHeader">Step 1: Seeding Rate in Mix</Typography>
+            <Typography variant="stepHeader">Seeding Rate in Mix</Typography>
           </Grid>
           {renderFormLabel(
             'Single Species Seeding Rate PLS (Lbs / Acre)',
@@ -160,7 +160,7 @@ const MixRatioSteps = ({
       {/* Step 2: */}
       <>
         <Grid item xs={12}>
-          <Typography variant="stepHeader">Step 2: Seeds Per Acre</Typography>
+          <Typography variant="stepHeader">Seeds Per Acre</Typography>
         </Grid>
         {renderFormLabel(
           'Seeds / Pound',
@@ -206,7 +206,7 @@ const MixRatioSteps = ({
       {council === 'NECCC' && (
         <>
           <Grid item xs={12}>
-            <Typography variant="stepHeader">Step 3: Seeds per SqFt</Typography>
+            <Typography variant="stepHeader">Seeds per SqFt</Typography>
           </Grid>
           {renderFormLabel('Seeds / Acre', 'Sq. Ft. / Acres', 'Seeds / Sq. Ft.')}
           <Grid container justifyContent="space-evenly">
@@ -249,7 +249,7 @@ const MixRatioSteps = ({
       {council === 'MCCC' && (
         <>
           <Grid item xs={12}>
-            <Typography variant="stepHeader">Step 3: Plants Per Acre</Typography>
+            <Typography variant="stepHeader">Plants Per Acre</Typography>
           </Grid>
           {renderFormLabel('Seeds / Acre', '% Survival', 'Plants / Acre')}
           <Grid container justifyContent="space-evenly">
@@ -289,7 +289,7 @@ const MixRatioSteps = ({
           </Grid>
 
           <Grid item xs={12}>
-            <Typography variant="stepHeader">Step 4: Approximate Plants Per SqFt</Typography>
+            <Typography variant="stepHeader">Approximate Plants Per SqFt</Typography>
           </Grid>
           {renderFormLabel(
             'Plants / Acre',
