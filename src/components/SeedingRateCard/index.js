@@ -15,6 +15,11 @@ const tooltipNECCC = {
   mixSeedingRate: 'Seeding Rate in Mix = Default Single Species Seeding Rate PLS *  Soil Fertility Modifier / Sum Species Of Group in Mix',
 };
 
+const roundToMillionth = (num) => {
+  const million = 10 ** 6;
+  return Math.round(num * million) / million;
+};
+
 const UnitSelection = () => {
   const unit = useSelector((state) => state.calculator.unit);
   const dispatch = useDispatch();
@@ -57,7 +62,7 @@ const SeedingRateCard = ({
       setDisplayValue({
         plantValue: plantValue / 43560,
         seedValue: seedValue / 43560,
-        seedingRateValue: seedingRateValue / 43560,
+        seedingRateValue: roundToMillionth(seedingRateValue / 43560),
       });
     } else if (unit === 'acre') {
       setDisplayValue({ plantValue, seedValue, seedingRateValue });
@@ -90,18 +95,16 @@ const SeedingRateCard = ({
       </Typography>
       <Box
         sx={{
-          width: '50px',
+          width: '110px',
           height: '50px',
+          padding: '11px',
           margin: '0 auto',
           backgroundColor: '#E5E7D5',
           border: '#C7C7C7 solid 1px',
-          borderRadius: '50%',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
+          borderRadius: '16px',
         }}
       >
-        <Typography>{ displayValue.seedingRateValue}</Typography>
+        <Typography>{displayValue.seedingRateValue}</Typography>
       </Box>
       <Typography>
         Lbs /
