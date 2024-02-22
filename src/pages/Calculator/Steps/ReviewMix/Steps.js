@@ -202,7 +202,6 @@ const ReviewMixSteps = ({
             value={options[seed.label].plantingMethod ?? ''}
             label="Seeding Method: "
             handleChange={(e) => {
-              console.log('plantingMethod', e.target.value, methods[e.target.value]);
               dispatch(
                 setOptionRedux(seed.label, {
                   ...options[seed.label],
@@ -237,9 +236,7 @@ const ReviewMixSteps = ({
             <NumberTextField
               label={matchesMd ? '' : 'Planting Method'}
               value={step2.plantingMethodModifier ?? 1}
-              handleChange={(e) => {
-                handleFormValueChange(seed, 'plantingMethodModifier', parseFloat(e.target.value));
-              }}
+              disabled
             />
           </Grid>
 
