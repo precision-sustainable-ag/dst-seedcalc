@@ -25,11 +25,7 @@ import {
 } from '../../../../shared/utils/calculator';
 import ReviewMixSteps from './Steps';
 import '../steps.scss';
-import {
-  DSTPieChart,
-  DSTPieChartLabel,
-  DSTPieChartLegend,
-} from '../../../../components/DSTPieChart';
+import { DSTPieChart } from '../../../../components/DSTPieChart';
 import SeedingRateCard, { UnitSelection } from '../../../../components/SeedingRateCard';
 import { setBulkSeedingRateRedux, setOptionRedux } from '../../../../features/calculatorSlice/actions';
 
@@ -57,8 +53,8 @@ const defaultResultNECCC = {
 
 const defaultPieChartData = {
   seedingRateArray: [],
-  plantsPerAcreArray: [],
-  seedsPerAcreArray: [],
+  plantsPerSqftArray: [],
+  seedsPerSqftArray: [],
 };
 
 // eslint-disable-next-line no-unused-vars
@@ -160,10 +156,10 @@ const ReviewMix = ({ calculator }) => {
     // calculate piechart data
     const {
       seedingRateArray,
-      plantsPerAcreArray,
-      seedsPerAcreArray,
+      plantsPerSqftArray,
+      seedsPerSqftArray,
     } = calculatePieChartData(seedsSelected, calculator, options);
-    setPieChartData({ seedingRateArray, plantsPerAcreArray, seedsPerAcreArray });
+    setPieChartData({ seedingRateArray, plantsPerSqftArray, seedsPerSqftArray });
     setPrevOptions(options);
   }, [options]);
 
@@ -275,31 +271,29 @@ const ReviewMix = ({ calculator }) => {
       <Grid item xs={12}>
         <Typography variant="h2">Review your mix</Typography>
       </Grid>
-      <Grid item xs={6} md={6} sx={{ textAlign: 'justify' }}>
-        <DSTPieChart chartData={piechartData.seedingRateArray} />
-        <DSTPieChartLabel>Pounds of Seed / Acre</DSTPieChartLabel>
-        <DSTPieChartLegend chartData={piechartData.seedingRateArray} />
-      </Grid>
 
-      <Grid item xs={6} md={6} sx={{ textAlign: 'justify' }}>
+      <Grid item xs={6} sx={{ textAlign: 'justify' }}>
         <DSTPieChart
-          chartData={
-            council === 'MCCC' ? piechartData.plantsPerAcreArray : piechartData.seedsPerAcreArray
-          }
-        />
-        <DSTPieChartLabel>
-          {council === 'MCCC' ? 'Plants' : 'Seeds'}
-          {' '}
-          Per Acre
-          {' '}
-        </DSTPieChartLabel>
-
-        <DSTPieChartLegend
-          chartData={
-            council === 'MCCC' ? piechartData.plantsPerAcreArray : piechartData.seedsPerAcreArray
-          }
+          chartData={piechartData.seedingRateArray}
+          label="Pounds of Seed / Acre"
         />
       </Grid>
+
+      <Grid item xs={6} sx={{ textAlign: 'justify' }}>
+        {council === 'MCCC' && (
+          <DSTPieChart
+            chartData={piechartData.plantsPerSqftArray}
+            label="Plants Per Sqft"
+          />
+        )}
+        {council === 'NECCC' && (
+        <DSTPieChart
+          chartData={piechartData.seedsPerSqftArray}
+          label="Seeds Per Sqft"
+        />
+        )}
+      </Grid>
+
       {seedsSelected.map((seed, i) => (
         <Grid item xs={12} key={i}>
           <Accordion

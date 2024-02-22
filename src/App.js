@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from '@emotion/react';
 
 import Calculator from './pages/Calculator';
-import Home from './pages/Home';
+// import Home from './pages/Home';
 import dstTheme from './shared/themes';
 
 const App = () => (
@@ -19,8 +19,8 @@ const App = () => (
     >
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/calculator" element={<Calculator />} />
+          {/* <Route path="/" element={<Home />} /> */}
+          <Route path="/" element={<Calculator />} />
         </Routes>
       </BrowserRouter>
     </div>
