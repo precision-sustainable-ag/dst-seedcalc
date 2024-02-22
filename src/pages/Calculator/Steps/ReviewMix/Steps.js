@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Grid from '@mui/material/Grid';
 import { Typography, useTheme, useMediaQuery } from '@mui/material';
 
 import NumberTextField from '../../../../components/NumberTextField';
 import { convertToPercent } from '../../../../shared/utils/calculator';
+import Dropdown from '../../../../components/Dropdown';
+import { seedingMethods, seedingMethodsNECCC } from '../../../../shared/data/dropdown';
 import '../steps.scss';
+import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 
 const ReviewMixSteps = ({
   council,
@@ -12,8 +16,12 @@ const ReviewMixSteps = ({
   handleFormValueChange,
   calculatorResult,
 }) => {
+  const [methods, setMethods] = useState({});
+
   const theme = useTheme();
   const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
+  const dispatch = useDispatch();
+  const { options } = useSelector((state) => state.calculator);
 
   const renderStepsForm = (label1, label2, label3) => (
     matchesMd && (
@@ -43,13 +51,31 @@ const ReviewMixSteps = ({
     step1, step2, step3, step4, step5,
   } = calculatorResult;
 
+  useEffect(() => {
+    const coefficients = seed.attributes.Coefficients;
+    const plantingMethods = council === 'MCCC' ? {
+      Drilled: 1,
+      Precision: parseFloat(coefficients['Precision Coefficient']?.values[0]) || null,
+      Broadcast: parseFloat(coefficients['Broadcast Coefficient']?.values[0]) || null,
+      Aerial: parseFloat(coefficients['Aerial Coefficient']?.values[0]) || null,
+    } : {
+      Drilled: 1,
+      'Broadcast(With Cultivation)':
+      parseFloat(coefficients['Broadcast with Cultivation Coefficient']?.values[0]) || null,
+      'Broadcast(With No Cultivation)':
+      parseFloat(coefficients['Broadcast without Cultivation Coefficient']?.values[0]) || null,
+      Aerial: parseFloat(coefficients['Aerial Coefficient']?.values[0]) || null,
+    };
+    setMethods(plantingMethods);
+  }, []);
+
   return (
     <Grid container>
       {/* NECCC Step 1:  */}
       {council === 'NECCC' && (
         <>
           <Grid item xs={12}>
-            <Typography variant="stepHeader">Step 1: Default Seeding Rate in Mix</Typography>
+            <Typography variant="stepHeader">Seeding Rate in Mix</Typography>
           </Grid>
           {renderStepsForm(
             'Single Species Seeding Rate PLS',
@@ -115,7 +141,7 @@ const ReviewMixSteps = ({
       {council === 'MCCC' && (
         <>
           <Grid item xs={12}>
-            <Typography variant="stepHeader">Step 1: Default Seeding Rate in Mix</Typography>
+            <Typography variant="stepHeader">Seeding Rate in Mix</Typography>
           </Grid>
           {renderStepsForm(
             'Single Species Seeding Rate PLS',
@@ -169,7 +195,23 @@ const ReviewMixSteps = ({
       {/* Step 2: */}
       <>
         <Grid item xs={12}>
-          <Typography variant="stepHeader">Step 2: Adjust By Seeding Method</Typography>
+          <Typography variant="stepHeader">Adjustment from Seeding Method</Typography>
+        </Grid>
+        <Grid item xs={6} margin="1rem">
+          <Dropdown
+            value={options[seed.label].plantingMethod ?? ''}
+            label="Seeding Method: "
+            handleChange={(e) => {
+              dispatch(
+                setOptionRedux(seed.label, {
+                  ...options[seed.label],
+                  plantingMethod: e.target.value,
+                  plantingMethodModifier: methods[e.target.value],
+                }),
+              );
+            }}
+            items={council === 'MCCC' ? seedingMethods : seedingMethodsNECCC}
+          />
         </Grid>
         {renderStepsForm(
           'Seeding Rate in Mix',
@@ -194,9 +236,7 @@ const ReviewMixSteps = ({
             <NumberTextField
               label={matchesMd ? '' : 'Planting Method'}
               value={step2.plantingMethodModifier ?? 1}
-              handleChange={(e) => {
-                handleFormValueChange(seed, 'plantingMethodModifier', parseFloat(e.target.value));
-              }}
+              disabled
             />
           </Grid>
 
@@ -218,7 +258,7 @@ const ReviewMixSteps = ({
       {/* Step 3: */}
       <>
         <Grid item xs={12}>
-          <Typography variant="stepHeader">Step 3: Adjust By Management Impact</Typography>
+          <Typography variant="stepHeader">Adjustment from Management Goals</Typography>
         </Grid>
         {renderStepsForm(
           'Seeding Rate in Mix',
@@ -242,7 +282,7 @@ const ReviewMixSteps = ({
           <Grid item xs={3}>
             <NumberTextField
               label={matchesMd ? '' : 'Management Impact on Mix'}
-              handleChange={(e) => handleFormValueChange(seed, 'managementImpactOnMix', parseFloat(e.target.value))}
+              disabled
               value={step3.managementImpactOnMix ?? 1}
             />
           </Grid>
@@ -266,7 +306,7 @@ const ReviewMixSteps = ({
       {/* Step 4: */}
       <>
         <Grid item xs={12}>
-          <Typography variant="stepHeader">Step 4: Bulk Seeding Rate</Typography>
+          <Typography variant="stepHeader">Bulk Seeding Rate</Typography>
         </Grid>
         {renderStepsForm('Seeding Rate in Mix', '% Germination', '% Purity')}
         <Grid container justifyContent="space-evenly">
@@ -327,7 +367,7 @@ const ReviewMixSteps = ({
       {/* Step 5: */}
       <>
         <Grid item xs={12}>
-          <Typography variant="stepHeader">Step 5: Pounds for Purchase</Typography>
+          <Typography variant="stepHeader">Pounds for Purchase</Typography>
         </Grid>
         {renderStepsForm('Bulk Seeding Rate', 'Acres', 'Pounds for Purchase')}
         <Grid container justifyContent="space-evenly">
