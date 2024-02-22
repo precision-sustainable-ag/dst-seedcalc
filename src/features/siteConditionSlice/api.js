@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-export const getLocalityNew = createAsyncThunk(
+export const getLocality = createAsyncThunk(
   'siteCondition/getLocality',
   async () => {
     const url = 'https://developapi.covercrop-selector.org/v2/regions?locality=state&context=seed_calc';
@@ -9,7 +9,7 @@ export const getLocalityNew = createAsyncThunk(
   },
 );
 
-export const getRegionNew = createAsyncThunk(
+export const getRegion = createAsyncThunk(
   'siteCondition/getRegion',
   async ({ stateId }) => {
     const url = `https://developapi.covercrop-selector.org/v2/regions/${stateId}`;
