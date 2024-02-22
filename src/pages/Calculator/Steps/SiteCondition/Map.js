@@ -1,44 +1,47 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
-import { Map } from '@psa/dst.ui.map';
+import { Map as MapComponent } from '@psa/dst.ui.map';
+
 import { Button } from '@mui/material';
-import PlaceIcon from '@mui/icons-material/Place';
 import { useDispatch, useSelector } from 'react-redux';
-import { getZoneData, getSSURGOData } from '../../../../features/siteConditionSlice/api';
+import { soilDrainageValues } from '../../../../shared/data/dropdown';
 import {
   setCountyRedux, setSoilDrainageRedux, updateLatlonRedux, updateTileDrainageRedux,
 } from '../../../../features/siteConditionSlice/actions';
+import { getZoneData, getSSURGOData } from '../../../../features/siteConditionSlice/api';
+
 import '../steps.scss';
-import { soilDrainageValues } from '../../../../shared/data/dropdown';
 
-const MapComponent = ({
-  handleSteps,
-  selectedToEditSite,
-  setSelectedToEditSite,
-  counties,
+const Map = ({
+  setStep,
 }) => {
-  const dispatch = useDispatch();
-  const siteCondition = useSelector((state) => state.siteCondition);
+  // const [isImported, setIsImported] = useState(false);
+  const [selectedToEditSite, setSelectedToEditSite] = useState({});
 
+  const siteCondition = useSelector((state) => state.siteCondition);
+  const { counties } = siteCondition;
+
+  const dispatch = useDispatch();
+
+  // update county/zone, latlon, soil drainage based on address
   useEffect(() => {
     const {
       latitude, longitude, zipCode, county,
     } = selectedToEditSite;
 
     if (Object.keys(selectedToEditSite).length > 0) {
+      // update county/zone for MCCC/NECCC
       if (siteCondition.council === 'MCCC') {
         const filteredCounty = counties.filter((c) => county.toLowerCase().includes(c.label.toLowerCase()));
         if (filteredCounty.length > 0) {
           dispatch(setCountyRedux(filteredCounty[0].label));
         }
+      } else if (siteCondition.council === 'NECCC') {
+        dispatch(getZoneData({ zip: zipCode })).then((res) => {
+          dispatch(setCountyRedux(`Zone ${res.payload.replace(/[^0-9]/g, '')}`));
+        });
       }
       dispatch(updateLatlonRedux([latitude, longitude]));
-      dispatch(getZoneData({ zip: zipCode })).then((res) => {
-        // update zone data for NECCC
-        if (siteCondition.council === 'NECCC') {
-          dispatch(setCountyRedux(`Zone ${res.payload.replace(/[^0-9]/g, '')}`));
-        }
-      });
       dispatch(
         getSSURGOData({
           lat: latitude,
@@ -58,16 +61,8 @@ const MapComponent = ({
 
   return (
     <Grid container>
-      <Grid xs={2} item p="10px">
-        <Button variant="contained" onClick={() => handleSteps('back')}>
-          <PlaceIcon />
-          {' '}
-          Select State
-        </Button>
-      </Grid>
-
       <Grid xs={12} md={12} item>
-        <Map
+        <MapComponent
           setAddress={setSelectedToEditSite}
           initWidth="100%"
           padding="20px"
@@ -87,9 +82,13 @@ const MapComponent = ({
           hasMarkerPopup
           hasMarkerMovable
         />
+        <Grid item xs={12} p="1rem">
+          <Button variant="contained" onClick={() => setStep(1)} sx={{ margin: '1rem' }}>Back</Button>
+          <Button variant="contained" onClick={() => setStep(3)} sx={{ margin: '1rem' }}>Edit Details</Button>
+        </Grid>
       </Grid>
     </Grid>
   );
 };
 
-export default MapComponent;
+export default Map;
