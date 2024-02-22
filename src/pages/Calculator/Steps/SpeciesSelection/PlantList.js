@@ -87,6 +87,15 @@ const PlantList = ({
     return '';
   };
 
+  const checkSoilDrainage = (seed) => {
+    if (council === 'MCCC') {
+      if (seed.soilDrainage.map((s) => s.toLowerCase()).indexOf(soilDrainage.toLowerCase()) === -1) {
+        return 'Selected soil drainage not recommended for this crop.';
+      }
+    }
+    return '';
+  };
+
   const handleClick = async (seed) => {
     const { id: cropId, label: seedName } = seed;
     // if seed not in seedSelected, add it
@@ -171,6 +180,7 @@ const PlantList = ({
                   }}
                 >
                   {checkPlantingDate(seed)}
+                  {checkSoilDrainage(seed)}
                 </Typography>
 
                 <CardContent>

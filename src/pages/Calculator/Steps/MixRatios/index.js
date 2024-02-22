@@ -9,7 +9,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MixRatioSteps from './form';
 import { DSTPieChart } from '../../../../components/DSTPieChart';
 import SeedingRateCard, { UnitSelection } from '../../../../components/SeedingRateCard';
@@ -173,7 +172,8 @@ const MixRatio = ({ calculator, setCalculator }) => {
       <Grid item xs={12}>
         {showAlert && (
         <Alert severity="warning" onClose={() => setShowAlert(false)}>
-          Disclaimer: This is a starting mix based on averages, but not a recommendation. Adjust as needed based on your rotation.
+          Disclaimer: This is a starting mix based on averages,
+          but not a recommendation. Adjust as needed based on your rotation.
         </Alert>
         )}
 
@@ -208,13 +208,17 @@ const MixRatio = ({ calculator, setCalculator }) => {
             onChange={() => handleExpandAccordion(seed.label)}
           >
             <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              className="accordian-summary"
+              expandIcon={(
+                <Typography sx={{ textDecoration: 'underline' }}>
+                  {accordionState[seed.label] ? 'Hide ' : 'Show '}
+                  Details
+                </Typography>
+              )}
             >
               <Typography>{seed.label}</Typography>
             </AccordionSummary>
 
-            <AccordionDetails className="accordian-details">
+            <AccordionDetails>
               <Grid container>
 
                 <Grid item xs={6}>

@@ -9,7 +9,6 @@ import { Button, Typography } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -121,13 +120,16 @@ const SeedTagInfo = ({ completedStep, setCompletedStep }) => {
               onChange={() => handleExpandAccordion(seed.label)}
             >
               <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                className="accordian-summary"
+                expandIcon={(
+                  <Typography sx={{ textDecoration: 'underline' }}>
+                    {accordionState[seed.label] ? 'Hide ' : 'Show '}
+                    Details
+                  </Typography>
+              )}
               >
                 <Typography>{seed.label}</Typography>
               </AccordionSummary>
-              <AccordionDetails className="accordian-details">
-
+              <AccordionDetails>
                 <Grid container>
 
                   <LeftGrid item xs={6}>

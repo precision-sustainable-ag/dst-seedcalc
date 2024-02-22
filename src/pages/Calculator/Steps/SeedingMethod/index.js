@@ -9,7 +9,6 @@ import { Typography, Box } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import styled from '@emotion/styled';
 import { seedingMethods, seedingMethodsNECCC } from '../../../../shared/data/dropdown';
 import Dropdown from '../../../../components/Dropdown';
@@ -190,13 +189,16 @@ const SeedingMethod = () => {
             onChange={() => handleExpandAccordion(seed.label)}
           >
             <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              className="accordian-summary"
+              expandIcon={(
+                <Typography sx={{ textDecoration: 'underline' }}>
+                  {accordionState[seed.label] ? 'Hide ' : 'Show '}
+                  Details
+                </Typography>
+              )}
             >
               <Typography>{seed.label}</Typography>
             </AccordionSummary>
-
-            <AccordionDetails className="accordian-details">
+            <AccordionDetails>
               <Grid container>
                 {council === 'MCCC'
                   && (
