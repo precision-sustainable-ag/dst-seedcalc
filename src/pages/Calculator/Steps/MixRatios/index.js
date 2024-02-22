@@ -178,7 +178,7 @@ const MixRatio = ({ calculator, setCalculator }) => {
         <Alert severity="success" onClose={() => setShowAlert(false)} icon={<InfoIcon />}>
           {updatedForm ? 'You now have a custom mix.'
             : 'This is a starting mix based on averages, but not a recommendation. \
-            Adjust via dropdown below as needed based on your goals.'}
+            Adjust via the dropdown below as needed based on your goals.'}
 
         </Alert>
         )}
