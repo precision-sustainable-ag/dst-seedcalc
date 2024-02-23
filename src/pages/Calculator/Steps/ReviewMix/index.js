@@ -1,19 +1,21 @@
+/* eslint-disable*/
 /// ///////////////////////////////////////////////////////
 //                     Imports                          //
 /// ///////////////////////////////////////////////////////
 
 import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
-import { Typography, Button } from '@mui/material';
+import { Typography, Button, useMediaQuery } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   ResponsiveContainer,
-  ScatterChart,
-  Scatter,
+  BarChart,
   XAxis,
+  Rectangle,
+  Bar,
   YAxis,
+  Tooltip,
   LabelList,
-  ZAxis,
 } from 'recharts';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -27,6 +29,7 @@ import '../steps.scss';
 import { DSTPieChart } from '../../../../components/DSTPieChart';
 import SeedingRateCard, { UnitSelection } from '../../../../components/SeedingRateCard';
 import { setBulkSeedingRateRedux, setOptionRedux } from '../../../../features/calculatorSlice/actions';
+import { useTheme } from '@emotion/react';
 
 const defaultResultMCCC = {
   step1: { singleSpeciesSeedingRate: 0, percentOfRate: 0, seedingRate: 0 },
@@ -58,6 +61,9 @@ const defaultPieChartData = {
 
 // eslint-disable-next-line no-unused-vars
 const ReviewMix = ({ calculator }) => {
+  const theme = useTheme();
+  const matchesSm = useMediaQuery(theme.breakpoints.down('sm'));
+
   const dispatch = useDispatch();
 
   const { council } = useSelector((state) => state.siteCondition);
@@ -84,7 +90,7 @@ const ReviewMix = ({ calculator }) => {
 
   const [accordionState, setAccordionState] = useState(
     seedsSelected.reduce((res, seed) => {
-      res[seed.label] = false;
+      res[seed.label] = true;
       return res;
     }, {}),
   );
@@ -116,12 +122,12 @@ const ReviewMix = ({ calculator }) => {
 
   // expand related accordion based on sidebar click
   useEffect(() => {
-    setAccordionState(
-      seedsSelected.reduce((res, seed) => {
-        res[seed.label] = seed.label === sideBarSelection;
-        return res;
-      }, {}),
-    );
+    // setAccordionState(
+    //   seedsSelected.reduce((res, seed) => {
+    //     res[seed.label] = seed.label === sideBarSelection;
+    //     return res;
+    //   }, {}),
+    // );
   }, [sideBarSelection]);
 
   // run reviewMix on options change
@@ -178,74 +184,88 @@ const ReviewMix = ({ calculator }) => {
     const labels = [
       {
         label: 'Single Species Seeding Rate',
-        key: 'singleSpeciesSeedingRatePLS',
+        caption: 'Initial seeding rate',
         val: calculatorResult[seed.label].step1.singleSpeciesSeedingRate,
       },
       {
         label: 'Added to Mix',
-        key: 'step2Result',
+        caption: 'Mix proportion',
         val: calculatorResult[seed.label].step2.seedingRate,
       },
       {
         label: 'Drilled or Broadcast with Cultipack',
-        key: 'drilled',
+        caption: 'Seeding method',
         val: calculatorResult[seed.label].step2.seedingRateAfterPlantingMethodModifier,
       },
       {
         label: `Management Impacts on Mix (${calculatorResult[seed.label].step3.managementImpactOnMix})`,
-        key: 'managementImpactOnMix',
+        caption: 'Management',
         val: calculatorResult[seed.label].step3.seedingRateAfterManagementImpact,
       },
       {
         label: 'Bulk Germination and Purity',
-        key: 'bulkSeedingRate',
+        caption: 'Bulk Germination and Purity',
         val: calculatorResult[seed.label].step4.bulkSeedingRate,
       },
     ];
 
-    const generateScatterData = () => {
-      const results = [];
-      let counter = 0;
-      labels.map((l) => {
-        counter += 30;
-        results.push({ x: counter, y: twoDigit(l.val), z: 400 });
-        return null;
-      });
-      return results;
+    // eslint-disable-next-line react/no-unstable-nested-components
+    const CustomTick = (props) => {
+      const { x, y, payload } = props;
+      console.log(props)
+      return (
+        <g transform={`translate(${x},${y})`} >
+          <text
+            // dy={10}
+            textAnchor="middle"
+            fill="#666"
+            x={0}
+            y={10}
+            // transform="rotate(-15)"
+            style={{fill: '#4f5f30', whiteSpace: 'normal'}}
+          >
+            {`${payload.value}`}
+          </text>
+        </g>
+      );
     };
-
-    const scatterData = generateScatterData();
 
     return (
       <Grid container>
+      {!matchesSm &&  
         <Grid item xs={12}>
           <ResponsiveContainer width="100%" height={200}>
-            <ScatterChart width={400} height={500} position="center">
-              <XAxis type="number" dataKey="x" name="" unit="" tick={false} />
-              <YAxis
-                type="number"
-                dataKey="y"
-                name="Mix Seeding Rate"
-                unit=""
+            <BarChart
+              width={400}
+              height={500}
+              data={labels}
+              
+              barGap={'10px'}
+              barCategoryGap={'25%'}
+              margin={{
+                top: 15, right: 30, bottom: 15, left: 15,
+              }}
+            >
+              <XAxis
+                dataKey="caption"
+                interval={0}
+                // minTickGap={-10}
+                tick={<CustomTick />}
               />
-              <ZAxis dataKey="z" range={[1000, 1449]} name="" unit="" />
-
-              <Scatter
-                name="Mix Seeding Rates"
-                data={scatterData}
-                fill="#E7885F"
-                margin={{
-                  top: 5,
-                  right: 30,
-                  left: 20,
-                  bottom: 5,
-                }}
+              <YAxis />
+              <Tooltip />
+              <Bar
+                dataKey="val"
+                fill="#4f5f30"
+                // label={<CustomLabel />}
               >
-                <LabelList dataKey="y" fill="#fff" position="center" />
-              </Scatter>
-            </ScatterChart>
+                {/* <LabelList dataKey="caption" position="top" /> */}
+                <LabelList dataKey="val" position="top" color='white' style={{fill: '#4f5f30'}}/>
+              </Bar>
+            </BarChart>
           </ResponsiveContainer>
         </Grid>
+}
 
         {labels.map((l, i) => (
           <Grid
@@ -253,8 +273,9 @@ const ReviewMix = ({ calculator }) => {
             sx={{ backgroundColor: !(i % 2) && '#e3e5d3' }}
             key={i}
           >
-            <Grid item sx={{ textAlign: 'justify' }} xs={10} pl={1}>
-              {l.label}
+          <Grid item xs={1}></Grid>
+            <Grid item sx={{ textAlign: 'justify' }} xs={9} pl={1}>
+              {l.caption}
             </Grid>
             <Grid item xs={2}>
               {twoDigit(l.val)}
