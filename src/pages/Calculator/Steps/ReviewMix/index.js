@@ -1,4 +1,3 @@
-/* eslint-disable*/
 /// ///////////////////////////////////////////////////////
 //                     Imports                          //
 /// ///////////////////////////////////////////////////////
@@ -7,11 +6,11 @@ import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { Typography, Button, useMediaQuery } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
+import { useTheme } from '@emotion/react';
 import {
   ResponsiveContainer,
   BarChart,
   XAxis,
-  Rectangle,
   Bar,
   YAxis,
   Tooltip,
@@ -25,11 +24,10 @@ import {
   calculatePlantsandSeedsPerAcre,
 } from '../../../../shared/utils/calculator';
 import ReviewMixSteps from './Steps';
-import '../steps.scss';
 import { DSTPieChart } from '../../../../components/DSTPieChart';
 import SeedingRateCard, { UnitSelection } from '../../../../components/SeedingRateCard';
 import { setBulkSeedingRateRedux, setOptionRedux } from '../../../../features/calculatorSlice/actions';
-import { useTheme } from '@emotion/react';
+import '../steps.scss';
 
 const defaultResultMCCC = {
   step1: { singleSpeciesSeedingRate: 0, percentOfRate: 0, seedingRate: 0 },
@@ -210,38 +208,29 @@ const ReviewMix = ({ calculator }) => {
     ];
 
     // eslint-disable-next-line react/no-unstable-nested-components
-    const CustomTick = (props) => {
-      const { x, y, payload } = props;
-      console.log(props)
-      return (
-        <g transform={`translate(${x},${y})`} >
-          <text
-            // dy={10}
-            textAnchor="middle"
-            fill="#666"
-            x={0}
-            y={10}
-            // transform="rotate(-15)"
-            style={{fill: '#4f5f30', whiteSpace: 'normal'}}
-          >
-            {`${payload.value}`}
-          </text>
-        </g>
-      );
-    };
+    const CustomTick = ({ x, y, payload }) => (
+      <g transform={`translate(${x},${y})`}>
+        <text
+          textAnchor="middle"
+          fill="#666"
+          x={0}
+          y={10}
+          style={{ fill: '#4f5f30', whiteSpace: 'normal' }}
+        >
+          {`${payload.value}`}
+        </text>
+      </g>
+    );
 
     return (
       <Grid container>
-      {!matchesSm &&  
+        {!matchesSm
+        && (
         <Grid item xs={12}>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart
-              width={400}
-              height={500}
               data={labels}
-              
-              barGap={'10px'}
-              barCategoryGap={'25%'}
+              barCategoryGap="25%"
               margin={{
                 top: 15, right: 30, bottom: 15, left: 15,
               }}
@@ -249,23 +238,17 @@ const ReviewMix = ({ calculator }) => {
               <XAxis
                 dataKey="caption"
                 interval={0}
-                // minTickGap={-10}
                 tick={<CustomTick />}
               />
               <YAxis />
               <Tooltip />
-              <Bar
-                dataKey="val"
-                fill="#4f5f30"
-                // label={<CustomLabel />}
-              >
-                {/* <LabelList dataKey="caption" position="top" /> */}
-                <LabelList dataKey="val" position="top" color='white' style={{fill: '#4f5f30'}}/>
+              <Bar dataKey="val" fill="#4f5f30">
+                <LabelList dataKey="val" position="top" color="white" style={{ fill: '#4f5f30' }} />
               </Bar>
             </BarChart>
           </ResponsiveContainer>
         </Grid>
-}
+        )}
 
         {labels.map((l, i) => (
           <Grid
@@ -273,7 +256,7 @@ const ReviewMix = ({ calculator }) => {
             sx={{ backgroundColor: !(i % 2) && '#e3e5d3' }}
             key={i}
           >
-          <Grid item xs={1}></Grid>
+            <Grid item xs={1} />
             <Grid item sx={{ textAlign: 'justify' }} xs={9} pl={1}>
               {l.caption}
             </Grid>
