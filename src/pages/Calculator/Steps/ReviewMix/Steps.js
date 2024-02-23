@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Grid from '@mui/material/Grid';
 import { Typography, useTheme, useMediaQuery } from '@mui/material';
 
 import NumberTextField from '../../../../components/NumberTextField';
 import { convertToPercent } from '../../../../shared/utils/calculator';
+import Dropdown from '../../../../components/Dropdown';
+import { seedingMethods, seedingMethodsNECCC } from '../../../../shared/data/dropdown';
 import '../steps.scss';
+import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 
 const ReviewMixSteps = ({
   council,
@@ -12,8 +16,12 @@ const ReviewMixSteps = ({
   handleFormValueChange,
   calculatorResult,
 }) => {
+  const [methods, setMethods] = useState({});
+
   const theme = useTheme();
   const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
+  const dispatch = useDispatch();
+  const { options } = useSelector((state) => state.calculator);
 
   const renderStepsForm = (label1, label2, label3) => (
     matchesMd && (
@@ -43,16 +51,34 @@ const ReviewMixSteps = ({
     step1, step2, step3, step4, step5,
   } = calculatorResult;
 
+  useEffect(() => {
+    const coefficients = seed.attributes.Coefficients;
+    const plantingMethods = council === 'MCCC' ? {
+      Drilled: 1,
+      Precision: parseFloat(coefficients['Precision Coefficient']?.values[0]) || null,
+      Broadcast: parseFloat(coefficients['Broadcast Coefficient']?.values[0]) || null,
+      Aerial: parseFloat(coefficients['Aerial Coefficient']?.values[0]) || null,
+    } : {
+      Drilled: 1,
+      'Broadcast(With Cultivation)':
+      parseFloat(coefficients['Broadcast with Cultivation Coefficient']?.values[0]) || null,
+      'Broadcast(With No Cultivation)':
+      parseFloat(coefficients['Broadcast without Cultivation Coefficient']?.values[0]) || null,
+      Aerial: parseFloat(coefficients['Aerial Coefficient']?.values[0]) || null,
+    };
+    setMethods(plantingMethods);
+  }, []);
+
   return (
     <Grid container>
       {/* NECCC Step 1:  */}
       {council === 'NECCC' && (
         <>
           <Grid item xs={12}>
-            <Typography className="step-header">Step 1: </Typography>
+            <Typography variant="stepHeader">Seeding Rate in Mix</Typography>
           </Grid>
           {renderStepsForm(
-            'Single Species Seeding Rate PLS',
+            'Single Species Seeding Rate PLS (Lbs / Acre)',
             'Soil Fertility Modifier',
             'Sum Species Of Group In Mix',
           )}
@@ -65,11 +91,10 @@ const ReviewMixSteps = ({
                 }}
                 value={step1.singleSpeciesSeedingRate}
               />
-              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
             </Grid>
 
             <Grid item xs={1}>
-              <Typography className="math-icon">&#215;</Typography>
+              <Typography variant="mathIcon">&#215;</Typography>
             </Grid>
 
             <Grid item xs={3}>
@@ -81,7 +106,7 @@ const ReviewMixSteps = ({
             </Grid>
 
             <Grid item xs={1}>
-              <Typography className="math-icon">÷</Typography>
+              <Typography variant="mathIcon">÷</Typography>
             </Grid>
 
             <Grid item xs={3}>
@@ -94,16 +119,15 @@ const ReviewMixSteps = ({
           </Grid>
           <Grid container p="10px">
             <Grid item xs={4}>
-              <Typography className="math-icon">=</Typography>
+              <Typography variant="mathIcon">=</Typography>
             </Grid>
 
             <Grid item xs={7}>
               <NumberTextField
-                label={matchesMd ? '' : 'Seeding Rate In Mix'}
+                label="Seeding Rate In Mix (Lbs / Acre)"
                 disabled
                 value={step1.seedingRate}
               />
-              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
             </Grid>
 
             <Grid item xs={1} />
@@ -115,49 +139,46 @@ const ReviewMixSteps = ({
       {council === 'MCCC' && (
         <>
           <Grid item xs={12}>
-            <Typography className="step-header">Step 1:</Typography>
+            <Typography variant="stepHeader">Seeding Rate in Mix</Typography>
           </Grid>
           {renderStepsForm(
-            'Single Species Seeding Rate PLS',
+            'Single Species Seeding Rate PLS (Lbs / Acre)',
             '% of Single Species Rate',
-            'Seeding Rate in Mix',
+            'Seeding Rate in Mix (Lbs / Acre)',
           )}
           <Grid container justifyContent="space-evenly">
             <Grid item xs={3}>
               <NumberTextField
                 disabled
-                label={matchesMd ? '' : 'Single Species Seeding Rate PLS'}
+                label={matchesMd ? '' : 'Single Species Seeding Rate PLS (Lbs / Acre)'}
                 value={step1.singleSpeciesSeedingRate}
               />
-              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
             </Grid>
 
             <Grid item xs={1}>
-              <Typography className="math-icon">&#215;</Typography>
+              <Typography variant="mathIcon">&#215;</Typography>
             </Grid>
 
             <Grid item xs={3}>
               <NumberTextField
-                disabled
                 label={matchesMd ? '' : '% of Single Species Rate'}
+                handleChange={(e) => {
+                  handleFormValueChange(seed, 'percentOfRate', parseFloat(e.target.value) / 100);
+                }}
                 value={convertToPercent(step1.percentOfRate)}
               />
-              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>
-                MCCC Recommendation
-              </Typography>
             </Grid>
 
             <Grid item xs={1}>
-              <Typography className="math-icon">=</Typography>
+              <Typography variant="mathIcon">=</Typography>
             </Grid>
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Seeding Rate in Mix'}
+                label={matchesMd ? '' : 'Seeding Rate in Mix (Lbs / Acre)'}
                 disabled
                 value={step1.seedingRate}
               />
-              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
             </Grid>
 
           </Grid>
@@ -167,48 +188,60 @@ const ReviewMixSteps = ({
       {/* Step 2: */}
       <>
         <Grid item xs={12}>
-          <Typography className="step-header">Step 2: </Typography>
+          <Typography variant="stepHeader">Adjustment from Seeding Method</Typography>
+        </Grid>
+        <Grid item xs={6} margin="1rem">
+          <Dropdown
+            value={options[seed.label].plantingMethod ?? ''}
+            label="Seeding Method: "
+            handleChange={(e) => {
+              dispatch(
+                setOptionRedux(seed.label, {
+                  ...options[seed.label],
+                  plantingMethod: e.target.value,
+                  plantingMethodModifier: methods[e.target.value],
+                }),
+              );
+            }}
+            items={council === 'MCCC' ? seedingMethods : seedingMethodsNECCC}
+          />
         </Grid>
         {renderStepsForm(
-          'Seeding Rate in Mix',
+          'Seeding Rate in Mix (Lbs / Acre)',
           'Planting Method',
-          'Seeding Rate in Mix',
+          'Seeding Rate in Mix (Lbs / Acre)',
         )}
         <Grid container justifyContent="space-evenly">
           <Grid item xs={3}>
             <NumberTextField
               disabled
-              label={matchesMd ? '' : 'Seeding Rate in Mix'}
+              label={matchesMd ? '' : 'Seeding Rate in Mix (Lbs / Acre)'}
               value={step2.seedingRate}
             />
-            <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
           </Grid>
 
           <Grid item xs={1}>
-            <Typography className="math-icon">&#215;</Typography>
+            <Typography variant="mathIcon">&#215;</Typography>
           </Grid>
 
           <Grid item xs={3}>
             <NumberTextField
               label={matchesMd ? '' : 'Planting Method'}
               value={step2.plantingMethodModifier ?? 1}
-              handleChange={(e) => {
-                handleFormValueChange(seed, 'plantingMethodModifier', parseFloat(e.target.value));
-              }}
+              disabled
             />
           </Grid>
 
           <Grid item xs={1}>
-            <Typography className="math-icon">=</Typography>
+            <Typography variant="mathIcon">=</Typography>
           </Grid>
 
           <Grid item xs={3}>
             <NumberTextField
-              label={matchesMd ? '' : 'Seeding Rate in Mix'}
+              label={matchesMd ? '' : 'Seeding Rate in Mix (Lbs / Acre)'}
               disabled
               value={step2.seedingRateAfterPlantingMethodModifier}
             />
-            <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
           </Grid>
         </Grid>
       </>
@@ -216,25 +249,24 @@ const ReviewMixSteps = ({
       {/* Step 3: */}
       <>
         <Grid item xs={12}>
-          <Typography className="step-header">Step 3: </Typography>
+          <Typography variant="stepHeader">Adjustment from Management Goals</Typography>
         </Grid>
         {renderStepsForm(
-          'Seeding Rate in Mix',
+          'Seeding Rate in Mix (Lbs / Acre)',
           'Management impact on Mix',
-          'Seeding Rate in Mix',
+          'Seeding Rate in Mix (Lbs / Acre)',
         )}
         <Grid container justifyContent="space-evenly">
           <Grid item xs={3}>
             <NumberTextField
-              label={matchesMd ? '' : 'Seeding Rate in Mix'}
+              label={matchesMd ? '' : 'Seeding Rate in Mix (Lbs / Acre)'}
               disabled
               value={step3.seedingRate}
             />
-            <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
           </Grid>
 
           <Grid item xs={1}>
-            <Typography className="math-icon">&#215;</Typography>
+            <Typography variant="mathIcon">&#215;</Typography>
           </Grid>
 
           <Grid item xs={3}>
@@ -246,16 +278,15 @@ const ReviewMixSteps = ({
           </Grid>
 
           <Grid item xs={1}>
-            <Typography className="math-icon">=</Typography>
+            <Typography variant="mathIcon">=</Typography>
           </Grid>
 
           <Grid item xs={3}>
             <NumberTextField
-              label={matchesMd ? '' : 'Seeding Rate in Mix'}
+              label={matchesMd ? '' : 'Seeding Rate in Mix (Lbs / Acre)'}
               disabled
               value={step3.seedingRateAfterManagementImpact}
             />
-            <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
           </Grid>
         </Grid>
         <Grid item xs={1} />
@@ -264,9 +295,9 @@ const ReviewMixSteps = ({
       {/* Step 4: */}
       <>
         <Grid item xs={12}>
-          <Typography className="step-header">Step 4: </Typography>
+          <Typography variant="stepHeader">Bulk Seeding Rate</Typography>
         </Grid>
-        {renderStepsForm('Seeding Rate in Mix', '% Germination', '% Purity')}
+        {renderStepsForm('Seeding Rate in Mix (Lbs / Acre)', '% Germination', '% Purity')}
         <Grid container justifyContent="space-evenly">
           <Grid item xs={3}>
             <NumberTextField
@@ -274,11 +305,10 @@ const ReviewMixSteps = ({
               disabled
               value={step4.seedingRateAfterManagementImpact}
             />
-            <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
           </Grid>
 
           <Grid item xs={1}>
-            <Typography className="math-icon">÷</Typography>
+            <Typography variant="mathIcon">÷</Typography>
           </Grid>
 
           <Grid item xs={3}>
@@ -292,7 +322,7 @@ const ReviewMixSteps = ({
           </Grid>
 
           <Grid item xs={1}>
-            <Typography className="math-icon">÷</Typography>
+            <Typography variant="mathIcon">÷</Typography>
           </Grid>
 
           <Grid item xs={3}>
@@ -307,12 +337,12 @@ const ReviewMixSteps = ({
         </Grid>
         <Grid container p="10px">
           <Grid item xs={4}>
-            <Typography className="math-icon">=</Typography>
+            <Typography variant="mathIcon">=</Typography>
           </Grid>
 
           <Grid item xs={7}>
             <NumberTextField
-              label={matchesMd ? '' : 'Bulk Seeding Rate'}
+              label="Bulk Seeding Rate (Lbs / Acre)"
               disabled
               value={step4.bulkSeedingRate}
             />
@@ -325,21 +355,20 @@ const ReviewMixSteps = ({
       {/* Step 5: */}
       <>
         <Grid item xs={12}>
-          <Typography className="step-header">Step 5: </Typography>
+          <Typography variant="stepHeader">Pounds for Purchase</Typography>
         </Grid>
-        {renderStepsForm('Bulk Seeding Rate', 'Acres', 'Pounds for Purchase')}
+        {renderStepsForm('Bulk Seeding Rate (Lbs / Acre)', 'Acres', 'Pounds for Purchase')}
         <Grid container justifyContent="space-evenly">
           <Grid item xs={3}>
             <NumberTextField
-              label={matchesMd ? '' : 'Bulk Seeding Rate'}
+              label={matchesMd ? '' : 'Bulk Seeding Rate (Lbs / Acre)'}
               disabled
               value={step5.bulkSeedingRate}
             />
-            <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
           </Grid>
 
           <Grid item xs={1}>
-            <Typography className="math-icon">&#215;</Typography>
+            <Typography variant="mathIcon">&#215;</Typography>
           </Grid>
 
           <Grid item xs={3}>
@@ -351,7 +380,7 @@ const ReviewMixSteps = ({
           </Grid>
 
           <Grid item xs={1}>
-            <Typography className="math-icon">=</Typography>
+            <Typography variant="mathIcon">=</Typography>
           </Grid>
 
           <Grid item xs={3}>

@@ -6,18 +6,18 @@ import PlaceIcon from '@mui/icons-material/Place';
 import { useDispatch, useSelector } from 'react-redux';
 import statesLatLongDict from '../../../../shared/data/statesLatLongDict';
 import { availableStates } from '../../../../shared/data/dropdown';
-import Dropdown from '../../../../components/Dropdown';
+// import Dropdown from '../../../../components/Dropdown';
 import DSTImport from '../../../../components/DSTImport';
 import {
   checkNRCSRedux, setCouncilRedux, setCountyIdRedux, setCountyRedux,
-  setSoilDrainageRedux, setSoilFertilityRedux, setStateRedux, updateLatlonRedux,
+  setSoilDrainageRedux, setSoilFertilityRedux, setStateRedux, updateLatlonRedux, updateTileDrainageRedux,
 } from '../../../../features/siteConditionSlice/actions';
 import { getRegionNew } from '../../../../features/siteConditionSlice/api';
 import { updateDiversityRedux } from '../../../../features/calculatorSlice/actions';
 import { clearOptions, clearSeeds } from '../../../../features/calculatorSlice';
 import '../steps.scss';
 
-const RegionSelector = ({
+const SelectState = ({
   stateList,
   handleSteps,
 }) => {
@@ -32,11 +32,6 @@ const RegionSelector = ({
   /// ///////////////////////////////////////////////////////
   //                      State Logic                     //
   /// ///////////////////////////////////////////////////////
-
-  const handleStateDropdown = (val) => {
-    const stateSelected = stateList.filter((s) => s.label === val)[0];
-    setSelectedState(stateSelected);
-  };
 
   /// ///////////////////////////////////////////////////////
   //                      Redux                           //
@@ -54,6 +49,7 @@ const RegionSelector = ({
     dispatch(setCountyRedux(''));
     dispatch(setCountyIdRedux(''));
     dispatch(setSoilDrainageRedux(''));
+    dispatch(updateTileDrainageRedux(false));
     dispatch(setSoilFertilityRedux(''));
     dispatch(checkNRCSRedux(false));
 
@@ -96,23 +92,7 @@ const RegionSelector = ({
 
   return (
     <Grid container>
-      <Grid item xs={8} md={10} p="10px">
-        <Dropdown
-          value={selectedState.label || ''}
-          label="State: "
-          handleChange={(e) => handleStateDropdown(e.target.value)}
-          size={12}
-          items={stateList}
-        />
-      </Grid>
-      <Grid
-        xs={4}
-        md={2}
-        item
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
+      <Grid xs={12} item margin="1rem">
         <Button
           disabled={
             !(newSiteCondition.state)
@@ -120,8 +100,7 @@ const RegionSelector = ({
           variant="contained"
           onClick={() => handleSteps('next')}
         >
-          Mark Location
-          {' '}
+          Enter Site Details
           <PlaceIcon />
         </Button>
       </Grid>
@@ -142,4 +121,4 @@ const RegionSelector = ({
   );
 };
 
-export default RegionSelector;
+export default SelectState;

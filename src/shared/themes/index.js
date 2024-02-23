@@ -32,11 +32,31 @@ const dstTheme = createTheme({
       paddingBottom: '0.75rem',
       backgroundColor: 'rgba(79, 95, 48, 0.09)',
     },
+    mathIcon: {
+      marginTop: '15px',
+      fontWeight: 600,
+      lineHeight: '1.5',
+      fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
+    },
+    stepHeader: {
+      fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
+      lineHeight: '1.5',
+      padding: '1rem',
+      background: '#e5e7d5',
+      margin: '1rem 0px',
+      fontSize: '18px',
+      fontWeight: 600,
+      textAlign: 'justify',
+    },
   },
   components: {
     MuiTypography: {
       defaultProps: {
         color: '#4F5F30',
+        variantMapping: {
+          mathIcon: 'p',
+          stepHeader: 'p',
+        },
       },
     },
     MuiButton: {
@@ -54,6 +74,42 @@ const dstTheme = createTheme({
       styleOverrides: {
         input: {
           color: '#4F5F30',
+        },
+      },
+    },
+    MuiAccordionSummary: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#eff1e0',
+          height: '3rem',
+
+        },
+        content: {
+          '& .MuiTypography-root': {
+            fontSize: '1.25rem',
+            lineHeight: '1.5rem',
+            fontWeight: '600',
+            textAlign: 'justify',
+          },
+        },
+        expandIconWrapper: {
+          transform: 'none',
+          WebkitTransform: 'none',
+          transition: 'none',
+          WebkitTransition: 'none',
+          '&.Mui-expanded': {
+            transform: 'none',
+            WebkitTransform: 'none',
+          },
+        },
+      },
+    },
+    MuiAccordionDetails: {
+      styleOverrides: {
+        root: {
+          color: '#4F5F30',
+          padding: '1rem 0',
+          backgroundColor: '#fffff2',
         },
       },
     },

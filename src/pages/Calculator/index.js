@@ -83,7 +83,10 @@ const Calculator = () => {
         );
       case 'Seed Tag Info':
         return (
-          <SeedTagInfo />
+          <SeedTagInfo
+            completedStep={completedStep}
+            setCompletedStep={setCompletedStep}
+          />
         );
       case 'Review Mix':
         return (

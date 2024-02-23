@@ -424,28 +424,50 @@ const getPlantingDate = (seed) => {
 
 const calculatePieChartData = (seeds, calculator, options = {}) => {
   const seedingRateArray = [];
-  const plantsPerAcreArray = [];
-  const seedsPerAcreArray = [];
+  const plantsPerSqftArray = [];
+  const seedsPerSqftArray = [];
   seeds.forEach((seed) => {
     seedingRateArray.push({
       name: seed.label,
       value: calculator.seedingRate(seed, options[seed.label]),
     });
-    seedsPerAcreArray.push({
+    seedsPerSqftArray.push({
       name: seed.label,
-      value: calculator.seedsPerAcre(seed, options[seed.label]),
+      value: calculator.seedsPerAcre(seed, options[seed.label]) / 43560,
     });
-    plantsPerAcreArray.push({
+    plantsPerSqftArray.push({
       name: seed.label,
-      value: calculator.plantsPerAcre(seed, options[seed.label]),
+      value: calculator.plantsPerSqft(seed, options[seed.label]),
     });
   });
-  return { seedingRateArray, seedsPerAcreArray, plantsPerAcreArray };
+  return { seedingRateArray, seedsPerSqftArray, plantsPerSqftArray };
+};
+
+const calculatePlantsandSeedsPerAcre = (seed, calculator, options, seedingRate = null, adjustedSeedingRate = null) => {
+  const plants = calculator.plantsPerAcre(
+    seed,
+    { ...options, percentOfRate: 1, ...(seedingRate !== null && { seedingRate }) },
+  );
+  const seeds = calculator.seedsPerAcre(
+    seed,
+    { ...options, percentOfRate: 1, ...(seedingRate !== null && { seedingRate }) },
+  );
+  const adjustedPlants = calculator.plantsPerAcre(
+    seed,
+    { ...options, ...(adjustedSeedingRate !== null && { seedingRate: adjustedSeedingRate }) },
+  );
+  const adjustedSeeds = calculator.seedsPerAcre(
+    seed,
+    { ...options, ...(adjustedSeedingRate !== null && { seedingRate: adjustedSeedingRate }) },
+  );
+  return {
+    plants, seeds, adjustedPlants, adjustedSeeds,
+  };
 };
 
 export {
   convertToPercent, twoDigit,
   createUserInput, createCalculator, initialOptions, adjustProportions,
   adjustProportionsNECCC, reviewMix, reviewMixNECCC, confirmPlan, checkNRCS,
-  getPlantingDate, calculatePieChartData,
+  getPlantingDate, calculatePieChartData, calculatePlantsandSeedsPerAcre,
 };

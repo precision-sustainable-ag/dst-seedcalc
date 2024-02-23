@@ -47,27 +47,26 @@ const MixRatioSteps = ({
       {council === 'NECCC' && (
         <>
           <Grid item xs={12}>
-            <Typography className="step-header">Step 1: </Typography>
+            <Typography variant="stepHeader">Seeding Rate in Mix</Typography>
           </Grid>
           {renderFormLabel(
-            'Single Species Seeding Rate PLS',
+            'Single Species Seeding Rate PLS (Lbs / Acre)',
             'Soil Fertility Modifier',
-            'Sum Species Of Group In Mix',
+            'Sum Species Of Group In Mix (Lbs / Acre)',
           )}
           <Grid container justifyContent="space-evenly">
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Single Species Seeding Rate PLS'}
+                label={matchesMd ? '' : 'Single Species Seeding Rate PLS (Lbs / Acre)'}
                 handleChange={(e) => {
                   handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
                 }}
                 value={step1.defaultSingleSpeciesSeedingRatePLS}
               />
-              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
             </Grid>
 
             <Grid item xs={1}>
-              <Typography className="math-icon">&#215;</Typography>
+              <Typography variant="mathIcon">&#215;</Typography>
             </Grid>
 
             <Grid item xs={3}>
@@ -79,7 +78,7 @@ const MixRatioSteps = ({
             </Grid>
 
             <Grid item xs={1}>
-              <Typography className="math-icon">÷</Typography>
+              <Typography variant="mathIcon">÷</Typography>
             </Grid>
 
             <Grid item xs={3}>
@@ -93,16 +92,15 @@ const MixRatioSteps = ({
 
           <Grid container p="10px">
             <Grid item xs={4}>
-              <Typography className="math-icon">=</Typography>
+              <Typography variant="mathIcon">=</Typography>
             </Grid>
 
             <Grid item xs={7}>
               <NumberTextField
-                label="Seeding Rate In Mix"
+                label="Seeding Rate In Mix (Lbs / Acre)"
                 disabled
                 value={step1.seedingRate}
               />
-              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
             </Grid>
 
             <Grid item xs={1} />
@@ -114,49 +112,46 @@ const MixRatioSteps = ({
       {council === 'MCCC' && (
         <>
           <Grid item xs={12}>
-            <Typography className="step-header">Step 1:</Typography>
+            <Typography variant="stepHeader">Seeding Rate in Mix</Typography>
           </Grid>
           {renderFormLabel(
-            'Single Species Seeding Rate PLS',
+            'Single Species Seeding Rate PLS (Lbs / Acre)',
             '% of Single Species Rate',
-            'Seeding Rate In Mix',
+            'Seeding Rate In Mix (Lbs / Acre)',
           )}
           <Grid container justifyContent="space-evenly">
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Single Species Seeding Rate PLS'}
-                handleChange={(e) => {
-                  handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
-                }}
+                label={matchesMd ? '' : 'Single Species Seeding Rate PLS (Lbs / Acre)'}
+                disabled
                 value={step1.defaultSingleSpeciesSeedingRatePLS}
               />
-              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
             </Grid>
 
             <Grid item xs={1}>
-              <Typography className="math-icon">&#215;</Typography>
+              <Typography variant="mathIcon">&#215;</Typography>
             </Grid>
 
             <Grid item xs={3}>
               <NumberTextField
                 label={matchesMd ? '' : '% of Single Species Rate'}
-                disabled
+                handleChange={(e) => {
+                  handleFormValueChange(seed, 'percentOfRate', parseFloat(e.target.value) / 100);
+                }}
                 value={convertToPercent(step1.percentOfRate)}
               />
-              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>MCCC Recommendation</Typography>
             </Grid>
 
             <Grid item xs={1}>
-              <Typography className="math-icon">=</Typography>
+              <Typography variant="mathIcon">=</Typography>
             </Grid>
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Seeding Rate In Mix'}
+                label={matchesMd ? '' : 'Seeding Rate In Mix (Lbs / Acre)'}
                 disabled
                 value={step1.seedingRate}
               />
-              <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
             </Grid>
           </Grid>
         </>
@@ -165,11 +160,11 @@ const MixRatioSteps = ({
       {/* Step 2: */}
       <>
         <Grid item xs={12}>
-          <Typography className="step-header">Step 2: </Typography>
+          <Typography variant="stepHeader">Seeds Per Acre</Typography>
         </Grid>
         {renderFormLabel(
           'Seeds / Pound',
-          'Seeding Rate In Mix',
+          'Seeding Rate In Mix (Lbs / Acre)',
           'Seeds / Acre',
         )}
         <Grid container justifyContent="space-evenly">
@@ -182,20 +177,19 @@ const MixRatioSteps = ({
           </Grid>
 
           <Grid item xs={1}>
-            <Typography className="math-icon">&#215;</Typography>
+            <Typography variant="mathIcon">&#215;</Typography>
           </Grid>
 
           <Grid item xs={3}>
             <NumberTextField
               disabled
-              label={matchesMd ? '' : 'Seeding Rate In Mix'}
+              label={matchesMd ? '' : 'Seeding Rate In Mix (Lbs / Acre)'}
               value={step2.seedingRate}
             />
-            <Typography fontSize={matchesMd ? '0.75rem' : '1rem'}>Lbs / Acre</Typography>
           </Grid>
 
           <Grid item xs={1}>
-            <Typography className="math-icon">=</Typography>
+            <Typography variant="mathIcon">=</Typography>
           </Grid>
 
           <Grid item xs={3}>
@@ -212,7 +206,7 @@ const MixRatioSteps = ({
       {council === 'NECCC' && (
         <>
           <Grid item xs={12}>
-            <Typography className="step-header">Step 3: </Typography>
+            <Typography variant="stepHeader">Seeds per SqFt</Typography>
           </Grid>
           {renderFormLabel('Seeds / Acre', 'Sq. Ft. / Acres', 'Seeds / Sq. Ft.')}
           <Grid container justifyContent="space-evenly">
@@ -225,7 +219,7 @@ const MixRatioSteps = ({
             </Grid>
 
             <Grid item xs={1}>
-              <Typography className="math-icon">÷</Typography>
+              <Typography variant="mathIcon">÷</Typography>
             </Grid>
 
             <Grid item xs={3}>
@@ -237,7 +231,7 @@ const MixRatioSteps = ({
             </Grid>
 
             <Grid item xs={1}>
-              <Typography className="math-icon">=</Typography>
+              <Typography variant="mathIcon">=</Typography>
             </Grid>
 
             <Grid item xs={3}>
@@ -255,7 +249,7 @@ const MixRatioSteps = ({
       {council === 'MCCC' && (
         <>
           <Grid item xs={12}>
-            <Typography className="step-header">Step 3: </Typography>
+            <Typography variant="stepHeader">Plants Per Acre</Typography>
           </Grid>
           {renderFormLabel('Seeds / Acre', '% Survival', 'Plants / Acre')}
           <Grid container justifyContent="space-evenly">
@@ -268,7 +262,7 @@ const MixRatioSteps = ({
             </Grid>
 
             <Grid item xs={1}>
-              <Typography className="math-icon">&#215;</Typography>
+              <Typography variant="mathIcon">&#215;</Typography>
             </Grid>
 
             <Grid item xs={3}>
@@ -282,7 +276,7 @@ const MixRatioSteps = ({
             </Grid>
 
             <Grid item xs={1}>
-              <Typography className="math-icon">=</Typography>
+              <Typography variant="mathIcon">=</Typography>
             </Grid>
 
             <Grid item xs={3}>
@@ -295,7 +289,7 @@ const MixRatioSteps = ({
           </Grid>
 
           <Grid item xs={12}>
-            <Typography className="step-header">Step 4: </Typography>
+            <Typography variant="stepHeader">Approximate Plants Per SqFt</Typography>
           </Grid>
           {renderFormLabel(
             'Plants / Acre',
@@ -312,7 +306,7 @@ const MixRatioSteps = ({
             </Grid>
 
             <Grid item xs={1}>
-              <Typography className="math-icon">÷</Typography>
+              <Typography variant="mathIcon">÷</Typography>
             </Grid>
 
             <Grid item xs={3}>
@@ -324,7 +318,7 @@ const MixRatioSteps = ({
             </Grid>
 
             <Grid item xs={1}>
-              <Typography className="math-icon">=</Typography>
+              <Typography variant="mathIcon">=</Typography>
             </Grid>
 
             <Grid item xs={3}>

@@ -1,7 +1,7 @@
 import {
   updateState, updateCounty, updateCountyId, updateSoilDrainage,
   updatePlantingDate, updateAcres, checkNRCS, updateCouncil,
-  updateSoilFertility, updateLatlon, importFromCSV,
+  updateSoilFertility, updateLatlon, importFromCSV, updateTileDrainage,
 } from './index';
 
 export const setStateRedux = (state, stateId) => updateState({ state, stateId });
@@ -25,3 +25,5 @@ export const setSoilFertilityRedux = (soilFertility) => updateSoilFertility({ so
 export const updateLatlonRedux = (latlon) => updateLatlon({ latlon });
 
 export const importFromCSVSite = (csvData) => importFromCSV({ csvData });
+
+export const updateTileDrainageRedux = (tileDrainage) => updateTileDrainage({ tileDrainage });

@@ -6,45 +6,76 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { Spinner } from '@psa/dst.ui.spinner';
+import { RegionSelectorMap } from '@psa/dst.ui.region-selector-map';
 import { isEmptyNull, validateForms } from '../../../../shared/utils/format';
-import SiteConditionForm from './form';
-import RegionSelector from './RegionSelector';
-import MapComponent from './MapComponent';
-import { setCountyIdRedux, setCountyRedux } from '../../../../features/siteConditionSlice/actions';
 import { getCropsNew } from '../../../../features/calculatorSlice/api';
-import { getLocalityNew } from '../../../../features/siteConditionSlice/api';
+import { getLocality, getRegion } from '../../../../features/siteConditionSlice/api';
+import {
+  checkNRCSRedux, setAcresRedux, setCouncilRedux, setCountyIdRedux, setCountyRedux,
+  setSoilDrainageRedux, setSoilFertilityRedux, setStateRedux, updateLatlonRedux, updateTileDrainageRedux,
+} from '../../../../features/siteConditionSlice/actions';
+import statesLatLongDict from '../../../../shared/data/statesLatLongDict';
+
 import '../steps.scss';
+import DSTImport from '../../../../components/DSTImport';
+import SiteConditionForm from './form';
+import Map from './Map';
+import { availableStates } from '../../../../shared/data/dropdown';
 
 const SiteCondition = ({ completedStep, setCompletedStep }) => {
   const dispatch = useDispatch();
 
   // Location state
   const [step, setStep] = useState(1);
-  const [selectedToEditSite, setSelectedToEditSite] = useState({});
+  const [mapState, setMapState] = useState({});
+  const [isImported, setIsImported] = useState(false);
+
   const siteCondition = useSelector((state) => state.siteCondition);
   const { states, counties, loading } = siteCondition;
 
-  /// ///////////////////////////////////////////////////////
-  //                   State Logic                        //
-  /// ///////////////////////////////////////////////////////
+  // update redux based on selectedState change
+  const updateStateRedux = (selectedState) => {
+    // if the state data comes from csv import do not do this to refresh the state
+    if (isImported) return;
+    setIsImported(false);
+    // Retrieve region/counties
+    dispatch(getRegion({ stateId: selectedState.id }));
 
-  // handle steps for the map
-  const handleSteps = (type) => {
-    type === 'next' ? setStep(step + 1) : setStep(step - 1);
-    type === 'back' && setSelectedToEditSite({});
+    // // Clear all the rest forms value
+    dispatch(setCountyRedux(''));
+    dispatch(setCountyIdRedux(''));
+    dispatch(setSoilDrainageRedux(''));
+    dispatch(updateTileDrainageRedux(false));
+    dispatch(setAcresRedux(0));
+    dispatch(setSoilFertilityRedux(''));
+    dispatch(checkNRCSRedux(false));
+
+    // Update siteCondition Redux
+    const { label } = selectedState;
+    dispatch(updateLatlonRedux(statesLatLongDict[label]));
+    dispatch(setStateRedux(label, selectedState.id));
+    dispatch(setCouncilRedux(selectedState.parents[0].shorthand));
   };
-
-  /// ///////////////////////////////////////////////////////
-  //                     useEffect                        //
-  /// ///////////////////////////////////////////////////////
 
   // initially get states data
   useEffect(() => {
-    if (states.length === 0) dispatch(getLocalityNew());
+    if (states.length === 0) dispatch(getLocality());
   }, []);
+
+  // update state redux based on map state change
+  useEffect(() => {
+    if (Object.keys(mapState).length !== 0) {
+      const st = states.filter(
+        (s) => s.label === mapState.properties.STATE_NAME,
+      );
+      if (st.length > 0 && st[0].label !== siteCondition.state) {
+        updateStateRedux(st[0]);
+      }
+    }
+  }, [mapState]);
 
   // Ensure that county id is updated to the current county
   useEffect(() => {
@@ -93,32 +124,60 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
       <Grid item xs={12}>
         <Typography variant="h2">Tell us about your planting site</Typography>
       </Grid>
-      {loading === 'getLocality' ? (
-        <Spinner />
-      ) : (
-        <Grid xs={12} lg={8} item>
-          {step === 1 ? (
-            <RegionSelector
-              stateList={states}
-              handleSteps={handleSteps}
-            />
+      <Grid xs={12} lg={8} item>
+        {loading === 'getLocality' ? (
+          <Spinner />
+        ) : (
+          step === 1 ? (
+            <>
+              <RegionSelectorMap
+                selectorFunction={setMapState}
+                selectedState={siteCondition.state || ''}
+                availableStates={availableStates}
+                initWidth="100%"
+                initHeight="360px"
+                initLon={-78}
+                initLat={43}
+                initStartZoom={4}
+              />
+              {
+                Object.keys(mapState).length > 0
+                  ? (
+                    <Grid item xs={12} p="1rem">
+                      <Typography>
+                        Would you like to manually enter your site conditions
+                        or use your location to prepopulate them?
+                      </Typography>
+                      <Button variant="contained" onClick={() => setStep(2)} sx={{ margin: '1rem' }}>Map</Button>
+                      <Button variant="contained" onClick={() => setStep(3)} sx={{ margin: '1rem' }}>Manually Enter</Button>
+                    </Grid>
+                  )
+                  : (
+                    <Grid item xs={12} p="1rem">
+                      <Typography fontWeight="bold">
+                        Please select your state above.
+                      </Typography>
+                    </Grid>
+                  )
+              }
+              <DSTImport setIsImported={setIsImported} />
+            </>
           ) : step === 2 ? (
-            <MapComponent
-              handleSteps={handleSteps}
-              selectedToEditSite={selectedToEditSite}
-              setSelectedToEditSite={setSelectedToEditSite}
+            <Map
+              setStep={setStep}
+            />
+          ) : step === 3 ? (
+            <SiteConditionForm
+              council={siteCondition.council}
               counties={counties}
+              stateList={states}
+              setStep={setStep}
             />
           ) : (
             null
-          )}
-        </Grid>
-      )}
-
-      <SiteConditionForm
-        council={siteCondition.council}
-        counties={counties}
-      />
+          )
+        )}
+      </Grid>
     </Grid>
   );
 };

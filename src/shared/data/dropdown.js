@@ -17,7 +17,7 @@ export const calculatorList = [
   'Review Mix',
   'Confirm Plan',
 ];
-export const completedList = [false, false, true, true, true, true, true, true];
+export const completedList = [false, false, true, true, true, false, true, true];
 
 export const availableStates = [
   'Connecticut',
@@ -35,7 +35,7 @@ export const availableStates = [
   'West Virginia',
 ];
 
-export const soilDrainage = [
+export const soilDrainageValues = [
   { label: 'Very Poorly Drained' },
   { label: 'Poorly Drained' },
   { label: 'Somewhat Poorly Drained' },
@@ -43,6 +43,28 @@ export const soilDrainage = [
   { label: 'Moderately Well Drained' },
   { label: 'Well Drained' },
   { label: 'Somewhat Excessively Drained' },
+  { label: 'Excessively Drained' },
+  { label: 'Saturated Muck' },
+  { label: 'Well Drained Muck' },
+];
+
+export const soilDrainagesNECCC = [
+  { label: 'Very Poorly Drained' },
+  { label: 'Poorly Drained' },
+  { label: 'Somewhat Poorly Drained' },
+  { label: 'Moderately Well Drained' },
+  { label: 'Well Drained' },
+  { label: 'Somewhat Excessively Drained' },
+  { label: 'Excessively Drained' },
+];
+
+export const soilDrainagesMCCC = [
+  { label: 'None' },
+  { label: 'Very Poorly Drained' },
+  { label: 'Poorly Drained' },
+  { label: 'Somewhat Poorly Drained' },
+  { label: 'Moderately Well Drained' },
+  { label: 'Well Drained' },
   { label: 'Excessively Drained' },
   { label: 'Saturated Muck' },
   { label: 'Well Drained Muck' },
@@ -62,7 +84,7 @@ export const seedingMethodsNECCC = [
   { label: 'Aerial' },
 ];
 
-export const soilFertility = [{ label: 'Low' }, { label: 'High' }];
+export const soilFertilityValues = [{ label: 'Low' }, { label: 'High' }];
 
 // TODO: Add API to retrieve City, State, & Countries
 
