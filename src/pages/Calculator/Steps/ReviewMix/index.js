@@ -75,7 +75,7 @@ const ReviewMix = ({ calculator }) => {
 
   const [accordionState, setAccordionState] = useState(
     seedsSelected.reduce((res, seed) => {
-      res[seed.label] = true;
+      res[seed.label] = false;
       return res;
     }, {}),
   );
