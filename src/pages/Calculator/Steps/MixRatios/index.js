@@ -12,7 +12,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import InfoIcon from '@mui/icons-material/Info';
 import MixRatioSteps from './form';
-import { DSTPieChart } from '../../../../components/DSTPieChart';
+import DSTPieChart from '../../../../components/DSTPieChart';
 import SeedingRateCard, { UnitSelection } from '../../../../components/SeedingRateCard';
 import {
   adjustProportions, adjustProportionsNECCC, createCalculator, createUserInput, calculatePieChartData,
