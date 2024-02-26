@@ -13,7 +13,6 @@ import {
   XAxis,
   Bar,
   YAxis,
-  Tooltip,
   LabelList,
 } from 'recharts';
 import Accordion from '@mui/material/Accordion';
@@ -120,12 +119,12 @@ const ReviewMix = ({ calculator }) => {
 
   // expand related accordion based on sidebar click
   useEffect(() => {
-    // setAccordionState(
-    //   seedsSelected.reduce((res, seed) => {
-    //     res[seed.label] = seed.label === sideBarSelection;
-    //     return res;
-    //   }, {}),
-    // );
+    setAccordionState(
+      seedsSelected.reduce((res, seed) => {
+        res[seed.label] = seed.label === sideBarSelection;
+        return res;
+      }, {}),
+    );
   }, [sideBarSelection]);
 
   // run reviewMix on options change
@@ -241,7 +240,6 @@ const ReviewMix = ({ calculator }) => {
                 tick={<CustomTick />}
               />
               <YAxis />
-              <Tooltip />
               <Bar dataKey="val" fill="#4f5f30">
                 <LabelList dataKey="val" position="top" color="white" style={{ fill: '#4f5f30' }} />
               </Bar>
