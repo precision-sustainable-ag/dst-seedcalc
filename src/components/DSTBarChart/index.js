@@ -18,17 +18,17 @@ const DSTBarChart = ({ seed, calculatorResult }) => {
   const labels = [
     {
       label: 'Single Species Seeding Rate',
-      caption: 'Initial seeding rate',
+      caption: 'Initial Seeding Rate',
       val: calculatorResult[seed.label].step1.singleSpeciesSeedingRate,
     },
     {
       label: 'Added to Mix',
-      caption: 'Mix proportion',
+      caption: 'Mix Ratios',
       val: calculatorResult[seed.label].step2.seedingRate,
     },
     {
       label: 'Drilled or Broadcast with Cultipack',
-      caption: 'Seeding method',
+      caption: 'Seeding Method',
       val: calculatorResult[seed.label].step2.seedingRateAfterPlantingMethodModifier,
     },
     {
@@ -61,7 +61,7 @@ const DSTBarChart = ({ seed, calculatorResult }) => {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Typography fontWeight="bold">Seeding rate impact from your decisions (Lbs per Acre)</Typography>
+        <Typography fontWeight="bold">Seeding Rate Impact From Your Decisions (Lbs per Acre)</Typography>
       </Grid>
       {!matchesSm
       && (
