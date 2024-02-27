@@ -60,10 +60,12 @@ const DSTBarChart = ({ seed, calculatorResult }) => {
 
   return (
     <Grid container>
+      <Grid item xs={12}>
+        <Typography fontWeight="bold">Seeding rate impact from your decisions (Lbs per Acre)</Typography>
+      </Grid>
       {!matchesSm
       && (
       <Grid item xs={12}>
-        <Typography fontWeight="bold">Seeding rate impact from your decisions</Typography>
         <ResponsiveContainer width="100%" height={200}>
           <BarChart
             data={labels}
