@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTheme } from '@emotion/react';
-import { useMediaQuery, Grid } from '@mui/material';
+import { useMediaQuery, Grid, Typography } from '@mui/material';
 import {
   ResponsiveContainer,
   BarChart,
@@ -38,7 +38,7 @@ const DSTBarChart = ({ seed, calculatorResult }) => {
     },
     {
       label: 'Bulk Germination and Purity',
-      caption: 'Bulk Germination and Purity',
+      caption: 'Germination and Purity',
       val: calculatorResult[seed.label].step4.bulkSeedingRate,
     },
   ];
@@ -63,6 +63,7 @@ const DSTBarChart = ({ seed, calculatorResult }) => {
       {!matchesSm
       && (
       <Grid item xs={12}>
+        <Typography fontWeight="bold">Seeding rate impact from your decisions</Typography>
         <ResponsiveContainer width="100%" height={200}>
           <BarChart
             data={labels}
