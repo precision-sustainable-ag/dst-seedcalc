@@ -113,6 +113,4 @@ const DSTPieChartLegend = ({ chartData }) => {
   );
 };
 
-export {
-  DSTPieChart, DSTPieChartLabel, DSTPieChartLegend,
-};
+export default DSTPieChart;

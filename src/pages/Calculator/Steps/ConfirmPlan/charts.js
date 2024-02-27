@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid';
 import { Typography, Box } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { calculatePieChartData, twoDigit } from '../../../../shared/utils/calculator';
-import { DSTPieChart } from '../../../../components/DSTPieChart';
+import DSTPieChart from '../../../../components/DSTPieChart';
 import '../steps.scss';
 
 const defaultPieChartData = {
