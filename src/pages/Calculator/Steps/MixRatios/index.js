@@ -15,7 +15,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import InfoIcon from '@mui/icons-material/Info';
 import MixRatioSteps from './form';
 import DSTPieChart from '../../../../components/DSTPieChart';
-import SeedingRateCard, { UnitSelection, SeedInfo } from '../../../../components/SeedingRateCard';
+import { UnitSelection, SeedInfo } from '../../../../components/SeedingRateCard';
 import {
   adjustProportions, adjustProportionsNECCC, createCalculator, createUserInput, calculatePieChartData,
   calculatePlantsandSeedsPerAcre,
@@ -209,10 +209,6 @@ const MixRatio = ({ calculator, setCalculator }) => {
         )}
       </Grid>
 
-      {seedsSelected.map((seed) => (
-        <SeedInfo seed={seed} seedData={seedData} calculatorResult={calculatorResult} />
-      ))}
-
       {seedsSelected.map((seed, i) => (
         <Grid item xs={12} key={i}>
           <Accordion
@@ -233,7 +229,7 @@ const MixRatio = ({ calculator, setCalculator }) => {
             <AccordionDetails>
               <Grid container>
 
-                <Grid item xs={6}>
+                {/* <Grid item xs={6}>
                   <SeedingRateCard
                     seedingRateLabel="Default Single Species Seeding Rate PLS"
                     seedingRateValue={calculatorResult[seed.label].step1.defaultSingleSpeciesSeedingRatePLS}
@@ -250,7 +246,14 @@ const MixRatio = ({ calculator, setCalculator }) => {
                     seedValue={seedData[seed.label].adjustedSeed}
                     showTooltip="mixSeedingRate"
                   />
-                </Grid>
+                </Grid> */}
+                <SeedInfo
+                  seed={seed}
+                  seedData={seedData}
+                  calculatorResult={calculatorResult}
+                  handleFormValueChange={handleFormValueChange}
+                />
+
                 <Grid item xs={12}>
                   <UnitSelection />
                 </Grid>

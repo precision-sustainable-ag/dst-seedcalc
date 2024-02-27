@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Typography, Box, Button, Grid, Card, CardContent, CardMedia,
+  Typography, Box, Button, Grid, Card, CardContent, CardMedia, Slider,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { twoDigit } from '../../shared/utils/calculator';
@@ -45,8 +45,10 @@ const UnitSelection = () => {
 };
 
 const SeedInfo = ({
-  seed, seedData, calculatorResult,
+  seed, seedData, calculatorResult, handleFormValueChange,
 }) => {
+  const [singleSpeciesRate, setSingleSpeciesRate] = useState(0);
+  const [survival, setSurvival] = useState(0);
   const [singleData, setSingleData] = useState({
     seedingRate: calculatorResult[seed.label].step1.defaultSingleSpeciesSeedingRatePLS,
     plantValue: seedData[seed.label].defaultPlant,
@@ -67,12 +69,12 @@ const SeedInfo = ({
     if (unit === 'sqft') {
       setSingleData((prev) => ({
         ...prev,
-        seedingRate: roundToMillionth(calculatorResult[seed.label].step1.defaultSingleSpeciesSeedingRatePLS / 43560),
+        seedingRate: 1000 * roundToMillionth(calculatorResult[seed.label].step1.defaultSingleSpeciesSeedingRatePLS / 43560),
         plantValue: twoDigit(seedData[seed.label].defaultPlant / 43560),
         seedValue: twoDigit(seedData[seed.label].defaultSeed / 43560),
       }));
       setMixData({
-        seedingRate: roundToMillionth(calculatorResult[seed.label].step1.seedingRate / 43560),
+        seedingRate: 1000 * roundToMillionth(calculatorResult[seed.label].step1.seedingRate / 43560),
         plantValue: twoDigit(seedData[seed.label].adjustedPlant / 43560),
         seedValue: twoDigit(seedData[seed.label].adjustedSeed / 43560),
       });
@@ -89,11 +91,13 @@ const SeedInfo = ({
         seedValue: seedData[seed.label].adjustedSeed,
       });
     }
+    setSingleSpeciesRate(calculatorResult[seed.label].step1.percentOfRate * 100);
+    setSurvival(calculatorResult[seed.label].step3.percentSurvival * 100);
   }, [seedData, calculatorResult, unit]);
 
   return (
     <Grid container p="0 5%">
-      <Grid item xs={4}>
+      <Grid item xs={4} justifyContent="center" display="flex">
         <Card
           sx={{
             backgroundColor: 'transparent',
@@ -125,7 +129,7 @@ const SeedInfo = ({
             <SeedingRateChip
               label="Default Single Species Seeding Rate PLS"
               value={singleData.seedingRate}
-              unit={unit === 'acre' ? '1000Acres' : unitText}
+              unit={unit === 'sqft' ? '1000SqFts' : unitText}
             />
           </Grid>
           <Grid item xs={4}>
@@ -148,7 +152,7 @@ const SeedInfo = ({
             <SeedingRateChip
               label="Seeding Rate in Mix"
               value={mixData.seedingRate}
-              unit={unit === 'acre' ? '1000Acres' : unitText}
+              unit={unit === 'sqft' ? '1000SqFts' : unitText}
             />
           </Grid>
           <Grid item xs={4}>
@@ -168,11 +172,25 @@ const SeedInfo = ({
         </Grid>
         <Grid item xs={12}>
           <Typography textAlign="left">% of Single Species Rate</Typography>
-          {/* <Slider /> */}
+          <Slider
+            min={0}
+            max={100}
+            value={singleSpeciesRate}
+            valueLabelDisplay="auto"
+            onChange={(e) => setSingleSpeciesRate(e.target.value)}
+            onChangeCommitted={() => handleFormValueChange(seed, 'percentOfRate', parseFloat(singleSpeciesRate) / 100)}
+          />
         </Grid>
         <Grid item xs={12}>
           <Typography textAlign="left">% Survival</Typography>
-          {/* <Slider /> */}
+          <Slider
+            min={0}
+            max={100}
+            value={survival}
+            valueLabelDisplay="auto"
+            onChange={(e) => setSurvival(e.target.value)}
+            onChangeCommitted={() => handleFormValueChange(seed, 'percentSurvival', parseFloat(survival) / 100)}
+          />
         </Grid>
       </Grid>
     </Grid>
@@ -197,7 +215,8 @@ const SeedingRateChip = ({ label, value, unit }) => (
     <Box sx={{ height: '2rem' }}>
       <Typography lineHeight="1rem" fontSize="0.8rem">
         {label}
-        {` per ${unit}`}
+        {' per '}
+        <span style={{ fontWeight: 'bold' }}>{unit}</span>
       </Typography>
     </Box>
 
