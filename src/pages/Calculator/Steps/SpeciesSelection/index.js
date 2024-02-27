@@ -46,6 +46,14 @@ const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
   const updateQuery = (e) => {
     const query = e.target.value;
     setQuery(query);
+    if (query !== '') {
+      setAccordionState({
+        ...seedsType.reduce((res, type) => {
+          res[type] = true;
+          return res;
+        }, {}),
+      });
+    }
     const filtered = query !== ''
       ? crops.filter((x) => x.label.toLowerCase().includes(query.toLowerCase()))
       : crops;
