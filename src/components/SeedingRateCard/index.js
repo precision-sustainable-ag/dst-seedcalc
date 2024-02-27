@@ -16,7 +16,7 @@ import { selectUnitRedux } from '../../features/calculatorSlice/actions';
 
 const roundToMillionth = (num) => {
   const million = 10 ** 6;
-  return Math.round(num * million) / million;
+  return (Math.round(num * million) / million) * 1000;
 };
 
 const UnitSelection = () => {
@@ -59,7 +59,6 @@ const SeedInfo = ({
     plantValue: seedData[seed.label].adjustedPlant,
     seedValue: seedData[seed.label].adjustedSeed,
   });
-
   const { unit } = useSelector((state) => state.calculator);
 
   // eslint-disable-next-line no-nested-ternary
@@ -69,12 +68,12 @@ const SeedInfo = ({
     if (unit === 'sqft') {
       setSingleData((prev) => ({
         ...prev,
-        seedingRate: 1000 * roundToMillionth(calculatorResult[seed.label].step1.defaultSingleSpeciesSeedingRatePLS / 43560),
+        seedingRate: roundToMillionth(calculatorResult[seed.label].step1.defaultSingleSpeciesSeedingRatePLS / 43560),
         plantValue: twoDigit(seedData[seed.label].defaultPlant / 43560),
         seedValue: twoDigit(seedData[seed.label].defaultSeed / 43560),
       }));
       setMixData({
-        seedingRate: 1000 * roundToMillionth(calculatorResult[seed.label].step1.seedingRate / 43560),
+        seedingRate: roundToMillionth(calculatorResult[seed.label].step1.seedingRate / 43560),
         plantValue: twoDigit(seedData[seed.label].adjustedPlant / 43560),
         seedValue: twoDigit(seedData[seed.label].adjustedSeed / 43560),
       });
@@ -97,7 +96,7 @@ const SeedInfo = ({
 
   return (
     <Grid container p="0 5%">
-      <Grid item xs={4} justifyContent="center" display="flex">
+      <Grid item xs={12} md={4} justifyContent="center" display="flex">
         <Card
           sx={{
             backgroundColor: 'transparent',
@@ -123,54 +122,68 @@ const SeedInfo = ({
           />
         </Card>
       </Grid>
-      <Grid item xs={8}>
+      <Grid item xs={12} md={8} pt="1rem">
         <Grid container>
           <Grid item xs={4}>
-            <SeedingRateChip
+            <SeedingRateChip value={singleData.seedingRate} />
+          </Grid>
+          <Grid item xs={4}>
+            <SeedingRateChip value={singleData.plantValue} />
+          </Grid>
+          <Grid item xs={4}>
+            <SeedingRateChip value={singleData.seedValue} />
+          </Grid>
+          <Grid item xs={4}>
+            <SeedLabel
               label="Default Single Species Seeding Rate PLS"
-              value={singleData.seedingRate}
               unit={unit === 'sqft' ? '1000SqFts' : unitText}
             />
           </Grid>
           <Grid item xs={4}>
-            <SeedingRateChip
+            <SeedLabel
               label="Approx Plants"
-              value={singleData.plantValue}
               unit={unitText}
             />
           </Grid>
           <Grid item xs={4}>
-            <SeedingRateChip
+            <SeedLabel
               label="Seeds"
-              value={singleData.seedValue}
               unit={unitText}
             />
           </Grid>
         </Grid>
+
         <Grid container>
           <Grid item xs={4}>
-            <SeedingRateChip
+            <SeedingRateChip value={mixData.seedingRate} />
+          </Grid>
+          <Grid item xs={4}>
+            <SeedingRateChip value={mixData.plantValue} />
+          </Grid>
+          <Grid item xs={4}>
+            <SeedingRateChip value={mixData.seedValue} />
+          </Grid>
+          <Grid item xs={4}>
+            <SeedLabel
               label="Seeding Rate in Mix"
-              value={mixData.seedingRate}
               unit={unit === 'sqft' ? '1000SqFts' : unitText}
             />
           </Grid>
           <Grid item xs={4}>
-            <SeedingRateChip
+            <SeedLabel
               label="Approx Plants"
-              value={mixData.plantValue}
               unit={unitText}
             />
           </Grid>
           <Grid item xs={4}>
-            <SeedingRateChip
+            <SeedLabel
               label="Seeds"
-              value={mixData.seedValue}
               unit={unitText}
             />
           </Grid>
         </Grid>
-        <Grid item xs={12}>
+
+        <Grid item xs={12} pt="1rem">
           <Typography textAlign="left">% of Single Species Rate</Typography>
           <Slider
             min={0}
@@ -197,30 +210,28 @@ const SeedInfo = ({
   );
 };
 
-const SeedingRateChip = ({ label, value, unit }) => (
-  <>
-    <Box
-      sx={{
-        width: '110px',
-        height: '50px',
-        padding: '11px',
-        margin: '0 auto',
-        backgroundColor: '#E5E7D5',
-        border: '#C7C7C7 solid 1px',
-        borderRadius: '16px',
-      }}
-    >
-      <Typography>{value}</Typography>
-    </Box>
-    <Box sx={{ height: '2rem' }}>
-      <Typography lineHeight="1rem" fontSize="0.8rem">
-        {label}
-        {' per '}
-        <span style={{ fontWeight: 'bold' }}>{unit}</span>
-      </Typography>
-    </Box>
+const SeedingRateChip = ({ value }) => (
+  <Box
+    sx={{
+      width: '110px',
+      height: '50px',
+      padding: '11px',
+      margin: '0 auto',
+      backgroundColor: '#E5E7D5',
+      border: '#C7C7C7 solid 1px',
+      borderRadius: '16px',
+    }}
+  >
+    <Typography>{value.toFixed(2)}</Typography>
+  </Box>
+);
 
-  </>
+const SeedLabel = ({ label, unit }) => (
+  <Typography lineHeight="1rem" fontSize="0.8rem">
+    {label}
+    {' per '}
+    <span style={{ fontWeight: 'bold' }}>{unit}</span>
+  </Typography>
 );
 
 const SeedingRateCard = ({
