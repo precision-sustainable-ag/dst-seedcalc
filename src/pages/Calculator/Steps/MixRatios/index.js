@@ -1,4 +1,6 @@
+/* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable no-multi-str */
+
 /// ///////////////////////////////////////////////////////
 //                     Imports                          //
 /// ///////////////////////////////////////////////////////
@@ -13,7 +15,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import InfoIcon from '@mui/icons-material/Info';
 import MixRatioSteps from './form';
 import DSTPieChart from '../../../../components/DSTPieChart';
-import SeedingRateCard, { UnitSelection } from '../../../../components/SeedingRateCard';
+import SeedingRateCard, { UnitSelection, SeedInfo } from '../../../../components/SeedingRateCard';
 import {
   adjustProportions, adjustProportionsNECCC, createCalculator, createUserInput, calculatePieChartData,
   calculatePlantsandSeedsPerAcre,
@@ -206,6 +208,10 @@ const MixRatio = ({ calculator, setCalculator }) => {
         />
         )}
       </Grid>
+
+      {seedsSelected.map((seed) => (
+        <SeedInfo seed={seed} seedData={seedData} calculatorResult={calculatorResult} />
+      ))}
 
       {seedsSelected.map((seed, i) => (
         <Grid item xs={12} key={i}>
