@@ -68,25 +68,25 @@ const SeedInfo = ({
       setSingleData((prev) => ({
         ...prev,
         seedingRate: roundToMillionth(calculatorResult[seed.label].step1.defaultSingleSpeciesSeedingRatePLS / 43560),
-        plantValue: twoDigit(seedData[seed.label].defaultPlant / 43560),
-        seedValue: twoDigit(seedData[seed.label].defaultSeed / 43560),
+        plantValue: Math.round(seedData[seed.label].defaultPlant / 43560),
+        seedValue: Math.round(seedData[seed.label].defaultSeed / 43560),
       }));
       setMixData({
         seedingRate: roundToMillionth(calculatorResult[seed.label].step1.seedingRate / 43560),
-        plantValue: twoDigit(seedData[seed.label].adjustedPlant / 43560),
-        seedValue: twoDigit(seedData[seed.label].adjustedSeed / 43560),
+        plantValue: Math.round(seedData[seed.label].adjustedPlant / 43560),
+        seedValue: Math.round(seedData[seed.label].adjustedSeed / 43560),
       });
     } else if (unit === 'acre') {
       setSingleData((prev) => ({
         ...prev,
         seedingRate: calculatorResult[seed.label].step1.defaultSingleSpeciesSeedingRatePLS,
-        plantValue: seedData[seed.label].defaultPlant,
-        seedValue: seedData[seed.label].defaultSeed,
+        plantValue: Math.round(seedData[seed.label].defaultPlant),
+        seedValue: Math.round(seedData[seed.label].defaultSeed),
       }));
       setMixData({
         seedingRate: calculatorResult[seed.label].step1.seedingRate,
-        plantValue: seedData[seed.label].adjustedPlant,
-        seedValue: seedData[seed.label].adjustedSeed,
+        plantValue: Math.round(seedData[seed.label].adjustedPlant),
+        seedValue: Math.round(seedData[seed.label].adjustedSeed),
       });
     }
     setSingleSpeciesRate(Math.round(calculatorResult[seed.label].step1.percentOfRate * 100));
@@ -224,7 +224,7 @@ const SeedingRateChip = ({ value }) => (
       borderRadius: '16px',
     }}
   >
-    <Typography>{value.toFixed(2)}</Typography>
+    <Typography>{value}</Typography>
   </Box>
 );
 
