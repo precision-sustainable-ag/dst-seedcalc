@@ -60,7 +60,6 @@ const SeedInfo = ({
     seedValue: seedData[seed.label].adjustedSeed,
   });
   const { unit } = useSelector((state) => state.calculator);
-
   // eslint-disable-next-line no-nested-ternary
   const unitText = unit === 'acre' ? 'Acre' : unit === 'sqft' ? 'SqFt' : '';
 
@@ -90,8 +89,8 @@ const SeedInfo = ({
         seedValue: seedData[seed.label].adjustedSeed,
       });
     }
-    setSingleSpeciesRate(calculatorResult[seed.label].step1.percentOfRate * 100);
-    setSurvival(calculatorResult[seed.label].step3.percentSurvival * 100);
+    setSingleSpeciesRate(Math.round(calculatorResult[seed.label].step1.percentOfRate * 100));
+    setSurvival(Math.round(twoDigit(calculatorResult[seed.label].step3.percentSurvival) * 100));
   }, [seedData, calculatorResult, unit]);
 
   return (
@@ -136,7 +135,7 @@ const SeedInfo = ({
           <Grid item xs={4}>
             <SeedLabel
               label="Default Single Species Seeding Rate PLS"
-              unit={unit === 'sqft' ? '1000SqFts' : unitText}
+              unit={unit === 'sqft' ? '1000SqFt' : unitText}
             />
           </Grid>
           <Grid item xs={4}>
@@ -166,7 +165,7 @@ const SeedInfo = ({
           <Grid item xs={4}>
             <SeedLabel
               label="Seeding Rate in Mix"
-              unit={unit === 'sqft' ? '1000SqFts' : unitText}
+              unit={unit === 'sqft' ? '1000SqFt' : unitText}
             />
           </Grid>
           <Grid item xs={4}>
@@ -184,7 +183,9 @@ const SeedInfo = ({
         </Grid>
 
         <Grid item xs={12} pt="1rem">
-          <Typography textAlign="left">% of Single Species Rate</Typography>
+          <Typography textAlign="left">
+            {`% of Single Species Rate: ${singleSpeciesRate}%`}
+          </Typography>
           <Slider
             min={0}
             max={100}
@@ -195,7 +196,9 @@ const SeedInfo = ({
           />
         </Grid>
         <Grid item xs={12}>
-          <Typography textAlign="left">% Survival</Typography>
+          <Typography textAlign="left">
+            {`% Survival: ${survival}%`}
+          </Typography>
           <Slider
             min={0}
             max={100}
@@ -213,9 +216,8 @@ const SeedInfo = ({
 const SeedingRateChip = ({ value }) => (
   <Box
     sx={{
-      width: '110px',
-      height: '50px',
-      padding: '11px',
+      width: '100px',
+      padding: '0.5rem',
       margin: '0 auto',
       backgroundColor: '#E5E7D5',
       border: '#C7C7C7 solid 1px',
@@ -227,7 +229,7 @@ const SeedingRateChip = ({ value }) => (
 );
 
 const SeedLabel = ({ label, unit }) => (
-  <Typography lineHeight="1rem" fontSize="0.8rem">
+  <Typography lineHeight="1rem" fontSize="0.8rem" padding="0.5rem 0">
     {label}
     {' per '}
     <span style={{ fontWeight: 'bold' }}>{unit}</span>

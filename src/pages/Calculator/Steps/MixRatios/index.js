@@ -7,12 +7,14 @@
 
 import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
-import { Typography, Button, Alert } from '@mui/material';
+import { Typography, Button } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import InfoIcon from '@mui/icons-material/Info';
+import CloseIcon from '@mui/icons-material/Close';
+import IconButton from '@mui/material/IconButton';
+import { FadeAlert } from '@psa/dst.ui.fade-alert';
 import MixRatioSteps from './form';
 import DSTPieChart from '../../../../components/DSTPieChart';
 import { UnitSelection, SeedInfo } from '../../../../components/SeedingRateCard';
@@ -175,18 +177,33 @@ const MixRatio = ({ calculator, setCalculator }) => {
         <Typography variant="h2">Review Proportions</Typography>
       </Grid>
 
-      <Grid item xs={12}>
-        {showAlert && (
-        <Alert severity="success" onClose={() => setShowAlert(false)} icon={<InfoIcon />}>
-          {updatedForm ? 'You now have a custom mix.'
-            : 'This is a starting mix based on averages, but not a recommendation. \
+      <Grid container display="flex" justifyContent="center">
+        <Grid item style={{ position: 'fixed', top: '0px', zIndex: 1000 }}>
+
+          {showAlert && (
+
+          <FadeAlert
+            showAlert={showAlert}
+            severity="success"
+            action={(
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => setShowAlert(false)}
+              >
+                <CloseIcon fontSize="inherit" />
+
+              </IconButton>
+            )}
+            message={updatedForm ? 'You now have a custom mix.'
+              : 'This is a starting mix based on averages, but not a recommendation. \
             Adjust via the dropdown below as needed based on your goals.'}
+          />
+          )}
 
-        </Alert>
-        )}
-
+        </Grid>
       </Grid>
-
       <Grid item xs={6} sx={{ textAlign: 'justify' }}>
         <DSTPieChart
           chartData={piechartData.seedingRateArray}
@@ -228,25 +245,6 @@ const MixRatio = ({ calculator, setCalculator }) => {
 
             <AccordionDetails>
               <Grid container>
-
-                {/* <Grid item xs={6}>
-                  <SeedingRateCard
-                    seedingRateLabel="Default Single Species Seeding Rate PLS"
-                    seedingRateValue={calculatorResult[seed.label].step1.defaultSingleSpeciesSeedingRatePLS}
-                    plantValue={seedData[seed.label].defaultPlant}
-                    seedValue={seedData[seed.label].defaultSeed}
-                  />
-                </Grid>
-
-                <Grid item xs={6}>
-                  <SeedingRateCard
-                    seedingRateLabel="Seeding Rate in Mix"
-                    seedingRateValue={calculatorResult[seed.label].step1.seedingRate}
-                    plantValue={seedData[seed.label].adjustedPlant}
-                    seedValue={seedData[seed.label].adjustedSeed}
-                    showTooltip="mixSeedingRate"
-                  />
-                </Grid> */}
                 <SeedInfo
                   seed={seed}
                   seedData={seedData}

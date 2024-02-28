@@ -41,12 +41,12 @@ const dstTheme = createTheme({
     stepHeader: {
       fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
       lineHeight: '1.5',
-      padding: '1rem',
+      padding: '0 1rem',
       background: '#e5e7d5',
-      margin: '1rem 0px',
-      fontSize: '18px',
+      margin: '1rem 0',
+      fontSize: '1rem',
       fontWeight: 600,
-      textAlign: 'justify',
+      // textAlign: 'justify',
     },
   },
   components: {
