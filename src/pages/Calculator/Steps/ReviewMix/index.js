@@ -174,7 +174,7 @@ const ReviewMix = ({ calculator }) => {
       <Grid item xs={6} sx={{ textAlign: 'justify' }}>
         <DSTPieChart
           chartData={piechartData.seedingRateArray}
-          label="Pounds of Seed / Acre"
+          label="Pounds of Seed per Acre"
         />
       </Grid>
 
@@ -182,13 +182,13 @@ const ReviewMix = ({ calculator }) => {
         {council === 'MCCC' && (
           <DSTPieChart
             chartData={piechartData.plantsPerSqftArray}
-            label="Plants Per Sqft"
+            label="Plants per Sqft"
           />
         )}
         {council === 'NECCC' && (
         <DSTPieChart
           chartData={piechartData.seedsPerSqftArray}
-          label="Seeds Per Sqft"
+          label="Seeds per Sqft"
         />
         )}
       </Grid>

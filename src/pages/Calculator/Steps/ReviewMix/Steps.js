@@ -78,14 +78,14 @@ const ReviewMixSteps = ({
             <Typography variant="stepHeader">Seeding Rate in Mix</Typography>
           </Grid>
           {renderStepsForm(
-            'Single Species Seeding Rate PLS (Lbs / Acre)',
+            'Single Species Seeding Rate PLS (Lbs per Acre)',
             'Soil Fertility Modifier',
-            'Sum Species Of Group In Mix',
+            'Sum Species of Group In Mix',
           )}
           <Grid container justifyContent="space-evenly">
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Single Species Seeding Rate PLS'}
+                label={matchesMd ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
                 handleChange={(e) => {
                   handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
                 }}
@@ -112,7 +112,7 @@ const ReviewMixSteps = ({
             <Grid item xs={3}>
               <NumberTextField
                 disabled
-                label={matchesMd ? '' : 'Sum Species Of Group In Mix'}
+                label={matchesMd ? '' : 'Sum Species of Group In Mix'}
                 value={step1.sumGroupInMix}
               />
             </Grid>
@@ -124,7 +124,7 @@ const ReviewMixSteps = ({
 
             <Grid item xs={7}>
               <NumberTextField
-                label="Seeding Rate In Mix (Lbs / Acre)"
+                label="Seeding Rate In Mix (Lbs per Acre)"
                 disabled
                 value={step1.seedingRate}
               />
@@ -142,15 +142,15 @@ const ReviewMixSteps = ({
             <Typography variant="stepHeader">Seeding Rate in Mix</Typography>
           </Grid>
           {renderStepsForm(
-            'Single Species Seeding Rate PLS (Lbs / Acre)',
+            'Single Species Seeding Rate PLS (Lbs per Acre)',
             '% of Single Species Rate',
-            'Seeding Rate in Mix (Lbs / Acre)',
+            'Seeding Rate in Mix (Lbs per Acre)',
           )}
           <Grid container justifyContent="space-evenly">
             <Grid item xs={3}>
               <NumberTextField
                 disabled
-                label={matchesMd ? '' : 'Single Species Seeding Rate PLS (Lbs / Acre)'}
+                label={matchesMd ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
                 value={step1.singleSpeciesSeedingRate}
               />
             </Grid>
@@ -175,7 +175,7 @@ const ReviewMixSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Seeding Rate in Mix (Lbs / Acre)'}
+                label={matchesMd ? '' : 'Seeding Rate in Mix (Lbs per Acre)'}
                 disabled
                 value={step1.seedingRate}
               />
@@ -207,15 +207,15 @@ const ReviewMixSteps = ({
           />
         </Grid>
         {renderStepsForm(
-          'Seeding Rate in Mix (Lbs / Acre)',
+          'Seeding Rate in Mix (Lbs per Acre)',
           'Planting Method',
-          'Seeding Rate in Mix (Lbs / Acre)',
+          'Seeding Rate in Mix (Lbs per Acre)',
         )}
         <Grid container justifyContent="space-evenly">
           <Grid item xs={3}>
             <NumberTextField
               disabled
-              label={matchesMd ? '' : 'Seeding Rate in Mix (Lbs / Acre)'}
+              label={matchesMd ? '' : 'Seeding Rate in Mix (Lbs per Acre)'}
               value={step2.seedingRate}
             />
           </Grid>
@@ -238,7 +238,7 @@ const ReviewMixSteps = ({
 
           <Grid item xs={3}>
             <NumberTextField
-              label={matchesMd ? '' : 'Seeding Rate in Mix (Lbs / Acre)'}
+              label={matchesMd ? '' : 'Seeding Rate in Mix (Lbs per Acre)'}
               disabled
               value={step2.seedingRateAfterPlantingMethodModifier}
             />
@@ -252,14 +252,14 @@ const ReviewMixSteps = ({
           <Typography variant="stepHeader">Adjustment from Management Goals</Typography>
         </Grid>
         {renderStepsForm(
-          'Seeding Rate in Mix (Lbs / Acre)',
+          'Seeding Rate in Mix (Lbs per Acre)',
           'Management impact on Mix',
-          'Seeding Rate in Mix (Lbs / Acre)',
+          'Seeding Rate in Mix (Lbs per Acre)',
         )}
         <Grid container justifyContent="space-evenly">
           <Grid item xs={3}>
             <NumberTextField
-              label={matchesMd ? '' : 'Seeding Rate in Mix (Lbs / Acre)'}
+              label={matchesMd ? '' : 'Seeding Rate in Mix (Lbs per Acre)'}
               disabled
               value={step3.seedingRate}
             />
@@ -283,7 +283,7 @@ const ReviewMixSteps = ({
 
           <Grid item xs={3}>
             <NumberTextField
-              label={matchesMd ? '' : 'Seeding Rate in Mix (Lbs / Acre)'}
+              label={matchesMd ? '' : 'Seeding Rate in Mix (Lbs per Acre)'}
               disabled
               value={step3.seedingRateAfterManagementImpact}
             />
@@ -297,11 +297,11 @@ const ReviewMixSteps = ({
         <Grid item xs={12}>
           <Typography variant="stepHeader">Bulk Seeding Rate</Typography>
         </Grid>
-        {renderStepsForm('Seeding Rate in Mix (Lbs / Acre)', '% Germination', '% Purity')}
+        {renderStepsForm('Seeding Rate in Mix (Lbs per Acre)', '% Germination', '% Purity')}
         <Grid container justifyContent="space-evenly">
           <Grid item xs={3}>
             <NumberTextField
-              label={matchesMd ? '' : 'Seeding Rate in Mix'}
+              label={matchesMd ? '' : 'Seeding Rate in Mix (Lbs per Acre)'}
               disabled
               value={step4.seedingRateAfterManagementImpact}
             />
@@ -342,7 +342,7 @@ const ReviewMixSteps = ({
 
           <Grid item xs={7}>
             <NumberTextField
-              label="Bulk Seeding Rate (Lbs / Acre)"
+              label="Bulk Seeding Rate (Lbs per Acre)"
               disabled
               value={step4.bulkSeedingRate}
             />
@@ -357,11 +357,11 @@ const ReviewMixSteps = ({
         <Grid item xs={12}>
           <Typography variant="stepHeader">Pounds for Purchase</Typography>
         </Grid>
-        {renderStepsForm('Bulk Seeding Rate (Lbs / Acre)', 'Acres', 'Pounds for Purchase')}
+        {renderStepsForm('Bulk Seeding Rate (Lbs per Acre)', 'Acres', 'Pounds for Purchase')}
         <Grid container justifyContent="space-evenly">
           <Grid item xs={3}>
             <NumberTextField
-              label={matchesMd ? '' : 'Bulk Seeding Rate (Lbs / Acre)'}
+              label={matchesMd ? '' : 'Bulk Seeding Rate (Lbs per Acre)'}
               disabled
               value={step5.bulkSeedingRate}
             />
