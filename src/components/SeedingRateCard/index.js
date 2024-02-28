@@ -32,7 +32,7 @@ const UnitSelection = () => {
         variant={unit === 'acre' ? 'outlined' : 'contained'}
         onClick={() => dispatch(selectUnitRedux('sqft'))}
       >
-        Sqft
+        SqFt
       </Button>
       {'  '}
       <Button

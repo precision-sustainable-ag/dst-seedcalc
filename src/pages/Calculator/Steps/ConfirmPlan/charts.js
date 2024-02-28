@@ -75,7 +75,7 @@ const ConfirmPlanCharts = ({ council, calculator, calculatorResult }) => {
           borderBottom: '1px solid #CCCCCC',
         }}
       >
-        <ConfirmPlanChip label="Price/Acre" value={`$${calculateTotalPricePerAcre()}`} />
+        <ConfirmPlanChip label="Price per Acre" value={`$${calculateTotalPricePerAcre()}`} />
       </Grid>
 
       <Grid
@@ -90,7 +90,7 @@ const ConfirmPlanCharts = ({ council, calculator, calculatorResult }) => {
       >
         <DSTPieChart
           chartData={piechartData.seedingRateArray}
-          label="Pounds of Seed / Acre"
+          label="Pounds of Seed per Acre"
         />
       </Grid>
       <Grid
@@ -105,13 +105,13 @@ const ConfirmPlanCharts = ({ council, calculator, calculatorResult }) => {
         {council === 'MCCC' && (
           <DSTPieChart
             chartData={piechartData.plantsPerSqftArray}
-            label="Plants Per Sqft"
+            label="Plants per SqFt"
           />
         )}
         {council === 'NECCC' && (
         <DSTPieChart
           chartData={piechartData.seedsPerSqftArray}
-          label="Seeds Per Sqft"
+          label="Seeds per SqFt"
         />
         )}
       </Grid>

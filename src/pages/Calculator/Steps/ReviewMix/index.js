@@ -182,13 +182,13 @@ const ReviewMix = ({ calculator }) => {
         {council === 'MCCC' && (
           <DSTPieChart
             chartData={piechartData.plantsPerSqftArray}
-            label="Plants per Sqft"
+            label="Plants per SqFt"
           />
         )}
         {council === 'NECCC' && (
         <DSTPieChart
           chartData={piechartData.seedsPerSqftArray}
-          label="Seeds per Sqft"
+          label="Seeds per SqFt"
         />
         )}
       </Grid>
