@@ -107,7 +107,7 @@ const SeedingRateCard = ({
         <Typography>{displayValue.seedingRateValue}</Typography>
       </Box>
       <Typography>
-        Lbs /
+        Lbs per
         {' '}
         <span style={{ fontWeight: 'bold' }}>{unitText}</span>
       </Typography>
@@ -126,7 +126,7 @@ const SeedingRateCard = ({
         <Typography>{twoDigit(displayValue.plantValue)}</Typography>
       </Box>
       <Typography>
-        Approx Plants Per
+        Approx Plants per
         {' '}
         <span style={{ fontWeight: 'bold' }}>{unitText}</span>
       </Typography>
@@ -145,7 +145,7 @@ const SeedingRateCard = ({
         <Typography>{twoDigit(displayValue.seedValue)}</Typography>
       </Box>
       <Typography>
-        Seeds Per
+        Seeds per
         {' '}
         <span style={{ fontWeight: 'bold' }}>{unitText}</span>
       </Typography>
