@@ -190,7 +190,7 @@ const ReviewMixSteps = ({
         <Grid item xs={12}>
           <Typography variant="stepHeader">Adjustment from Seeding Method</Typography>
         </Grid>
-        <Grid item xs={6} margin="1rem">
+        <Grid item xs={6} paddingLeft="1rem" paddingBottom="1rem">
           <Dropdown
             value={options[seed.label].plantingMethod ?? ''}
             label="Seeding Method: "
@@ -335,12 +335,12 @@ const ReviewMixSteps = ({
             />
           </Grid>
         </Grid>
-        <Grid container p="10px">
+        <Grid container p="1rem 1rem 0 1rem">
           <Grid item xs={4}>
             <Typography variant="mathIcon">=</Typography>
           </Grid>
 
-          <Grid item xs={7}>
+          <Grid item xs={8}>
             <NumberTextField
               label="Bulk Seeding Rate (Lbs / Acre)"
               disabled
@@ -348,7 +348,7 @@ const ReviewMixSteps = ({
             />
           </Grid>
 
-          <Grid item xs={1} />
+          {/* <Grid item xs={1} /> */}
         </Grid>
       </>
 
