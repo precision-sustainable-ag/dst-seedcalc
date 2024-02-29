@@ -6,27 +6,19 @@ import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { Typography, Button } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  ResponsiveContainer,
-  ScatterChart,
-  Scatter,
-  XAxis,
-  YAxis,
-  LabelList,
-  ZAxis,
-} from 'recharts';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import {
-  twoDigit, reviewMix, reviewMixNECCC, calculatePieChartData,
+  reviewMix, reviewMixNECCC, calculatePieChartData,
   calculatePlantsandSeedsPerAcre,
 } from '../../../../shared/utils/calculator';
 import ReviewMixSteps from './Steps';
-import '../steps.scss';
-import { DSTPieChart } from '../../../../components/DSTPieChart';
+import DSTPieChart from '../../../../components/DSTPieChart';
+import DSTBarChart from '../../../../components/DSTBarChart';
 import SeedingRateCard, { UnitSelection } from '../../../../components/SeedingRateCard';
 import { setBulkSeedingRateRedux, setOptionRedux } from '../../../../features/calculatorSlice/actions';
+import '../steps.scss';
 
 const defaultResultMCCC = {
   step1: { singleSpeciesSeedingRate: 0, percentOfRate: 0, seedingRate: 0 },
@@ -59,7 +51,6 @@ const defaultPieChartData = {
 // eslint-disable-next-line no-unused-vars
 const ReviewMix = ({ calculator }) => {
   const dispatch = useDispatch();
-
   const { council } = useSelector((state) => state.siteCondition);
   const {
     seedsSelected, sideBarSelection, options,
@@ -174,97 +165,6 @@ const ReviewMix = ({ calculator }) => {
   //                     Render                           //
   /// ///////////////////////////////////////////////////////
 
-  const renderAccordianChart = (seed) => {
-    const labels = [
-      {
-        label: 'Single Species Seeding Rate',
-        key: 'singleSpeciesSeedingRatePLS',
-        val: calculatorResult[seed.label].step1.singleSpeciesSeedingRate,
-      },
-      {
-        label: 'Added to Mix',
-        key: 'step2Result',
-        val: calculatorResult[seed.label].step2.seedingRate,
-      },
-      {
-        label: 'Drilled or Broadcast with Cultipack',
-        key: 'drilled',
-        val: calculatorResult[seed.label].step2.seedingRateAfterPlantingMethodModifier,
-      },
-      {
-        label: `Management Impacts on Mix (${calculatorResult[seed.label].step3.managementImpactOnMix})`,
-        key: 'managementImpactOnMix',
-        val: calculatorResult[seed.label].step3.seedingRateAfterManagementImpact,
-      },
-      {
-        label: 'Bulk Germination and Purity',
-        key: 'bulkSeedingRate',
-        val: calculatorResult[seed.label].step4.bulkSeedingRate,
-      },
-    ];
-
-    const generateScatterData = () => {
-      const results = [];
-      let counter = 0;
-      labels.map((l) => {
-        counter += 30;
-        results.push({ x: counter, y: twoDigit(l.val), z: 400 });
-        return null;
-      });
-      return results;
-    };
-
-    const scatterData = generateScatterData();
-
-    return (
-      <Grid container>
-        <Grid item xs={12}>
-          <ResponsiveContainer width="100%" height={200}>
-            <ScatterChart width={400} height={500} position="center">
-              <XAxis type="number" dataKey="x" name="" unit="" tick={false} />
-              <YAxis
-                type="number"
-                dataKey="y"
-                name="Mix Seeding Rate"
-                unit=""
-              />
-              <ZAxis dataKey="z" range={[1000, 1449]} name="" unit="" />
-
-              <Scatter
-                name="Mix Seeding Rates"
-                data={scatterData}
-                fill="#E7885F"
-                margin={{
-                  top: 5,
-                  right: 30,
-                  left: 20,
-                  bottom: 5,
-                }}
-              >
-                <LabelList dataKey="y" fill="#fff" position="center" />
-              </Scatter>
-            </ScatterChart>
-          </ResponsiveContainer>
-        </Grid>
-
-        {labels.map((l, i) => (
-          <Grid
-            container
-            sx={{ backgroundColor: !(i % 2) && '#e3e5d3' }}
-            key={i}
-          >
-            <Grid item sx={{ textAlign: 'justify' }} xs={10} pl={1}>
-              {l.label}
-            </Grid>
-            <Grid item xs={2}>
-              {twoDigit(l.val)}
-            </Grid>
-          </Grid>
-        ))}
-      </Grid>
-    );
-  };
-
   return (
     <Grid container>
       <Grid item xs={12}>
@@ -310,10 +210,10 @@ const ReviewMix = ({ calculator }) => {
               <Typography>{seed.label}</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              {renderAccordianChart(seed)}
 
-              <Grid container pt="1rem">
-                <Grid item xs={6}>
+              <Grid container>
+                <DSTBarChart seed={seed} calculatorResult={calculatorResult} />
+                <Grid item xs={6} pt="1rem">
                   <SeedingRateCard
                     seedingRateLabel="Seeding Rate in Mix PLS"
                     seedingRateValue={calculatorResult[seed.label].step2.seedingRate}
@@ -322,7 +222,7 @@ const ReviewMix = ({ calculator }) => {
                   />
                 </Grid>
 
-                <Grid item xs={6}>
+                <Grid item xs={6} pt="1rem">
                   <SeedingRateCard
                     seedingRateLabel="Bulk Seeding Rate"
                     seedingRateValue={calculatorResult[seed.label].step4.bulkSeedingRate}
