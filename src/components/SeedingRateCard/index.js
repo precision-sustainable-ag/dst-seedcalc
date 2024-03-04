@@ -16,7 +16,7 @@ import { selectUnitRedux } from '../../features/calculatorSlice/actions';
 
 const roundToMillionth = (num) => {
   const million = 10 ** 6;
-  return (Math.round(num * million) / million) * 1000;
+  return Math.round(num * million) / (million / 1000);
 };
 
 const UnitSelection = () => {
