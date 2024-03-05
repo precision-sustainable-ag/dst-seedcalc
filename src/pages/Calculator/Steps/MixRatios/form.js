@@ -133,9 +133,6 @@ const MixRatioSteps = ({
             <Grid item xs={3}>
               <NumberTextField
                 label={matchesMd ? '' : '% of Single Species Rate'}
-                // handleChange={(e) => {
-                //   handleFormValueChange(seed, 'percentOfRate', parseFloat(e.target.value) / 100);
-                // }}
                 disabled
                 value={convertToPercent(step1.percentOfRate)}
               />
@@ -267,9 +264,6 @@ const MixRatioSteps = ({
             <Grid item xs={3}>
               <NumberTextField
                 label={matchesMd ? '' : '% Survival'}
-                // handleChange={(e) => {
-                //   handleFormValueChange(seed, 'percentSurvival', parseFloat(e.target.value) / 100);
-                // }}
                 disabled
                 value={convertToPercent(step3.percentSurvival)}
               />

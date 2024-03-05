@@ -46,7 +46,6 @@ const dstTheme = createTheme({
       margin: '1rem 0',
       fontSize: '1rem',
       fontWeight: 600,
-      // textAlign: 'justify',
     },
   },
   components: {

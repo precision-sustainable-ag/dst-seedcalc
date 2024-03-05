@@ -348,7 +348,6 @@ const ReviewMixSteps = ({
             />
           </Grid>
 
-          {/* <Grid item xs={1} /> */}
         </Grid>
       </>
 
