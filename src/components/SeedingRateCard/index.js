@@ -307,9 +307,9 @@ const SeedingRateCard = ({
         <Typography>{displayValue.seedingRateValue}</Typography>
       </Box>
       <Typography>
-        Lbs /
+        Lbs per
         {' '}
-        <span style={{ fontWeight: 'bold' }}>{unitText}</span>
+        <span style={{ fontWeight: 'bold' }}>{unit === 'sqft' ? '1000SqFt' : unitText}</span>
       </Typography>
 
       <Box

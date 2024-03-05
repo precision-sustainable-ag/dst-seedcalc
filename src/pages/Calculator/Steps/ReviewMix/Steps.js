@@ -117,7 +117,7 @@ const ReviewMixSteps = ({
               />
             </Grid>
           </Grid>
-          <Grid container p="10px">
+          <Grid container p="1rem 1rem 0 1rem">
             <Grid item xs={4}>
               <Typography variant="mathIcon">=</Typography>
             </Grid>
