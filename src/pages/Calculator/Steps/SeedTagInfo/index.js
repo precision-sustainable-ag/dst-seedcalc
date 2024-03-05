@@ -163,9 +163,10 @@ const SeedTagInfo = ({ completedStep, setCompletedStep }) => {
                   </LeftGrid>
                   <Grid item xs={4}>
                     <NumberTextField
-                      value={seedsPerPound(seed)}
+                      value={parseFloat(seedsPerPound(seed))}
                       handleChange={(e) => {
-                        updateSeedsPerPound(seed.label, parseFloat(e.target.value));
+                        const val = parseFloat(e.target.value.replace(/,/g, ''));
+                        updateSeedsPerPound(seed.label, val);
                       }}
                     />
                   </Grid>

@@ -19,6 +19,12 @@ const roundToMillionth = (num) => {
   return Math.round(num * million) / (million / 1000);
 };
 
+const formatToHundredth = (num) => {
+  if (num < 100) return num;
+  const res = Math.round((num / 100)) * 100;
+  return res.toLocaleString();
+};
+
 const UnitSelection = () => {
   const unit = useSelector((state) => state.calculator.unit);
   const dispatch = useDispatch();
@@ -127,10 +133,10 @@ const SeedInfo = ({
             <SeedingRateChip value={singleData.seedingRate} />
           </Grid>
           <Grid item xs={4}>
-            <SeedingRateChip value={singleData.plantValue} />
+            <SeedingRateChip value={formatToHundredth(singleData.plantValue)} />
           </Grid>
           <Grid item xs={4}>
-            <SeedingRateChip value={singleData.seedValue} />
+            <SeedingRateChip value={formatToHundredth(singleData.seedValue)} />
           </Grid>
           <Grid item xs={4}>
             <SeedLabel
@@ -157,10 +163,10 @@ const SeedInfo = ({
             <SeedingRateChip value={mixData.seedingRate} />
           </Grid>
           <Grid item xs={4}>
-            <SeedingRateChip value={mixData.plantValue} />
+            <SeedingRateChip value={formatToHundredth(mixData.plantValue)} />
           </Grid>
           <Grid item xs={4}>
-            <SeedingRateChip value={mixData.seedValue} />
+            <SeedingRateChip value={formatToHundredth(mixData.seedValue)} />
           </Grid>
           <Grid item xs={4}>
             <SeedLabel
@@ -295,7 +301,7 @@ const SeedingRateCard = ({
           borderRadius: '16px',
         }}
       >
-        <Typography>{twoDigit(displayValue.plantValue)}</Typography>
+        <Typography>{formatToHundredth(twoDigit(displayValue.plantValue))}</Typography>
       </Box>
       <Typography>
         Approx Plants Per
@@ -314,7 +320,7 @@ const SeedingRateCard = ({
           borderRadius: '16px',
         }}
       >
-        <Typography>{twoDigit(displayValue.seedValue)}</Typography>
+        <Typography>{formatToHundredth(twoDigit(displayValue.seedValue))}</Typography>
       </Box>
       <Typography>
         Seeds Per
