@@ -179,9 +179,7 @@ const MixRatio = ({ calculator, setCalculator }) => {
 
       <Grid container display="flex" justifyContent="center">
         <Grid item style={{ position: 'fixed', top: '0px', zIndex: 1000 }}>
-
           {showAlert && (
-
           <FadeAlert
             showAlert={showAlert}
             severity="success"
@@ -201,7 +199,6 @@ const MixRatio = ({ calculator, setCalculator }) => {
             Adjust via the dropdown below as needed based on your goals.'}
           />
           )}
-
         </Grid>
       </Grid>
       <Grid item xs={6} sx={{ textAlign: 'justify' }}>
@@ -250,6 +247,7 @@ const MixRatio = ({ calculator, setCalculator }) => {
                   seedData={seedData}
                   calculatorResult={calculatorResult}
                   handleFormValueChange={handleFormValueChange}
+                  council={council}
                 />
 
                 <Grid item xs={12}>
@@ -270,9 +268,7 @@ const MixRatio = ({ calculator, setCalculator }) => {
                 <Grid item xs={12}>
                   {showSteps[seed.label] && (
                   <MixRatioSteps
-                    seed={seed}
                     council={council}
-                    handleFormValueChange={handleFormValueChange}
                     calculatorResult={calculatorResult[seed.label]}
                   />
                   )}

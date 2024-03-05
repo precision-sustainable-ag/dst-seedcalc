@@ -7,7 +7,7 @@ import { convertToPercent } from '../../../../shared/utils/calculator';
 import '../steps.scss';
 
 const MixRatioSteps = ({
-  seed, council, handleFormValueChange, calculatorResult,
+  council, calculatorResult,
 }) => {
   const theme = useTheme();
   const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
@@ -58,9 +58,7 @@ const MixRatioSteps = ({
             <Grid item xs={3}>
               <NumberTextField
                 label={matchesMd ? '' : 'Single Species Seeding Rate PLS (Lbs / Acre)'}
-                handleChange={(e) => {
-                  handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
-                }}
+                disabled
                 value={step1.defaultSingleSpeciesSeedingRatePLS}
               />
             </Grid>

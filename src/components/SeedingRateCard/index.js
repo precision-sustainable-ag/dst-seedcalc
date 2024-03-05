@@ -6,14 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { twoDigit } from '../../shared/utils/calculator';
 import { selectUnitRedux } from '../../features/calculatorSlice/actions';
 
-// const tooltipMCCC = {
-//   mixSeedingRate: 'Seeding Rate in Mix = Default Single Species Seeding Rate PLS * Percent of Rate',
-// };
-
-// const tooltipNECCC = {
-//   mixSeedingRate: 'Seeding Rate in Mix = Default Single Species Seeding Rate PLS *  Soil Fertility Modifier / Sum Species Of Group in Mix',
-// };
-
 const roundToMillionth = (num) => {
   const million = 10 ** 6;
   return Math.round(num * million) / (million / 1000);
@@ -51,10 +43,12 @@ const UnitSelection = () => {
 };
 
 const SeedInfo = ({
-  seed, seedData, calculatorResult, handleFormValueChange,
+  seed, seedData, calculatorResult, handleFormValueChange, council,
 }) => {
   const [singleSpeciesRate, setSingleSpeciesRate] = useState(0);
   const [survival, setSurvival] = useState(0);
+  const [singleSpeciesSeedingRate, setSingleSpeciesSeedingRate] = useState(0);
+  const [range, setRange] = useState([0, 0]);
   const [singleData, setSingleData] = useState({
     seedingRate: calculatorResult[seed.label].step1.defaultSingleSpeciesSeedingRatePLS,
     plantValue: seedData[seed.label].defaultPlant,
@@ -68,6 +62,12 @@ const SeedInfo = ({
   const { unit } = useSelector((state) => state.calculator);
   // eslint-disable-next-line no-nested-ternary
   const unitText = unit === 'acre' ? 'Acre' : unit === 'sqft' ? 'SqFt' : '';
+
+  useEffect(() => {
+    const singleSpeciesSeedingRateVal = parseFloat(seed.attributes.Coefficients['Single Species Seeding Rate'].values[0]);
+    setSingleSpeciesSeedingRate(singleSpeciesSeedingRateVal);
+    setRange([Math.round(singleSpeciesSeedingRateVal * 0.5), Math.round(singleSpeciesSeedingRateVal * 1.5)]);
+  }, []);
 
   useEffect(() => {
     if (unit === 'sqft') {
@@ -188,32 +188,54 @@ const SeedInfo = ({
           </Grid>
         </Grid>
 
+        {council === 'MCCC'
+        && (
+        <>
+          <Grid item xs={12} pt="1rem">
+            <Typography textAlign="left">
+              {`% of Single Species Rate: ${singleSpeciesRate}%`}
+            </Typography>
+            <Slider
+              min={0}
+              max={100}
+              value={singleSpeciesRate}
+              valueLabelDisplay="auto"
+              onChange={(e) => setSingleSpeciesRate(e.target.value)}
+              onChangeCommitted={() => handleFormValueChange(seed, 'percentOfRate', parseFloat(singleSpeciesRate) / 100)}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography textAlign="left">
+              {`% Survival: ${survival}%`}
+            </Typography>
+            <Slider
+              min={0}
+              max={100}
+              value={survival}
+              valueLabelDisplay="auto"
+              onChange={(e) => setSurvival(e.target.value)}
+              onChangeCommitted={() => handleFormValueChange(seed, 'percentSurvival', parseFloat(survival) / 100)}
+            />
+          </Grid>
+        </>
+        )}
+
+        {council === 'NECCC' && (
         <Grid item xs={12} pt="1rem">
           <Typography textAlign="left">
-            {`% of Single Species Rate: ${singleSpeciesRate}%`}
+            {`Single Species Seeding Rate PLS: ${singleSpeciesSeedingRate} Lbs per Acre`}
           </Typography>
           <Slider
-            min={0}
-            max={100}
-            value={singleSpeciesRate}
+            min={range[0]}
+            max={range[1]}
+            value={singleSpeciesSeedingRate}
             valueLabelDisplay="auto"
-            onChange={(e) => setSingleSpeciesRate(e.target.value)}
-            onChangeCommitted={() => handleFormValueChange(seed, 'percentOfRate', parseFloat(singleSpeciesRate) / 100)}
+            onChange={(e) => setSingleSpeciesSeedingRate(e.target.value)}
+            onChangeCommitted={() => handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(singleSpeciesSeedingRate))}
           />
         </Grid>
-        <Grid item xs={12}>
-          <Typography textAlign="left">
-            {`% Survival: ${survival}%`}
-          </Typography>
-          <Slider
-            min={0}
-            max={100}
-            value={survival}
-            valueLabelDisplay="auto"
-            onChange={(e) => setSurvival(e.target.value)}
-            onChangeCommitted={() => handleFormValueChange(seed, 'percentSurvival', parseFloat(survival) / 100)}
-          />
-        </Grid>
+        )}
+
       </Grid>
     </Grid>
   );
