@@ -291,8 +291,8 @@ const SeedingRateCard = ({
     <>
       <Typography display="flex" alignItems="center" justifyContent="center">
         {seedingRateLabel}
-
       </Typography>
+      {/* TODO: use custom components for these chips */}
       <Box
         sx={{
           width: '110px',
