@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
-  Grid, Typography, TextField, Button, FormGroup, FormControlLabel, Checkbox, Snackbar,
+  Grid, Typography, TextField, Button, FormGroup, FormControlLabel, Checkbox, Snackbar, useTheme,
 } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { useNavigate } from 'react-router-dom';
 
 const defaultFeedback = {
@@ -20,6 +21,9 @@ const Feedback = () => {
   const [feedback, setFeedback] = useState(defaultFeedback);
   const [snackbarData, setSnackbarData] = useState(defaultSnackbar);
   const [alertMessage, setAlertMessage] = useState('');
+
+  const theme = useTheme();
+  const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
 
   const navigate = useNavigate();
 
@@ -152,7 +156,9 @@ const Feedback = () => {
       <Grid container item spacing={1} padding="0 10%" style={{ textAlign: 'justify' }}>
         {/* Title */}
         <Grid item xs={12}>
-          <Typography variant="h4">Cover Crop Seeding Rate Calculator Feedback</Typography>
+          <Typography variant={matchesMd ? 'h6' : 'h4'}>
+            Cover Crop Seeding Rate Calculator Feedback
+          </Typography>
         </Grid>
 
         {/* Feedback Title */}
@@ -249,10 +255,10 @@ const Feedback = () => {
           />
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid item xs={12} p="1rem">
           {alertMessage !== ''
           && (
-          <Typography variant="body1" style={{ color: 'red' }}>
+          <Typography variant="body1" style={{ color: 'red' }} p="0.5rem 0">
             {alertMessage}
             . Please fill all required fields before submitting.
           </Typography>
