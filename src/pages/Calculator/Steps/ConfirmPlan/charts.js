@@ -4,6 +4,7 @@ import { Typography, Box } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { calculatePieChartData, twoDigit } from '../../../../shared/utils/calculator';
 import DSTPieChart from '../../../../components/DSTPieChart';
+import { pieChartUnits } from '../../../../shared/data/units';
 import '../steps.scss';
 
 const defaultPieChartData = {
@@ -90,7 +91,7 @@ const ConfirmPlanCharts = ({ council, calculator, calculatorResult }) => {
       >
         <DSTPieChart
           chartData={piechartData.seedingRateArray}
-          label="Pounds of Seed per Acre"
+          label={pieChartUnits.poundsOfSeedPerAcre}
         />
       </Grid>
       <Grid
@@ -105,13 +106,13 @@ const ConfirmPlanCharts = ({ council, calculator, calculatorResult }) => {
         {council === 'MCCC' && (
           <DSTPieChart
             chartData={piechartData.plantsPerSqftArray}
-            label="Plants per SqFt"
+            label={pieChartUnits.plantsPerSqft}
           />
         )}
         {council === 'NECCC' && (
         <DSTPieChart
           chartData={piechartData.seedsPerSqftArray}
-          label="Seeds per SqFt"
+          label={pieChartUnits.seedsPerSqft}
         />
         )}
       </Grid>
