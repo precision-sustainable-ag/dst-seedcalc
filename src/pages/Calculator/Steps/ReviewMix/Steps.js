@@ -142,9 +142,10 @@ const ReviewMixSteps = ({
             <Grid item xs={3}>
               <NumberTextField
                 label={matchesMd ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
-                handleChange={(e) => {
-                  handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
-                }}
+                disabled
+                // handleChange={(e) => {
+                //   handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
+                // }}
                 value={step1.singleSpeciesSeedingRate}
               />
             </Grid>
@@ -230,9 +231,10 @@ const ReviewMixSteps = ({
             <Grid item xs={3}>
               <NumberTextField
                 label={matchesMd ? '' : '% of Single Species Rate'}
-                handleChange={(e) => {
-                  handleFormValueChange(seed, 'percentOfRate', parseFloat(e.target.value) / 100);
-                }}
+                disabled
+                // handleChange={(e) => {
+                //   handleFormValueChange(seed, 'percentOfRate', parseFloat(e.target.value) / 100);
+                // }}
                 value={convertToPercent(step1.percentOfRate)}
               />
             </Grid>
@@ -402,9 +404,10 @@ const ReviewMixSteps = ({
           <Grid item xs={3}>
             <NumberTextField
               label={matchesMd ? '' : '% Germination'}
-              handleChange={(e) => {
-                handleFormValueChange(seed, 'germination', parseFloat(e.target.value) / 100);
-              }}
+              disabled
+              // handleChange={(e) => {
+              //   handleFormValueChange(seed, 'germination', parseFloat(e.target.value) / 100);
+              // }}
               value={convertToPercent(step4.germination)}
             />
           </Grid>
@@ -416,9 +419,10 @@ const ReviewMixSteps = ({
           <Grid item xs={3}>
             <NumberTextField
               label={matchesMd ? '' : '% Purity'}
-              handleChange={(e) => {
-                handleFormValueChange(seed, 'purity', parseFloat(e.target.value) / 100);
-              }}
+              disabled
+              // handleChange={(e) => {
+              //   handleFormValueChange(seed, 'purity', parseFloat(e.target.value) / 100);
+              // }}
               value={convertToPercent(step4.purity)}
             />
           </Grid>
