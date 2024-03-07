@@ -4,6 +4,7 @@ import { Typography, Box } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { calculatePieChartData, twoDigit } from '../../../../shared/utils/calculator';
 import DSTPieChart from '../../../../components/DSTPieChart';
+import { pieChartUnits } from '../../../../shared/data/units';
 import '../steps.scss';
 
 const defaultPieChartData = {
@@ -63,7 +64,7 @@ const ConfirmPlanCharts = ({ council, calculator, calculatorResult }) => {
         }}
       >
         <ConfirmPlanChip
-          label="Amount of mix for 50 acres"
+          label="Amount of Mix for 50 Acres"
           // FIXME: temporary, need verification
           value={`${mixSeedingRate * 50}lbs`}
         />
@@ -75,7 +76,7 @@ const ConfirmPlanCharts = ({ council, calculator, calculatorResult }) => {
           borderBottom: '1px solid #CCCCCC',
         }}
       >
-        <ConfirmPlanChip label="Price/Acre" value={`$${calculateTotalPricePerAcre()}`} />
+        <ConfirmPlanChip label="Price per Acre" value={`$${calculateTotalPricePerAcre()}`} />
       </Grid>
 
       <Grid
@@ -90,7 +91,7 @@ const ConfirmPlanCharts = ({ council, calculator, calculatorResult }) => {
       >
         <DSTPieChart
           chartData={piechartData.seedingRateArray}
-          label="Pounds of Seed / Acre"
+          label={pieChartUnits.poundsOfSeedPerAcre}
         />
       </Grid>
       <Grid
@@ -105,13 +106,13 @@ const ConfirmPlanCharts = ({ council, calculator, calculatorResult }) => {
         {council === 'MCCC' && (
           <DSTPieChart
             chartData={piechartData.plantsPerSqftArray}
-            label="Plants Per Sqft"
+            label={pieChartUnits.plantsPerSqft}
           />
         )}
         {council === 'NECCC' && (
         <DSTPieChart
           chartData={piechartData.seedsPerSqftArray}
-          label="Seeds Per Sqft"
+          label={pieChartUnits.seedsPerSqft}
         />
         )}
       </Grid>

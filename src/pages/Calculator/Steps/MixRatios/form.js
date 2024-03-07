@@ -50,14 +50,14 @@ const MixRatioSteps = ({
             <Typography variant="stepHeader">Seeding Rate in Mix</Typography>
           </Grid>
           {renderFormLabel(
-            'Single Species Seeding Rate PLS (Lbs / Acre)',
+            'Single Species Seeding Rate PLS (Lbs per Acre)',
             'Soil Fertility Modifier',
-            'Sum Species Of Group In Mix (Lbs / Acre)',
+            'Sum Species of Group In Mix (Lbs per Acre)',
           )}
           <Grid container justifyContent="space-evenly">
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Single Species Seeding Rate PLS (Lbs / Acre)'}
+                label={matchesMd ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
                 disabled
                 value={step1.defaultSingleSpeciesSeedingRatePLS}
               />
@@ -82,7 +82,7 @@ const MixRatioSteps = ({
             <Grid item xs={3}>
               <NumberTextField
                 disabled
-                label={matchesMd ? '' : 'Sum Species Of Group In Mix'}
+                label={matchesMd ? '' : 'Sum Species of Group In Mix'}
                 value={step1.sumGroupInMix}
               />
             </Grid>
@@ -95,7 +95,7 @@ const MixRatioSteps = ({
 
             <Grid item xs={7}>
               <NumberTextField
-                label="Seeding Rate In Mix (Lbs / Acre)"
+                label="Seeding Rate In Mix (Lbs per Acre)"
                 disabled
                 value={step1.seedingRate}
               />
@@ -113,14 +113,14 @@ const MixRatioSteps = ({
             <Typography variant="stepHeader">Seeding Rate in Mix</Typography>
           </Grid>
           {renderFormLabel(
-            'Single Species Seeding Rate PLS (Lbs / Acre)',
+            'Single Species Seeding Rate PLS (Lbs per Acre)',
             '% of Single Species Rate',
-            'Seeding Rate In Mix (Lbs / Acre)',
+            'Seeding Rate In Mix (Lbs per Acre)',
           )}
           <Grid container justifyContent="space-evenly">
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Single Species Seeding Rate PLS (Lbs / Acre)'}
+                label={matchesMd ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
                 disabled
                 value={step1.defaultSingleSpeciesSeedingRatePLS}
               />
@@ -144,7 +144,7 @@ const MixRatioSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Seeding Rate In Mix (Lbs / Acre)'}
+                label={matchesMd ? '' : 'Seeding Rate In Mix (Lbs per Acre)'}
                 disabled
                 value={step1.seedingRate}
               />
@@ -159,15 +159,15 @@ const MixRatioSteps = ({
           <Typography variant="stepHeader">Seeds Per Acre</Typography>
         </Grid>
         {renderFormLabel(
-          'Seeds / Pound',
-          'Seeding Rate In Mix (Lbs / Acre)',
-          'Seeds / Acre',
+          'Seeds per Pound',
+          'Seeding Rate In Mix (Lbs per Acre)',
+          'Seeds per Acre',
         )}
         <Grid container justifyContent="space-evenly">
           <Grid item xs={3}>
             <NumberTextField
               disabled
-              label={matchesMd ? '' : 'Seeds / Pound'}
+              label={matchesMd ? '' : 'Seeds per Pound'}
               value={step2.seedsPerPound}
             />
           </Grid>
@@ -179,7 +179,7 @@ const MixRatioSteps = ({
           <Grid item xs={3}>
             <NumberTextField
               disabled
-              label={matchesMd ? '' : 'Seeding Rate In Mix (Lbs / Acre)'}
+              label={matchesMd ? '' : 'Seeding Rate In Mix (Lbs per Acre)'}
               value={step2.seedingRate}
             />
           </Grid>
@@ -190,7 +190,7 @@ const MixRatioSteps = ({
 
           <Grid item xs={3}>
             <NumberTextField
-              label={matchesMd ? '' : 'Seeds / Acre'}
+              label={matchesMd ? '' : 'Seeds per Acre'}
               disabled
               value={step2.seedsPerAcre}
             />
@@ -204,11 +204,11 @@ const MixRatioSteps = ({
           <Grid item xs={12}>
             <Typography variant="stepHeader">Seeds per SqFt</Typography>
           </Grid>
-          {renderFormLabel('Seeds / Acre', 'Sq. Ft. / Acres', 'Seeds / Sq. Ft.')}
+          {renderFormLabel('Seeds per Acre', 'SqFt per Acre', 'Seeds per SqFt')}
           <Grid container justifyContent="space-evenly">
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Seeds / Acre'}
+                label={matchesMd ? '' : 'Seeds per Acre'}
                 disabled
                 value={step3.seedsPerAcre}
               />
@@ -220,7 +220,7 @@ const MixRatioSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Sq. Ft./ Acre'}
+                label={matchesMd ? '' : 'SqFt per Acre'}
                 disabled
                 value={step3.sqftPerAcre}
               />
@@ -232,7 +232,7 @@ const MixRatioSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Seeds / Sq. Ft.'}
+                label={matchesMd ? '' : 'Seeds per SqFt'}
                 disabled
                 value={step3.seedsPerSqft}
               />
@@ -247,11 +247,11 @@ const MixRatioSteps = ({
           <Grid item xs={12}>
             <Typography variant="stepHeader">Plants Per Acre</Typography>
           </Grid>
-          {renderFormLabel('Seeds / Acre', '% Survival', 'Plants / Acre')}
+          {renderFormLabel('Seeds per Acre', '% Survival', 'Plants per Acre')}
           <Grid container justifyContent="space-evenly">
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Seeds / Acre'}
+                label={matchesMd ? '' : 'Seeds per Acre'}
                 disabled
                 value={step3.seedsPerAcre}
               />
@@ -275,7 +275,7 @@ const MixRatioSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Plants / Acre'}
+                label={matchesMd ? '' : 'Plants per Acre'}
                 disabled
                 value={step3.plantsPerAcre}
               />
@@ -286,14 +286,14 @@ const MixRatioSteps = ({
             <Typography variant="stepHeader">Approximate Plants Per SqFt</Typography>
           </Grid>
           {renderFormLabel(
-            'Plants / Acre',
-            'Sq.Ft. / Acre',
-            'Aproximate Plants / Sq.Ft.',
+            'Plants per Acre',
+            'SqFt per Acre',
+            'Aproximate Plants per SqFt',
           )}
           <Grid container justifyContent="space-evenly">
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Plants / Acre'}
+                label={matchesMd ? '' : 'Plants per Acre'}
                 disabled
                 value={step4.plantsPerAcre}
               />
@@ -305,7 +305,7 @@ const MixRatioSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Sq. Ft./ Acre'}
+                label={matchesMd ? '' : 'SqFt per Acre'}
                 disabled
                 value={step4.sqftPerAcre}
               />
@@ -317,7 +317,7 @@ const MixRatioSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Aproximate Plants / Sq.Ft.'}
+                label={matchesMd ? '' : 'Aproximate Plants per SqFt'}
                 disabled
                 value={step4.plantsPerSqft}
               />
