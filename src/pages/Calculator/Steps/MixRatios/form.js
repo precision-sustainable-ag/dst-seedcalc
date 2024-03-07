@@ -88,12 +88,13 @@ const MixRatioSteps = ({
             </Grid>
           </Grid>
 
-          <Grid container p="1rem 1rem 0 1rem">
-            <Grid item xs={4}>
+          <Grid container p="1rem 0 0 0" justifyContent="space-evenly">
+            <Grid item xs={3}>
               <Typography variant="mathIcon">=</Typography>
             </Grid>
+            <Grid item xs={1} />
 
-            <Grid item xs={7}>
+            <Grid item xs={3}>
               <NumberTextField
                 label="Seeding Rate In Mix (Lbs per Acre)"
                 disabled
@@ -102,6 +103,7 @@ const MixRatioSteps = ({
             </Grid>
 
             <Grid item xs={1} />
+            <Grid item xs={3} />
           </Grid>
         </>
       )}

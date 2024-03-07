@@ -193,7 +193,7 @@ const SeedInfo = ({
         && (
         <>
           <Grid item xs={12} pt="1rem">
-            <Typography textAlign="left">
+            <Typography>
               {`% of Single Species Rate: ${singleSpeciesRate}%`}
             </Typography>
             <Slider
@@ -206,7 +206,7 @@ const SeedInfo = ({
             />
           </Grid>
           <Grid item xs={12}>
-            <Typography textAlign="left">
+            <Typography>
               {`% Survival: ${survival}%`}
             </Typography>
             <Slider
@@ -223,7 +223,7 @@ const SeedInfo = ({
 
         {council === 'NECCC' && (
         <Grid item xs={12} pt="1rem">
-          <Typography textAlign="left">
+          <Typography>
             {`Single Species Seeding Rate PLS: ${singleSpeciesSeedingRate} Lbs per Acre`}
           </Typography>
           <Slider

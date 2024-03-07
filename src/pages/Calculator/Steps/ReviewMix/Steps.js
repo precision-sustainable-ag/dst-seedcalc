@@ -89,11 +89,12 @@ const ReviewMixSteps = ({
     return (
       <Grid container>
         <Grid item xs={2} md={3} />
-        <Grid item xs={10} md={9}>
-          <Typography textAlign="justify">
+        <Grid item xs={8} md={6}>
+          <Typography>
             {`${label}: ${value} ${unit}`}
           </Typography>
         </Grid>
+        <Grid item xs={2} md={3} />
         <Grid item xs={2} md={3} />
         <Grid item xs={8} md={6}>
           <Slider
@@ -174,20 +175,20 @@ const ReviewMixSteps = ({
               />
             </Grid>
           </Grid>
-          <Grid container p="1rem 1rem 0 1rem">
-            <Grid item xs={4}>
+          <Grid container p="1rem 0 0 0" justifyContent="space-evenly">
+            <Grid item xs={3}>
               <Typography variant="mathIcon">=</Typography>
             </Grid>
-
-            <Grid item xs={7}>
+            <Grid item xs={1} />
+            <Grid item xs={3}>
               <NumberTextField
                 label="Seeding Rate In Mix (Lbs per Acre)"
                 disabled
                 value={step1.seedingRate}
               />
             </Grid>
-
             <Grid item xs={1} />
+            <Grid item xs={3} />
           </Grid>
         </>
       )}
@@ -427,18 +428,21 @@ const ReviewMixSteps = ({
             />
           </Grid>
         </Grid>
-        <Grid container p="1rem 1rem 0 1rem">
-          <Grid item xs={4}>
+        <Grid container p="1rem 0 0 0" justifyContent="space-evenly">
+          <Grid item xs={3}>
             <Typography variant="mathIcon">=</Typography>
           </Grid>
+          <Grid item xs={1} />
 
-          <Grid item xs={8}>
+          <Grid item xs={3}>
             <NumberTextField
               label="Bulk Seeding Rate (Lbs per Acre)"
               disabled
               value={step4.bulkSeedingRate}
             />
           </Grid>
+          <Grid item xs={1} />
+          <Grid item xs={3} />
 
         </Grid>
       </>
