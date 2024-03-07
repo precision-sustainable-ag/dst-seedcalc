@@ -7,7 +7,7 @@ import { convertToPercent } from '../../../../shared/utils/calculator';
 import '../steps.scss';
 
 const MixRatioSteps = ({
-  seed, council, handleFormValueChange, calculatorResult,
+  council, calculatorResult,
 }) => {
   const theme = useTheme();
   const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
@@ -58,9 +58,7 @@ const MixRatioSteps = ({
             <Grid item xs={3}>
               <NumberTextField
                 label={matchesMd ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
-                handleChange={(e) => {
-                  handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
-                }}
+                disabled
                 value={step1.defaultSingleSpeciesSeedingRatePLS}
               />
             </Grid>
@@ -90,12 +88,13 @@ const MixRatioSteps = ({
             </Grid>
           </Grid>
 
-          <Grid container p="10px">
-            <Grid item xs={4}>
+          <Grid container p="1rem 0 0 0" justifyContent="space-evenly">
+            <Grid item xs={3}>
               <Typography variant="mathIcon">=</Typography>
             </Grid>
+            <Grid item xs={1} />
 
-            <Grid item xs={7}>
+            <Grid item xs={3}>
               <NumberTextField
                 label="Seeding Rate In Mix (Lbs per Acre)"
                 disabled
@@ -104,6 +103,7 @@ const MixRatioSteps = ({
             </Grid>
 
             <Grid item xs={1} />
+            <Grid item xs={3} />
           </Grid>
         </>
       )}
@@ -135,9 +135,7 @@ const MixRatioSteps = ({
             <Grid item xs={3}>
               <NumberTextField
                 label={matchesMd ? '' : '% of Single Species Rate'}
-                handleChange={(e) => {
-                  handleFormValueChange(seed, 'percentOfRate', parseFloat(e.target.value) / 100);
-                }}
+                disabled
                 value={convertToPercent(step1.percentOfRate)}
               />
             </Grid>
@@ -268,9 +266,7 @@ const MixRatioSteps = ({
             <Grid item xs={3}>
               <NumberTextField
                 label={matchesMd ? '' : '% Survival'}
-                handleChange={(e) => {
-                  handleFormValueChange(seed, 'percentSurvival', parseFloat(e.target.value) / 100);
-                }}
+                disabled
                 value={convertToPercent(step3.percentSurvival)}
               />
             </Grid>

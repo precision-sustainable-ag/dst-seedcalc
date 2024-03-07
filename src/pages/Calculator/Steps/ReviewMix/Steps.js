@@ -1,7 +1,10 @@
+/* eslint-disable react/no-unstable-nested-components */
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Grid from '@mui/material/Grid';
-import { Typography, useTheme, useMediaQuery } from '@mui/material';
+import {
+  Typography, useTheme, useMediaQuery, Slider,
+} from '@mui/material';
 
 import NumberTextField from '../../../../components/NumberTextField';
 import { convertToPercent } from '../../../../shared/utils/calculator';
@@ -17,11 +20,12 @@ const ReviewMixSteps = ({
   calculatorResult,
 }) => {
   const [methods, setMethods] = useState({});
+  const [seedingRateRange, setSeedingRateRange] = useState([0, 0]);
 
   const theme = useTheme();
   const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
   const dispatch = useDispatch();
-  const { options } = useSelector((state) => state.calculator);
+  const { seedsSelected, options } = useSelector((state) => state.calculator);
 
   const renderStepsForm = (label1, label2, label3) => (
     matchesMd && (
@@ -67,7 +71,47 @@ const ReviewMixSteps = ({
       Aerial: parseFloat(coefficients['Aerial Coefficient']?.values[0]) || null,
     };
     setMethods(plantingMethods);
+    setSeedingRateRange([
+      Math.round(step1.singleSpeciesSeedingRate * 0.5),
+      Math.round(step1.singleSpeciesSeedingRate * 1.5),
+    ]);
   }, []);
+
+  const FormSlider = ({
+    range, label, val, onChangeCommitted, unit,
+  }) => {
+    const [value, setValue] = useState(val);
+
+    useEffect(() => {
+      setValue(val);
+    }, [val]);
+
+    return (
+      <Grid container>
+        <Grid item xs={2} md={3} />
+        <Grid item xs={8} md={6}>
+          <Typography>
+            {`${label}: ${value} ${unit}`}
+          </Typography>
+        </Grid>
+        <Grid item xs={2} md={3} />
+        <Grid item xs={2} md={3} />
+        <Grid item xs={8} md={6}>
+          <Slider
+            min={range[0]}
+            max={range[1]}
+            value={value}
+            valueLabelDisplay="auto"
+            onChange={(e) => setValue(e.target.value)}
+            onChangeCommitted={() => {
+              onChangeCommitted(value);
+            }}
+          />
+        </Grid>
+        <Grid item xs={2} md={6} />
+      </Grid>
+    );
+  };
 
   return (
     <Grid container>
@@ -77,6 +121,19 @@ const ReviewMixSteps = ({
           <Grid item xs={12}>
             <Typography variant="stepHeader">Seeding Rate in Mix</Typography>
           </Grid>
+
+          <FormSlider
+            range={seedingRateRange}
+            label="Single Species Seeding Rate PLS"
+            val={options[seed.label].singleSpeciesSeedingRate
+             ?? parseFloat(seed.attributes.Coefficients['Single Species Seeding Rate'].values[0])}
+            onChangeCommitted={(val) => {
+              handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(val));
+            }}
+            unit="Lbs / Acre"
+          />
+          <Grid item xs={12} p="0.5rem" />
+
           {renderStepsForm(
             'Single Species Seeding Rate PLS (Lbs per Acre)',
             'Soil Fertility Modifier',
@@ -86,9 +143,10 @@ const ReviewMixSteps = ({
             <Grid item xs={3}>
               <NumberTextField
                 label={matchesMd ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
-                handleChange={(e) => {
-                  handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
-                }}
+                disabled
+                // handleChange={(e) => {
+                //   handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
+                // }}
                 value={step1.singleSpeciesSeedingRate}
               />
             </Grid>
@@ -117,20 +175,20 @@ const ReviewMixSteps = ({
               />
             </Grid>
           </Grid>
-          <Grid container p="10px">
-            <Grid item xs={4}>
+          <Grid container p="1rem 0 0 0" justifyContent="space-evenly">
+            <Grid item xs={3}>
               <Typography variant="mathIcon">=</Typography>
             </Grid>
-
-            <Grid item xs={7}>
+            <Grid item xs={1} />
+            <Grid item xs={3}>
               <NumberTextField
                 label="Seeding Rate In Mix (Lbs per Acre)"
                 disabled
                 value={step1.seedingRate}
               />
             </Grid>
-
             <Grid item xs={1} />
+            <Grid item xs={3} />
           </Grid>
         </>
       )}
@@ -141,6 +199,18 @@ const ReviewMixSteps = ({
           <Grid item xs={12}>
             <Typography variant="stepHeader">Seeding Rate in Mix</Typography>
           </Grid>
+
+          <FormSlider
+            range={[0, 100]}
+            label="% of Single Species Rate"
+            val={convertToPercent(options[seed.label].percentOfRate)}
+            onChangeCommitted={(val) => {
+              handleFormValueChange(seed, 'percentOfRate', parseFloat(val) / 100);
+            }}
+            unit="%"
+          />
+          <Grid item xs={12} p="0.5rem" />
+
           {renderStepsForm(
             'Single Species Seeding Rate PLS (Lbs per Acre)',
             '% of Single Species Rate',
@@ -162,9 +232,10 @@ const ReviewMixSteps = ({
             <Grid item xs={3}>
               <NumberTextField
                 label={matchesMd ? '' : '% of Single Species Rate'}
-                handleChange={(e) => {
-                  handleFormValueChange(seed, 'percentOfRate', parseFloat(e.target.value) / 100);
-                }}
+                disabled
+                // handleChange={(e) => {
+                //   handleFormValueChange(seed, 'percentOfRate', parseFloat(e.target.value) / 100);
+                // }}
                 value={convertToPercent(step1.percentOfRate)}
               />
             </Grid>
@@ -190,18 +261,17 @@ const ReviewMixSteps = ({
         <Grid item xs={12}>
           <Typography variant="stepHeader">Adjustment from Seeding Method</Typography>
         </Grid>
-        <Grid item xs={6} margin="1rem">
+        <Grid item xs={3} />
+        <Grid item xs={6} paddingLeft="1rem" paddingBottom="1rem">
           <Dropdown
             value={options[seed.label].plantingMethod ?? ''}
             label="Seeding Method: "
             handleChange={(e) => {
-              dispatch(
-                setOptionRedux(seed.label, {
-                  ...options[seed.label],
-                  plantingMethod: e.target.value,
-                  plantingMethodModifier: methods[e.target.value],
-                }),
-              );
+              seedsSelected.forEach((s) => {
+                dispatch(
+                  setOptionRedux(s.label, { ...options[s.label], plantingMethod: e.target.value, plantingMethodModifier: methods[e.target.value] }),
+                );
+              });
             }}
             items={council === 'MCCC' ? seedingMethods : seedingMethodsNECCC}
           />
@@ -297,6 +367,27 @@ const ReviewMixSteps = ({
         <Grid item xs={12}>
           <Typography variant="stepHeader">Bulk Seeding Rate</Typography>
         </Grid>
+
+        <FormSlider
+          range={[0, 100]}
+          label="% Germination"
+          val={convertToPercent(options[seed.label].germination)}
+          onChangeCommitted={(val) => {
+            handleFormValueChange(seed, 'germination', parseFloat(val) / 100);
+          }}
+          unit="%"
+        />
+        <FormSlider
+          range={[0, 100]}
+          label="% Purity"
+          val={convertToPercent(options[seed.label].purity)}
+          onChangeCommitted={(val) => {
+            handleFormValueChange(seed, 'purity', parseFloat(val) / 100);
+          }}
+          unit="%"
+        />
+        <Grid item xs={12} p="0.5rem" />
+
         {renderStepsForm('Seeding Rate in Mix (Lbs per Acre)', '% Germination', '% Purity')}
         <Grid container justifyContent="space-evenly">
           <Grid item xs={3}>
@@ -314,9 +405,10 @@ const ReviewMixSteps = ({
           <Grid item xs={3}>
             <NumberTextField
               label={matchesMd ? '' : '% Germination'}
-              handleChange={(e) => {
-                handleFormValueChange(seed, 'germination', parseFloat(e.target.value) / 100);
-              }}
+              disabled
+              // handleChange={(e) => {
+              //   handleFormValueChange(seed, 'germination', parseFloat(e.target.value) / 100);
+              // }}
               value={convertToPercent(step4.germination)}
             />
           </Grid>
@@ -328,27 +420,30 @@ const ReviewMixSteps = ({
           <Grid item xs={3}>
             <NumberTextField
               label={matchesMd ? '' : '% Purity'}
-              handleChange={(e) => {
-                handleFormValueChange(seed, 'purity', parseFloat(e.target.value) / 100);
-              }}
+              disabled
+              // handleChange={(e) => {
+              //   handleFormValueChange(seed, 'purity', parseFloat(e.target.value) / 100);
+              // }}
               value={convertToPercent(step4.purity)}
             />
           </Grid>
         </Grid>
-        <Grid container p="10px">
-          <Grid item xs={4}>
+        <Grid container p="1rem 0 0 0" justifyContent="space-evenly">
+          <Grid item xs={3}>
             <Typography variant="mathIcon">=</Typography>
           </Grid>
+          <Grid item xs={1} />
 
-          <Grid item xs={7}>
+          <Grid item xs={3}>
             <NumberTextField
               label="Bulk Seeding Rate (Lbs per Acre)"
               disabled
               value={step4.bulkSeedingRate}
             />
           </Grid>
-
           <Grid item xs={1} />
+          <Grid item xs={3} />
+
         </Grid>
       </>
 

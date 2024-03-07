@@ -11,17 +11,15 @@ const NumberTextField = ({
 }) => (
   <TextField
     fullWidth
-    value={value}
+    value={value.toLocaleString()}
     label={label}
     onChange={handleChange}
     InputLabelProps={{
       shrink: true,
     }}
     InputProps={InputProps}
-    type="number"
     placeholder={placeholder}
     disabled={disabled}
-    sx={{ backgroundColor: disabled ? 'WhiteSmoke' : '' }}
   />
 );
 

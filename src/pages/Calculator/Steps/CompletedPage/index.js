@@ -9,7 +9,6 @@ const CompletedPage = () => {
   const matchesUpMd = useMediaQuery(theme.breakpoints.up('md'));
   return (
     <>
-      {/* FIXME: is these words still needed? */}
       <Grid container>
         <Grid xs={12} item sx={{ pt: '50px' }} justifyContent="center">
           <Typography>

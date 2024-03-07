@@ -68,9 +68,10 @@ const SiteConditionForm = ({
   const dispatch = useDispatch();
   const {
     state, soilDrainage, tileDrainage, county, plannedPlantingDate,
-    acres, soilFertility, checkNRCSStandards,
+    soilFertility, checkNRCSStandards,
   } = useSelector((s) => s.siteCondition);
 
+  const [acres, setAcres] = useState(0);
   const [soilDrainagePrev, setSoilDrainagePrev] = useState(soilDrainage);
 
   const handleSoilDrainage = (e) => {
@@ -243,7 +244,11 @@ const SiteConditionForm = ({
           label="Acres"
           disabled={false}
           handleChange={(e) => {
-            dispatch(setAcresRedux(parseFloat(e.target.value)));
+            // FIXME: this is a temporary fix for number textboxes, need to further investigate solutions.
+            // maybe use error property: https://mui.com/material-ui/react-text-field/#validation
+            // Same situation applies to Seed Tag Info too.
+            setAcres(e.target.value);
+            if (!Number.isNaN(parseFloat(e.target.value))) dispatch(setAcresRedux(parseFloat(e.target.value)));
           }}
           placeholder="Enter your field acres here"
         />
