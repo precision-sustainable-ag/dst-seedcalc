@@ -51,11 +51,11 @@ const ConfirmPlanForm = ({
     return (
       <Grid container>
         <Grid container sx={{ p: '0.625rem' }}>
-          {renderStepsForm('Bulk Lbs / Acre', 'Acres', 'Total Pounds')}
+          {renderStepsForm('Bulk Lbs per Acre', 'Acres', 'Total Pounds')}
           <Grid item xs={3}>
             <NumberTextField
               disabled
-              label={matchesMd ? '' : 'Bulk Lbs / Acre'}
+              label={matchesMd ? '' : 'Bulk Lbs per Acre'}
               value={result.bulkSeedingRate}
             />
           </Grid>
@@ -97,7 +97,7 @@ const ConfirmPlanForm = ({
           <Grid item xs={1} />
           <Grid item xs={3}>
             <NumberTextField
-              label="Cost/Pound"
+              label="Cost per Pound"
               value={result.costPerPound}
               handleChange={(e) => dispatch(
                 setOptionRedux(seed.label, { ...options[seed.label], costPerPound: e.target.value }),
@@ -108,11 +108,11 @@ const ConfirmPlanForm = ({
         </Grid>
 
         <Grid container sx={{ p: '0.625rem' }}>
-          {renderStepsForm('Cost/Pound', 'Total Pounds', 'Total Cost')}
+          {renderStepsForm('Cost per Pound', 'Total Pounds', 'Total Cost')}
           <Grid item xs={3}>
             <NumberTextField
               disabled
-              label={matchesMd ? '' : 'Cost/Pound'}
+              label={matchesMd ? '' : 'Cost per Pound'}
               value={result.costPerPound}
             />
           </Grid>

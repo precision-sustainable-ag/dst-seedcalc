@@ -158,7 +158,7 @@ const SeedingMethod = () => {
             <Box>
               <Typography sx={{ width: '50px' }}>{val}</Typography>
             </Box>
-            <Typography>Lbs / Acre</Typography>
+            <Typography>Lbs per Acre</Typography>
           </>
         )}
       </RightGrid>

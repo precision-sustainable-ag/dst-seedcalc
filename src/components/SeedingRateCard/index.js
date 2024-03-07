@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import HelpIcon from '@mui/icons-material/Help';
 import { twoDigit } from '../../shared/utils/calculator';
 import { selectUnitRedux } from '../../features/calculatorSlice/actions';
+import { seedDataUnits } from '../../shared/data/units';
 
 const tooltipMCCC = {
   mixSeedingRate: 'Seeding Rate in Mix = Default Single Species Seeding Rate PLS * Percent of Rate',
@@ -32,7 +33,7 @@ const UnitSelection = () => {
         variant={unit === 'acre' ? 'outlined' : 'contained'}
         onClick={() => dispatch(selectUnitRedux('sqft'))}
       >
-        Sqft
+        SqFt
       </Button>
       {'  '}
       <Button
@@ -53,9 +54,6 @@ const SeedingRateCard = ({
 
   const council = useSelector((state) => state.siteCondition.council);
   const unit = useSelector((state) => state.calculator.unit);
-
-  // eslint-disable-next-line no-nested-ternary
-  const unitText = unit === 'acre' ? 'Acre' : unit === 'sqft' ? 'SqFt' : '';
 
   useEffect(() => {
     if (unit === 'sqft') {
@@ -107,9 +105,10 @@ const SeedingRateCard = ({
         <Typography>{displayValue.seedingRateValue}</Typography>
       </Box>
       <Typography>
-        Lbs /
-        {' '}
-        <span style={{ fontWeight: 'bold' }}>{unitText}</span>
+        {seedDataUnits.lbsper}
+        <span style={{ fontWeight: 'bold' }}>
+          {unit === 'acre' ? seedDataUnits.acre : seedDataUnits.sqft}
+        </span>
       </Typography>
 
       <Box
@@ -126,9 +125,10 @@ const SeedingRateCard = ({
         <Typography>{twoDigit(displayValue.plantValue)}</Typography>
       </Box>
       <Typography>
-        Approx Plants Per
-        {' '}
-        <span style={{ fontWeight: 'bold' }}>{unitText}</span>
+        {seedDataUnits.approxPlantsper}
+        <span style={{ fontWeight: 'bold' }}>
+          {unit === 'acre' ? seedDataUnits.acre : seedDataUnits.sqft}
+        </span>
       </Typography>
 
       <Box
@@ -145,9 +145,10 @@ const SeedingRateCard = ({
         <Typography>{twoDigit(displayValue.seedValue)}</Typography>
       </Box>
       <Typography>
-        Seeds Per
-        {' '}
-        <span style={{ fontWeight: 'bold' }}>{unitText}</span>
+        {seedDataUnits.seedsper}
+        <span style={{ fontWeight: 'bold' }}>
+          {unit === 'acre' ? seedDataUnits.acre : seedDataUnits.sqft}
+        </span>
       </Typography>
     </>
   );

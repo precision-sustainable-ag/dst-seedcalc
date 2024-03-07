@@ -19,6 +19,7 @@ import {
   calculatePlantsandSeedsPerAcre,
 } from '../../../../shared/utils/calculator';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
+import { pieChartUnits, seedDataUnits } from '../../../../shared/data/units';
 import '../steps.scss';
 
 const defaultResultMCCC = {
@@ -188,7 +189,7 @@ const MixRatio = ({ calculator, setCalculator }) => {
       <Grid item xs={6} sx={{ textAlign: 'justify' }}>
         <DSTPieChart
           chartData={piechartData.seedingRateArray}
-          label="Pounds of Seed / Acre"
+          label={pieChartUnits.poundsOfSeedPerAcre}
         />
       </Grid>
 
@@ -196,13 +197,13 @@ const MixRatio = ({ calculator, setCalculator }) => {
         {council === 'MCCC' && (
           <DSTPieChart
             chartData={piechartData.plantsPerSqftArray}
-            label="Plants Per Sqft"
+            label={pieChartUnits.plantsPerSqft}
           />
         )}
         {council === 'NECCC' && (
         <DSTPieChart
           chartData={piechartData.seedsPerSqftArray}
-          label="Seeds Per Sqft"
+          label={pieChartUnits.seedsPerSqft}
         />
         )}
       </Grid>
@@ -229,7 +230,7 @@ const MixRatio = ({ calculator, setCalculator }) => {
 
                 <Grid item xs={6}>
                   <SeedingRateCard
-                    seedingRateLabel="Default Single Species Seeding Rate PLS"
+                    seedingRateLabel={seedDataUnits.defaultSingelSpeciesSeedingRatePLS}
                     seedingRateValue={calculatorResult[seed.label].step1.defaultSingleSpeciesSeedingRatePLS}
                     plantValue={seedData[seed.label].defaultPlant}
                     seedValue={seedData[seed.label].defaultSeed}
@@ -238,7 +239,7 @@ const MixRatio = ({ calculator, setCalculator }) => {
 
                 <Grid item xs={6}>
                   <SeedingRateCard
-                    seedingRateLabel="Seeding Rate in Mix"
+                    seedingRateLabel={seedDataUnits.seedingRateinMix}
                     seedingRateValue={calculatorResult[seed.label].step1.seedingRate}
                     plantValue={seedData[seed.label].adjustedPlant}
                     seedValue={seedData[seed.label].adjustedSeed}
