@@ -5,6 +5,7 @@ import { ThemeProvider } from '@emotion/react';
 import Calculator from './pages/Calculator';
 // import Home from './pages/Home';
 import dstTheme from './shared/themes';
+import Feedback from './pages/Feedback';
 
 const App = () => (
   <ThemeProvider theme={dstTheme}>
@@ -21,6 +22,7 @@ const App = () => (
         <Routes>
           {/* <Route path="/" element={<Home />} /> */}
           <Route path="/" element={<Calculator />} />
+          <Route path="/feedback" element={<Feedback />} />
         </Routes>
       </BrowserRouter>
     </div>
