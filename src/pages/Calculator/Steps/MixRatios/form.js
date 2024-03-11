@@ -158,7 +158,7 @@ const MixRatioSteps = ({
       {/* Step 2: */}
       <>
         <Grid item xs={12}>
-          <Typography variant="stepHeader">Seeds Per Acre</Typography>
+          <Typography variant="stepHeader">Seeds per Acre</Typography>
         </Grid>
         {renderFormLabel(
           'Seeds per Pound',
@@ -247,7 +247,7 @@ const MixRatioSteps = ({
       {council === 'MCCC' && (
         <>
           <Grid item xs={12}>
-            <Typography variant="stepHeader">Plants Per Acre</Typography>
+            <Typography variant="stepHeader">Plants per Acre</Typography>
           </Grid>
           {renderFormLabel('Seeds per Acre', '% Survival', 'Plants per Acre')}
           <Grid container justifyContent="space-evenly">
@@ -285,7 +285,7 @@ const MixRatioSteps = ({
           </Grid>
 
           <Grid item xs={12}>
-            <Typography variant="stepHeader">Approximate Plants Per SqFt</Typography>
+            <Typography variant="stepHeader">Approximate Plants per SqFt</Typography>
           </Grid>
           {renderFormLabel(
             'Plants per Acre',

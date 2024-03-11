@@ -216,7 +216,7 @@ const ReviewMix = ({ calculator }) => {
                 <DSTBarChart seed={seed} calculatorResult={calculatorResult} />
                 <Grid item xs={6} pt="1rem">
                   <SeedingRateCard
-                    seedingRateLabel={seedDataUnits.seedingRateinMixPLS}
+                    seedingRateLabel={seedDataUnits.pureLiveSeed}
                     seedingRateValue={calculatorResult[seed.label].step2.seedingRate}
                     plantValue={seedData[seed.label].defaultPlant}
                     seedValue={seedData[seed.label].defaultSeed}
@@ -225,7 +225,7 @@ const ReviewMix = ({ calculator }) => {
 
                 <Grid item xs={6} pt="1rem">
                   <SeedingRateCard
-                    seedingRateLabel={seedDataUnits.bulkSeedingRate}
+                    seedingRateLabel={seedDataUnits.bulkSeed}
                     seedingRateValue={calculatorResult[seed.label].step4.bulkSeedingRate}
                     plantValue={seedData[seed.label].adjustedPlant}
                     seedValue={seedData[seed.label].adjustedSeed}

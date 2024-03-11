@@ -13,8 +13,8 @@ const seedDataUnits = {
   seedsper: 'Seeds Per ',
   defaultSingelSpeciesSeedingRatePLS: 'Default Single Species Seeding Rate PLS',
   seedingRateinMix: 'Seeding Rate in Mix',
-  seedingRateinMixPLS: 'Seeding Rate in Mix PLS',
-  bulkSeedingRate: 'Bulk Seeding Rate',
+  pureLiveSeed: 'Pure Live Seed',
+  bulkSeed: 'Bulk Seed',
 };
 
 export { pieChartUnits, seedDataUnits };
