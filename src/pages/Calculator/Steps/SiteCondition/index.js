@@ -107,11 +107,12 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
 
   // validate all information on this page is selected, then call getCrops api
   useEffect(() => {
-    const checkNextStep = !isEmptyNull(siteCondition.state)
+    let checkNextStep = !isEmptyNull(siteCondition.state)
       && !isEmptyNull(siteCondition.soilDrainage)
       && !isEmptyNull(siteCondition.acres)
       && siteCondition.acres > 0
       && !isEmptyNull(siteCondition.county);
+    if (siteCondition.council === 'NECCC') checkNextStep &&= siteCondition.soilFertility !== '';
     validateForms(checkNextStep, 0, completedStep, setCompletedStep);
     // call getCrops api to get all crops from countyId
     if (checkNextStep) {
