@@ -112,6 +112,18 @@ const Calculator = () => {
     return undefined;
   };
 
+  // set favicon based on redux council value
+  useEffect(() => {
+    const favicon = document.getElementById('favicon');
+    if (siteCondition.council === 'MCCC') {
+      favicon.href = 'favicons/mccc-favicon.ico';
+    } else if (siteCondition.council === 'NECCC') {
+      favicon.href = 'favicons/neccc-favicon.ico';
+    } else if (siteCondition.council === '') {
+      favicon.href = 'PSALogo.png';
+    }
+  }, [siteCondition.council]);
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 85) {
