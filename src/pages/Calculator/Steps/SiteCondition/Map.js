@@ -15,7 +15,6 @@ import '../steps.scss';
 const Map = ({
   setStep,
 }) => {
-  // const [isImported, setIsImported] = useState(false);
   const [selectedToEditSite, setSelectedToEditSite] = useState({});
 
   const siteCondition = useSelector((state) => state.siteCondition);

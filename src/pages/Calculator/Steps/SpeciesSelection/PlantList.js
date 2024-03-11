@@ -105,7 +105,7 @@ const PlantList = ({
       dispatch(addSeedRedux(data));
       const { label, attributes } = data;
       const percentSurvival = council === 'MCCC'
-        ? parseFloat(attributes.Coefficients['% Chance of Winter Survial'].values[0])
+        ? parseFloat(attributes.Coefficients['% Live Seed to Emergence'].values[0])
         : '';
       // set initial options
       dispatch(setOptionRedux(label, {

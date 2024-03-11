@@ -89,9 +89,6 @@ const SiteConditionForm = ({
   };
 
   const updateState = (selectedState) => {
-    // if the state data comes from csv import do not do this to refresh the state
-    // if (isImported) return;
-    // setIsImported(false);
     // Retrieve region
     dispatch(getRegion({ stateId: selectedState.id }));
 

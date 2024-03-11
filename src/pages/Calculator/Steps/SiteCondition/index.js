@@ -93,25 +93,14 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
     }
   }, [siteCondition.county, counties]);
 
-  // set favicon based on redux council value
-  useEffect(() => {
-    const favicon = document.getElementById('favicon');
-    if (siteCondition.council === 'MCCC') {
-      favicon.href = 'favicons/mccc-favicon.ico';
-    } else if (siteCondition.council === 'NECCC') {
-      favicon.href = 'favicons/neccc-favicon.ico';
-    } else if (siteCondition.council === '') {
-      favicon.href = 'PSALogo.png';
-    }
-  }, [siteCondition.council]);
-
   // validate all information on this page is selected, then call getCrops api
   useEffect(() => {
-    const checkNextStep = !isEmptyNull(siteCondition.state)
+    let checkNextStep = !isEmptyNull(siteCondition.state)
       && !isEmptyNull(siteCondition.soilDrainage)
       && !isEmptyNull(siteCondition.acres)
       && siteCondition.acres > 0
       && !isEmptyNull(siteCondition.county);
+    if (siteCondition.council === 'NECCC') checkNextStep &&= siteCondition.soilFertility !== '';
     validateForms(checkNextStep, 0, completedStep, setCompletedStep);
     // call getCrops api to get all crops from countyId
     if (checkNextStep) {
