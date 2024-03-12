@@ -47,7 +47,6 @@ const SeedInfo = ({
   seed, seedData, calculatorResult, handleFormValueChange, council,
 }) => {
   const [singleSpeciesRate, setSingleSpeciesRate] = useState(0);
-  const [survival, setSurvival] = useState(0);
   const [singleSpeciesSeedingRate, setSingleSpeciesSeedingRate] = useState(0);
   const [range, setRange] = useState([0, 0]);
   const [singleData, setSingleData] = useState({
@@ -97,7 +96,6 @@ const SeedInfo = ({
       });
     }
     setSingleSpeciesRate(Math.round(calculatorResult[seed.label].step1.percentOfRate * 100));
-    setSurvival(Math.round(twoDigit(calculatorResult[seed.label].step3.percentSurvival) * 100));
   }, [seedData, calculatorResult, unit]);
 
   return (
@@ -191,34 +189,19 @@ const SeedInfo = ({
 
         {council === 'MCCC'
         && (
-        <>
-          <Grid item xs={12} pt="1rem">
-            <Typography>
-              {`% of Single Species Rate: ${singleSpeciesRate}%`}
-            </Typography>
-            <Slider
-              min={0}
-              max={100}
-              value={singleSpeciesRate}
-              valueLabelDisplay="auto"
-              onChange={(e) => setSingleSpeciesRate(e.target.value)}
-              onChangeCommitted={() => handleFormValueChange(seed, 'percentOfRate', parseFloat(singleSpeciesRate) / 100)}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Typography>
-              {`% Survival: ${survival}%`}
-            </Typography>
-            <Slider
-              min={0}
-              max={100}
-              value={survival}
-              valueLabelDisplay="auto"
-              onChange={(e) => setSurvival(e.target.value)}
-              onChangeCommitted={() => handleFormValueChange(seed, 'percentSurvival', parseFloat(survival) / 100)}
-            />
-          </Grid>
-        </>
+        <Grid item xs={12} pt="1rem">
+          <Typography>
+            {`% of Single Species Rate: ${singleSpeciesRate}%`}
+          </Typography>
+          <Slider
+            min={0}
+            max={100}
+            value={singleSpeciesRate}
+            valueLabelDisplay="auto"
+            onChange={(e) => setSingleSpeciesRate(e.target.value)}
+            onChangeCommitted={() => handleFormValueChange(seed, 'percentOfRate', parseFloat(singleSpeciesRate) / 100)}
+          />
+        </Grid>
         )}
 
         {council === 'NECCC' && (

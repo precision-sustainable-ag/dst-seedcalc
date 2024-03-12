@@ -116,6 +116,16 @@ const ReviewMix = ({ calculator }) => {
     );
   }, [sideBarSelection]);
 
+  useEffect(() => {
+    seedsSelected.forEach((seed) => {
+      // FIXME: for NECCC the SDK uses 0.85 as a default survival rate
+      const percentSurvival = council === 'MCCC' ? parseFloat(
+        seed.attributes.Coefficients['% Live Seed to Emergence'].values[0],
+      ) : 0.85;
+      dispatch(setOptionRedux(seed.label, { ...options[seed.label], percentSurvival }));
+    });
+  }, []);
+
   // run reviewMix on options change
   useEffect(() => {
     seedsSelected.forEach((seed) => {
@@ -125,9 +135,7 @@ const ReviewMix = ({ calculator }) => {
         else if (council === 'NECCC') result = reviewMixNECCC(seed, calculator, options[seed.label]);
         setCalculatorResult((prev) => ({ ...prev, [seed.label]: result }));
         // set percentSurvival if council is MCCC
-        const percentSurvival = council === 'MCCC' ? parseFloat(
-          seed.attributes.Coefficients['% Live Seed to Emergence'].values[0],
-        ) : 1;
+
         const {
           plants, seeds, adjustedPlants, adjustedSeeds,
         } = calculatePlantsandSeedsPerAcre(
@@ -136,7 +144,7 @@ const ReviewMix = ({ calculator }) => {
           options[seed.label],
           result.step2.seedingRate,
           result.step4.bulkSeedingRate,
-          percentSurvival,
+          options[seed.label].percentSurvival,
         );
         setSeedData((prev) => ({
           ...prev,
@@ -258,6 +266,7 @@ const ReviewMix = ({ calculator }) => {
                     seed={seed}
                     handleFormValueChange={handleFormValueChange}
                     calculatorResult={calculatorResult[seed.label]}
+                    seedData={seedData}
                   />
                   )}
                 </Grid>
