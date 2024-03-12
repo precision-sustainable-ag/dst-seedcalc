@@ -134,8 +134,6 @@ const ReviewMix = ({ calculator }) => {
         if (council === 'MCCC') result = reviewMix(seed, calculator, options[seed.label]);
         else if (council === 'NECCC') result = reviewMixNECCC(seed, calculator, options[seed.label]);
         setCalculatorResult((prev) => ({ ...prev, [seed.label]: result }));
-        // set percentSurvival if council is MCCC
-
         const {
           plants, seeds, adjustedPlants, adjustedSeeds,
         } = calculatePlantsandSeedsPerAcre(
