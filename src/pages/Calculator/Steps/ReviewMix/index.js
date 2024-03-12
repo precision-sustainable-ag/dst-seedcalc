@@ -124,6 +124,10 @@ const ReviewMix = ({ calculator }) => {
         if (council === 'MCCC') result = reviewMix(seed, calculator, options[seed.label]);
         else if (council === 'NECCC') result = reviewMixNECCC(seed, calculator, options[seed.label]);
         setCalculatorResult((prev) => ({ ...prev, [seed.label]: result }));
+        // set percentSurvival if council is MCCC
+        const percentSurvival = council === 'MCCC' ? parseFloat(
+          seed.attributes.Coefficients['% Live Seed to Emergence'].values[0],
+        ) : 1;
         const {
           plants, seeds, adjustedPlants, adjustedSeeds,
         } = calculatePlantsandSeedsPerAcre(
@@ -132,6 +136,7 @@ const ReviewMix = ({ calculator }) => {
           options[seed.label],
           result.step2.seedingRate,
           result.step4.bulkSeedingRate,
+          percentSurvival,
         );
         setSeedData((prev) => ({
           ...prev,

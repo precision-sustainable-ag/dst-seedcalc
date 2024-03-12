@@ -103,17 +103,14 @@ const PlantList = ({
       const url = `https://developapi.covercrop-selector.org/v2/crops/${cropId}?regions=${stateId}&context=seed_calc&regions=${countyId}`;
       const { data } = await fetch(url).then((res) => res.json());
       dispatch(addSeedRedux(data));
-      const { label, attributes } = data;
-      const percentSurvival = council === 'MCCC'
-        ? parseFloat(attributes.Coefficients['% Live Seed to Emergence'].values[0])
-        : '';
+      const { label } = data;
       // set initial options
       dispatch(setOptionRedux(label, {
         ...initialOptions,
         acres,
         soilDrainage,
         plannedPlantingDate,
-        percentSurvival,
+        percentSurvival: 1,
         soilFertility: soilFertility.toLowerCase(),
       }));
     } else {

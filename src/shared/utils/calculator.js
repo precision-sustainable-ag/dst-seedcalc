@@ -443,22 +443,31 @@ const calculatePieChartData = (seeds, calculator, options = {}) => {
   return { seedingRateArray, seedsPerSqftArray, plantsPerSqftArray };
 };
 
-const calculatePlantsandSeedsPerAcre = (seed, calculator, options, seedingRate = null, adjustedSeedingRate = null) => {
-  const plants = calculator.plantsPerAcre(
-    seed,
-    { ...options, percentOfRate: 1, ...(seedingRate !== null && { seedingRate }) },
-  );
+const calculatePlantsandSeedsPerAcre = (seed, calculator, options, seedingRate = null, adjustedSeedingRate = null, percentSurvival = 1) => {
   const seeds = calculator.seedsPerAcre(
     seed,
     { ...options, percentOfRate: 1, ...(seedingRate !== null && { seedingRate }) },
   );
-  const adjustedPlants = calculator.plantsPerAcre(
+  const plants = calculator.plantsPerAcre(
     seed,
-    { ...options, ...(adjustedSeedingRate !== null && { seedingRate: adjustedSeedingRate }) },
+    {
+      ...options,
+      percentOfRate: 1,
+      ...(seedingRate !== null && { seedingRate }),
+      percentSurvival: 1,
+    },
   );
   const adjustedSeeds = calculator.seedsPerAcre(
     seed,
     { ...options, ...(adjustedSeedingRate !== null && { seedingRate: adjustedSeedingRate }) },
+  );
+  const adjustedPlants = calculator.plantsPerAcre(
+    seed,
+    {
+      ...options,
+      ...(adjustedSeedingRate !== null && { seedingRate: adjustedSeedingRate }),
+      percentSurvival,
+    },
   );
   return {
     plants, seeds, adjustedPlants, adjustedSeeds,
