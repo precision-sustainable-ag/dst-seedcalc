@@ -30,14 +30,14 @@ const UnitSelection = () => {
         variant={unit === 'acre' ? 'outlined' : 'contained'}
         onClick={() => dispatch(selectUnitRedux('sqft'))}
       >
-        SqFt
+        {seedDataUnits.sqft}
       </Button>
       {'  '}
       <Button
         variant={unit === 'acre' ? 'contained' : 'outlined'}
         onClick={() => dispatch(selectUnitRedux('acre'))}
       >
-        Acre
+        {seedDataUnits.acre}
       </Button>
     </>
   );
@@ -62,7 +62,7 @@ const SeedInfo = ({
   });
   const { unit } = useSelector((state) => state.calculator);
   // eslint-disable-next-line no-nested-ternary
-  const unitText = unit === 'acre' ? 'Acre' : unit === 'sqft' ? 'SqFt' : '';
+  const unitText = unit === 'acre' ? seedDataUnits.acre : unit === 'sqft' ? seedDataUnits.sqft : '';
 
   useEffect(() => {
     const singleSpeciesSeedingRateVal = parseFloat(seed.attributes.Coefficients['Single Species Seeding Rate'].values[0]);
@@ -96,8 +96,8 @@ const SeedInfo = ({
         seedValue: Math.round(seedData[seed.label].adjustedSeed),
       });
     }
-    setSingleSpeciesRate(Math.round(calculatorResult[seed.label].step1.percentOfRate * 100));
     setSurvival(Math.round(twoDigit(calculatorResult[seed.label].step3.percentSurvival) * 100));
+    setSingleSpeciesRate(Math.round(calculatorResult[seed.label].step1.percentOfRate * 100));
   }, [seedData, calculatorResult, unit]);
 
   return (
@@ -141,19 +141,19 @@ const SeedInfo = ({
           </Grid>
           <Grid item xs={4}>
             <SeedLabel
-              label="Default Single Species Seeding Rate PLS"
-              unit={unit === 'sqft' ? '1000SqFt' : unitText}
+              label={`${seedDataUnits.defaultSingelSpeciesSeedingRatePLS} per `}
+              unit={unit === 'sqft' ? seedDataUnits.tsqft : unitText}
             />
           </Grid>
           <Grid item xs={4}>
             <SeedLabel
-              label="Approx Plants"
+              label={seedDataUnits.approxPlantsper}
               unit={unitText}
             />
           </Grid>
           <Grid item xs={4}>
             <SeedLabel
-              label="Seeds"
+              label={seedDataUnits.seedsper}
               unit={unitText}
             />
           </Grid>
@@ -171,19 +171,19 @@ const SeedInfo = ({
           </Grid>
           <Grid item xs={4}>
             <SeedLabel
-              label="Seeding Rate in Mix"
-              unit={unit === 'sqft' ? '1000SqFt' : unitText}
+              label={`${seedDataUnits.seedingRateinMix} per `}
+              unit={unit === 'sqft' ? seedDataUnits.tsqft : unitText}
             />
           </Grid>
           <Grid item xs={4}>
             <SeedLabel
-              label="Approx Plants"
+              label={seedDataUnits.approxPlantsper}
               unit={unitText}
             />
           </Grid>
           <Grid item xs={4}>
             <SeedLabel
-              label="Seeds"
+              label={seedDataUnits.seedsper}
               unit={unitText}
             />
           </Grid>
@@ -191,34 +191,34 @@ const SeedInfo = ({
 
         {council === 'MCCC'
         && (
-        <>
-          <Grid item xs={12} pt="1rem">
-            <Typography>
-              {`% of Single Species Rate: ${singleSpeciesRate}%`}
-            </Typography>
-            <Slider
-              min={0}
-              max={100}
-              value={singleSpeciesRate}
-              valueLabelDisplay="auto"
-              onChange={(e) => setSingleSpeciesRate(e.target.value)}
-              onChangeCommitted={() => handleFormValueChange(seed, 'percentOfRate', parseFloat(singleSpeciesRate) / 100)}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Typography>
-              {`% Survival: ${survival}%`}
-            </Typography>
-            <Slider
-              min={0}
-              max={100}
-              value={survival}
-              valueLabelDisplay="auto"
-              onChange={(e) => setSurvival(e.target.value)}
-              onChangeCommitted={() => handleFormValueChange(seed, 'percentSurvival', parseFloat(survival) / 100)}
-            />
-          </Grid>
-        </>
+          <>
+            <Grid item xs={12} pt="1rem">
+              <Typography>
+                {`% of Single Species Rate: ${singleSpeciesRate}%`}
+              </Typography>
+              <Slider
+                min={0}
+                max={100}
+                value={singleSpeciesRate}
+                valueLabelDisplay="auto"
+                onChange={(e) => setSingleSpeciesRate(e.target.value)}
+                onChangeCommitted={() => handleFormValueChange(seed, 'percentOfRate', parseFloat(singleSpeciesRate) / 100)}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography>
+                {`% Survival: ${survival}%`}
+              </Typography>
+              <Slider
+                min={0}
+                max={100}
+                value={survival}
+                valueLabelDisplay="auto"
+                onChange={(e) => setSurvival(e.target.value)}
+                onChangeCommitted={() => handleFormValueChange(seed, 'percentSurvival', parseFloat(survival) / 100)}
+              />
+            </Grid>
+          </>
         )}
 
         {council === 'NECCC' && (
@@ -260,7 +260,6 @@ const SeedingRateChip = ({ value }) => (
 const SeedLabel = ({ label, unit }) => (
   <Typography lineHeight="1rem" fontSize="0.8rem" padding="0.5rem 0">
     {label}
-    {' per '}
     <span style={{ fontWeight: 'bold' }}>{unit}</span>
   </Typography>
 );
@@ -287,69 +286,28 @@ const SeedingRateCard = ({
 
   return (
     <>
-      <Typography display="flex" alignItems="center" justifyContent="center">
+      <Typography display="flex" alignItems="center" justifyContent="center" pb="0.5rem" fontWeight="bold">
         {seedingRateLabel}
       </Typography>
-      {/* TODO: use custom components for these chips */}
-      <Box
-        sx={{
-          width: '110px',
-          height: '50px',
-          padding: '11px',
-          margin: '0 auto',
-          backgroundColor: '#E5E7D5',
-          border: '#C7C7C7 solid 1px',
-          borderRadius: '16px',
-        }}
-      >
-        <Typography>{displayValue.seedingRateValue}</Typography>
-      </Box>
-      <Typography>
-        {seedDataUnits.lbsper}
-        <span style={{ fontWeight: 'bold' }}>
-          {unit === 'acre' ? seedDataUnits.acre : seedDataUnits.sqft}
-        </span>
-      </Typography>
 
-      <Box
-        sx={{
-          width: '110px',
-          height: '50px',
-          padding: '11px',
-          margin: '0 auto',
-          backgroundColor: '#E5E7D5',
-          border: '#C7C7C7 solid 1px',
-          borderRadius: '16px',
-        }}
-      >
-        <Typography>{formatToHundredth(twoDigit(displayValue.plantValue))}</Typography>
-      </Box>
-      <Typography>
-        {seedDataUnits.approxPlantsper}
-        <span style={{ fontWeight: 'bold' }}>
-          {unit === 'acre' ? seedDataUnits.acre : seedDataUnits.sqft}
-        </span>
-      </Typography>
+      <SeedLabel
+        label="Seeding Rate "
+        unit={seedDataUnits.lbsper + (unit === 'acre' ? seedDataUnits.acre : seedDataUnits.tsqft)}
+      />
+      <SeedingRateChip value={displayValue.seedingRateValue} />
 
-      <Box
-        sx={{
-          width: '110px',
-          height: '50px',
-          padding: '11px',
-          margin: '0 auto',
-          backgroundColor: '#E5E7D5',
-          border: '#C7C7C7 solid 1px',
-          borderRadius: '16px',
-        }}
-      >
-        <Typography>{formatToHundredth(twoDigit(displayValue.seedValue))}</Typography>
-      </Box>
-      <Typography>
-        {seedDataUnits.seedsper}
-        <span style={{ fontWeight: 'bold' }}>
-          {unit === 'acre' ? seedDataUnits.acre : seedDataUnits.sqft}
-        </span>
-      </Typography>
+      <SeedLabel
+        label={seedDataUnits.approxPlantsper}
+        unit={unit === 'acre' ? seedDataUnits.acre : seedDataUnits.sqft}
+      />
+      <SeedingRateChip value={formatToHundredth(twoDigit(displayValue.plantValue))} />
+
+      <SeedLabel
+        label={seedDataUnits.seedsper}
+        unit={unit === 'acre' ? seedDataUnits.acre : seedDataUnits.sqft}
+      />
+      <SeedingRateChip value={formatToHundredth(twoDigit(displayValue.seedValue))} />
+
     </>
   );
 };
