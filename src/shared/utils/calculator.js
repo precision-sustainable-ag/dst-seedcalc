@@ -443,19 +443,14 @@ const calculatePieChartData = (seeds, calculator, options = {}) => {
   return { seedingRateArray, seedsPerSqftArray, plantsPerSqftArray };
 };
 
-const calculatePlantsandSeedsPerAcre = (seed, calculator, options, seedingRate = null, adjustedSeedingRate = null, percentSurvival = 1) => {
+const calculatePlantsandSeedsPerAcre = (seed, calculator, options, seedingRate = null, adjustedSeedingRate = null) => {
   const seeds = twoDigit(calculator.seedsPerAcre(
     seed,
     { ...options, percentOfRate: 1, ...(seedingRate !== null && { seedingRate }) },
   ));
   const plants = twoDigit(calculator.plantsPerAcre(
     seed,
-    {
-      ...options,
-      percentOfRate: 1,
-      ...(seedingRate !== null && { seedingRate }),
-      percentSurvival: 1,
-    },
+    { ...options, percentOfRate: 1, ...(seedingRate !== null && { seedingRate }) },
   ));
   const adjustedSeeds = twoDigit(calculator.seedsPerAcre(
     seed,
@@ -463,11 +458,7 @@ const calculatePlantsandSeedsPerAcre = (seed, calculator, options, seedingRate =
   ));
   const adjustedPlants = twoDigit(calculator.plantsPerAcre(
     seed,
-    {
-      ...options,
-      ...(adjustedSeedingRate !== null && { seedingRate: adjustedSeedingRate }),
-      percentSurvival,
-    },
+    { ...options, ...(adjustedSeedingRate !== null && { seedingRate: adjustedSeedingRate }) },
   ));
   return {
     plants, seeds, adjustedPlants, adjustedSeeds,

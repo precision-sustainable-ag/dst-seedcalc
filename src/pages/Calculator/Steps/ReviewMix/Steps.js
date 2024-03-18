@@ -18,7 +18,6 @@ const ReviewMixSteps = ({
   seed,
   handleFormValueChange,
   calculatorResult,
-  seedData,
 }) => {
   const [methods, setMethods] = useState({});
   const [seedingRateRange, setSeedingRateRange] = useState([0, 0]);
@@ -445,58 +444,6 @@ const ReviewMixSteps = ({
           <Grid item xs={1} />
           <Grid item xs={3} />
 
-        </Grid>
-      </>
-
-      {/* Calculations for Plants Per Acre */}
-      <>
-        <Grid item xs={12}>
-          <Typography variant="stepHeader">Plants per Acre</Typography>
-        </Grid>
-        <FormSlider
-          range={[0, 100]}
-          label="% Survival"
-          val={convertToPercent(options[seed.label].percentSurvival)}
-          onChangeCommitted={(val) => {
-            handleFormValueChange(seed, 'percentSurvival', parseFloat(val) / 100);
-          }}
-          unit="%"
-        />
-        <Grid item xs={12} p="0.5rem" />
-
-        {renderStepsForm('Seeds per Acre', '% Survival', 'Plants per Acre')}
-        <Grid container justifyContent="space-evenly">
-          <Grid item xs={3}>
-            <NumberTextField
-              label={matchesMd ? '' : 'Seeds per Acre'}
-              disabled
-              value={seedData[seed.label].adjustedSeed}
-            />
-          </Grid>
-
-          <Grid item xs={1}>
-            <Typography variant="mathIcon">&#215;</Typography>
-          </Grid>
-
-          <Grid item xs={3}>
-            <NumberTextField
-              label={matchesMd ? '' : '% Survival'}
-              disabled
-              value={convertToPercent(options[seed.label].percentSurvival)}
-            />
-          </Grid>
-
-          <Grid item xs={1}>
-            <Typography variant="mathIcon">=</Typography>
-          </Grid>
-
-          <Grid item xs={3}>
-            <NumberTextField
-              label={matchesMd ? '' : 'Plants per Acre'}
-              disabled
-              value={seedData[seed.label].adjustedPlant}
-            />
-          </Grid>
         </Grid>
       </>
 
