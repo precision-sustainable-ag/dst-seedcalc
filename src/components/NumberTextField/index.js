@@ -20,6 +20,12 @@ const NumberTextField = ({
     InputProps={InputProps}
     placeholder={placeholder}
     disabled={disabled}
+    sx={{
+      // custom style for undisabled textbox
+      '& .MuiOutlinedInput-notchedOutline': {
+        border: '1px solid #4F5F30',
+      },
+    }}
   />
 );
 
