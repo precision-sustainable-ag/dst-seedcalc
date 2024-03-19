@@ -17,7 +17,7 @@ import Dropdown from '../../../../components/Dropdown';
 import NumberTextField from '../../../../components/NumberTextField';
 import DSTSwitch from '../../../../components/Switch';
 import {
-  soilDrainagesMCCC, soilDrainagesNECCC, soilFertilityValues,
+  soilDrainagesMCCC, soilDrainagesNECCC, soilFertilityValues, soilDrainageValues,
 } from '../../../../shared/data/dropdown';
 import {
   checkNRCSRedux,
@@ -44,7 +44,7 @@ const getTileDrainage = (council, currentDrainage) => {
         return '';
     }
   }
-  if (council === 'NECCC') {
+  if (council === 'NECCC' || council === 'SCCC') {
     switch (currentDrainage) {
       case 'Very Poorly Drained':
         return 'Poorly Drained';
@@ -118,6 +118,19 @@ const SiteConditionForm = ({
     updateState(stateSelected);
   };
 
+  const soilDrainages = () => {
+    switch (council) {
+      case 'MCCC':
+        return soilDrainagesMCCC;
+      case 'NECCC':
+        return soilDrainagesNECCC;
+      case 'SCCC':
+        return soilDrainagesNECCC;
+      default:
+        return soilDrainageValues;
+    }
+  };
+
   return (
     <Grid container>
 
@@ -157,8 +170,7 @@ const SiteConditionForm = ({
           label="Soil Drainage: "
           handleChange={handleSoilDrainage}
           size={12}
-          // eslint-disable-next-line no-nested-ternary
-          items={council === 'MCCC' ? soilDrainagesMCCC : council === 'NECCC' ? soilDrainagesNECCC : []}
+          items={soilDrainages()}
         />
       </Grid>
       <Grid item xs={0} md={3} />

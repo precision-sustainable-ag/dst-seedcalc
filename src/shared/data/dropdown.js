@@ -19,6 +19,7 @@ export const calculatorList = [
 ];
 export const completedList = [false, false, true, true, true, false, true, true];
 
+// TODO: not used anymore
 export const availableStates = [
   'Connecticut',
   'Delaware',

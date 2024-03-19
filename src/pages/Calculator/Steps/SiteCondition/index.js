@@ -23,7 +23,6 @@ import '../steps.scss';
 import DSTImport from '../../../../components/DSTImport';
 import SiteConditionForm from './form';
 import Map from './Map';
-import { availableStates } from '../../../../shared/data/dropdown';
 
 const SiteCondition = ({ completedStep, setCompletedStep }) => {
   const dispatch = useDispatch();
@@ -61,6 +60,7 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
   };
 
   // initially get states data
+  // TODO: this updates states in redux, while availableStates(static) still need to update
   useEffect(() => {
     if (states.length === 0) dispatch(getLocality());
   }, []);
@@ -80,8 +80,8 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
   // Ensure that county id is updated to the current county
   useEffect(() => {
     if (siteCondition.county !== '' && counties.length > 0) {
-      // FIXME: temporary workaround for areas in zone 8(MD, DE and NJ), will update in the future
-      if (siteCondition.county === 'Zone 8') {
+      // FIXME: temporary workaround for NECCC areas in zone 8(MD, DE and NJ), will update in the future
+      if (siteCondition.council === 'NECCC' && siteCondition.county === 'Zone 8') {
         dispatch(setCountyRedux('Zone 7'));
         dispatch(setCountyIdRedux(4));
       } else {
@@ -122,12 +122,12 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
               <RegionSelectorMap
                 selectorFunction={setMapState}
                 selectedState={siteCondition.state || ''}
-                availableStates={availableStates}
+                availableStates={states.map((s) => s.label)}
                 initWidth="100%"
                 initHeight="360px"
                 initLon={-78}
                 initLat={43}
-                initStartZoom={4}
+                initStartZoom={3}
               />
               {
                 Object.keys(mapState).length > 0
