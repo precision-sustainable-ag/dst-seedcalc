@@ -12,7 +12,9 @@ const twoDigit = (value) => Number(parseFloat(value).toFixed(2));
 const createUserInput = (soilDrainage, plantingDate, acres) => ({ soilDrainage, plantingDate, acres });
 
 // eslint-disable-next-line no-undef
-const createCalculator = (mix, council, userInput) => new SeedRateCalculator({ mix, council, userInput });
+const createCalculator = (mix, council, regions, userInput) => new SeedRateCalculator({
+  mix, council, regions, userInput,
+});
 
 const initialOptions = {
   acres: null,
@@ -30,7 +32,7 @@ const initialOptions = {
   costPerPound: null,
 };
 
-const adjustProportions = (seed, calculator, options = {}) => {
+const adjustProportionsMCCC = (seed, calculator, options = {}) => {
   const crop = calculator.getCrop(seed);
   const defaultSingleSpeciesSeedingRatePLS = options.singleSpeciesSeedingRate
   ?? crop.coefficients.singleSpeciesSeedingRate;
@@ -467,7 +469,7 @@ const calculatePlantsandSeedsPerAcre = (seed, calculator, options, seedingRate =
 
 export {
   convertToPercent, twoDigit,
-  createUserInput, createCalculator, initialOptions, adjustProportions,
+  createUserInput, createCalculator, initialOptions, adjustProportionsMCCC,
   adjustProportionsNECCC, reviewMix, reviewMixNECCC, confirmPlan, checkNRCS,
   getPlantingDate, calculatePieChartData, calculatePlantsandSeedsPerAcre,
 };

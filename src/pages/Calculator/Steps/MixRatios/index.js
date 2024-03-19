@@ -19,7 +19,7 @@ import MixRatioSteps from './form';
 import DSTPieChart from '../../../../components/DSTPieChart';
 import { UnitSelection, SeedInfo } from '../../../../components/SeedingRateCard';
 import {
-  adjustProportions, adjustProportionsNECCC, createCalculator, createUserInput, calculatePieChartData,
+  adjustProportionsMCCC, adjustProportionsNECCC, createCalculator, createUserInput, calculatePieChartData,
   calculatePlantsandSeedsPerAcre,
 } from '../../../../shared/utils/calculator';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
@@ -57,7 +57,7 @@ const MixRatio = ({ calculator, setCalculator }) => {
   const dispatch = useDispatch();
   const { seedsSelected, sideBarSelection, options } = useSelector((state) => state.calculator);
   const {
-    council, soilDrainage, plantingDate, acres,
+    council, soilDrainage, plantingDate, acres, county,
   } = useSelector((state) => state.siteCondition);
 
   const [calculatorResult, setCalculatorResult] = useState(
@@ -92,7 +92,10 @@ const MixRatio = ({ calculator, setCalculator }) => {
   // initialize calculator, set initial options
   useEffect(() => {
     const userInput = createUserInput(soilDrainage, plantingDate, acres);
-    const seedingRateCalculator = createCalculator(seedsSelected, council, userInput);
+    // use a region array for sdk init
+    const regions = [county];
+    const seedingRateCalculator = createCalculator(seedsSelected, council, regions, userInput);
+    console.log(seedingRateCalculator);
     setCalculator(seedingRateCalculator);
     seedsSelected.forEach((seed) => {
       // FIXME: updated percentOfRate here, this is a temporary workaround for MCCC
@@ -111,7 +114,7 @@ const MixRatio = ({ calculator, setCalculator }) => {
     seedsSelected.forEach((seed) => {
       if (options[seed.label] !== prevOptions[seed.label]) {
         let result;
-        if (council === 'MCCC') result = adjustProportions(seed, calculator, options[seed.label]);
+        if (council === 'MCCC') result = adjustProportionsMCCC(seed, calculator, options[seed.label]);
         else if (council === 'NECCC') result = adjustProportionsNECCC(seed, calculator, options[seed.label]);
         setCalculatorResult((prev) => ({ ...prev, [seed.label]: result }));
         const {

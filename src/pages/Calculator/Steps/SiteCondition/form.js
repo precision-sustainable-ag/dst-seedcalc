@@ -67,7 +67,7 @@ const SiteConditionForm = ({
 }) => {
   const dispatch = useDispatch();
   const {
-    state, soilDrainage, tileDrainage, county, plannedPlantingDate,
+    state, soilDrainage, tileDrainage, county, plantingDate,
     soilFertility, checkNRCSStandards,
   } = useSelector((s) => s.siteCondition);
 
@@ -236,7 +236,7 @@ const SiteConditionForm = ({
       <Grid item xs={12} md={6} p="10px">
         <DatePicker
           label="Planned Planting Date: "
-          value={plannedPlantingDate}
+          value={plantingDate}
           handleChange={(e) => {
             const formattedDate = dayjs(e).format('MM/DD/YYYY');
             dispatch(setPlantingDateRedux(formattedDate));
