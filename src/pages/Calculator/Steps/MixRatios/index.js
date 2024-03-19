@@ -19,26 +19,51 @@ import MixRatioSteps from './form';
 import DSTPieChart from '../../../../components/DSTPieChart';
 import { UnitSelection, SeedInfo } from '../../../../components/SeedingRateCard';
 import {
-  adjustProportionsMCCC, adjustProportionsNECCC, createCalculator, createUserInput, calculatePieChartData,
-  calculatePlantsandSeedsPerAcre,
+  adjustProportionsMCCC, adjustProportionsNECCC, adjustProportionsSCCC,
+  createCalculator, createUserInput, calculatePieChartData, calculatePlantsandSeedsPerAcre,
 } from '../../../../shared/utils/calculator';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 import { pieChartUnits } from '../../../../shared/data/units';
 import '../steps.scss';
 
-const defaultResultMCCC = {
-  step1: { defaultSingleSpeciesSeedingRatePLS: 0, percentOfRate: 0, seedingRate: 0 },
-  step2: { seedsPerPound: 0, seedingRate: 0, seedsPerAcre: 0 },
-  step3: { seedsPerAcre: 0, percentSurvival: 0, plantsPerAcre: 0 },
-  step4: { plantPerAcre: 0, sqftPerAcre: 43560, plantPerSqft: 0 },
-};
+const getCalculatorResult = (council) => {
+  const defaultResultMCCC = {
+    step1: { defaultSingleSpeciesSeedingRatePLS: 0, percentOfRate: 0, seedingRate: 0 },
+    step2: { seedsPerPound: 0, seedingRate: 0, seedsPerAcre: 0 },
+    step3: { seedsPerAcre: 0, percentSurvival: 0, plantsPerAcre: 0 },
+    step4: { plantPerAcre: 0, sqftPerAcre: 43560, plantPerSqft: 0 },
+  };
 
-const defaultResultNECCC = {
-  step1: {
-    defaultSingleSpeciesSeedingRatePLS: 0, soilFertilityModifer: 0, sumGroupInMix: 0, seedingRate: 0,
-  },
-  step2: { seedsPerPound: 0, seedingRate: 0, seedsPerAcre: 0 },
-  step3: { seedsPerAcre: 0, sqftPerAcre: 43560, seedsPerSqft: 0 },
+  const defaultResultNECCC = {
+    step1: {
+      defaultSingleSpeciesSeedingRatePLS: 0, soilFertilityModifer: 0, sumGroupInMix: 0, seedingRate: 0,
+    },
+    step2: { seedsPerPound: 0, seedingRate: 0, seedsPerAcre: 0 },
+    step3: { seedsPerAcre: 0, sqftPerAcre: 43560, seedsPerSqft: 0 },
+  };
+
+  const defaultResultSCCC = {
+    step1: {
+      defaultSingleSpeciesSeedingRatePLS: 0,
+      percentOfRate: 0,
+      plantingTimeModifier: 0,
+      mixCompetitionCoefficient: 0,
+      seedingRate: 0,
+    },
+    step2: { seedsPerPound: 0, seedingRate: 0, seedsPerAcre: 0 },
+    step3: { seedsPerAcre: 0, sqftPerAcre: 43560, seedsPerSqft: 0 },
+  };
+
+  switch (council) {
+    case 'MCCC':
+      return defaultResultMCCC;
+    case 'NECCC':
+      return defaultResultNECCC;
+    case 'SCCC':
+      return defaultResultSCCC;
+    default:
+      return null;
+  }
 };
 
 const defaultPieChartData = {
@@ -62,7 +87,7 @@ const MixRatio = ({ calculator, setCalculator }) => {
 
   const [calculatorResult, setCalculatorResult] = useState(
     seedsSelected.reduce((res, seed) => {
-      res[seed.label] = council === 'MCCC' ? defaultResultMCCC : defaultResultNECCC;
+      res[seed.label] = getCalculatorResult(council);
       return res;
     }, {}),
   );
@@ -92,10 +117,9 @@ const MixRatio = ({ calculator, setCalculator }) => {
   // initialize calculator, set initial options
   useEffect(() => {
     const userInput = createUserInput(soilDrainage, plantingDate, acres);
-    // use a region array for sdk init
-    const regions = [county];
+    // use a region object array for sdk init
+    const regions = [{ label: county }];
     const seedingRateCalculator = createCalculator(seedsSelected, council, regions, userInput);
-    console.log(seedingRateCalculator);
     setCalculator(seedingRateCalculator);
     seedsSelected.forEach((seed) => {
       // FIXME: updated percentOfRate here, this is a temporary workaround for MCCC
@@ -116,6 +140,7 @@ const MixRatio = ({ calculator, setCalculator }) => {
         let result;
         if (council === 'MCCC') result = adjustProportionsMCCC(seed, calculator, options[seed.label]);
         else if (council === 'NECCC') result = adjustProportionsNECCC(seed, calculator, options[seed.label]);
+        else if (council === 'SCCC') result = adjustProportionsSCCC(seed, calculator, options[seed.label]);
         setCalculatorResult((prev) => ({ ...prev, [seed.label]: result }));
         const {
           plants, seeds, adjustedPlants, adjustedSeeds,
@@ -220,6 +245,12 @@ const MixRatio = ({ calculator, setCalculator }) => {
           />
         )}
         {council === 'NECCC' && (
+        <DSTPieChart
+          chartData={piechartData.seedsPerSqftArray}
+          label={pieChartUnits.seedsPerSqft}
+        />
+        )}
+        {council === 'SCCC' && (
         <DSTPieChart
           chartData={piechartData.seedsPerSqftArray}
           label={pieChartUnits.seedsPerSqft}

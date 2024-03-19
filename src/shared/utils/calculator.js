@@ -104,6 +104,47 @@ const adjustProportionsNECCC = (seed, calculator, options = {}) => {
   return result;
 };
 
+const adjustProportionsSCCC = (seed, calculator, options = {}) => {
+  const crop = calculator.getCrop(seed);
+  const defaultSingleSpeciesSeedingRatePLS = options.singleSpeciesSeedingRate
+  ?? crop.coefficients.singleSpeciesSeedingRate;
+
+  console.log('speciesInMix', calculator.sumSpeciesInMix());
+  console.log(calculator.isFreezingZone());
+
+  const percentOfRate = calculator.getDefaultPercentOfSingleSpeciesSeedingRate(seed, options);
+  const plantingTimeModifier = calculator.plantingTimeCoefficient(seed, options);
+  const mixCompetitionCoefficient = calculator.getDefaultMixCompetitionCoefficient(seed, options);
+
+  const seedingRate = twoDigit(calculator.seedingRate(seed, options));
+  const seedsPerAcre = twoDigit(calculator.seedsPerAcre(seed, options));
+  const seedsPerSqft = twoDigit(seedsPerAcre / 43560);
+
+  console.log('\n> ', seed.label, '- AdjustProportionsPage');
+  console.log('Step 1: Default Single Species Seeding Rate PLS *\
+  Percent Of Rate * Planting Time Modifier * Mix Competition Coefficient = Seeding Rate');
+  console.log(
+    `${defaultSingleSpeciesSeedingRatePLS} * ${percentOfRate}\
+* ${plantingTimeModifier} * ${mixCompetitionCoefficient} = ${seedingRate}`,
+  );
+  console.log('Step 2: Seeds Per Pound * Seeding Rate = Seeds Per Acre');
+  console.log(crop.seedsPerPound, ' * ', seedingRate, ' = ', seedsPerAcre);
+  console.log('Step 3: Seeds Per Acre / Sqft Per Acre = Seeds Per Sqft');
+  console.log(seedsPerAcre, ' / ', 43560, ' = ', seedsPerSqft);
+  const result = {
+    step1: {
+      defaultSingleSpeciesSeedingRatePLS,
+      percentOfRate,
+      plantingTimeModifier,
+      mixCompetitionCoefficient,
+      seedingRate,
+    },
+    step2: { seedsPerPound: crop.seedsPerPound, seedingRate, seedsPerAcre },
+    step3: { seedsPerAcre, sqftPerAcre: 43560, seedsPerSqft },
+  };
+  return result;
+};
+
 const reviewMix = (seed, calculator, options = {}) => {
   const crop = calculator.getCrop(seed);
   const singleSpeciesSeedingRate = options.singleSpeciesSeedingRate ?? crop.coefficients.singleSpeciesSeedingRate;
@@ -470,6 +511,6 @@ const calculatePlantsandSeedsPerAcre = (seed, calculator, options, seedingRate =
 export {
   convertToPercent, twoDigit,
   createUserInput, createCalculator, initialOptions, adjustProportionsMCCC,
-  adjustProportionsNECCC, reviewMix, reviewMixNECCC, confirmPlan, checkNRCS,
+  adjustProportionsNECCC, adjustProportionsSCCC, reviewMix, reviewMixNECCC, confirmPlan, checkNRCS,
   getPlantingDate, calculatePieChartData, calculatePlantsandSeedsPerAcre,
 };

@@ -65,7 +65,9 @@ const SeedInfo = ({
   const unitText = unit === 'acre' ? seedDataUnits.acre : unit === 'sqft' ? seedDataUnits.sqft : '';
 
   useEffect(() => {
-    const singleSpeciesSeedingRateVal = parseFloat(seed.attributes.Coefficients['Single Species Seeding Rate'].values[0]);
+    const singleSpeciesSeedingRateVal = council === 'SCCC'
+      ? parseFloat(seed.attributes.Planting['Base Seeding Rate'].values[0])
+      : parseFloat(seed.attributes.Coefficients['Single Species Seeding Rate'].values[0]);
     setSingleSpeciesSeedingRate(singleSpeciesSeedingRateVal);
     setRange([Math.round(singleSpeciesSeedingRateVal * 0.5), Math.round(singleSpeciesSeedingRateVal * 1.5)]);
   }, []);
