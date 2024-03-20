@@ -9,7 +9,7 @@ import {
 import NumberTextField from '../../../../components/NumberTextField';
 import { convertToPercent } from '../../../../shared/utils/calculator';
 import Dropdown from '../../../../components/Dropdown';
-import { seedingMethods, seedingMethodsNECCC } from '../../../../shared/data/dropdown';
+import { seedingMethodsMCCC, seedingMethodsNECCC, seedingMethodsSCCC } from '../../../../shared/data/dropdown';
 import '../steps.scss';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 
@@ -19,13 +19,12 @@ const ReviewMixSteps = ({
   handleFormValueChange,
   calculatorResult,
 }) => {
-  const [methods, setMethods] = useState({});
   const [seedingRateRange, setSeedingRateRange] = useState([0, 0]);
 
   const theme = useTheme();
   const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
   const dispatch = useDispatch();
-  const { seedsSelected, options } = useSelector((state) => state.calculator);
+  const { seedsSelected, options, seedingMethods } = useSelector((state) => state.calculator);
 
   const renderStepsForm = (label1, label2, label3) => (
     matchesMd && (
@@ -56,21 +55,6 @@ const ReviewMixSteps = ({
   } = calculatorResult;
 
   useEffect(() => {
-    const coefficients = seed.attributes.Coefficients;
-    const plantingMethods = council === 'MCCC' ? {
-      Drilled: 1,
-      Precision: parseFloat(coefficients['Precision Coefficient']?.values[0]) || null,
-      Broadcast: parseFloat(coefficients['Broadcast Coefficient']?.values[0]) || null,
-      Aerial: parseFloat(coefficients['Aerial Coefficient']?.values[0]) || null,
-    } : {
-      Drilled: 1,
-      'Broadcast(With Cultivation)':
-      parseFloat(coefficients['Broadcast with Cultivation Coefficient']?.values[0]) || null,
-      'Broadcast(With No Cultivation)':
-      parseFloat(coefficients['Broadcast without Cultivation Coefficient']?.values[0]) || null,
-      Aerial: parseFloat(coefficients['Aerial Coefficient']?.values[0]) || null,
-    };
-    setMethods(plantingMethods);
     setSeedingRateRange([
       Math.round(step1.singleSpeciesSeedingRate * 0.5),
       Math.round(step1.singleSpeciesSeedingRate * 1.5),
@@ -111,6 +95,19 @@ const ReviewMixSteps = ({
         <Grid item xs={2} md={6} />
       </Grid>
     );
+  };
+
+  const getSeedingMethods = () => {
+    switch (council) {
+      case 'MCCC':
+        return seedingMethodsMCCC;
+      case 'NECCC':
+        return seedingMethodsNECCC;
+      case 'SCCC':
+        return seedingMethodsSCCC;
+      default:
+        return [];
+    }
   };
 
   return (
@@ -269,11 +266,16 @@ const ReviewMixSteps = ({
             handleChange={(e) => {
               seedsSelected.forEach((s) => {
                 dispatch(
-                  setOptionRedux(s.label, { ...options[s.label], plantingMethod: e.target.value, plantingMethodModifier: methods[e.target.value] }),
+                  setOptionRedux(s.label, {
+                    ...options[s.label],
+                    plantingMethod: e.target.value,
+                    // TODO: need more check for seeding methods in SCCC
+                    plantingMethodModifier: seedingMethods[seed.label][e.target.value],
+                  }),
                 );
               });
             }}
-            items={council === 'MCCC' ? seedingMethods : seedingMethodsNECCC}
+            items={getSeedingMethods()}
           />
         </Grid>
         {renderStepsForm(

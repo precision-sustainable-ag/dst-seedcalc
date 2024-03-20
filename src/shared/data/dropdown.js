@@ -71,7 +71,7 @@ export const soilDrainagesMCCC = [
   { label: 'Well Drained Muck' },
 ];
 
-export const seedingMethods = [
+export const seedingMethodsMCCC = [
   { label: 'Precision' },
   { label: 'Drilled' },
   { label: 'Broadcast' },
@@ -83,6 +83,13 @@ export const seedingMethodsNECCC = [
   { label: 'Broadcast(With Cultivation)' },
   { label: 'Broadcast(With No Cultivation)' },
   { label: 'Aerial' },
+];
+
+export const seedingMethodsSCCC = [
+  { label: 'Drilled' },
+  { label: 'Broadcast(With Cultivation)' },
+  { label: 'Broadcast(With Cultivation), No Packing' },
+  { label: 'Broadcast(With No Cultivation)' },
 ];
 
 export const soilFertilityValues = [{ label: 'Low' }, { label: 'High' }];
