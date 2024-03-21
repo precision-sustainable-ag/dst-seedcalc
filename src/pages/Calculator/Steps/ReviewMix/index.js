@@ -10,8 +10,9 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import {
-  reviewMix, reviewMixNECCC, calculatePieChartData,
+  reviewMixMCCC, reviewMixNECCC, calculatePieChartData,
   calculatePlantsandSeedsPerAcre,
+  reviewMixSCCC,
 } from '../../../../shared/utils/calculator';
 import ReviewMixSteps from './Steps';
 import DSTPieChart from '../../../../components/DSTPieChart';
@@ -21,26 +22,46 @@ import { setBulkSeedingRateRedux, setOptionRedux } from '../../../../features/ca
 import { pieChartUnits, seedDataUnits } from '../../../../shared/data/units';
 import '../steps.scss';
 
-const defaultResultMCCC = {
-  step1: { singleSpeciesSeedingRate: 0, percentOfRate: 0, seedingRate: 0 },
-  step2: { seedingRate: 0, plantingMethodModifier: 0, seedingRateAfterPlantingMethodModifier: 0 },
-  step3: { seedingRate: 0, managementImpactOnMix: 0, seedingRateAfterManagementImpact: 0 },
-  step4: {
-    seedingRateAfterManagementImpact: 0, germination: 0, purity: 0, bulkSeedingRate: 0,
-  },
-  step5: { bulkSeedingRate: 0, acres: 0, poundsForPurchase: 0 },
-};
+const getCalculatorResult = (council) => {
+  const defaultResultMCCC = {
+    step1: { defaultSingleSpeciesSeedingRatePLS: 0, percentOfRate: 0, seedingRate: 0 },
+  };
 
-const defaultResultNECCC = {
-  step1: {
-    singleSpeciesSeedingRate: 0, soilFertilityModifer: 0, sumGroupInMix: 0, seedingRate: 0,
-  },
-  step2: { seedingRate: 0, plantingMethodModifier: 0, seedingRateAfterPlantingMethodModifier: 0 },
-  step3: { seedingRate: 0, managementImpactOnMix: 0, seedingRateAfterManagementImpact: 0 },
-  step4: {
-    seedingRateAfterManagementImpact: 0, germination: 0, purity: 0, bulkSeedingRate: 0,
-  },
-  step5: { bulkSeedingRate: 0, acres: 0, poundsForPurchase: 0 },
+  const defaultResultNECCC = {
+    step1: {
+      defaultSingleSpeciesSeedingRatePLS: 0, soilFertilityModifer: 0, sumGroupInMix: 0, seedingRate: 0,
+    },
+  };
+
+  const defaultResultSCCC = {
+    step1: {
+      defaultSingleSpeciesSeedingRatePLS: 0,
+      percentOfRate: 0,
+      plantingTimeModifier: 0,
+      mixCompetitionCoefficient: 0,
+      seedingRate: 0,
+    },
+  };
+
+  const restSteps = {
+    step2: { seedingRate: 0, plantingMethodModifier: 0, seedingRateAfterPlantingMethodModifier: 0 },
+    step3: { seedingRate: 0, managementImpactOnMix: 0, seedingRateAfterManagementImpact: 0 },
+    step4: {
+      seedingRateAfterManagementImpact: 0, germination: 0, purity: 0, bulkSeedingRate: 0,
+    },
+    step5: { bulkSeedingRate: 0, acres: 0, poundsForPurchase: 0 },
+  };
+
+  switch (council) {
+    case 'MCCC':
+      return { ...defaultResultMCCC, ...restSteps };
+    case 'NECCC':
+      return { ...defaultResultNECCC, ...restSteps };
+    case 'SCCC':
+      return { ...defaultResultSCCC, ...restSteps };
+    default:
+      return null;
+  }
 };
 
 const defaultPieChartData = {
@@ -62,7 +83,7 @@ const ReviewMix = ({ calculator }) => {
 
   const [calculatorResult, setCalculatorResult] = useState(
     seedsSelected.reduce((res, seed) => {
-      res[seed.label] = council === 'MCCC' ? defaultResultMCCC : defaultResultNECCC;
+      res[seed.label] = getCalculatorResult(council);
       return res;
     }, {}),
   );
@@ -121,8 +142,9 @@ const ReviewMix = ({ calculator }) => {
     seedsSelected.forEach((seed) => {
       if (options[seed.label] !== prevOptions[seed.label]) {
         let result;
-        if (council === 'MCCC') result = reviewMix(seed, calculator, options[seed.label]);
+        if (council === 'MCCC') result = reviewMixMCCC(seed, calculator, options[seed.label]);
         else if (council === 'NECCC') result = reviewMixNECCC(seed, calculator, options[seed.label]);
+        else if (council === 'SCCC') result = reviewMixSCCC(seed, calculator, options[seed.label]);
         setCalculatorResult((prev) => ({ ...prev, [seed.label]: result }));
         const {
           plants, seeds, adjustedSeeds,
@@ -187,6 +209,12 @@ const ReviewMix = ({ calculator }) => {
           />
         )}
         {council === 'NECCC' && (
+        <DSTPieChart
+          chartData={piechartData.seedsPerSqftArray}
+          label={pieChartUnits.seedsPerSqft}
+        />
+        )}
+        {council === 'SCCC' && (
         <DSTPieChart
           chartData={piechartData.seedsPerSqftArray}
           label={pieChartUnits.seedsPerSqft}

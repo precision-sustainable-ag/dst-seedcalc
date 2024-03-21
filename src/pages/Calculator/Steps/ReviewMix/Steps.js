@@ -253,6 +253,100 @@ const ReviewMixSteps = ({
         </>
       )}
 
+      {/* SCCC Step 1: */}
+      {council === 'SCCC' && (
+        <>
+          <Grid item xs={12}>
+            <Typography variant="stepHeader">Seeding Rate in Mix</Typography>
+          </Grid>
+
+          {/* <FormSlider
+            range={[0, 100]}
+            label="% of Single Species Rate"
+            val={convertToPercent(options[seed.label].percentOfRate)}
+            onChangeCommitted={(val) => {
+              handleFormValueChange(seed, 'percentOfRate', parseFloat(val) / 100);
+            }}
+            unit="%"
+          />
+          <Grid item xs={12} p="0.5rem" /> */}
+
+          {renderStepsForm(
+            'Single Species Seeding Rate PLS (Lbs per Acre)',
+            'Percent Of Rate',
+            'Planting Time Modifier',
+          )}
+          <Grid container justifyContent="space-evenly" pb="1rem">
+            <Grid item xs={3}>
+              <NumberTextField
+                disabled
+                label={matchesMd ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
+                value={step1.singleSpeciesSeedingRate}
+              />
+            </Grid>
+
+            <Grid item xs={1}>
+              <Typography variant="mathIcon">&#215;</Typography>
+            </Grid>
+
+            <Grid item xs={3}>
+              <NumberTextField
+                label={matchesMd ? '' : 'Percent Of Rate'}
+                disabled
+                value={convertToPercent(step1.percentOfRate)}
+              />
+            </Grid>
+
+            <Grid item xs={1}>
+              <Typography variant="mathIcon">&#215;</Typography>
+            </Grid>
+
+            <Grid item xs={3}>
+              <NumberTextField
+                label={matchesMd ? '' : 'Planting Time Modifier'}
+                disabled
+                value={step1.plantingTimeModifier}
+              />
+            </Grid>
+
+          </Grid>
+
+          {renderStepsForm(
+            '',
+            'Mix Competition Coefficient',
+            'Seeding Rate In Mix (Lbs per Acre)',
+          )}
+
+          <Grid container p="1rem 0 0 0" justifyContent="space-evenly">
+            <Grid item xs={3} />
+            <Grid item xs={1}>
+              <Typography variant="mathIcon">&#215;</Typography>
+            </Grid>
+
+            <Grid item xs={3}>
+              <NumberTextField
+                disabled
+                label={matchesMd ? '' : 'Mix Competition Coefficient'}
+                value={step1.mixCompetitionCoefficient}
+              />
+            </Grid>
+
+            <Grid item xs={1}>
+              <Typography variant="mathIcon">=</Typography>
+            </Grid>
+
+            <Grid item xs={3}>
+              <NumberTextField
+                label="Seeding Rate In Mix (Lbs per Acre)"
+                disabled
+                value={step1.seedingRate}
+              />
+            </Grid>
+
+          </Grid>
+        </>
+      )}
+
       {/* Step 2: */}
       <>
         <Grid item xs={12}>
