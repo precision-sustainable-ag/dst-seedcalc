@@ -68,10 +68,10 @@ const SiteConditionForm = ({
   const dispatch = useDispatch();
   const {
     state, soilDrainage, tileDrainage, county, plantingDate,
-    soilFertility, checkNRCSStandards,
+    soilFertility, checkNRCSStandards, acres: acresRedux,
   } = useSelector((s) => s.siteCondition);
 
-  const [acres, setAcres] = useState(0);
+  const [acres, setAcres] = useState(acresRedux);
   const [soilDrainagePrev, setSoilDrainagePrev] = useState(soilDrainage);
 
   const handleSoilDrainage = (e) => {
