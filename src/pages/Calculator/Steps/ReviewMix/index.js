@@ -24,18 +24,18 @@ import '../steps.scss';
 
 const getCalculatorResult = (council) => {
   const defaultResultMCCC = {
-    step1: { defaultSingleSpeciesSeedingRatePLS: 0, percentOfRate: 0, seedingRate: 0 },
+    step1: { singleSpeciesSeedingRate: 0, percentOfRate: 0, seedingRate: 0 },
   };
 
   const defaultResultNECCC = {
     step1: {
-      defaultSingleSpeciesSeedingRatePLS: 0, soilFertilityModifer: 0, sumGroupInMix: 0, seedingRate: 0,
+      singleSpeciesSeedingRate: 0, soilFertilityModifier: 0, sumGroupInMix: 0, seedingRate: 0,
     },
   };
 
   const defaultResultSCCC = {
     step1: {
-      defaultSingleSpeciesSeedingRatePLS: 0,
+      singleSpeciesSeedingRate: 0,
       percentOfRate: 0,
       plantingTimeModifier: 0,
       mixCompetitionCoefficient: 0,
@@ -208,13 +208,7 @@ const ReviewMix = ({ calculator }) => {
             label={pieChartUnits.plantsPerSqft}
           />
         )}
-        {council === 'NECCC' && (
-        <DSTPieChart
-          chartData={piechartData.seedsPerSqftArray}
-          label={pieChartUnits.seedsPerSqft}
-        />
-        )}
-        {council === 'SCCC' && (
+        {(council === 'NECCC' || council === 'SCCC') && (
         <DSTPieChart
           chartData={piechartData.seedsPerSqftArray}
           label={pieChartUnits.seedsPerSqft}
@@ -281,6 +275,7 @@ const ReviewMix = ({ calculator }) => {
                     seed={seed}
                     handleFormValueChange={handleFormValueChange}
                     calculatorResult={calculatorResult[seed.label]}
+                    options={options[seed.label]}
                   />
                   )}
                 </Grid>

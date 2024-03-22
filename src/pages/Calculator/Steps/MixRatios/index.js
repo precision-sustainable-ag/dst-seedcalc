@@ -36,7 +36,7 @@ const getCalculatorResult = (council) => {
 
   const defaultResultNECCC = {
     step1: {
-      defaultSingleSpeciesSeedingRatePLS: 0, soilFertilityModifer: 0, sumGroupInMix: 0, seedingRate: 0,
+      defaultSingleSpeciesSeedingRatePLS: 0, soilFertilityModifier: 0, sumGroupInMix: 0, seedingRate: 0,
     },
     step2: { seedsPerPound: 0, seedingRate: 0, seedsPerAcre: 0 },
     step3: { seedsPerAcre: 0, sqftPerAcre: 43560, seedsPerSqft: 0 },
@@ -244,13 +244,7 @@ const MixRatio = ({ calculator, setCalculator }) => {
             label={pieChartUnits.plantsPerSqft}
           />
         )}
-        {council === 'NECCC' && (
-        <DSTPieChart
-          chartData={piechartData.seedsPerSqftArray}
-          label={pieChartUnits.seedsPerSqft}
-        />
-        )}
-        {council === 'SCCC' && (
+        {(council === 'NECCC' || council === 'SCCC') && (
         <DSTPieChart
           chartData={piechartData.seedsPerSqftArray}
           label={pieChartUnits.seedsPerSqft}
@@ -283,6 +277,7 @@ const MixRatio = ({ calculator, setCalculator }) => {
                   calculatorResult={calculatorResult}
                   handleFormValueChange={handleFormValueChange}
                   council={council}
+                  options={options[seed.label]}
                 />
 
                 <Grid item xs={12}>
@@ -305,6 +300,7 @@ const MixRatio = ({ calculator, setCalculator }) => {
                   <MixRatioSteps
                     council={council}
                     calculatorResult={calculatorResult[seed.label]}
+                    options={options[seed.label]}
                   />
                   )}
                 </Grid>

@@ -11,7 +11,8 @@ const NumberTextField = ({
 }) => (
   <TextField
     fullWidth
-    value={value.toLocaleString()}
+    // FIXME: temporary fix for this
+    value={value?.toLocaleString() || 'None'}
     label={label}
     onChange={handleChange}
     InputLabelProps={{

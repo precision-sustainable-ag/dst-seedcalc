@@ -7,7 +7,7 @@ import { convertToPercent } from '../../../../shared/utils/calculator';
 import '../steps.scss';
 
 const MixRatioSteps = ({
-  council, calculatorResult,
+  council, calculatorResult, options,
 }) => {
   const theme = useTheme();
   const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
@@ -40,6 +40,9 @@ const MixRatioSteps = ({
     // eslint-disable-next-line no-unused-vars
     step1, step2, step3, step4,
   } = calculatorResult;
+  const { soilFertilityModifier } = calculatorResult.step1;
+
+  const percentOfRateNECCC = convertToPercent(options.percentOfRate / soilFertilityModifier || 1 / step1.sumGroupInMix);
 
   return (
     <Grid container>
@@ -52,7 +55,7 @@ const MixRatioSteps = ({
           {renderFormLabel(
             'Single Species Seeding Rate PLS (Lbs per Acre)',
             'Soil Fertility Modifier',
-            'Sum Species of Group In Mix (Lbs per Acre)',
+            '% of Single Species Rate',
           )}
           <Grid container justifyContent="space-evenly">
             <Grid item xs={3}>
@@ -76,14 +79,14 @@ const MixRatioSteps = ({
             </Grid>
 
             <Grid item xs={1}>
-              <Typography variant="mathIcon">÷</Typography>
+              <Typography variant="mathIcon">&#215;</Typography>
             </Grid>
 
             <Grid item xs={3}>
               <NumberTextField
                 disabled
-                label={matchesMd ? '' : 'Sum Species of Group In Mix'}
-                value={step1.sumGroupInMix}
+                label={matchesMd ? '' : '% of Single Species Rate'}
+                value={percentOfRateNECCC}
               />
             </Grid>
           </Grid>
@@ -163,7 +166,7 @@ const MixRatioSteps = ({
           </Grid>
           {renderFormLabel(
             'Single Species Seeding Rate PLS (Lbs per Acre)',
-            'Percent Of Rate',
+            '% of Single Species Rate',
             'Planting Time Modifier',
           )}
           <Grid container justifyContent="space-evenly" pb="1rem">
@@ -181,9 +184,9 @@ const MixRatioSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Percent Of Rate'}
+                label={matchesMd ? '' : '% of Single Species Rate'}
                 disabled
-                value={step1.percentOfRate}
+                value={convertToPercent(step1.percentOfRate)}
               />
             </Grid>
 

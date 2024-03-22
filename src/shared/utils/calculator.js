@@ -226,10 +226,10 @@ const reviewMixMCCC = (seed, calculator, options = {}) => {
 const reviewMixNECCC = (seed, calculator, options = {}) => {
   const crop = calculator.getCrop(seed);
   const singleSpeciesSeedingRate = options.singleSpeciesSeedingRate ?? crop.coefficients.singleSpeciesSeedingRate;
-  const soilFertilityModifer = calculator.soilFertilityModifier(crop, options);
+  const soilFertilityModifier = calculator.soilFertilityModifier(crop, options);
   const { group } = crop;
   const sumGroupInMix = calculator.speciesInMix[group];
-  const percentOfRate = calculator.getDefaultPercentOfSingleSpeciesSeedingRate(crop, options);
+  const percentOfRate = options.percentOfRate ?? calculator.getDefaultPercentOfSingleSpeciesSeedingRate(crop, options);
 
   const seedingRate = twoDigit(calculator.seedingRate(seed, {
     singleSpeciesSeedingRate: options.singleSpeciesSeedingRate,
@@ -274,7 +274,7 @@ const reviewMixNECCC = (seed, calculator, options = {}) => {
   console.log(
     singleSpeciesSeedingRate,
     ' * ',
-    soilFertilityModifer,
+    soilFertilityModifier,
     '/',
     sumGroupInMix,
     ' = ',
@@ -296,7 +296,7 @@ const reviewMixNECCC = (seed, calculator, options = {}) => {
   console.log(bulkSeedingRate, ' * ', options.acres, ' = ', poundsForPurchase);
   const result = {
     step1: {
-      singleSpeciesSeedingRate, soilFertilityModifer, sumGroupInMix, seedingRate,
+      singleSpeciesSeedingRate, soilFertilityModifier, sumGroupInMix, seedingRate,
     },
     step2: { seedingRate, plantingMethodModifier: options.plantingMethodModifier, seedingRateAfterPlantingMethodModifier },
     step3: {
