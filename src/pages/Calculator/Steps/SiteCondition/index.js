@@ -125,8 +125,8 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
                 availableStates={states.map((s) => s.label)}
                 initWidth="100%"
                 initHeight="360px"
-                initLon={-78}
-                initLat={43}
+                initLon={-90}
+                initLat={39}
                 initStartZoom={3}
               />
               {

@@ -125,7 +125,9 @@ const MixRatio = ({ calculator, setCalculator }) => {
       // FIXME: updated percentOfRate here, this is a temporary workaround for MCCC
       const newOption = {
         ...options[seed.label],
-        percentOfRate: council === 'MCCC' ? 1 / seedsSelected.length : null,
+        percentOfRate: (council === 'MCCC'
+        || (council === 'SCCC' && !seedingRateCalculator.isFreezingZone()))
+          ? 1 / seedsSelected.length : null,
       };
       dispatch(setOptionRedux(seed.label, newOption));
     });
