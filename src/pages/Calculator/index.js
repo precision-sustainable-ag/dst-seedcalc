@@ -11,6 +11,7 @@ import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { FadeAlert } from '@psa/dst.ui.fade-alert';
+import { useAuth0 } from '@auth0/auth0-react';
 import {
   SiteCondition,
   SpeciesSelection,
@@ -23,6 +24,7 @@ import {
   CompletedPage,
 } from './Steps';
 import SeedsSelectedList from '../../components/SeedsSelectedList';
+import AuthButton from '../../components/Auth/AuthButton';
 
 import { calculatorList, completedList } from '../../shared/data/dropdown';
 import StepsList from '../../components/StepsList';
@@ -45,6 +47,8 @@ const Calculator = () => {
   const theme = useTheme();
   const matchesSm = useMediaQuery(theme.breakpoints.down('sm'));
   const [showAlert, setShowAlert] = useState(false);
+
+  const { isAuthenticated } = useAuth0();
 
   /// ///////////////////////////////////////////////////////
   //                      Render                          //
@@ -181,6 +185,11 @@ const Calculator = () => {
         <Typography variant="dstHeader" pl="1rem">
           Seeding Rate Calculator
         </Typography>
+        <AuthButton
+          variant="outlined"
+          type={isAuthenticated ? 'Logout' : 'Login'}
+          color={isAuthenticated ? 'error' : 'primary'}
+        />
       </Grid>
 
       <Grid item md={0} lg={2} />
