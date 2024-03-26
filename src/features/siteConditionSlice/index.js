@@ -64,23 +64,7 @@ const siteConditionSlice = createSlice({
       .addCase(getLocality.fulfilled, (state, { payload }) => {
         state.loading = false;
         // TODO: temporary fix for states
-        state.states = [...payload, {
-          id: 37,
-          label: 'North Carolina',
-          shorthand: 'NC',
-          councilId: 57,
-          localityId: 1,
-          council: {
-            id: 57,
-            label: 'Southern Cover Crops Council',
-            shorthand: 'SCCC',
-          },
-          parents: {
-            0: {
-              shorthand: 'SCCC',
-            },
-          },
-        }];
+        state.states = [...payload];
         state.error = false;
       })
       .addCase(getLocality.rejected, (state) => {
