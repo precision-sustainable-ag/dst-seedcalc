@@ -356,7 +356,6 @@ const ReviewMixSteps = ({
                   setOptionRedux(s.label, {
                     ...options,
                     plantingMethod: e.target.value,
-                    // TODO: need more check for seeding methods in SCCC
                     plantingMethodModifier: seedingMethods[seed.label][e.target.value],
                   }),
                 );

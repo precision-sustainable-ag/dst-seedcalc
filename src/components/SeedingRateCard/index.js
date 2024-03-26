@@ -187,7 +187,6 @@ const SeedInfo = ({
           </Grid>
         </Grid>
 
-        {/* TODO: does this need to multiply soil fertility? */}
         <Grid item xs={12} pt="1rem">
           <Typography>
             {`% of Single Species Rate: ${singleSpeciesRate}%`}

@@ -60,7 +60,6 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
   };
 
   // initially get states data
-  // TODO: this updates states in redux, while availableStates(static) still need to update
   useEffect(() => {
     if (states.length === 0) dispatch(getLocality());
   }, []);
