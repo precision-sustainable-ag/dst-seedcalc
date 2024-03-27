@@ -24,10 +24,10 @@ import {
   CompletedPage,
 } from './Steps';
 import SeedsSelectedList from '../../components/SeedsSelectedList';
-import AuthButton from '../../components/Auth/AuthButton';
 
 import { calculatorList, completedList } from '../../shared/data/dropdown';
 import StepsList from '../../components/StepsList';
+import NavBar from '../../components/NavBar';
 
 const Calculator = () => {
   const siteCondition = useSelector((state) => state.siteCondition);
@@ -147,6 +147,17 @@ const Calculator = () => {
     if (siteConditionError || calculatorError) setShowAlert(true);
   }, [siteConditionError, calculatorError]);
 
+  useEffect(() => {
+    const fetchToken = async () => {
+      const token = await getAccessTokenSilently();
+      console.log('token', token);
+      return token;
+    };
+    if (isAuthenticated) {
+      fetchToken();
+    }
+  }, [isAuthenticated]);
+
   return (
     <Grid container justifyContent="center">
       <Grid item style={{ position: 'fixed', top: '0px', zIndex: 1000 }}>
@@ -194,11 +205,7 @@ const Calculator = () => {
             </Typography>
           </Grid>
           <Grid item xs={3} md={6}>
-            <AuthButton
-              variant="outlined"
-              type={isAuthenticated ? 'Logout' : 'Login'}
-              color={isAuthenticated ? 'error' : 'primary'}
-            />
+            <NavBar />
           </Grid>
         </Grid>
 

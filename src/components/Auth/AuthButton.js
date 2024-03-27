@@ -8,7 +8,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react';
 
 const AuthButton = ({
-  type, variant = 'text', onClickCallback = () => {}, color = 'primary',
+  type, variant = 'text', onClickCallback = () => {},
 }) => {
   const { loginWithRedirect, logout } = useAuth0();
 
@@ -45,9 +45,22 @@ const AuthButton = ({
     }
   };
 
+  const getColor = () => {
+    switch (type) {
+      case 'Login':
+        return '#add08f';
+      case 'Signup':
+        return 'purple';
+      case 'Logout':
+        return 'salmon';
+      default:
+        return 'black';
+    }
+  };
+
   return (
-    <Button variant={variant} onClick={handleClick} color={color}>
-      <Typography variant="body2" sx={{ fontWeight: 'bold', color }}>
+    <Button variant={variant} onClick={handleClick}>
+      <Typography sx={{ fontSize: '0.875rem', fontWeight: 'bold' }} color={getColor()}>
         {type}
       </Typography>
     </Button>
