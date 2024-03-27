@@ -109,7 +109,7 @@ const ConfirmPlanCharts = ({ council, calculator, calculatorResult }) => {
             label={pieChartUnits.plantsPerSqft}
           />
         )}
-        {council === 'NECCC' && (
+        {(council === 'NECCC' || council === 'SCCC') && (
         <DSTPieChart
           chartData={piechartData.seedsPerSqftArray}
           label={pieChartUnits.seedsPerSqft}

@@ -44,12 +44,10 @@ const UnitSelection = () => {
 };
 
 const SeedInfo = ({
-  seed, seedData, calculatorResult, handleFormValueChange, council,
+  seed, seedData, calculatorResult, handleFormValueChange, council, options,
 }) => {
   const [singleSpeciesRate, setSingleSpeciesRate] = useState(0);
   const [survival, setSurvival] = useState(0);
-  const [singleSpeciesSeedingRate, setSingleSpeciesSeedingRate] = useState(0);
-  const [range, setRange] = useState([0, 0]);
   const [singleData, setSingleData] = useState({
     seedingRate: calculatorResult[seed.label].step1.defaultSingleSpeciesSeedingRatePLS,
     plantValue: seedData[seed.label].defaultPlant,
@@ -61,14 +59,9 @@ const SeedInfo = ({
     seedValue: seedData[seed.label].adjustedSeed,
   });
   const { unit } = useSelector((state) => state.calculator);
+  const { soilFertilityModifier } = calculatorResult[seed.label].step1;
   // eslint-disable-next-line no-nested-ternary
   const unitText = unit === 'acre' ? seedDataUnits.acre : unit === 'sqft' ? seedDataUnits.sqft : '';
-
-  useEffect(() => {
-    const singleSpeciesSeedingRateVal = parseFloat(seed.attributes.Coefficients['Single Species Seeding Rate'].values[0]);
-    setSingleSpeciesSeedingRate(singleSpeciesSeedingRateVal);
-    setRange([Math.round(singleSpeciesSeedingRateVal * 0.5), Math.round(singleSpeciesSeedingRateVal * 1.5)]);
-  }, []);
 
   useEffect(() => {
     if (unit === 'sqft') {
@@ -97,7 +90,12 @@ const SeedInfo = ({
       });
     }
     setSurvival(Math.round(twoDigit(calculatorResult[seed.label].step3.percentSurvival) * 100));
-    setSingleSpeciesRate(Math.round(calculatorResult[seed.label].step1.percentOfRate * 100));
+    if (council === 'NECCC') {
+      if (options.percentOfRate) setSingleSpeciesRate(Math.round((options.percentOfRate / soilFertilityModifier) * 100));
+      else setSingleSpeciesRate(Math.round((1 / calculatorResult[seed.label].step1.sumGroupInMix) * 100));
+    } else {
+      setSingleSpeciesRate(Math.round(calculatorResult[seed.label].step1.percentOfRate * 100));
+    }
   }, [seedData, calculatorResult, unit]);
 
   return (
@@ -189,52 +187,42 @@ const SeedInfo = ({
           </Grid>
         </Grid>
 
-        {council === 'MCCC'
-        && (
-          <>
-            <Grid item xs={12} pt="1rem">
-              <Typography>
-                {`% of Single Species Rate: ${singleSpeciesRate}%`}
-              </Typography>
-              <Slider
-                min={0}
-                max={100}
-                value={singleSpeciesRate}
-                valueLabelDisplay="auto"
-                onChange={(e) => setSingleSpeciesRate(e.target.value)}
-                onChangeCommitted={() => handleFormValueChange(seed, 'percentOfRate', parseFloat(singleSpeciesRate) / 100)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography>
-                {`% Survival: ${survival}%`}
-              </Typography>
-              <Slider
-                min={0}
-                max={100}
-                value={survival}
-                valueLabelDisplay="auto"
-                onChange={(e) => setSurvival(e.target.value)}
-                onChangeCommitted={() => handleFormValueChange(seed, 'percentSurvival', parseFloat(survival) / 100)}
-              />
-            </Grid>
-          </>
-        )}
-
-        {council === 'NECCC' && (
         <Grid item xs={12} pt="1rem">
           <Typography>
-            {`Single Species Seeding Rate PLS: ${singleSpeciesSeedingRate} Lbs per Acre`}
+            {`% of Single Species Rate: ${singleSpeciesRate}%`}
           </Typography>
           <Slider
-            min={range[0]}
-            max={range[1]}
-            value={singleSpeciesSeedingRate}
+            min={0}
+            max={100}
+            value={singleSpeciesRate}
             valueLabelDisplay="auto"
-            onChange={(e) => setSingleSpeciesSeedingRate(e.target.value)}
-            onChangeCommitted={() => handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(singleSpeciesSeedingRate))}
+            onChange={(e) => setSingleSpeciesRate(e.target.value)}
+            onChangeCommitted={() => {
+              if (council === 'NECCC') {
+                // if council is neccc, the percent of rate need to multiply by soil fertility modifier
+                handleFormValueChange(seed, 'percentOfRate', (soilFertilityModifier * parseFloat(singleSpeciesRate)) / 100);
+              } else {
+                handleFormValueChange(seed, 'percentOfRate', parseFloat(singleSpeciesRate) / 100);
+              }
+            }}
           />
         </Grid>
+
+        {council === 'MCCC'
+        && (
+          <Grid item xs={12}>
+            <Typography>
+              {`% Survival: ${survival}%`}
+            </Typography>
+            <Slider
+              min={0}
+              max={100}
+              value={survival}
+              valueLabelDisplay="auto"
+              onChange={(e) => setSurvival(e.target.value)}
+              onChangeCommitted={() => handleFormValueChange(seed, 'percentSurvival', parseFloat(survival) / 100)}
+            />
+          </Grid>
         )}
 
       </Grid>

@@ -58,6 +58,7 @@ const SeedTagInfo = ({ completedStep, setCompletedStep }) => {
     if (options[seed.label].seedsPerPound) return options[seed.label].seedsPerPound;
     if (council === 'MCCC') return seed.attributes['Planting Information']['Seed Count'].values[0];
     if (council === 'NECCC') return seed.attributes.Planting['Seeds Per lb'].values[0];
+    if (council === 'SCCC') return seed.attributes.Planting['Seeds per Pound'].values[0];
     return '';
   };
 
