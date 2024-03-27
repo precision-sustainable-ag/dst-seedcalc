@@ -23,8 +23,10 @@ import '../steps.scss';
 import DSTImport from '../../../../components/DSTImport';
 import SiteConditionForm from './form';
 import Map from './Map';
+import HistoryDialog from '../../../../components/HistoryDialog';
+import { postHistory } from '../../../../shared/utils/api';
 
-const SiteCondition = ({ completedStep, setCompletedStep }) => {
+const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
   const dispatch = useDispatch();
 
   // Location state
@@ -33,6 +35,7 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
   const [isImported, setIsImported] = useState(false);
 
   const siteCondition = useSelector((state) => state.siteCondition);
+  // TODO: move states and counties out from redux since they're only user in this step
   const { states, counties, loading } = siteCondition;
 
   // update redux based on selectedState change
@@ -57,6 +60,17 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
     dispatch(updateLatlonRedux(statesLatLongDict[label]));
     dispatch(setStateRedux(label, selectedState.id));
     dispatch(setCouncilRedux(selectedState.parents[0].shorthand));
+  };
+
+  const updateHistory = async () => {
+    const name = 'test1';
+    const state = 'North Carolina';
+    const stateId = 123;
+    const data = {
+      name, state, stateId,
+    };
+    const res = await postHistory(token, data);
+    console.log(res);
   };
 
   // initially get states data
@@ -149,6 +163,7 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
                   )
               }
               <DSTImport setIsImported={setIsImported} />
+              <HistoryDialog />
             </>
           ) : step === 2 ? (
             <Map
@@ -166,6 +181,7 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
           )
         )}
       </Grid>
+      <Button onClick={updateHistory}>save</Button>
     </Grid>
   );
 };

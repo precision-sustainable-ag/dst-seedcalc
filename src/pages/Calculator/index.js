@@ -41,6 +41,7 @@ const Calculator = () => {
   // this completedStep is to determine whether the next button is clickable on each page
   const [completedStep, setCompletedStep] = useState([...completedList]);
   const [showHeaderLogo, setShowHeaderLogo] = useState(true);
+  const [token, setToken] = useState(null);
 
   const stepperRef = useRef();
 
@@ -61,6 +62,7 @@ const Calculator = () => {
           <SiteCondition
             completedStep={completedStep}
             setCompletedStep={setCompletedStep}
+            token={token}
           />
         );
       case 'Species Selection':
@@ -150,11 +152,11 @@ const Calculator = () => {
     if (siteConditionError || calculatorError) setShowAlert(true);
   }, [siteConditionError, calculatorError]);
 
+  // initially get token
   useEffect(() => {
     const fetchToken = async () => {
-      const token = await getAccessTokenSilently();
-      console.log('token', token);
-      return token;
+      const t = await getAccessTokenSilently();
+      setToken(t);
     };
     if (isAuthenticated) {
       fetchToken();
