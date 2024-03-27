@@ -35,7 +35,7 @@ const Map = ({
         if (filteredCounty.length > 0) {
           dispatch(setCountyRedux(filteredCounty[0].label));
         }
-      } else if (siteCondition.council === 'NECCC') {
+      } else if (siteCondition.council === 'NECCC' || siteCondition.council === 'SCCC') {
         dispatch(getZoneData({ zip: zipCode })).then((res) => {
           dispatch(setCountyRedux(`Zone ${res.payload.replace(/[^0-9]/g, '')}`));
         });

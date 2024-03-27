@@ -63,7 +63,7 @@ const siteConditionSlice = createSlice({
       })
       .addCase(getLocality.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.states = payload;
+        state.states = [...payload];
         state.error = false;
       })
       .addCase(getLocality.rejected, (state) => {

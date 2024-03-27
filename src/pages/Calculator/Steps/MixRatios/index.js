@@ -19,26 +19,51 @@ import MixRatioSteps from './form';
 import DSTPieChart from '../../../../components/DSTPieChart';
 import { UnitSelection, SeedInfo } from '../../../../components/SeedingRateCard';
 import {
-  adjustProportions, adjustProportionsNECCC, createCalculator, createUserInput, calculatePieChartData,
-  calculatePlantsandSeedsPerAcre,
+  adjustProportionsMCCC, adjustProportionsNECCC, adjustProportionsSCCC,
+  createCalculator, createUserInput, calculatePieChartData, calculatePlantsandSeedsPerAcre,
 } from '../../../../shared/utils/calculator';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 import { pieChartUnits } from '../../../../shared/data/units';
 import '../steps.scss';
 
-const defaultResultMCCC = {
-  step1: { defaultSingleSpeciesSeedingRatePLS: 0, percentOfRate: 0, seedingRate: 0 },
-  step2: { seedsPerPound: 0, seedingRate: 0, seedsPerAcre: 0 },
-  step3: { seedsPerAcre: 0, percentSurvival: 0, plantsPerAcre: 0 },
-  step4: { plantPerAcre: 0, sqftPerAcre: 43560, plantPerSqft: 0 },
-};
+const getCalculatorResult = (council) => {
+  const defaultResultMCCC = {
+    step1: { defaultSingleSpeciesSeedingRatePLS: 0, percentOfRate: 0, seedingRate: 0 },
+    step2: { seedsPerPound: 0, seedingRate: 0, seedsPerAcre: 0 },
+    step3: { seedsPerAcre: 0, percentSurvival: 0, plantsPerAcre: 0 },
+    step4: { plantPerAcre: 0, sqftPerAcre: 43560, plantPerSqft: 0 },
+  };
 
-const defaultResultNECCC = {
-  step1: {
-    defaultSingleSpeciesSeedingRatePLS: 0, soilFertilityModifer: 0, sumGroupInMix: 0, seedingRate: 0,
-  },
-  step2: { seedsPerPound: 0, seedingRate: 0, seedsPerAcre: 0 },
-  step3: { seedsPerAcre: 0, sqftPerAcre: 43560, seedsPerSqft: 0 },
+  const defaultResultNECCC = {
+    step1: {
+      defaultSingleSpeciesSeedingRatePLS: 0, soilFertilityModifier: 0, sumGroupInMix: 0, seedingRate: 0,
+    },
+    step2: { seedsPerPound: 0, seedingRate: 0, seedsPerAcre: 0 },
+    step3: { seedsPerAcre: 0, sqftPerAcre: 43560, seedsPerSqft: 0 },
+  };
+
+  const defaultResultSCCC = {
+    step1: {
+      defaultSingleSpeciesSeedingRatePLS: 0,
+      percentOfRate: 0,
+      plantingTimeModifier: 0,
+      mixCompetitionCoefficient: 0,
+      seedingRate: 0,
+    },
+    step2: { seedsPerPound: 0, seedingRate: 0, seedsPerAcre: 0 },
+    step3: { seedsPerAcre: 0, sqftPerAcre: 43560, seedsPerSqft: 0 },
+  };
+
+  switch (council) {
+    case 'MCCC':
+      return defaultResultMCCC;
+    case 'NECCC':
+      return defaultResultNECCC;
+    case 'SCCC':
+      return defaultResultSCCC;
+    default:
+      return null;
+  }
 };
 
 const defaultPieChartData = {
@@ -57,12 +82,12 @@ const MixRatio = ({ calculator, setCalculator }) => {
   const dispatch = useDispatch();
   const { seedsSelected, sideBarSelection, options } = useSelector((state) => state.calculator);
   const {
-    council, soilDrainage, plantingDate, acres,
+    council, soilDrainage, plantingDate, acres, county,
   } = useSelector((state) => state.siteCondition);
 
   const [calculatorResult, setCalculatorResult] = useState(
     seedsSelected.reduce((res, seed) => {
-      res[seed.label] = council === 'MCCC' ? defaultResultMCCC : defaultResultNECCC;
+      res[seed.label] = getCalculatorResult(council);
       return res;
     }, {}),
   );
@@ -92,13 +117,17 @@ const MixRatio = ({ calculator, setCalculator }) => {
   // initialize calculator, set initial options
   useEffect(() => {
     const userInput = createUserInput(soilDrainage, plantingDate, acres);
-    const seedingRateCalculator = createCalculator(seedsSelected, council, userInput);
+    // use a region object array for sdk init
+    const regions = [{ label: county }];
+    const seedingRateCalculator = createCalculator(seedsSelected, council, regions, userInput);
     setCalculator(seedingRateCalculator);
     seedsSelected.forEach((seed) => {
       // FIXME: updated percentOfRate here, this is a temporary workaround for MCCC
       const newOption = {
         ...options[seed.label],
-        percentOfRate: council === 'MCCC' ? 1 / seedsSelected.length : null,
+        percentOfRate: (council === 'MCCC'
+        || (council === 'SCCC' && !seedingRateCalculator.isFreezingZone()))
+          ? 1 / seedsSelected.length : null,
       };
       dispatch(setOptionRedux(seed.label, newOption));
     });
@@ -111,8 +140,9 @@ const MixRatio = ({ calculator, setCalculator }) => {
     seedsSelected.forEach((seed) => {
       if (options[seed.label] !== prevOptions[seed.label]) {
         let result;
-        if (council === 'MCCC') result = adjustProportions(seed, calculator, options[seed.label]);
+        if (council === 'MCCC') result = adjustProportionsMCCC(seed, calculator, options[seed.label]);
         else if (council === 'NECCC') result = adjustProportionsNECCC(seed, calculator, options[seed.label]);
+        else if (council === 'SCCC') result = adjustProportionsSCCC(seed, calculator, options[seed.label]);
         setCalculatorResult((prev) => ({ ...prev, [seed.label]: result }));
         const {
           plants, seeds, adjustedPlants, adjustedSeeds,
@@ -216,7 +246,7 @@ const MixRatio = ({ calculator, setCalculator }) => {
             label={pieChartUnits.plantsPerSqft}
           />
         )}
-        {council === 'NECCC' && (
+        {(council === 'NECCC' || council === 'SCCC') && (
         <DSTPieChart
           chartData={piechartData.seedsPerSqftArray}
           label={pieChartUnits.seedsPerSqft}
@@ -249,6 +279,7 @@ const MixRatio = ({ calculator, setCalculator }) => {
                   calculatorResult={calculatorResult}
                   handleFormValueChange={handleFormValueChange}
                   council={council}
+                  options={options[seed.label]}
                 />
 
                 <Grid item xs={12}>
@@ -271,6 +302,7 @@ const MixRatio = ({ calculator, setCalculator }) => {
                   <MixRatioSteps
                     council={council}
                     calculatorResult={calculatorResult[seed.label]}
+                    options={options[seed.label]}
                   />
                   )}
                 </Grid>

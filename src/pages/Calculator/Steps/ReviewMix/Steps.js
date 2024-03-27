@@ -9,7 +9,7 @@ import {
 import NumberTextField from '../../../../components/NumberTextField';
 import { convertToPercent } from '../../../../shared/utils/calculator';
 import Dropdown from '../../../../components/Dropdown';
-import { seedingMethods, seedingMethodsNECCC } from '../../../../shared/data/dropdown';
+import { seedingMethodsMCCC, seedingMethodsNECCC, seedingMethodsSCCC } from '../../../../shared/data/dropdown';
 import '../steps.scss';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 
@@ -18,14 +18,12 @@ const ReviewMixSteps = ({
   seed,
   handleFormValueChange,
   calculatorResult,
+  options,
 }) => {
-  const [methods, setMethods] = useState({});
-  const [seedingRateRange, setSeedingRateRange] = useState([0, 0]);
-
   const theme = useTheme();
   const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
   const dispatch = useDispatch();
-  const { seedsSelected, options } = useSelector((state) => state.calculator);
+  const { seedsSelected, seedingMethods } = useSelector((state) => state.calculator);
 
   const renderStepsForm = (label1, label2, label3) => (
     matchesMd && (
@@ -55,27 +53,7 @@ const ReviewMixSteps = ({
     step1, step2, step3, step4, step5,
   } = calculatorResult;
 
-  useEffect(() => {
-    const coefficients = seed.attributes.Coefficients;
-    const plantingMethods = council === 'MCCC' ? {
-      Drilled: 1,
-      Precision: parseFloat(coefficients['Precision Coefficient']?.values[0]) || null,
-      Broadcast: parseFloat(coefficients['Broadcast Coefficient']?.values[0]) || null,
-      Aerial: parseFloat(coefficients['Aerial Coefficient']?.values[0]) || null,
-    } : {
-      Drilled: 1,
-      'Broadcast(With Cultivation)':
-      parseFloat(coefficients['Broadcast with Cultivation Coefficient']?.values[0]) || null,
-      'Broadcast(With No Cultivation)':
-      parseFloat(coefficients['Broadcast without Cultivation Coefficient']?.values[0]) || null,
-      Aerial: parseFloat(coefficients['Aerial Coefficient']?.values[0]) || null,
-    };
-    setMethods(plantingMethods);
-    setSeedingRateRange([
-      Math.round(step1.singleSpeciesSeedingRate * 0.5),
-      Math.round(step1.singleSpeciesSeedingRate * 1.5),
-    ]);
-  }, []);
+  const { soilFertilityModifier } = calculatorResult.step1;
 
   const FormSlider = ({
     range, label, val, onChangeCommitted, unit,
@@ -113,6 +91,21 @@ const ReviewMixSteps = ({
     );
   };
 
+  const getSeedingMethods = () => {
+    switch (council) {
+      case 'MCCC':
+        return seedingMethodsMCCC;
+      case 'NECCC':
+        return seedingMethodsNECCC;
+      case 'SCCC':
+        return seedingMethodsSCCC;
+      default:
+        return [];
+    }
+  };
+
+  const percentOfRateNECCC = convertToPercent(options.percentOfRate / soilFertilityModifier || 1 / step1.sumGroupInMix);
+
   return (
     <Grid container>
       {/* NECCC Step 1:  */}
@@ -123,30 +116,27 @@ const ReviewMixSteps = ({
           </Grid>
 
           <FormSlider
-            range={seedingRateRange}
-            label="Single Species Seeding Rate PLS"
-            val={options[seed.label].singleSpeciesSeedingRate
-             ?? parseFloat(seed.attributes.Coefficients['Single Species Seeding Rate'].values[0])}
+            range={[0, 100]}
+            label="% of Single Species Rate"
+            val={percentOfRateNECCC}
             onChangeCommitted={(val) => {
-              handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(val));
+              // the percent of rate need to multiply by soil fertility modifier
+              handleFormValueChange(seed, 'percentOfRate', (soilFertilityModifier * parseFloat(val)) / 100);
             }}
-            unit="Lbs / Acre"
+            unit="%"
           />
           <Grid item xs={12} p="0.5rem" />
 
           {renderStepsForm(
             'Single Species Seeding Rate PLS (Lbs per Acre)',
             'Soil Fertility Modifier',
-            'Sum Species of Group In Mix',
+            '% of Single Species Rate',
           )}
           <Grid container justifyContent="space-evenly">
             <Grid item xs={3}>
               <NumberTextField
                 label={matchesMd ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
                 disabled
-                // handleChange={(e) => {
-                //   handleFormValueChange(seed, 'singleSpeciesSeedingRate', parseFloat(e.target.value));
-                // }}
                 value={step1.singleSpeciesSeedingRate}
               />
             </Grid>
@@ -159,19 +149,19 @@ const ReviewMixSteps = ({
               <NumberTextField
                 label={matchesMd ? '' : 'Soil Fertility Modifier'}
                 disabled
-                value={step1.soilFertilityModifer}
+                value={step1.soilFertilityModifier}
               />
             </Grid>
 
             <Grid item xs={1}>
-              <Typography variant="mathIcon">÷</Typography>
+              <Typography variant="mathIcon">&#215;</Typography>
             </Grid>
 
             <Grid item xs={3}>
               <NumberTextField
                 disabled
-                label={matchesMd ? '' : 'Sum Species of Group In Mix'}
-                value={step1.sumGroupInMix}
+                label={matchesMd ? '' : '% of Single Species Rate'}
+                value={percentOfRateNECCC}
               />
             </Grid>
           </Grid>
@@ -203,7 +193,7 @@ const ReviewMixSteps = ({
           <FormSlider
             range={[0, 100]}
             label="% of Single Species Rate"
-            val={convertToPercent(options[seed.label].percentOfRate)}
+            val={convertToPercent(options.percentOfRate)}
             onChangeCommitted={(val) => {
               handleFormValueChange(seed, 'percentOfRate', parseFloat(val) / 100);
             }}
@@ -256,6 +246,100 @@ const ReviewMixSteps = ({
         </>
       )}
 
+      {/* SCCC Step 1: */}
+      {council === 'SCCC' && (
+        <>
+          <Grid item xs={12}>
+            <Typography variant="stepHeader">Seeding Rate in Mix</Typography>
+          </Grid>
+
+          <FormSlider
+            range={[0, 100]}
+            label="% of Single Species Rate"
+            val={convertToPercent(options.percentOfRate)}
+            onChangeCommitted={(val) => {
+              handleFormValueChange(seed, 'percentOfRate', parseFloat(val) / 100);
+            }}
+            unit="%"
+          />
+          <Grid item xs={12} p="0.5rem" />
+
+          {renderStepsForm(
+            'Single Species Seeding Rate PLS (Lbs per Acre)',
+            'Percent Of Rate',
+            'Planting Time Modifier',
+          )}
+          <Grid container justifyContent="space-evenly" pb="1rem">
+            <Grid item xs={3}>
+              <NumberTextField
+                disabled
+                label={matchesMd ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
+                value={step1.singleSpeciesSeedingRate}
+              />
+            </Grid>
+
+            <Grid item xs={1}>
+              <Typography variant="mathIcon">&#215;</Typography>
+            </Grid>
+
+            <Grid item xs={3}>
+              <NumberTextField
+                label={matchesMd ? '' : 'Percent Of Rate'}
+                disabled
+                value={convertToPercent(step1.percentOfRate)}
+              />
+            </Grid>
+
+            <Grid item xs={1}>
+              <Typography variant="mathIcon">&#215;</Typography>
+            </Grid>
+
+            <Grid item xs={3}>
+              <NumberTextField
+                label={matchesMd ? '' : 'Planting Time Modifier'}
+                disabled
+                value={step1.plantingTimeModifier}
+              />
+            </Grid>
+
+          </Grid>
+
+          {renderStepsForm(
+            '',
+            'Mix Competition Coefficient',
+            'Seeding Rate In Mix (Lbs per Acre)',
+          )}
+
+          <Grid container p="1rem 0 0 0" justifyContent="space-evenly">
+            <Grid item xs={3} />
+            <Grid item xs={1}>
+              <Typography variant="mathIcon">&#215;</Typography>
+            </Grid>
+
+            <Grid item xs={3}>
+              <NumberTextField
+                disabled
+                label={matchesMd ? '' : 'Mix Competition Coefficient'}
+                value={step1.mixCompetitionCoefficient}
+              />
+            </Grid>
+
+            <Grid item xs={1}>
+              <Typography variant="mathIcon">=</Typography>
+            </Grid>
+
+            <Grid item xs={3}>
+              <NumberTextField
+                label="Seeding Rate In Mix (Lbs per Acre)"
+                disabled
+                value={step1.seedingRate}
+              />
+            </Grid>
+
+          </Grid>
+        </>
+      )}
+
       {/* Step 2: */}
       <>
         <Grid item xs={12}>
@@ -264,16 +348,20 @@ const ReviewMixSteps = ({
         <Grid item xs={3} />
         <Grid item xs={6} paddingLeft="1rem" paddingBottom="1rem">
           <Dropdown
-            value={options[seed.label].plantingMethod ?? ''}
+            value={options.plantingMethod ?? ''}
             label="Seeding Method: "
             handleChange={(e) => {
               seedsSelected.forEach((s) => {
                 dispatch(
-                  setOptionRedux(s.label, { ...options[s.label], plantingMethod: e.target.value, plantingMethodModifier: methods[e.target.value] }),
+                  setOptionRedux(s.label, {
+                    ...options,
+                    plantingMethod: e.target.value,
+                    plantingMethodModifier: seedingMethods[seed.label][e.target.value],
+                  }),
                 );
               });
             }}
-            items={council === 'MCCC' ? seedingMethods : seedingMethodsNECCC}
+            items={getSeedingMethods()}
           />
         </Grid>
         {renderStepsForm(
@@ -371,7 +459,7 @@ const ReviewMixSteps = ({
         <FormSlider
           range={[0, 100]}
           label="% Germination"
-          val={convertToPercent(options[seed.label].germination)}
+          val={convertToPercent(options.germination)}
           onChangeCommitted={(val) => {
             handleFormValueChange(seed, 'germination', parseFloat(val) / 100);
           }}
@@ -380,7 +468,7 @@ const ReviewMixSteps = ({
         <FormSlider
           range={[0, 100]}
           label="% Purity"
-          val={convertToPercent(options[seed.label].purity)}
+          val={convertToPercent(options.purity)}
           onChangeCommitted={(val) => {
             handleFormValueChange(seed, 'purity', parseFloat(val) / 100);
           }}

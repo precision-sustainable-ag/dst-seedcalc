@@ -10,6 +10,7 @@ const initialState = {
   adjustedMixSeedingRate: null,
   bulkSeedingRate: {},
   unit: 'acre',
+  seedingMethods: {},
 };
 
 export default initialState;

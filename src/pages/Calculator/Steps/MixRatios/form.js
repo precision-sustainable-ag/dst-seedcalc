@@ -7,7 +7,7 @@ import { convertToPercent } from '../../../../shared/utils/calculator';
 import '../steps.scss';
 
 const MixRatioSteps = ({
-  council, calculatorResult,
+  council, calculatorResult, options,
 }) => {
   const theme = useTheme();
   const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
@@ -40,6 +40,9 @@ const MixRatioSteps = ({
     // eslint-disable-next-line no-unused-vars
     step1, step2, step3, step4,
   } = calculatorResult;
+  const { soilFertilityModifier } = calculatorResult.step1;
+
+  const percentOfRateNECCC = convertToPercent(options.percentOfRate / soilFertilityModifier || 1 / step1.sumGroupInMix);
 
   return (
     <Grid container>
@@ -52,7 +55,7 @@ const MixRatioSteps = ({
           {renderFormLabel(
             'Single Species Seeding Rate PLS (Lbs per Acre)',
             'Soil Fertility Modifier',
-            'Sum Species of Group In Mix (Lbs per Acre)',
+            '% of Single Species Rate',
           )}
           <Grid container justifyContent="space-evenly">
             <Grid item xs={3}>
@@ -76,14 +79,14 @@ const MixRatioSteps = ({
             </Grid>
 
             <Grid item xs={1}>
-              <Typography variant="mathIcon">÷</Typography>
+              <Typography variant="mathIcon">&#215;</Typography>
             </Grid>
 
             <Grid item xs={3}>
               <NumberTextField
                 disabled
-                label={matchesMd ? '' : 'Sum Species of Group In Mix'}
-                value={step1.sumGroupInMix}
+                label={matchesMd ? '' : '% of Single Species Rate'}
+                value={percentOfRateNECCC}
               />
             </Grid>
           </Grid>
@@ -155,6 +158,87 @@ const MixRatioSteps = ({
         </>
       )}
 
+      {/* SCCC Step 1:  */}
+      {council === 'SCCC' && (
+        <>
+          <Grid item xs={12}>
+            <Typography variant="stepHeader">Seeding Rate in Mix</Typography>
+          </Grid>
+          {renderFormLabel(
+            'Single Species Seeding Rate PLS (Lbs per Acre)',
+            '% of Single Species Rate',
+            'Planting Time Modifier',
+          )}
+          <Grid container justifyContent="space-evenly" pb="1rem">
+            <Grid item xs={3}>
+              <NumberTextField
+                label={matchesMd ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
+                disabled
+                value={step1.defaultSingleSpeciesSeedingRatePLS}
+              />
+            </Grid>
+
+            <Grid item xs={1}>
+              <Typography variant="mathIcon">&#215;</Typography>
+            </Grid>
+
+            <Grid item xs={3}>
+              <NumberTextField
+                label={matchesMd ? '' : '% of Single Species Rate'}
+                disabled
+                value={convertToPercent(step1.percentOfRate)}
+              />
+            </Grid>
+
+            <Grid item xs={1}>
+              <Typography variant="mathIcon">&#215;</Typography>
+            </Grid>
+
+            <Grid item xs={3}>
+              <NumberTextField
+                disabled
+                label={matchesMd ? '' : 'Planting Time Modifier'}
+                value={step1.plantingTimeModifier}
+              />
+            </Grid>
+          </Grid>
+
+          {renderFormLabel(
+            '',
+            'Mix Competition Coefficient',
+            'Seeding Rate In Mix (Lbs per Acre)',
+          )}
+
+          <Grid container p="1rem 0 0 0" justifyContent="space-evenly">
+            <Grid item xs={3} />
+            <Grid item xs={1}>
+              <Typography variant="mathIcon">&#215;</Typography>
+            </Grid>
+
+            <Grid item xs={3}>
+              <NumberTextField
+                disabled
+                label={matchesMd ? '' : 'Mix Competition Coefficient'}
+                value={step1.mixCompetitionCoefficient}
+              />
+            </Grid>
+
+            <Grid item xs={1}>
+              <Typography variant="mathIcon">=</Typography>
+            </Grid>
+
+            <Grid item xs={3}>
+              <NumberTextField
+                label="Seeding Rate In Mix (Lbs per Acre)"
+                disabled
+                value={step1.seedingRate}
+              />
+            </Grid>
+
+          </Grid>
+        </>
+      )}
+
       {/* Step 2: */}
       <>
         <Grid item xs={12}>
@@ -201,7 +285,7 @@ const MixRatioSteps = ({
       </>
 
       {/* NECCC Step 3: */}
-      {council === 'NECCC' && (
+      {(council === 'SCCC' || council === 'NECCC') && (
         <>
           <Grid item xs={12}>
             <Typography variant="stepHeader">Seeds per SqFt</Typography>
