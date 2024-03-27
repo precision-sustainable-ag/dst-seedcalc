@@ -113,7 +113,7 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
       <Grid item xs={12}>
         <Typography variant="h2">Tell us about your planting site</Typography>
       </Grid>
-      <Grid xs={12} lg={8} item>
+      <Grid xs={12} item>
         {loading === 'getLocality' ? (
           <Spinner />
         ) : (

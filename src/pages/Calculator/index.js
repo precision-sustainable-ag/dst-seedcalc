@@ -48,7 +48,7 @@ const Calculator = () => {
   const matchesSm = useMediaQuery(theme.breakpoints.down('sm'));
   const [showAlert, setShowAlert] = useState(false);
 
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
   /// ///////////////////////////////////////////////////////
   //                      Render                          //
@@ -168,36 +168,45 @@ const Calculator = () => {
           />
           )}
       </Grid>
-      <Grid
-        item
-        xs={12}
-        paddingTop="0.625rem"
-        height="85px"
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <img
-          alt={siteCondition.council}
-          src={headerLogo()}
-          height="75px"
-        />
-        <Typography variant="dstHeader" pl="1rem">
-          Seeding Rate Calculator
-        </Typography>
-        <AuthButton
-          variant="outlined"
-          type={isAuthenticated ? 'Logout' : 'Login'}
-          color={isAuthenticated ? 'error' : 'primary'}
-        />
-      </Grid>
 
       <Grid item md={0} lg={2} />
-      <Grid
-        item
-        xs={12}
-        lg={8}
-        sx={
+
+      <Grid item xs={12} lg={8}>
+        {/* header logo & nav */}
+        <Grid container>
+          <Grid
+            item
+            xs={9}
+            md={6}
+            paddingTop="0.625rem"
+            height="85px"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <img
+              alt={siteCondition.council}
+              src={headerLogo()}
+              height="75px"
+            />
+            <Typography variant="dstHeader" pl="1rem">
+              Seeding Rate Calculator
+            </Typography>
+          </Grid>
+          <Grid item xs={3} md={6}>
+            <AuthButton
+              variant="outlined"
+              type={isAuthenticated ? 'Logout' : 'Login'}
+              color={isAuthenticated ? 'error' : 'primary'}
+            />
+          </Grid>
+        </Grid>
+
+        {/* steps list */}
+        <Grid
+          item
+          xs={12}
+          sx={
           matchesSm && !showHeaderLogo
             ? {
               position: 'fixed',
@@ -210,24 +219,24 @@ const Calculator = () => {
             : { paddingTop: '20px' }
         }
         // height={"100px"}
-        ref={stepperRef}
-      >
-        <StepsList
-          activeStep={activeStep}
-          setActiveStep={setActiveStep}
-          availableSteps={completedStep}
-        />
-      </Grid>
-      <Grid item md={0} lg={2} />
+          ref={stepperRef}
+        >
+          <StepsList
+            activeStep={activeStep}
+            setActiveStep={setActiveStep}
+            availableSteps={completedStep}
+          />
+        </Grid>
 
-      <Grid item md={0} lg={2} />
-
-      {activeStep > 0 && activeStep < 8 && (
-        <Grid
-          item
-          xs={12}
-          md={1}
-          sx={
+        <Grid container>
+          {/* seeds selected list */}
+          {activeStep > 0 && activeStep < 8 && (
+          <Grid
+            item
+            xs={12}
+            md={1}
+            lg={2}
+            sx={
             matchesSm && !showHeaderLogo
               ? {
                 position: 'fixed',
@@ -237,30 +246,33 @@ const Calculator = () => {
               }
               : {}
           }
-        >
-          <SeedsSelectedList list={seedsSelected} />
-        </Grid>
-      )}
+          >
+            <SeedsSelectedList list={seedsSelected} />
+          </Grid>
+          )}
 
-      <Grid
-        item
-        xs={12}
-        lg={activeStep === 0 ? 8 : 7}
-        md={activeStep > 0 ? 11 : 12}
-        sx={
-          // eslint-disable-next-line no-nested-ternary
-          matchesSm && !showHeaderLogo
-            ? activeStep === 0
-              ? { paddingTop: '90px' }
-              : { paddingTop: '190px' }
-            : {}
-        }
-      >
-        {renderCalculator(
-          activeStep === calculatorList.length
-            ? 'Finish'
-            : calculatorList[activeStep],
-        )}
+          {/* main calculator */}
+          <Grid
+            item
+            xs={12}
+            lg={activeStep === 0 ? 12 : 10}
+            md={activeStep > 0 ? 11 : 12}
+            sx={
+              // eslint-disable-next-line no-nested-ternary
+              matchesSm && !showHeaderLogo
+                ? activeStep === 0
+                  ? { paddingTop: '90px' }
+                  : { paddingTop: '190px' }
+                : {}
+            }
+          >
+            {renderCalculator(
+              activeStep === calculatorList.length
+                ? 'Finish'
+                : calculatorList[activeStep],
+            )}
+          </Grid>
+        </Grid>
       </Grid>
 
       <Grid item md={0} lg={2} />
