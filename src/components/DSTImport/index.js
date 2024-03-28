@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { importFromCSVCalculator } from '../../features/calculatorSlice/actions';
-import { importFromCSVSite } from '../../features/siteConditionSlice/actions';
+import { setSiteConditionRedux } from '../../features/siteConditionSlice/actions';
 
 const modalStyle = {
   position: 'absolute',
@@ -51,7 +51,7 @@ const DSTImport = ({ setIsImported }) => {
       setOpenModal(!openModal);
       return;
     }
-    dispatch(importFromCSVSite(CSVImport[0]));
+    dispatch(setSiteConditionRedux(CSVImport[0]));
     dispatch(importFromCSVCalculator(CSVImport[1]));
     navigate('/');
     setOpenModal(!openModal);

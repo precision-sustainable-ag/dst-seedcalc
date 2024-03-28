@@ -1,5 +1,4 @@
 /* eslint-disable no-nested-ternary */
-/* eslint-disable no-unused-expressions */
 /// ///////////////////////////////////////////////////////
 //                      Imports                         //
 /// ///////////////////////////////////////////////////////
@@ -15,6 +14,7 @@ import { getCropsNew } from '../../../../features/calculatorSlice/api';
 import { getLocality, getRegion } from '../../../../features/siteConditionSlice/api';
 import {
   checkNRCSRedux, setAcresRedux, setCouncilRedux, setCountyIdRedux, setCountyRedux,
+  setSiteConditionRedux,
   setSoilDrainageRedux, setSoilFertilityRedux, setStateRedux, updateLatlonRedux, updateTileDrainageRedux,
 } from '../../../../features/siteConditionSlice/actions';
 import statesLatLongDict from '../../../../shared/data/statesLatLongDict';
@@ -24,7 +24,7 @@ import DSTImport from '../../../../components/DSTImport';
 import SiteConditionForm from './form';
 import Map from './Map';
 import HistoryDialog from '../../../../components/HistoryDialog';
-import { postHistory } from '../../../../shared/utils/api';
+import { getHistory, postHistory } from '../../../../shared/utils/api';
 
 const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
   // Location state
@@ -46,13 +46,29 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
     if (council === 'MCCC') setRegions(kids.Counties);
   };
 
+  const updateHistory = async () => {
+    const name = 'test1';
+    const data = {
+      name, siteCondition,
+    };
+    const res = await postHistory(token, data);
+    console.log(res);
+  };
+
+  const loadHistory = async () => {
+    const res = await getHistory(token);
+    console.log('history', res.data.json.siteCondition);
+    // set redux
+    dispatch(setSiteConditionRedux(res.data.json.siteCondition));
+  };
+
   // update redux based on selectedState change
   const updateStateRedux = (selectedState) => {
     // if the state data comes from csv import do not do this to refresh the state
     if (isImported) return;
     setIsImported(false);
     // Retrieve region/counties
-    getRegions(selectedState);
+    // getRegions(selectedState);
 
     // // Clear all the rest forms value
     dispatch(setCountyRedux(''));
@@ -70,17 +86,6 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
     dispatch(setCouncilRedux(selectedState.parents[0].shorthand));
   };
 
-  const updateHistory = async () => {
-    const name = 'test1';
-    const state = 'North Carolina';
-    const stateId = 123;
-    const data = {
-      name, state, stateId,
-    };
-    const res = await postHistory(token, data);
-    console.log(res);
-  };
-
   // initially get states data
   useEffect(() => {
     const getStates = async () => {
@@ -96,8 +101,11 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
       const st = states.filter(
         (s) => s.label === mapState.properties.STATE_NAME,
       );
-      if (st.length > 0 && st[0].label !== siteCondition.state) {
-        updateStateRedux(st[0]);
+      if (st.length > 0) {
+        // update regions everytime there's a state change
+        getRegions(st[0]);
+        // if select a new state (st[0].label different from redux state), update all related redux values
+        if (st[0].label !== siteCondition.state) updateStateRedux(st[0]);
       }
     }
   }, [mapState]);
@@ -117,6 +125,7 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
       }
     }
   }, [siteCondition.county, regions]);
+  // console.log(regions);
 
   // validate all information on this page is selected, then call getCrops api
   useEffect(() => {
@@ -195,6 +204,7 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
           )
         )}
       </Grid>
+      <Button onClick={loadHistory}>load</Button>
       <Button onClick={updateHistory}>save</Button>
     </Grid>
   );
