@@ -17,7 +17,7 @@ import {
   setSiteConditionRedux,
   setSoilDrainageRedux, setSoilFertilityRedux, setStateRedux, updateLatlonRedux, updateTileDrainageRedux,
 } from '../../../../features/siteConditionSlice/actions';
-import { setFromUserHistoryRedux } from '../../../../features/userSlice/actions';
+import { setCalculationNameRedux, setFromUserHistoryRedux } from '../../../../features/userSlice/actions';
 import statesLatLongDict from '../../../../shared/data/statesLatLongDict';
 
 import '../steps.scss';
@@ -26,6 +26,7 @@ import SiteConditionForm from './form';
 import Map from './Map';
 import HistoryDialog from '../../../../components/HistoryDialog';
 import { getHistory, postHistory } from '../../../../shared/utils/api';
+import { setCalculatorRedux } from '../../../../features/calculatorSlice/actions';
 
 const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
   // Location state
@@ -58,9 +59,11 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
 
   const loadHistory = async () => {
     const res = await getHistory(token);
-    console.log('history', res.data.json.siteCondition);
+    console.log('history', res.data.json);
     // set redux
     dispatch(setSiteConditionRedux(res.data.json.siteCondition));
+    dispatch(setCalculatorRedux(res.data.json.calculator));
+    dispatch(setCalculationNameRedux(res.data.json.name));
     dispatch(setFromUserHistoryRedux(true));
   };
 

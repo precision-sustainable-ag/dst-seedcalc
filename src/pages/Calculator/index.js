@@ -104,7 +104,7 @@ const Calculator = () => {
         );
       case 'Finish':
         return (
-          <CompletedPage />
+          <CompletedPage token={token} />
         );
       default:
         return null;

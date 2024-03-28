@@ -3,7 +3,7 @@ import {
   addSeed, removeSeed, setOption, removeOption,
   updateDiversity, selectSidebarSeed, setMixSeedingRate,
   setAdjustedMixSeedingRate, importFromCSV, setBulkSeedingRate, selectUnit,
-  setSeedingMethods,
+  setSeedingMethods, setCalculator,
 } from './index';
 
 export const addSeedRedux = (seed) => addSeed({ seed });
@@ -29,3 +29,5 @@ export const importFromCSVCalculator = (csvData) => importFromCSV({ csvData });
 export const selectUnitRedux = (unit) => selectUnit({ unit });
 
 export const setSeedingMethodsRedux = (seedingMethods) => setSeedingMethods({ seedingMethods });
+
+export const setCalculatorRedux = (calculator) => setCalculator({ calculator });
