@@ -3,14 +3,17 @@ import React, { useEffect, useState } from 'react';
 import {
   Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField, Typography,
 } from '@mui/material';
-import { useAuth0 } from '@auth0/auth0-react';
+import { useDispatch } from 'react-redux';
+import { setCalculationNameRedux } from '../../features/userSlice/actions';
 
 const HistoryDialog = () => {
   const [open, setOpen] = useState(false);
   const [historyName, setHistoryName] = useState('');
-  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
-  const handleClose = () => {
+  const dispatch = useDispatch();
+
+  const handleClose = (selection) => {
+    if (selection === 'YES') dispatch(setCalculationNameRedux(historyName));
     setOpen(false);
   };
 
@@ -30,8 +33,8 @@ const HistoryDialog = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Yes</Button>
-          <Button onClick={handleClose}>No</Button>
+          <Button onClick={() => handleClose('YES')}>Yes</Button>
+          <Button onClick={() => handleClose('NO')}>No</Button>
         </DialogActions>
 
       </Dialog>

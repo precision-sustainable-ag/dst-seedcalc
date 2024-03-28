@@ -17,6 +17,7 @@ import {
   setSiteConditionRedux,
   setSoilDrainageRedux, setSoilFertilityRedux, setStateRedux, updateLatlonRedux, updateTileDrainageRedux,
 } from '../../../../features/siteConditionSlice/actions';
+import { setFromUserHistoryRedux } from '../../../../features/userSlice/actions';
 import statesLatLongDict from '../../../../shared/data/statesLatLongDict';
 
 import '../steps.scss';
@@ -36,6 +37,7 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
 
   const dispatch = useDispatch();
   const siteCondition = useSelector((state) => state.siteCondition);
+  const { calculationName } = useSelector((state) => state.user);
 
   // function to get all regions(counties/zones) of a state
   const getRegions = async (selectedState) => {
@@ -46,10 +48,9 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
     if (council === 'MCCC') setRegions(kids.Counties);
   };
 
-  const updateHistory = async () => {
-    const name = 'test1';
+  const saveHistory = async () => {
     const data = {
-      name, siteCondition,
+      name: calculationName, siteCondition,
     };
     const res = await postHistory(token, data);
     console.log(res);
@@ -60,6 +61,7 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
     console.log('history', res.data.json.siteCondition);
     // set redux
     dispatch(setSiteConditionRedux(res.data.json.siteCondition));
+    dispatch(setFromUserHistoryRedux(true));
   };
 
   // update redux based on selectedState change
@@ -205,7 +207,7 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
         )}
       </Grid>
       <Button onClick={loadHistory}>load</Button>
-      <Button onClick={updateHistory}>save</Button>
+      <Button onClick={saveHistory}>save</Button>
     </Grid>
   );
 };
