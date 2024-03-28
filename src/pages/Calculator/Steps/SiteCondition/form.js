@@ -84,8 +84,12 @@ const SiteConditionForm = ({
   const handleTileDrainage = () => {
     dispatch(updateTileDrainageRedux(!tileDrainage));
     if (!tileDrainage) {
+      // set tile drainage
       const newDrainage = getTileDrainage(council, soilDrainage);
       dispatch(setSoilDrainageRedux(newDrainage));
+    } else {
+      // reset
+      dispatch(setSoilDrainageRedux(soilDrainagePrev));
     }
   };
 
