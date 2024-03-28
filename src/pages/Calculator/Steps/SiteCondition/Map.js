@@ -13,12 +13,11 @@ import { getZoneData, getSSURGOData } from '../../../../features/siteConditionSl
 import '../steps.scss';
 
 const Map = ({
-  setStep,
+  setStep, counties,
 }) => {
   const [selectedToEditSite, setSelectedToEditSite] = useState({});
 
   const siteCondition = useSelector((state) => state.siteCondition);
-  const { counties } = siteCondition;
 
   const dispatch = useDispatch();
 

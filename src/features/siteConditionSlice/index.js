@@ -61,9 +61,8 @@ const siteConditionSlice = createSlice({
         state.loading = 'getLocality';
         state.error = false;
       })
-      .addCase(getLocality.fulfilled, (state, { payload }) => {
+      .addCase(getLocality.fulfilled, (state) => {
         state.loading = false;
-        state.states = [...payload];
         state.error = false;
       })
       .addCase(getLocality.rejected, (state) => {
@@ -74,9 +73,8 @@ const siteConditionSlice = createSlice({
         state.loading = 'getRegion';
         state.error = false;
       })
-      .addCase(getRegion.fulfilled, (state, { payload }) => {
+      .addCase(getRegion.fulfilled, (state) => {
         state.loading = false;
-        state.counties = payload.data.kids.Zones ?? payload.data.kids.Counties ?? [];
         state.error = false;
       })
       .addCase(getRegion.rejected, (state) => {

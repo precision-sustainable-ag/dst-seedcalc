@@ -27,16 +27,24 @@ import HistoryDialog from '../../../../components/HistoryDialog';
 import { postHistory } from '../../../../shared/utils/api';
 
 const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
-  const dispatch = useDispatch();
-
   // Location state
   const [step, setStep] = useState(1);
   const [mapState, setMapState] = useState({});
   const [isImported, setIsImported] = useState(false);
+  const [states, setStates] = useState([]);
+  const [regions, setRegions] = useState([]);
 
+  const dispatch = useDispatch();
   const siteCondition = useSelector((state) => state.siteCondition);
-  // TODO: move states and counties out from redux since they're only user in this step
-  const { states, counties, loading } = siteCondition;
+
+  // function to get all regions(counties/zones) of a state
+  const getRegions = async (selectedState) => {
+    const council = selectedState.parents[0].shorthand;
+    const res = await dispatch(getRegion({ stateId: selectedState.id }));
+    const { kids } = res.payload.data;
+    if (council === 'NECCC' || council === 'SCCC') setRegions(kids.Zones);
+    if (council === 'MCCC') setRegions(kids.Counties);
+  };
 
   // update redux based on selectedState change
   const updateStateRedux = (selectedState) => {
@@ -44,7 +52,7 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
     if (isImported) return;
     setIsImported(false);
     // Retrieve region/counties
-    dispatch(getRegion({ stateId: selectedState.id }));
+    getRegions(selectedState);
 
     // // Clear all the rest forms value
     dispatch(setCountyRedux(''));
@@ -75,7 +83,11 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
 
   // initially get states data
   useEffect(() => {
-    if (states.length === 0) dispatch(getLocality());
+    const getStates = async () => {
+      const res = await dispatch(getLocality());
+      setStates([...states, ...res.payload]);
+    };
+    if (states.length === 0) getStates();
   }, []);
 
   // update state redux based on map state change
@@ -92,19 +104,19 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
 
   // Ensure that county id is updated to the current county
   useEffect(() => {
-    if (siteCondition.county !== '' && counties.length > 0) {
+    if (siteCondition.county !== '' && regions.length > 0) {
       // FIXME: temporary workaround for NECCC areas in zone 8(MD, DE and NJ), will update in the future
       if (siteCondition.council === 'NECCC' && siteCondition.county === 'Zone 8') {
         dispatch(setCountyRedux('Zone 7'));
         dispatch(setCountyIdRedux(4));
       } else {
-        const countyId = counties.filter(
+        const countyId = regions.filter(
           (c) => c.label === siteCondition.county,
         )[0].id;
         dispatch(setCountyIdRedux(countyId));
       }
     }
-  }, [siteCondition.county, counties]);
+  }, [siteCondition.county, regions]);
 
   // validate all information on this page is selected, then call getCrops api
   useEffect(() => {
@@ -127,7 +139,7 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
         <Typography variant="h2">Tell us about your planting site</Typography>
       </Grid>
       <Grid xs={12} item>
-        {loading === 'getLocality' ? (
+        {siteCondition.loading === 'getLocality' ? (
           <Spinner />
         ) : (
           step === 1 ? (
@@ -168,13 +180,15 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
           ) : step === 2 ? (
             <Map
               setStep={setStep}
+              counties={regions}
             />
           ) : step === 3 ? (
             <SiteConditionForm
               council={siteCondition.council}
-              counties={counties}
               stateList={states}
               setStep={setStep}
+              regions={regions}
+              setRegions={setRegions}
             />
           ) : (
             null

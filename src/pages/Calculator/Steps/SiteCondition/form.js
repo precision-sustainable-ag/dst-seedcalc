@@ -61,9 +61,10 @@ const getTileDrainage = (council, currentDrainage) => {
 
 const SiteConditionForm = ({
   council,
-  counties,
   stateList,
   setStep,
+  regions,
+  setRegions,
 }) => {
   const dispatch = useDispatch();
   const {
@@ -88,9 +89,16 @@ const SiteConditionForm = ({
     }
   };
 
+  const getRegions = async (selectedState) => {
+    const res = await dispatch(getRegion({ stateId: selectedState.id }));
+    const { kids } = res.payload.data;
+    if (council === 'NECCC' || council === 'SCCC') setRegions(kids.Zones);
+    if (council === 'MCCC') setRegions(kids.Counties);
+  };
+
   const updateState = (selectedState) => {
     // Retrieve region
-    dispatch(getRegion({ stateId: selectedState.id }));
+    getRegions(selectedState);
 
     // Clear all the rest forms value
     dispatch(setCountyRedux(''));
@@ -157,7 +165,7 @@ const SiteConditionForm = ({
           }
           handleChange={(e) => dispatch(setCountyRedux(e.target.value))}
           size={12}
-          items={counties}
+          items={regions}
         />
       </Grid>
       <Grid item xs={0} md={3} />
