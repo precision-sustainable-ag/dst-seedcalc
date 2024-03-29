@@ -14,10 +14,8 @@ import { getCropsNew } from '../../../../features/calculatorSlice/api';
 import { getLocality, getRegion } from '../../../../features/siteConditionSlice/api';
 import {
   checkNRCSRedux, setAcresRedux, setCouncilRedux, setCountyIdRedux, setCountyRedux,
-  setSiteConditionRedux,
   setSoilDrainageRedux, setSoilFertilityRedux, setStateRedux, updateLatlonRedux, updateTileDrainageRedux,
 } from '../../../../features/siteConditionSlice/actions';
-import { setCalculationNameRedux, setFromUserHistoryRedux } from '../../../../features/userSlice/actions';
 import statesLatLongDict from '../../../../shared/data/statesLatLongDict';
 
 import '../steps.scss';
@@ -25,8 +23,7 @@ import DSTImport from '../../../../components/DSTImport';
 import SiteConditionForm from './form';
 import Map from './Map';
 import HistoryDialog from '../../../../components/HistoryDialog';
-import { getHistory, postHistory } from '../../../../shared/utils/api';
-import { setCalculatorRedux } from '../../../../features/calculatorSlice/actions';
+import useUserHistory from '../../../../shared/hooks/useUserHistory';
 
 const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
   // Location state
@@ -38,7 +35,8 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
 
   const dispatch = useDispatch();
   const siteCondition = useSelector((state) => state.siteCondition);
-  const { calculationName } = useSelector((state) => state.user);
+
+  const { loadHistory, saveHistory } = useUserHistory(token);
 
   // function to get all regions(counties/zones) of a state
   const getRegions = async (selectedState) => {
@@ -47,24 +45,6 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
     const { kids } = res.payload.data;
     if (council === 'NECCC' || council === 'SCCC') setRegions(kids.Zones);
     if (council === 'MCCC') setRegions(kids.Counties);
-  };
-
-  const saveHistory = async () => {
-    const data = {
-      name: calculationName, siteCondition,
-    };
-    const res = await postHistory(token, data);
-    console.log(res);
-  };
-
-  const loadHistory = async () => {
-    const res = await getHistory(token);
-    console.log('history', res.data.json);
-    // set redux
-    dispatch(setSiteConditionRedux(res.data.json.siteCondition));
-    dispatch(setCalculatorRedux(res.data.json.calculator));
-    dispatch(setCalculationNameRedux(res.data.json.name));
-    dispatch(setFromUserHistoryRedux(true));
   };
 
   // update redux based on selectedState change
@@ -189,7 +169,7 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
                   )
               }
               <DSTImport setIsImported={setIsImported} />
-              <HistoryDialog />
+              <HistoryDialog buttonLabel="create new calculation" />
             </>
           ) : step === 2 ? (
             <Map

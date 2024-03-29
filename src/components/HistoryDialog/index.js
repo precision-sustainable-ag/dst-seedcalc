@@ -6,14 +6,16 @@ import {
 import { useDispatch } from 'react-redux';
 import { setCalculationNameRedux } from '../../features/userSlice/actions';
 
-const HistoryDialog = () => {
+const HistoryDialog = ({ buttonLabel, saveHistory }) => {
   const [open, setOpen] = useState(false);
   const [historyName, setHistoryName] = useState('');
 
   const dispatch = useDispatch();
 
   const handleClose = (selection) => {
-    if (selection === 'YES') dispatch(setCalculationNameRedux(historyName));
+    if (selection === 'YES') {
+      dispatch(setCalculationNameRedux(historyName));
+    }
     setOpen(false);
   };
 
@@ -39,7 +41,7 @@ const HistoryDialog = () => {
 
       </Dialog>
       <Button variant="contained" onClick={() => setOpen(!open)}>
-        Create new calculation
+        {buttonLabel}
       </Button>
     </>
   );

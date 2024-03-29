@@ -4,24 +4,15 @@ import {
 } from '@mui/material';
 import { useTheme } from '@emotion/react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { postHistory } from '../../../../shared/utils/api';
+import HistoryDialog from '../../../../components/HistoryDialog';
+import useUserHistory from '../../../../shared/hooks/useUserHistory';
 
 const CompletedPage = ({ token }) => {
   // themes
   const theme = useTheme();
   const matchesUpMd = useMediaQuery(theme.breakpoints.up('md'));
-  const { calculationName } = useSelector((state) => state.user);
-  const siteCondition = useSelector((state) => state.siteCondition);
-  const { crops, ...calculator } = useSelector((state) => state.calculator);
 
-  const saveHistory = async () => {
-    const data = {
-      name: calculationName, siteCondition, calculator,
-    };
-    const res = await postHistory(token, data);
-    console.log(res);
-  };
+  const { saveHistory } = useUserHistory(token);
 
   return (
     <>
@@ -32,7 +23,15 @@ const CompletedPage = ({ token }) => {
           </Typography>
         </Grid>
 
-        <Grid xs={12} item sx={{ pt: '150px' }} justifyContent="center">
+        <Grid xs={12} item sx={{ pt: '50px' }} justifyContent="center">
+          <Typography>
+            Do you want to save this calculation?
+          </Typography>
+          <HistoryDialog buttonLabel="Save this calculation" saveHistory={saveHistory} />
+          <Button onClick={saveHistory}>save</Button>
+        </Grid>
+
+        <Grid xs={12} item sx={{ pt: '50px' }} justifyContent="center">
           <Typography sx={{ fontWeight: 600 }}>
             Questions or Comments?
           </Typography>
@@ -43,8 +42,6 @@ const CompletedPage = ({ token }) => {
           </Link>
         </Grid>
       </Grid>
-
-      <Button onClick={saveHistory}>save</Button>
 
       <Grid container sx={{ pt: '150px' }}>
         <Grid xs={!matchesUpMd ? 6 : 3} item>
