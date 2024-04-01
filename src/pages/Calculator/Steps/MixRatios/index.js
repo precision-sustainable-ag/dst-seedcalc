@@ -22,7 +22,7 @@ import {
   adjustProportionsMCCC, adjustProportionsNECCC, adjustProportionsSCCC,
   createCalculator, createUserInput, calculatePieChartData, calculatePlantsandSeedsPerAcre,
 } from '../../../../shared/utils/calculator';
-import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
+import { setOptionRedux, setMixRatioOptionsRedux } from '../../../../features/calculatorSlice/actions';
 import { pieChartUnits } from '../../../../shared/data/units';
 import '../steps.scss';
 
@@ -80,10 +80,13 @@ const MixRatio = ({ calculator, setCalculator }) => {
   const [updatedForm, setUpdatedForm] = useState(false);
 
   const dispatch = useDispatch();
-  const { seedsSelected, sideBarSelection, options } = useSelector((state) => state.calculator);
+  const {
+    seedsSelected, sideBarSelection, options, mixRatioOptions,
+  } = useSelector((state) => state.calculator);
   const {
     council, soilDrainage, plantingDate, acres, county,
   } = useSelector((state) => state.siteCondition);
+  const { fromUserHistory } = useSelector((state) => state.user);
 
   const [calculatorResult, setCalculatorResult] = useState(
     seedsSelected.reduce((res, seed) => {
@@ -121,16 +124,19 @@ const MixRatio = ({ calculator, setCalculator }) => {
     const regions = [{ label: county }];
     const seedingRateCalculator = createCalculator(seedsSelected, council, regions, userInput);
     setCalculator(seedingRateCalculator);
-    seedsSelected.forEach((seed) => {
+    // If the data is from user history, not init options, use mixRatioOptions instead
+    if (!fromUserHistory) {
+      seedsSelected.forEach((seed) => {
       // FIXME: updated percentOfRate here, this is a temporary workaround for MCCC
-      const newOption = {
-        ...options[seed.label],
-        percentOfRate: (council === 'MCCC'
+        const newOption = {
+          ...options[seed.label],
+          percentOfRate: (council === 'MCCC'
         || (council === 'SCCC' && !seedingRateCalculator.isFreezingZone()))
-          ? 1 / seedsSelected.length : null,
-      };
-      dispatch(setOptionRedux(seed.label, newOption));
-    });
+            ? 1 / seedsSelected.length : null,
+        };
+        dispatch(setOptionRedux(seed.label, newOption));
+      });
+    }
     setInitCalculator(true);
   }, []);
 
@@ -138,18 +144,19 @@ const MixRatio = ({ calculator, setCalculator }) => {
   useEffect(() => {
     if (!initCalculator) return;
     seedsSelected.forEach((seed) => {
-      if (options[seed.label] !== prevOptions[seed.label]) {
+      const seedOption = fromUserHistory ? mixRatioOptions[seed.label] : options[seed.label];
+      if (seedOption !== prevOptions[seed.label]) {
         let result;
-        if (council === 'MCCC') result = adjustProportionsMCCC(seed, calculator, options[seed.label]);
-        else if (council === 'NECCC') result = adjustProportionsNECCC(seed, calculator, options[seed.label]);
-        else if (council === 'SCCC') result = adjustProportionsSCCC(seed, calculator, options[seed.label]);
+        if (council === 'MCCC') result = adjustProportionsMCCC(seed, calculator, seedOption);
+        else if (council === 'NECCC') result = adjustProportionsNECCC(seed, calculator, seedOption);
+        else if (council === 'SCCC') result = adjustProportionsSCCC(seed, calculator, seedOption);
         setCalculatorResult((prev) => ({ ...prev, [seed.label]: result }));
         const {
           plants, seeds, adjustedPlants, adjustedSeeds,
         } = calculatePlantsandSeedsPerAcre(
           seed,
           calculator,
-          options[seed.label],
+          seedOption,
         );
         setSeedData((prev) => ({
           ...prev,
@@ -170,6 +177,9 @@ const MixRatio = ({ calculator, setCalculator }) => {
     } = calculatePieChartData(seedsSelected, calculator, options);
     setPieChartData({ seedingRateArray, plantsPerSqftArray, seedsPerSqftArray });
     setPrevOptions(options);
+    // when options change, set mixRatiosOptions in redux
+    // FIXME: maybe need to think a little bit more situations
+    if (!fromUserHistory) dispatch(setMixRatioOptionsRedux(options));
   }, [options, initCalculator]);
 
   // expand related accordion based on sidebar click

@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import {
-  addSeed, removeSeed, setOption, removeOption,
+  addSeed, removeSeed, setOption, setMixRatioOptions, removeOption,
   updateDiversity, selectSidebarSeed, setMixSeedingRate,
   setAdjustedMixSeedingRate, importFromCSV, setBulkSeedingRate, selectUnit,
   setSeedingMethods, setCalculator,
@@ -11,6 +11,8 @@ export const addSeedRedux = (seed) => addSeed({ seed });
 export const removeSeedRedux = (seedName) => removeSeed({ seedName });
 
 export const setOptionRedux = (seedLabel, option) => setOption({ seedLabel, option });
+
+export const setMixRatioOptionsRedux = (mixRatioOptions) => setMixRatioOptions({ mixRatioOptions });
 
 export const removeOptionRedux = (seedLabel) => removeOption({ seedLabel });
 

@@ -2,6 +2,7 @@ const initialState = {
   seedsSelected: [],
   diversitySelected: [],
   options: {},
+  mixRatioOptions: {},
   crops: [],
   loading: false,
   error: false,
