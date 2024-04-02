@@ -4,7 +4,7 @@ import {
 } from '@mui/material';
 import { useTheme } from '@emotion/react';
 import { Link } from 'react-router-dom';
-import HistoryDialog from '../../../../components/HistoryDialog';
+import HistoryDialog, { historyDialogFromEnums } from '../../../../components/HistoryDialog';
 import useUserHistory from '../../../../shared/hooks/useUserHistory';
 
 const CompletedPage = ({ token }) => {
@@ -27,7 +27,7 @@ const CompletedPage = ({ token }) => {
           <Typography>
             Do you want to save this calculation?
           </Typography>
-          <HistoryDialog buttonLabel="Save this calculation" saveHistory={saveHistory} />
+          <HistoryDialog buttonLabel="Save this calculation" from={historyDialogFromEnums.completePage} />
           <Button onClick={saveHistory}>save</Button>
         </Grid>
 

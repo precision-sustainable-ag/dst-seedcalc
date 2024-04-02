@@ -22,7 +22,7 @@ import '../steps.scss';
 import DSTImport from '../../../../components/DSTImport';
 import SiteConditionForm from './form';
 import Map from './Map';
-import HistoryDialog from '../../../../components/HistoryDialog';
+import HistoryDialog, { historyDialogFromEnums } from '../../../../components/HistoryDialog';
 import useUserHistory from '../../../../shared/hooks/useUserHistory';
 
 const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
@@ -169,7 +169,7 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
                   )
               }
               <DSTImport setIsImported={setIsImported} />
-              <HistoryDialog buttonLabel="create new calculation" />
+              <HistoryDialog buttonLabel="create new calculation" from={historyDialogFromEnums.siteCondition} />
             </>
           ) : step === 2 ? (
             <Map
