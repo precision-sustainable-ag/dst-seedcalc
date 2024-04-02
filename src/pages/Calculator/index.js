@@ -30,24 +30,23 @@ import StepsList from '../../components/StepsList';
 import NavBar from '../../components/NavBar';
 
 const Calculator = () => {
-  const siteCondition = useSelector((state) => state.siteCondition);
-  const { error: siteConditionError } = siteCondition;
-  const calculatorError = useSelector((state) => state.calculator.error);
-
-  const { seedsSelected } = useSelector((state) => state.calculator);
   // initially set calculator here
   const [calculator, setCalculator] = useState(null);
   const [activeStep, setActiveStep] = useState(0);
   // this completedStep is to determine whether the next button is clickable on each page
   const [completedStep, setCompletedStep] = useState([...completedList]);
-  const [showHeaderLogo, setShowHeaderLogo] = useState(true);
+  const [showAlert, setShowAlert] = useState(false);
   const [token, setToken] = useState(null);
+  const [showHeaderLogo, setShowHeaderLogo] = useState(true);
+
+  const siteCondition = useSelector((state) => state.siteCondition);
+  const { error: siteConditionError } = siteCondition;
+  const { error: calculatorError, seedsSelected } = useSelector((state) => state.calculator);
 
   const stepperRef = useRef();
 
   const theme = useTheme();
   const matchesSm = useMediaQuery(theme.breakpoints.down('sm'));
-  const [showAlert, setShowAlert] = useState(false);
 
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
@@ -237,6 +236,7 @@ const Calculator = () => {
             activeStep={activeStep}
             setActiveStep={setActiveStep}
             availableSteps={completedStep}
+            token={token}
           />
         </Grid>
 

@@ -169,7 +169,11 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
                   )
               }
               <DSTImport setIsImported={setIsImported} />
-              <HistoryDialog buttonLabel="create new calculation" from={historyDialogFromEnums.siteCondition} />
+              <HistoryDialog
+                buttonLabel="create new calculation"
+                from={historyDialogFromEnums.siteCondition}
+                token={token}
+              />
             </>
           ) : step === 2 ? (
             <Map

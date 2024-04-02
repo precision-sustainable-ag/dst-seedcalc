@@ -11,7 +11,7 @@ export const historyDialogFromEnums = {
   completePage: 'completePage',
 };
 
-const HistoryDialog = ({ buttonLabel, from }) => {
+const HistoryDialog = ({ buttonLabel, from, token }) => {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(false);
   const [helperText, setHelperText] = useState('');
@@ -20,7 +20,7 @@ const HistoryDialog = ({ buttonLabel, from }) => {
   const { calculationName } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
-  const { saveHistory } = useUserHistory();
+  const { saveHistory } = useUserHistory(token);
 
   const nameValidation = () => {
     // TODO: update this function to check if name already exists

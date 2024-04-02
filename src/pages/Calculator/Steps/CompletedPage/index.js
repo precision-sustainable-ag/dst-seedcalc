@@ -27,7 +27,11 @@ const CompletedPage = ({ token }) => {
           <Typography>
             Do you want to save this calculation?
           </Typography>
-          <HistoryDialog buttonLabel="Save this calculation" from={historyDialogFromEnums.completePage} />
+          <HistoryDialog
+            buttonLabel="Save this calculation"
+            from={historyDialogFromEnums.completePage}
+            token={token}
+          />
           <Button onClick={saveHistory}>save</Button>
         </Grid>
 
