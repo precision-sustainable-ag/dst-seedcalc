@@ -25,7 +25,6 @@ export const getSchemaId = async (accessToken = null) => {
 export const postHistory = async (accessToken = null, historyData = null) => {
   const schemaId = await getSchemaId(accessToken);
   const url = `${historyApiUrl}/history`;
-  console.log(historyData);
   const config = {
     method: 'POST',
     headers: {
@@ -37,10 +36,10 @@ export const postHistory = async (accessToken = null, historyData = null) => {
       schemaId,
     }),
   };
-  console.log('config', config);
   return (
     fetch(url, config)
       .then((res) => res.json())
+      // TODO: add err msg to alert
       .catch((err) => console.log(err))
   );
 };

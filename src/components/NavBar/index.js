@@ -39,12 +39,12 @@ const NavBar = () => {
                   type={isAuthenticated ? 'Logout' : 'Login'}
                 />
               </MenuItem>
-              <MenuItem onClick={() => navigate('/feedback')}>
+              {/* <MenuItem>
                 <Typography fontSize="0.875rem" fontWeight="bold">
                   Profile
                 </Typography>
-              </MenuItem>
-              <MenuItem>
+              </MenuItem> */}
+              <MenuItem onClick={() => navigate('/feedback')}>
                 <Typography fontSize="0.875rem" fontWeight="bold">
                   Feedback
                 </Typography>
@@ -55,11 +55,11 @@ const NavBar = () => {
         )
         : (
           <>
-            <Button>
+            {/* <Button>
               <Typography fontSize="0.875rem" fontWeight="bold">
                 Profile
               </Typography>
-            </Button>
+            </Button> */}
             <Button onClick={() => navigate('/feedback')}>
               <Typography fontSize="0.875rem" fontWeight="bold">
                 Feedback

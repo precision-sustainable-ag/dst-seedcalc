@@ -1,18 +1,15 @@
 import React from 'react';
 import {
-  Typography, useMediaQuery, Grid, Button,
+  Typography, useMediaQuery, Grid,
 } from '@mui/material';
 import { useTheme } from '@emotion/react';
 import { Link } from 'react-router-dom';
 import HistoryDialog, { historyDialogFromEnums } from '../../../../components/HistoryDialog';
-import useUserHistory from '../../../../shared/hooks/useUserHistory';
 
 const CompletedPage = ({ token }) => {
   // themes
   const theme = useTheme();
   const matchesUpMd = useMediaQuery(theme.breakpoints.up('md'));
-
-  const { saveHistory } = useUserHistory(token);
 
   return (
     <>
@@ -24,7 +21,7 @@ const CompletedPage = ({ token }) => {
         </Grid>
 
         <Grid xs={12} item sx={{ pt: '50px' }} justifyContent="center">
-          <Typography>
+          <Typography pb="1rem">
             Do you want to save this calculation?
           </Typography>
           <HistoryDialog
@@ -32,7 +29,6 @@ const CompletedPage = ({ token }) => {
             from={historyDialogFromEnums.completePage}
             token={token}
           />
-          <Button onClick={saveHistory}>save</Button>
         </Grid>
 
         <Grid xs={12} item sx={{ pt: '50px' }} justifyContent="center">

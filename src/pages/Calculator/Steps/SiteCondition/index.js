@@ -23,7 +23,6 @@ import DSTImport from '../../../../components/DSTImport';
 import SiteConditionForm from './form';
 import Map from './Map';
 import HistoryDialog, { historyDialogFromEnums } from '../../../../components/HistoryDialog';
-import useUserHistory from '../../../../shared/hooks/useUserHistory';
 
 const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
   // Location state
@@ -35,8 +34,6 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
 
   const dispatch = useDispatch();
   const siteCondition = useSelector((state) => state.siteCondition);
-
-  const { loadHistory, saveHistory } = useUserHistory(token);
 
   // function to get all regions(counties/zones) of a state
   const getRegions = async (selectedState) => {
@@ -168,7 +165,7 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
                     </Grid>
                   )
               }
-              <DSTImport setIsImported={setIsImported} />
+              <DSTImport setIsImported={setIsImported} token={token} />
               <HistoryDialog
                 buttonLabel="create new calculation"
                 from={historyDialogFromEnums.siteCondition}
@@ -193,8 +190,6 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
           )
         )}
       </Grid>
-      <Button onClick={loadHistory}>load</Button>
-      <Button onClick={saveHistory}>save</Button>
     </Grid>
   );
 };

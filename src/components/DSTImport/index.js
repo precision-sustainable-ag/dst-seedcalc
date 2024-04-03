@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Papa from 'papaparse';
-
 import {
   Box, Grid, Modal, Typography, Button,
 } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { importFromCSVCalculator } from '../../features/calculatorSlice/actions';
 import { setSiteConditionRedux } from '../../features/siteConditionSlice/actions';
+import useUserHistory from '../../shared/hooks/useUserHistory';
 
 const modalStyle = {
   position: 'absolute',
@@ -22,12 +21,13 @@ const modalStyle = {
   padding: ' 32px',
 };
 
-const DSTImport = ({ setIsImported }) => {
+const DSTImport = ({ setIsImported, token }) => {
   const [openModal, setOpenModal] = useState(false);
   const [CSVImport, setCSVImport] = useState(null);
 
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const { loadHistory } = useUserHistory(token);
 
   /// ///////////////////////////////////////////////////////
   //                  Import Logic                        //
@@ -53,7 +53,11 @@ const DSTImport = ({ setIsImported }) => {
     }
     dispatch(setSiteConditionRedux(CSVImport[0]));
     dispatch(importFromCSVCalculator(CSVImport[1]));
-    navigate('/');
+    setOpenModal(!openModal);
+  };
+
+  const handleLoadUserHistory = () => {
+    loadHistory();
     setOpenModal(!openModal);
   };
 
@@ -67,27 +71,30 @@ const DSTImport = ({ setIsImported }) => {
       >
         <Box sx={modalStyle}>
           <Grid container>
-            <Grid xs={3} item />
-            <Grid xs={6} item>
+            <Grid item xs={12} display="flex" justifyContent="center">
               <Typography variant="h6" component="h2">
-                Import a CSV file
+                Import From CSV
               </Typography>
             </Grid>
-            <Grid xs={3} item />
-            <Grid xs={2} item />
-            <Grid xs={8} item>
-              <Typography sx={{ mt: 2 }}>
+
+            <Grid xs={12} item display="flex" justifyContent="center" alignItems="center" pt="1rem">
+              <Typography>
                 <input type="file" accept=".csv" onChange={handleFileUpload} />
               </Typography>
+              <Button onClick={handleImportCSV}>
+                Import
+              </Button>
             </Grid>
-            <Grid xs={2} item />
-            <Grid xs={8} item />
-            <Grid xs={4} item>
-              <Button
-                sx={{ marginTop: '15px' }}
-                onClick={handleImportCSV}
-              >
-                Import CSV
+
+            <Grid item xs={12} display="flex" justifyContent="center" pt="1rem">
+              <Typography variant="h6" component="h2">
+                Import From User History
+              </Typography>
+            </Grid>
+
+            <Grid xs={12} item display="flex" justifyContent="center" alignItems="center" pt="1rem">
+              <Button onClick={handleLoadUserHistory}>
+                Import
               </Button>
             </Grid>
           </Grid>
