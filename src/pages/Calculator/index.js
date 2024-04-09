@@ -188,13 +188,15 @@ const Calculator = () => {
 
       <Grid item xs={12} lg={8}>
         {/* header logo & nav */}
-        <Grid container>
+        <Grid
+          container
+          paddingTop="0.625rem"
+          height="85px"
+        >
           <Grid
             item
             xs={9}
             md={6}
-            paddingTop="0.625rem"
-            height="85px"
             display="flex"
             justifyContent="center"
             alignItems="center"
@@ -226,6 +228,7 @@ const Calculator = () => {
               backgroundColor: 'primary.light',
               height: '90px',
               zIndex: '101',
+              top: '0',
             }
             : { paddingTop: '20px' }
         }
@@ -255,6 +258,7 @@ const Calculator = () => {
                 width: '100%',
                 paddingTop: '90px',
                 zIndex: '100',
+                top: '0',
               }
               : {}
           }
