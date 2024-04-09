@@ -21,7 +21,7 @@ const modalStyle = {
   padding: ' 32px',
 };
 
-const DSTImport = ({ setIsImported, token }) => {
+const DSTImport = ({ token }) => {
   const [openModal, setOpenModal] = useState(false);
   const [CSVImport, setCSVImport] = useState(null);
 
@@ -41,7 +41,6 @@ const DSTImport = ({ setIsImported, token }) => {
         const siteCondition = JSON.parse(results.data[0].extData);
         const calculator = JSON.parse(results.data[1].extData);
         setCSVImport([siteCondition, calculator]);
-        setIsImported(true);
       },
     });
   };

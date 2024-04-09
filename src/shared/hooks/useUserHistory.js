@@ -13,7 +13,7 @@ const useUserHistory = (token) => {
 
   const loadHistory = async () => {
     const res = await getHistory(token);
-    console.log('history', res.data.json);
+    console.log('loaded history', res.data.json);
     // set redux
     dispatch(setSiteConditionRedux(res.data.json.siteCondition));
     dispatch(setCalculatorRedux(res.data.json.calculator));
@@ -26,7 +26,7 @@ const useUserHistory = (token) => {
       name: calculationName, siteCondition, calculator,
     };
     const res = await postHistory(token, data);
-    console.log(res);
+    console.log('saved history', res);
   };
 
   return { loadHistory, saveHistory };

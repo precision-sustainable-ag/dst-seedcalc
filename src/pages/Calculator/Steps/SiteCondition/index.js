@@ -13,22 +13,20 @@ import { isEmptyNull, validateForms } from '../../../../shared/utils/format';
 import { getCropsNew } from '../../../../features/calculatorSlice/api';
 import { getLocality, getRegion } from '../../../../features/siteConditionSlice/api';
 import {
-  checkNRCSRedux, setAcresRedux, setCouncilRedux, setCountyIdRedux, setCountyRedux,
-  setSoilDrainageRedux, setSoilFertilityRedux, setStateRedux, updateLatlonRedux, updateTileDrainageRedux,
+  setCouncilRedux, setSiteConditionRedux, setStateRedux, updateLatlonRedux,
 } from '../../../../features/siteConditionSlice/actions';
 import statesLatLongDict from '../../../../shared/data/statesLatLongDict';
-
-import '../steps.scss';
 import DSTImport from '../../../../components/DSTImport';
 import SiteConditionForm from './form';
 import Map from './Map';
 import HistoryDialog, { historyDialogFromEnums } from '../../../../components/HistoryDialog';
+import initialState from '../../../../features/siteConditionSlice/state';
+import '../steps.scss';
 
 const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
   // Location state
   const [step, setStep] = useState(1);
   const [mapState, setMapState] = useState({});
-  const [isImported, setIsImported] = useState(false);
   const [states, setStates] = useState([]);
   const [regions, setRegions] = useState([]);
 
@@ -40,32 +38,41 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
     const council = selectedState.parents[0].shorthand;
     const res = await dispatch(getRegion({ stateId: selectedState.id }));
     const { kids } = res.payload.data;
-    if (council === 'NECCC' || council === 'SCCC') setRegions(kids.Zones);
-    if (council === 'MCCC') setRegions(kids.Counties);
+    if (council === 'NECCC' || council === 'SCCC') return kids.Zones;
+    if (council === 'MCCC') return kids.Counties;
+    return [];
   };
 
-  // update redux based on selectedState change
+  // update redux based on state change
   const updateStateRedux = (selectedState) => {
-    // if the state data comes from csv import do not do this to refresh the state
-    if (isImported) return;
-    setIsImported(false);
-    // Retrieve region/counties
-    // getRegions(selectedState);
+    // set all siteCondition redux value to default
+    // FIXME: this also set loading and error to false, need to make changes to redux apis
+    // maybe move them to user api
+    dispatch(setSiteConditionRedux(initialState));
 
-    // // Clear all the rest forms value
-    dispatch(setCountyRedux(''));
-    dispatch(setCountyIdRedux(''));
-    dispatch(setSoilDrainageRedux(''));
-    dispatch(updateTileDrainageRedux(false));
-    dispatch(setAcresRedux(0));
-    dispatch(setSoilFertilityRedux(''));
-    dispatch(checkNRCSRedux(false));
+    // TODO: if back to prev step is enabled, then also need to initiate calculator redux
 
-    // Update siteCondition Redux
+    // Update state in siteCondition
     const { label } = selectedState;
     dispatch(updateLatlonRedux(statesLatLongDict[label]));
     dispatch(setStateRedux(label, selectedState.id));
     dispatch(setCouncilRedux(selectedState.parents[0].shorthand));
+  };
+
+  const mapStateChange = async (state) => {
+    setMapState(state);
+    if (Object.keys(state).length !== 0) {
+      const st = states.filter(
+        (s) => s.label === state.properties.STATE_NAME,
+      );
+      if (st.length > 0) {
+        // update regions everytime there's a state change FROM MAP
+        const res = await getRegions(st[0]);
+        setRegions(res);
+        // if select a new state (st[0].label different from redux state), update all related redux values
+        if (st[0].label !== siteCondition.state) updateStateRedux(st[0]);
+      }
+    }
   };
 
   // initially get states data
@@ -76,38 +83,6 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
     };
     if (states.length === 0) getStates();
   }, []);
-
-  // update state redux based on map state change
-  useEffect(() => {
-    if (Object.keys(mapState).length !== 0) {
-      const st = states.filter(
-        (s) => s.label === mapState.properties.STATE_NAME,
-      );
-      if (st.length > 0) {
-        // update regions everytime there's a state change
-        getRegions(st[0]);
-        // if select a new state (st[0].label different from redux state), update all related redux values
-        if (st[0].label !== siteCondition.state) updateStateRedux(st[0]);
-      }
-    }
-  }, [mapState]);
-
-  // Ensure that county id is updated to the current county
-  useEffect(() => {
-    if (siteCondition.county !== '' && regions.length > 0) {
-      // FIXME: temporary workaround for NECCC areas in zone 8(MD, DE and NJ), will update in the future
-      if (siteCondition.council === 'NECCC' && siteCondition.county === 'Zone 8') {
-        dispatch(setCountyRedux('Zone 7'));
-        dispatch(setCountyIdRedux(4));
-      } else {
-        const countyId = regions.filter(
-          (c) => c.label === siteCondition.county,
-        )[0].id;
-        dispatch(setCountyIdRedux(countyId));
-      }
-    }
-  }, [siteCondition.county, regions]);
-  // console.log(regions);
 
   // validate all information on this page is selected, then call getCrops api
   useEffect(() => {
@@ -136,7 +111,7 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
           step === 1 ? (
             <>
               <RegionSelectorMap
-                selectorFunction={setMapState}
+                selectorFunction={mapStateChange}
                 selectedState={siteCondition.state || ''}
                 availableStates={states.map((s) => s.label)}
                 initWidth="100%"
@@ -165,7 +140,7 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
                     </Grid>
                   )
               }
-              <DSTImport setIsImported={setIsImported} token={token} />
+              <DSTImport token={token} />
               <HistoryDialog
                 buttonLabel="create new calculation"
                 from={historyDialogFromEnums.siteCondition}
@@ -175,15 +150,16 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
           ) : step === 2 ? (
             <Map
               setStep={setStep}
-              counties={regions}
+              regions={regions}
             />
           ) : step === 3 ? (
             <SiteConditionForm
-              council={siteCondition.council}
               stateList={states}
               setStep={setStep}
               regions={regions}
               setRegions={setRegions}
+              getRegions={getRegions}
+              updateStateRedux={updateStateRedux}
             />
           ) : (
             null
