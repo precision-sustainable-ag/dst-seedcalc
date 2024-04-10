@@ -139,8 +139,8 @@ const SeedTagInfo = ({ completedStep, setCompletedStep }) => {
                   <Grid item xs={4}>
                     <NumberTextField
                       value={(options[seed.label].germination ?? 0.85) * 100}
-                      handleChange={(e) => {
-                        updateGermination(seed.label, parseFloat(e.target.value) / 100);
+                      onChange={(val) => {
+                        updateGermination(seed.label, val / 100);
                       }}
                     />
                   </Grid>
@@ -152,8 +152,8 @@ const SeedTagInfo = ({ completedStep, setCompletedStep }) => {
                   <Grid item xs={4}>
                     <NumberTextField
                       value={(options[seed.label].purity ?? 0.9) * 100}
-                      handleChange={(e) => {
-                        updatePurity(seed.label, parseFloat(e.target.value) / 100);
+                      onChange={(val) => {
+                        updatePurity(seed.label, val / 100);
                       }}
                     />
                   </Grid>
@@ -165,8 +165,7 @@ const SeedTagInfo = ({ completedStep, setCompletedStep }) => {
                   <Grid item xs={4}>
                     <NumberTextField
                       value={parseFloat(seedsPerPound(seed))}
-                      handleChange={(e) => {
-                        const val = parseFloat(e.target.value.replace(/,/g, ''));
+                      onChange={(val) => {
                         updateSeedsPerPound(seed.label, val);
                       }}
                     />
