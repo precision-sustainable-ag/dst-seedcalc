@@ -109,9 +109,6 @@ const adjustProportionsSCCC = (seed, calculator, options = {}) => {
   const defaultSingleSpeciesSeedingRatePLS = options.singleSpeciesSeedingRate
   ?? crop.coefficients.singleSpeciesSeedingRate;
 
-  console.log('speciesInMix', calculator.sumSpeciesInMix());
-  console.log(calculator.isFreezingZone());
-
   const percentOfRate = calculator.getDefaultPercentOfSingleSpeciesSeedingRate(seed, options);
   const plantingTimeModifier = calculator.plantingTimeCoefficient(seed, options);
   const mixCompetitionCoefficient = calculator.getDefaultMixCompetitionCoefficient(seed, options);

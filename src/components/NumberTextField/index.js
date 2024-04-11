@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 
 const NumberTextField = ({
@@ -8,9 +8,16 @@ const NumberTextField = ({
   disabled,
   placeholder,
 }) => {
-  const [displayValue, setDisplayValue] = useState(value.toLocaleString());
+  const [displayValue, setDisplayValue] = useState(value);
   const [error, setError] = useState(false);
   const [helperText, setHelperText] = useState('');
+
+  useEffect(() => {
+    // update value for disabled textfields(this might cause problems for editable fields)
+    if (disabled) {
+      setDisplayValue(value.toLocaleString());
+    }
+  }, [value]);
 
   // regex for only number or number with decimal
   const regex = /^[0-9]\d*(\.\d+)?$/;
