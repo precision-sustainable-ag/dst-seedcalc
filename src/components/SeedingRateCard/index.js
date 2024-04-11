@@ -199,7 +199,7 @@ const SeedInfo = ({
             onChange={(e) => setSingleSpeciesRate(e.target.value)}
             onChangeCommitted={() => {
               if (council === 'NECCC') {
-                // if council is neccc, the percent of rate need to multiply by soil fertility modifier
+                // TODO: NOTE: if council is NECCC, the percentOfRate need to multiply by soilFertilityModifier
                 handleFormValueChange(seed, 'percentOfRate', (soilFertilityModifier * parseFloat(singleSpeciesRate)) / 100);
               } else {
                 handleFormValueChange(seed, 'percentOfRate', parseFloat(singleSpeciesRate) / 100);

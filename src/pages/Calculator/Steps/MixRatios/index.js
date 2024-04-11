@@ -122,13 +122,15 @@ const MixRatio = ({ calculator, setCalculator }) => {
     const seedingRateCalculator = createCalculator(seedsSelected, council, regions, userInput);
     setCalculator(seedingRateCalculator);
     seedsSelected.forEach((seed) => {
-      // FIXME: updated percentOfRate here, this is a temporary workaround for MCCC
-      const newOption = {
-        ...options[seed.label],
-        percentOfRate: (council === 'MCCC'
-        || (council === 'SCCC' && !seedingRateCalculator.isFreezingZone()))
-          ? 1 / seedsSelected.length : null,
-      };
+      // FIXME: updated percentOfRate here, this is a workaround for calculation errors in SDK
+      let percentOfRate = null;
+      if (council === 'MCCC'
+      || (council === 'SCCC' && seedingRateCalculator.isFreezingZone())) {
+        percentOfRate = 1 / seedsSelected.length;
+      } else if (council === 'SCCC' && !seedingRateCalculator.isFreezingZone()) {
+        percentOfRate = seedingRateCalculator.getFreezingZonesDefaultPercentOfSingleSpeciesSeedingRate(seed, options[seed.label]);
+      }
+      const newOption = { ...options[seed.label], percentOfRate };
       dispatch(setOptionRedux(seed.label, newOption));
     });
     setInitCalculator(true);
