@@ -10,36 +10,58 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import {
-  reviewMix, reviewMixNECCC, calculatePieChartData,
+  reviewMixMCCC, reviewMixNECCC, calculatePieChartData,
   calculatePlantsandSeedsPerAcre,
+  reviewMixSCCC,
 } from '../../../../shared/utils/calculator';
 import ReviewMixSteps from './Steps';
 import DSTPieChart from '../../../../components/DSTPieChart';
 import DSTBarChart from '../../../../components/DSTBarChart';
 import SeedingRateCard, { UnitSelection } from '../../../../components/SeedingRateCard';
 import { setBulkSeedingRateRedux, setOptionRedux } from '../../../../features/calculatorSlice/actions';
+import { pieChartUnits, seedDataUnits } from '../../../../shared/data/units';
 import '../steps.scss';
 
-const defaultResultMCCC = {
-  step1: { singleSpeciesSeedingRate: 0, percentOfRate: 0, seedingRate: 0 },
-  step2: { seedingRate: 0, plantingMethodModifier: 0, seedingRateAfterPlantingMethodModifier: 0 },
-  step3: { seedingRate: 0, managementImpactOnMix: 0, seedingRateAfterManagementImpact: 0 },
-  step4: {
-    seedingRateAfterManagementImpact: 0, germination: 0, purity: 0, bulkSeedingRate: 0,
-  },
-  step5: { bulkSeedingRate: 0, acres: 0, poundsForPurchase: 0 },
-};
+const getCalculatorResult = (council) => {
+  const defaultResultMCCC = {
+    step1: { singleSpeciesSeedingRate: 0, percentOfRate: 0, seedingRate: 0 },
+  };
 
-const defaultResultNECCC = {
-  step1: {
-    singleSpeciesSeedingRate: 0, soilFertilityModifer: 0, sumGroupInMix: 0, seedingRate: 0,
-  },
-  step2: { seedingRate: 0, plantingMethodModifier: 0, seedingRateAfterPlantingMethodModifier: 0 },
-  step3: { seedingRate: 0, managementImpactOnMix: 0, seedingRateAfterManagementImpact: 0 },
-  step4: {
-    seedingRateAfterManagementImpact: 0, germination: 0, purity: 0, bulkSeedingRate: 0,
-  },
-  step5: { bulkSeedingRate: 0, acres: 0, poundsForPurchase: 0 },
+  const defaultResultNECCC = {
+    step1: {
+      singleSpeciesSeedingRate: 0, soilFertilityModifier: 0, sumGroupInMix: 0, seedingRate: 0,
+    },
+  };
+
+  const defaultResultSCCC = {
+    step1: {
+      singleSpeciesSeedingRate: 0,
+      percentOfRate: 0,
+      plantingTimeModifier: 0,
+      mixCompetitionCoefficient: 0,
+      seedingRate: 0,
+    },
+  };
+
+  const restSteps = {
+    step2: { seedingRate: 0, plantingMethodModifier: 0, seedingRateAfterPlantingMethodModifier: 0 },
+    step3: { seedingRate: 0, managementImpactOnMix: 0, seedingRateAfterManagementImpact: 0 },
+    step4: {
+      seedingRateAfterManagementImpact: 0, germination: 0, purity: 0, bulkSeedingRate: 0,
+    },
+    step5: { bulkSeedingRate: 0, acres: 0, poundsForPurchase: 0 },
+  };
+
+  switch (council) {
+    case 'MCCC':
+      return { ...defaultResultMCCC, ...restSteps };
+    case 'NECCC':
+      return { ...defaultResultNECCC, ...restSteps };
+    case 'SCCC':
+      return { ...defaultResultSCCC, ...restSteps };
+    default:
+      return null;
+  }
 };
 
 const defaultPieChartData = {
@@ -61,7 +83,7 @@ const ReviewMix = ({ calculator }) => {
 
   const [calculatorResult, setCalculatorResult] = useState(
     seedsSelected.reduce((res, seed) => {
-      res[seed.label] = council === 'MCCC' ? defaultResultMCCC : defaultResultNECCC;
+      res[seed.label] = getCalculatorResult(council);
       return res;
     }, {}),
   );
@@ -120,11 +142,12 @@ const ReviewMix = ({ calculator }) => {
     seedsSelected.forEach((seed) => {
       if (options[seed.label] !== prevOptions[seed.label]) {
         let result;
-        if (council === 'MCCC') result = reviewMix(seed, calculator, options[seed.label]);
+        if (council === 'MCCC') result = reviewMixMCCC(seed, calculator, options[seed.label]);
         else if (council === 'NECCC') result = reviewMixNECCC(seed, calculator, options[seed.label]);
+        else if (council === 'SCCC') result = reviewMixSCCC(seed, calculator, options[seed.label]);
         setCalculatorResult((prev) => ({ ...prev, [seed.label]: result }));
         const {
-          plants, seeds, adjustedPlants, adjustedSeeds,
+          plants, seeds, adjustedSeeds,
         } = calculatePlantsandSeedsPerAcre(
           seed,
           calculator,
@@ -137,7 +160,7 @@ const ReviewMix = ({ calculator }) => {
           [seed.label]: {
             defaultPlant: plants,
             defaultSeed: seeds,
-            adjustedPlant: adjustedPlants,
+            adjustedPlant: plants,
             adjustedSeed: adjustedSeeds,
           },
         }));
@@ -174,7 +197,7 @@ const ReviewMix = ({ calculator }) => {
       <Grid item xs={6} sx={{ textAlign: 'justify' }}>
         <DSTPieChart
           chartData={piechartData.seedingRateArray}
-          label="Pounds of Seed / Acre"
+          label={pieChartUnits.poundsOfSeedPerAcre}
         />
       </Grid>
 
@@ -182,13 +205,13 @@ const ReviewMix = ({ calculator }) => {
         {council === 'MCCC' && (
           <DSTPieChart
             chartData={piechartData.plantsPerSqftArray}
-            label="Plants Per Sqft"
+            label={pieChartUnits.plantsPerSqft}
           />
         )}
-        {council === 'NECCC' && (
+        {(council === 'NECCC' || council === 'SCCC') && (
         <DSTPieChart
           chartData={piechartData.seedsPerSqftArray}
-          label="Seeds Per Sqft"
+          label={pieChartUnits.seedsPerSqft}
         />
         )}
       </Grid>
@@ -215,7 +238,7 @@ const ReviewMix = ({ calculator }) => {
                 <DSTBarChart seed={seed} calculatorResult={calculatorResult} />
                 <Grid item xs={6} pt="1rem">
                   <SeedingRateCard
-                    seedingRateLabel="Seeding Rate in Mix PLS"
+                    seedingRateLabel={seedDataUnits.pureLiveSeed}
                     seedingRateValue={calculatorResult[seed.label].step2.seedingRate}
                     plantValue={seedData[seed.label].defaultPlant}
                     seedValue={seedData[seed.label].defaultSeed}
@@ -224,7 +247,7 @@ const ReviewMix = ({ calculator }) => {
 
                 <Grid item xs={6} pt="1rem">
                   <SeedingRateCard
-                    seedingRateLabel="Bulk Seeding Rate"
+                    seedingRateLabel={seedDataUnits.bulkSeed}
                     seedingRateValue={calculatorResult[seed.label].step4.bulkSeedingRate}
                     plantValue={seedData[seed.label].adjustedPlant}
                     seedValue={seedData[seed.label].adjustedSeed}
@@ -252,6 +275,7 @@ const ReviewMix = ({ calculator }) => {
                     seed={seed}
                     handleFormValueChange={handleFormValueChange}
                     calculatorResult={calculatorResult[seed.label]}
+                    options={options[seed.label]}
                   />
                   )}
                 </Grid>

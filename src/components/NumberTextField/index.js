@@ -11,17 +11,22 @@ const NumberTextField = ({
 }) => (
   <TextField
     fullWidth
-    value={value}
+    // FIXME: temporary fix for this
+    value={value?.toLocaleString() || 'None'}
     label={label}
     onChange={handleChange}
     InputLabelProps={{
       shrink: true,
     }}
     InputProps={InputProps}
-    type="number"
     placeholder={placeholder}
     disabled={disabled}
-    sx={{ backgroundColor: disabled ? 'WhiteSmoke' : '' }}
+    sx={{
+      // custom style for undisabled textbox
+      '& .MuiOutlinedInput-notchedOutline': {
+        border: '1px solid #4F5F30',
+      },
+    }}
   />
 );
 

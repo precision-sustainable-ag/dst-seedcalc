@@ -10,11 +10,12 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import styled from '@emotion/styled';
-import { seedingMethods, seedingMethodsNECCC } from '../../../../shared/data/dropdown';
+import { seedingMethodsMCCC, seedingMethodsNECCC, seedingMethodsSCCC } from '../../../../shared/data/dropdown';
 import Dropdown from '../../../../components/Dropdown';
 import '../steps.scss';
-import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
+import { setOptionRedux, setSeedingMethodsRedux } from '../../../../features/calculatorSlice/actions';
 
+// styles for left grid
 const LeftGrid = styled(Grid)(() => ({
   '&.MuiGrid-item': {
     height: '150px',
@@ -26,6 +27,7 @@ const LeftGrid = styled(Grid)(() => ({
   },
 }));
 
+// styles for right grid
 const RightGrid = styled(Grid)(() => ({
   '&.MuiGrid-item': {
     height: '150px',
@@ -54,11 +56,14 @@ const RightGrid = styled(Grid)(() => ({
 
 const SeedingMethod = () => {
   const [methods, setMethods] = useState({});
+  const [updatedMethods, setUpdatedMethods] = useState(false);
   // useSelector for crops reducer data
   const dispatch = useDispatch();
 
   const { council } = useSelector((state) => state.siteCondition);
-  const { seedsSelected, sideBarSelection, options } = useSelector((state) => state.calculator);
+  const {
+    seedsSelected, sideBarSelection, options,
+  } = useSelector((state) => state.calculator);
 
   // create an key/value pair for the seed and related accordion expanded state
   const [accordionState, setAccordionState] = useState(
@@ -93,26 +98,43 @@ const SeedingMethod = () => {
   /// ///////////////////////////////////////////////////////
 
   // initially set all seeding methods
-  // TODO: maybe build this into redux instead of local state
-  //       OR init all the data in Species Selection or Mix Ratio page
   useEffect(() => {
     seedsSelected.forEach((seed) => {
       const coefficients = seed.attributes.Coefficients;
-      const plantingMethods = council === 'MCCC' ? {
-        Drilled: 1,
-        Precision: parseFloat(coefficients['Precision Coefficient']?.values[0]) || null,
-        Broadcast: parseFloat(coefficients['Broadcast Coefficient']?.values[0]) || null,
-        Aerial: parseFloat(coefficients['Aerial Coefficient']?.values[0]) || null,
-      } : {
-        Drilled: 1,
-        'Broadcast(With Cultivation)':
-        parseFloat(coefficients['Broadcast with Cultivation Coefficient']?.values[0]) || null,
-        'Broadcast(With No Cultivation)':
-        parseFloat(coefficients['Broadcast without Cultivation Coefficient']?.values[0]) || null,
-        Aerial: parseFloat(coefficients['Aerial Coefficient']?.values[0]) || null,
+      const getPlantingMethods = () => {
+        switch (council) {
+          case 'MCCC':
+            return {
+              Drilled: 1,
+              Precision: parseFloat(coefficients['Precision Coefficient']?.values[0]) || null,
+              Broadcast: parseFloat(coefficients['Broadcast Coefficient']?.values[0]) || null,
+              Aerial: parseFloat(coefficients['Aerial Coefficient']?.values[0]) || null,
+            };
+          case 'NECCC':
+            return {
+              Drilled: 1,
+              'Broadcast(With Cultivation)':
+              parseFloat(coefficients['Broadcast with Cultivation Coefficient']?.values[0]) || null,
+              'Broadcast(With No Cultivation)':
+              parseFloat(coefficients['Broadcast without Cultivation Coefficient']?.values[0]) || null,
+              Aerial: parseFloat(coefficients['Aerial Coefficient']?.values[0]) || null,
+            };
+          case 'SCCC':
+            return {
+              Drilled: 1,
+              'Broadcast(With Cultivation)':
+              parseFloat(coefficients['Broadcast with Cultivation Coefficient']?.values[0]) || null,
+              'Broadcast(With Cultivation), No Packing':
+              parseFloat(coefficients['Broadcast with Cultivation, No Packing Coefficient']?.values[0]) || null,
+              'Broadcast(With No Cultivation)':
+              parseFloat(coefficients['Broadcast without Cultivation Coefficient']?.values[0]) || null,
+            };
+          default:
+            return null;
+        }
       };
+      const plantingMethods = getPlantingMethods();
       setMethods((prev) => ({ ...prev, [seed.label]: plantingMethods }));
-
       // initial set planting method to drilled
       if (options[seed.label].plantingMethod === null) {
         dispatch(setOptionRedux(
@@ -121,7 +143,17 @@ const SeedingMethod = () => {
         ));
       }
     });
+    // set state to true for finishing updating methods
+    setUpdatedMethods(true);
   }, []);
+
+  // update seeding methods to redux
+  useEffect(() => {
+    // after updating methods is finished, update methods to redux
+    if (updatedMethods) {
+      dispatch(setSeedingMethodsRedux(methods));
+    }
+  }, [updatedMethods, methods]);
 
   useEffect(() => {
     // expand related accordion based on sidebar click
@@ -137,15 +169,26 @@ const SeedingMethod = () => {
   //                    Render                            //
   /// ///////////////////////////////////////////////////////
 
+  const getSeedingMethods = () => {
+    switch (council) {
+      case 'MCCC':
+        return seedingMethodsMCCC;
+      case 'NECCC':
+        return seedingMethodsNECCC;
+      case 'SCCC':
+        return seedingMethodsSCCC;
+      default:
+        return [];
+    }
+  };
+
+  // TODO: might be some better ways render these methods
   const renderMethod = (type, val, comment) => (
     <>
       <LeftGrid item xs={6}>
         <Box textAlign="left" pl="25%">
           <Typography fontWeight="bold">
-            {
-            type === 'BroadcastwithCultivation' || type === 'BroadcastwithoutCultivation'
-              ? 'Broadcast' : type
-            }
+            {type}
           </Typography>
           <Typography fontSize="0.75rem">{comment}</Typography>
         </Box>
@@ -158,7 +201,7 @@ const SeedingMethod = () => {
             <Box>
               <Typography sx={{ width: '50px' }}>{val}</Typography>
             </Box>
-            <Typography>Lbs / Acre</Typography>
+            <Typography>Lbs per Acre</Typography>
           </>
         )}
       </RightGrid>
@@ -179,7 +222,7 @@ const SeedingMethod = () => {
             updateOptions(e.target.value);
           }}
           size={12}
-          items={council === 'MCCC' ? seedingMethods : seedingMethodsNECCC}
+          items={getSeedingMethods()}
         />
       </Grid>
       {seedsSelected.map((seed, i) => (
@@ -222,16 +265,37 @@ const SeedingMethod = () => {
                   <>
                     {renderMethod('Drilled', methods[seed.label]?.Drilled)}
                     {renderMethod(
-                      'BroadcastwithCultivation',
+                      'Broadcast',
                       methods[seed.label]?.['Broadcast(With Cultivation)'],
                       'with Cultivation, No Packing',
                     )}
                     {renderMethod(
-                      'BroadcastwithoutCultivation',
+                      'Broadcast',
                       methods[seed.label]?.['Broadcast(With No Cultivation)'],
                       'with No Cultivation, No Packing',
                     )}
                     {renderMethod('Aerial', methods[seed.label]?.Aerial)}
+                  </>
+                  )}
+                {council === 'SCCC'
+                  && (
+                  <>
+                    {renderMethod('Drilled', methods[seed.label]?.Drilled)}
+                    {renderMethod(
+                      'Broadcast',
+                      methods[seed.label]?.['Broadcast(With Cultivation)'],
+                      'with Cultivation',
+                    )}
+                    {renderMethod(
+                      'Broadcast',
+                      methods[seed.label]?.['Broadcast(With Cultivation), No Packing'],
+                      'with Cultivation, No Packing',
+                    )}
+                    {renderMethod(
+                      'Broadcast',
+                      methods[seed.label]?.['Broadcast(With No Cultivation)'],
+                      'without Cultivation',
+                    )}
                   </>
                   )}
               </Grid>

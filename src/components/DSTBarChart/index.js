@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTheme } from '@emotion/react';
-import { useMediaQuery, Grid, Typography } from '@mui/material';
+import {
+  useMediaQuery, Grid, Typography, Button,
+} from '@mui/material';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import {
   ResponsiveContainer,
   BarChart,
@@ -12,36 +16,35 @@ import {
 import { twoDigit } from '../../shared/utils/calculator';
 
 const DSTBarChart = ({ seed, calculatorResult }) => {
+  const [index, setIndex] = useState(0);
   const theme = useTheme();
   const matchesSm = useMediaQuery(theme.breakpoints.down('sm'));
 
   const labels = [
     {
-      label: 'Single Species Seeding Rate',
       caption: 'Initial Seeding Rate',
       val: calculatorResult[seed.label].step1.singleSpeciesSeedingRate,
     },
     {
-      label: 'Added to Mix',
       caption: 'Mix Ratios',
       val: calculatorResult[seed.label].step2.seedingRate,
     },
     {
-      label: 'Drilled or Broadcast with Cultipack',
       caption: 'Seeding Method',
       val: calculatorResult[seed.label].step2.seedingRateAfterPlantingMethodModifier,
     },
     {
-      label: `Management Impacts on Mix (${calculatorResult[seed.label].step3.managementImpactOnMix})`,
+      // label: `Management Impacts on Mix (${calculatorResult[seed.label].step3.managementImpactOnMix})`,
       caption: 'Management',
       val: calculatorResult[seed.label].step3.seedingRateAfterManagementImpact,
     },
     {
-      label: 'Bulk Germination and Purity',
       caption: 'Germination and Purity',
       val: calculatorResult[seed.label].step4.bulkSeedingRate,
     },
   ];
+
+  const maxValue = labels.reduce((prev, curr) => (prev.val > curr.val ? prev : curr), labels[0]).val;
 
   // eslint-disable-next-line react/no-unstable-nested-components
   const CustomTick = ({ x, y, payload }) => (
@@ -63,31 +66,51 @@ const DSTBarChart = ({ seed, calculatorResult }) => {
       <Grid item xs={12}>
         <Typography fontWeight="bold">Seeding Rate Impact From Your Decisions (Lbs per Acre)</Typography>
       </Grid>
-      {!matchesSm
-      && (
-      <Grid item xs={12}>
-        <ResponsiveContainer width="100%" height={200}>
+      <Grid item xs={12} display="flex" justifyContent="center">
+        <ResponsiveContainer width={matchesSm ? '100%' : '50%'} height={200}>
           <BarChart
-            data={labels}
-            barCategoryGap="25%"
+            data={[labels[index]]}
+            barCategoryGap="35%"
             margin={{
-              top: 15, right: 30, bottom: 15, left: 15,
+              top: 15, right: 50, bottom: 15, left: 15,
             }}
+            maxBarSize={50}
           >
             <XAxis
               dataKey="caption"
               interval={0}
               tick={<CustomTick />}
             />
-            <YAxis />
+            <YAxis
+              domain={[0, Math.round(maxValue * 1.1)]}
+            />
             <Bar dataKey="val" fill="#4f5f30">
               <LabelList dataKey="val" position="top" color="white" style={{ fill: '#4f5f30' }} />
             </Bar>
           </BarChart>
         </ResponsiveContainer>
       </Grid>
-      )}
+      <Grid item xs={12}>
+        <Button
+          onClick={() => setIndex(index - 1)}
+          disabled={index === 0}
+        >
+          <ArrowBackIosNewIcon />
+          Back
+        </Button>
+        <Typography display="inline-block" padding="0 1rem">
+          {`${index + 1} / 5`}
+        </Typography>
+        <Button
+          onClick={() => setIndex((index + 1) % 5)}
+          disabled={index === 4}
+        >
+          Next
+          <ArrowForwardIosIcon />
+        </Button>
+      </Grid>
 
+      {/* list under barchart */}
       {labels.map((l, i) => (
         <Grid
           container

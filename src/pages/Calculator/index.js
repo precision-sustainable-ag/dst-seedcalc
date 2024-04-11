@@ -109,8 +109,23 @@ const Calculator = () => {
     if (siteCondition.council === '') return './PSALogo.png';
     if (siteCondition.council === 'MCCC') return './mccc-logo.png';
     if (siteCondition.council === 'NECCC') return './neccc-logo.png';
+    if (siteCondition.council === 'SCCC') return './sccc_logo.png';
     return undefined;
   };
+
+  // set favicon based on redux council value
+  useEffect(() => {
+    const favicon = document.getElementById('favicon');
+    if (siteCondition.council === 'MCCC') {
+      favicon.href = 'favicons/mccc-favicon.ico';
+    } else if (siteCondition.council === 'NECCC') {
+      favicon.href = 'favicons/neccc-favicon.ico';
+    } else if (siteCondition.council === 'SCCC') {
+      favicon.href = 'favicons/sccc-favicon.ico';
+    } else if (siteCondition.council === '') {
+      favicon.href = 'PSALogo.png';
+    }
+  }, [siteCondition.council]);
 
   useEffect(() => {
     const handleScroll = () => {

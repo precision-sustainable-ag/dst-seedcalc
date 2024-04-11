@@ -1,6 +1,7 @@
 import React from 'react';
 import { Typography, useMediaQuery, Grid } from '@mui/material';
 import { useTheme } from '@emotion/react';
+import { Link } from 'react-router-dom';
 
 const CompletedPage = () => {
   // themes
@@ -8,19 +9,22 @@ const CompletedPage = () => {
   const matchesUpMd = useMediaQuery(theme.breakpoints.up('md'));
   return (
     <>
-      {/* FIXME: is these words still needed? */}
       <Grid container>
         <Grid xs={12} item sx={{ pt: '50px' }} justifyContent="center">
           <Typography>
-            Thank you for completing the Seeding Rate Calculator Cognitive
-            Walkthrough
+            Thank you for trying out the Seeding Rate Calculator!
           </Typography>
         </Grid>
 
         <Grid xs={12} item sx={{ pt: '150px' }} justifyContent="center">
           <Typography sx={{ fontWeight: 600 }}>
-            Questions or Comments? Email Juliet Norton jnnorton@purdue.edu
+            Questions or Comments?
           </Typography>
+          <Link to="/feedback">
+            <Typography style={{ textDecoration: 'underline' }}>
+              Click here to leave feedback
+            </Typography>
+          </Link>
         </Grid>
       </Grid>
 

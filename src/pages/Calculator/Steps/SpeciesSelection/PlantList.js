@@ -105,7 +105,7 @@ const PlantList = ({
       dispatch(addSeedRedux(data));
       const { label, attributes } = data;
       const percentSurvival = council === 'MCCC'
-        ? parseFloat(attributes.Coefficients['% Chance of Winter Survial'].values[0])
+        ? parseFloat(attributes.Coefficients['% Live Seed to Emergence'].values[0])
         : '';
       // set initial options
       dispatch(setOptionRedux(label, {
@@ -160,8 +160,9 @@ const PlantList = ({
                   component="img"
                   height="160px"
                   image={
-                    seed.thumbnail
-                    ?? 'https://placehold.it/250x150?text=Placeholder'
+                    ((seed.thumbnail === null || seed.thumbnail === '')
+                      ? 'https://placehold.it/250x150?text=Placeholder'
+                      : seed.thumbnail)
                   }
                   alt={seed.label}
                   sx={{ border: '2px solid green', borderRadius: '1rem' }}
