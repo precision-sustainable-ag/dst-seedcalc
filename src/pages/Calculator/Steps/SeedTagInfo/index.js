@@ -28,7 +28,9 @@ const LeftGrid = styled(Grid)({
   },
 });
 
-const SeedTagInfo = ({ completedStep, setCompletedStep }) => {
+const SeedTagInfo = ({
+  completedStep, setCompletedStep, alertState, setAlertState,
+}) => {
   const dispatch = useDispatch();
   const { council } = useSelector((state) => state.siteCondition);
   const { seedsSelected, options } = useSelector((state) => state.calculator);
@@ -43,10 +45,22 @@ const SeedTagInfo = ({ completedStep, setCompletedStep }) => {
   const [haveSeedTagInfo, setHaveSeedTagInfo] = useState(false);
 
   const updateGermination = (seedLabel, value) => {
+    setAlertState({
+      ...alertState,
+      open: true,
+      severity: 'success',
+      message: 'You can also edit this information in furthur steps.',
+    });
     dispatch(setOptionRedux(seedLabel, { ...options[seedLabel], germination: value }));
   };
 
   const updatePurity = (seedLabel, value) => {
+    setAlertState({
+      ...alertState,
+      open: true,
+      severity: 'success',
+      message: 'You can also edit this information in furthur steps.',
+    });
     dispatch(setOptionRedux(seedLabel, { ...options[seedLabel], purity: value }));
   };
 
@@ -84,6 +98,14 @@ const SeedTagInfo = ({ completedStep, setCompletedStep }) => {
   }, []);
 
   useEffect(() => {
+    if (haveSeedTagInfo) {
+      setAlertState({
+        ...alertState,
+        open: true,
+        severity: 'success',
+        message: 'This is a starting mix based on averages, but not a recommendation. Adjust as needed based on your goals.',
+      });
+    }
     validateForms(haveSeedTagInfo, 5, completedStep, setCompletedStep);
   }, [haveSeedTagInfo]);
 

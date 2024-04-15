@@ -53,7 +53,7 @@ const RightGrid = styled(Grid)(() => ({
   },
 }));
 
-const SeedingMethod = () => {
+const SeedingMethod = ({ alertState, setAlertState }) => {
   const [selectedMethod, setSelectedMethod] = useState('');
   const [methods, setMethods] = useState({});
   const [updatedMethods, setUpdatedMethods] = useState(false);
@@ -90,6 +90,12 @@ const SeedingMethod = () => {
       const plantingMethod = method;
       const plantingMethodModifier = methods[seed.label][method];
       dispatch(setOptionRedux(seed.label, { ...prevOption, plantingMethod, plantingMethodModifier }));
+    });
+    setAlertState({
+      ...alertState,
+      open: true,
+      severity: 'success',
+      message: 'You can also edit this information in furthur steps.',
     });
     setSelectedMethod(method);
   };
