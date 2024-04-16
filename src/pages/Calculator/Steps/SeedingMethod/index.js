@@ -298,19 +298,19 @@ const SeedingMethod = ({ alertState, setAlertState }) => {
                     {renderMethod(
                       'Broadcast',
                       methods[seed.label]?.['Broadcast(With Cultivation)'],
-                      'with Cultivation',
+                      'with Cultivation / Incorporation',
                       'Broadcast(With Cultivation)',
                     )}
                     {renderMethod(
                       'Broadcast',
                       methods[seed.label]?.['Broadcast(With Cultivation), No Packing'],
-                      'with Cultivation, No Packing',
+                      'with Cultivation / Incorporation, No Packing',
                       'Broadcast(With Cultivation), No Packing',
                     )}
                     {renderMethod(
                       'Broadcast',
                       methods[seed.label]?.['Broadcast(With No Cultivation)'],
-                      'without Cultivation',
+                      'without Cultivation / Incorporation',
                       'Broadcast(With No Cultivation)',
                     )}
                   </>
