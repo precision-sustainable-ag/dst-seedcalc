@@ -52,8 +52,6 @@ const Calculator = () => {
   const matchesSm = useMediaQuery(theme.breakpoints.down('sm'));
   const [alertState, setAlertState] = useState(defaultAlert);
 
-  console.log('alertState', alertState);
-
   // close alert eveytime switch steps
   useEffect(() => {
     setAlertState({ ...alertState, open: false });

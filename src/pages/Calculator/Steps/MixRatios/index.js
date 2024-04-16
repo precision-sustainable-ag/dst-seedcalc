@@ -224,30 +224,6 @@ const MixRatio = ({
         <Typography variant="h2">Review Proportions</Typography>
       </Grid>
 
-      <Grid container display="flex" justifyContent="center">
-        <Grid item style={{ position: 'fixed', bottom: '0px', zIndex: 1000 }}>
-          {/* {showAlert && (
-          <FadeAlert
-            showAlert={showAlert}
-            severity="success"
-            action={(
-              <IconButton
-                aria-label="close"
-                color="inherit"
-                size="small"
-                onClick={() => setShowAlert(false)}
-              >
-                <CloseIcon fontSize="inherit" />
-
-              </IconButton>
-            )}
-            message={updatedForm ? 'You now have a custom mix.'
-              : 'This is a starting mix based on averages, but not a recommendation. \
-            Adjust as needed based on your goals.'}
-          />
-          )} */}
-        </Grid>
-      </Grid>
       <Grid item xs={6} sx={{ textAlign: 'justify' }}>
         <DSTPieChart
           chartData={piechartData.seedingRateArray}

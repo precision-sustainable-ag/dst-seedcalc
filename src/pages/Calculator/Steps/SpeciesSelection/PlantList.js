@@ -72,17 +72,14 @@ const PlantList = ({
     const inFirstPeriod = plannedDate.isBetween(firstStart, firstEnd, 'day', []);
     const inSecondPeriod = secondStart && plannedDate.isBetween(secondStart, secondEnd, 'day', []);
 
-    if (!inFirstPeriod) {
-      if (secondStart && !inSecondPeriod) {
-        return `Seeding date outside of recommended window: 
+    if (inFirstPeriod || inSecondPeriod) return '';
+    if (secondStart) {
+      return `Seeding date outside of recommended window: 
         ${firstStart.format('MM/DD')} - ${firstEnd.format('MM/DD')},
         ${secondStart.format('MM/DD')} - ${secondEnd.format('MM/DD')}`;
-      }
-      return `Seeding date outside of recommended window: 
-      ${firstStart.format('MM/DD')} - ${firstEnd.format('MM/DD')}`;
     }
-
-    return '';
+    return `Seeding date outside of recommended window: 
+      ${firstStart.format('MM/DD')} - ${firstEnd.format('MM/DD')}`;
   };
 
   const checkSoilDrainage = (seed) => {
