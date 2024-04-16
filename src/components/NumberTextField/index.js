@@ -13,16 +13,17 @@ const NumberTextField = ({
   const [helperText, setHelperText] = useState('');
 
   useEffect(() => {
-    // update value for disabled textfields(this might cause problems for editable fields)
+    // TODO: for editable textfields, not use toLocalString since it'll not pass regex check
     if (disabled) {
       setDisplayValue(value.toLocaleString());
-    }
+    } else setDisplayValue(value);
   }, [value]);
 
   // regex for only number or number with decimal
   const regex = /^[0-9]\d*(\.\d+)?$/;
 
-  // value validation using parseFloat
+  // value validation using parseFloat, call onChange method
+  // TODO: NOTE: the onChange would only call with a Number value
   const handleChange = (e) => {
     const val = e.target.value;
     setDisplayValue(e.target.value);
@@ -32,7 +33,6 @@ const NumberTextField = ({
     } else {
       setError(false);
       setHelperText('');
-      // TODO: NOTE: the onChange would only call with a number value
       onChange(parseFloat(val));
     }
   };

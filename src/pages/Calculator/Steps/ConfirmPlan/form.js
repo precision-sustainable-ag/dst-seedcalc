@@ -67,13 +67,13 @@ const ConfirmPlanForm = ({
           <Grid item xs={3}>
             <NumberTextField
               label={matchesMd ? '' : 'Acres'}
-              handleChange={(e) => {
-                dispatch(setAcresRedux(parseFloat(e.target.value)));
+              value={result.acres}
+              onChange={(val) => {
+                dispatch(setAcresRedux(val));
                 seedsSelected.forEach((s) => {
-                  dispatch(setOptionRedux(s.label, { ...options[s.label], acres: e.target.value }));
+                  dispatch(setOptionRedux(s.label, { ...options[s.label], acres: val }));
                 });
               }}
-              value={result.acres}
             />
           </Grid>
 
@@ -99,8 +99,8 @@ const ConfirmPlanForm = ({
             <NumberTextField
               label="Cost per Pound"
               value={result.costPerPound}
-              handleChange={(e) => dispatch(
-                setOptionRedux(seed.label, { ...options[seed.label], costPerPound: e.target.value }),
+              onChange={(val) => dispatch(
+                setOptionRedux(seed.label, { ...options[seed.label], costPerPound: val }),
               )}
             />
           </Grid>
