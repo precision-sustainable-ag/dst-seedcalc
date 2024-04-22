@@ -103,7 +103,7 @@ const SeedTagInfo = ({
         ...alertState,
         open: true,
         severity: 'success',
-        message: 'This is a starting mix based on averages, but not a recommendation. Adjust as needed based on your goals.',
+        message: 'These are starting values. Adjust as needed based on your seed tag info.',
       });
     }
     validateForms(haveSeedTagInfo, 5, completedStep, setCompletedStep);
