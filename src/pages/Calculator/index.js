@@ -29,13 +29,18 @@ import { calculatorList, completedList } from '../../shared/data/dropdown';
 import StepsList from '../../components/StepsList';
 import NavBar from '../../components/NavBar';
 
+const defaultAlert = {
+  open: false,
+  severity: 'error',
+  message: 'Network Error - Try again later or refresh the page!',
+};
+
 const Calculator = () => {
   // initially set calculator here
   const [calculator, setCalculator] = useState(null);
   const [activeStep, setActiveStep] = useState(0);
   // this completedStep is to determine whether the next button is clickable on each page
   const [completedStep, setCompletedStep] = useState([...completedList]);
-  const [showAlert, setShowAlert] = useState(false);
   const [token, setToken] = useState(null);
   const [showHeaderLogo, setShowHeaderLogo] = useState(true);
 
@@ -47,9 +52,13 @@ const Calculator = () => {
 
   const theme = useTheme();
   const matchesSm = useMediaQuery(theme.breakpoints.down('sm'));
-
+  const [alertState, setAlertState] = useState(defaultAlert);
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
+  // close alert eveytime switch steps
+  useEffect(() => {
+    setAlertState({ ...alertState, open: false });
+  }, [activeStep]);
   /// ///////////////////////////////////////////////////////
   //                      Render                          //
   /// ///////////////////////////////////////////////////////
@@ -76,11 +85,16 @@ const Calculator = () => {
           <MixRatio
             calculator={calculator}
             setCalculator={setCalculator}
+            alertState={alertState}
+            setAlertState={setAlertState}
           />
         );
       case 'Seeding Method':
         return (
-          <SeedingMethod />
+          <SeedingMethod
+            alertState={alertState}
+            setAlertState={setAlertState}
+          />
         );
       case 'Mix Seeding Rate':
         return (
@@ -91,6 +105,8 @@ const Calculator = () => {
           <SeedTagInfo
             completedStep={completedStep}
             setCompletedStep={setCompletedStep}
+            alertState={alertState}
+            setAlertState={setAlertState}
           />
         );
       case 'Review Mix':
@@ -148,7 +164,7 @@ const Calculator = () => {
   }, []);
 
   useEffect(() => {
-    if (siteConditionError || calculatorError) setShowAlert(true);
+    if (siteConditionError || calculatorError) setAlertState({ ...alert, open: true });
   }, [siteConditionError, calculatorError]);
 
   // initially get token
@@ -164,22 +180,24 @@ const Calculator = () => {
 
   return (
     <Grid container justifyContent="center">
-      <Grid item style={{ position: 'fixed', top: '0px', zIndex: 1000 }}>
-        {showAlert
+      <Grid item style={{ position: 'fixed', bottom: '0px', zIndex: 1000 }}>
+        {alertState.open
           && (
           <FadeAlert
-            showAlert={showAlert}
+            showAlert={alertState.open}
+            severity={alertState.severity}
+            variant="filled"
             action={(
               <IconButton
                 aria-label="close"
                 color="inherit"
                 size="small"
-                onClick={() => setShowAlert(false)}
+                onClick={() => setAlertState({ ...alert, open: false })}
               >
                 <CloseIcon fontSize="inherit" />
               </IconButton>
             )}
-            message="Network Error - Try again later or refresh the page!"
+            message={alertState.message}
           />
           )}
       </Grid>

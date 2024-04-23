@@ -18,7 +18,6 @@ import { setOptionRedux, setSeedingMethodsRedux } from '../../../../features/cal
 // styles for left grid
 const LeftGrid = styled(Grid)(() => ({
   '&.MuiGrid-item': {
-    height: '150px',
     border: '1px solid #c7c7c7',
     borderLeft: 'none',
     display: 'flex',
@@ -30,7 +29,7 @@ const LeftGrid = styled(Grid)(() => ({
 // styles for right grid
 const RightGrid = styled(Grid)(() => ({
   '&.MuiGrid-item': {
-    height: '150px',
+    padding: '1rem',
     border: '1px solid #c7c7c7',
     borderRight: 'none',
     display: 'flex',
@@ -54,7 +53,8 @@ const RightGrid = styled(Grid)(() => ({
   },
 }));
 
-const SeedingMethod = () => {
+const SeedingMethod = ({ alertState, setAlertState }) => {
+  const [selectedMethod, setSelectedMethod] = useState('');
   const [methods, setMethods] = useState({});
   const [updatedMethods, setUpdatedMethods] = useState(false);
   // useSelector for crops reducer data
@@ -91,6 +91,13 @@ const SeedingMethod = () => {
       const plantingMethodModifier = methods[seed.label][method];
       dispatch(setOptionRedux(seed.label, { ...prevOption, plantingMethod, plantingMethodModifier }));
     });
+    setAlertState({
+      ...alertState,
+      open: true,
+      severity: 'success',
+      message: 'You can also edit this information in furthur steps.',
+    });
+    setSelectedMethod(method);
   };
 
   /// ///////////////////////////////////////////////////////
@@ -141,6 +148,7 @@ const SeedingMethod = () => {
           seed.label,
           { ...options[seed.label], plantingMethod: 'Drilled', plantingMethodModifier: 1 },
         ));
+        setSelectedMethod('Drilled');
       }
     });
     // set state to true for finishing updating methods
@@ -183,38 +191,42 @@ const SeedingMethod = () => {
   };
 
   // TODO: might be some better ways render these methods
-  const renderMethod = (type, val, comment) => (
-    <>
-      <LeftGrid item xs={6}>
-        <Box textAlign="left" pl="25%">
-          <Typography fontWeight="bold">
-            {type}
-          </Typography>
-          <Typography fontSize="0.75rem">{comment}</Typography>
-        </Box>
-      </LeftGrid>
-      <RightGrid item xs={6}>
-        {!val ? (
-          <Typography color="#D84727">Not Recommended</Typography>
-        ) : (
-          <>
-            <Box>
-              <Typography sx={{ width: '50px' }}>{val}</Typography>
-            </Box>
-            <Typography>Lbs per Acre</Typography>
-          </>
-        )}
-      </RightGrid>
+  const renderMethod = (type, comment, seedingMethods, method) => {
+    const value = seedingMethods?.[method];
+    return (
+      <Grid container border={selectedMethod === method ? '2px solid #4f5f30' : ''}>
+        <LeftGrid item xs={6}>
+          <Box textAlign="left" pl="25%">
+            <Typography fontWeight="bold">
+              {type}
+            </Typography>
+            <Typography fontSize="0.75rem">{comment}</Typography>
+          </Box>
+        </LeftGrid>
+        <RightGrid item xs={6}>
+          {!value ? (
+            <Typography color="#D84727">Not Recommended</Typography>
+          ) : (
+            <>
+              <Box>
+                <Typography sx={{ width: '50px' }}>{value}</Typography>
+              </Box>
+              <Typography>Lbs per Acre</Typography>
+            </>
+          )}
+        </RightGrid>
 
-    </>
-  );
+      </Grid>
+    );
+  };
 
   return (
     <Grid container>
       <Grid item xs={12}>
         <Typography variant="h2">Select Seeding Method</Typography>
       </Grid>
-      <Grid item xs={12} padding="15px" className="">
+      <Grid item xs={0} md={3} />
+      <Grid item xs={12} md={6} padding="15px">
         <Dropdown
           value={options[seedsSelected[0].label].plantingMethod ?? ''}
           label="Seeding Method: "
@@ -225,6 +237,7 @@ const SeedingMethod = () => {
           items={getSeedingMethods()}
         />
       </Grid>
+      <Grid item xs={0} md={3} />
       {seedsSelected.map((seed, i) => (
         <Grid item xs={12} key={i}>
           <Accordion
@@ -246,55 +259,62 @@ const SeedingMethod = () => {
                 {council === 'MCCC'
                   && (
                   <>
-                    {renderMethod('Precision', methods[seed.label]?.Precision)}
-                    {renderMethod('Drilled', methods[seed.label]?.Drilled)}
+                    {renderMethod('Precision', '', methods[seed.label], 'Precision')}
+                    {renderMethod('Drilled', '', methods[seed.label], 'Drilled')}
                     {renderMethod(
                       'Broadcast',
-                      methods[seed.label]?.Broadcast,
                       'with Light Incorporation',
+                      methods[seed.label],
+                      'Broadcast',
                     )}
                     {renderMethod(
                       'Aerial',
-                      methods[seed.label]?.Aerial,
                       'or broadcast with no Light Incorporation',
+                      methods[seed.label],
+                      'Aerial',
                     )}
                   </>
                   )}
                 {council === 'NECCC'
                   && (
                   <>
-                    {renderMethod('Drilled', methods[seed.label]?.Drilled)}
+                    {renderMethod('Drilled', '', methods[seed.label], 'Drilled')}
                     {renderMethod(
                       'Broadcast',
-                      methods[seed.label]?.['Broadcast(With Cultivation)'],
                       'with Cultivation, No Packing',
+                      methods[seed.label],
+                      'Broadcast(With Cultivation)',
                     )}
                     {renderMethod(
                       'Broadcast',
-                      methods[seed.label]?.['Broadcast(With No Cultivation)'],
                       'with No Cultivation, No Packing',
+                      methods[seed.label],
+                      'Broadcast(With No Cultivation)',
                     )}
-                    {renderMethod('Aerial', methods[seed.label]?.Aerial)}
+                    {renderMethod('Aerial', '', methods[seed.label], 'Aerial')}
                   </>
                   )}
                 {council === 'SCCC'
                   && (
                   <>
-                    {renderMethod('Drilled', methods[seed.label]?.Drilled)}
+                    {renderMethod('Drilled', '', methods[seed.label], 'Drilled')}
                     {renderMethod(
                       'Broadcast',
-                      methods[seed.label]?.['Broadcast(With Cultivation)'],
-                      'with Cultivation',
+                      'with Cultivation / Incorporation',
+                      methods[seed.label],
+                      'Broadcast(With Cultivation)',
                     )}
                     {renderMethod(
                       'Broadcast',
-                      methods[seed.label]?.['Broadcast(With Cultivation), No Packing'],
-                      'with Cultivation, No Packing',
+                      'with Cultivation / Incorporation, No Packing',
+                      methods[seed.label],
+                      'Broadcast(With Cultivation), No Packing',
                     )}
                     {renderMethod(
                       'Broadcast',
-                      methods[seed.label]?.['Broadcast(With No Cultivation)'],
-                      'without Cultivation',
+                      'without Cultivation / Incorporation',
+                      methods[seed.label],
+                      'Broadcast(With No Cultivation)',
                     )}
                   </>
                   )}

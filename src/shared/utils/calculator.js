@@ -109,9 +109,6 @@ const adjustProportionsSCCC = (seed, calculator, options = {}) => {
   const defaultSingleSpeciesSeedingRatePLS = options.singleSpeciesSeedingRate
   ?? crop.coefficients.singleSpeciesSeedingRate;
 
-  console.log('speciesInMix', calculator.sumSpeciesInMix());
-  console.log(calculator.isFreezingZone());
-
   const percentOfRate = calculator.getDefaultPercentOfSingleSpeciesSeedingRate(seed, options);
   const plantingTimeModifier = calculator.plantingTimeCoefficient(seed, options);
   const mixCompetitionCoefficient = calculator.getDefaultMixCompetitionCoefficient(seed, options);
@@ -443,7 +440,7 @@ const checkNRCS = (seeds, calculator, options) => {
     // FIXME: frontend checks for reliable establishment, while sdk checks more, early and late seeding
     console.log('-----------Planting Date:');
     seeds.forEach((seed) => {
-      const plannedDate = dayjs(options[seed.label].plannedPlantingDate).format('MM/DD');
+      const plannedDate = dayjs(options[seed.label].plantingDate).format('MM/DD');
       const [firstStart, firstEnd, secondStart, secondEnd] = getPlantingDate(seed);
       // eslint-disable-next-line no-shadow
       let result;

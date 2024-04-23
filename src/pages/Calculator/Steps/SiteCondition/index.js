@@ -10,7 +10,7 @@ import Grid from '@mui/material/Grid';
 import { Spinner } from '@psa/dst.ui.spinner';
 import { RegionSelectorMap } from '@psa/dst.ui.region-selector-map';
 import { isEmptyNull, validateForms } from '../../../../shared/utils/format';
-import { getCropsNew } from '../../../../features/calculatorSlice/api';
+import { getCrops } from '../../../../features/calculatorSlice/api';
 import { getLocality, getRegion } from '../../../../features/siteConditionSlice/api';
 import {
   setCouncilRedux, setSiteConditionRedux, setStateRedux, updateLatlonRedux,
@@ -95,7 +95,7 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
     validateForms(checkNextStep, 0, completedStep, setCompletedStep);
     // call getCrops api to get all crops from countyId
     if (checkNextStep) {
-      dispatch(getCropsNew({ regionId: siteCondition.countyId }));
+      dispatch(getCrops({ regionId: siteCondition.countyId }));
     }
   }, [siteCondition]);
 

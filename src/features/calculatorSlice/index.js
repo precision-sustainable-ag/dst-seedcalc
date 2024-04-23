@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import initialState from './state';
-import { getCropsNew } from './api';
+import { getCrops } from './api';
 
 const calculatorSlice = createSlice({
   name: 'calculator',
@@ -75,16 +75,16 @@ const calculatorSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getCropsNew.pending, (state) => {
+      .addCase(getCrops.pending, (state) => {
         state.loading = true;
         state.error = false;
       })
-      .addCase(getCropsNew.fulfilled, (state, { payload }) => {
+      .addCase(getCrops.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.crops = payload.data;
         state.error = false;
       })
-      .addCase(getCropsNew.rejected, (state) => {
+      .addCase(getCrops.rejected, (state) => {
         state.loading = false;
         state.error = true;
       });

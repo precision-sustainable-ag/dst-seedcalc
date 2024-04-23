@@ -46,7 +46,10 @@ const UnitSelection = () => {
 const SeedInfo = ({
   seed, seedData, calculatorResult, handleFormValueChange, council, options,
 }) => {
-  const [singleSpeciesRate, setSingleSpeciesRate] = useState(0);
+  // TODO: the scrollable seeding rate only works for SCCC for now
+  const baseSeedingRate = council === 'SCCC' ? seed.attributes.Planting['Base Seeding Rate'].values[0] : 0;
+  const [singleSpeciesSeedingRate, setSingleSpeciesSeedingRate] = useState(parseFloat(baseSeedingRate));
+  const [percentOfRate, setPercentOfRate] = useState(0);
   const [survival, setSurvival] = useState(0);
   const [singleData, setSingleData] = useState({
     seedingRate: calculatorResult[seed.label].step1.defaultSingleSpeciesSeedingRatePLS,
@@ -58,6 +61,7 @@ const SeedInfo = ({
     plantValue: seedData[seed.label].adjustedPlant,
     seedValue: seedData[seed.label].adjustedSeed,
   });
+
   const { unit } = useSelector((state) => state.calculator);
   const { soilFertilityModifier } = calculatorResult[seed.label].step1;
   // eslint-disable-next-line no-nested-ternary
@@ -91,10 +95,10 @@ const SeedInfo = ({
     }
     setSurvival(Math.round(twoDigit(calculatorResult[seed.label].step3.percentSurvival) * 100));
     if (council === 'NECCC') {
-      if (options.percentOfRate) setSingleSpeciesRate(Math.round((options.percentOfRate / soilFertilityModifier) * 100));
-      else setSingleSpeciesRate(Math.round((1 / calculatorResult[seed.label].step1.sumGroupInMix) * 100));
+      if (options.percentOfRate) setPercentOfRate(Math.round((options.percentOfRate / soilFertilityModifier) * 100));
+      else setPercentOfRate(Math.round((1 / calculatorResult[seed.label].step1.sumGroupInMix) * 100));
     } else {
-      setSingleSpeciesRate(Math.round(calculatorResult[seed.label].step1.percentOfRate * 100));
+      setPercentOfRate(Math.round(calculatorResult[seed.label].step1.percentOfRate * 100));
     }
   }, [seedData, calculatorResult, unit]);
 
@@ -187,22 +191,40 @@ const SeedInfo = ({
           </Grid>
         </Grid>
 
+        {council === 'SCCC'
+        && (
+          <Grid item xs={12}>
+            <Typography>
+              {`Single Species Seeding Rate PLS: ${singleSpeciesSeedingRate} Lbs per Acre`}
+            </Typography>
+            <Slider
+              min={baseSeedingRate * 0.5}
+              max={baseSeedingRate * 1.5}
+              step={0.1}
+              value={singleSpeciesSeedingRate}
+              valueLabelDisplay="auto"
+              onChange={(e) => setSingleSpeciesSeedingRate(e.target.value)}
+              onChangeCommitted={() => handleFormValueChange(seed, 'singleSpeciesSeedingRate', singleSpeciesSeedingRate)}
+            />
+          </Grid>
+        )}
+
         <Grid item xs={12} pt="1rem">
           <Typography>
-            {`% of Single Species Rate: ${singleSpeciesRate}%`}
+            {`% of Single Species Rate: ${percentOfRate}%`}
           </Typography>
           <Slider
             min={0}
             max={100}
-            value={singleSpeciesRate}
+            value={percentOfRate}
             valueLabelDisplay="auto"
-            onChange={(e) => setSingleSpeciesRate(e.target.value)}
+            onChange={(e) => setPercentOfRate(e.target.value)}
             onChangeCommitted={() => {
               if (council === 'NECCC') {
-                // if council is neccc, the percent of rate need to multiply by soil fertility modifier
-                handleFormValueChange(seed, 'percentOfRate', (soilFertilityModifier * parseFloat(singleSpeciesRate)) / 100);
+                // TODO: NOTE: if council is NECCC, the percentOfRate need to multiply by soilFertilityModifier
+                handleFormValueChange(seed, 'percentOfRate', (soilFertilityModifier * parseFloat(percentOfRate)) / 100);
               } else {
-                handleFormValueChange(seed, 'percentOfRate', parseFloat(singleSpeciesRate) / 100);
+                handleFormValueChange(seed, 'percentOfRate', parseFloat(percentOfRate) / 100);
               }
             }}
           />
