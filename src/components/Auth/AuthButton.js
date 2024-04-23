@@ -10,14 +10,14 @@ import React from 'react';
 const AuthButton = ({
   type, variant = 'text', onClickCallback = () => {},
 }) => {
-  const { loginWithRedirect, logout } = useAuth0();
+  const { logout, loginWithPopup } = useAuth0();
 
   const handleLogin = async () => {
-    await loginWithRedirect();
+    await loginWithPopup();
   };
 
   const handleSignUp = async () => {
-    await loginWithRedirect({
+    await loginWithPopup({
       authorizationParams: {
         screen_hint: 'signup',
       },
