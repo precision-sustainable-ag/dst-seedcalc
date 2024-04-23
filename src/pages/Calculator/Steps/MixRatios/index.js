@@ -12,9 +12,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import CloseIcon from '@mui/icons-material/Close';
-import IconButton from '@mui/material/IconButton';
-import { FadeAlert } from '@psa/dst.ui.fade-alert';
 import MixRatioSteps from './form';
 import DSTPieChart from '../../../../components/DSTPieChart';
 import { UnitSelection, SeedInfo } from '../../../../components/SeedingRateCard';
@@ -72,11 +69,12 @@ const defaultPieChartData = {
   seedsPerSqftArray: [],
 };
 
-const MixRatio = ({ calculator, setCalculator }) => {
+const MixRatio = ({
+  calculator, setCalculator, alertState, setAlertState,
+}) => {
   const [initCalculator, setInitCalculator] = useState(false);
   const [prevOptions, setPrevOptions] = useState({});
   const [piechartData, setPieChartData] = useState(defaultPieChartData);
-  const [showAlert, setShowAlert] = useState(true);
   const [updatedForm, setUpdatedForm] = useState(false);
 
   const dispatch = useDispatch();
@@ -122,13 +120,15 @@ const MixRatio = ({ calculator, setCalculator }) => {
     const seedingRateCalculator = createCalculator(seedsSelected, council, regions, userInput);
     setCalculator(seedingRateCalculator);
     seedsSelected.forEach((seed) => {
-      // FIXME: updated percentOfRate here, this is a temporary workaround for MCCC
-      const newOption = {
-        ...options[seed.label],
-        percentOfRate: (council === 'MCCC'
-        || (council === 'SCCC' && !seedingRateCalculator.isFreezingZone()))
-          ? 1 / seedsSelected.length : null,
-      };
+      // FIXME: updated percentOfRate here, this is a workaround for calculation errors in SDK
+      let percentOfRate = null;
+      if (council === 'MCCC'
+      || (council === 'SCCC' && seedingRateCalculator.isFreezingZone())) {
+        percentOfRate = 1 / seedsSelected.length;
+      } else if (council === 'SCCC' && !seedingRateCalculator.isFreezingZone()) {
+        percentOfRate = seedingRateCalculator.getFreezingZonesDefaultPercentOfSingleSpeciesSeedingRate(seed, options[seed.label]);
+      }
+      const newOption = { ...options[seed.label], percentOfRate };
       dispatch(setOptionRedux(seed.label, newOption));
     });
     setInitCalculator(true);
@@ -189,11 +189,27 @@ const MixRatio = ({ calculator, setCalculator }) => {
   // function to handle form value change, update options
   const handleFormValueChange = (seed, option, value) => {
     setUpdatedForm(true);
+    setAlertState({
+      ...alertState,
+      open: true,
+      message:
+      'You now have a custom mix. You can edit this information in furthur steps.',
+    });
     dispatch(setOptionRedux(seed.label, { ...options[seed.label], [option]: value }));
   };
 
   // handler for click to open accordion
   const handleExpandAccordion = (label) => {
+    if (!alertState.open) {
+      setAlertState({
+        ...alertState,
+        open: true,
+        severity: 'success',
+        message: updatedForm ? 'You now have a custom mix. You can edit this information in furthur steps.'
+          : 'This is a starting mix based on averages, but not a recommendation. \
+          Adjust as needed based on your goals.',
+      });
+    }
     const open = accordionState[label];
     setAccordionState({ ...accordionState, [label]: !open });
   };
@@ -208,30 +224,6 @@ const MixRatio = ({ calculator, setCalculator }) => {
         <Typography variant="h2">Review Proportions</Typography>
       </Grid>
 
-      <Grid container display="flex" justifyContent="center">
-        <Grid item style={{ position: 'fixed', top: '0px', zIndex: 1000 }}>
-          {showAlert && (
-          <FadeAlert
-            showAlert={showAlert}
-            severity="success"
-            action={(
-              <IconButton
-                aria-label="close"
-                color="inherit"
-                size="small"
-                onClick={() => setShowAlert(false)}
-              >
-                <CloseIcon fontSize="inherit" />
-
-              </IconButton>
-            )}
-            message={updatedForm ? 'You now have a custom mix.'
-              : 'This is a starting mix based on averages, but not a recommendation. \
-            Adjust via the dropdown below as needed based on your goals.'}
-          />
-          )}
-        </Grid>
-      </Grid>
       <Grid item xs={6} sx={{ textAlign: 'justify' }}>
         <DSTPieChart
           chartData={piechartData.seedingRateArray}

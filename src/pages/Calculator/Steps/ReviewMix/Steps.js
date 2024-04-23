@@ -20,6 +20,8 @@ const ReviewMixSteps = ({
   calculatorResult,
   options,
 }) => {
+  // TODO: the scrollable seeding rate only works for SCCC for now
+  const baseSeedingRate = council === 'SCCC' ? seed.attributes.Planting['Base Seeding Rate'].values[0] : 0;
   const theme = useTheme();
   const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
   const dispatch = useDispatch();
@@ -56,7 +58,7 @@ const ReviewMixSteps = ({
   const { soilFertilityModifier } = calculatorResult.step1;
 
   const FormSlider = ({
-    range, label, val, onChangeCommitted, unit,
+    range, label, val, onChangeCommitted, unit, step = 1,
   }) => {
     const [value, setValue] = useState(val);
 
@@ -78,6 +80,7 @@ const ReviewMixSteps = ({
           <Slider
             min={range[0]}
             max={range[1]}
+            step={step}
             value={value}
             valueLabelDisplay="auto"
             onChange={(e) => setValue(e.target.value)}
@@ -252,6 +255,17 @@ const ReviewMixSteps = ({
           <Grid item xs={12}>
             <Typography variant="stepHeader">Seeding Rate in Mix</Typography>
           </Grid>
+
+          <FormSlider
+            range={[baseSeedingRate * 0.5, baseSeedingRate * 1.5]}
+            label="Single Species Seeding Rate PLS"
+            val={options.singleSpeciesSeedingRate ?? step1.singleSpeciesSeedingRate}
+            onChangeCommitted={(val) => {
+              handleFormValueChange(seed, 'singleSpeciesSeedingRate', val);
+            }}
+            unit="Lbs per Acre"
+            step={0.1}
+          />
 
           <FormSlider
             range={[0, 100]}
