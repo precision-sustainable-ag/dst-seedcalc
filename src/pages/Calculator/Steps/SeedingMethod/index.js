@@ -191,31 +191,34 @@ const SeedingMethod = ({ alertState, setAlertState }) => {
   };
 
   // TODO: might be some better ways render these methods
-  const renderMethod = (type, val, comment, method) => (
-    <Grid container border={selectedMethod === method ? '2px solid #4f5f30' : ''}>
-      <LeftGrid item xs={6}>
-        <Box textAlign="left" pl="25%">
-          <Typography fontWeight="bold">
-            {type}
-          </Typography>
-          <Typography fontSize="0.75rem">{comment}</Typography>
-        </Box>
-      </LeftGrid>
-      <RightGrid item xs={6}>
-        {!val ? (
-          <Typography color="#D84727">Not Recommended</Typography>
-        ) : (
-          <>
-            <Box>
-              <Typography sx={{ width: '50px' }}>{val}</Typography>
-            </Box>
-            <Typography>Lbs per Acre</Typography>
-          </>
-        )}
-      </RightGrid>
+  const renderMethod = (type, comment, seedingMethods, method) => {
+    const value = seedingMethods?.[method];
+    return (
+      <Grid container border={selectedMethod === method ? '2px solid #4f5f30' : ''}>
+        <LeftGrid item xs={6}>
+          <Box textAlign="left" pl="25%">
+            <Typography fontWeight="bold">
+              {type}
+            </Typography>
+            <Typography fontSize="0.75rem">{comment}</Typography>
+          </Box>
+        </LeftGrid>
+        <RightGrid item xs={6}>
+          {!value ? (
+            <Typography color="#D84727">Not Recommended</Typography>
+          ) : (
+            <>
+              <Box>
+                <Typography sx={{ width: '50px' }}>{value}</Typography>
+              </Box>
+              <Typography>Lbs per Acre</Typography>
+            </>
+          )}
+        </RightGrid>
 
-    </Grid>
-  );
+      </Grid>
+    );
+  };
 
   return (
     <Grid container>
@@ -256,18 +259,18 @@ const SeedingMethod = ({ alertState, setAlertState }) => {
                 {council === 'MCCC'
                   && (
                   <>
-                    {renderMethod('Precision', methods[seed.label]?.Precision, '', 'Precision')}
-                    {renderMethod('Drilled', methods[seed.label]?.Drilled, '', 'Drilled')}
+                    {renderMethod('Precision', '', methods[seed.label], 'Precision')}
+                    {renderMethod('Drilled', '', methods[seed.label], 'Drilled')}
                     {renderMethod(
                       'Broadcast',
-                      methods[seed.label]?.Broadcast,
                       'with Light Incorporation',
+                      methods[seed.label],
                       'Broadcast',
                     )}
                     {renderMethod(
                       'Aerial',
-                      methods[seed.label]?.Aerial,
                       'or broadcast with no Light Incorporation',
+                      methods[seed.label],
                       'Aerial',
                     )}
                   </>
@@ -275,42 +278,42 @@ const SeedingMethod = ({ alertState, setAlertState }) => {
                 {council === 'NECCC'
                   && (
                   <>
-                    {renderMethod('Drilled', methods[seed.label]?.Drilled, '', 'Drilled')}
+                    {renderMethod('Drilled', '', methods[seed.label], 'Drilled')}
                     {renderMethod(
                       'Broadcast',
-                      methods[seed.label]?.['Broadcast(With Cultivation)'],
                       'with Cultivation, No Packing',
+                      methods[seed.label],
                       'Broadcast(With Cultivation)',
                     )}
                     {renderMethod(
                       'Broadcast',
-                      methods[seed.label]?.['Broadcast(With No Cultivation)'],
                       'with No Cultivation, No Packing',
+                      methods[seed.label],
                       'Broadcast(With No Cultivation)',
                     )}
-                    {renderMethod('Aerial', methods[seed.label]?.Aerial, '', 'Aerial')}
+                    {renderMethod('Aerial', '', methods[seed.label], 'Aerial')}
                   </>
                   )}
                 {council === 'SCCC'
                   && (
                   <>
-                    {renderMethod('Drilled', methods[seed.label]?.Drilled, '', 'Drilled')}
+                    {renderMethod('Drilled', '', methods[seed.label], 'Drilled')}
                     {renderMethod(
                       'Broadcast',
-                      methods[seed.label]?.['Broadcast(With Cultivation)'],
                       'with Cultivation / Incorporation',
+                      methods[seed.label],
                       'Broadcast(With Cultivation)',
                     )}
                     {renderMethod(
                       'Broadcast',
-                      methods[seed.label]?.['Broadcast(With Cultivation), No Packing'],
                       'with Cultivation / Incorporation, No Packing',
+                      methods[seed.label],
                       'Broadcast(With Cultivation), No Packing',
                     )}
                     {renderMethod(
                       'Broadcast',
-                      methods[seed.label]?.['Broadcast(With No Cultivation)'],
                       'without Cultivation / Incorporation',
+                      methods[seed.label],
                       'Broadcast(With No Cultivation)',
                     )}
                   </>
