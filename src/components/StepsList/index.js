@@ -13,6 +13,7 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { useDispatch } from 'react-redux';
 import { calculatorList } from '../../shared/data/dropdown';
 import { resetCalculator } from '../../features/calculatorSlice';
+import { setCalculationNameRedux, setFromUserHistoryRedux } from '../../features/userSlice/actions';
 import useUserHistory from '../../shared/hooks/useUserHistory';
 
 /*
@@ -50,7 +51,7 @@ const StepsList = ({
   /// ///////////////////////////////////////////////////////
 
   const handleNext = () => {
-    saveHistory();
+    // saveHistory();
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setCompletedStep(activeStep > completedStep ? activeStep : completedStep);
   };
@@ -63,6 +64,8 @@ const StepsList = ({
     setActiveStep(0);
     setCompletedStep(-1);
     dispatch(resetCalculator());
+    dispatch(setFromUserHistoryRedux(false));
+    dispatch(setCalculationNameRedux(''));
   };
 
   return (

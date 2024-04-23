@@ -3,8 +3,10 @@ import {
   Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField, Typography,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCalculationNameRedux } from '../../features/userSlice/actions';
+import { setCalculationNameRedux, setFromUserHistoryRedux } from '../../features/userSlice/actions';
 import useUserHistory from '../../shared/hooks/useUserHistory';
+import { setCalculatorRedux } from '../../features/calculatorSlice/actions';
+import initialState from '../../features/calculatorSlice/state';
 
 export const historyDialogFromEnums = {
   siteCondition: 'siteConditoin',
@@ -18,6 +20,7 @@ const HistoryDialog = ({ buttonLabel, from, token }) => {
   const [historyName, setHistoryName] = useState('');
 
   const { calculationName } = useSelector((state) => state.user);
+  const { crops } = useSelector((state) => state.calculator);
   const dispatch = useDispatch();
 
   const { saveHistory } = useUserHistory(token);
@@ -35,8 +38,15 @@ const HistoryDialog = ({ buttonLabel, from, token }) => {
     if (!nameValidation()) return;
     if (selection === 'YES') {
       dispatch(setCalculationNameRedux(historyName));
+      dispatch(setFromUserHistoryRedux(false));
+      // on the complete page, save the calculation
       if (from === historyDialogFromEnums.completePage) {
         saveHistory();
+      }
+      // create a new history, need to cleanup calculator redux(except for crops)
+      // FIXME: this should only happens if there's an imported history before
+      if (from === historyDialogFromEnums.siteCondition) {
+        dispatch(setCalculatorRedux({ ...initialState, crops }));
       }
     }
     setOpen(false);
