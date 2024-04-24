@@ -19,23 +19,24 @@ const useUserHistory = (token) => {
       const res = await getHistories(token);
       if (res.data.length > 0) {
         const histories = res.data;
-        console.log('histories', histories);
         if (name) {
           const history = histories.filter((h) => h.label === name);
           if (history.length > 0) {
             const data = history[0].json;
-            console.log('history data', data);
+            console.log('loaded history', name, history[0]);
             dispatch(setSiteConditionRedux(data.siteCondition));
             dispatch(setCalculatorRedux(data.calculator));
-            dispatch(setCalculationNameRedux(data.json.name));
+            dispatch(setCalculationNameRedux(data.name));
             dispatch(setFromUserHistoryRedux(true));
+            // return object since sometime ID property is needed
+            return history[0];
           }
-          // return object since sometime ID property is needed
-          return history[0];
+          throw new Error('History name not available!');
         }
         console.log('history list', histories.map((history) => (history.label)));
         return histories.map((history) => (history.label));
       }
+      throw new Error('No available history record!');
     } catch (err) {
       // FIXME: temporary error handling for all api calls, not throwing it
       console.error('Error when loading history: ', err);

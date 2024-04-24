@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
-// const historyApiUrl = 'https://history.covercrop-data.org/v1';
-const historyApiUrl = 'http://localhost:3009/v1';
+const historyApiUrl = 'https://develophistory.covercrop-data.org/v1';
 
 // TODO: two ways to handle error when fetching, another way is move these apis to redux toolkit
 

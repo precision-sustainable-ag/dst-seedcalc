@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Papa from 'papaparse';
 import {
   Box, Grid, Modal, Typography, Button,
 } from '@mui/material';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { importFromCSVCalculator } from '../../features/calculatorSlice/actions';
 import { setSiteConditionRedux } from '../../features/siteConditionSlice/actions';
 import useUserHistory from '../../shared/hooks/useUserHistory';
+import Dropdown from '../Dropdown';
+import { setCalculationNameRedux } from '../../features/userSlice/actions';
 
 const modalStyle = {
   position: 'absolute',
@@ -24,14 +26,25 @@ const modalStyle = {
 const DSTImport = ({ token }) => {
   const [openModal, setOpenModal] = useState(false);
   const [CSVImport, setCSVImport] = useState(null);
+  const [histories, setHistories] = useState([]);
 
   const dispatch = useDispatch();
 
   const { loadHistory } = useUserHistory(token);
 
+  const { calculationName } = useSelector((state) => state.user);
+
   /// ///////////////////////////////////////////////////////
   //                  Import Logic                        //
   /// ///////////////////////////////////////////////////////
+
+  const handleOpenModal = () => {
+    // there's possibilities that click 'Create New Calculation', set a name and then click 'Import'.
+    // If this happens then the dropdown will popup with a not available name.
+    // Set the calculation name to empty to prevent this behaviour.
+    dispatch(setCalculationNameRedux(''));
+    setOpenModal(true);
+  };
 
   const handleFileUpload = (event) => {
     Papa.parse(event.target.files[0], {
@@ -55,10 +68,26 @@ const DSTImport = ({ token }) => {
     setOpenModal(!openModal);
   };
 
+  const handleSelectHistory = (e) => {
+    // console.log('selected', e.target.value);
+    dispatch(setCalculationNameRedux(e.target.value));
+  };
+
   const handleLoadUserHistory = () => {
-    loadHistory();
+    // load specific history(TODO:maybe need to add id for updating)
+    loadHistory(calculationName);
     setOpenModal(!openModal);
   };
+
+  // initially load all history records
+  useEffect(() => {
+    const loadHistories = async () => {
+      const historyList = await loadHistory();
+      setHistories(historyList.map((h) => ({ label: h })));
+    };
+    // token is null initially so only call when token is available
+    if (token !== null) loadHistories();
+  }, [token]);
 
   return (
     <>
@@ -77,9 +106,11 @@ const DSTImport = ({ token }) => {
             </Grid>
 
             <Grid xs={12} item display="flex" justifyContent="center" alignItems="center" pt="1rem">
-              <Typography>
-                <input type="file" accept=".csv" onChange={handleFileUpload} />
-              </Typography>
+              <Grid xs={8} item>
+                <Typography>
+                  <input type="file" accept=".csv" onChange={handleFileUpload} />
+                </Typography>
+              </Grid>
               <Button onClick={handleImportCSV}>
                 Import
               </Button>
@@ -92,6 +123,14 @@ const DSTImport = ({ token }) => {
             </Grid>
 
             <Grid xs={12} item display="flex" justifyContent="center" alignItems="center" pt="1rem">
+              <Grid xs={8} item>
+                <Dropdown
+                  value={calculationName}
+                  label="Select your calculation"
+                  items={histories}
+                  handleChange={handleSelectHistory}
+                />
+              </Grid>
               <Button onClick={handleLoadUserHistory}>
                 Import
               </Button>
@@ -101,7 +140,7 @@ const DSTImport = ({ token }) => {
       </Modal>
       <Button
         variant="contained"
-        onClick={() => setOpenModal(!openModal)}
+        onClick={handleOpenModal}
         sx={{ textDecoration: 'none', margin: '1rem' }}
       >
         Import previous calculation
