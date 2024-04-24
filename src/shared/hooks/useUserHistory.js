@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setSiteConditionRedux } from '../../features/siteConditionSlice/actions';
 import { setCalculationNameRedux, setFromUserHistoryRedux } from '../../features/userSlice/actions';
 import { setCalculatorRedux } from '../../features/calculatorSlice/actions';
-import { getHistory, postHistory } from '../utils/api';
+import { getHistories, postHistory } from '../utils/api';
 
 const useUserHistory = (token) => {
   const dispatch = useDispatch();
@@ -11,17 +11,42 @@ const useUserHistory = (token) => {
   // not upload crops data to user history since it's too large
   const { crops, ...calculator } = useSelector((state) => state.calculator);
 
-  const loadHistory = async () => {
-    const res = await getHistory(token);
-    console.log('loaded history', res.data.json);
-    // set redux
-    dispatch(setSiteConditionRedux(res.data.json.siteCondition));
-    dispatch(setCalculatorRedux(res.data.json.calculator));
-    dispatch(setCalculationNameRedux(res.data.json.name));
-    dispatch(setFromUserHistoryRedux(true));
+  // function to load history, initially load all history records and return a list of names
+  // if given a name param, query by the name and if existed set redux
+  const loadHistory = async (name = undefined) => {
+    try {
+      if (!token) throw new Error('Access token not available!');
+      const res = await getHistories(token);
+      if (res.data.length > 0) {
+        const histories = res.data;
+        console.log('histories', histories);
+        if (name) {
+          const history = histories.filter((h) => h.label === name);
+          if (history.length > 0) {
+            const data = history[0].json;
+            console.log('history data', data);
+            dispatch(setSiteConditionRedux(data.siteCondition));
+            dispatch(setCalculatorRedux(data.calculator));
+            dispatch(setCalculationNameRedux(data.json.name));
+            dispatch(setFromUserHistoryRedux(true));
+          }
+          // return object since sometime ID property is needed
+          return history[0];
+        }
+        console.log('history list', histories.map((history) => (history.label)));
+        return histories.map((history) => (history.label));
+      }
+    } catch (err) {
+      // FIXME: temporary error handling for all api calls, not throwing it
+      console.error('Error when loading history: ', err);
+      // throw err;
+    }
+    return [];
   };
 
   const saveHistory = async () => {
+    if (!token) throw new Error('Access token not available!');
+
     const data = {
       name: calculationName, siteCondition, calculator,
     };
