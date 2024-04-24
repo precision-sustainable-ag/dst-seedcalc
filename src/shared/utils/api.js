@@ -18,7 +18,7 @@ const fetchData = async (url, options = {}) => {
   }
 };
 
-export const postHistory = async (accessToken = null, historyData = null) => {
+export const createHistory = async (accessToken, historyData, name) => {
   const schemaId = userHistorySchema;
   const url = `${historyApiUrl}/history`;
   const config = {
@@ -28,23 +28,47 @@ export const postHistory = async (accessToken = null, historyData = null) => {
       Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify({
-      json: historyData,
+      label: name,
+      // TODO: decide whether to keep name here
+      json: { name, ...historyData },
       schemaId,
     }),
   };
-  return (
-    fetch(url, config)
-      .then((res) => res.json())
-      // TODO: add err msg to alert
-      .catch((err) => console.log(err))
-  );
+  try {
+    const data = await fetchData(url, config);
+    return data;
+  } catch (err) {
+    console.error('Error creating history: ', err);
+    throw err;
+  }
 };
 
-// export const updateHistory = async (accessToken = null, historyData = null) => {
+export const updateHistory = async (accessToken, historyData, name, id) => {
+  const schemaId = userHistorySchema;
+  const url = `${historyApiUrl}/history/${id}`;
+  const config = {
+    method: 'PUT',
+    headers: {
+      'content-type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify({
+      label: name,
+      // TODO: decide whether to keep name here
+      json: { name, ...historyData },
+      schemaId,
+    }),
+  };
+  try {
+    const data = await fetchData(url, config);
+    return data;
+  } catch (err) {
+    console.error('Error updating history: ', err);
+    throw err;
+  }
+};
 
-// }
-
-export const getHistories = async (accessToken = null) => {
+export const getHistories = async (accessToken) => {
   const url = `${historyApiUrl}/histories?schema=${userHistorySchema}`;
   const config = {
     method: 'GET',
