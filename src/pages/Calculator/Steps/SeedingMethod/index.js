@@ -149,7 +149,7 @@ const SeedingMethod = ({ alertState, setAlertState }) => {
           { ...options[seed.label], plantingMethod: 'Drilled', plantingMethodModifier: 1 },
         ));
         setSelectedMethod('Drilled');
-      }
+      } else setSelectedMethod(options[seed.label].plantingMethod);
     });
     // set state to true for finishing updating methods
     setUpdatedMethods(true);
