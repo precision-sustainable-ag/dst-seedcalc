@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { useDispatch, useSelector } from 'react-redux';
 import { setSiteConditionRedux } from '../../features/siteConditionSlice/actions';
-import { setCalculationNameRedux, setFromUserHistoryRedux } from '../../features/userSlice/actions';
+import { setCalculationNameRedux, setFromUserHistoryRedux, setUserHistoryListRedux } from '../../features/userSlice/actions';
 import { setCalculatorRedux } from '../../features/calculatorSlice/actions';
 import { getHistories, createHistory, updateHistory } from '../utils/api';
 
@@ -25,6 +25,7 @@ const useUserHistory = (token) => {
       if (res.data.length > 0) {
         const histories = res.data;
         if (name !== null) {
+          // name is not null, find match history record and return it
           const history = histories.filter((h) => h.label === name);
           if (history.length > 0) {
             const data = history[0].json;
@@ -37,9 +38,13 @@ const useUserHistory = (token) => {
             return history[0];
           }
           throw new Error('History name not available!');
+        } else {
+          // name is null, return a list of history name and id
+          const historyList = histories.map((history) => ({ label: history.label, id: history.id }));
+          dispatch(setUserHistoryListRedux(historyList));
+          console.log('history list', historyList);
+          return historyList;
         }
-        console.log('history list', histories.map((history) => (history.label)));
-        return histories.map((history) => (history.label));
       }
       throw new Error('No available history record!');
     } catch (err) {

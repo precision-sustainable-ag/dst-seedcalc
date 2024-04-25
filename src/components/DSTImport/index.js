@@ -83,7 +83,7 @@ const DSTImport = ({ token }) => {
   useEffect(() => {
     const loadHistories = async () => {
       const historyList = await loadHistory();
-      setHistories(historyList.map((h) => ({ label: h })));
+      setHistories(historyList);
     };
     // token is null initially so only call when token is available
     if (token !== null) loadHistories();

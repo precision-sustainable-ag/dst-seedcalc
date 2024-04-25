@@ -13,10 +13,13 @@ const userSlice = createSlice({
       const { fromUserHistory } = payload;
       return { ...state, fromUserHistory };
     },
-
+    setUserHistoryList: (state, { payload }) => {
+      const { userHistoryList } = payload;
+      return { ...state, userHistoryList };
+    },
   },
 });
 
-export const { setCalculationName, setFromUserHistory } = userSlice.actions;
+export const { setCalculationName, setFromUserHistory, setUserHistoryList } = userSlice.actions;
 
 export default userSlice;
