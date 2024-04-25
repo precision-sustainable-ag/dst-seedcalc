@@ -69,12 +69,10 @@ const DSTImport = ({ token }) => {
   };
 
   const handleSelectHistory = (e) => {
-    // console.log('selected', e.target.value);
     dispatch(setCalculationNameRedux(e.target.value));
   };
 
   const handleLoadUserHistory = () => {
-    // load specific history(TODO:maybe need to add id for updating)
     loadHistory(calculationName);
     setOpenModal(!openModal);
   };

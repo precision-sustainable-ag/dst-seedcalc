@@ -257,7 +257,6 @@ const Calculator = () => {
             activeStep={activeStep}
             setActiveStep={setActiveStep}
             availableSteps={completedStep}
-            token={token}
           />
         </Grid>
 

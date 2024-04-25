@@ -3,7 +3,7 @@ import {
   Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField, Typography,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCalculationNameRedux, setFromUserHistoryRedux } from '../../features/userSlice/actions';
+import { setCalculationNameRedux, setFromUserHistoryRedux, setSelectedHistoryRedux } from '../../features/userSlice/actions';
 import useUserHistory from '../../shared/hooks/useUserHistory';
 import { setCalculatorRedux } from '../../features/calculatorSlice/actions';
 import initialState from '../../features/calculatorSlice/state';
@@ -19,36 +19,51 @@ const HistoryDialog = ({ buttonLabel, from, token }) => {
   const [helperText, setHelperText] = useState('');
   const [historyName, setHistoryName] = useState('');
 
-  const { calculationName } = useSelector((state) => state.user);
-  const { crops } = useSelector((state) => state.calculator);
-  const dispatch = useDispatch();
-
   const { saveHistory } = useUserHistory(token);
 
+  const {
+    calculationName, fromUserHistory, userHistoryList, selectedHistory,
+  } = useSelector((state) => state.user);
+  const { crops } = useSelector((state) => state.calculator);
+
+  const dispatch = useDispatch();
+
   const nameValidation = () => {
-    // TODO: update this function to check if name already exists
-    setError(true);
-    setHelperText('error!');
-    if (error === true) return true;
-    return false;
+    if (userHistoryList.find((h) => h.label === historyName)) {
+      setError(true);
+      setHelperText('A calculation with same name already exists!');
+      return false;
+    }
+    return true;
+  };
+
+  const handleOpenDialog = () => {
+    setOpen(true);
   };
 
   const handleClose = (selection) => {
-    // TODO: run this function after user click yes or no
-    if (!nameValidation()) return;
     if (selection === 'YES') {
-      dispatch(setCalculationNameRedux(historyName));
-      dispatch(setFromUserHistoryRedux(false));
-      // on the complete page, save the calculation
-      if (from === historyDialogFromEnums.completePage) {
-        saveHistory();
-      }
-      // create a new history, need to cleanup calculator redux(except for crops)
-      // FIXME: this should only happens if there's an imported history before
       if (from === historyDialogFromEnums.siteCondition) {
-        dispatch(setCalculatorRedux({ ...initialState, crops }));
+        if (!nameValidation()) return;
+        // if there's an imported history, cleanup calculator redux(except for crops)
+        if (fromUserHistory) dispatch(setCalculatorRedux({ ...initialState, crops }));
       }
+      // on the complete page, update/save the calculation
+      if (from === historyDialogFromEnums.completePage) {
+        if (fromUserHistory) {
+          if (selectedHistory.label !== historyName && !nameValidation()) return;
+          saveHistory(selectedHistory.id, historyName);
+        } else {
+          if (!nameValidation()) return;
+          saveHistory();
+        }
+      }
+      dispatch(setCalculationNameRedux(historyName));
+      dispatch(setSelectedHistoryRedux(null));
+      dispatch(setFromUserHistoryRedux(false));
     }
+    setError(false);
+    setHelperText('');
     setOpen(false);
   };
 
@@ -63,7 +78,7 @@ const HistoryDialog = ({ buttonLabel, from, token }) => {
         <DialogTitle>
           {from === historyDialogFromEnums.siteCondition
             ? 'Do you want to create a new calculation and save it?'
-            : 'Do you want to save this calaulation?'}
+            : 'Do you want to save this calculation?'}
         </DialogTitle>
         <Typography pl="1.5rem">
           {from === historyDialogFromEnums.siteCondition
@@ -88,7 +103,7 @@ const HistoryDialog = ({ buttonLabel, from, token }) => {
         </DialogActions>
 
       </Dialog>
-      <Button variant="contained" onClick={() => setOpen(!open)}>
+      <Button variant="contained" onClick={handleOpenDialog}>
         {buttonLabel}
       </Button>
     </>

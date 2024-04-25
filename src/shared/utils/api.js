@@ -19,7 +19,7 @@ const fetchData = async (url, options = {}) => {
 };
 
 export const createHistory = async (accessToken, historyData, name) => {
-  const schemaId = userHistorySchema;
+  const schemaId = parseInt(userHistorySchema, 10);
   const url = `${historyApiUrl}/history`;
   const config = {
     method: 'POST',
@@ -44,7 +44,7 @@ export const createHistory = async (accessToken, historyData, name) => {
 };
 
 export const updateHistory = async (accessToken, historyData, name, id) => {
-  const schemaId = userHistorySchema;
+  const schemaId = parseInt(userHistorySchema, 10);
   const url = `${historyApiUrl}/history/${id}`;
   const config = {
     method: 'PUT',

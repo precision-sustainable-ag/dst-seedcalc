@@ -17,9 +17,15 @@ const userSlice = createSlice({
       const { userHistoryList } = payload;
       return { ...state, userHistoryList };
     },
+    setSelectedHistory: (state, { payload }) => {
+      const { selectedHistory } = payload;
+      return { ...state, selectedHistory };
+    },
   },
 });
 
-export const { setCalculationName, setFromUserHistory, setUserHistoryList } = userSlice.actions;
+export const {
+  setCalculationName, setFromUserHistory, setUserHistoryList, setSelectedHistory,
+} = userSlice.actions;
 
 export default userSlice;

@@ -13,8 +13,7 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { useDispatch } from 'react-redux';
 import { calculatorList } from '../../shared/data/dropdown';
 import { resetCalculator } from '../../features/calculatorSlice';
-import { setCalculationNameRedux, setFromUserHistoryRedux } from '../../features/userSlice/actions';
-import useUserHistory from '../../shared/hooks/useUserHistory';
+import { setCalculationNameRedux, setFromUserHistoryRedux, setSelectedHistoryRedux } from '../../features/userSlice/actions';
 
 /*
 {
@@ -33,7 +32,7 @@ import useUserHistory from '../../shared/hooks/useUserHistory';
 */
 
 const StepsList = ({
-  activeStep, setActiveStep, availableSteps, token,
+  activeStep, setActiveStep, availableSteps,
 }) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
@@ -43,15 +42,11 @@ const StepsList = ({
   // this completed step is to determine the latest completed step
   const [completedStep, setCompletedStep] = useState(-1);
 
-  // eslint-disable-next-line no-unused-vars
-  const { saveHistory } = useUserHistory(token);
-
   /// ///////////////////////////////////////////////////////
   //                      State Logic                     //
   /// ///////////////////////////////////////////////////////
 
   const handleNext = () => {
-    // saveHistory();
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setCompletedStep(activeStep > completedStep ? activeStep : completedStep);
   };
@@ -66,6 +61,7 @@ const StepsList = ({
     dispatch(resetCalculator());
     dispatch(setFromUserHistoryRedux(false));
     dispatch(setCalculationNameRedux(''));
+    dispatch(setSelectedHistoryRedux(null));
   };
 
   return (

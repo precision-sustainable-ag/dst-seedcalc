@@ -1,7 +1,9 @@
 /* eslint-disable no-console */
 import { useDispatch, useSelector } from 'react-redux';
 import { setSiteConditionRedux } from '../../features/siteConditionSlice/actions';
-import { setCalculationNameRedux, setFromUserHistoryRedux, setUserHistoryListRedux } from '../../features/userSlice/actions';
+import {
+  setCalculationNameRedux, setFromUserHistoryRedux, setUserHistoryListRedux, setSelectedHistoryRedux,
+} from '../../features/userSlice/actions';
 import { setCalculatorRedux } from '../../features/calculatorSlice/actions';
 import { getHistories, createHistory, updateHistory } from '../utils/api';
 
@@ -26,14 +28,15 @@ const useUserHistory = (token) => {
         const histories = res.data;
         if (name !== null) {
           // name is not null, find match history record and return it
-          const history = histories.filter((h) => h.label === name);
-          if (history.length > 0) {
-            const data = history[0].json;
-            console.log('loaded history', name, history[0]);
+          const history = histories.find((h) => h.label === name);
+          if (history !== undefined) {
+            const data = history.json;
+            console.log('loaded history', name, history);
             dispatch(setSiteConditionRedux(data.siteCondition));
             dispatch(setCalculatorRedux(data.calculator));
-            dispatch(setCalculationNameRedux(data.name));
+            dispatch(setCalculationNameRedux(history.label));
             dispatch(setFromUserHistoryRedux(true));
+            dispatch(setSelectedHistoryRedux({ label: history.label, id: history.id }));
             // return object since sometime ID property is needed
             return history[0];
           }
@@ -60,14 +63,15 @@ const useUserHistory = (token) => {
  * If no param, create a new history record.
  * If `id` is specified, update relevant history object.
  * @param {number} id - The id of history to update, default to `null`.
+ * @param {string} name - The name of history to update, default to `null`.
  */
-  const saveHistory = async (id = null) => {
+  const saveHistory = async (id = null, name = null) => {
     try {
       if (!token) throw new Error('Access token not available!');
       const data = { siteCondition, calculator };
       if (id !== null) {
         // if id is not null, update history with id
-        const res = await updateHistory(token, data, calculationName, id);
+        const res = await updateHistory(token, data, name, id);
         console.log('updated history', res);
       } else {
         // if id is null, create a new history
