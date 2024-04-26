@@ -13,9 +13,12 @@ import {
 import '../steps.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  addSeedRedux, setOptionRedux, removeOptionRedux, removeSeedRedux,
+  addSeedRedux, removeOptionRedux, removeSeedRedux,
+  setMixRatioOptionRedux,
 } from '../../../../features/calculatorSlice/actions';
 import { initialOptions } from '../../../../shared/utils/calculator';
+import { setFromUserHistoryRedux } from '../../../../features/userSlice/actions';
+import { historyState } from '../../../../features/userSlice/state';
 
 const CheckBoxIcon = ({ style }) => (
   <Box sx={style}>
@@ -50,6 +53,7 @@ const PlantList = ({
   const {
     acres, stateId, countyId, soilDrainage, plantingDate, soilFertility, council,
   } = useSelector((state) => state.siteCondition);
+  const { fromUserHistory } = useSelector((state) => state.user);
 
   const seedsSelected = useSelector((state) => state.calculator.seedsSelected);
 
@@ -92,6 +96,9 @@ const PlantList = ({
   };
 
   const handleClick = async (seed) => {
+    // if from user history, set fromUserHistory to historyState.updated to create a new calculation
+    // FIXME: this will clean all further step options
+    if (fromUserHistory === historyState.imported) dispatch(setFromUserHistoryRedux(historyState.updated));
     const { id: cropId, label: seedName } = seed;
     // if seed not in seedSelected, add it
     if (seedsSelected.filter((s) => s.label === seedName).length === 0) {
@@ -102,15 +109,17 @@ const PlantList = ({
       const percentSurvival = council === 'MCCC'
         ? parseFloat(attributes.Coefficients['% Live Seed to Emergence'].values[0])
         : '';
-      // set initial options
-      dispatch(setOptionRedux(label, {
+      const initOptions = {
         ...initialOptions,
         acres,
         soilDrainage,
         plantingDate,
         percentSurvival,
         soilFertility: soilFertility.toLowerCase(),
-      }));
+      };
+      // set initial options
+      // dispatch(setOptionRedux(label, initOptions));
+      dispatch(setMixRatioOptionRedux(label, initOptions));
     } else {
     // if seed already in seedSelected, del it
       dispatch(removeSeedRedux(seedName));

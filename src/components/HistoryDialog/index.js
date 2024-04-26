@@ -7,6 +7,7 @@ import { setCalculationNameRedux, setFromUserHistoryRedux, setSelectedHistoryRed
 import useUserHistory from '../../shared/hooks/useUserHistory';
 import { setCalculatorRedux } from '../../features/calculatorSlice/actions';
 import initialState from '../../features/calculatorSlice/state';
+import { historyState } from '../../features/userSlice/state';
 
 export const historyDialogFromEnums = {
   siteCondition: 'siteConditoin',
@@ -45,22 +46,23 @@ const HistoryDialog = ({ buttonLabel, from, token }) => {
     if (selection === 'YES') {
       if (from === historyDialogFromEnums.siteCondition) {
         if (!nameValidation()) return;
-        // if there's an imported history, cleanup calculator redux(except for crops)
-        if (fromUserHistory) dispatch(setCalculatorRedux({ ...initialState, crops }));
+        // if there's already an imported history existed, cleanup calculator redux(except for crops)
+        if (fromUserHistory === historyState.imported) dispatch(setCalculatorRedux({ ...initialState, crops }));
+        dispatch(setFromUserHistoryRedux(historyState.new));
       }
       // on the complete page, update/save the calculation
       if (from === historyDialogFromEnums.completePage) {
-        if (fromUserHistory) {
+        if (fromUserHistory === historyState.updated) {
+          // if history is updated but name is not changed, not run nameValidation again
           if (selectedHistory.label !== historyName && !nameValidation()) return;
           saveHistory(selectedHistory.id, historyName);
-        } else {
+        } else if (fromUserHistory === historyState.new) {
           if (!nameValidation()) return;
           saveHistory();
         }
       }
       dispatch(setCalculationNameRedux(historyName));
       dispatch(setSelectedHistoryRedux(null));
-      dispatch(setFromUserHistoryRedux(false));
     }
     setError(false);
     setHelperText('');

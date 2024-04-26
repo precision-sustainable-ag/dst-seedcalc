@@ -22,9 +22,9 @@ const calculatorSlice = createSlice({
       const { seedLabel, option } = payload;
       return { ...state, options: { ...state.options, [seedLabel]: option } };
     },
-    setMixRatioOptions: (state, { payload }) => {
-      const { mixRatioOptions } = payload;
-      return { ...state, mixRatioOptions };
+    setMixRatioOption: (state, { payload }) => {
+      const { seedLabel, option } = payload;
+      return { ...state, mixRatioOptions: { ...state.mixRatioOptions, [seedLabel]: option } };
     },
     removeOption: (state, { payload }) => {
       const { seedLabel } = payload;
@@ -92,7 +92,7 @@ const calculatorSlice = createSlice({
 });
 
 export const {
-  addSeed, removeSeed, setOption, setMixRatioOptions, removeOption, updateDiversity,
+  addSeed, removeSeed, setOption, setMixRatioOption, removeOption, updateDiversity,
   clearSeeds, clearOptions, selectSidebarSeed, setMixSeedingRate,
   setBulkSeedingRate, setAdjustedMixSeedingRate, importFromCSV,
   selectUnit, resetCalculator, setSeedingMethods, setCalculator,

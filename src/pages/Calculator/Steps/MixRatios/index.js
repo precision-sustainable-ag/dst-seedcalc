@@ -19,9 +19,11 @@ import {
   adjustProportionsMCCC, adjustProportionsNECCC, adjustProportionsSCCC,
   createCalculator, createUserInput, calculatePieChartData, calculatePlantsandSeedsPerAcre,
 } from '../../../../shared/utils/calculator';
-import { setOptionRedux, setMixRatioOptionsRedux } from '../../../../features/calculatorSlice/actions';
+import { setOptionRedux, setMixRatioOptionRedux } from '../../../../features/calculatorSlice/actions';
 import { pieChartUnits } from '../../../../shared/data/units';
 import '../steps.scss';
+import { setFromUserHistoryRedux } from '../../../../features/userSlice/actions';
+import { historyState } from '../../../../features/userSlice/state';
 
 const getCalculatorResult = (council) => {
   const defaultResultMCCC = {
@@ -79,7 +81,7 @@ const MixRatio = ({
 
   const dispatch = useDispatch();
   const {
-    seedsSelected, sideBarSelection, options, mixRatioOptions,
+    seedsSelected, sideBarSelection, mixRatioOptions,
   } = useSelector((state) => state.calculator);
   const {
     council, soilDrainage, plantingDate, acres, county,
@@ -122,17 +124,20 @@ const MixRatio = ({
     const regions = [{ label: county }];
     const seedingRateCalculator = createCalculator(seedsSelected, council, regions, userInput);
     setCalculator(seedingRateCalculator);
-    // If the data is from user history, not init options, use mixRatioOptions instead
-    if (!fromUserHistory) {
+    // If historyState is imported, not init options, use mixRatioOptions instead
+    if (fromUserHistory !== historyState.imported) {
       seedsSelected.forEach((seed) => {
-      // FIXME: updated percentOfRate here, this is a temporary workaround for MCCC
-        const newOption = {
-          ...options[seed.label],
-          percentOfRate: (council === 'MCCC'
-        || (council === 'SCCC' && !seedingRateCalculator.isFreezingZone()))
-            ? 1 / seedsSelected.length : null,
-        };
-        dispatch(setOptionRedux(seed.label, newOption));
+        // if percentOfRate is not null, skip this step(this happens when add new crop for a imported history)
+        if (mixRatioOptions[seed.label].percentOfRate === null) {
+          // FIXME: updated percentOfRate here, this is a temporary workaround for MCCC
+          const newOption = {
+            ...mixRatioOptions[seed.label],
+            percentOfRate: (council === 'MCCC'
+            || (council === 'SCCC' && !seedingRateCalculator.isFreezingZone()))
+              ? 1 / seedsSelected.length : null,
+          };
+          dispatch(setMixRatioOptionRedux(seed.label, newOption));
+        }
       });
     }
     setInitCalculator(true);
@@ -142,7 +147,7 @@ const MixRatio = ({
   useEffect(() => {
     if (!initCalculator) return;
     seedsSelected.forEach((seed) => {
-      const seedOption = fromUserHistory ? mixRatioOptions[seed.label] : options[seed.label];
+      const seedOption = mixRatioOptions[seed.label];
       if (seedOption !== prevOptions[seed.label]) {
         let result;
         if (council === 'MCCC') result = adjustProportionsMCCC(seed, calculator, seedOption);
@@ -151,11 +156,7 @@ const MixRatio = ({
         setCalculatorResult((prev) => ({ ...prev, [seed.label]: result }));
         const {
           plants, seeds, adjustedPlants, adjustedSeeds,
-        } = calculatePlantsandSeedsPerAcre(
-          seed,
-          calculator,
-          seedOption,
-        );
+        } = calculatePlantsandSeedsPerAcre(seed, calculator, seedOption);
         setSeedData((prev) => ({
           ...prev,
           [seed.label]: {
@@ -165,6 +166,9 @@ const MixRatio = ({
             adjustedSeed: adjustedSeeds,
           },
         }));
+        // if history is not imported, update mixRatioOptions to options
+        if (fromUserHistory !== historyState.imported) dispatch(setOptionRedux(seed.label, seedOption));
+        // if history is imported, NOT update options UNLESS make any changes (historyState = updated)
       }
     });
     // calculate piechart data
@@ -172,13 +176,13 @@ const MixRatio = ({
       seedingRateArray,
       plantsPerSqftArray,
       seedsPerSqftArray,
-    } = calculatePieChartData(seedsSelected, calculator, options);
+    } = calculatePieChartData(seedsSelected, calculator, mixRatioOptions);
     setPieChartData({ seedingRateArray, plantsPerSqftArray, seedsPerSqftArray });
-    setPrevOptions(options);
+    setPrevOptions(mixRatioOptions);
     // when options change, set mixRatiosOptions in redux
     // FIXME: maybe need to think a little bit more situations
-    if (!fromUserHistory) dispatch(setMixRatioOptionsRedux(options));
-  }, [options, initCalculator]);
+    // if (!fromUserHistory) dispatch(setMixRatioOptionsRedux(options));
+  }, [mixRatioOptions, initCalculator]);
 
   // expand related accordion based on sidebar click
   useEffect(() => {
@@ -203,7 +207,9 @@ const MixRatio = ({
       message:
       'You now have a custom mix. You can edit this information in furthur steps.',
     });
-    dispatch(setOptionRedux(seed.label, { ...options[seed.label], [option]: value }));
+    dispatch(setMixRatioOptionRedux(seed.label, { ...mixRatioOptions[seed.label], [option]: value }));
+    // FIXME: set historyState.updated if change anything, this will also remove all options in further steps
+    dispatch(setFromUserHistoryRedux(historyState.updated));
   };
 
   // handler for click to open accordion
@@ -279,7 +285,7 @@ const MixRatio = ({
                   calculatorResult={calculatorResult}
                   handleFormValueChange={handleFormValueChange}
                   council={council}
-                  options={options[seed.label]}
+                  options={mixRatioOptions[seed.label]}
                 />
 
                 <Grid item xs={12}>
@@ -302,7 +308,7 @@ const MixRatio = ({
                   <MixRatioSteps
                     council={council}
                     calculatorResult={calculatorResult[seed.label]}
-                    options={options[seed.label]}
+                    options={mixRatioOptions[seed.label]}
                   />
                   )}
                 </Grid>

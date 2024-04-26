@@ -6,6 +6,7 @@ import {
 } from '../../features/userSlice/actions';
 import { setCalculatorRedux } from '../../features/calculatorSlice/actions';
 import { getHistories, createHistory, updateHistory } from '../utils/api';
+import { historyState } from '../../features/userSlice/state';
 
 const useUserHistory = (token) => {
   const dispatch = useDispatch();
@@ -35,7 +36,7 @@ const useUserHistory = (token) => {
             dispatch(setSiteConditionRedux(data.siteCondition));
             dispatch(setCalculatorRedux(data.calculator));
             dispatch(setCalculationNameRedux(history.label));
-            dispatch(setFromUserHistoryRedux(true));
+            dispatch(setFromUserHistoryRedux(historyState.imported));
             dispatch(setSelectedHistoryRedux({ label: history.label, id: history.id }));
             // return object since sometime ID property is needed
             return history[0];
