@@ -209,7 +209,7 @@ const MixRatio = ({
     });
     dispatch(setMixRatioOptionRedux(seed.label, { ...mixRatioOptions[seed.label], [option]: value }));
     // FIXME: set historyState.updated if change anything, this will also remove all options in further steps
-    dispatch(setFromUserHistoryRedux(historyState.updated));
+    if (fromUserHistory === historyState.imported) dispatch(setFromUserHistoryRedux(historyState.updated));
   };
 
   // handler for click to open accordion
