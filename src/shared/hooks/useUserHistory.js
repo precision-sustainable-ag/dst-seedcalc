@@ -39,7 +39,7 @@ const useUserHistory = (token) => {
             dispatch(setFromUserHistoryRedux(historyState.imported));
             dispatch(setSelectedHistoryRedux({ label: history.label, id: history.id }));
             // return object since sometime ID property is needed
-            return history[0];
+            return history;
           }
           throw new Error('History name not available!');
         } else {

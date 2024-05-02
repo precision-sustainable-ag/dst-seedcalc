@@ -19,7 +19,6 @@ import statesLatLongDict from '../../../../shared/data/statesLatLongDict';
 import DSTImport from '../../../../components/DSTImport';
 import SiteConditionForm from './form';
 import Map from './Map';
-import HistoryDialog, { historyDialogFromEnums } from '../../../../components/HistoryDialog';
 import initialState from '../../../../features/siteConditionSlice/state';
 import '../steps.scss';
 
@@ -141,11 +140,7 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
                   )
               }
               <DSTImport token={token} />
-              <HistoryDialog
-                buttonLabel="create new calculation"
-                from={historyDialogFromEnums.siteCondition}
-                token={token}
-              />
+
             </>
           ) : step === 2 ? (
             <Map

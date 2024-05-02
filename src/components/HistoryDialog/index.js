@@ -14,7 +14,9 @@ export const historyDialogFromEnums = {
   completePage: 'completePage',
 };
 
-const HistoryDialog = ({ buttonLabel, from, token }) => {
+const HistoryDialog = ({
+  buttonLabel, from, token, setOpenModal,
+}) => {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(false);
   const [helperText, setHelperText] = useState('');
@@ -49,6 +51,7 @@ const HistoryDialog = ({ buttonLabel, from, token }) => {
         // if there's already an imported history existed, cleanup calculator redux(except for crops)
         if (fromUserHistory === historyState.imported) dispatch(setCalculatorRedux({ ...initialState, crops }));
         dispatch(setFromUserHistoryRedux(historyState.new));
+        setOpenModal(false);
       }
       // on the complete page, update/save the calculation
       if (from === historyDialogFromEnums.completePage) {

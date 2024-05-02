@@ -4,18 +4,20 @@ import {
   Box, Grid, Modal, Typography, Button,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
+import { useAuth0 } from '@auth0/auth0-react';
 import { importFromCSVCalculator } from '../../features/calculatorSlice/actions';
 import { setSiteConditionRedux } from '../../features/siteConditionSlice/actions';
 import useUserHistory from '../../shared/hooks/useUserHistory';
 import Dropdown from '../Dropdown';
 import { setCalculationNameRedux } from '../../features/userSlice/actions';
+import HistoryDialog, { historyDialogFromEnums } from '../HistoryDialog';
 
 const modalStyle = {
   position: 'absolute',
   top: ' 50%',
   left: ' 50%',
   transform: ' translate(-50%, -50%)',
-  width: ' 400px',
+  width: '80%',
   backgroundColor: ' #fff',
   border: ' 2px solid #000',
   boxShadow:
@@ -33,6 +35,8 @@ const DSTImport = ({ token }) => {
   const { loadHistory } = useUserHistory(token);
 
   const { calculationName } = useSelector((state) => state.user);
+
+  const { isAuthenticated } = useAuth0();
 
   /// ///////////////////////////////////////////////////////
   //                  Import Logic                        //
@@ -77,6 +81,11 @@ const DSTImport = ({ token }) => {
     setOpenModal(!openModal);
   };
 
+  // open the modal if user is logged in
+  useEffect(() => {
+    if (isAuthenticated) setOpenModal(true);
+  }, []);
+
   // initially load all history records
   useEffect(() => {
     const loadHistories = async () => {
@@ -96,31 +105,35 @@ const DSTImport = ({ token }) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={modalStyle}>
-          <Grid container>
+          <Grid container spacing="1rem">
+            <Grid item xs={12} display="flex" justifyContent="center">
+              <Typography variant="h6">
+                Do you want to import previous calculation, or create a new one?
+              </Typography>
+            </Grid>
+
             <Grid item xs={12} display="flex" justifyContent="center">
               <Typography variant="h6" component="h2">
                 Import From CSV
               </Typography>
             </Grid>
 
-            <Grid xs={12} item display="flex" justifyContent="center" alignItems="center" pt="1rem">
-              <Grid xs={8} item>
-                <Typography>
-                  <input type="file" accept=".csv" onChange={handleFileUpload} />
-                </Typography>
-              </Grid>
+            <Grid xs={12} item display="flex" justifyContent="center" alignItems="center">
+              <Typography>
+                <input type="file" accept=".csv" onChange={handleFileUpload} />
+              </Typography>
               <Button onClick={handleImportCSV}>
                 Import
               </Button>
             </Grid>
 
-            <Grid item xs={12} display="flex" justifyContent="center" pt="1rem">
+            <Grid item xs={12} display="flex" justifyContent="center">
               <Typography variant="h6" component="h2">
                 Import From User History
               </Typography>
             </Grid>
 
-            <Grid xs={12} item display="flex" justifyContent="center" alignItems="center" pt="1rem">
+            <Grid xs={12} item display="flex" justifyContent="center" alignItems="center">
               <Grid xs={8} item>
                 <Dropdown
                   value={calculationName}
@@ -133,6 +146,22 @@ const DSTImport = ({ token }) => {
                 Import
               </Button>
             </Grid>
+
+            <Grid item xs={12} display="flex" justifyContent="center">
+              <Typography variant="h6" component="h2">
+                Create New Calculation
+              </Typography>
+            </Grid>
+
+            <Grid item xs={12} display="flex" justifyContent="center">
+              <HistoryDialog
+                buttonLabel="+ new calculation"
+                from={historyDialogFromEnums.siteCondition}
+                token={token}
+                setOpenModal={setOpenModal}
+              />
+            </Grid>
+
           </Grid>
         </Box>
       </Modal>
@@ -141,7 +170,7 @@ const DSTImport = ({ token }) => {
         onClick={handleOpenModal}
         sx={{ textDecoration: 'none', margin: '1rem' }}
       >
-        Import previous calculation
+        Import / Create calculation
       </Button>
     </>
   );
