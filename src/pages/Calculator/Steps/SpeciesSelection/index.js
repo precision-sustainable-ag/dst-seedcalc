@@ -21,7 +21,7 @@ import { removeOptionRedux, removeSeedRedux, updateDiversityRedux } from '../../
 import '../steps.scss';
 import { createUserInput, createCalculator } from '../../../../shared/utils/calculator';
 
-const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
+const SpeciesSelection = ({ completedStep, setCompletedStep, setAlertState }) => {
   // useSelector for crops reducer data
   const dispatch = useDispatch();
 
@@ -91,11 +91,15 @@ const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
       const seedingRateCalculator = createCalculator(seedsSelected, council, regions, userInput);
     } catch (err) {
       // if the crop is not valid, remove it from seedSelected
-      console.log(err);
+      console.error(err);
       const lastAddedSeedName = seedsSelected[seedsSelected.length - 1]?.label;
       dispatch(removeSeedRedux(lastAddedSeedName));
       dispatch(removeOptionRedux(lastAddedSeedName));
-      // TODO: add notification here using the alert
+      setAlertState({
+        open: true,
+        severity: 'error',
+        message: 'Error: Invalid crop!',
+      });
     }
   }, [seedsSelected]);
 

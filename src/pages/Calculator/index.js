@@ -78,6 +78,7 @@ const Calculator = () => {
           <SpeciesSelection
             completedStep={completedStep}
             setCompletedStep={setCompletedStep}
+            setAlertState={setAlertState}
           />
         );
       case 'Mix Ratios':
