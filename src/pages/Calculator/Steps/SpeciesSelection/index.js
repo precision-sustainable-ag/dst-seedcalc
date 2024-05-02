@@ -17,8 +17,9 @@ import { seedsType, seedsLabel } from '../../../../shared/data/species';
 import { validateForms } from '../../../../shared/utils/format';
 import PlantList from './PlantList';
 import Diversity from './diversity';
-import { updateDiversityRedux } from '../../../../features/calculatorSlice/actions';
+import { removeOptionRedux, removeSeedRedux, updateDiversityRedux } from '../../../../features/calculatorSlice/actions';
 import '../steps.scss';
+import { createUserInput, createCalculator } from '../../../../shared/utils/calculator';
 
 const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
   // useSelector for crops reducer data
@@ -27,6 +28,9 @@ const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
   const {
     seedsSelected, diversitySelected, loading, crops,
   } = useSelector((state) => state.calculator);
+  const {
+    soilDrainage, plantingDate, acres, county, council,
+  } = useSelector((state) => state.siteCondition);
 
   const [filteredSeeds, setFilteredSeeds] = useState([]);
   const [query, setQuery] = useState('');
@@ -72,6 +76,28 @@ const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
   useEffect(() => {
     setFilteredSeeds(crops);
   }, [crops]);
+
+  const userInput = createUserInput(soilDrainage, plantingDate, acres);
+  // use a region object array for sdk init
+  const regions = [{ label: county }];
+
+  // unselect crops with missing fields
+  useEffect(() => {
+    // TODO: NOTE: the calculator here is only used for validating the crop
+    // , the calculator for calculation in initialized in MixRatios
+    console.log('seedsSelected', seedsSelected);
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const seedingRateCalculator = createCalculator(seedsSelected, council, regions, userInput);
+    } catch (err) {
+      // if the crop is not valid, remove it from seedSelected
+      console.log(err);
+      const lastAddedSeedName = seedsSelected[seedsSelected.length - 1]?.label;
+      dispatch(removeSeedRedux(lastAddedSeedName));
+      dispatch(removeOptionRedux(lastAddedSeedName));
+      // TODO: add notification here using the alert
+    }
+  }, [seedsSelected]);
 
   // update diversity selected
   useEffect(() => {
