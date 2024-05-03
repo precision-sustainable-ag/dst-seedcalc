@@ -116,11 +116,11 @@ const Calculator = () => {
         );
       case 'Confirm Plan':
         return (
-          <ConfirmPlan calculator={calculator} />
+          <ConfirmPlan calculator={calculator} token={token} />
         );
       case 'Finish':
         return (
-          <CompletedPage token={token} />
+          <CompletedPage />
         );
       default:
         return null;

@@ -4,9 +4,8 @@ import {
 } from '@mui/material';
 import { useTheme } from '@emotion/react';
 import { Link } from 'react-router-dom';
-import HistoryDialog, { historyDialogFromEnums } from '../../../../components/HistoryDialog';
 
-const CompletedPage = ({ token }) => {
+const CompletedPage = () => {
   // themes
   const theme = useTheme();
   const matchesUpMd = useMediaQuery(theme.breakpoints.up('md'));
@@ -18,17 +17,6 @@ const CompletedPage = ({ token }) => {
           <Typography>
             Thank you for trying out the Seeding Rate Calculator!
           </Typography>
-        </Grid>
-
-        <Grid xs={12} item sx={{ pt: '50px' }} justifyContent="center">
-          <Typography pb="1rem">
-            Do you want to save this calculation?
-          </Typography>
-          <HistoryDialog
-            buttonLabel="Save this calculation"
-            from={historyDialogFromEnums.completePage}
-            token={token}
-          />
         </Grid>
 
         <Grid xs={12} item sx={{ pt: '50px' }} justifyContent="center">

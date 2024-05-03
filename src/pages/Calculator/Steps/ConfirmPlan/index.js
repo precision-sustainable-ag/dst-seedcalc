@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { Typography, Button } from '@mui/material';
+import { Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
-
-import { handleDownload } from '../../../../shared/utils/exportExcel';
 import ConfirmPlanCharts from './charts';
 import '../steps.scss';
 import ConfirmPlanForm from './form';
 import { checkNRCS, confirmPlan } from '../../../../shared/utils/calculator';
+import ExportModal from './ExportModal';
 
 const defaultResult = {
   bulkSeedingRate: 0,
@@ -19,10 +16,7 @@ const defaultResult = {
   totalCost: 0,
 };
 
-const ConfirmPlan = ({ calculator }) => {
-  const theme = useTheme();
-  const matchesUpMd = useMediaQuery(theme.breakpoints.up('md'));
-
+const ConfirmPlan = ({ calculator, token }) => {
   const siteCondition = useSelector((state) => state.siteCondition);
   const calculatorRedux = useSelector((state) => state.calculator);
   const { council, checkNRCSStandards } = siteCondition;
@@ -74,38 +68,8 @@ const ConfirmPlan = ({ calculator }) => {
         <Typography variant="h2">Confirm Plan and Enter Costs Below</Typography>
 
         {/* Export Button */}
-        <Grid container sx={{ marginTop: '5px' }}>
-          <Grid item xs={matchesUpMd ? 11 : 9} />
-          <Grid item xs={matchesUpMd ? 1 : 3}>
-            <Button
-              sx={{
-                bgcolor: '#e7885f',
-                color: 'white',
-                padding: '7px',
-                width: '83px',
-                margin: '3px',
-                fontSize: '12px',
-                borderRadius: '26px',
-              }}
-              onClick={() => {
-                handleDownload(
-                  [
-                    {
-                      label: 'SITE-CONDITION',
-                      extData: JSON.stringify(siteCondition),
-                    },
-                    {
-                      label: 'CALCULATOR',
-                      extData: JSON.stringify(calculatorRedux),
-                    },
-                  ],
-                  council,
-                );
-              }}
-            >
-              Export
-            </Button>
-          </Grid>
+        <Grid item xs={12} display="flex" justifyContent="flex-end" pt="5px">
+          <ExportModal token={token} />
         </Grid>
 
         {/* Charts */}
