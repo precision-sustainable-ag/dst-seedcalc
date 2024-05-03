@@ -48,7 +48,7 @@ const PlantList = ({
   const dispatch = useDispatch();
 
   const {
-    acres, stateId, countyId, soilDrainage, plannedPlantingDate, soilFertility, council,
+    acres, stateId, countyId, soilDrainage, plantingDate, soilFertility, council,
   } = useSelector((state) => state.siteCondition);
 
   const seedsSelected = useSelector((state) => state.calculator.seedsSelected);
@@ -67,24 +67,19 @@ const PlantList = ({
       secondStart = dayjs(dayjs(secondPeriod.split(' - ')[0]).format('MM/DD'));
       secondEnd = dayjs(dayjs(secondPeriod.split(' - ')[1]).format('MM/DD'));
     }
-    const plannedDate = dayjs(dayjs(plannedPlantingDate).format('MM/DD'));
+    const plannedDate = dayjs(dayjs(plantingDate).format('MM/DD'));
 
-    if (!plannedDate.isBetween(firstStart, firstEnd, 'day')) {
-      if (
-        secondStart
-        && !plannedDate.isBetween(secondStart, secondEnd, 'day')
-      ) {
-        return `Seeding date outside of recommended window: ${firstStart.format(
-          'MM/DD',
-        )} - ${firstEnd.format('MM/DD')}, ${secondStart.format(
-          'MM/DD',
-        )} - ${secondEnd.format('MM/DD')}`;
-      }
-      return `Seeding date outside of recommended window: ${firstStart.format(
-        'MM/DD',
-      )} - ${firstEnd.format('MM/DD')}`;
+    const inFirstPeriod = plannedDate.isBetween(firstStart, firstEnd, 'day', []);
+    const inSecondPeriod = secondStart && plannedDate.isBetween(secondStart, secondEnd, 'day', []);
+
+    if (inFirstPeriod || inSecondPeriod) return '';
+    if (secondStart) {
+      return `Seeding date outside of recommended window: 
+        ${firstStart.format('MM/DD')} - ${firstEnd.format('MM/DD')},
+        ${secondStart.format('MM/DD')} - ${secondEnd.format('MM/DD')}`;
     }
-    return '';
+    return `Seeding date outside of recommended window: 
+      ${firstStart.format('MM/DD')} - ${firstEnd.format('MM/DD')}`;
   };
 
   const checkSoilDrainage = (seed) => {
@@ -112,7 +107,7 @@ const PlantList = ({
         ...initialOptions,
         acres,
         soilDrainage,
-        plannedPlantingDate,
+        plantingDate,
         percentSurvival,
         soilFertility: soilFertility.toLowerCase(),
       }));

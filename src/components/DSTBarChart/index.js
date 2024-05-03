@@ -12,6 +12,7 @@ import {
   Bar,
   YAxis,
   LabelList,
+  Cell,
 } from 'recharts';
 import { twoDigit } from '../../shared/utils/calculator';
 
@@ -67,9 +68,9 @@ const DSTBarChart = ({ seed, calculatorResult }) => {
         <Typography fontWeight="bold">Seeding Rate Impact From Your Decisions (Lbs per Acre)</Typography>
       </Grid>
       <Grid item xs={12} display="flex" justifyContent="center">
-        <ResponsiveContainer width={matchesSm ? '100%' : '50%'} height={200}>
+        <ResponsiveContainer width="100%" height={200}>
           <BarChart
-            data={[labels[index]]}
+            data={matchesSm ? [labels[index]] : labels}
             barCategoryGap="35%"
             margin={{
               top: 15, right: 50, bottom: 15, left: 15,
@@ -85,7 +86,9 @@ const DSTBarChart = ({ seed, calculatorResult }) => {
               domain={[0, Math.round(maxValue * 1.1)]}
             />
             <Bar dataKey="val" fill="#4f5f30">
-              <LabelList dataKey="val" position="top" color="white" style={{ fill: '#4f5f30' }} />
+              <LabelList dataKey="val" position="top" style={{ fill: '#4f5f30' }} />
+              {!matchesSm
+              && labels.map((l, i) => (<Cell key={i} fill={index === i ? '#98FB98' : '#4f5f30'} />))}
             </Bar>
           </BarChart>
         </ResponsiveContainer>
