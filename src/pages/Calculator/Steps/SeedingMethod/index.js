@@ -18,8 +18,6 @@ import { setOptionRedux, setSeedingMethodsRedux } from '../../../../features/cal
 // styles for left grid
 const FullGrid = styled(Grid)(() => ({
   '&.MuiGrid-item': {
-    // border: '1px solid #c7c7c7',
-    // borderRight: 'none',
     boxShadow: '1px 1px 10px 1px lightgrey',
     display: 'flex',
     justifyContent: 'flex-start',
@@ -29,11 +27,7 @@ const FullGrid = styled(Grid)(() => ({
 // styles for left grid
 const LeftGrid = styled(Grid)(() => ({
   '&.MuiGrid-item': {
-    // border: '1px solid #c7c7c7',
-    // borderRight: 'none',
     display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
   },
 }));
 
@@ -41,12 +35,8 @@ const LeftGrid = styled(Grid)(() => ({
 const RightGrid = styled(Grid)(() => ({
   '&.MuiGrid-item': {
     padding: '1rem',
-    // border: '1px solid #c7c7c7',
-    // borderLeft: 'none',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
     '& .MuiBox-root': {
       width: '50px',
       height: '50px',
