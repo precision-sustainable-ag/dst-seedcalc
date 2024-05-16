@@ -48,11 +48,11 @@ const AuthButton = ({
   const getColor = () => {
     switch (type) {
       case 'Login':
-        return '#add08f';
+        return '#008000';
       case 'Signup':
         return 'purple';
       case 'Logout':
-        return 'salmon';
+        return '#8B0000';
       default:
         return 'black';
     }
