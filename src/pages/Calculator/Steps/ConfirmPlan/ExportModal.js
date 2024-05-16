@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Button, Modal, Box, Typography,
+  Button, Modal, Box, Typography, Grid,
 } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -18,6 +18,7 @@ const modalStyle = {
   boxShadow:
     ' 0px 11px 15px -7px rgb(0 0 0 / 20%), 0px 24px 38px 3px rgb(0 0 0 / 14%), 0px 9px 46px 8px rgb(0 0 0 / 12%)',
   padding: ' 32px',
+  maxWidth: '500px',
 };
 
 const buttonStyles = {
@@ -60,24 +61,29 @@ const ExportModal = ({ token }) => {
     <>
       <Modal open={open} onClose={() => setOpen(false)}>
         <Box sx={modalStyle}>
-          <Typography variant="h6">
-            Do you want to save your calculation as a csv file?
-          </Typography>
-          <Button variant="contained" onClick={handleExportcsv}>Export to csv</Button>
-          {isAuthenticated
-          && (
-          <>
-            <Typography variant="h6">
-              Or save your calculation in history?
-            </Typography>
-            <HistoryDialog
-              buttonLabel="Save this calculation"
-              from={historyDialogFromEnums.completePage}
-              token={token}
-              setOpenModal={setOpen}
-            />
-          </>
-          )}
+          <Grid container spacing={2}>
+            <Grid item xs={12} display="flex" justifyContent="center">
+              <Typography variant="h6">
+                How would you like to save your calculation?
+              </Typography>
+            </Grid>
+            <Grid item xs={12} display="flex" justifyContent="center">
+              <Button variant="contained" onClick={handleExportcsv}>Export to csv</Button>
+            </Grid>
+
+            {isAuthenticated
+              && (
+              <Grid item xs={12} display="flex" justifyContent="center">
+                <HistoryDialog
+                  buttonLabel="Save this calculation"
+                  from={historyDialogFromEnums.completePage}
+                  token={token}
+                  setOpenModal={setOpen}
+                />
+              </Grid>
+              )}
+          </Grid>
+
         </Box>
       </Modal>
       <Button sx={buttonStyles} onClick={() => setOpen(true)}>

@@ -23,9 +23,10 @@ const Dropdown = ({
   handleChange,
   items,
   disabled = false,
+  minWidth = 120,
 }) => (
-  <Box sx={{ minWidth: 120, color: '#4F5F30' }}>
-    <FormControl fullWidth>
+  <Box sx={{ color: '#4F5F30' }}>
+    <FormControl fullWidth sx={{ minWidth }}>
       <InputLabel>{label}</InputLabel>
       <Select
         disabled={disabled}

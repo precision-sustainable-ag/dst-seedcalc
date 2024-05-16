@@ -103,8 +103,8 @@ const HistoryDialog = ({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => handleClose('YES')}>Yes</Button>
-          <Button onClick={() => handleClose('NO')}>No</Button>
+          <Button onClick={() => handleClose('YES')}>Save</Button>
+          <Button onClick={() => handleClose('NO')}>Cancel</Button>
         </DialogActions>
 
       </Dialog>
