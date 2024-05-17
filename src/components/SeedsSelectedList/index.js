@@ -8,7 +8,40 @@ import {
   CardActionArea,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectSidebarSeedRedux } from '../../features/calculatorSlice/actions';
+import {
+  removeOptionRedux, removeSeedRedux, selectSidebarSeedRedux,
+} from '../../features/calculatorSlice/actions';
+
+const CheckBoxIcon = ({ style }) => (
+  <Box sx={style}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 18 18"
+      fill="none"
+    >
+      <path
+        d="M14 0H4C1.79086 0 0 1.79086 0 4V14C0 16.2091 1.79086 18 4 18H14C16.2091 18 18 16.2091 18 14V4C18 1.79086 16.2091 0 14 0Z"
+        fill="red"
+      />
+      <path
+        d="M4 4L14 14"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M14 4L4 14"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  </Box>
+);
 
 const SeedsSelectedList = ({ list }) => {
   // themes
@@ -43,6 +76,7 @@ const SeedsSelectedList = ({ list }) => {
     >
       {[...list].reverse().map((s, i) => (
         <Box minWidth={matchesMd ? '120px' : ''} key={i}>
+
           <Card
             sx={{
               backgroundColor: 'transparent',
@@ -50,7 +84,20 @@ const SeedsSelectedList = ({ list }) => {
               cursor: 'pointer',
             }}
           >
-            <CardActionArea onClick={() => selectSpecies(s.label)}>
+
+            <CardActionArea onClick={() => {
+              selectSpecies(s.label); dispatch(removeSeedRedux(s.label));
+              dispatch(removeOptionRedux(s.label));
+            }}
+            >
+              <CheckBoxIcon
+                style={{
+                  position: 'absolute',
+                  right: '0.0rem',
+                  zIndex: 1,
+
+                }}
+              />
               <img
                 style={{
                   borderRadius: '50%',

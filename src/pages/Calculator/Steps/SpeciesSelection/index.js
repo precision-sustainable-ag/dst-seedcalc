@@ -112,11 +112,12 @@ const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
           flexDirection="column"
           p="1rem"
         >
+
           <SearchField handleChange={updateQuery} value={query} />
           {seedsSelected.length === 0
             ? (
               <Typography variant="p">
-                Click Show details to see species options, or use the search bar to find a speciric species you can parir to create a mix.
+                Click Show details to see species options, or use the search bar to find a specific species you can pair to create a mix.
               </Typography>
             )
             : <Diversity diversitySelected={diversitySelected} />}

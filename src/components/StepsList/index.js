@@ -31,6 +31,7 @@ import { resetCalculator } from '../../features/calculatorSlice';
 */
 
 const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
+  const [visible, setVisible] = useState(false);
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
 
@@ -86,6 +87,7 @@ const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
       </Stepper>
 
       <Box sx={{ display: 'flex', flexDirection: 'row', pt: 1 }}>
+
         {activeStep !== 0 && (
           <Button variant="stepper" onClick={handleRestart}>
             <RestartAltIcon />
@@ -98,16 +100,23 @@ const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
         {activeStep !== calculatorList.length
         && (
         <Tooltip
+          onMouseEnter={() => setVisible(true)}
+          onMouseLeave={() => setVisible(false)}
+          onHover={() => setVisible(true)}
           arrow
           title={
               // eslint-disable-next-line no-nested-ternary
+
               activeStep === 0 && !availableSteps[0]
                 ? 'Please enter the necessary info below.'
                 : activeStep === 1 && !availableSteps[1]
-                  ? 'Please select at least 2 plants.'
+                  ? visible
+                    ? 'Please select at least 2 plants.'
+                    : ''
                   : activeStep === 5 && !availableSteps[5]
                     ? 'Please make a selection.'
                     : ''
+
             }
           open
         >
