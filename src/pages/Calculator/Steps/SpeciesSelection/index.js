@@ -100,7 +100,9 @@ const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
   return (
     <Grid container justifyContent="center">
       <Grid item xs={12}>
-        <Typography variant="h2">Pick species for the mix.</Typography>
+        <Typography variant="h2">
+          Click 2 or more species for your mix.
+        </Typography>
       </Grid>
       <Grid item xs={11}>
         <Box
@@ -111,7 +113,14 @@ const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
           p="1rem"
         >
           <SearchField handleChange={updateQuery} value={query} />
-          <Diversity diversitySelected={diversitySelected} />
+          {seedsSelected.length === 0
+            ? (
+              <Typography variant="p">
+                Click Show details to see species options, or use the search bar to find a speciric species you can parir to create a mix.
+              </Typography>
+            )
+            : <Diversity diversitySelected={diversitySelected} />}
+
         </Box>
       </Grid>
 
@@ -133,7 +142,6 @@ const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
             </AccordionSummary>
             <AccordionDetails>
               {loading && <Spinner />}
-
               <PlantList
                 seedType={seedType}
                 filteredSeeds={filteredSeeds}

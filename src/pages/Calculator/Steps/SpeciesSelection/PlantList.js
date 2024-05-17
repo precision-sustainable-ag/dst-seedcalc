@@ -129,13 +129,14 @@ const PlantList = ({
               <CheckBoxIcon
                 style={{
                   position: 'absolute',
-                  right: '-0.5rem',
-                  top: '0.5rem',
+                  right: '0.6rem',
+                  top: '1.7rem',
                   zIndex: 1,
+                  transform: 'scale(1.5)',
+
                 }}
               />
             )}
-
             <Card
               sx={{
                 backgroundColor: 'transparent',
@@ -160,7 +161,15 @@ const PlantList = ({
                       : seed.thumbnail)
                   }
                   alt={seed.label}
-                  sx={{ border: '2px solid green', borderRadius: '1rem' }}
+                  sx={{
+                    border: '2px solid green',
+                    borderRadius: '1rem',
+
+                    ...(seedsSelected.filter((s) => s.label === seed.label).length > 0 && {
+                      border: '10px solid #5a92e7',
+                    }),
+                  }}
+
                 />
 
                 <Typography
