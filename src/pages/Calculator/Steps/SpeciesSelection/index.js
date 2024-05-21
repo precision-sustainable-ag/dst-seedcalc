@@ -116,7 +116,12 @@ const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
           <SearchField handleChange={updateQuery} value={query} />
           {seedsSelected.length === 0
             ? (
-              <Typography variant="p">
+              <Typography
+                variant="h2"
+                sx={{
+                  backgroundColor: 'transparent',
+                }}
+              >
                 Click Show details to see species options, or use the search bar to find a specific species you can pair to create a mix.
               </Typography>
             )

@@ -129,8 +129,6 @@ const PlantList = ({
       dispatch(removeSeedRedux(seedName));
       dispatch(removeOptionRedux(seedName));
     }
-    // dispatch(removeSeedRedux(seedName));
-    // dispatch(removeOptionRedux(seedName));
   };
 
   return (
@@ -176,7 +174,7 @@ const PlantList = ({
                   }
                   alt={seed.label}
                   sx={{
-                    border: '2px solid green',
+                    border: '2px solid #4f5f30',
                     borderRadius: '1rem',
 
                     ...(seedsSelected.filter((s) => s.label === seed.label).length > 0 && {
@@ -187,12 +185,11 @@ const PlantList = ({
                 />
                 <Typography
                   sx={{
-                    color: 'green',
+                    color: 'primary.text',
                     position: 'absolute',
                     top: '2px',
                     left: 'calc(2px)',
                     right: 'calc(2px)',
-                    // textAlign: 'center',
                     ...(checkPlantingDate(seed) !== '' && {
                       height: '30px',
                       paddingTop: '5px',
@@ -229,7 +226,7 @@ const PlantList = ({
 
                 <Typography
                   sx={{
-                    color: 'green',
+                    color: 'primary.text',
                     position: 'absolute',
                     borderBottomLeftRadius: '0.9rem',
                     borderBottomRightRadius: '0.9rem',
@@ -260,7 +257,6 @@ const PlantList = ({
 
                   }}
                 >
-                  {}
                   {checkPlantingDate(seed)}
                   {checkSoilDrainage(seed)}
                 </Typography>

@@ -136,10 +136,8 @@ const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
           arrow
           open={visible}
           title={(
-
-              tooltipTitle()
-
-)}
+            tooltipTitle()
+          )}
 
         >
           <span>

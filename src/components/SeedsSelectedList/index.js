@@ -84,7 +84,6 @@ const SeedsSelectedList = ({ list }) => {
               cursor: 'pointer',
             }}
           >
-
             <CardActionArea onClick={() => {
               selectSpecies(s.label); dispatch(removeSeedRedux(s.label));
               dispatch(removeOptionRedux(s.label));
