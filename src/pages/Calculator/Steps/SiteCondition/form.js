@@ -2,7 +2,7 @@
 //                      Imports                         //
 /// ///////////////////////////////////////////////////////
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Typography, Tooltip,
@@ -30,34 +30,7 @@ import statesLatLongDict from '../../../../shared/data/statesLatLongDict';
 import '../steps.scss';
 
 const needTileDrainage = ['Very Poorly Drained', 'Poorly Drained', 'Somewhat Poorly Drained'];
-
-const getTileDrainage = (council, currentDrainage) => {
-  if (council === 'MCCC') {
-    switch (currentDrainage) {
-      case 'Very Poorly Drained':
-        return 'Somewhat Poorly Drained';
-      case 'Poorly Drained':
-        return 'Moderately Well Drained';
-      case 'Somewhat Poorly Drained':
-        return 'Moderately Well Drained';
-      default:
-        return '';
-    }
-  }
-  if (council === 'NECCC' || council === 'SCCC') {
-    switch (currentDrainage) {
-      case 'Very Poorly Drained':
-        return 'Poorly Drained';
-      case 'Poorly Drained':
-        return 'Somewhat Poorly Drained';
-      case 'Somewhat Poorly Drained':
-        return 'Moderately Well Drained';
-      default:
-        return '';
-    }
-  }
-  return '';
-};
+const improvedNeedTileDrainage = ['Very Poorly Drained', 'Poorly Drained', 'Somewhat Poorly Drained', 'Moderately Well Drained'];
 
 const SiteConditionForm = ({
   council,
@@ -72,6 +45,45 @@ const SiteConditionForm = ({
   } = useSelector((s) => s.siteCondition);
 
   const [soilDrainagePrev, setSoilDrainagePrev] = useState(soilDrainage);
+  const [previousSoilDrainage, setPreviousSoilDrainage] = useState('');
+
+  const getTileDrainageYes = (currentDrainage) => {
+    if (council === 'MCCC') {
+      switch (currentDrainage) {
+        case 'Very Poorly Drained':
+          return 'Somewhat Poorly Drained';
+        case 'Poorly Drained':
+          return 'Moderately Well Drained';
+        case 'Somewhat Poorly Drained':
+          return 'Moderately Well Drained';
+        default:
+          return '';
+      }
+    }
+    if (council === 'NECCC' || council === 'SCCC') {
+      switch (currentDrainage) {
+        case 'Very Poorly Drained':
+          return 'Poorly Drained';
+        case 'Poorly Drained':
+          return 'Somewhat Poorly Drained';
+        case 'Somewhat Poorly Drained':
+          return 'Moderately Well Drained';
+        default:
+          return '';
+      }
+    }
+    return '';
+  };
+
+  useEffect(() => {
+    if (tileDrainage) {
+      setPreviousSoilDrainage(soilDrainage);
+      const newDrainage = getTileDrainageYes(soilDrainage);
+      dispatch(setSoilDrainageRedux(newDrainage));
+    } else {
+      dispatch(setSoilDrainageRedux(previousSoilDrainage));
+    }
+  }, [tileDrainage]);
 
   const handleSoilDrainage = (e) => {
     setSoilDrainagePrev(e.target.value);
@@ -81,10 +93,6 @@ const SiteConditionForm = ({
 
   const handleTileDrainage = () => {
     dispatch(updateTileDrainageRedux(!tileDrainage));
-    if (!tileDrainage) {
-      const newDrainage = getTileDrainage(council, soilDrainage);
-      dispatch(setSoilDrainageRedux(newDrainage));
-    }
   };
 
   const updateState = (selectedState) => {
@@ -137,6 +145,7 @@ const SiteConditionForm = ({
       <Grid item xs={0} md={3} />
       <Grid item xs={12} md={6} p="10px">
         <Dropdown
+          error={state.length === 0}
           value={state}
           label="State: "
           handleChange={(e) => handleState(e.target.value)}
@@ -150,6 +159,7 @@ const SiteConditionForm = ({
       <Grid item xs={0} md={3} />
       <Grid item xs={12} md={6} p="10px">
         <Dropdown
+          error={county.length === 0}
           value={county}
           label={
             council === 'MCCC' ? 'County: ' : 'USDA Plant Hardiness Zone: '
@@ -165,6 +175,7 @@ const SiteConditionForm = ({
       <Grid item xs={0} md={3} />
       <Grid item xs={12} md={6} p="10px">
         <Dropdown
+          error={soilDrainagePrev.length === 0}
           value={soilDrainagePrev}
           label="Soil Drainage: "
           handleChange={handleSoilDrainage}
@@ -177,6 +188,8 @@ const SiteConditionForm = ({
       {/* Tile Drainage */}
       <Grid item xs={0} md={3} />
       <Grid item xs={12} md={6} p="10px">
+        {(tileDrainage ? improvedNeedTileDrainage.includes(soilDrainage) : needTileDrainage.includes(soilDrainage))
+        && (
         <Grid container alignItems="center">
           <Grid item xs={4}>
             <Grid container direction="column">
@@ -213,20 +226,17 @@ const SiteConditionForm = ({
             </Grid>
           </Grid>
           <Grid item xs={8}>
-            {!tileDrainage && (needTileDrainage.indexOf(soilDrainage) === -1 || council === '')
-              ? <Typography>Tile Drainage not available.</Typography>
-              : (
-                tileDrainage && (
-                <>
-                  <Typography>Your improved drainage class is: </Typography>
-                  <Typography fontWeight="bold">{soilDrainage}</Typography>
-                </>
-                )
-              )}
+            {(tileDrainage ? improvedNeedTileDrainage.includes(soilDrainage) : needTileDrainage.includes(soilDrainage) || council !== '')
+            && (
+            <>
+              <Typography>Your improved drainage class is: </Typography>
+              <Typography fontWeight="bold">{soilDrainage}</Typography>
+            </>
+            )}
 
           </Grid>
         </Grid>
-
+        )}
       </Grid>
       <Grid item xs={0} md={3} />
 
@@ -248,6 +258,7 @@ const SiteConditionForm = ({
       <Grid item xs={0} md={3} />
       <Grid item xs={12} md={6} p="10px">
         <NumberTextField
+          errorValue={acres <= 0}
           value={acres}
           label="Acres"
           disabled={false}

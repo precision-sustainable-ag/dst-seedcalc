@@ -6,6 +6,7 @@ const NumberTextField = ({
   label,
   onChange,
   disabled,
+  errorValue,
   placeholder,
 }) => {
   const [displayValue, setDisplayValue] = useState(value);
@@ -68,7 +69,7 @@ const NumberTextField = ({
           border: '1px solid #4F5F30',
         },
       }}
-      error={error}
+      error={error || errorValue}
       helperText={helperText}
       onFocus={handleFocus}
       onBlur={handleBlur}
