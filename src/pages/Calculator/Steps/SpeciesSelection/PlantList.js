@@ -74,11 +74,10 @@ const PlantList = ({
 
     if (inFirstPeriod || inSecondPeriod) return '';
     if (secondStart) {
-      return `Seeding date outside of recommended window: 
-        ${firstStart.format('MM/DD')} - ${firstEnd.format('MM/DD')},
-        ${secondStart.format('MM/DD')} - ${secondEnd.format('MM/DD')}`;
+      return `Seeding date outside of recommended window:
+        ${firstStart.format('MM/DD')} - ${firstEnd.format('MM/DD')}, ${secondStart.format('MM/DD')} - ${secondEnd.format('MM/DD')}`;
     }
-    return `Seeding date outside of recommended window: 
+    return `Seeding date outside of recommended window:
       ${firstStart.format('MM/DD')} - ${firstEnd.format('MM/DD')}`;
   };
 
@@ -193,7 +192,7 @@ const PlantList = ({
                     ...(checkPlantingDate(seed) !== '' && {
                       height: '30px',
                       paddingTop: '5px',
-                      fontSize: '0.875rem',
+                      fontSize: '0.790rem',
                     }),
                     borderTopLeftRadius: '0.9rem',
                     borderTopRightRadius: '0.9rem',
@@ -201,13 +200,16 @@ const PlantList = ({
                     && checkPlantingDate(seed) !== ''
                     && {
                       left: 'calc(6px)',
-                      right: '27px',
+                      right: 'calc(6px)',
                       top: '5px',
                       height: '28.5px',
                       borderTopLeftRadius: '0.68rem',
-                      borderTopRightRadius: '0rem',
+                      borderTopRightRadius: '0.68rem',
                       overflow: 'hidden',
-                      fontSize: '0.675rem',
+                      fontSize: '0.790rem',
+                      '& span': {
+                        zIndex: 5,
+                      },
                     }),
                     fontWeight: 'bold',
                     bgcolor: 'primary.light',
@@ -235,7 +237,6 @@ const PlantList = ({
                     right: 'calc(2px)',
                     ...(checkPlantingDate(seed) !== '' && {
                       height: '41px',
-                      fontSize: '0.875rem',
                       ...(seedsSelected.filter((s) => s.label === seed.label).length > 0 && {
                         left: 'calc(6px)',
                         right: 'calc(6px)',
@@ -254,6 +255,7 @@ const PlantList = ({
                     paddingRight: '5px',
                     paddingLeft: '5px',
                     overflow: 'hidden',
+                    whiteSpace: 'pre-line',
 
                   }}
                 >
