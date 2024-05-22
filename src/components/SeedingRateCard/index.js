@@ -258,9 +258,7 @@ const SeedingRateChip = ({ value }) => (
       width: '100px',
       padding: '0.5rem',
       margin: '0 auto',
-      backgroundColor: '#E5E7D5',
       border: '#C7C7C7 solid 1px',
-      borderRadius: '16px',
     }}
   >
     <Typography>{value}</Typography>
