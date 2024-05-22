@@ -45,9 +45,8 @@ const SiteConditionForm = ({
   } = useSelector((s) => s.siteCondition);
 
   const [soilDrainagePrev, setSoilDrainagePrev] = useState(soilDrainage);
-  const [previousSoilDrainage, setPreviousSoilDrainage] = useState('');
 
-  const getTileDrainageYes = (currentDrainage) => {
+  const getTileDrainage = (currentDrainage) => {
     if (council === 'MCCC') {
       switch (currentDrainage) {
         case 'Very Poorly Drained':
@@ -77,11 +76,10 @@ const SiteConditionForm = ({
 
   useEffect(() => {
     if (tileDrainage) {
-      setPreviousSoilDrainage(soilDrainage);
-      const newDrainage = getTileDrainageYes(soilDrainage);
+      const newDrainage = getTileDrainage(soilDrainage);
       dispatch(setSoilDrainageRedux(newDrainage));
     } else {
-      dispatch(setSoilDrainageRedux(previousSoilDrainage));
+      dispatch(setSoilDrainageRedux(soilDrainagePrev));
     }
   }, [tileDrainage]);
 
@@ -145,7 +143,7 @@ const SiteConditionForm = ({
       <Grid item xs={0} md={3} />
       <Grid item xs={12} md={6} p="10px">
         <Dropdown
-          error={state.length === 0}
+          emptyWarning={state.length === 0}
           value={state}
           label="State: "
           handleChange={(e) => handleState(e.target.value)}
@@ -159,7 +157,7 @@ const SiteConditionForm = ({
       <Grid item xs={0} md={3} />
       <Grid item xs={12} md={6} p="10px">
         <Dropdown
-          error={county.length === 0}
+          emptyWarning={county.length === 0}
           value={county}
           label={
             council === 'MCCC' ? 'County: ' : 'USDA Plant Hardiness Zone: '
@@ -175,7 +173,7 @@ const SiteConditionForm = ({
       <Grid item xs={0} md={3} />
       <Grid item xs={12} md={6} p="10px">
         <Dropdown
-          error={soilDrainagePrev.length === 0}
+          emptyWarning={soilDrainagePrev.length === 0}
           value={soilDrainagePrev}
           label="Soil Drainage: "
           handleChange={handleSoilDrainage}
@@ -226,7 +224,7 @@ const SiteConditionForm = ({
             </Grid>
           </Grid>
           <Grid item xs={8}>
-            {(tileDrainage ? improvedNeedTileDrainage.includes(soilDrainage) : needTileDrainage.includes(soilDrainage) || council !== '')
+            {(tileDrainage)
             && (
             <>
               <Typography>Your improved drainage class is: </Typography>
@@ -258,7 +256,7 @@ const SiteConditionForm = ({
       <Grid item xs={0} md={3} />
       <Grid item xs={12} md={6} p="10px">
         <NumberTextField
-          errorValue={acres <= 0}
+          emptyWarning={acres <= 0}
           value={acres}
           label="Acres"
           disabled={false}
