@@ -27,6 +27,7 @@ const UnitSelection = () => {
         Select data unit:
       </Typography>
       <Button
+        sx={{ borderRadius: '0.5rem' }}
         variant={unit === 'acre' ? 'outlined' : 'contained'}
         onClick={() => dispatch(selectUnitRedux('sqft'))}
       >
@@ -34,6 +35,7 @@ const UnitSelection = () => {
       </Button>
       {'  '}
       <Button
+        sx={{ borderRadius: '0.5rem' }}
         variant={unit === 'acre' ? 'contained' : 'outlined'}
         onClick={() => dispatch(selectUnitRedux('acre'))}
       >

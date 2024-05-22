@@ -280,6 +280,9 @@ const MixRatio = ({
 
                 <Grid item xs={12} pt="1rem">
                   <Button
+                    sx={{
+                      borderRadius: '1rem',
+                    }}
                     onClick={() => {
                       setShowSteps({ ...showSteps, [seed.label]: !showSteps[seed.label] });
                     }}
