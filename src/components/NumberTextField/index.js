@@ -6,6 +6,7 @@ const NumberTextField = ({
   label,
   onChange,
   disabled,
+  emptyWarning,
   placeholder,
 }) => {
   const [displayValue, setDisplayValue] = useState(value);
@@ -66,6 +67,9 @@ const NumberTextField = ({
       // custom style for undisabled textbox
         '& .MuiOutlinedInput-notchedOutline': {
           border: '1px solid #4F5F30',
+        },
+        '.MuiOutlinedInput-notchedOutline': emptyWarning && {
+          borderColor: 'rgba(255, 0, 0, .5)',
         },
       }}
       error={error}
