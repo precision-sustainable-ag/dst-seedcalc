@@ -14,13 +14,13 @@ import {
   removeOptionRedux, removeSeedRedux, selectSidebarSeedRedux,
 } from '../../features/calculatorSlice/actions';
 
-const CheckBoxIcon = ({ style }) => (
+const ExitIcon = ({ style }) => (
   <Box sx={style}>
     <CancelRounded style={{ color: '#FF0000' }} />
   </Box>
 );
 
-const SeedsSelectedList = ({ list }) => {
+const SeedsSelectedList = ({ list, activeStep }) => {
   // themes
   const theme = useTheme();
   const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
@@ -31,6 +31,15 @@ const SeedsSelectedList = ({ list }) => {
 
   const selectSpecies = (seed) => {
     dispatch(selectSidebarSeedRedux(sideBarSelection === seed ? '' : seed));
+  };
+
+  const clickItem = (label) => {
+    if (activeStep === 1) {
+      dispatch(removeSeedRedux(label));
+      dispatch(removeOptionRedux(label));
+    } else {
+      selectSpecies(label);
+    }
   };
 
   return (
@@ -62,11 +71,12 @@ const SeedsSelectedList = ({ list }) => {
             }}
           >
             <CardActionArea onClick={() => {
-              selectSpecies(s.label); dispatch(removeSeedRedux(s.label));
-              dispatch(removeOptionRedux(s.label));
+              clickItem(s.label);
             }}
             >
-              <CheckBoxIcon
+              {activeStep === 1
+              && (
+              <ExitIcon
                 style={{
                   position: 'absolute',
                   right: '0.0rem',
@@ -74,6 +84,7 @@ const SeedsSelectedList = ({ list }) => {
 
                 }}
               />
+              )}
               <img
                 style={{
                   borderRadius: '50%',

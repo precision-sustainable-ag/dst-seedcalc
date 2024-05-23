@@ -135,7 +135,7 @@ const PlantList = ({
                   zIndex: 1,
                   backgroundColor: '#5992E6',
                   borderTopRightRadius: '1rem',
-                  borderBottomLeftRadius: '0.2rem',
+                  borderBottomLeftRadius: '0.5rem',
 
                 }}
               />

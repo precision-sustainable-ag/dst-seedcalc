@@ -288,7 +288,7 @@ const MixRatio = ({
                     }}
                     variant="outlined"
                   >
-                    {showSteps[seed.label] ? 'Close Steps' : 'Change My Rate'}
+                    {showSteps[seed.label] ? 'Close Steps' : 'View Calculations'}
                   </Button>
                 </Grid>
 
