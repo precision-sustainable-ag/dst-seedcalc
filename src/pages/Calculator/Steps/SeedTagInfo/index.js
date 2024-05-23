@@ -21,7 +21,10 @@ import { validateForms } from '../../../../shared/utils/format';
 const LeftGrid = styled(Grid)({
   '&.MuiGrid-item': {
     height: '80px',
-    paddingTop: '15px',
+    paddingTop: '8px',
+    paddingLeft: '15px',
+    paddingRight: '20px',
+    // maxWidth: 'fit-content',
     '& p': {
       fontWeight: 'bold',
     },
@@ -153,46 +156,79 @@ const SeedTagInfo = ({
                 <Typography>{seed.label}</Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <Grid container>
-
-                  <LeftGrid item xs={6}>
+                <Grid
+                  container
+                  sx={{ justifyContent: 'flex-start' }}
+                >
+                  <LeftGrid item xs={4}>
                     <Typography>% Germination: </Typography>
                   </LeftGrid>
-                  <Grid item xs={4}>
+                  <Grid item xs={2}>
                     <NumberTextField
                       value={(options[seed.label].germination ?? 0.85) * 100}
                       onChange={(val) => {
                         updateGermination(seed.label, val / 100);
                       }}
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: '0px',
+                          backgroundColor: 'white',
+                        },
+                        '& .MuiInputBase-input': {
+                          fontSize: 16,
+                          width: 'auto',
+                          padding: '10px 10px',
+                        },
+                      }}
                     />
                   </Grid>
-                  <Grid item xs={2} />
-
-                  <LeftGrid item xs={6}>
+                  <Grid item xs={6} />
+                  <LeftGrid item xs={4}>
                     <Typography>% Purity: </Typography>
                   </LeftGrid>
-                  <Grid item xs={4}>
+                  <Grid item xs={2}>
                     <NumberTextField
                       value={(options[seed.label].purity ?? 0.9) * 100}
                       onChange={(val) => {
                         updatePurity(seed.label, val / 100);
                       }}
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: '0px',
+                          backgroundColor: 'white',
+                        },
+                        '& .MuiInputBase-input': {
+                          fontSize: 16,
+                          width: 'auto',
+                          padding: '10px 10px',
+                        },
+                      }}
                     />
                   </Grid>
-                  <Grid item xs={2} />
-
-                  <LeftGrid item xs={6}>
+                  <Grid item xs={6} />
+                  <LeftGrid item xs={4}>
                     <Typography>Seeds per Pound </Typography>
                   </LeftGrid>
-                  <Grid item xs={4}>
+                  <Grid item xs={2}>
                     <NumberTextField
                       value={parseFloat(seedsPerPound(seed))}
                       onChange={(val) => {
                         updateSeedsPerPound(seed.label, val);
                       }}
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: '0px',
+                          backgroundColor: 'white',
+                        },
+                        '& .MuiInputBase-input': {
+                          fontSize: 16,
+                          width: 'auto',
+                          padding: '10px 10px',
+                        },
+                      }}
                     />
                   </Grid>
-                  <Grid item xs={2} />
+                  <Grid item xs={6} />
                 </Grid>
 
               </AccordionDetails>

@@ -8,6 +8,7 @@ const NumberTextField = ({
   disabled,
   emptyWarning,
   placeholder,
+  sx,
 }) => {
   const [displayValue, setDisplayValue] = useState(value);
   const [error, setError] = useState(false);
@@ -71,6 +72,7 @@ const NumberTextField = ({
         '.MuiOutlinedInput-notchedOutline': emptyWarning && {
           borderColor: 'rgba(255, 0, 0, .5)',
         },
+        ...sx,
       }}
       error={error}
       helperText={helperText}
