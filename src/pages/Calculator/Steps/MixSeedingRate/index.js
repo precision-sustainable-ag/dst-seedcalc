@@ -92,12 +92,15 @@ const MixSeedingSlider = styled(Slider)(({
 
 const MixSeedingTypography = styled(Typography)(({ theme }) => ({
   color: theme.palette.primary.text,
-  fontSize: '0.75rem',
+  fontSize: '1rem',
   // fontWeight: '600',
   lineHeight: '1.5rem',
   border: '2px solid #4f5f30',
   padding: '0.5rem',
   textAlign: 'left',
+  alignContent: 'center',
+  // width: '20rem',
+  height: '25rem',
 }));
 
 const MixSeedingRate = ({ calculator }) => {
@@ -175,7 +178,7 @@ const MixSeedingRate = ({ calculator }) => {
       <Grid item xs={12}>
         <Typography variant="h2">Adjust Seeding Rate of Mix</Typography>
       </Grid>
-      <Grid container sx={{ padding: '3% 3%' }}>
+      <Grid container sx={{ padding: '3% 3% 5% 5%' }}>
         <Grid
           container
           item
@@ -184,6 +187,8 @@ const MixSeedingRate = ({ calculator }) => {
           flexDirection="column"
           justifyContent="space-between"
           alignSelf="center"
+          // minHeight="25rem"
+          minWidth="20rem"
         >
           <MixSeedingTypography>
             <b>Your Seeding Rate may vary. </b>
@@ -220,7 +225,7 @@ const MixSeedingRate = ({ calculator }) => {
           justifyContent="flex-start"
           alignItems="center"
           minHeight="28rem"
-          pl="3rem"
+          pl="10rem"
         >
           <Stack sx={{ height: '100%' }}>
             <Typography
