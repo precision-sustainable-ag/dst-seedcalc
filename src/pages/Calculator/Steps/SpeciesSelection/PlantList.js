@@ -12,6 +12,7 @@ import {
 
 import '../steps.scss';
 import { useDispatch, useSelector } from 'react-redux';
+import { CheckRounded } from '@mui/icons-material';
 import {
   addSeedRedux, setOptionRedux, removeOptionRedux, removeSeedRedux,
 } from '../../../../features/calculatorSlice/actions';
@@ -19,25 +20,13 @@ import { initialOptions } from '../../../../shared/utils/calculator';
 
 const CheckBoxIcon = ({ style }) => (
   <Box sx={style}>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="34"
-      height="34"
-      viewBox="0 0 18 18"
-      fill="none"
-    >
-      <path
-        d="M14 0H4C1.79086 0 0 1.79086 0 4V14C0 16.2091 1.79086 18 4 18H14C16.2091 18 18 16.2091 18 14V4C18 1.79086 16.2091 0 14 0Z"
-        fill="#5992E6"
-      />
-      <path
-        d="M6 9L8.25 11L12 7"
-        stroke="white"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
+    <CheckRounded style={{
+      color: '#FFFFFF',
+      width: '28.5',
+      height: '28.5',
+    }}
+    />
+
   </Box>
 );
 
@@ -141,9 +130,12 @@ const PlantList = ({
               <CheckBoxIcon
                 style={{
                   position: 'absolute',
-                  right: '0.0rem',
-                  top: '1rem',
+                  right: '0.2rem',
+                  top: '1.1rem',
                   zIndex: 1,
+                  backgroundColor: '#5992E6',
+                  borderTopRightRadius: '1rem',
+                  borderBottomLeftRadius: '0.2rem',
 
                 }}
               />
@@ -235,7 +227,7 @@ const PlantList = ({
                     top: '117px',
                     left: 'calc(2px)',
                     right: 'calc(2px)',
-                    ...(checkPlantingDate(seed) !== '' && {
+                    ...((checkPlantingDate(seed) !== '' || (checkSoilDrainage(seed) !== '')) && {
                       height: '41px',
                       ...(seedsSelected.filter((s) => s.label === seed.label).length > 0 && {
                         left: 'calc(6px)',
