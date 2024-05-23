@@ -66,7 +66,7 @@ const MixSeedingSlider = styled(Slider)(({
       left: '6rem',
       color: theme.palette.primary.text,
       border: '2px solid',
-      borderRadius: '1rem',
+      // borderRadius: '1rem',
       padding: '0.5rem',
       backgroundColor: 'white',
       fontSize: '0.75rem',
@@ -93,11 +93,11 @@ const MixSeedingSlider = styled(Slider)(({
 const MixSeedingTypography = styled(Typography)(({ theme }) => ({
   color: theme.palette.primary.text,
   fontSize: '0.75rem',
-  fontWeight: '600',
-  lineHeight: '0.9375rem',
+  // fontWeight: '600',
+  lineHeight: '1.5rem',
   border: '2px solid #4f5f30',
   padding: '0.5rem',
-  borderRadius: '1rem',
+  textAlign: 'left',
 }));
 
 const MixSeedingRate = ({ calculator }) => {
@@ -183,20 +183,27 @@ const MixSeedingRate = ({ calculator }) => {
           sm={5}
           flexDirection="column"
           justifyContent="space-between"
-          alignItems="center"
+          alignSelf="center"
         >
           <MixSeedingTypography>
-            Factors that may raise Seeding Rate:
+            <b>Your Seeding Rate may vary. </b>
+            Choose a rate based on your needs.
             <br />
-            - Erosion Control
+            <br />
+            Factors that may
+            <b> raise </b>
+            Seeding Rate:
+            <br />
+            -  Erosion Control
             <br />
             - Weed Supression
             <br />
             - Grazing
-          </MixSeedingTypography>
-
-          <MixSeedingTypography>
-            Factors that lower Seeding Rate:
+            <br />
+            <br />
+            Factors that may
+            <b> lower </b>
+            Seeding Rate:
             <br />
             - Cost Saving
             <br />
