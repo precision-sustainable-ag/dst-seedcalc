@@ -251,7 +251,7 @@ const Calculator = () => {
               : {}
           }
         >
-          <SeedsSelectedList list={seedsSelected} />
+          <SeedsSelectedList list={seedsSelected} activeStep={activeStep} />
         </Grid>
       )}
 
