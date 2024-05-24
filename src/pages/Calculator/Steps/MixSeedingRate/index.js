@@ -66,7 +66,6 @@ const MixSeedingSlider = styled(Slider)(({
       left: '6rem',
       color: theme.palette.primary.text,
       border: '2px solid',
-      // borderRadius: '1rem',
       padding: '0.5rem',
       backgroundColor: 'white',
       fontSize: '0.75rem',
@@ -93,13 +92,11 @@ const MixSeedingSlider = styled(Slider)(({
 const MixSeedingTypography = styled(Typography)(({ theme }) => ({
   color: theme.palette.primary.text,
   fontSize: '1rem',
-  // fontWeight: '600',
   lineHeight: '1.5rem',
   border: '2px solid #4f5f30',
   padding: '0.5rem',
   textAlign: 'left',
   alignContent: 'center',
-  // width: '20rem',
   height: '25rem',
 }));
 
@@ -187,7 +184,6 @@ const MixSeedingRate = ({ calculator }) => {
           flexDirection="column"
           justifyContent="space-between"
           alignSelf="center"
-          // minHeight="25rem"
           minWidth="20rem"
         >
           <MixSeedingTypography>
