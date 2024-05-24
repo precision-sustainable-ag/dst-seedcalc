@@ -156,14 +156,11 @@ const SeedTagInfo = ({
                 <Typography>{seed.label}</Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <Grid
-                  container
-                  sx={{ justifyContent: 'flex-start' }}
-                >
-                  <LeftGrid item xs={4}>
+                <Grid container>
+                  <LeftGrid item xs={6} lg={2} xl={2}>
                     <Typography>% Germination: </Typography>
                   </LeftGrid>
-                  <Grid item xs={2}>
+                  <Grid item xs={4} lg={1} xl={1}>
                     <NumberTextField
                       value={(options[seed.label].germination ?? 0.85) * 100}
                       onChange={(val) => {
@@ -182,11 +179,12 @@ const SeedTagInfo = ({
                       }}
                     />
                   </Grid>
-                  <Grid item xs={6} />
-                  <LeftGrid item xs={4}>
+                  <Grid item xs={2} lg={1} xl={1} />
+
+                  <LeftGrid item xs={6} lg={2} xl={2}>
                     <Typography>% Purity: </Typography>
                   </LeftGrid>
-                  <Grid item xs={2}>
+                  <Grid item xs={4} lg={1} xl={1}>
                     <NumberTextField
                       value={(options[seed.label].purity ?? 0.9) * 100}
                       onChange={(val) => {
@@ -205,11 +203,12 @@ const SeedTagInfo = ({
                       }}
                     />
                   </Grid>
-                  <Grid item xs={6} />
-                  <LeftGrid item xs={4}>
+                  <Grid item xs={2} lg={1} xl={1} />
+
+                  <LeftGrid item xs={6} lg={2} xl={2}>
                     <Typography>Seeds per Pound </Typography>
                   </LeftGrid>
-                  <Grid item xs={2}>
+                  <Grid item xs={4} lg={1} xl={1}>
                     <NumberTextField
                       value={parseFloat(seedsPerPound(seed))}
                       onChange={(val) => {
@@ -228,7 +227,7 @@ const SeedTagInfo = ({
                       }}
                     />
                   </Grid>
-                  <Grid item xs={6} />
+                  <Grid item xs={2} lg={1} xl={1} />
                 </Grid>
 
               </AccordionDetails>
