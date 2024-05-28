@@ -9,6 +9,7 @@ const NumberTextField = ({
   emptyWarning,
   placeholder,
   sx,
+  className,
 }) => {
   const [displayValue, setDisplayValue] = useState(value);
   const [error, setError] = useState(false);
@@ -59,6 +60,7 @@ const NumberTextField = ({
       value={displayValue}
       label={label}
       onChange={handleChange}
+      className={className}
       InputLabelProps={{
         shrink: true,
       }}

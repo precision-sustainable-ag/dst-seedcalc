@@ -24,10 +24,21 @@ const LeftGrid = styled(Grid)({
     paddingTop: '8px',
     paddingLeft: '15px',
     paddingRight: '20px',
-    // maxWidth: 'fit-content',
     '& p': {
       fontWeight: 'bold',
     },
+  },
+});
+
+const SeedTagNumField = styled(NumberTextField)({
+  '& .MuiOutlinedInput-root': {
+    borderRadius: '0px',
+    backgroundColor: 'white',
+  },
+  '& .MuiInputBase-input': {
+    fontSize: 16,
+    width: 'auto',
+    padding: '10px 10px',
   },
 });
 
@@ -161,21 +172,10 @@ const SeedTagInfo = ({
                     <Typography>% Germination: </Typography>
                   </LeftGrid>
                   <Grid item xs={4} lg={1} xl={1}>
-                    <NumberTextField
+                    <SeedTagNumField
                       value={(options[seed.label].germination ?? 0.85) * 100}
                       onChange={(val) => {
                         updateGermination(seed.label, val / 100);
-                      }}
-                      sx={{
-                        '& .MuiOutlinedInput-root': {
-                          borderRadius: '0px',
-                          backgroundColor: 'white',
-                        },
-                        '& .MuiInputBase-input': {
-                          fontSize: 16,
-                          width: 'auto',
-                          padding: '10px 10px',
-                        },
                       }}
                     />
                   </Grid>
@@ -185,21 +185,10 @@ const SeedTagInfo = ({
                     <Typography>% Purity: </Typography>
                   </LeftGrid>
                   <Grid item xs={4} lg={1} xl={1}>
-                    <NumberTextField
+                    <SeedTagNumField
                       value={(options[seed.label].purity ?? 0.9) * 100}
                       onChange={(val) => {
                         updatePurity(seed.label, val / 100);
-                      }}
-                      sx={{
-                        '& .MuiOutlinedInput-root': {
-                          borderRadius: '0px',
-                          backgroundColor: 'white',
-                        },
-                        '& .MuiInputBase-input': {
-                          fontSize: 16,
-                          width: 'auto',
-                          padding: '10px 10px',
-                        },
                       }}
                     />
                   </Grid>
@@ -209,21 +198,10 @@ const SeedTagInfo = ({
                     <Typography>Seeds per Pound </Typography>
                   </LeftGrid>
                   <Grid item xs={4} lg={1} xl={1}>
-                    <NumberTextField
+                    <SeedTagNumField
                       value={parseFloat(seedsPerPound(seed))}
                       onChange={(val) => {
                         updateSeedsPerPound(seed.label, val);
-                      }}
-                      sx={{
-                        '& .MuiOutlinedInput-root': {
-                          borderRadius: '0px',
-                          backgroundColor: 'white',
-                        },
-                        '& .MuiInputBase-input': {
-                          fontSize: 16,
-                          width: 'auto',
-                          padding: '10px 10px',
-                        },
                       }}
                     />
                   </Grid>
