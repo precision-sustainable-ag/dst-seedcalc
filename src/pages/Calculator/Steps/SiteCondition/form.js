@@ -25,6 +25,7 @@ import {
 import '../steps.scss';
 
 const needTileDrainage = ['Very Poorly Drained', 'Poorly Drained', 'Somewhat Poorly Drained'];
+
 const improvedNeedTileDrainage = ['Very Poorly Drained', 'Poorly Drained', 'Somewhat Poorly Drained', 'Moderately Well Drained'];
 
 const getSoilDrainages = (council) => {
@@ -38,6 +39,34 @@ const getSoilDrainages = (council) => {
     default:
       return soilDrainageValues;
   }
+};
+
+const getTileDrainage = (currentDrainage, council) => {
+  if (council === 'MCCC') {
+    switch (currentDrainage) {
+      case 'Very Poorly Drained':
+        return 'Somewhat Poorly Drained';
+      case 'Poorly Drained':
+        return 'Moderately Well Drained';
+      case 'Somewhat Poorly Drained':
+        return 'Moderately Well Drained';
+      default:
+        return '';
+    }
+  }
+  if (council === 'NECCC' || council === 'SCCC') {
+    switch (currentDrainage) {
+      case 'Very Poorly Drained':
+        return 'Poorly Drained';
+      case 'Poorly Drained':
+        return 'Somewhat Poorly Drained';
+      case 'Somewhat Poorly Drained':
+        return 'Moderately Well Drained';
+      default:
+        return '';
+    }
+  }
+  return '';
 };
 
 const SiteConditionForm = ({
@@ -56,43 +85,6 @@ const SiteConditionForm = ({
 
   const [soilDrainagePrev, setSoilDrainagePrev] = useState(soilDrainage);
 
-  const getTileDrainage = (currentDrainage) => {
-    if (council === 'MCCC') {
-      switch (currentDrainage) {
-        case 'Very Poorly Drained':
-          return 'Somewhat Poorly Drained';
-        case 'Poorly Drained':
-          return 'Moderately Well Drained';
-        case 'Somewhat Poorly Drained':
-          return 'Moderately Well Drained';
-        default:
-          return '';
-      }
-    }
-    if (council === 'NECCC' || council === 'SCCC') {
-      switch (currentDrainage) {
-        case 'Very Poorly Drained':
-          return 'Poorly Drained';
-        case 'Poorly Drained':
-          return 'Somewhat Poorly Drained';
-        case 'Somewhat Poorly Drained':
-          return 'Moderately Well Drained';
-        default:
-          return '';
-      }
-    }
-    return '';
-  };
-
-  useEffect(() => {
-    if (tileDrainage) {
-      const newDrainage = getTileDrainage(soilDrainage);
-      dispatch(setSoilDrainageRedux(newDrainage));
-    } else {
-      dispatch(setSoilDrainageRedux(soilDrainagePrev));
-    }
-  }, [tileDrainage]);
-
   const handleState = async (e) => {
     const stateSelected = stateList.filter((s) => s.label === e.target.value);
     if (stateSelected.length > 0) {
@@ -110,6 +102,7 @@ const SiteConditionForm = ({
     )[0].id;
     dispatch(setCountyIdRedux(countyId));
   };
+
   const handleSoilDrainage = (e) => {
     setSoilDrainagePrev(e.target.value);
     dispatch(setSoilDrainageRedux(e.target.value));
@@ -119,6 +112,15 @@ const SiteConditionForm = ({
   const handleTileDrainage = () => {
     dispatch(updateTileDrainageRedux(!tileDrainage));
   };
+
+  useEffect(() => {
+    if (tileDrainage) {
+      const newDrainage = getTileDrainage(soilDrainage, council);
+      dispatch(setSoilDrainageRedux(newDrainage));
+    } else {
+      dispatch(setSoilDrainageRedux(soilDrainagePrev));
+    }
+  }, [tileDrainage]);
 
   return (
     <Grid container>
