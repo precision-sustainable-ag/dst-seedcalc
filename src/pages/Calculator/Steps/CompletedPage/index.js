@@ -1,5 +1,7 @@
 import React from 'react';
-import { Typography, useMediaQuery, Grid } from '@mui/material';
+import {
+  Typography, useMediaQuery, Grid,
+} from '@mui/material';
 import { useTheme } from '@emotion/react';
 import { Link } from 'react-router-dom';
 
@@ -7,6 +9,7 @@ const CompletedPage = () => {
   // themes
   const theme = useTheme();
   const matchesUpMd = useMediaQuery(theme.breakpoints.up('md'));
+
   return (
     <>
       <Grid container>
@@ -16,7 +19,7 @@ const CompletedPage = () => {
           </Typography>
         </Grid>
 
-        <Grid xs={12} item sx={{ pt: '150px' }} justifyContent="center">
+        <Grid xs={12} item sx={{ pt: '50px' }} justifyContent="center">
           <Typography sx={{ fontWeight: 600 }}>
             Questions or Comments?
           </Typography>

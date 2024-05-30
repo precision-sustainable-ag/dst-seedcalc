@@ -1,37 +1,54 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import Papa from 'papaparse';
-
 import {
   Box, Grid, Modal, Typography, Button,
 } from '@mui/material';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useAuth0 } from '@auth0/auth0-react';
 import { importFromCSVCalculator } from '../../features/calculatorSlice/actions';
-import { importFromCSVSite } from '../../features/siteConditionSlice/actions';
+import { setSiteConditionRedux } from '../../features/siteConditionSlice/actions';
+import useUserHistory from '../../shared/hooks/useUserHistory';
+import Dropdown from '../Dropdown';
+import { setCalculationNameRedux } from '../../features/userSlice/actions';
+import HistoryDialog, { historyDialogFromEnums } from '../HistoryDialog';
 
 const modalStyle = {
   position: 'absolute',
   top: ' 50%',
   left: ' 50%',
   transform: ' translate(-50%, -50%)',
-  width: ' 400px',
   backgroundColor: ' #fff',
   border: ' 2px solid #000',
   boxShadow:
     ' 0px 11px 15px -7px rgb(0 0 0 / 20%), 0px 24px 38px 3px rgb(0 0 0 / 14%), 0px 9px 46px 8px rgb(0 0 0 / 12%)',
   padding: ' 32px',
+  maxWidth: '500px',
 };
 
-const DSTImport = ({ setIsImported }) => {
+const DSTImport = ({ token }) => {
   const [openModal, setOpenModal] = useState(false);
-  const [CSVImport, setCSVImport] = useState(null);
 
-  const navigate = useNavigate();
+  const [histories, setHistories] = useState([]);
+
   const dispatch = useDispatch();
+
+  const { loadHistory } = useUserHistory(token);
+
+  const { calculationName } = useSelector((state) => state.user);
+
+  const { isAuthenticated } = useAuth0();
 
   /// ///////////////////////////////////////////////////////
   //                  Import Logic                        //
   /// ///////////////////////////////////////////////////////
+
+  const handleOpenModal = () => {
+    // there's possibilities that click 'Create New Calculation', set a name and then click 'Import'.
+    // If this happens then the dropdown will popup with a not available name.
+    // Set the calculation name to empty to prevent this behaviour.
+    dispatch(setCalculationNameRedux(''));
+    setOpenModal(true);
+  };
 
   const handleFileUpload = (event) => {
     Papa.parse(event.target.files[0], {
@@ -40,22 +57,37 @@ const DSTImport = ({ setIsImported }) => {
       complete(results) {
         const siteCondition = JSON.parse(results.data[0].extData);
         const calculator = JSON.parse(results.data[1].extData);
-        setCSVImport([siteCondition, calculator]);
-        setIsImported(true);
+
+        dispatch(setSiteConditionRedux(siteCondition));
+        dispatch(importFromCSVCalculator(calculator));
+        setOpenModal(!openModal);
       },
     });
   };
 
-  const handleImportCSV = () => {
-    if (CSVImport === null) {
-      setOpenModal(!openModal);
-      return;
-    }
-    dispatch(importFromCSVSite(CSVImport[0]));
-    dispatch(importFromCSVCalculator(CSVImport[1]));
-    navigate('/');
+  const handleSelectHistory = (e) => {
+    dispatch(setCalculationNameRedux(e.target.value));
+  };
+
+  const handleLoadUserHistory = () => {
+    loadHistory(calculationName);
     setOpenModal(!openModal);
   };
+
+  // open the modal if user is logged in
+  useEffect(() => {
+    if (isAuthenticated) setOpenModal(true);
+  }, []);
+
+  // initially load all history records
+  useEffect(() => {
+    const loadHistories = async () => {
+      const historyList = await loadHistory();
+      setHistories(historyList);
+    };
+    // token is null initially so only call when token is available
+    if (token !== null) loadHistories();
+  }, [token]);
 
   return (
     <>
@@ -66,39 +98,84 @@ const DSTImport = ({ setIsImported }) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={modalStyle}>
-          <Grid container>
-            <Grid xs={3} item />
-            <Grid xs={6} item>
-              <Typography variant="h6" component="h2">
-                Import a CSV file
-              </Typography>
+          <Grid container spacing={5}>
+            {isAuthenticated && (
+              <Grid container item spacing={1}>
+                <Grid item xs={12} display="flex" justifyContent="center">
+                  <Typography variant="h6">
+                    Create New Calculation
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} display="flex" justifyContent="center">
+                  <HistoryDialog
+                    buttonLabel="create new calculation"
+                    from={historyDialogFromEnums.siteCondition}
+                    token={token}
+                    setOpenModal={setOpenModal}
+                  />
+                </Grid>
+              </Grid>
+
+            )}
+
+            <Grid container item spacing={1}>
+              <Grid item xs={12} display="flex" justifyContent="center">
+                <Typography variant="h6">
+                  Import from CSV
+                </Typography>
+              </Grid>
+
+              <Grid xs={12} item display="flex" justifyContent="center" alignItems="center">
+                <input
+                  id="contained-button-file"
+                  type="file"
+                  accept=".csv"
+                  onChange={handleFileUpload}
+                  hidden
+                />
+                {/* eslint-disable-next-line */}
+              <label htmlFor="contained-button-file">
+                <Button variant="contained" color="primary" component="span">
+                  Import from CSV
+                </Button>
+              </label>
+              </Grid>
             </Grid>
-            <Grid xs={3} item />
-            <Grid xs={2} item />
-            <Grid xs={8} item>
-              <Typography sx={{ mt: 2 }}>
-                <input type="file" accept=".csv" onChange={handleFileUpload} />
-              </Typography>
-            </Grid>
-            <Grid xs={2} item />
-            <Grid xs={8} item />
-            <Grid xs={4} item>
-              <Button
-                sx={{ marginTop: '15px' }}
-                onClick={handleImportCSV}
-              >
-                Import CSV
-              </Button>
-            </Grid>
+
+            {isAuthenticated && (
+              <Grid container item xs={12} spacing={1}>
+                <Grid item xs={12} display="flex" justifyContent="center">
+                  <Typography variant="h6">
+                    Import from User History
+                  </Typography>
+                </Grid>
+                <Grid container item xs={12} spacing={2}>
+                  <Grid item xs={12} display="flex" justifyContent="center" alignItems="center">
+                    <Dropdown
+                      value={calculationName}
+                      label="Select your calculation"
+                      items={histories}
+                      handleChange={handleSelectHistory}
+                      minWidth={220}
+                    />
+                  </Grid>
+                  <Grid item xs={12} display="flex" justifyContent="center" alignItems="center">
+                    <Button variant="contained" onClick={handleLoadUserHistory}>
+                      Import
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Grid>
+            )}
           </Grid>
         </Box>
       </Modal>
       <Button
         variant="contained"
-        onClick={() => setOpenModal(!openModal)}
+        onClick={handleOpenModal}
         sx={{ textDecoration: 'none', margin: '1rem' }}
       >
-        Import previous calculation
+        {isAuthenticated ? 'Import / Create calculation' : 'Import Calculation'}
       </Button>
     </>
   );

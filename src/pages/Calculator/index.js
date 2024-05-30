@@ -11,6 +11,7 @@ import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { FadeAlert } from '@psa/dst.ui.fade-alert';
+import { useAuth0 } from '@auth0/auth0-react';
 import {
   SiteCondition,
   SpeciesSelection,
@@ -26,6 +27,7 @@ import SeedsSelectedList from '../../components/SeedsSelectedList';
 
 import { calculatorList, completedList } from '../../shared/data/dropdown';
 import StepsList from '../../components/StepsList';
+import NavBar from '../../components/NavBar';
 
 const defaultAlert = {
   open: false,
@@ -34,23 +36,24 @@ const defaultAlert = {
 };
 
 const Calculator = () => {
-  const siteCondition = useSelector((state) => state.siteCondition);
-  const { error: siteConditionError } = siteCondition;
-  const calculatorError = useSelector((state) => state.calculator.error);
-
-  const { seedsSelected } = useSelector((state) => state.calculator);
   // initially set calculator here
   const [calculator, setCalculator] = useState(null);
   const [activeStep, setActiveStep] = useState(0);
   // this completedStep is to determine whether the next button is clickable on each page
   const [completedStep, setCompletedStep] = useState([...completedList]);
+  const [token, setToken] = useState(null);
   const [showHeaderLogo, setShowHeaderLogo] = useState(true);
+
+  const siteCondition = useSelector((state) => state.siteCondition);
+  const { error: siteConditionError } = siteCondition;
+  const { error: calculatorError, seedsSelected } = useSelector((state) => state.calculator);
 
   const stepperRef = useRef();
 
   const theme = useTheme();
   const matchesSm = useMediaQuery(theme.breakpoints.down('sm'));
   const [alertState, setAlertState] = useState(defaultAlert);
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
   // close alert eveytime switch steps
   useEffect(() => {
@@ -67,6 +70,7 @@ const Calculator = () => {
           <SiteCondition
             completedStep={completedStep}
             setCompletedStep={setCompletedStep}
+            token={token}
           />
         );
       case 'Species Selection':
@@ -74,6 +78,7 @@ const Calculator = () => {
           <SpeciesSelection
             completedStep={completedStep}
             setCompletedStep={setCompletedStep}
+            setAlertState={setAlertState}
           />
         );
       case 'Mix Ratios':
@@ -111,7 +116,7 @@ const Calculator = () => {
         );
       case 'Confirm Plan':
         return (
-          <ConfirmPlan calculator={calculator} />
+          <ConfirmPlan calculator={calculator} token={token} />
         );
       case 'Finish':
         return (
@@ -163,6 +168,17 @@ const Calculator = () => {
     if (siteConditionError || calculatorError) setAlertState({ ...alert, open: true });
   }, [siteConditionError, calculatorError]);
 
+  // initially get token
+  useEffect(() => {
+    const fetchToken = async () => {
+      const t = await getAccessTokenSilently();
+      setToken(t);
+    };
+    if (isAuthenticated) {
+      fetchToken();
+    }
+  }, [isAuthenticated]);
+
   return (
     <Grid container justifyContent="center">
       <Grid item style={{ position: 'fixed', bottom: '0px', zIndex: 1000 }}>
@@ -186,31 +202,43 @@ const Calculator = () => {
           />
           )}
       </Grid>
-      <Grid
-        item
-        xs={12}
-        paddingTop="0.625rem"
-        height="85px"
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <img
-          alt={siteCondition.council}
-          src={headerLogo()}
-          height="75px"
-        />
-        <Typography variant="dstHeader" pl="1rem">
-          Seeding Rate Calculator
-        </Typography>
-      </Grid>
 
       <Grid item md={0} lg={2} />
-      <Grid
-        item
-        xs={12}
-        lg={8}
-        sx={
+
+      <Grid item xs={12} lg={8}>
+        {/* header logo & nav */}
+        <Grid
+          container
+          paddingTop="0.625rem"
+          height="85px"
+        >
+          <Grid
+            item
+            xs={9}
+            md={6}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <img
+              alt={siteCondition.council}
+              src={headerLogo()}
+              height="75px"
+            />
+            <Typography variant="dstHeader" pl="1rem">
+              Seeding Rate Calculator
+            </Typography>
+          </Grid>
+          <Grid item xs={3} md={6}>
+            <NavBar />
+          </Grid>
+        </Grid>
+
+        {/* steps list */}
+        <Grid
+          item
+          xs={12}
+          sx={
           matchesSm && !showHeaderLogo
             ? {
               position: 'fixed',
@@ -219,61 +247,66 @@ const Calculator = () => {
               backgroundColor: 'primary.light',
               height: '90px',
               zIndex: '101',
+              top: '0',
             }
             : { paddingTop: '20px' }
         }
         // height={"100px"}
-        ref={stepperRef}
-      >
-        <StepsList
-          activeStep={activeStep}
-          setActiveStep={setActiveStep}
-          availableSteps={completedStep}
-        />
-      </Grid>
-      <Grid item md={0} lg={2} />
+          ref={stepperRef}
+        >
+          <StepsList
+            activeStep={activeStep}
+            setActiveStep={setActiveStep}
+            availableSteps={completedStep}
+          />
+        </Grid>
 
-      <Grid item md={0} lg={2} />
-
-      {activeStep > 0 && activeStep < 8 && (
-        <Grid
-          item
-          xs={12}
-          md={1}
-          sx={
+        <Grid container>
+          {/* seeds selected list */}
+          {activeStep > 0 && activeStep < 8 && (
+          <Grid
+            item
+            xs={12}
+            md={1}
+            lg={2}
+            sx={
             matchesSm && !showHeaderLogo
               ? {
                 position: 'fixed',
                 width: '100%',
                 paddingTop: '90px',
                 zIndex: '100',
+                top: '0',
               }
               : {}
           }
-        >
-          <SeedsSelectedList list={seedsSelected} activeStep={activeStep} />
-        </Grid>
-      )}
+          >
+            <SeedsSelectedList list={seedsSelected} activeStep={activeStep} />
+          </Grid>
+          )}
 
-      <Grid
-        item
-        xs={12}
-        lg={activeStep === 0 ? 8 : 7}
-        md={activeStep > 0 ? 11 : 12}
-        sx={
-          // eslint-disable-next-line no-nested-ternary
-          matchesSm && !showHeaderLogo
-            ? activeStep === 0
-              ? { paddingTop: '90px' }
-              : { paddingTop: '190px' }
-            : {}
-        }
-      >
-        {renderCalculator(
-          activeStep === calculatorList.length
-            ? 'Finish'
-            : calculatorList[activeStep],
-        )}
+          {/* main calculator */}
+          <Grid
+            item
+            xs={12}
+            lg={activeStep === 0 ? 12 : 10}
+            md={activeStep > 0 ? 11 : 12}
+            sx={
+              // eslint-disable-next-line no-nested-ternary
+              matchesSm && !showHeaderLogo
+                ? activeStep === 0
+                  ? { paddingTop: '90px' }
+                  : { paddingTop: '190px' }
+                : {}
+            }
+          >
+            {renderCalculator(
+              activeStep === calculatorList.length
+                ? 'Finish'
+                : calculatorList[activeStep],
+            )}
+          </Grid>
+        </Grid>
       </Grid>
 
       <Grid item md={0} lg={2} />

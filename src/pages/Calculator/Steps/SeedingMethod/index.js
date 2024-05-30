@@ -14,6 +14,8 @@ import { seedingMethodsMCCC, seedingMethodsNECCC, seedingMethodsSCCC } from '../
 import Dropdown from '../../../../components/Dropdown';
 import '../steps.scss';
 import { setOptionRedux, setSeedingMethodsRedux } from '../../../../features/calculatorSlice/actions';
+import { historyState } from '../../../../features/userSlice/state';
+import { setFromUserHistoryRedux } from '../../../../features/userSlice/actions';
 
 // styles for left grid
 const FullGrid = styled(Grid)(() => ({
@@ -65,6 +67,7 @@ const SeedingMethod = ({ alertState, setAlertState }) => {
   const {
     seedsSelected, sideBarSelection, options,
   } = useSelector((state) => state.calculator);
+  const { fromUserHistory } = useSelector((state) => state.user);
 
   // create an key/value pair for the seed and related accordion expanded state
   const [accordionState, setAccordionState] = useState(
@@ -99,6 +102,7 @@ const SeedingMethod = ({ alertState, setAlertState }) => {
       message: 'You can also edit this information in furthur steps.',
     });
     setSelectedMethod(method);
+    if (fromUserHistory === historyState.imported) dispatch(setFromUserHistoryRedux(historyState.updated));
   };
 
   /// ///////////////////////////////////////////////////////
@@ -150,7 +154,7 @@ const SeedingMethod = ({ alertState, setAlertState }) => {
           { ...options[seed.label], plantingMethod: 'Drilled', plantingMethodModifier: 1 },
         ));
         setSelectedMethod('Drilled');
-      }
+      } else setSelectedMethod(options[seed.label].plantingMethod);
     });
     // set state to true for finishing updating methods
     setUpdatedMethods(true);

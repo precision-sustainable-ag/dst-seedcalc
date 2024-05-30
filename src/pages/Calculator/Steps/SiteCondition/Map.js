@@ -7,18 +7,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { soilDrainageValues } from '../../../../shared/data/dropdown';
 import {
   setCountyRedux, setSoilDrainageRedux, updateLatlonRedux, updateTileDrainageRedux,
+  setCountyIdRedux,
 } from '../../../../features/siteConditionSlice/actions';
 import { getZoneData, getSSURGOData } from '../../../../features/siteConditionSlice/api';
 
 import '../steps.scss';
 
 const Map = ({
-  setStep,
+  setStep, regions,
 }) => {
   const [selectedToEditSite, setSelectedToEditSite] = useState({});
 
-  const siteCondition = useSelector((state) => state.siteCondition);
-  const { counties } = siteCondition;
+  const { council, latlon } = useSelector((state) => state.siteCondition);
 
   const dispatch = useDispatch();
 
@@ -30,17 +30,31 @@ const Map = ({
 
     if (Object.keys(selectedToEditSite).length > 0) {
       // update county/zone for MCCC/NECCC
-      if (siteCondition.council === 'MCCC') {
-        const filteredCounty = counties.filter((c) => county.toLowerCase().includes(c.label.toLowerCase()));
+      if (council === 'MCCC') {
+        const filteredCounty = regions.filter((c) => county.toLowerCase().includes(c.label.toLowerCase()));
         if (filteredCounty.length > 0) {
           dispatch(setCountyRedux(filteredCounty[0].label));
+          dispatch(setCountyIdRedux(filteredCounty[0].id));
         }
-      } else if (siteCondition.council === 'NECCC' || siteCondition.council === 'SCCC') {
+      } else if (council === 'NECCC' || council === 'SCCC') {
         dispatch(getZoneData({ zip: zipCode })).then((res) => {
-          dispatch(setCountyRedux(`Zone ${res.payload.replace(/[^0-9]/g, '')}`));
+          const countyName = `Zone ${res.payload.replace(/[^0-9]/g, '')}`;
+          // FIXME: temporary workaround for NECCC areas in zone 8(MD, DE and NJ), will update in the future
+          if (council === 'NECCC' && countyName === 'Zone 8') {
+            dispatch(setCountyRedux('Zone 7'));
+            dispatch(setCountyIdRedux(4));
+          } else {
+            dispatch(setCountyRedux(countyName));
+            const countyId = regions.filter(
+              (c) => c.label === countyName,
+            )[0].id;
+            dispatch(setCountyIdRedux(countyId));
+          }
         });
       }
+      // update latlon
       dispatch(updateLatlonRedux([latitude, longitude]));
+      // update soil drainage
       dispatch(
         getSSURGOData({
           lat: latitude,
@@ -66,8 +80,8 @@ const Map = ({
           initWidth="100%"
           padding="20px"
           initHeight="360px"
-          initLat={siteCondition.latlon[0]}
-          initLon={siteCondition.latlon[1]}
+          initLat={latlon[0]}
+          initLon={latlon[1]}
           initStartZoom={12}
           initMinZoom={4}
           initMaxZoom={18}

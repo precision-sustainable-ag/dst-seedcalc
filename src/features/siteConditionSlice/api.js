@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
+// api to get all states
 export const getLocality = createAsyncThunk(
   'siteCondition/getLocality',
   async () => {
@@ -9,6 +10,7 @@ export const getLocality = createAsyncThunk(
   },
 );
 
+// api to get all regions(counties/zones) of a state
 export const getRegion = createAsyncThunk(
   'siteCondition/getRegion',
   async ({ stateId }) => {

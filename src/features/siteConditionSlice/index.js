@@ -46,9 +46,9 @@ const siteConditionSlice = createSlice({
       const { latlon } = payload;
       return { ...state, latlon };
     },
-    importFromCSV: (state, { payload }) => {
-      const { csvData } = payload;
-      return { ...csvData };
+    setSiteCondition: (state, { payload }) => {
+      const { siteCondition } = payload;
+      return { ...state, ...siteCondition };
     },
     updateTileDrainage: (state, { payload }) => {
       const { tileDrainage } = payload;
@@ -61,9 +61,8 @@ const siteConditionSlice = createSlice({
         state.loading = 'getLocality';
         state.error = false;
       })
-      .addCase(getLocality.fulfilled, (state, { payload }) => {
+      .addCase(getLocality.fulfilled, (state) => {
         state.loading = false;
-        state.states = [...payload];
         state.error = false;
       })
       .addCase(getLocality.rejected, (state) => {
@@ -74,9 +73,8 @@ const siteConditionSlice = createSlice({
         state.loading = 'getRegion';
         state.error = false;
       })
-      .addCase(getRegion.fulfilled, (state, { payload }) => {
+      .addCase(getRegion.fulfilled, (state) => {
         state.loading = false;
-        state.counties = payload.data.kids.Zones ?? payload.data.kids.Counties ?? [];
         state.error = false;
       })
       .addCase(getRegion.rejected, (state) => {
@@ -89,7 +87,7 @@ const siteConditionSlice = createSlice({
 export const {
   updateState, updateCounty, updateCountyId, updateSoilDrainage,
   updatePlantingDate, updateAcres, checkNRCS, updateCouncil, updateSoilFertility,
-  updateLatlon, importFromCSV, updateTileDrainage,
+  updateLatlon, setSiteCondition, updateTileDrainage,
 } = siteConditionSlice.actions;
 
 export default siteConditionSlice;

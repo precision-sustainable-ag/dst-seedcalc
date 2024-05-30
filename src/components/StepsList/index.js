@@ -13,6 +13,10 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { useDispatch } from 'react-redux';
 import { calculatorList } from '../../shared/data/dropdown';
 import { resetCalculator } from '../../features/calculatorSlice';
+import {
+  setCalculationNameRedux, setFromUserHistoryRedux, setSelectedHistoryRedux,
+} from '../../features/userSlice/actions';
+import { historyState } from '../../features/userSlice/state';
 
 /*
 {
@@ -59,6 +63,9 @@ const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
     setActiveStep(0);
     setCompletedStep(-1);
     dispatch(resetCalculator());
+    dispatch(setFromUserHistoryRedux(historyState.none));
+    dispatch(setCalculationNameRedux(''));
+    dispatch(setSelectedHistoryRedux(null));
   };
   const tooltipTitle = () => {
     if (activeStep === 0 && !availableSteps[0]) {
