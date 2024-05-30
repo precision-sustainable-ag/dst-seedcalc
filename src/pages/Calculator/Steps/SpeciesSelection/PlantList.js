@@ -97,7 +97,6 @@ const PlantList = ({
 
   const handleClick = async (seed) => {
     // if from user history, set fromUserHistory to historyState.updated to create a new calculation
-    // FIXME: this will clean all further step options
     if (fromUserHistory === historyState.imported) dispatch(setFromUserHistoryRedux(historyState.updated));
     const { id: cropId, label: seedName } = seed;
     // if seed not in seedSelected, add it

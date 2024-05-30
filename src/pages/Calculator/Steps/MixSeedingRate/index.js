@@ -15,6 +15,8 @@ import {
   setAdjustedMixSeedingRateRedux,
   setMixSeedingRateRedux, setOptionRedux,
 } from '../../../../features/calculatorSlice/actions';
+import { historyState } from '../../../../features/userSlice/state';
+import { setFromUserHistoryRedux } from '../../../../features/userSlice/actions';
 import '../steps.scss';
 
 const CustomThumb = (props) => {
@@ -113,6 +115,7 @@ const MixSeedingRate = ({ calculator }) => {
     seedsSelected, options, mixSeedingRate,
     adjustedMixSeedingRate: adjustedRate,
   } = useSelector((state) => state.calculator);
+  const { fromUserHistory } = useSelector((state) => state.user);
 
   /// ///////////////////////////////////////////////////////
   //                    State Logic                       //
@@ -126,6 +129,7 @@ const MixSeedingRate = ({ calculator }) => {
       dispatch(setOptionRedux(seed.label, { ...prevOptions, managementImpactOnMix }));
     });
     dispatch(setAdjustedMixSeedingRateRedux(adjustedMixSeedingRate));
+    if (fromUserHistory === historyState.imported) dispatch(setFromUserHistoryRedux(historyState.updated));
   };
 
   /// ///////////////////////////////////////////////////////

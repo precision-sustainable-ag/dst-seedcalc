@@ -166,10 +166,10 @@ const MixRatio = ({
             adjustedSeed: adjustedSeeds,
           },
         }));
-        // if history is not imported, update mixRatioOptions to options
-        if (fromUserHistory !== historyState.imported) dispatch(setOptionRedux(seed.label, seedOption));
-        // if history is imported, NOT update options UNLESS make any changes (historyState = updated)
       }
+      // if history is not imported, update mixRatioOptions to options
+      if (fromUserHistory !== historyState.imported) dispatch(setOptionRedux(seed.label, seedOption));
+      // if history is updated, this will remove previously imported options redux and set it as mixRatioOptions
     });
     // calculate piechart data
     const {
@@ -208,7 +208,7 @@ const MixRatio = ({
       'You now have a custom mix. You can edit this information in furthur steps.',
     });
     dispatch(setMixRatioOptionRedux(seed.label, { ...mixRatioOptions[seed.label], [option]: value }));
-    // FIXME: set historyState.updated if change anything, this will also remove all options in further steps
+    // set historyState.updated if change anything
     if (fromUserHistory === historyState.imported) dispatch(setFromUserHistoryRedux(historyState.updated));
   };
 
