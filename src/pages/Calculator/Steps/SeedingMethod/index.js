@@ -18,13 +18,18 @@ import { historyState } from '../../../../features/userSlice/state';
 import { setFromUserHistoryRedux } from '../../../../features/userSlice/actions';
 
 // styles for left grid
-const LeftGrid = styled(Grid)(() => ({
+const FullGrid = styled(Grid)(() => ({
   '&.MuiGrid-item': {
-    border: '1px solid #c7c7c7',
-    borderLeft: 'none',
+    boxShadow: '1px 1px 10px 1px lightgrey',
     display: 'flex',
     justifyContent: 'flex-start',
     alignItems: 'center',
+  },
+}));
+// styles for left grid
+const LeftGrid = styled(Grid)(() => ({
+  '&.MuiGrid-item': {
+    display: 'flex',
   },
 }));
 
@@ -32,12 +37,8 @@ const LeftGrid = styled(Grid)(() => ({
 const RightGrid = styled(Grid)(() => ({
   '&.MuiGrid-item': {
     padding: '1rem',
-    border: '1px solid #c7c7c7',
-    borderRight: 'none',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
     '& .MuiBox-root': {
       width: '50px',
       height: '50px',
@@ -198,28 +199,31 @@ const SeedingMethod = ({ alertState, setAlertState }) => {
   const renderMethod = (type, comment, seedingMethods, method) => {
     const value = seedingMethods?.[method];
     return (
-      <Grid container border={selectedMethod === method ? '2px solid #4f5f30' : ''}>
-        <LeftGrid item xs={6}>
-          <Box textAlign="left" pl="25%">
-            <Typography fontWeight="bold">
-              {type}
-            </Typography>
-            <Typography fontSize="0.75rem">{comment}</Typography>
-          </Box>
-        </LeftGrid>
-        <RightGrid item xs={6}>
-          {!value ? (
-            <Typography color="#D84727">Not Recommended</Typography>
-          ) : (
-            <>
-              <Box>
-                <Typography sx={{ width: '50px' }}>{value}</Typography>
-              </Box>
-              <Typography>Lbs per Acre</Typography>
-            </>
-          )}
-        </RightGrid>
-
+      <Grid container margin={1} border={selectedMethod === method ? '2px solid #4f5f30' : ''}>
+        <FullGrid item xs={14}>
+          <LeftGrid item xs={6}>
+            <Box textAlign="left" pl="25%">
+              <Typography fontWeight="bold">
+                {type}
+              </Typography>
+              <Typography fontSize="0.75rem">{comment}</Typography>
+            </Box>
+          </LeftGrid>
+          <RightGrid item xs={6}>
+            {!value ? (
+              <Typography color="#D84727">Not Recommended</Typography>
+            ) : (
+              <>
+                {/*  <Typography sx={{ width: '50px' }}>{value}</Typography> */}
+                <Typography>
+                  {value}
+                  {' '}
+                  Lbs per Acre
+                </Typography>
+              </>
+            )}
+          </RightGrid>
+        </FullGrid>
       </Grid>
     );
   };

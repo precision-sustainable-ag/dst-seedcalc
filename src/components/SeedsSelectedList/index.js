@@ -8,9 +8,19 @@ import {
   CardActionArea,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectSidebarSeedRedux } from '../../features/calculatorSlice/actions';
+import { CancelRounded } from '@mui/icons-material';
 
-const SeedsSelectedList = ({ list }) => {
+import {
+  removeOptionRedux, removeSeedRedux, selectSidebarSeedRedux,
+} from '../../features/calculatorSlice/actions';
+
+const ExitIcon = ({ style }) => (
+  <Box sx={style}>
+    <CancelRounded style={{ color: '#FF0000' }} />
+  </Box>
+);
+
+const SeedsSelectedList = ({ list, activeStep }) => {
   // themes
   const theme = useTheme();
   const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
@@ -21,6 +31,15 @@ const SeedsSelectedList = ({ list }) => {
 
   const selectSpecies = (seed) => {
     dispatch(selectSidebarSeedRedux(sideBarSelection === seed ? '' : seed));
+  };
+
+  const clickItem = (label) => {
+    if (activeStep === 1) {
+      dispatch(removeSeedRedux(label));
+      dispatch(removeOptionRedux(label));
+    } else {
+      selectSpecies(label);
+    }
   };
 
   return (
@@ -43,6 +62,7 @@ const SeedsSelectedList = ({ list }) => {
     >
       {[...list].reverse().map((s, i) => (
         <Box minWidth={matchesMd ? '120px' : ''} key={i}>
+
           <Card
             sx={{
               backgroundColor: 'transparent',
@@ -50,7 +70,21 @@ const SeedsSelectedList = ({ list }) => {
               cursor: 'pointer',
             }}
           >
-            <CardActionArea onClick={() => selectSpecies(s.label)}>
+            <CardActionArea onClick={() => {
+              clickItem(s.label);
+            }}
+            >
+              {activeStep === 1
+              && (
+              <ExitIcon
+                style={{
+                  position: 'absolute',
+                  right: '0.0rem',
+                  zIndex: 1,
+
+                }}
+              />
+              )}
               <img
                 style={{
                   borderRadius: '50%',

@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
@@ -34,9 +34,10 @@ import { historyState } from '../../features/userSlice/state';
 }
 */
 
-const StepsList = ({
-  activeStep, setActiveStep, availableSteps,
-}) => {
+const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
+  const [hovering, setHovering] = useState(false);
+  const [visible, setVisible] = useState(false);
+
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
 
@@ -66,6 +67,35 @@ const StepsList = ({
     dispatch(setCalculationNameRedux(''));
     dispatch(setSelectedHistoryRedux(null));
   };
+  const tooltipTitle = () => {
+    if (activeStep === 0 && !availableSteps[0]) {
+      return 'Please enter the necessary info below.';
+    }
+    if (activeStep === 1 && !availableSteps[1]) {
+      return 'Please select at least 2 plants.';
+    }
+    if (activeStep === 5 && !availableSteps[5]) {
+      return 'Please make a selection.';
+    }
+    return '';
+  };
+
+  useEffect(() => {
+    const displayToolTip = () => {
+      if (activeStep === 0 && !availableSteps[0]) {
+        return true;
+      }
+      if (activeStep === 1 && !availableSteps[1] && hovering) {
+        return true;
+      }
+      if (activeStep === 5 && !availableSteps[5]) {
+        return true;
+      }
+      return false;
+    };
+
+    setVisible(displayToolTip());
+  }, [activeStep, availableSteps, hovering]);
 
   return (
     <Box sx={{ color: 'primary.text' }}>
@@ -95,6 +125,7 @@ const StepsList = ({
       </Stepper>
 
       <Box sx={{ display: 'flex', flexDirection: 'row', pt: 1 }}>
+
         {activeStep !== 0 && (
           <Button variant="stepper" onClick={handleRestart}>
             <RestartAltIcon />
@@ -107,18 +138,14 @@ const StepsList = ({
         {activeStep !== calculatorList.length
         && (
         <Tooltip
+          onMouseEnter={() => setHovering(true)}
+          onMouseLeave={() => setHovering(false)}
           arrow
-          title={
-              // eslint-disable-next-line no-nested-ternary
-              activeStep === 0 && !availableSteps[0]
-                ? 'Please enter the necessary info below.'
-                : activeStep === 1 && !availableSteps[1]
-                  ? 'Please select at least 2 plants.'
-                  : activeStep === 5 && !availableSteps[5]
-                    ? 'Please make a selection.'
-                    : ''
-            }
-          open
+          open={visible}
+          title={(
+            tooltipTitle()
+          )}
+
         >
           <span>
             <Button
