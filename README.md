@@ -101,12 +101,6 @@ Generally for the core pages, we have comments that specify the section of the p
 ## Runbook
 
 **Symptom:**
-Node sass not supported on Mac OS `Error: Node Sass does not yet support your current environment: OS X 64-bit with Unsupported runtime (88)`
-
-**Solution:**
-`npm rebuild node-sass`
-
-**Symptom:**
 After running `npm install` you might run into an `Error E404 - Not Found - GET https://registry.npmjs.org/@psa%2fdst.ui.map - Not found`
 
 **Solution:**
@@ -116,6 +110,8 @@ Follow these steps:
 
 **Line Spacing**
 Set Line spacing (CRLF -> LF)
-`git config core.autocrlf false`
-`git rm --cached -r .`
-`git reset --hard`
+```
+git config core.autocrlf false
+git rm --cached -r .
+git reset --hard
+```
