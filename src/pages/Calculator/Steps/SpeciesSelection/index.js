@@ -85,7 +85,6 @@ const SpeciesSelection = ({ completedStep, setCompletedStep, setAlertState }) =>
   useEffect(() => {
     // TODO: NOTE: the calculator here is only used for validating the crop
     // , the calculator for calculation in initialized in MixRatios
-    console.log('seedsSelected', seedsSelected);
     try {
       // eslint-disable-next-line no-unused-vars
       const seedingRateCalculator = createCalculator(seedsSelected, council, regions, userInput);

@@ -10,6 +10,7 @@ const initialState = {
   fromUserHistory: historyState.none,
   userHistoryList: [],
   selectedHistory: null,
+  error: false,
 };
 
 export default initialState;

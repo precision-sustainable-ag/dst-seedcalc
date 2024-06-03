@@ -1,21 +1,17 @@
 /* eslint-disable no-console */
 import { userHistoryApiUrl, userHistorySchema } from '../data/keys';
 
-const historyApiUrl = `${userHistoryApiUrl}/v1`;
+const historyApiUrl = `${userHistoryApiUrl}/v122`;
 
 // TODO: two ways to handle error when fetching, another way is move these apis to redux toolkit
 const fetchData = async (url, options = {}) => {
-  try {
-    const res = await fetch(url, options);
-    if (!res.ok) {
-      throw new Error(`Fetch Status: ${res.status} ${res.statusText}`);
-    }
-    // TODO: NOTE: there might be more res structure like res.text()
-    return await res.json();
-  } catch (error) {
-    console.error('Error when fetching: ', error.message);
-    throw error;
+  const res = await fetch(url, options);
+  if (!res.ok) {
+    throw new Error(`Fetch Status: ${res.status} ${res.statusText}`);
   }
+  // TODO: NOTE: there might be more res structure like res.text()
+  const data = await res.json();
+  return data;
 };
 
 export const createHistory = async (accessToken, historyData, name) => {
@@ -34,13 +30,8 @@ export const createHistory = async (accessToken, historyData, name) => {
       schemaId,
     }),
   };
-  try {
-    const data = await fetchData(url, config);
-    return data;
-  } catch (err) {
-    console.error('Error creating history: ', err);
-    throw err;
-  }
+  const data = await fetchData(url, config);
+  return data;
 };
 
 export const updateHistory = async (accessToken, historyData, name, id) => {
@@ -59,13 +50,8 @@ export const updateHistory = async (accessToken, historyData, name, id) => {
       schemaId,
     }),
   };
-  try {
-    const data = await fetchData(url, config);
-    return data;
-  } catch (err) {
-    console.error('Error updating history: ', err);
-    throw err;
-  }
+  const data = await fetchData(url, config);
+  return data;
 };
 
 export const getHistories = async (accessToken) => {
@@ -77,11 +63,6 @@ export const getHistories = async (accessToken) => {
       Authorization: `Bearer ${accessToken}`,
     },
   };
-  try {
-    const data = await fetchData(url, config);
-    return data;
-  } catch (err) {
-    console.error('Error trying fetch histories: ', err);
-    throw err;
-  }
+  const data = await fetchData(url, config);
+  return data;
 };
