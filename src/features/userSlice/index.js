@@ -22,6 +22,7 @@ const userSlice = createSlice({
       const { selectedHistory } = payload;
       return { ...state, selectedHistory };
     },
+    setAlertState: (state, { payload }) => ({ ...state, alertState: { ...state.alertState, ...payload } }),
   },
   extraReducers: (builder) => {
     builder
@@ -56,7 +57,7 @@ const userSlice = createSlice({
 });
 
 export const {
-  setCalculationName, setFromUserHistory, setUserHistoryList, setSelectedHistory,
+  setCalculationName, setFromUserHistory, setUserHistoryList, setSelectedHistory, setAlertState,
 } = userSlice.actions;
 
 export default userSlice;

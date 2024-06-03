@@ -22,7 +22,7 @@ import {
 import { setOptionRedux, setMixRatioOptionRedux } from '../../../../features/calculatorSlice/actions';
 import { pieChartUnits } from '../../../../shared/data/units';
 import '../steps.scss';
-import { setFromUserHistoryRedux } from '../../../../features/userSlice/actions';
+import { setAlertStateRedux, setFromUserHistoryRedux } from '../../../../features/userSlice/actions';
 import { historyState } from '../../../../features/userSlice/state';
 
 const getCalculatorResult = (council) => {
@@ -72,7 +72,7 @@ const defaultPieChartData = {
 };
 
 const MixRatio = ({
-  calculator, setCalculator, alertState, setAlertState,
+  calculator, setCalculator, alertState,
 }) => {
   const [initCalculator, setInitCalculator] = useState(false);
   const [prevOptions, setPrevOptions] = useState({});
@@ -201,12 +201,12 @@ const MixRatio = ({
   // function to handle form value change, update options
   const handleFormValueChange = (seed, option, value) => {
     setUpdatedForm(true);
-    setAlertState({
+    dispatch(setAlertStateRedux({
       ...alertState,
       open: true,
-      message:
-      'You now have a custom mix. You can edit this information in furthur steps.',
-    });
+      severity: 'success',
+      message: 'You now have a custom mix. You can edit this information in furthur steps.',
+    }));
     dispatch(setMixRatioOptionRedux(seed.label, { ...mixRatioOptions[seed.label], [option]: value }));
     // set historyState.updated if change anything
     if (fromUserHistory === historyState.imported) dispatch(setFromUserHistoryRedux(historyState.updated));
@@ -215,14 +215,14 @@ const MixRatio = ({
   // handler for click to open accordion
   const handleExpandAccordion = (label) => {
     if (!alertState.open) {
-      setAlertState({
+      dispatch(setAlertStateRedux({
         ...alertState,
         open: true,
         severity: 'success',
         message: updatedForm ? 'You now have a custom mix. You can edit this information in furthur steps.'
           : 'This is a starting mix based on averages, but not a recommendation. \
           Adjust as needed based on your goals.',
-      });
+      }));
     }
     const open = accordionState[label];
     setAccordionState({ ...accordionState, [label]: !open });

@@ -20,8 +20,9 @@ import Diversity from './diversity';
 import { removeOptionRedux, removeSeedRedux, updateDiversityRedux } from '../../../../features/calculatorSlice/actions';
 import '../steps.scss';
 import { createUserInput, createCalculator } from '../../../../shared/utils/calculator';
+import { setAlertStateRedux } from '../../../../features/userSlice/actions';
 
-const SpeciesSelection = ({ completedStep, setCompletedStep, setAlertState }) => {
+const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
   // useSelector for crops reducer data
   const dispatch = useDispatch();
 
@@ -94,11 +95,11 @@ const SpeciesSelection = ({ completedStep, setCompletedStep, setAlertState }) =>
       const lastAddedSeedName = seedsSelected[seedsSelected.length - 1]?.label;
       dispatch(removeSeedRedux(lastAddedSeedName));
       dispatch(removeOptionRedux(lastAddedSeedName));
-      setAlertState({
+      dispatch(setAlertStateRedux({
         open: true,
         severity: 'error',
         message: 'Error: Invalid crop!',
-      });
+      }));
     }
   }, [seedsSelected]);
 

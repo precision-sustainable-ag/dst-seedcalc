@@ -4,7 +4,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Grid from '@mui/material/Grid';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Typography, useMediaQuery } from '@mui/material';
 
 import { useTheme } from '@mui/material/styles';
@@ -28,12 +28,7 @@ import SeedsSelectedList from '../../components/SeedsSelectedList';
 import { calculatorList, completedList } from '../../shared/data/dropdown';
 import StepsList from '../../components/StepsList';
 import NavBar from '../../components/NavBar';
-
-const defaultAlert = {
-  open: false,
-  severity: 'error',
-  message: 'Network Error - Try again later or refresh the page!',
-};
+import { setAlertStateRedux } from '../../features/userSlice/actions';
 
 const Calculator = () => {
   // initially set calculator here
@@ -47,18 +42,17 @@ const Calculator = () => {
   const siteCondition = useSelector((state) => state.siteCondition);
   const { error: siteConditionError } = siteCondition;
   const { error: calculatorError, seedsSelected } = useSelector((state) => state.calculator);
+  const { alertState } = useSelector((state) => state.user);
 
   const stepperRef = useRef();
 
+  const dispatch = useDispatch();
+
   const theme = useTheme();
   const matchesSm = useMediaQuery(theme.breakpoints.down('sm'));
-  const [alertState, setAlertState] = useState(defaultAlert);
+
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
-  // close alert eveytime switch steps
-  useEffect(() => {
-    setAlertState({ ...alertState, open: false });
-  }, [activeStep]);
   /// ///////////////////////////////////////////////////////
   //                      Render                          //
   /// ///////////////////////////////////////////////////////
@@ -78,7 +72,6 @@ const Calculator = () => {
           <SpeciesSelection
             completedStep={completedStep}
             setCompletedStep={setCompletedStep}
-            setAlertState={setAlertState}
           />
         );
       case 'Mix Ratios':
@@ -87,14 +80,12 @@ const Calculator = () => {
             calculator={calculator}
             setCalculator={setCalculator}
             alertState={alertState}
-            setAlertState={setAlertState}
           />
         );
       case 'Seeding Method':
         return (
           <SeedingMethod
             alertState={alertState}
-            setAlertState={setAlertState}
           />
         );
       case 'Mix Seeding Rate':
@@ -107,7 +98,6 @@ const Calculator = () => {
             completedStep={completedStep}
             setCompletedStep={setCompletedStep}
             alertState={alertState}
-            setAlertState={setAlertState}
           />
         );
       case 'Review Mix':
@@ -164,8 +154,20 @@ const Calculator = () => {
     };
   }, []);
 
+  // close alert eveytime switch steps
   useEffect(() => {
-    if (siteConditionError || calculatorError) setAlertState({ ...alert, open: true });
+    dispatch(setAlertStateRedux({ ...alertState, open: false }));
+  }, [activeStep]);
+
+  useEffect(() => {
+    if (siteConditionError || calculatorError) {
+      dispatch(setAlertStateRedux({
+        ...alertState,
+        open: true,
+        severity: 'error',
+        message: 'Network Error - Try again later or refresh the page!',
+      }));
+    }
   }, [siteConditionError, calculatorError]);
 
   // initially get token
@@ -193,7 +195,7 @@ const Calculator = () => {
                 aria-label="close"
                 color="inherit"
                 size="small"
-                onClick={() => setAlertState({ ...alert, open: false })}
+                onClick={() => dispatch(setAlertStateRedux({ ...alert, open: false }))}
               >
                 <CloseIcon fontSize="inherit" />
               </IconButton>

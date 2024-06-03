@@ -15,7 +15,7 @@ import Dropdown from '../../../../components/Dropdown';
 import '../steps.scss';
 import { setOptionRedux, setSeedingMethodsRedux } from '../../../../features/calculatorSlice/actions';
 import { historyState } from '../../../../features/userSlice/state';
-import { setFromUserHistoryRedux } from '../../../../features/userSlice/actions';
+import { setAlertStateRedux, setFromUserHistoryRedux } from '../../../../features/userSlice/actions';
 
 // styles for left grid
 const FullGrid = styled(Grid)(() => ({
@@ -56,7 +56,7 @@ const RightGrid = styled(Grid)(() => ({
   },
 }));
 
-const SeedingMethod = ({ alertState, setAlertState }) => {
+const SeedingMethod = ({ alertState }) => {
   const [selectedMethod, setSelectedMethod] = useState('');
   const [methods, setMethods] = useState({});
   const [updatedMethods, setUpdatedMethods] = useState(false);
@@ -95,12 +95,12 @@ const SeedingMethod = ({ alertState, setAlertState }) => {
       const plantingMethodModifier = methods[seed.label][method];
       dispatch(setOptionRedux(seed.label, { ...prevOption, plantingMethod, plantingMethodModifier }));
     });
-    setAlertState({
+    dispatch(setAlertStateRedux({
       ...alertState,
       open: true,
       severity: 'success',
       message: 'You can also edit this information in furthur steps.',
-    });
+    }));
     setSelectedMethod(method);
     if (fromUserHistory === historyState.imported) dispatch(setFromUserHistoryRedux(historyState.updated));
   };

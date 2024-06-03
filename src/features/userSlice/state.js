@@ -11,6 +11,11 @@ const initialState = {
   userHistoryList: [],
   selectedHistory: null,
   error: false,
+  alertState: {
+    open: false,
+    severity: 'error',
+    message: 'Network Error - Try again later or refresh the page!',
+  },
 };
 
 export default initialState;
