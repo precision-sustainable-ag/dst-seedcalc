@@ -13,7 +13,7 @@ To access the live tool, visit [here](https://covercrop-seedcalc.org/).
 To see the documents for this tool, visit [the wiki pages](https://precision-sustainable-ag.atlassian.net/wiki/spaces/DST/pages/162037825/Seeding+Rate+Calculator).
 
 **Date Created:** 02/16/22
-**Date Last Modified:** 05/31/24
+**Date Last Modified:** 06/03/24
 
 ### Table of Contents
 
@@ -43,9 +43,9 @@ The technologies we are currently using in this repo:
     git clone https://github.com/precision-sustainable-ag/dst-seedcalc.git
     ```
 
-2. Then run `npm config set '@psa:registry' https://node.bit.cloud`
+2. Then run `npm config set @psa:registry https://node.bit.cloud`
 
-3. Then run `npm install` to install project dependencies. A full list of the dependencies can be found in package.json. If you are running on a windows machine delete `package-lock.json` prior to running the below command.
+3. Run `npm install` to install project dependencies. A full list of the dependencies can be found in package.json. If you are running on a windows machine delete `package-lock.json` prior to running the below command.
 
 4. Create a `.env` file in the root directory. The file will contain following keys, ask @mikahpinegar for the values of the keys.
 
@@ -67,7 +67,7 @@ src/
 ├── components        # Re-usable components
 ├── features          # Redux slice logic
 ├── pages             # Core pages
-├── shared            # Shared javascript code
+├── shared            # Constant data, theme and utility functions
 ```
 
 ### File structure
