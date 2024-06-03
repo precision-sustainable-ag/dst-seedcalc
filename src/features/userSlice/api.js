@@ -15,7 +15,7 @@ const fetchData = async (url, options = {}) => {
 
 export const createHistory = createAsyncThunk(
   'user/createHistory',
-  async (accessToken, historyData, name) => {
+  async ({ accessToken, historyData, name }) => {
     const schemaId = parseInt(userHistorySchema, 10);
     const url = `${historyApiUrl}/history`;
     const config = {
@@ -38,7 +38,9 @@ export const createHistory = createAsyncThunk(
 
 export const updateHistory = createAsyncThunk(
   'user/updateHistory',
-  async (accessToken, historyData, name, id) => {
+  async ({
+    accessToken, historyData, name, id,
+  }) => {
     const schemaId = parseInt(userHistorySchema, 10);
     const url = `${historyApiUrl}/history/${id}`;
     const config = {
@@ -61,7 +63,7 @@ export const updateHistory = createAsyncThunk(
 
 export const getHistories = createAsyncThunk(
   'user/getHistories',
-  async (accessToken) => {
+  async ({ accessToken }) => {
     const url = `${historyApiUrl}/histories?schema=${userHistorySchema}`;
     const config = {
       method: 'GET',
