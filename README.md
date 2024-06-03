@@ -6,7 +6,7 @@
 
 </div>
 
-This is the Seeding Rate Calculator codebase for [PSA](https://www.precisionsustainableag.org/). Helping MCCC/NECCC farmers calculate their seeding rate.
+This is the Seeding Rate Calculator codebase for [PSA](https://www.precisionsustainableag.org/). Helping MCCC/NECCC/SCCC farmers calculate their seeding rate.
 
 To access the live tool, visit [here](https://covercrop-seedcalc.org/).
 
