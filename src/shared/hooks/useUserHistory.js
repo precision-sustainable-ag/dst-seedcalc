@@ -6,7 +6,6 @@ import {
   setAlertStateRedux,
 } from '../../features/userSlice/actions';
 import { setCalculatorRedux } from '../../features/calculatorSlice/actions';
-// import { getHistories, createHistory, updateHistory } from '../utils/api';
 import { getHistories, createHistory, updateHistory } from '../../features/userSlice/api';
 import { historyState } from '../../features/userSlice/state';
 

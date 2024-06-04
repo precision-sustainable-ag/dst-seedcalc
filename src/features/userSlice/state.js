@@ -10,7 +10,6 @@ const initialState = {
   fromUserHistory: historyState.none,
   userHistoryList: [],
   selectedHistory: null,
-  error: false,
   alertState: {
     open: false,
     severity: 'error',

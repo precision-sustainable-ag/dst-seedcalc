@@ -91,7 +91,6 @@ const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
       const seedingRateCalculator = createCalculator(seedsSelected, council, regions, userInput);
     } catch (err) {
       // if the crop is not valid, remove it from seedSelected
-      console.error(err);
       const lastAddedSeedName = seedsSelected[seedsSelected.length - 1]?.label;
       dispatch(removeSeedRedux(lastAddedSeedName));
       dispatch(removeOptionRedux(lastAddedSeedName));
