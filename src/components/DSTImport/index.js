@@ -73,11 +73,6 @@ const DSTImport = ({ token }) => {
     setOpenModal(!openModal);
   };
 
-  // open the modal if user is logged in
-  useEffect(() => {
-    if (isAuthenticated) setOpenModal(true);
-  }, []);
-
   // initially load all history records
   useEffect(() => {
     const loadHistories = async () => {
