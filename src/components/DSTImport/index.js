@@ -9,8 +9,8 @@ import { importFromCSVCalculator } from '../../features/calculatorSlice/actions'
 import { setSiteConditionRedux } from '../../features/siteConditionSlice/actions';
 import useUserHistory from '../../shared/hooks/useUserHistory';
 import Dropdown from '../Dropdown';
-import { setCalculationNameRedux } from '../../features/userSlice/actions';
-import HistoryDialog, { historyDialogFromEnums } from '../HistoryDialog';
+import { setCalculationNameRedux, setHistoryDialogStateRedux } from '../../features/userSlice/actions';
+import HistoryDialog from '../HistoryDialog';
 
 const modalStyle = {
   position: 'absolute',
@@ -107,12 +107,13 @@ const DSTImport = ({ token }) => {
                   </Typography>
                 </Grid>
                 <Grid item xs={12} display="flex" justifyContent="center">
-                  <HistoryDialog
-                    buttonLabel="create new calculation"
-                    from={historyDialogFromEnums.siteCondition}
-                    token={token}
-                    setOpenModal={setOpenModal}
-                  />
+                  <HistoryDialog />
+                  <Button
+                    variant="contained"
+                    onClick={() => dispatch(setHistoryDialogStateRedux({ open: true, type: 'add' }))}
+                  >
+                    create new calculation
+                  </Button>
                 </Grid>
               </Grid>
 

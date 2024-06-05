@@ -3,9 +3,7 @@ import {
   Button, Modal, Box, Typography, Grid,
 } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { useAuth0 } from '@auth0/auth0-react';
 import { handleDownload } from '../../../../shared/utils/exportExcel';
-import HistoryDialog, { historyDialogFromEnums } from '../../../../components/HistoryDialog';
 
 const modalStyle = {
   position: 'absolute',
@@ -31,14 +29,12 @@ const buttonStyles = {
   borderRadius: '26px',
 };
 
-const ExportModal = ({ token }) => {
+const ExportModal = () => {
   const [open, setOpen] = useState(false);
 
   const siteCondition = useSelector((state) => state.siteCondition);
   const calculatorRedux = useSelector((state) => state.calculator);
   const { council } = siteCondition;
-
-  const { isAuthenticated } = useAuth0();
 
   const handleExportcsv = () => {
     handleDownload(
@@ -70,18 +66,6 @@ const ExportModal = ({ token }) => {
             <Grid item xs={12} display="flex" justifyContent="center">
               <Button variant="contained" onClick={handleExportcsv}>Export to csv</Button>
             </Grid>
-
-            {isAuthenticated
-              && (
-              <Grid item xs={12} display="flex" justifyContent="center">
-                <HistoryDialog
-                  buttonLabel="Save this calculation"
-                  from={historyDialogFromEnums.completePage}
-                  token={token}
-                  setOpenModal={setOpen}
-                />
-              </Grid>
-              )}
           </Grid>
 
         </Box>

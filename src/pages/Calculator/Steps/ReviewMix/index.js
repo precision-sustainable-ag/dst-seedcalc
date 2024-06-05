@@ -21,7 +21,7 @@ import SeedingRateCard, { UnitSelection } from '../../../../components/SeedingRa
 import { setBulkSeedingRateRedux, setOptionRedux } from '../../../../features/calculatorSlice/actions';
 import { pieChartUnits, seedDataUnits } from '../../../../shared/data/units';
 import { historyState } from '../../../../features/userSlice/state';
-import { setFromUserHistoryRedux } from '../../../../features/userSlice/actions';
+import { setHistoryStateRedux } from '../../../../features/userSlice/actions';
 import '../steps.scss';
 
 const getCalculatorResult = (council) => {
@@ -79,7 +79,7 @@ const ReviewMix = ({ calculator }) => {
   const {
     seedsSelected, sideBarSelection, options,
   } = useSelector((state) => state.calculator);
-  const { fromUserHistory } = useSelector((state) => state.user);
+  const { historyState } = useSelector((state) => state.user);
 
   const [prevOptions, setPrevOptions] = useState({});
   const [piechartData, setPieChartData] = useState(defaultPieChartData);
@@ -119,7 +119,7 @@ const ReviewMix = ({ calculator }) => {
   // function to handle form value change, update options
   const handleFormValueChange = (seed, option, value) => {
     dispatch(setOptionRedux(seed.label, { ...options[seed.label], [option]: value }));
-    if (fromUserHistory === historyState.imported) dispatch(setFromUserHistoryRedux(historyState.updated));
+    if (historyState === historyState.imported) dispatch(setHistoryStateRedux(historyState.updated));
   };
 
   const handleExpandAccordion = (label) => {

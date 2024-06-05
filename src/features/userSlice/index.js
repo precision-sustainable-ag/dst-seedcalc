@@ -9,9 +9,9 @@ const userSlice = createSlice({
       const { calculationName } = payload;
       return { ...state, calculationName };
     },
-    setFromUserHistory: (state, { payload }) => {
-      const { fromUserHistory } = payload;
-      return { ...state, fromUserHistory };
+    setHistoryState: (state, { payload }) => {
+      const { historyState } = payload;
+      return { ...state, historyState };
     },
     setUserHistoryList: (state, { payload }) => {
       const { userHistoryList } = payload;
@@ -22,11 +22,13 @@ const userSlice = createSlice({
       return { ...state, selectedHistory };
     },
     setAlertState: (state, { payload }) => ({ ...state, alertState: { ...state.alertState, ...payload } }),
+    setHistoryDialogState: (state, { payload }) => ({ ...state, historyDialogState: { ...payload } }),
   },
 });
 
 export const {
-  setCalculationName, setFromUserHistory, setUserHistoryList, setSelectedHistory, setAlertState,
+  setCalculationName, setHistoryState, setUserHistoryList, setSelectedHistory, setAlertState,
+  setHistoryDialogState,
 } = userSlice.actions;
 
 export default userSlice;

@@ -14,7 +14,7 @@ import { useDispatch } from 'react-redux';
 import { calculatorList } from '../../shared/data/dropdown';
 import { resetCalculator } from '../../features/calculatorSlice';
 import {
-  setCalculationNameRedux, setFromUserHistoryRedux, setSelectedHistoryRedux,
+  setCalculationNameRedux, setHistoryStateRedux, setSelectedHistoryRedux,
 } from '../../features/userSlice/actions';
 import { historyState } from '../../features/userSlice/state';
 
@@ -63,7 +63,7 @@ const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
     setActiveStep(0);
     setCompletedStep(-1);
     dispatch(resetCalculator());
-    dispatch(setFromUserHistoryRedux(historyState.none));
+    dispatch(setHistoryStateRedux(historyState.none));
     dispatch(setCalculationNameRedux(''));
     dispatch(setSelectedHistoryRedux(null));
   };

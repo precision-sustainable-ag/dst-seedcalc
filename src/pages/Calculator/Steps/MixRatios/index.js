@@ -22,7 +22,7 @@ import {
 import { setOptionRedux, setMixRatioOptionRedux } from '../../../../features/calculatorSlice/actions';
 import { pieChartUnits } from '../../../../shared/data/units';
 import '../steps.scss';
-import { setAlertStateRedux, setFromUserHistoryRedux } from '../../../../features/userSlice/actions';
+import { setAlertStateRedux, setHistoryStateRedux } from '../../../../features/userSlice/actions';
 import { historyState } from '../../../../features/userSlice/state';
 
 const getCalculatorResult = (council) => {
@@ -86,7 +86,7 @@ const MixRatio = ({
   const {
     council, soilDrainage, plantingDate, acres, county,
   } = useSelector((state) => state.siteCondition);
-  const { fromUserHistory } = useSelector((state) => state.user);
+  const { historyState } = useSelector((state) => state.user);
 
   const [calculatorResult, setCalculatorResult] = useState(
     seedsSelected.reduce((res, seed) => {
@@ -125,7 +125,7 @@ const MixRatio = ({
     const seedingRateCalculator = createCalculator(seedsSelected, council, regions, userInput);
     setCalculator(seedingRateCalculator);
     // If historyState is imported, not init options, use mixRatioOptions instead
-    if (fromUserHistory !== historyState.imported) {
+    if (historyState !== historyState.imported) {
       seedsSelected.forEach((seed) => {
         // if percentOfRate is not null, skip this step(this happens when add new crop for a imported history)
         if (mixRatioOptions[seed.label].percentOfRate === null) {
@@ -168,7 +168,7 @@ const MixRatio = ({
         }));
       }
       // if history is not imported, update mixRatioOptions to options
-      if (fromUserHistory !== historyState.imported) dispatch(setOptionRedux(seed.label, seedOption));
+      if (historyState !== historyState.imported) dispatch(setOptionRedux(seed.label, seedOption));
       // if history is updated, this will remove previously imported options redux and set it as mixRatioOptions
     });
     // calculate piechart data
@@ -181,7 +181,7 @@ const MixRatio = ({
     setPrevOptions(mixRatioOptions);
     // when options change, set mixRatiosOptions in redux
     // FIXME: maybe need to think a little bit more situations
-    // if (!fromUserHistory) dispatch(setMixRatioOptionsRedux(options));
+    // if (!historyState) dispatch(setMixRatioOptionsRedux(options));
   }, [mixRatioOptions, initCalculator]);
 
   // expand related accordion based on sidebar click
@@ -209,7 +209,7 @@ const MixRatio = ({
     }));
     dispatch(setMixRatioOptionRedux(seed.label, { ...mixRatioOptions[seed.label], [option]: value }));
     // set historyState.updated if change anything
-    if (fromUserHistory === historyState.imported) dispatch(setFromUserHistoryRedux(historyState.updated));
+    if (historyState === historyState.imported) dispatch(setHistoryStateRedux(historyState.updated));
   };
 
   // handler for click to open accordion

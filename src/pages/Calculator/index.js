@@ -106,7 +106,7 @@ const Calculator = () => {
         );
       case 'Confirm Plan':
         return (
-          <ConfirmPlan calculator={calculator} token={token} />
+          <ConfirmPlan calculator={calculator} />
         );
       case 'Finish':
         return (
@@ -309,6 +309,7 @@ const Calculator = () => {
             )}
           </Grid>
         </Grid>
+
       </Grid>
 
       <Grid item md={0} lg={2} />

@@ -16,7 +16,7 @@ const defaultResult = {
   totalCost: 0,
 };
 
-const ConfirmPlan = ({ calculator, token }) => {
+const ConfirmPlan = ({ calculator }) => {
   const siteCondition = useSelector((state) => state.siteCondition);
   const calculatorRedux = useSelector((state) => state.calculator);
   const { council, checkNRCSStandards } = siteCondition;
@@ -69,7 +69,7 @@ const ConfirmPlan = ({ calculator, token }) => {
 
         {/* Export Button */}
         <Grid item xs={12} display="flex" justifyContent="flex-end" pt="5px">
-          <ExportModal token={token} />
+          <ExportModal />
         </Grid>
 
         {/* Charts */}

@@ -2,7 +2,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { setSiteConditionRedux } from '../../features/siteConditionSlice/actions';
 import {
-  setCalculationNameRedux, setFromUserHistoryRedux, setUserHistoryListRedux, setSelectedHistoryRedux,
+  setCalculationNameRedux, setHistoryStateRedux, setUserHistoryListRedux, setSelectedHistoryRedux,
   setAlertStateRedux,
 } from '../../features/userSlice/actions';
 import { setCalculatorRedux } from '../../features/calculatorSlice/actions';
@@ -37,7 +37,7 @@ const useUserHistory = (token) => {
             dispatch(setSiteConditionRedux(data.siteCondition));
             dispatch(setCalculatorRedux(data.calculator));
             dispatch(setCalculationNameRedux(history.label));
-            dispatch(setFromUserHistoryRedux(historyState.imported));
+            dispatch(setHistoryStateRedux(historyState.imported));
             dispatch(setSelectedHistoryRedux({ label: history.label, id: history.id }));
             dispatch(setAlertStateRedux({
               open: true,

@@ -7,13 +7,17 @@ export const historyState = {
 
 const initialState = {
   calculationName: '',
-  fromUserHistory: historyState.none,
+  historyState: historyState.none,
   userHistoryList: [],
   selectedHistory: null,
   alertState: {
     open: false,
     severity: 'error',
     message: 'Network Error - Try again later or refresh the page!',
+  },
+  historyDialogState: {
+    open: false,
+    type: 'add',
   },
 };
 
