@@ -16,7 +16,7 @@ import { resetCalculator } from '../../features/calculatorSlice';
 import {
   setCalculationNameRedux, setHistoryStateRedux, setSelectedHistoryRedux,
 } from '../../features/userSlice/actions';
-import { historyState } from '../../features/userSlice/state';
+import { historyStates } from '../../features/userSlice/state';
 
 /*
 {
@@ -63,7 +63,7 @@ const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
     setActiveStep(0);
     setCompletedStep(-1);
     dispatch(resetCalculator());
-    dispatch(setHistoryStateRedux(historyState.none));
+    dispatch(setHistoryStateRedux(historyStates.none));
     dispatch(setCalculationNameRedux(''));
     dispatch(setSelectedHistoryRedux(null));
   };

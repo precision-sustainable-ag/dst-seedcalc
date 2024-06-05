@@ -29,6 +29,7 @@ import { calculatorList, completedList } from '../../shared/data/dropdown';
 import StepsList from '../../components/StepsList';
 import NavBar from '../../components/NavBar';
 import { setAlertStateRedux } from '../../features/userSlice/actions';
+import HistoryDialog from '../../components/HistoryDialog';
 
 const Calculator = () => {
   // initially set calculator here
@@ -308,6 +309,8 @@ const Calculator = () => {
                 : calculatorList[activeStep],
             )}
           </Grid>
+
+          <HistoryDialog />
         </Grid>
 
       </Grid>

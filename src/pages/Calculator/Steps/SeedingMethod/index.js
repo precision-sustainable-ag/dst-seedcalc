@@ -14,7 +14,7 @@ import { seedingMethodsMCCC, seedingMethodsNECCC, seedingMethodsSCCC } from '../
 import Dropdown from '../../../../components/Dropdown';
 import '../steps.scss';
 import { setOptionRedux, setSeedingMethodsRedux } from '../../../../features/calculatorSlice/actions';
-import { historyState } from '../../../../features/userSlice/state';
+import { historyStates } from '../../../../features/userSlice/state';
 import { setAlertStateRedux, setHistoryStateRedux } from '../../../../features/userSlice/actions';
 
 // styles for left grid
@@ -102,7 +102,7 @@ const SeedingMethod = ({ alertState }) => {
       message: 'You can also edit this information in furthur steps.',
     }));
     setSelectedMethod(method);
-    if (historyState === historyState.imported) dispatch(setHistoryStateRedux(historyState.updated));
+    if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
   };
 
   /// ///////////////////////////////////////////////////////

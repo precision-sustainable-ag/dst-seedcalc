@@ -10,7 +10,6 @@ import { setSiteConditionRedux } from '../../features/siteConditionSlice/actions
 import useUserHistory from '../../shared/hooks/useUserHistory';
 import Dropdown from '../Dropdown';
 import { setCalculationNameRedux, setHistoryDialogStateRedux } from '../../features/userSlice/actions';
-import HistoryDialog from '../HistoryDialog';
 
 const modalStyle = {
   position: 'absolute',
@@ -107,10 +106,12 @@ const DSTImport = ({ token }) => {
                   </Typography>
                 </Grid>
                 <Grid item xs={12} display="flex" justifyContent="center">
-                  <HistoryDialog />
                   <Button
                     variant="contained"
-                    onClick={() => dispatch(setHistoryDialogStateRedux({ open: true, type: 'add' }))}
+                    onClick={() => {
+                      dispatch(setHistoryDialogStateRedux({ open: true, type: 'add' }));
+                      setOpenModal(false);
+                    }}
                   >
                     create new calculation
                   </Button>

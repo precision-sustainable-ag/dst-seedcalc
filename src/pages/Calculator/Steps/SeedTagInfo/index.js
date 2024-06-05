@@ -17,7 +17,7 @@ import NumberTextField from '../../../../components/NumberTextField';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 import '../steps.scss';
 import { validateForms } from '../../../../shared/utils/format';
-import { historyState } from '../../../../features/userSlice/state';
+import { historyStates } from '../../../../features/userSlice/state';
 import { setAlertStateRedux, setHistoryStateRedux } from '../../../../features/userSlice/actions';
 
 const LeftGrid = styled(Grid)({
@@ -70,7 +70,7 @@ const SeedTagInfo = ({
       message: 'You can also edit this information in furthur steps.',
     }));
     dispatch(setOptionRedux(seedLabel, { ...options[seedLabel], germination: value }));
-    if (historyState === historyState.imported) dispatch(setHistoryStateRedux(historyState.updated));
+    if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
   };
 
   const updatePurity = (seedLabel, value) => {
@@ -81,12 +81,12 @@ const SeedTagInfo = ({
       message: 'You can also edit this information in furthur steps.',
     }));
     dispatch(setOptionRedux(seedLabel, { ...options[seedLabel], purity: value }));
-    if (historyState === historyState.imported) dispatch(setHistoryStateRedux(historyState.updated));
+    if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
   };
 
   const updateSeedsPerPound = (seedLabel, value) => {
     dispatch(setOptionRedux(seedLabel, { ...options[seedLabel], seedsPerPound: value }));
-    if (historyState === historyState.imported) dispatch(setHistoryStateRedux(historyState.updated));
+    if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
   };
 
   const seedsPerPound = (seed) => {

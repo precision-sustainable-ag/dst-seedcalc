@@ -7,7 +7,7 @@ import {
 } from '../../features/userSlice/actions';
 import { setCalculatorRedux } from '../../features/calculatorSlice/actions';
 import { getHistories, createHistory, updateHistory } from '../../features/userSlice/api';
-import { historyState } from '../../features/userSlice/state';
+import { historyStates } from '../../features/userSlice/state';
 
 const useUserHistory = (token) => {
   const dispatch = useDispatch();
@@ -37,7 +37,7 @@ const useUserHistory = (token) => {
             dispatch(setSiteConditionRedux(data.siteCondition));
             dispatch(setCalculatorRedux(data.calculator));
             dispatch(setCalculationNameRedux(history.label));
-            dispatch(setHistoryStateRedux(historyState.imported));
+            dispatch(setHistoryStateRedux(historyStates.imported));
             dispatch(setSelectedHistoryRedux({ label: history.label, id: history.id }));
             dispatch(setAlertStateRedux({
               open: true,

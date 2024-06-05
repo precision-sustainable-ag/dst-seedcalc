@@ -19,7 +19,7 @@ import {
 } from '../../../../features/calculatorSlice/actions';
 import { initialOptions } from '../../../../shared/utils/calculator';
 import { setHistoryStateRedux } from '../../../../features/userSlice/actions';
-import { historyState } from '../../../../features/userSlice/state';
+import { historyStates } from '../../../../features/userSlice/state';
 
 const CheckBoxIcon = ({ style }) => (
   <Box sx={style}>
@@ -97,8 +97,8 @@ const PlantList = ({
   };
 
   const handleClick = async (seed) => {
-    // if from user history, set historyState to historyState.updated to create a new calculation
-    if (historyState === historyState.imported) dispatch(setHistoryStateRedux(historyState.updated));
+    // if from user history, set historyState to historyStates.updated to create a new calculation
+    if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
     const { id: cropId, label: seedName } = seed;
     // if seed not in seedSelected, add it
     if (seedsSelected.filter((s) => s.label === seedName).length === 0) {

@@ -23,7 +23,7 @@ import { setOptionRedux, setMixRatioOptionRedux } from '../../../../features/cal
 import { pieChartUnits } from '../../../../shared/data/units';
 import '../steps.scss';
 import { setAlertStateRedux, setHistoryStateRedux } from '../../../../features/userSlice/actions';
-import { historyState } from '../../../../features/userSlice/state';
+import { historyStates } from '../../../../features/userSlice/state';
 
 const getCalculatorResult = (council) => {
   const defaultResultMCCC = {
@@ -125,7 +125,7 @@ const MixRatio = ({
     const seedingRateCalculator = createCalculator(seedsSelected, council, regions, userInput);
     setCalculator(seedingRateCalculator);
     // If historyState is imported, not init options, use mixRatioOptions instead
-    if (historyState !== historyState.imported) {
+    if (historyState !== historyStates.imported) {
       seedsSelected.forEach((seed) => {
         // if percentOfRate is not null, skip this step(this happens when add new crop for a imported history)
         if (mixRatioOptions[seed.label].percentOfRate === null) {
@@ -168,7 +168,7 @@ const MixRatio = ({
         }));
       }
       // if history is not imported, update mixRatioOptions to options
-      if (historyState !== historyState.imported) dispatch(setOptionRedux(seed.label, seedOption));
+      if (historyState !== historyStates.imported) dispatch(setOptionRedux(seed.label, seedOption));
       // if history is updated, this will remove previously imported options redux and set it as mixRatioOptions
     });
     // calculate piechart data
@@ -208,8 +208,8 @@ const MixRatio = ({
       message: 'You now have a custom mix. You can edit this information in furthur steps.',
     }));
     dispatch(setMixRatioOptionRedux(seed.label, { ...mixRatioOptions[seed.label], [option]: value }));
-    // set historyState.updated if change anything
-    if (historyState === historyState.imported) dispatch(setHistoryStateRedux(historyState.updated));
+    // set historyStates.updated if change anything
+    if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
   };
 
   // handler for click to open accordion

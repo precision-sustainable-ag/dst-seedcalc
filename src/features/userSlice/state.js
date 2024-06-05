@@ -1,4 +1,4 @@
-export const historyState = {
+export const historyStates = {
   none: 'none',
   new: 'new',
   imported: 'imported',
@@ -7,7 +7,7 @@ export const historyState = {
 
 const initialState = {
   calculationName: '',
-  historyState: historyState.none,
+  historyState: historyStates.none,
   userHistoryList: [],
   selectedHistory: null,
   alertState: {

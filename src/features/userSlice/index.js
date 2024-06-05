@@ -5,6 +5,7 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
+    // TODO: whether to remove this redux state
     setCalculationName: (state, { payload }) => {
       const { calculationName } = payload;
       return { ...state, calculationName };

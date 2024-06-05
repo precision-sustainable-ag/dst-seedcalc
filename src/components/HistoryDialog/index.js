@@ -9,7 +9,7 @@ import {
 import { setCalculatorRedux } from '../../features/calculatorSlice/actions';
 import initialCalculatorState from '../../features/calculatorSlice/state';
 import initialSiteConditionState from '../../features/siteConditionSlice/state';
-import { historyState } from '../../features/userSlice/state';
+import { historyStates } from '../../features/userSlice/state';
 import { setSiteConditionRedux } from '../../features/siteConditionSlice/actions';
 
 const HistoryDialog = () => {
@@ -51,7 +51,7 @@ const HistoryDialog = () => {
       dispatch(setCalculatorRedux(initialCalculatorState));
       dispatch(setSiteConditionRedux(initialSiteConditionState));
       dispatch(setSelectedHistoryRedux({ label: historyName, id: null }));
-      dispatch(setHistoryStateRedux(historyState.new));
+      dispatch(setHistoryStateRedux(historyStates.new));
     } else {
       setError(true);
       setHelperText('Name invalid or already exists!');
@@ -65,7 +65,7 @@ const HistoryDialog = () => {
     dispatch(setCalculatorRedux(initialCalculatorState));
     dispatch(setSiteConditionRedux(initialSiteConditionState));
     dispatch(setSelectedHistoryRedux(null));
-    dispatch(setHistoryStateRedux(historyState.none));
+    dispatch(setHistoryStateRedux(historyStates.none));
     // open dialog and set dialog state as add
     handleOpenDialog(true, 'add');
   };
@@ -79,17 +79,17 @@ const HistoryDialog = () => {
   //     if (from === historyDialogFromEnums.siteCondition) {
   //       if (!nameValidation()) return;
   //       // if there's already an imported history existed, cleanup calculator redux(except for crops)
-  //       if (historyState === historyState.imported) dispatch(setCalculatorRedux({ ...initialState, crops }));
-  //       dispatch(setHistoryStateRedux(historyState.new));
+  //       if (historyState === historyStates.imported) dispatch(setCalculatorRedux({ ...initialState, crops }));
+  //       dispatch(setHistoryStateRedux(historyStates.new));
   //       setOpenModal(false);
   //     }
   //     // on the complete page, update/save the calculation
   //     if (from === historyDialogFromEnums.completePage) {
-  //       if (historyState === historyState.updated) {
+  //       if (historyState === historyStates.updated) {
   //         // if history is updated but name is not changed, not run nameValidation again
   //         if (selectedHistory.label !== historyName && !nameValidation()) return;
   //         saveHistory(selectedHistory.id, historyName);
-  //       } else if (historyState === historyState.new) {
+  //       } else if (historyState === historyStates.new) {
   //         if (!nameValidation()) return;
   //         saveHistory();
   //       }

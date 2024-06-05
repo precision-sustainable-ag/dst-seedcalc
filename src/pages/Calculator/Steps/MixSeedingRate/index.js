@@ -15,7 +15,7 @@ import {
   setAdjustedMixSeedingRateRedux,
   setMixSeedingRateRedux, setOptionRedux,
 } from '../../../../features/calculatorSlice/actions';
-import { historyState } from '../../../../features/userSlice/state';
+import { historyStates } from '../../../../features/userSlice/state';
 import { setHistoryStateRedux } from '../../../../features/userSlice/actions';
 import '../steps.scss';
 
@@ -129,7 +129,7 @@ const MixSeedingRate = ({ calculator }) => {
       dispatch(setOptionRedux(seed.label, { ...prevOptions, managementImpactOnMix }));
     });
     dispatch(setAdjustedMixSeedingRateRedux(adjustedMixSeedingRate));
-    if (historyState === historyState.imported) dispatch(setHistoryStateRedux(historyState.updated));
+    if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
   };
 
   /// ///////////////////////////////////////////////////////
