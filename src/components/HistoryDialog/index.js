@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField,
+  Typography,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -12,7 +13,7 @@ import initialSiteConditionState from '../../features/siteConditionSlice/state';
 import { historyStates } from '../../features/userSlice/state';
 import { setSiteConditionRedux } from '../../features/siteConditionSlice/actions';
 
-const HistoryDialog = () => {
+const HistoryDialog = ({ setStep }) => {
   const [error, setError] = useState(false);
   const [helperText, setHelperText] = useState('');
   const [historyName, setHistoryName] = useState('');
@@ -61,6 +62,8 @@ const HistoryDialog = () => {
   };
 
   const handleUpdate = () => {
+    // return to first step
+    setStep(0);
     // reset redux
     dispatch(setCalculatorRedux(initialCalculatorState));
     dispatch(setSiteConditionRedux(initialSiteConditionState));
@@ -73,34 +76,6 @@ const HistoryDialog = () => {
   const handleCancel = () => {
     resetDialogState();
   };
-
-  // const handleClose = (selection) => {
-  //   if (selection === 'YES') {
-  //     if (from === historyDialogFromEnums.siteCondition) {
-  //       if (!nameValidation()) return;
-  //       // if there's already an imported history existed, cleanup calculator redux(except for crops)
-  //       if (historyState === historyStates.imported) dispatch(setCalculatorRedux({ ...initialState, crops }));
-  //       dispatch(setHistoryStateRedux(historyStates.new));
-  //       setOpenModal(false);
-  //     }
-  //     // on the complete page, update/save the calculation
-  //     if (from === historyDialogFromEnums.completePage) {
-  //       if (historyState === historyStates.updated) {
-  //         // if history is updated but name is not changed, not run nameValidation again
-  //         if (selectedHistory.label !== historyName && !nameValidation()) return;
-  //         saveHistory(selectedHistory.id, historyName);
-  //       } else if (historyState === historyStates.new) {
-  //         if (!nameValidation()) return;
-  //         saveHistory();
-  //       }
-  //     }
-  //     dispatch(setCalculationNameRedux(historyName));
-  //     dispatch(setSelectedHistoryRedux(null));
-  //   }
-  //   setError(false);
-  //   setHelperText('');
-  //   setOpen(false);
-  // };
 
   // initially set calculation name
   useEffect(() => {
@@ -130,18 +105,20 @@ const HistoryDialog = () => {
         {type === 'update'
           && (
           <DialogContent>
-            <span style={{ color: 'red' }}>Warning: </span>
-            Making changes may affect the results of subsequent steps
-            that you have saved. Please create a new record instead.
+            <Typography>
+              <span style={{ color: 'red' }}>Warning: </span>
+              Making changes may affect the results of subsequent steps
+              that you have saved. Please create a new record instead.
+            </Typography>
           </DialogContent>
           )}
       </DialogContent>
       <DialogActions>
         {type === 'add'
-            && <Button onClick={handleCreate}>Create</Button>}
+            && <Button onClick={handleCreate} variant="contained">Create</Button>}
         {type === 'update'
-            && <Button onClick={handleUpdate}>Create a new record</Button>}
-        <Button onClick={handleCancel}>Cancel</Button>
+            && <Button onClick={handleUpdate} variant="contained">Create a new record</Button>}
+        <Button onClick={handleCancel} variant="contained">Cancel</Button>
       </DialogActions>
 
     </Dialog>

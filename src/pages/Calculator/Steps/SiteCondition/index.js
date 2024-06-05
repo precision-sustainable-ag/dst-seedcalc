@@ -21,21 +21,25 @@ import SiteConditionForm from './form';
 import Map from './Map';
 import initialState from '../../../../features/siteConditionSlice/state';
 import '../steps.scss';
+import { historyStates } from '../../../../features/userSlice/state';
+import { setHistoryDialogStateRedux } from '../../../../features/userSlice/actions';
 
 const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
   // Location state
   const [step, setStep] = useState(1);
   const [mapState, setMapState] = useState({});
+  const [selectedState, setSelectedState] = useState({});
   const [states, setStates] = useState([]);
   const [regions, setRegions] = useState([]);
 
   const dispatch = useDispatch();
   const siteCondition = useSelector((state) => state.siteCondition);
+  const { historyState } = useSelector((state) => state.user);
 
   // function to get all regions(counties/zones) of a state
-  const getRegions = async (selectedState) => {
-    const council = selectedState.parents[0].shorthand;
-    const res = await dispatch(getRegion({ stateId: selectedState.id }));
+  const getRegions = async (state) => {
+    const council = state.parents[0].shorthand;
+    const res = await dispatch(getRegion({ stateId: state.id }));
     const { kids } = res.payload.data;
     if (council === 'NECCC' || council === 'SCCC') return kids.Zones;
     if (council === 'MCCC') return kids.Counties;
@@ -43,7 +47,7 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
   };
 
   // update redux based on state change
-  const updateStateRedux = (selectedState) => {
+  const updateStateRedux = (state) => {
     // set all siteCondition redux value to default
     // FIXME: this also set loading and error to false, need to make changes to redux apis
     // maybe move them to user api
@@ -52,27 +56,46 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
     // TODO: if back to prev step is enabled, then also need to initiate calculator redux
 
     // Update state in siteCondition
-    const { label } = selectedState;
+    const { label } = state;
     dispatch(updateLatlonRedux(statesLatLongDict[label]));
-    dispatch(setStateRedux(label, selectedState.id));
-    dispatch(setCouncilRedux(selectedState.parents[0].shorthand));
+    dispatch(setStateRedux(label, state.id));
+    dispatch(setCouncilRedux(state.parents[0].shorthand));
   };
 
-  const mapStateChange = async (state) => {
+  const mapStateChange = (state) => {
     setMapState(state);
     if (Object.keys(state).length !== 0) {
       const st = states.filter(
         (s) => s.label === state.properties.STATE_NAME,
       );
       if (st.length > 0) {
-        // update regions everytime there's a state change FROM MAP
-        const res = await getRegions(st[0]);
-        setRegions(res);
-        // if select a new state (st[0].label different from redux state), update all related redux values
-        if (st[0].label !== siteCondition.state) updateStateRedux(st[0]);
+        setSelectedState(st[0]);
       }
     }
   };
+
+  // const mapStateChange = async (state) => {
+  //   setMapState(state);
+  //   if (Object.keys(state).length !== 0) {
+  //     const st = states.filter(
+  //       (s) => s.label === state.properties.STATE_NAME,
+  //     );
+  //     if (st.length > 0) {
+  //       // prevent history state change and show historyDialog
+  //       console.log(historyState, historyState === historyStates.imported, st[0].label !== siteCondition.state);
+  //       if (historyState === historyStates.imported && st[0].label !== siteCondition.state) {
+  //         // dispatch(setHistoryDialogStateRedux({ open: true, type: 'update' }));
+  //         // dispatch(setStateRedux(siteCondition.state, siteCondition.stateId));
+  //         return;
+  //       }
+  //       // update regions everytime there's a state change FROM MAP
+  //       const res = await getRegions(st[0]);
+  //       setRegions(res);
+  //       // if select a new state (st[0].label different from redux state), update all related redux values
+  //       if (st[0].label !== siteCondition.state) updateStateRedux(st[0]);
+  //     }
+  //   }
+  // };
 
   // initially get states data
   useEffect(() => {
@@ -82,6 +105,39 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
     };
     if (states.length === 0) getStates();
   }, []);
+
+  useEffect(() => {
+    if (states.length) {
+      const state = states.filter((s) => s.label === siteCondition.state);
+      if (state.length > 0) {
+        setSelectedState(state[0]);
+      } else setSelectedState({});
+    }
+  }, [siteCondition.state, states]);
+
+  useEffect(() => {
+    const fetchRegions = async () => {
+      const res = await getRegions(selectedState);
+      setRegions(res);
+    };
+
+    if (Object.keys(selectedState).length !== 0) {
+      if (historyState === historyStates.imported && selectedState.label !== siteCondition.state) {
+        // open history dialog
+        dispatch(setHistoryDialogStateRedux({ open: true, type: 'update' }));
+        // reset state to previous state in redux
+        const state = states.filter((s) => s.label === siteCondition.state);
+        if (state.length > 0) {
+          setSelectedState(state[0]);
+        } else setSelectedState({});
+        return;
+      }
+      // update regions everytime there's a state change FROM MAP
+      fetchRegions();
+      // if select a new state (st[0].label different from redux state), update all related redux values
+      if (selectedState.label !== siteCondition.state) updateStateRedux(selectedState);
+    }
+  }, [selectedState]);
 
   // validate all information on this page is selected, then call getCrops api
   useEffect(() => {
@@ -111,7 +167,7 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
             <>
               <RegionSelectorMap
                 selectorFunction={mapStateChange}
-                selectedState={siteCondition.state || ''}
+                selectedState={selectedState.label || ''}
                 availableStates={states.map((s) => s.label)}
                 initWidth="100%"
                 initHeight="360px"

@@ -23,6 +23,8 @@ import {
   setSoilDrainageRedux, setSoilFertilityRedux, updateTileDrainageRedux,
 } from '../../../../features/siteConditionSlice/actions';
 import '../steps.scss';
+import { historyStates } from '../../../../features/userSlice/state';
+import { setHistoryDialogStateRedux } from '../../../../features/userSlice/actions';
 
 const needTileDrainage = ['Very Poorly Drained', 'Poorly Drained', 'Somewhat Poorly Drained'];
 
@@ -82,10 +84,16 @@ const SiteConditionForm = ({
     state, soilDrainage, tileDrainage, county, plantingDate,
     soilFertility, checkNRCSStandards, acres, council,
   } = useSelector((s) => s.siteCondition);
+  // eslint-disable-next-line no-shadow
+  const { historyState } = useSelector((state) => state.user);
 
   const [soilDrainagePrev, setSoilDrainagePrev] = useState(soilDrainage);
 
   const handleState = async (e) => {
+    if (historyState === historyStates.imported) {
+      dispatch(setHistoryDialogStateRedux({ open: true, type: 'update' }));
+      return;
+    }
     const stateSelected = stateList.filter((s) => s.label === e.target.value);
     if (stateSelected.length > 0) {
       // get new regions for the selected state

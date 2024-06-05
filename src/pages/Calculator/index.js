@@ -310,7 +310,7 @@ const Calculator = () => {
             )}
           </Grid>
 
-          <HistoryDialog />
+          <HistoryDialog setStep={setActiveStep} />
         </Grid>
 
       </Grid>
