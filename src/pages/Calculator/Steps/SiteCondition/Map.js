@@ -9,16 +9,19 @@ import {
   setCountyRedux, setSoilDrainageRedux, updateLatlonRedux, updateTileDrainageRedux,
   setCountyIdRedux,
 } from '../../../../features/siteConditionSlice/actions';
+import { setHistoryDialogStateRedux } from '../../../../features/userSlice/actions';
 import { getZoneData, getSSURGOData } from '../../../../features/siteConditionSlice/api';
-
+import { historyStates } from '../../../../features/userSlice/state';
 import '../steps.scss';
 
 const Map = ({
   setStep, regions,
 }) => {
   const [selectedToEditSite, setSelectedToEditSite] = useState({});
+  const [mapFeatures, setMapFeatures] = useState([]);
 
   const { council, latlon } = useSelector((state) => state.siteCondition);
+  const { historyState } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
 
@@ -29,6 +32,19 @@ const Map = ({
     } = selectedToEditSite;
 
     if (Object.keys(selectedToEditSite).length > 0) {
+      if (latitude === latlon[0] && longitude === latlon[1]) return;
+      if (historyState === historyStates.imported) {
+        dispatch(setHistoryDialogStateRedux({ open: true, type: 'update' }));
+        // reset map location to history redux
+        setMapFeatures([{
+          type: 'Feature',
+          geometry: {
+            coordinates: [latlon[1], latlon[0]],
+            type: 'Point',
+          },
+        }]);
+        return;
+      }
       // update county/zone for MCCC/NECCC
       if (council === 'MCCC') {
         const filteredCounty = regions.filter((c) => county.toLowerCase().includes(c.label.toLowerCase()));
@@ -82,6 +98,7 @@ const Map = ({
           initHeight="360px"
           initLat={latlon[0]}
           initLon={latlon[1]}
+          initFeatures={mapFeatures}
           initStartZoom={12}
           initMinZoom={4}
           initMaxZoom={18}

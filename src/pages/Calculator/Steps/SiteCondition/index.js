@@ -24,9 +24,10 @@ import '../steps.scss';
 import { historyStates } from '../../../../features/userSlice/state';
 import { setHistoryDialogStateRedux } from '../../../../features/userSlice/actions';
 
-const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
+const SiteCondition = ({
+  siteConditionStep, setSiteConditionStep, completedStep, setCompletedStep, token,
+}) => {
   // Location state
-  const [step, setStep] = useState(1);
   const [mapState, setMapState] = useState({});
   const [selectedState, setSelectedState] = useState({});
   const [states, setStates] = useState([]);
@@ -163,7 +164,7 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
         {siteCondition.loading === 'getLocality' ? (
           <Spinner />
         ) : (
-          step === 1 ? (
+          siteConditionStep === 1 ? (
             <>
               <RegionSelectorMap
                 selectorFunction={mapStateChange}
@@ -183,8 +184,8 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
                         Would you like to manually enter your site conditions
                         or use your location to prepopulate them?
                       </Typography>
-                      <Button variant="contained" onClick={() => setStep(2)} sx={{ margin: '1rem' }}>Map</Button>
-                      <Button variant="contained" onClick={() => setStep(3)} sx={{ margin: '1rem' }}>Manually Enter</Button>
+                      <Button variant="contained" onClick={() => setSiteConditionStep(2)} sx={{ margin: '1rem' }}>Map</Button>
+                      <Button variant="contained" onClick={() => setSiteConditionStep(3)} sx={{ margin: '1rem' }}>Manually Enter</Button>
                     </Grid>
                   )
                   : (
@@ -198,15 +199,15 @@ const SiteCondition = ({ completedStep, setCompletedStep, token }) => {
               <DSTImport token={token} />
 
             </>
-          ) : step === 2 ? (
+          ) : siteConditionStep === 2 ? (
             <Map
-              setStep={setStep}
+              setStep={setSiteConditionStep}
               regions={regions}
             />
-          ) : step === 3 ? (
+          ) : siteConditionStep === 3 ? (
             <SiteConditionForm
               stateList={states}
-              setStep={setStep}
+              setStep={setSiteConditionStep}
               regions={regions}
               setRegions={setRegions}
               getRegions={getRegions}

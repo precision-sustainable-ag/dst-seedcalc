@@ -13,7 +13,7 @@ import initialSiteConditionState from '../../features/siteConditionSlice/state';
 import { historyStates } from '../../features/userSlice/state';
 import { setSiteConditionRedux } from '../../features/siteConditionSlice/actions';
 
-const HistoryDialog = ({ setStep }) => {
+const HistoryDialog = ({ setStep, setSiteConditionStep }) => {
   const [error, setError] = useState(false);
   const [helperText, setHelperText] = useState('');
   const [historyName, setHistoryName] = useState('');
@@ -64,6 +64,7 @@ const HistoryDialog = ({ setStep }) => {
   const handleUpdate = () => {
     // return to first step
     setStep(0);
+    setSiteConditionStep(1);
     // reset redux
     dispatch(setCalculatorRedux(initialCalculatorState));
     dispatch(setSiteConditionRedux(initialSiteConditionState));

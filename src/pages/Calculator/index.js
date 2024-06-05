@@ -35,6 +35,7 @@ const Calculator = () => {
   // initially set calculator here
   const [calculator, setCalculator] = useState(null);
   const [activeStep, setActiveStep] = useState(0);
+  const [siteConditionStep, setSiteConditionStep] = useState(1);
   // this completedStep is to determine whether the next button is clickable on each page
   const [completedStep, setCompletedStep] = useState([...completedList]);
   const [token, setToken] = useState(null);
@@ -63,6 +64,8 @@ const Calculator = () => {
       case 'Site Conditions':
         return (
           <SiteCondition
+            siteConditionStep={siteConditionStep}
+            setSiteConditionStep={setSiteConditionStep}
             completedStep={completedStep}
             setCompletedStep={setCompletedStep}
             token={token}
@@ -310,7 +313,7 @@ const Calculator = () => {
             )}
           </Grid>
 
-          <HistoryDialog setStep={setActiveStep} />
+          <HistoryDialog setStep={setActiveStep} setSiteConditionStep={setSiteConditionStep} />
         </Grid>
 
       </Grid>

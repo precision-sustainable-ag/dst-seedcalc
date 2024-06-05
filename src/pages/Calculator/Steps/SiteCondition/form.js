@@ -104,6 +104,10 @@ const SiteConditionForm = ({
   };
 
   const handleRegion = (e) => {
+    if (historyState === historyStates.imported) {
+      dispatch(setHistoryDialogStateRedux({ open: true, type: 'update' }));
+      return;
+    }
     dispatch(setCountyRedux(e.target.value));
     const countyId = regions.filter(
       (c) => c.label === e.target.value,
@@ -112,6 +116,10 @@ const SiteConditionForm = ({
   };
 
   const handleSoilDrainage = (e) => {
+    if (historyState === historyStates.imported) {
+      dispatch(setHistoryDialogStateRedux({ open: true, type: 'update' }));
+      return;
+    }
     setSoilDrainagePrev(e.target.value);
     dispatch(setSoilDrainageRedux(e.target.value));
     dispatch(updateTileDrainageRedux(false));
