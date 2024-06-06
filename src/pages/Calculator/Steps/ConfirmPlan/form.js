@@ -7,10 +7,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import NumberTextField from '../../../../components/NumberTextField';
 import DSTTextField from '../../../../components/DSTTextField';
 import NRCSStandards from './NRCSStandards';
-
-import '../steps.scss';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 import { setAcresRedux } from '../../../../features/siteConditionSlice/actions';
+import { historyStates } from '../../../../features/userSlice/state';
+import { setHistoryStateRedux } from '../../../../features/userSlice/actions';
+import '../steps.scss';
 
 const ConfirmPlanForm = ({
   nrcsResult, seedsSelected, calculatorResult, options,
@@ -21,6 +22,7 @@ const ConfirmPlanForm = ({
   const dispatch = useDispatch();
 
   const { checkNRCSStandards } = useSelector((state) => state.siteCondition);
+  const { historyState } = useSelector((state) => state.user);
 
   const renderStepsForm = (label1, label2, label3) => (
     matchesMd && (
@@ -73,6 +75,7 @@ const ConfirmPlanForm = ({
                 seedsSelected.forEach((s) => {
                   dispatch(setOptionRedux(s.label, { ...options[s.label], acres: val }));
                 });
+                if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
               }}
             />
           </Grid>
@@ -99,9 +102,12 @@ const ConfirmPlanForm = ({
             <NumberTextField
               label="Cost per Pound"
               value={result.costPerPound}
-              onChange={(val) => dispatch(
-                setOptionRedux(seed.label, { ...options[seed.label], costPerPound: val }),
-              )}
+              onChange={(val) => {
+                dispatch(
+                  setOptionRedux(seed.label, { ...options[seed.label], costPerPound: val }),
+                );
+                if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
+              }}
             />
           </Grid>
           <Grid item xs={3} />
