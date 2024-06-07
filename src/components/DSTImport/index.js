@@ -31,7 +31,7 @@ const DSTImport = ({ token }) => {
 
   const dispatch = useDispatch();
 
-  const { loadHistory } = useUserHistory(token);
+  const { loadHistory } = useUserHistory();
 
   const { calculationName } = useSelector((state) => state.user);
 
@@ -69,14 +69,14 @@ const DSTImport = ({ token }) => {
   };
 
   const handleLoadUserHistory = () => {
-    loadHistory(calculationName);
+    loadHistory(token, calculationName);
     setOpenModal(!openModal);
   };
 
   // initially load all history records
   useEffect(() => {
     const loadHistories = async () => {
-      const historyList = await loadHistory();
+      const historyList = await loadHistory(token);
       setHistories(historyList);
     };
     // token is null initially so only call when token is available

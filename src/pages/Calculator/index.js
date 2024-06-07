@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /// ///////////////////////////////////////////////////////
 //                      Imports                         //
 /// ///////////////////////////////////////////////////////
@@ -6,7 +7,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { useDispatch, useSelector } from 'react-redux';
 import { Typography, useMediaQuery } from '@mui/material';
-
 import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
@@ -28,8 +28,10 @@ import SeedsSelectedList from '../../components/SeedsSelectedList';
 import { calculatorList, completedList } from '../../shared/data/dropdown';
 import StepsList from '../../components/StepsList';
 import NavBar from '../../components/NavBar';
-import { setAlertStateRedux } from '../../features/userSlice/actions';
+import { setAlertStateRedux, setHistoryStateRedux } from '../../features/userSlice/actions';
 import HistoryDialog from '../../components/HistoryDialog';
+import useUserHistory from '../../shared/hooks/useUserHistory';
+import { historyStates } from '../../features/userSlice/state';
 
 const Calculator = () => {
   // initially set calculator here
@@ -44,7 +46,7 @@ const Calculator = () => {
   const siteCondition = useSelector((state) => state.siteCondition);
   const { error: siteConditionError } = siteCondition;
   const { error: calculatorError, seedsSelected } = useSelector((state) => state.calculator);
-  const { alertState } = useSelector((state) => state.user);
+  const { alertState, historyState, selectedHistory } = useSelector((state) => state.user);
 
   const stepperRef = useRef();
 
@@ -54,6 +56,8 @@ const Calculator = () => {
   const matchesSm = useMediaQuery(theme.breakpoints.down('sm'));
 
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+
+  const { saveHistory } = useUserHistory();
 
   /// ///////////////////////////////////////////////////////
   //                      Render                          //
@@ -161,6 +165,15 @@ const Calculator = () => {
   // close alert eveytime switch steps
   useEffect(() => {
     dispatch(setAlertStateRedux({ ...alertState, open: false }));
+    if (historyState === historyStates.new || historyState === historyStates.imported) {
+      const { label, id } = selectedHistory;
+      console.log('save history');
+      // saveHistory(token, id, label).then((res) => {
+      //   console.log('save history', res.payload.data.json);
+      //   dispatch(setHistoryStateRedux(historyStates.imported));
+      //   // set history id
+      // });
+    }
   }, [activeStep]);
 
   useEffect(() => {

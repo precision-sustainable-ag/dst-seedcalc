@@ -9,7 +9,7 @@ import { setCalculatorRedux } from '../../features/calculatorSlice/actions';
 import { getHistories, createHistory, updateHistory } from '../../features/userSlice/api';
 import { historyStates } from '../../features/userSlice/state';
 
-const useUserHistory = (token) => {
+const useUserHistory = () => {
   const dispatch = useDispatch();
   const { calculationName } = useSelector((state) => state.user);
   const siteCondition = useSelector((state) => state.siteCondition);
@@ -22,7 +22,7 @@ const useUserHistory = (token) => {
  * If `name` is specified, return relevant history object.
  * @param {string} name - The name of history record, default to `null`.
  */
-  const loadHistory = async (name = null) => {
+  const loadHistory = async (token = null, name = null) => {
     try {
       if (!token) throw new Error('Access token not available!');
       const res = await dispatch(getHistories({ accessToken: token }));
@@ -52,6 +52,7 @@ const useUserHistory = (token) => {
           // name is null, return a list of history name and id
           const historyList = histories.map((history) => ({ label: history.label, id: history.id }));
           dispatch(setUserHistoryListRedux(historyList));
+          console.log('historyList', historyList);
           return historyList;
         }
       }
@@ -73,15 +74,16 @@ const useUserHistory = (token) => {
  * @param {number} id - The id of history to update, default to `null`.
  * @param {string} name - The name of history to update, default to `null`.
  */
-  const saveHistory = async (id = null, name = null) => {
+  // eslint-disable-next-line consistent-return
+  const saveHistory = async (token = null, id = null, name = null) => {
     try {
       if (!token) throw new Error('Access token not available!');
       const data = { siteCondition, calculator };
       if (id !== null) {
+        // if id is not null, update history with id
         const params = {
           accessToken: token, historyData: data, name, id,
         };
-        // if id is not null, update history with id
         const res = await dispatch(updateHistory(params));
         console.log('updated history', res.payload);
         dispatch(setAlertStateRedux({
@@ -89,11 +91,13 @@ const useUserHistory = (token) => {
           severity: 'success',
           message: 'History updated.',
         }));
+        return res;
+      // eslint-disable-next-line no-else-return
       } else {
+        // if id is null, create a new history
         const params = {
           accessToken: token, historyData: data, name: calculationName,
         };
-        // if id is null, create a new history
         const res = await dispatch(createHistory(params));
         console.log('created history', res.payload);
         dispatch(setAlertStateRedux({
@@ -101,6 +105,7 @@ const useUserHistory = (token) => {
           severity: 'success',
           message: 'History saved.',
         }));
+        return res;
       }
     } catch (err) {
       dispatch(setAlertStateRedux({
