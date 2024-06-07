@@ -14,6 +14,7 @@ const useUserHistory = () => {
   const siteCondition = useSelector((state) => state.siteCondition);
   // not upload crops data to user history since it's too large
   const { crops, ...calculator } = useSelector((state) => state.calculator);
+  const { historyState, selectedHistory } = useSelector((state) => state.user);
 
   /**
  * This function loads history from user history api.
@@ -54,7 +55,7 @@ const useUserHistory = () => {
           return historyList;
         }
       }
-      throw new Error('No available history record!');
+      console.error('No available history record!');
     } catch (err) {
       dispatch(setAlertStateRedux({
         open: true,
@@ -89,6 +90,7 @@ const useUserHistory = () => {
           severity: 'success',
           message: 'History updated.',
         }));
+        if (historyState !== historyStates.new) dispatch(setHistoryStateRedux(historyStates.imported));
         return res;
       // eslint-disable-next-line no-else-return
       } else {
@@ -103,6 +105,9 @@ const useUserHistory = () => {
           severity: 'success',
           message: 'History saved.',
         }));
+        // dispatch(setHistoryStateRedux(historyStates.imported));
+        dispatch(setSelectedHistoryRedux({ ...selectedHistory, id: res.payload.data.id }));
+        loadHistory(token);
         return res;
       }
     } catch (err) {

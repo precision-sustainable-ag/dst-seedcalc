@@ -34,7 +34,9 @@ import { historyStates } from '../../features/userSlice/state';
 }
 */
 
-const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
+const StepsList = ({
+  activeStep, setActiveStep, availableSteps, setSiteConditionStep,
+}) => {
   const [hovering, setHovering] = useState(false);
   const [visible, setVisible] = useState(false);
 
@@ -61,6 +63,7 @@ const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
 
   const handleRestart = () => {
     setActiveStep(0);
+    setSiteConditionStep(1);
     setCompletedStep(-1);
     dispatch(resetCalculator());
     dispatch(setHistoryStateRedux(historyStates.none));

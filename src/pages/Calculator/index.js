@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /// ///////////////////////////////////////////////////////
 //                      Imports                         //
 /// ///////////////////////////////////////////////////////
@@ -24,11 +23,10 @@ import {
   CompletedPage,
 } from './Steps';
 import SeedsSelectedList from '../../components/SeedsSelectedList';
-
 import { calculatorList, completedList } from '../../shared/data/dropdown';
 import StepsList from '../../components/StepsList';
 import NavBar from '../../components/NavBar';
-import { setAlertStateRedux, setHistoryStateRedux } from '../../features/userSlice/actions';
+import { setAlertStateRedux } from '../../features/userSlice/actions';
 import HistoryDialog from '../../components/HistoryDialog';
 import useUserHistory from '../../shared/hooks/useUserHistory';
 import { historyStates } from '../../features/userSlice/state';
@@ -162,17 +160,12 @@ const Calculator = () => {
     };
   }, []);
 
-  // close alert eveytime switch steps
+  // close alert and save user history
   useEffect(() => {
     dispatch(setAlertStateRedux({ ...alertState, open: false }));
-    if (historyState === historyStates.new || historyState === historyStates.imported) {
+    if (historyState === historyStates.new || historyState === historyStates.updated) {
       const { label, id } = selectedHistory;
-      console.log('save history');
-      // saveHistory(token, id, label).then((res) => {
-      //   console.log('save history', res.payload.data.json);
-      //   dispatch(setHistoryStateRedux(historyStates.imported));
-      //   // set history id
-      // });
+      saveHistory(token, id, label);
     }
   }, [activeStep]);
 
@@ -277,6 +270,7 @@ const Calculator = () => {
             activeStep={activeStep}
             setActiveStep={setActiveStep}
             availableSteps={completedStep}
+            setSiteConditionStep={setSiteConditionStep}
           />
         </Grid>
 
