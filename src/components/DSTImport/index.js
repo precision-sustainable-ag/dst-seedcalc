@@ -3,13 +3,13 @@ import Papa from 'papaparse';
 import {
   Box, Grid, Modal, Typography, Button,
 } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useAuth0 } from '@auth0/auth0-react';
 import { importFromCSVCalculator } from '../../features/calculatorSlice/actions';
 import { setSiteConditionRedux } from '../../features/siteConditionSlice/actions';
 import useUserHistory from '../../shared/hooks/useUserHistory';
 import Dropdown from '../Dropdown';
-import { setCalculationNameRedux, setHistoryDialogStateRedux } from '../../features/userSlice/actions';
+import { setHistoryDialogStateRedux } from '../../features/userSlice/actions';
 
 const modalStyle = {
   position: 'absolute',
@@ -26,28 +26,18 @@ const modalStyle = {
 
 const DSTImport = ({ token }) => {
   const [openModal, setOpenModal] = useState(false);
-
   const [histories, setHistories] = useState([]);
+  const [calculationName, setCaclulationName] = useState('');
 
   const dispatch = useDispatch();
 
   const { loadHistory } = useUserHistory();
-
-  const { calculationName } = useSelector((state) => state.user);
 
   const { isAuthenticated } = useAuth0();
 
   /// ///////////////////////////////////////////////////////
   //                  Import Logic                        //
   /// ///////////////////////////////////////////////////////
-
-  const handleOpenModal = () => {
-    // there's possibilities that click 'Create New Calculation', set a name and then click 'Import'.
-    // If this happens then the dropdown will popup with a not available name.
-    // Set the calculation name to empty to prevent this behaviour.
-    dispatch(setCalculationNameRedux(''));
-    setOpenModal(true);
-  };
 
   const handleFileUpload = (event) => {
     Papa.parse(event.target.files[0], {
@@ -62,10 +52,6 @@ const DSTImport = ({ token }) => {
         setOpenModal(!openModal);
       },
     });
-  };
-
-  const handleSelectHistory = (e) => {
-    dispatch(setCalculationNameRedux(e.target.value));
   };
 
   const handleLoadUserHistory = () => {
@@ -152,7 +138,7 @@ const DSTImport = ({ token }) => {
                       value={calculationName}
                       label="Select your calculation"
                       items={histories}
-                      handleChange={handleSelectHistory}
+                      handleChange={(e) => setCaclulationName(e.target.value)}
                       minWidth={220}
                     />
                   </Grid>
@@ -169,7 +155,7 @@ const DSTImport = ({ token }) => {
       </Modal>
       <Button
         variant="contained"
-        onClick={handleOpenModal}
+        onClick={() => setOpenModal(true)}
         sx={{ textDecoration: 'none', margin: '1rem' }}
       >
         {isAuthenticated ? 'Import / Create calculation' : 'Import Calculation'}

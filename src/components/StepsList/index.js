@@ -14,7 +14,7 @@ import { useDispatch } from 'react-redux';
 import { calculatorList } from '../../shared/data/dropdown';
 import { resetCalculator } from '../../features/calculatorSlice';
 import {
-  setCalculationNameRedux, setHistoryStateRedux, setSelectedHistoryRedux,
+  setHistoryStateRedux, setSelectedHistoryRedux,
 } from '../../features/userSlice/actions';
 import { historyStates } from '../../features/userSlice/state';
 
@@ -64,7 +64,6 @@ const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
     setCompletedStep(-1);
     dispatch(resetCalculator());
     dispatch(setHistoryStateRedux(historyStates.none));
-    dispatch(setCalculationNameRedux(''));
     dispatch(setSelectedHistoryRedux(null));
   };
   const tooltipTitle = () => {

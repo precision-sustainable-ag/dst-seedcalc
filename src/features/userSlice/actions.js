@@ -1,10 +1,8 @@
 /* eslint-disable import/prefer-default-export */
 import {
-  setCalculationName, setHistoryState, setUserHistoryList, setSelectedHistory, setAlertState,
+  setHistoryState, setUserHistoryList, setSelectedHistory, setAlertState,
   setHistoryDialogState,
 } from './index';
-
-export const setCalculationNameRedux = (calculationName) => setCalculationName({ calculationName });
 
 export const setHistoryStateRedux = (historyState) => setHistoryState({ historyState });
 

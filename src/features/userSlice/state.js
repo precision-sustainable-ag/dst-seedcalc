@@ -6,7 +6,6 @@ export const historyStates = {
 };
 
 const initialState = {
-  calculationName: '',
   historyState: historyStates.none,
   userHistoryList: [],
   selectedHistory: null,

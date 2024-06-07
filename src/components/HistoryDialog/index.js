@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField,
   Typography,
@@ -19,7 +19,7 @@ const HistoryDialog = ({ setStep, setSiteConditionStep }) => {
   const [historyName, setHistoryName] = useState('');
 
   const {
-    calculationName, userHistoryList, historyDialogState,
+    userHistoryList, historyDialogState,
   } = useSelector((state) => state.user);
   // const { crops } = useSelector((state) => state.calculator);
   const { open, type } = historyDialogState;
@@ -77,11 +77,6 @@ const HistoryDialog = ({ setStep, setSiteConditionStep }) => {
   const handleCancel = () => {
     resetDialogState();
   };
-
-  // initially set calculation name
-  useEffect(() => {
-    setHistoryName(calculationName);
-  }, []);
 
   return (
     <Dialog open={open}>

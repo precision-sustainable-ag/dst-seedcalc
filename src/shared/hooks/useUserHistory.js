@@ -2,7 +2,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { setSiteConditionRedux } from '../../features/siteConditionSlice/actions';
 import {
-  setCalculationNameRedux, setHistoryStateRedux, setUserHistoryListRedux, setSelectedHistoryRedux,
+  setHistoryStateRedux, setUserHistoryListRedux, setSelectedHistoryRedux,
   setAlertStateRedux,
 } from '../../features/userSlice/actions';
 import { setCalculatorRedux } from '../../features/calculatorSlice/actions';
@@ -11,7 +11,6 @@ import { historyStates } from '../../features/userSlice/state';
 
 const useUserHistory = () => {
   const dispatch = useDispatch();
-  const { calculationName } = useSelector((state) => state.user);
   const siteCondition = useSelector((state) => state.siteCondition);
   // not upload crops data to user history since it's too large
   const { crops, ...calculator } = useSelector((state) => state.calculator);
@@ -36,7 +35,6 @@ const useUserHistory = () => {
             console.log('loaded history', name, history);
             dispatch(setSiteConditionRedux(data.siteCondition));
             dispatch(setCalculatorRedux(data.calculator));
-            dispatch(setCalculationNameRedux(history.label));
             dispatch(setHistoryStateRedux(historyStates.imported));
             dispatch(setSelectedHistoryRedux({ label: history.label, id: history.id }));
             dispatch(setAlertStateRedux({
@@ -96,7 +94,7 @@ const useUserHistory = () => {
       } else {
         // if id is null, create a new history
         const params = {
-          accessToken: token, historyData: data, name: calculationName,
+          accessToken: token, historyData: data, name,
         };
         const res = await dispatch(createHistory(params));
         console.log('created history', res.payload);
