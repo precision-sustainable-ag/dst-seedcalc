@@ -183,9 +183,6 @@ const MixRatio = ({
     } = calculatePieChartData(seedsSelected, calculator, mixRatioOptions);
     setPieChartData({ seedingRateArray, plantsPerSqftArray, seedsPerSqftArray });
     setPrevOptions(mixRatioOptions);
-    // when options change, set mixRatiosOptions in redux
-    // FIXME: maybe need to think a little bit more situations
-    // if (!historyState) dispatch(setMixRatioOptionsRedux(options));
   }, [mixRatioOptions, initCalculator]);
 
   // expand related accordion based on sidebar click

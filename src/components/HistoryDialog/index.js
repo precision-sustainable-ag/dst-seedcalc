@@ -21,7 +21,6 @@ const HistoryDialog = ({ setStep, setSiteConditionStep }) => {
   const {
     userHistoryList, historyDialogState,
   } = useSelector((state) => state.user);
-  // const { crops } = useSelector((state) => state.calculator);
   const { open, type } = historyDialogState;
 
   const dispatch = useDispatch();

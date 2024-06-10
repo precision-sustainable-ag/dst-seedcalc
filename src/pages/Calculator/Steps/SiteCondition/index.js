@@ -75,29 +75,6 @@ const SiteCondition = ({
     }
   };
 
-  // const mapStateChange = async (state) => {
-  //   setMapState(state);
-  //   if (Object.keys(state).length !== 0) {
-  //     const st = states.filter(
-  //       (s) => s.label === state.properties.STATE_NAME,
-  //     );
-  //     if (st.length > 0) {
-  //       // prevent history state change and show historyDialog
-  //       console.log(historyState, historyState === historyStates.imported, st[0].label !== siteCondition.state);
-  //       if (historyState === historyStates.imported && st[0].label !== siteCondition.state) {
-  //         // dispatch(setHistoryDialogStateRedux({ open: true, type: 'update' }));
-  //         // dispatch(setStateRedux(siteCondition.state, siteCondition.stateId));
-  //         return;
-  //       }
-  //       // update regions everytime there's a state change FROM MAP
-  //       const res = await getRegions(st[0]);
-  //       setRegions(res);
-  //       // if select a new state (st[0].label different from redux state), update all related redux values
-  //       if (st[0].label !== siteCondition.state) updateStateRedux(st[0]);
-  //     }
-  //   }
-  // };
-
   // initially get states data
   useEffect(() => {
     const getStates = async () => {
