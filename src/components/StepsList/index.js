@@ -8,7 +8,7 @@ import Step from '@mui/material/Step';
 import { StepLabel, Tooltip } from '@mui/material';
 import Button from '@mui/material/Button';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-// import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { useDispatch } from 'react-redux';
 import { calculatorList } from '../../shared/data/dropdown';
@@ -57,9 +57,9 @@ const StepsList = ({
     setCompletedStep(activeStep > completedStep ? activeStep : completedStep);
   };
 
-  // const handleBack = () => {
-  //   setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  // };
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
 
   const handleRestart = () => {
     setActiveStep(0);
@@ -69,6 +69,7 @@ const StepsList = ({
     dispatch(setHistoryStateRedux(historyStates.none));
     dispatch(setSelectedHistoryRedux(null));
   };
+
   const tooltipTitle = () => {
     if (activeStep === 0 && !availableSteps[0]) {
       return 'Please enter the necessary info below.';
@@ -129,10 +130,19 @@ const StepsList = ({
       <Box sx={{ display: 'flex', flexDirection: 'row', pt: 1 }}>
 
         {activeStep !== 0 && (
-          <Button variant="stepper" onClick={handleRestart}>
-            <RestartAltIcon />
-            Restart
-          </Button>
+          activeStep === calculatorList.length ? (
+            <Button variant="stepper" onClick={handleRestart}>
+              <RestartAltIcon />
+              Restart
+            </Button>
+          )
+            : (
+              <Button variant="stepper" onClick={handleBack}>
+                <ArrowBackIosNewIcon />
+                {' '}
+                BACK
+              </Button>
+            )
         )}
 
         <Box sx={{ flex: '1 1 auto' }} />
@@ -144,10 +154,7 @@ const StepsList = ({
           onMouseLeave={() => setHovering(false)}
           arrow
           open={visible}
-          title={(
-            tooltipTitle()
-          )}
-
+          title={tooltipTitle()}
         >
           <span>
             <Button
