@@ -19,12 +19,16 @@ const userSlice = createSlice({
     },
     setAlertState: (state, { payload }) => ({ ...state, alertState: { ...state.alertState, ...payload } }),
     setHistoryDialogState: (state, { payload }) => ({ ...state, historyDialogState: { ...payload } }),
+    setVisitedMixRatios: (state, { payload }) => {
+      const { visitedMixRatios } = payload;
+      return { ...state, visitedMixRatios };
+    },
   },
 });
 
 export const {
   setHistoryState, setUserHistoryList, setSelectedHistory, setAlertState,
-  setHistoryDialogState,
+  setHistoryDialogState, setVisitedMixRatios,
 } = userSlice.actions;
 
 export default userSlice;

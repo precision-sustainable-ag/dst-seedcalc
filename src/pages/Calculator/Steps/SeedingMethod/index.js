@@ -15,7 +15,7 @@ import Dropdown from '../../../../components/Dropdown';
 import '../steps.scss';
 import { setOptionRedux, setSeedingMethodsRedux } from '../../../../features/calculatorSlice/actions';
 import { historyStates } from '../../../../features/userSlice/state';
-import { setAlertStateRedux, setHistoryStateRedux } from '../../../../features/userSlice/actions';
+import { setAlertStateRedux, setHistoryStateRedux, setVisitedMixRatiosRedux } from '../../../../features/userSlice/actions';
 
 // styles for left grid
 const FullGrid = styled(Grid)(() => ({
@@ -67,7 +67,7 @@ const SeedingMethod = ({ alertState }) => {
   const {
     seedsSelected, sideBarSelection, options,
   } = useSelector((state) => state.calculator);
-  const { historyState } = useSelector((state) => state.user);
+  const { historyState, visitedMixRatios } = useSelector((state) => state.user);
 
   // create an key/value pair for the seed and related accordion expanded state
   const [accordionState, setAccordionState] = useState(
@@ -158,6 +158,7 @@ const SeedingMethod = ({ alertState }) => {
     });
     // set state to true for finishing updating methods
     setUpdatedMethods(true);
+    if (!visitedMixRatios) dispatch(setVisitedMixRatiosRedux(true));
   }, []);
 
   // update seeding methods to redux

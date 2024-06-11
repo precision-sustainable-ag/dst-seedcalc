@@ -22,7 +22,9 @@ import {
 import { setOptionRedux, setMixRatioOptionRedux } from '../../../../features/calculatorSlice/actions';
 import { pieChartUnits } from '../../../../shared/data/units';
 import '../steps.scss';
-import { setAlertStateRedux, setHistoryStateRedux, setHistoryDialogStateRedux } from '../../../../features/userSlice/actions';
+import {
+  setAlertStateRedux, setHistoryStateRedux, setHistoryDialogStateRedux, setVisitedMixRatiosRedux,
+} from '../../../../features/userSlice/actions';
 import { historyStates } from '../../../../features/userSlice/state';
 
 const getCalculatorResult = (council) => {
@@ -86,7 +88,7 @@ const MixRatio = ({
   const {
     council, soilDrainage, plantingDate, acres, county,
   } = useSelector((state) => state.siteCondition);
-  const { historyState } = useSelector((state) => state.user);
+  const { historyState, visitedMixRatios } = useSelector((state) => state.user);
 
   const [calculatorResult, setCalculatorResult] = useState(
     seedsSelected.reduce((res, seed) => {
@@ -172,7 +174,7 @@ const MixRatio = ({
         }));
       }
       // if history is not imported, update mixRatioOptions to options
-      if (historyState !== historyStates.imported) dispatch(setOptionRedux(seed.label, seedOption));
+      if (historyState !== historyStates.imported && !visitedMixRatios) dispatch(setOptionRedux(seed.label, seedOption));
       // if history is updated, this will remove previously imported options redux and set it as mixRatioOptions
     });
     // calculate piechart data
@@ -211,6 +213,7 @@ const MixRatio = ({
     dispatch(setMixRatioOptionRedux(seed.label, { ...mixRatioOptions[seed.label], [option]: value }));
     // set historyStates.updated if change anything
     if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
+    dispatch(setVisitedMixRatiosRedux(false));
   };
 
   // handler for click to open accordion
