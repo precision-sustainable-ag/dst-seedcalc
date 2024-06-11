@@ -18,7 +18,7 @@ import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 import '../steps.scss';
 import { validateForms } from '../../../../shared/utils/format';
 import { historyState } from '../../../../features/userSlice/state';
-import { setFromUserHistoryRedux } from '../../../../features/userSlice/actions';
+import { setAlertStateRedux, setFromUserHistoryRedux } from '../../../../features/userSlice/actions';
 
 const LeftGrid = styled(Grid)({
   '&.MuiGrid-item': {
@@ -46,7 +46,7 @@ const SeedTagNumField = styled(NumberTextField)({
 });
 
 const SeedTagInfo = ({
-  completedStep, setCompletedStep, alertState, setAlertState,
+  completedStep, setCompletedStep, alertState,
 }) => {
   const dispatch = useDispatch();
   const { council } = useSelector((state) => state.siteCondition);
@@ -63,23 +63,23 @@ const SeedTagInfo = ({
   const [haveSeedTagInfo, setHaveSeedTagInfo] = useState(false);
 
   const updateGermination = (seedLabel, value) => {
-    setAlertState({
+    dispatch(setAlertStateRedux({
       ...alertState,
       open: true,
-      severity: 'success',
+      type: 'success',
       message: 'You can also edit this information in furthur steps.',
-    });
+    }));
     dispatch(setOptionRedux(seedLabel, { ...options[seedLabel], germination: value }));
     if (fromUserHistory === historyState.imported) dispatch(setFromUserHistoryRedux(historyState.updated));
   };
 
   const updatePurity = (seedLabel, value) => {
-    setAlertState({
+    dispatch(setAlertStateRedux({
       ...alertState,
       open: true,
-      severity: 'success',
+      type: 'success',
       message: 'You can also edit this information in furthur steps.',
-    });
+    }));
     dispatch(setOptionRedux(seedLabel, { ...options[seedLabel], purity: value }));
     if (fromUserHistory === historyState.imported) dispatch(setFromUserHistoryRedux(historyState.updated));
   };
@@ -120,12 +120,12 @@ const SeedTagInfo = ({
 
   useEffect(() => {
     if (haveSeedTagInfo) {
-      setAlertState({
+      dispatch(setAlertStateRedux({
         ...alertState,
         open: true,
-        severity: 'success',
+        type: 'success',
         message: 'These are starting values. Adjust as needed based on your seed tag info.',
-      });
+      }));
     }
     validateForms(haveSeedTagInfo, 5, completedStep, setCompletedStep);
   }, [haveSeedTagInfo]);

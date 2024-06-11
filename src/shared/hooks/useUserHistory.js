@@ -3,9 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setSiteConditionRedux } from '../../features/siteConditionSlice/actions';
 import {
   setCalculationNameRedux, setFromUserHistoryRedux, setUserHistoryListRedux, setSelectedHistoryRedux,
+  setAlertStateRedux,
 } from '../../features/userSlice/actions';
 import { setCalculatorRedux } from '../../features/calculatorSlice/actions';
-import { getHistories, createHistory, updateHistory } from '../utils/api';
+import { getHistories, createHistory, updateHistory } from '../../features/userSlice/api';
 import { historyState } from '../../features/userSlice/state';
 
 const useUserHistory = (token) => {
@@ -24,9 +25,9 @@ const useUserHistory = (token) => {
   const loadHistory = async (name = null) => {
     try {
       if (!token) throw new Error('Access token not available!');
-      const res = await getHistories(token);
-      if (res.data.length > 0) {
-        const histories = res.data;
+      const res = await dispatch(getHistories({ accessToken: token }));
+      if (res.payload.data.length > 0) {
+        const histories = res.payload.data;
         if (name !== null) {
           // name is not null, find match history record and return it
           const history = histories.find((h) => h.label === name);
@@ -38,6 +39,11 @@ const useUserHistory = (token) => {
             dispatch(setCalculationNameRedux(history.label));
             dispatch(setFromUserHistoryRedux(historyState.imported));
             dispatch(setSelectedHistoryRedux({ label: history.label, id: history.id }));
+            dispatch(setAlertStateRedux({
+              open: true,
+              type: 'success',
+              message: 'History loaded.',
+            }));
             // return object since sometime ID property is needed
             return history;
           }
@@ -46,15 +52,16 @@ const useUserHistory = (token) => {
           // name is null, return a list of history name and id
           const historyList = histories.map((history) => ({ label: history.label, id: history.id }));
           dispatch(setUserHistoryListRedux(historyList));
-          console.log('history list', historyList);
           return historyList;
         }
       }
       throw new Error('No available history record!');
     } catch (err) {
-      // FIXME: temporary error handling for all api calls, not throwing it
-      console.error('Error when loading history: ', err);
-      // throw err;
+      dispatch(setAlertStateRedux({
+        open: true,
+        type: 'error',
+        message: `Error when loading history: ${err}, please try again later or refresh the page!`,
+      }));
     }
     return [];
   };
@@ -71,16 +78,36 @@ const useUserHistory = (token) => {
       if (!token) throw new Error('Access token not available!');
       const data = { siteCondition, calculator };
       if (id !== null) {
+        const params = {
+          accessToken: token, historyData: data, name, id,
+        };
         // if id is not null, update history with id
-        const res = await updateHistory(token, data, name, id);
-        console.log('updated history', res);
+        const res = await dispatch(updateHistory(params));
+        console.log('updated history', res.payload);
+        dispatch(setAlertStateRedux({
+          open: true,
+          type: 'success',
+          message: 'History updated.',
+        }));
       } else {
+        const params = {
+          accessToken: token, historyData: data, name: calculationName,
+        };
         // if id is null, create a new history
-        const res = await createHistory(token, data, calculationName);
-        console.log('created history', res);
+        const res = await dispatch(createHistory(params));
+        console.log('created history', res.payload);
+        dispatch(setAlertStateRedux({
+          open: true,
+          type: 'success',
+          message: 'History saved.',
+        }));
       }
     } catch (err) {
-      console.error('Error when saving history: ', err);
+      dispatch(setAlertStateRedux({
+        open: true,
+        type: 'error',
+        message: `Error when saving history: ${err}, please try again later or refresh the page!`,
+      }));
     }
   };
 

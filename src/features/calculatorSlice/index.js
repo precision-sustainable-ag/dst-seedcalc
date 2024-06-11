@@ -36,7 +36,6 @@ const calculatorSlice = createSlice({
       const { diversity } = payload;
       return { ...state, diversitySelected: diversity };
     },
-    // TODO: create an action for reinitialize calculator and siteCondition
     clearSeeds: (state) => ({ ...state, seedsSelected: [] }),
     clearOptions: (state) => ({ ...state, options: {} }),
     selectSidebarSeed: (state, { payload }) => {

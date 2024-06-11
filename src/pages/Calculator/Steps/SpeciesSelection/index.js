@@ -20,8 +20,9 @@ import Diversity from './diversity';
 import { removeOptionRedux, removeSeedRedux, updateDiversityRedux } from '../../../../features/calculatorSlice/actions';
 import '../steps.scss';
 import { createUserInput, createCalculator } from '../../../../shared/utils/calculator';
+import { setAlertStateRedux } from '../../../../features/userSlice/actions';
 
-const SpeciesSelection = ({ completedStep, setCompletedStep, setAlertState }) => {
+const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
   // useSelector for crops reducer data
   const dispatch = useDispatch();
 
@@ -85,21 +86,19 @@ const SpeciesSelection = ({ completedStep, setCompletedStep, setAlertState }) =>
   useEffect(() => {
     // TODO: NOTE: the calculator here is only used for validating the crop
     // , the calculator for calculation in initialized in MixRatios
-    console.log('seedsSelected', seedsSelected);
     try {
       // eslint-disable-next-line no-unused-vars
       const seedingRateCalculator = createCalculator(seedsSelected, council, regions, userInput);
     } catch (err) {
       // if the crop is not valid, remove it from seedSelected
-      console.error(err);
       const lastAddedSeedName = seedsSelected[seedsSelected.length - 1]?.label;
       dispatch(removeSeedRedux(lastAddedSeedName));
       dispatch(removeOptionRedux(lastAddedSeedName));
-      setAlertState({
+      dispatch(setAlertStateRedux({
         open: true,
-        severity: 'error',
+        type: 'error',
         message: 'Error: Invalid crop!',
-      });
+      }));
     }
   }, [seedsSelected]);
 
