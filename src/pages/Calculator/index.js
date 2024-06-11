@@ -164,7 +164,7 @@ const Calculator = () => {
       dispatch(setAlertStateRedux({
         ...alertState,
         open: true,
-        severity: 'error',
+        type: 'error',
         message: 'Network Error - Try again later or refresh the page!',
       }));
     }
@@ -181,6 +181,16 @@ const Calculator = () => {
     }
   }, [isAuthenticated]);
 
+  // auto close alert after setting time
+  useEffect(() => {
+    const closeAlertTimeout = 5000;
+    if (alertState.open) {
+      setTimeout(() => {
+        dispatch(setAlertStateRedux({ open: false, type: 'success', message: '' }));
+      }, closeAlertTimeout);
+    }
+  }, [alertState.open]);
+
   return (
     <Grid container justifyContent="center">
       <Grid item style={{ position: 'fixed', bottom: '0px', zIndex: 1000 }}>
@@ -188,7 +198,7 @@ const Calculator = () => {
           && (
           <FadeAlert
             showAlert={alertState.open}
-            severity={alertState.severity}
+            severity={alertState.type}
             variant="filled"
             action={(
               <IconButton

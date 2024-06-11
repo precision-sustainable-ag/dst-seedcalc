@@ -41,7 +41,7 @@ const useUserHistory = (token) => {
             dispatch(setSelectedHistoryRedux({ label: history.label, id: history.id }));
             dispatch(setAlertStateRedux({
               open: true,
-              severity: 'success',
+              type: 'success',
               message: 'History loaded.',
             }));
             // return object since sometime ID property is needed
@@ -59,7 +59,7 @@ const useUserHistory = (token) => {
     } catch (err) {
       dispatch(setAlertStateRedux({
         open: true,
-        severity: 'error',
+        type: 'error',
         message: `Error when loading history: ${err}, please try again later or refresh the page!`,
       }));
     }
@@ -86,7 +86,7 @@ const useUserHistory = (token) => {
         console.log('updated history', res.payload);
         dispatch(setAlertStateRedux({
           open: true,
-          severity: 'success',
+          type: 'success',
           message: 'History updated.',
         }));
       } else {
@@ -98,14 +98,14 @@ const useUserHistory = (token) => {
         console.log('created history', res.payload);
         dispatch(setAlertStateRedux({
           open: true,
-          severity: 'success',
+          type: 'success',
           message: 'History saved.',
         }));
       }
     } catch (err) {
       dispatch(setAlertStateRedux({
         open: true,
-        severity: 'error',
+        type: 'error',
         message: `Error when saving history: ${err}, please try again later or refresh the page!`,
       }));
     }

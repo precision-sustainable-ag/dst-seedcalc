@@ -12,7 +12,7 @@ const initialState = {
   selectedHistory: null,
   alertState: {
     open: false,
-    severity: 'error',
+    type: 'error',
     message: 'Network Error - Try again later or refresh the page!',
   },
 };

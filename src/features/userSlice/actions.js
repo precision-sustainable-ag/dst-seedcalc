@@ -11,4 +11,4 @@ export const setUserHistoryListRedux = (userHistoryList) => setUserHistoryList({
 
 export const setSelectedHistoryRedux = (selectedHistory) => setSelectedHistory({ selectedHistory });
 
-export const setAlertStateRedux = ({ open, severity, message }) => setAlertState({ open, severity, message });
+export const setAlertStateRedux = ({ open, type, message }) => setAlertState({ open, type, message });

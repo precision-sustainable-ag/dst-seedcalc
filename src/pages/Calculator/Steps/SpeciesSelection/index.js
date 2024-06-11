@@ -96,7 +96,7 @@ const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
       dispatch(removeOptionRedux(lastAddedSeedName));
       dispatch(setAlertStateRedux({
         open: true,
-        severity: 'error',
+        type: 'error',
         message: 'Error: Invalid crop!',
       }));
     }
