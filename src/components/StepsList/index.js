@@ -5,7 +5,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
-import { StepLabel, Tooltip } from '@mui/material';
+import { StepButton, Tooltip } from '@mui/material';
 import Button from '@mui/material/Button';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -106,6 +106,7 @@ const StepsList = ({
         {calculatorList.map((label, index) => (
           <Step
             key={label}
+            disabled={completedStep + 1 < index}
             sx={{
               '& .MuiSvgIcon-root': {
                 color: completedStep + 1 < index ? '' : '#4f5f30',
@@ -120,9 +121,9 @@ const StepsList = ({
               },
             }}
           >
-            <StepLabel>
+            <StepButton onClick={() => setActiveStep(index)}>
               {matches && label}
-            </StepLabel>
+            </StepButton>
           </Step>
         ))}
       </Stepper>
