@@ -205,7 +205,7 @@ const MixRatio = ({
     dispatch(setAlertStateRedux({
       ...alertState,
       open: true,
-      severity: 'success',
+      type: 'success',
       message: 'You now have a custom mix. You can edit this information in furthur steps.',
     }));
     dispatch(setMixRatioOptionRedux(seed.label, { ...mixRatioOptions[seed.label], [option]: value }));
@@ -219,7 +219,7 @@ const MixRatio = ({
       dispatch(setAlertStateRedux({
         ...alertState,
         open: true,
-        severity: 'success',
+        type: 'success',
         message: updatedForm ? 'You now have a custom mix. You can edit this information in furthur steps.'
           : 'This is a starting mix based on averages, but not a recommendation. \
           Adjust as needed based on your goals.',
