@@ -23,16 +23,12 @@ const userSlice = createSlice({
       const { visitedMixRatios } = payload;
       return { ...state, visitedMixRatios };
     },
-    setActiveStep: (state, { payload }) => {
-      const { activeStep } = payload;
-      return { ...state, activeStep };
-    },
   },
 });
 
 export const {
   setHistoryState, setUserHistoryList, setSelectedHistory, setAlertState,
-  setHistoryDialogState, setVisitedMixRatios, setActiveStep,
+  setHistoryDialogState, setVisitedMixRatios,
 } = userSlice.actions;
 
 export default userSlice;

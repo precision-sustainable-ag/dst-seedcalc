@@ -10,11 +10,10 @@ import Button from '@mui/material/Button';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { calculatorList } from '../../shared/data/dropdown';
 import { resetCalculator } from '../../features/calculatorSlice';
 import {
-  setActiveStepRedux,
   setHistoryStateRedux, setSelectedHistoryRedux,
 } from '../../features/userSlice/actions';
 import { historyStates } from '../../features/userSlice/state';
@@ -36,7 +35,7 @@ import { historyStates } from '../../features/userSlice/state';
 */
 
 const StepsList = ({
-  availableSteps, setSiteConditionStep,
+  activeStep, setActiveStep, availableSteps, setSiteConditionStep,
 }) => {
   const [hovering, setHovering] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -49,23 +48,17 @@ const StepsList = ({
   // this completed step is to determine the latest completed step
   const [completedStep, setCompletedStep] = useState(-1);
 
-  const { activeStep } = useSelector((state) => state.user);
-
   /// ///////////////////////////////////////////////////////
   //                      State Logic                     //
   /// ///////////////////////////////////////////////////////
 
-  const setActiveStep = (step) => {
-    dispatch(setActiveStepRedux(step));
-  };
-
   const handleNext = () => {
-    setActiveStep(activeStep + 1);
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setCompletedStep(activeStep > completedStep ? activeStep : completedStep);
   };
 
   const handleBack = () => {
-    setActiveStep(activeStep - 1);
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
   const handleRestart = () => {

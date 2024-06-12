@@ -6,7 +6,6 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import {
   setHistoryStateRedux, setHistoryDialogStateRedux, setSelectedHistoryRedux,
-  setActiveStepRedux,
 } from '../../features/userSlice/actions';
 import { setCalculatorRedux } from '../../features/calculatorSlice/actions';
 import initialCalculatorState from '../../features/calculatorSlice/state';
@@ -14,7 +13,7 @@ import initialSiteConditionState from '../../features/siteConditionSlice/state';
 import { historyStates } from '../../features/userSlice/state';
 import { setSiteConditionRedux } from '../../features/siteConditionSlice/actions';
 
-const HistoryDialog = ({ setSiteConditionStep }) => {
+const HistoryDialog = ({ setStep, setSiteConditionStep }) => {
   const [error, setError] = useState(false);
   const [helperText, setHelperText] = useState('');
   const [historyName, setHistoryName] = useState('');
@@ -63,7 +62,7 @@ const HistoryDialog = ({ setSiteConditionStep }) => {
 
   const handleUpdate = () => {
     // return to first step
-    dispatch(setActiveStepRedux(0));
+    setStep(0);
     setSiteConditionStep(1);
     // reset redux
     dispatch(setCalculatorRedux(initialCalculatorState));
