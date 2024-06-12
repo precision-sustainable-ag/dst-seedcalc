@@ -19,10 +19,6 @@ const userSlice = createSlice({
     },
     setAlertState: (state, { payload }) => ({ ...state, alertState: { ...state.alertState, ...payload } }),
     setHistoryDialogState: (state, { payload }) => ({ ...state, historyDialogState: { ...payload } }),
-    setVisitedMixRatios: (state, { payload }) => {
-      const { visitedMixRatios } = payload;
-      return { ...state, visitedMixRatios };
-    },
     setMaxAvailableStep: (state, { payload }) => {
       const { maxAvailableStep } = payload;
       return { ...state, maxAvailableStep };
@@ -32,7 +28,7 @@ const userSlice = createSlice({
 
 export const {
   setHistoryState, setUserHistoryList, setSelectedHistory, setAlertState,
-  setHistoryDialogState, setVisitedMixRatios, setMaxAvailableStep,
+  setHistoryDialogState, setMaxAvailableStep,
 } = userSlice.actions;
 
 export default userSlice;

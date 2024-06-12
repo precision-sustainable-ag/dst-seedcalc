@@ -18,7 +18,6 @@ const initialState = {
     open: false,
     type: 'add',
   },
-  visitedMixRatios: false,
   maxAvailableStep: -1,
 };
 
