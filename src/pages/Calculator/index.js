@@ -34,7 +34,6 @@ import { historyStates } from '../../features/userSlice/state';
 const Calculator = () => {
   // initially set calculator here
   const [calculator, setCalculator] = useState(null);
-  const [activeStep, setActiveStep] = useState(0);
   const [siteConditionStep, setSiteConditionStep] = useState(1);
   // this completedStep is to determine whether the next button is clickable on each page
   const [completedStep, setCompletedStep] = useState([...completedList]);
@@ -44,7 +43,9 @@ const Calculator = () => {
   const siteCondition = useSelector((state) => state.siteCondition);
   const { error: siteConditionError } = siteCondition;
   const { error: calculatorError, seedsSelected } = useSelector((state) => state.calculator);
-  const { alertState, historyState, selectedHistory } = useSelector((state) => state.user);
+  const {
+    alertState, historyState, selectedHistory, activeStep,
+  } = useSelector((state) => state.user);
 
   const stepperRef = useRef();
 
@@ -277,8 +278,6 @@ const Calculator = () => {
           ref={stepperRef}
         >
           <StepsList
-            activeStep={activeStep}
-            setActiveStep={setActiveStep}
             availableSteps={completedStep}
             setSiteConditionStep={setSiteConditionStep}
           />
@@ -304,7 +303,7 @@ const Calculator = () => {
               : {}
           }
           >
-            <SeedsSelectedList list={seedsSelected} activeStep={activeStep} />
+            <SeedsSelectedList list={seedsSelected} />
           </Grid>
           )}
 
@@ -330,7 +329,7 @@ const Calculator = () => {
             )}
           </Grid>
 
-          <HistoryDialog setStep={setActiveStep} setSiteConditionStep={setSiteConditionStep} />
+          <HistoryDialog setSiteConditionStep={setSiteConditionStep} />
         </Grid>
 
       </Grid>

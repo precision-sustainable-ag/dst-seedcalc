@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import {
   setHistoryState, setUserHistoryList, setSelectedHistory, setAlertState,
-  setHistoryDialogState, setVisitedMixRatios,
+  setHistoryDialogState, setVisitedMixRatios, setActiveStep,
 } from './index';
 
 export const setHistoryStateRedux = (historyState) => setHistoryState({ historyState });
@@ -15,3 +15,5 @@ export const setAlertStateRedux = ({ open, type, message }) => setAlertState({ o
 export const setHistoryDialogStateRedux = ({ open, type }) => setHistoryDialogState({ open, type });
 
 export const setVisitedMixRatiosRedux = (visitedMixRatios) => setVisitedMixRatios({ visitedMixRatios });
+
+export const setActiveStepRedux = (activeStep) => setActiveStep({ activeStep });

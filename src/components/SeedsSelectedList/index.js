@@ -20,7 +20,7 @@ const ExitIcon = ({ style }) => (
   </Box>
 );
 
-const SeedsSelectedList = ({ list, activeStep }) => {
+const SeedsSelectedList = ({ list }) => {
   // themes
   const theme = useTheme();
   const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
@@ -28,6 +28,7 @@ const SeedsSelectedList = ({ list, activeStep }) => {
   const dispatch = useDispatch();
 
   const { sideBarSelection } = useSelector((state) => state.calculator);
+  const { activeStep } = useSelector((state) => state.user);
 
   const selectSpecies = (seed) => {
     dispatch(selectSidebarSeedRedux(sideBarSelection === seed ? '' : seed));
