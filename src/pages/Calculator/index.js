@@ -76,6 +76,7 @@ const Calculator = () => {
       case 'Species Selection':
         return (
           <SpeciesSelection
+            setSiteConditionStep={setSiteConditionStep}
             completedStep={completedStep}
             setCompletedStep={setCompletedStep}
           />

@@ -23,7 +23,7 @@ import { createUserInput, createCalculator } from '../../../../shared/utils/calc
 import { setAlertStateRedux, setHistoryDialogStateRedux } from '../../../../features/userSlice/actions';
 import { historyStates } from '../../../../features/userSlice/state';
 
-const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
+const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedStep }) => {
   // useSelector for crops reducer data
   const dispatch = useDispatch();
 
@@ -81,6 +81,7 @@ const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
   /// ///////////////////////////////////////////////////////
 
   useEffect(() => {
+    setSiteConditionStep(1);
     if (historyState === historyStates.imported) {
       dispatch(setHistoryDialogStateRedux({ open: true, type: 'warning' }));
     }
