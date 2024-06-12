@@ -40,7 +40,7 @@ const useUserHistory = () => {
             dispatch(setSelectedHistoryRedux({ label: history.label, id: history.id }));
             dispatch(setAlertStateRedux({
               open: true,
-              severity: 'success',
+              type: 'success',
               message: 'History loaded.',
             }));
             // return object since sometime ID property is needed
@@ -59,7 +59,7 @@ const useUserHistory = () => {
     } catch (err) {
       dispatch(setAlertStateRedux({
         open: true,
-        severity: 'error',
+        type: 'error',
         message: `Error when loading history: ${err}, please try again later or refresh the page!`,
       }));
     }
@@ -87,7 +87,7 @@ const useUserHistory = () => {
         console.log('updated history', res.payload);
         dispatch(setAlertStateRedux({
           open: true,
-          severity: 'success',
+          type: 'success',
           message: 'History updated.',
         }));
         if (historyState !== historyStates.new) dispatch(setHistoryStateRedux(historyStates.imported));
@@ -102,7 +102,7 @@ const useUserHistory = () => {
         console.log('created history', res.payload);
         dispatch(setAlertStateRedux({
           open: true,
-          severity: 'success',
+          type: 'success',
           message: 'History saved.',
         }));
         // dispatch(setHistoryStateRedux(historyStates.imported));
@@ -113,7 +113,7 @@ const useUserHistory = () => {
     } catch (err) {
       dispatch(setAlertStateRedux({
         open: true,
-        severity: 'error',
+        type: 'error',
         message: `Error when saving history: ${err}, please try again later or refresh the page!`,
       }));
     }

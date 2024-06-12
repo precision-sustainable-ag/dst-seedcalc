@@ -98,7 +98,7 @@ const SeedingMethod = ({ alertState }) => {
     dispatch(setAlertStateRedux({
       ...alertState,
       open: true,
-      severity: 'success',
+      type: 'success',
       message: 'You can also edit this information in furthur steps.',
     }));
     setSelectedMethod(method);

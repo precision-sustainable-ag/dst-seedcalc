@@ -66,7 +66,7 @@ const SeedTagInfo = ({
     dispatch(setAlertStateRedux({
       ...alertState,
       open: true,
-      severity: 'success',
+      type: 'success',
       message: 'You can also edit this information in furthur steps.',
     }));
     dispatch(setOptionRedux(seedLabel, { ...options[seedLabel], germination: value }));
@@ -77,7 +77,7 @@ const SeedTagInfo = ({
     dispatch(setAlertStateRedux({
       ...alertState,
       open: true,
-      severity: 'success',
+      type: 'success',
       message: 'You can also edit this information in furthur steps.',
     }));
     dispatch(setOptionRedux(seedLabel, { ...options[seedLabel], purity: value }));
@@ -123,7 +123,7 @@ const SeedTagInfo = ({
       dispatch(setAlertStateRedux({
         ...alertState,
         open: true,
-        severity: 'success',
+        type: 'success',
         message: 'These are starting values. Adjust as needed based on your seed tag info.',
       }));
     }
