@@ -24,7 +24,7 @@ import {
 } from '../../../../features/siteConditionSlice/actions';
 import '../steps.scss';
 import { historyStates } from '../../../../features/userSlice/state';
-import { setHistoryDialogStateRedux } from '../../../../features/userSlice/actions';
+import { setHistoryDialogStateRedux, setMaxAvailableStepRedux } from '../../../../features/userSlice/actions';
 
 const needTileDrainage = ['Very Poorly Drained', 'Poorly Drained', 'Somewhat Poorly Drained'];
 
@@ -85,7 +85,7 @@ const SiteConditionForm = ({
     soilFertility, checkNRCSStandards, acres, council,
   } = useSelector((s) => s.siteCondition);
   // eslint-disable-next-line no-shadow
-  const { historyState } = useSelector((state) => state.user);
+  const { historyState, maxAvailableStep } = useSelector((state) => state.user);
 
   const [soilDrainagePrev, setSoilDrainagePrev] = useState(soilDrainage);
 
@@ -96,6 +96,7 @@ const SiteConditionForm = ({
     }
     const stateSelected = stateList.filter((s) => s.label === e.target.value);
     if (stateSelected.length > 0) {
+      if (maxAvailableStep > -1) dispatch(setMaxAvailableStepRedux(-1));
       // get new regions for the selected state
       const res = await getRegions(stateSelected[0]);
       setRegions(res);
@@ -108,6 +109,7 @@ const SiteConditionForm = ({
       dispatch(setHistoryDialogStateRedux({ open: true, type: 'update' }));
       return;
     }
+    if (maxAvailableStep > -1) dispatch(setMaxAvailableStepRedux(-1));
     dispatch(setCountyRedux(e.target.value));
     const countyId = regions.filter(
       (c) => c.label === e.target.value,
@@ -120,6 +122,7 @@ const SiteConditionForm = ({
       dispatch(setHistoryDialogStateRedux({ open: true, type: 'update' }));
       return;
     }
+    if (maxAvailableStep > -1) dispatch(setMaxAvailableStepRedux(-1));
     setSoilDrainagePrev(e.target.value);
     dispatch(setSoilDrainageRedux(e.target.value));
     dispatch(updateTileDrainageRedux(false));

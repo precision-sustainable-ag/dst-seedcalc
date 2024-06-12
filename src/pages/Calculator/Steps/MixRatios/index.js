@@ -24,6 +24,7 @@ import { pieChartUnits } from '../../../../shared/data/units';
 import '../steps.scss';
 import {
   setAlertStateRedux, setHistoryStateRedux, setHistoryDialogStateRedux, setVisitedMixRatiosRedux,
+  setMaxAvailableStepRedux,
 } from '../../../../features/userSlice/actions';
 import { historyStates } from '../../../../features/userSlice/state';
 
@@ -88,7 +89,7 @@ const MixRatio = ({
   const {
     council, soilDrainage, plantingDate, acres, county,
   } = useSelector((state) => state.siteCondition);
-  const { historyState, visitedMixRatios } = useSelector((state) => state.user);
+  const { historyState, visitedMixRatios, maxAvailableStep } = useSelector((state) => state.user);
 
   const [calculatorResult, setCalculatorResult] = useState(
     seedsSelected.reduce((res, seed) => {
@@ -213,6 +214,7 @@ const MixRatio = ({
     dispatch(setMixRatioOptionRedux(seed.label, { ...mixRatioOptions[seed.label], [option]: value }));
     // set historyStates.updated if change anything
     if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
+    if (maxAvailableStep > 1) dispatch(setMaxAvailableStepRedux(1));
     dispatch(setVisitedMixRatiosRedux(false));
   };
 

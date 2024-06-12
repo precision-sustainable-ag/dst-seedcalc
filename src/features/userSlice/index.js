@@ -23,12 +23,16 @@ const userSlice = createSlice({
       const { visitedMixRatios } = payload;
       return { ...state, visitedMixRatios };
     },
+    setMaxAvailableStep: (state, { payload }) => {
+      const { maxAvailableStep } = payload;
+      return { ...state, maxAvailableStep };
+    },
   },
 });
 
 export const {
   setHistoryState, setUserHistoryList, setSelectedHistory, setAlertState,
-  setHistoryDialogState, setVisitedMixRatios,
+  setHistoryDialogState, setVisitedMixRatios, setMaxAvailableStep,
 } = userSlice.actions;
 
 export default userSlice;

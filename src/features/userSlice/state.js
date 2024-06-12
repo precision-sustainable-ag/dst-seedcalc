@@ -19,6 +19,7 @@ const initialState = {
     type: 'add',
   },
   visitedMixRatios: false,
+  maxAvailableStep: -1,
 };
 
 export default initialState;

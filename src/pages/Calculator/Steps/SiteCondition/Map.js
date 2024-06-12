@@ -9,7 +9,7 @@ import {
   setCountyRedux, setSoilDrainageRedux, updateLatlonRedux, updateTileDrainageRedux,
   setCountyIdRedux,
 } from '../../../../features/siteConditionSlice/actions';
-import { setHistoryDialogStateRedux } from '../../../../features/userSlice/actions';
+import { setHistoryDialogStateRedux, setMaxAvailableStepRedux } from '../../../../features/userSlice/actions';
 import { getZoneData, getSSURGOData } from '../../../../features/siteConditionSlice/api';
 import { historyStates } from '../../../../features/userSlice/state';
 import '../steps.scss';
@@ -21,7 +21,7 @@ const Map = ({
   const [mapFeatures, setMapFeatures] = useState([]);
 
   const { council, latlon } = useSelector((state) => state.siteCondition);
-  const { historyState } = useSelector((state) => state.user);
+  const { historyState, maxAvailableStep } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
 
@@ -33,6 +33,7 @@ const Map = ({
 
     if (Object.keys(selectedToEditSite).length > 0) {
       if (latitude === latlon[0] && longitude === latlon[1]) return;
+      if (maxAvailableStep > -1) dispatch(setMaxAvailableStepRedux(-1));
       if (historyState === historyStates.imported) {
         dispatch(setHistoryDialogStateRedux({ open: true, type: 'update' }));
         // reset map location to history redux

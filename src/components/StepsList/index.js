@@ -10,11 +10,11 @@ import Button from '@mui/material/Button';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { calculatorList } from '../../shared/data/dropdown';
 import { resetCalculator } from '../../features/calculatorSlice';
 import {
-  setHistoryStateRedux, setSelectedHistoryRedux,
+  setHistoryStateRedux, setMaxAvailableStepRedux, setSelectedHistoryRedux,
 } from '../../features/userSlice/actions';
 import { historyStates } from '../../features/userSlice/state';
 
@@ -45,8 +45,7 @@ const StepsList = ({
 
   const dispatch = useDispatch();
 
-  // this completed step is to determine the latest completed step
-  const [completedStep, setCompletedStep] = useState(-1);
+  const { maxAvailableStep } = useSelector((state) => state.user);
 
   /// ///////////////////////////////////////////////////////
   //                      State Logic                     //
@@ -54,7 +53,7 @@ const StepsList = ({
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setCompletedStep(activeStep > completedStep ? activeStep : completedStep);
+    dispatch(setMaxAvailableStepRedux(activeStep > maxAvailableStep ? activeStep : maxAvailableStep));
   };
 
   const handleBack = () => {
@@ -64,7 +63,7 @@ const StepsList = ({
   const handleRestart = () => {
     setActiveStep(0);
     setSiteConditionStep(1);
-    setCompletedStep(-1);
+    dispatch(setMaxAvailableStepRedux(-1));
     dispatch(resetCalculator());
     dispatch(setHistoryStateRedux(historyStates.none));
     dispatch(setSelectedHistoryRedux(null));
@@ -106,10 +105,10 @@ const StepsList = ({
         {calculatorList.map((label, index) => (
           <Step
             key={label}
-            disabled={completedStep + 1 < index}
+            disabled={maxAvailableStep + 1 < index}
             sx={{
               '& .MuiSvgIcon-root': {
-                color: completedStep + 1 < index ? '' : '#4f5f30',
+                color: maxAvailableStep + 1 < index ? '' : '#4f5f30',
                 '&.Mui-active': {
                   color: '#77b400',
                 },

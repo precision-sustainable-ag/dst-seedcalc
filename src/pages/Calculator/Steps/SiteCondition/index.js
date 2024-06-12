@@ -22,7 +22,7 @@ import Map from './Map';
 import initialState from '../../../../features/siteConditionSlice/state';
 import '../steps.scss';
 import { historyStates } from '../../../../features/userSlice/state';
-import { setHistoryDialogStateRedux } from '../../../../features/userSlice/actions';
+import { setHistoryDialogStateRedux, setMaxAvailableStepRedux } from '../../../../features/userSlice/actions';
 
 const SiteCondition = ({
   siteConditionStep, setSiteConditionStep, completedStep, setCompletedStep, token,
@@ -35,7 +35,7 @@ const SiteCondition = ({
 
   const dispatch = useDispatch();
   const siteCondition = useSelector((state) => state.siteCondition);
-  const { historyState } = useSelector((state) => state.user);
+  const { historyState, maxAvailableStep } = useSelector((state) => state.user);
 
   // function to get all regions(counties/zones) of a state
   const getRegions = async (state) => {
@@ -49,6 +49,7 @@ const SiteCondition = ({
 
   // update redux based on state change
   const updateStateRedux = (state) => {
+    if (maxAvailableStep > -1) dispatch(setMaxAvailableStepRedux(-1));
     // set all siteCondition redux value to default
     // FIXME: this also set loading and error to false, need to make changes to redux apis
     // maybe move them to user api
