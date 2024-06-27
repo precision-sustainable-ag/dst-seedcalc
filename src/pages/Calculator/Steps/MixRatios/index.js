@@ -23,8 +23,7 @@ import { setOptionRedux, setMixRatioOptionRedux } from '../../../../features/cal
 import { pieChartUnits } from '../../../../shared/data/units';
 import '../steps.scss';
 import {
-  setAlertStateRedux, setHistoryStateRedux, setHistoryDialogStateRedux,
-  setMaxAvailableStepRedux,
+  setAlertStateRedux, setHistoryStateRedux, setMaxAvailableStepRedux,
 } from '../../../../features/userSlice/actions';
 import { historyStates } from '../../../../features/userSlice/state';
 
@@ -120,12 +119,8 @@ const MixRatio = ({
     }, {}),
   );
 
-  // initialize calculator, set initial options, open warning dialog if history is imported
+  // initialize calculator, set initial options
   useEffect(() => {
-    if (historyState === historyStates.imported) {
-      dispatch(setHistoryDialogStateRedux({ open: true, type: 'warning' }));
-    }
-
     const userInput = createUserInput(soilDrainage, plantingDate, acres);
     // use a region object array for sdk init
     const regions = [{ label: county }];
