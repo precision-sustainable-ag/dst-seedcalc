@@ -26,7 +26,7 @@ const HistoryDialog = ({ setStep, setSiteConditionStep }) => {
   const dispatch = useDispatch();
 
   // eslint-disable-next-line no-shadow
-  const handleOpenDialog = (open, type = 'add') => {
+  const handleOpenDialog = (open) => {
     dispatch(setHistoryDialogStateRedux({ open, type }));
   };
 

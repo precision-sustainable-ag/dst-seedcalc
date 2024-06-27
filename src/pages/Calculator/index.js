@@ -313,6 +313,7 @@ const Calculator = () => {
           <Grid
             item
             xs={12}
+            // FIXME: except last step which does not have the crop bar
             lg={activeStep === 0 ? 12 : 10}
             md={activeStep > 0 ? 11 : 12}
             sx={
