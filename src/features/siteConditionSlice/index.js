@@ -51,8 +51,8 @@ const siteConditionSlice = createSlice({
       return { ...state, ...siteCondition };
     },
     updateTileDrainage: (state, { payload }) => {
-      const { tileDrainage } = payload;
-      return { ...state, tileDrainage };
+      const { prevSoilDrainage, tileDrainage } = payload;
+      return { ...state, prevSoilDrainage, tileDrainage };
     },
   },
   extraReducers: (builder) => {

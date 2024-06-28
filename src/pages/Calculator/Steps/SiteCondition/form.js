@@ -2,7 +2,7 @@
 //                      Imports                         //
 /// ///////////////////////////////////////////////////////
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   Button,
   Typography, Tooltip,
@@ -81,13 +81,11 @@ const SiteConditionForm = ({
 }) => {
   const dispatch = useDispatch();
   const {
-    state, soilDrainage, tileDrainage, county, plantingDate,
+    state, soilDrainage, prevSoilDrainage, tileDrainage, county, plantingDate,
     soilFertility, checkNRCSStandards, acres, council,
   } = useSelector((s) => s.siteCondition);
   // eslint-disable-next-line no-shadow
   const { historyState, maxAvailableStep } = useSelector((state) => state.user);
-
-  const [soilDrainagePrev, setSoilDrainagePrev] = useState(soilDrainage);
 
   const handleState = async (e) => {
     if (historyState === historyStates.imported) {
@@ -123,23 +121,27 @@ const SiteConditionForm = ({
       return;
     }
     if (maxAvailableStep > -1) dispatch(setMaxAvailableStepRedux(-1));
-    setSoilDrainagePrev(e.target.value);
     dispatch(setSoilDrainageRedux(e.target.value));
-    dispatch(updateTileDrainageRedux(false));
+    dispatch(updateTileDrainageRedux('', false));
   };
 
   const handleTileDrainage = () => {
-    dispatch(updateTileDrainageRedux(!tileDrainage));
-  };
-
-  useEffect(() => {
-    if (tileDrainage) {
+    if (historyState === historyStates.imported) {
+      dispatch(setHistoryDialogStateRedux({ open: true, type: 'update' }));
+      return;
+    }
+    if (maxAvailableStep > -1) dispatch(setMaxAvailableStepRedux(-1));
+    if (!tileDrainage) {
+      // switch tileDrainage to true
       const newDrainage = getTileDrainage(soilDrainage, council);
       dispatch(setSoilDrainageRedux(newDrainage));
+      dispatch(updateTileDrainageRedux(soilDrainage, true));
     } else {
-      dispatch(setSoilDrainageRedux(soilDrainagePrev));
+      // switch to false
+      dispatch(setSoilDrainageRedux(prevSoilDrainage));
+      dispatch(updateTileDrainageRedux('', false));
     }
-  }, [tileDrainage]);
+  };
 
   return (
     <Grid container>
@@ -178,8 +180,8 @@ const SiteConditionForm = ({
       <Grid item xs={0} md={3} />
       <Grid item xs={12} md={6} p="10px">
         <Dropdown
-          emptyWarning={soilDrainagePrev.length === 0}
-          value={soilDrainagePrev}
+          emptyWarning={soilDrainage === ''}
+          value={tileDrainage ? prevSoilDrainage : soilDrainage}
           label="Soil Drainage: "
           handleChange={handleSoilDrainage}
           size={12}

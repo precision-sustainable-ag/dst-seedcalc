@@ -6,6 +6,7 @@ const initialState = {
   county: '',
   countyId: '',
   soilDrainage: '',
+  prevSoilDrainage: '',
   tileDrainage: false,
   plantingDate: dayjs(new Date()).format('MM/DD/YYYY'),
   acres: 0,
