@@ -14,8 +14,8 @@ import { seedingMethodsMCCC, seedingMethodsNECCC, seedingMethodsSCCC } from '../
 import Dropdown from '../../../../components/Dropdown';
 import '../steps.scss';
 import { setOptionRedux, setSeedingMethodsRedux } from '../../../../features/calculatorSlice/actions';
-import { historyState } from '../../../../features/userSlice/state';
-import { setAlertStateRedux, setFromUserHistoryRedux } from '../../../../features/userSlice/actions';
+import { historyStates } from '../../../../features/userSlice/state';
+import { setAlertStateRedux, setHistoryStateRedux } from '../../../../features/userSlice/actions';
 
 // styles for left grid
 const FullGrid = styled(Grid)(() => ({
@@ -67,7 +67,7 @@ const SeedingMethod = ({ alertState }) => {
   const {
     seedsSelected, sideBarSelection, options,
   } = useSelector((state) => state.calculator);
-  const { fromUserHistory } = useSelector((state) => state.user);
+  const { historyState } = useSelector((state) => state.user);
 
   // create an key/value pair for the seed and related accordion expanded state
   const [accordionState, setAccordionState] = useState(
@@ -102,7 +102,7 @@ const SeedingMethod = ({ alertState }) => {
       message: 'You can also edit this information in furthur steps.',
     }));
     setSelectedMethod(method);
-    if (fromUserHistory === historyState.imported) dispatch(setFromUserHistoryRedux(historyState.updated));
+    if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
   };
 
   /// ///////////////////////////////////////////////////////

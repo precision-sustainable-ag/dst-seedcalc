@@ -22,8 +22,10 @@ import {
 import { setOptionRedux, setMixRatioOptionRedux } from '../../../../features/calculatorSlice/actions';
 import { pieChartUnits } from '../../../../shared/data/units';
 import '../steps.scss';
-import { setAlertStateRedux, setFromUserHistoryRedux } from '../../../../features/userSlice/actions';
-import { historyState } from '../../../../features/userSlice/state';
+import {
+  setAlertStateRedux, setHistoryStateRedux, setMaxAvailableStepRedux,
+} from '../../../../features/userSlice/actions';
+import { historyStates } from '../../../../features/userSlice/state';
 
 const getCalculatorResult = (council) => {
   const defaultResultMCCC = {
@@ -86,7 +88,7 @@ const MixRatio = ({
   const {
     council, soilDrainage, plantingDate, acres, county,
   } = useSelector((state) => state.siteCondition);
-  const { fromUserHistory } = useSelector((state) => state.user);
+  const { historyState, maxAvailableStep } = useSelector((state) => state.user);
 
   const [calculatorResult, setCalculatorResult] = useState(
     seedsSelected.reduce((res, seed) => {
@@ -125,7 +127,7 @@ const MixRatio = ({
     const seedingRateCalculator = createCalculator(seedsSelected, council, regions, userInput);
     setCalculator(seedingRateCalculator);
     // If historyState is imported, not init options, use mixRatioOptions instead
-    if (fromUserHistory !== historyState.imported) {
+    if (historyState !== historyStates.imported) {
       seedsSelected.forEach((seed) => {
         // if percentOfRate is not null, skip this step(this happens when add new crop for a imported history)
         if (mixRatioOptions[seed.label].percentOfRate === null) {
@@ -168,7 +170,7 @@ const MixRatio = ({
         }));
       }
       // if history is not imported, update mixRatioOptions to options
-      if (fromUserHistory !== historyState.imported) dispatch(setOptionRedux(seed.label, seedOption));
+      if (historyState !== historyStates.imported && maxAvailableStep <= 1) dispatch(setOptionRedux(seed.label, seedOption));
       // if history is updated, this will remove previously imported options redux and set it as mixRatioOptions
     });
     // calculate piechart data
@@ -179,9 +181,6 @@ const MixRatio = ({
     } = calculatePieChartData(seedsSelected, calculator, mixRatioOptions);
     setPieChartData({ seedingRateArray, plantsPerSqftArray, seedsPerSqftArray });
     setPrevOptions(mixRatioOptions);
-    // when options change, set mixRatiosOptions in redux
-    // FIXME: maybe need to think a little bit more situations
-    // if (!fromUserHistory) dispatch(setMixRatioOptionsRedux(options));
   }, [mixRatioOptions, initCalculator]);
 
   // expand related accordion based on sidebar click
@@ -208,8 +207,9 @@ const MixRatio = ({
       message: 'You now have a custom mix. You can edit this information in furthur steps.',
     }));
     dispatch(setMixRatioOptionRedux(seed.label, { ...mixRatioOptions[seed.label], [option]: value }));
-    // set historyState.updated if change anything
-    if (fromUserHistory === historyState.imported) dispatch(setFromUserHistoryRedux(historyState.updated));
+    // set historyStates.updated if change anything
+    if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
+    if (maxAvailableStep > 1) dispatch(setMaxAvailableStepRedux(1));
   };
 
   // handler for click to open accordion
@@ -236,6 +236,15 @@ const MixRatio = ({
     <Grid container>
       <Grid item xs={12}>
         <Typography variant="h2">Review Proportions</Typography>
+        {historyState === historyStates.imported && (
+        <Typography sx={{
+          fontWeight: 'bold', margin: '1rem', marginBottom: '0',
+        }}
+        >
+          <span style={{ color: 'red' }}>Warning: </span>
+          Making changes on this page will reset the subsequent steps of the calculation.
+        </Typography>
+        )}
       </Grid>
 
       <Grid item xs={6} sx={{ textAlign: 'justify' }}>

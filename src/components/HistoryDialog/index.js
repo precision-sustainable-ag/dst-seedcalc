@@ -1,96 +1,91 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
-  Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField, Typography,
+  Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField,
+  Typography,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCalculationNameRedux, setFromUserHistoryRedux, setSelectedHistoryRedux } from '../../features/userSlice/actions';
-import useUserHistory from '../../shared/hooks/useUserHistory';
+import {
+  setHistoryStateRedux, setHistoryDialogStateRedux, setSelectedHistoryRedux,
+} from '../../features/userSlice/actions';
 import { setCalculatorRedux } from '../../features/calculatorSlice/actions';
-import initialState from '../../features/calculatorSlice/state';
-import { historyState } from '../../features/userSlice/state';
+import initialCalculatorState from '../../features/calculatorSlice/state';
+import initialSiteConditionState from '../../features/siteConditionSlice/state';
+import { historyStates } from '../../features/userSlice/state';
+import { setSiteConditionRedux } from '../../features/siteConditionSlice/actions';
 
-export const historyDialogFromEnums = {
-  siteCondition: 'siteConditoin',
-  completePage: 'completePage',
-};
-
-const HistoryDialog = ({
-  buttonLabel, from, token, setOpenModal,
-}) => {
-  const [open, setOpen] = useState(false);
+const HistoryDialog = ({ setStep, setSiteConditionStep }) => {
   const [error, setError] = useState(false);
   const [helperText, setHelperText] = useState('');
   const [historyName, setHistoryName] = useState('');
 
-  const { saveHistory } = useUserHistory(token);
-
   const {
-    calculationName, fromUserHistory, userHistoryList, selectedHistory,
+    userHistoryList, historyDialogState,
   } = useSelector((state) => state.user);
-  const { crops } = useSelector((state) => state.calculator);
+  const { open, type } = historyDialogState;
 
   const dispatch = useDispatch();
 
-  const nameValidation = () => {
-    if (userHistoryList.find((h) => h.label === historyName)) {
-      setError(true);
-      setHelperText('A calculation with same name already exists!');
-      return false;
-    }
-    return true;
+  // eslint-disable-next-line no-shadow
+  const handleOpenDialog = (open) => {
+    dispatch(setHistoryDialogStateRedux({ open, type }));
   };
 
-  const handleOpenDialog = () => {
-    setOpen(true);
+  const nameValidation = (name) => {
+    if (name === '') return false;
+    const result = userHistoryList.find((history) => history.label === name);
+    if (result === undefined) return true;
+    return false;
   };
 
-  const handleClose = (selection) => {
-    if (selection === 'YES') {
-      if (from === historyDialogFromEnums.siteCondition) {
-        if (!nameValidation()) return;
-        // if there's already an imported history existed, cleanup calculator redux(except for crops)
-        if (fromUserHistory === historyState.imported) dispatch(setCalculatorRedux({ ...initialState, crops }));
-        dispatch(setFromUserHistoryRedux(historyState.new));
-        setOpenModal(false);
-      }
-      // on the complete page, update/save the calculation
-      if (from === historyDialogFromEnums.completePage) {
-        if (fromUserHistory === historyState.updated) {
-          // if history is updated but name is not changed, not run nameValidation again
-          if (selectedHistory.label !== historyName && !nameValidation()) return;
-          saveHistory(selectedHistory.id, historyName);
-        } else if (fromUserHistory === historyState.new) {
-          if (!nameValidation()) return;
-          saveHistory();
-        }
-      }
-      dispatch(setCalculationNameRedux(historyName));
-      dispatch(setSelectedHistoryRedux(null));
-    }
+  const resetDialogState = () => {
+    handleOpenDialog(false);
+    setHistoryName('');
     setError(false);
     setHelperText('');
-    setOpen(false);
   };
 
-  // initially set calculation name
-  useEffect(() => {
-    setHistoryName(calculationName);
-  }, []);
+  const handleCreate = () => {
+    const result = nameValidation(historyName);
+    if (result) {
+      // reset redux
+      dispatch(setCalculatorRedux(initialCalculatorState));
+      dispatch(setSiteConditionRedux(initialSiteConditionState));
+      dispatch(setSelectedHistoryRedux({ label: historyName, id: null }));
+      dispatch(setHistoryStateRedux(historyStates.new));
+    } else {
+      setError(true);
+      setHelperText('Name invalid or already exists!');
+      return;
+    }
+    resetDialogState();
+  };
+
+  const handleUpdate = () => {
+    // return to first step
+    setStep(0);
+    setSiteConditionStep(1);
+    // reset redux
+    dispatch(setCalculatorRedux(initialCalculatorState));
+    dispatch(setSiteConditionRedux(initialSiteConditionState));
+    dispatch(setSelectedHistoryRedux(null));
+    dispatch(setHistoryStateRedux(historyStates.none));
+    // open dialog and set dialog state as add
+    handleOpenDialog(true, 'add');
+  };
+
+  const handleCancel = () => {
+    resetDialogState();
+  };
 
   return (
-    <>
-      <Dialog open={open}>
-        <DialogTitle>
-          {from === historyDialogFromEnums.siteCondition
-            ? 'Do you want to create a new calculation and save it?'
-            : 'Do you want to save this calculation?'}
-        </DialogTitle>
-        <Typography pl="1.5rem">
-          {from === historyDialogFromEnums.siteCondition
-            ? 'You can also save it after the calculation.'
-            : ''}
-        </Typography>
-        <DialogContent>
+    <Dialog open={open}>
+      <DialogTitle>
+        { type === 'add' && 'Are you creating a new record?'}
+        { type === 'update' && 'Are you updating your record?'}
+      </DialogTitle>
+      <DialogContent>
+        {type === 'add'
+          && (
           <TextField
             autoFocus
             fullWidth
@@ -101,17 +96,27 @@ const HistoryDialog = ({
             error={error}
             helperText={helperText}
           />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => handleClose('YES')}>Save</Button>
-          <Button onClick={() => handleClose('NO')}>Cancel</Button>
-        </DialogActions>
+          )}
+        {type === 'update'
+          && (
+          <DialogContent>
+            <Typography>
+              <span style={{ color: 'red' }}>Warning: </span>
+              Making changes may affect the results of subsequent steps
+              that you have saved. Please create a new record instead.
+            </Typography>
+          </DialogContent>
+          )}
+      </DialogContent>
+      <DialogActions>
+        {type === 'add'
+            && <Button onClick={handleCreate} variant="contained">Create</Button>}
+        {type === 'update'
+            && <Button onClick={handleUpdate} variant="contained">Create a new record</Button>}
+        <Button onClick={handleCancel} variant="contained">Cancel</Button>
+      </DialogActions>
 
-      </Dialog>
-      <Button variant="contained" onClick={handleOpenDialog}>
-        {buttonLabel}
-      </Button>
-    </>
+    </Dialog>
   );
 };
 export default HistoryDialog;

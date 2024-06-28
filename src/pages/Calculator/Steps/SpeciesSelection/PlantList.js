@@ -18,8 +18,8 @@ import {
   setMixRatioOptionRedux,
 } from '../../../../features/calculatorSlice/actions';
 import { initialOptions } from '../../../../shared/utils/calculator';
-import { setFromUserHistoryRedux } from '../../../../features/userSlice/actions';
-import { historyState } from '../../../../features/userSlice/state';
+import { setHistoryStateRedux, setMaxAvailableStepRedux } from '../../../../features/userSlice/actions';
+import { historyStates } from '../../../../features/userSlice/state';
 
 const CheckBoxIcon = ({ style }) => (
   <Box sx={style}>
@@ -42,7 +42,7 @@ const PlantList = ({
   const {
     acres, stateId, countyId, soilDrainage, plantingDate, soilFertility, council,
   } = useSelector((state) => state.siteCondition);
-  const { fromUserHistory } = useSelector((state) => state.user);
+  const { historyState, maxAvailableStep } = useSelector((state) => state.user);
 
   const seedsSelected = useSelector((state) => state.calculator.seedsSelected);
 
@@ -97,8 +97,9 @@ const PlantList = ({
   };
 
   const handleClick = async (seed) => {
-    // if from user history, set fromUserHistory to historyState.updated to create a new calculation
-    if (fromUserHistory === historyState.imported) dispatch(setFromUserHistoryRedux(historyState.updated));
+    // if from user history, set historyState to historyStates.updated to create a new calculation
+    if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
+    if (maxAvailableStep > 0) dispatch(setMaxAvailableStepRedux(0));
     const { id: cropId, label: seedName } = seed;
     // if seed not in seedSelected, add it
     if (seedsSelected.filter((s) => s.label === seedName).length === 0) {

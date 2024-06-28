@@ -3,14 +3,13 @@ import Papa from 'papaparse';
 import {
   Box, Grid, Modal, Typography, Button,
 } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useAuth0 } from '@auth0/auth0-react';
 import { importFromCSVCalculator } from '../../features/calculatorSlice/actions';
 import { setSiteConditionRedux } from '../../features/siteConditionSlice/actions';
 import useUserHistory from '../../shared/hooks/useUserHistory';
 import Dropdown from '../Dropdown';
-import { setCalculationNameRedux } from '../../features/userSlice/actions';
-import HistoryDialog, { historyDialogFromEnums } from '../HistoryDialog';
+import { setHistoryDialogStateRedux } from '../../features/userSlice/actions';
 
 const modalStyle = {
   position: 'absolute',
@@ -27,28 +26,18 @@ const modalStyle = {
 
 const DSTImport = ({ token }) => {
   const [openModal, setOpenModal] = useState(false);
-
   const [histories, setHistories] = useState([]);
+  const [calculationName, setCaclulationName] = useState('');
 
   const dispatch = useDispatch();
 
-  const { loadHistory } = useUserHistory(token);
-
-  const { calculationName } = useSelector((state) => state.user);
+  const { loadHistory } = useUserHistory();
 
   const { isAuthenticated } = useAuth0();
 
   /// ///////////////////////////////////////////////////////
   //                  Import Logic                        //
   /// ///////////////////////////////////////////////////////
-
-  const handleOpenModal = () => {
-    // there's possibilities that click 'Create New Calculation', set a name and then click 'Import'.
-    // If this happens then the dropdown will popup with a not available name.
-    // Set the calculation name to empty to prevent this behaviour.
-    dispatch(setCalculationNameRedux(''));
-    setOpenModal(true);
-  };
 
   const handleFileUpload = (event) => {
     Papa.parse(event.target.files[0], {
@@ -65,24 +54,15 @@ const DSTImport = ({ token }) => {
     });
   };
 
-  const handleSelectHistory = (e) => {
-    dispatch(setCalculationNameRedux(e.target.value));
-  };
-
   const handleLoadUserHistory = () => {
-    loadHistory(calculationName);
+    loadHistory(token, calculationName);
     setOpenModal(!openModal);
   };
-
-  // open the modal if user is logged in
-  useEffect(() => {
-    if (isAuthenticated) setOpenModal(true);
-  }, []);
 
   // initially load all history records
   useEffect(() => {
     const loadHistories = async () => {
-      const historyList = await loadHistory();
+      const historyList = await loadHistory(token);
       setHistories(historyList);
     };
     // token is null initially so only call when token is available
@@ -107,12 +87,15 @@ const DSTImport = ({ token }) => {
                   </Typography>
                 </Grid>
                 <Grid item xs={12} display="flex" justifyContent="center">
-                  <HistoryDialog
-                    buttonLabel="create new calculation"
-                    from={historyDialogFromEnums.siteCondition}
-                    token={token}
-                    setOpenModal={setOpenModal}
-                  />
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      dispatch(setHistoryDialogStateRedux({ open: true, type: 'add' }));
+                      setOpenModal(false);
+                    }}
+                  >
+                    create new calculation
+                  </Button>
                 </Grid>
               </Grid>
 
@@ -155,7 +138,7 @@ const DSTImport = ({ token }) => {
                       value={calculationName}
                       label="Select your calculation"
                       items={histories}
-                      handleChange={handleSelectHistory}
+                      handleChange={(e) => setCaclulationName(e.target.value)}
                       minWidth={220}
                     />
                   </Grid>
@@ -172,7 +155,7 @@ const DSTImport = ({ token }) => {
       </Modal>
       <Button
         variant="contained"
-        onClick={handleOpenModal}
+        onClick={() => setOpenModal(true)}
         sx={{ textDecoration: 'none', margin: '1rem' }}
       >
         {isAuthenticated ? 'Import / Create calculation' : 'Import Calculation'}

@@ -1,4 +1,4 @@
-export const historyState = {
+export const historyStates = {
   none: 'none',
   new: 'new',
   imported: 'imported',
@@ -6,8 +6,7 @@ export const historyState = {
 };
 
 const initialState = {
-  calculationName: '',
-  fromUserHistory: historyState.none,
+  historyState: historyStates.none,
   userHistoryList: [],
   selectedHistory: null,
   alertState: {
@@ -15,6 +14,11 @@ const initialState = {
     type: 'error',
     message: 'Network Error - Try again later or refresh the page!',
   },
+  historyDialogState: {
+    open: false,
+    type: 'add',
+  },
+  maxAvailableStep: -1,
 };
 
 export default initialState;

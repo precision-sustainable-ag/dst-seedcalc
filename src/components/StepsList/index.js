@@ -5,18 +5,18 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
-import { StepLabel, Tooltip } from '@mui/material';
+import { StepButton, Tooltip } from '@mui/material';
 import Button from '@mui/material/Button';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-// import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { calculatorList } from '../../shared/data/dropdown';
 import { resetCalculator } from '../../features/calculatorSlice';
 import {
-  setCalculationNameRedux, setFromUserHistoryRedux, setSelectedHistoryRedux,
+  setHistoryStateRedux, setMaxAvailableStepRedux, setSelectedHistoryRedux,
 } from '../../features/userSlice/actions';
-import { historyState } from '../../features/userSlice/state';
+import { historyStates } from '../../features/userSlice/state';
 
 /*
 {
@@ -34,7 +34,9 @@ import { historyState } from '../../features/userSlice/state';
 }
 */
 
-const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
+const StepsList = ({
+  activeStep, setActiveStep, availableSteps, setSiteConditionStep,
+}) => {
   const [hovering, setHovering] = useState(false);
   const [visible, setVisible] = useState(false);
 
@@ -43,8 +45,7 @@ const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
 
   const dispatch = useDispatch();
 
-  // this completed step is to determine the latest completed step
-  const [completedStep, setCompletedStep] = useState(-1);
+  const { maxAvailableStep } = useSelector((state) => state.user);
 
   /// ///////////////////////////////////////////////////////
   //                      State Logic                     //
@@ -52,21 +53,22 @@ const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setCompletedStep(activeStep > completedStep ? activeStep : completedStep);
+    dispatch(setMaxAvailableStepRedux(activeStep > maxAvailableStep ? activeStep : maxAvailableStep));
   };
 
-  // const handleBack = () => {
-  //   setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  // };
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
 
   const handleRestart = () => {
     setActiveStep(0);
-    setCompletedStep(-1);
+    setSiteConditionStep(1);
+    dispatch(setMaxAvailableStepRedux(-1));
     dispatch(resetCalculator());
-    dispatch(setFromUserHistoryRedux(historyState.none));
-    dispatch(setCalculationNameRedux(''));
+    dispatch(setHistoryStateRedux(historyStates.none));
     dispatch(setSelectedHistoryRedux(null));
   };
+
   const tooltipTitle = () => {
     if (activeStep === 0 && !availableSteps[0]) {
       return 'Please enter the necessary info below.';
@@ -103,9 +105,10 @@ const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
         {calculatorList.map((label, index) => (
           <Step
             key={label}
+            disabled={maxAvailableStep + 1 < index}
             sx={{
               '& .MuiSvgIcon-root': {
-                color: completedStep + 1 < index ? '' : '#4f5f30',
+                color: maxAvailableStep + 1 < index ? '' : '#4f5f30',
                 '&.Mui-active': {
                   color: '#77b400',
                 },
@@ -117,9 +120,9 @@ const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
               },
             }}
           >
-            <StepLabel>
+            <StepButton onClick={() => setActiveStep(index)}>
               {matches && label}
-            </StepLabel>
+            </StepButton>
           </Step>
         ))}
       </Stepper>
@@ -127,10 +130,19 @@ const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
       <Box sx={{ display: 'flex', flexDirection: 'row', pt: 1 }}>
 
         {activeStep !== 0 && (
-          <Button variant="stepper" onClick={handleRestart}>
-            <RestartAltIcon />
-            Restart
-          </Button>
+          activeStep === calculatorList.length ? (
+            <Button variant="stepper" onClick={handleRestart}>
+              <RestartAltIcon />
+              Restart
+            </Button>
+          )
+            : (
+              <Button variant="stepper" onClick={handleBack}>
+                <ArrowBackIosNewIcon />
+                {' '}
+                BACK
+              </Button>
+            )
         )}
 
         <Box sx={{ flex: '1 1 auto' }} />
@@ -142,10 +154,7 @@ const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
           onMouseLeave={() => setHovering(false)}
           arrow
           open={visible}
-          title={(
-            tooltipTitle()
-          )}
-
+          title={tooltipTitle()}
         >
           <span>
             <Button

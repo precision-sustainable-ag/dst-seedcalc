@@ -6,7 +6,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { useDispatch, useSelector } from 'react-redux';
 import { Typography, useMediaQuery } from '@mui/material';
-
 import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
@@ -24,16 +23,19 @@ import {
   CompletedPage,
 } from './Steps';
 import SeedsSelectedList from '../../components/SeedsSelectedList';
-
 import { calculatorList, completedList } from '../../shared/data/dropdown';
 import StepsList from '../../components/StepsList';
 import NavBar from '../../components/NavBar';
 import { setAlertStateRedux } from '../../features/userSlice/actions';
+import HistoryDialog from '../../components/HistoryDialog';
+import useUserHistory from '../../shared/hooks/useUserHistory';
+import { historyStates } from '../../features/userSlice/state';
 
 const Calculator = () => {
   // initially set calculator here
   const [calculator, setCalculator] = useState(null);
   const [activeStep, setActiveStep] = useState(0);
+  const [siteConditionStep, setSiteConditionStep] = useState(1);
   // this completedStep is to determine whether the next button is clickable on each page
   const [completedStep, setCompletedStep] = useState([...completedList]);
   const [token, setToken] = useState(null);
@@ -42,7 +44,7 @@ const Calculator = () => {
   const siteCondition = useSelector((state) => state.siteCondition);
   const { error: siteConditionError } = siteCondition;
   const { error: calculatorError, seedsSelected } = useSelector((state) => state.calculator);
-  const { alertState } = useSelector((state) => state.user);
+  const { alertState, historyState, selectedHistory } = useSelector((state) => state.user);
 
   const stepperRef = useRef();
 
@@ -53,6 +55,8 @@ const Calculator = () => {
 
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
+  const { saveHistory } = useUserHistory();
+
   /// ///////////////////////////////////////////////////////
   //                      Render                          //
   /// ///////////////////////////////////////////////////////
@@ -62,6 +66,8 @@ const Calculator = () => {
       case 'Site Conditions':
         return (
           <SiteCondition
+            siteConditionStep={siteConditionStep}
+            setSiteConditionStep={setSiteConditionStep}
             completedStep={completedStep}
             setCompletedStep={setCompletedStep}
             token={token}
@@ -70,6 +76,7 @@ const Calculator = () => {
       case 'Species Selection':
         return (
           <SpeciesSelection
+            setSiteConditionStep={setSiteConditionStep}
             completedStep={completedStep}
             setCompletedStep={setCompletedStep}
           />
@@ -106,7 +113,7 @@ const Calculator = () => {
         );
       case 'Confirm Plan':
         return (
-          <ConfirmPlan calculator={calculator} token={token} />
+          <ConfirmPlan calculator={calculator} />
         );
       case 'Finish':
         return (
@@ -154,9 +161,13 @@ const Calculator = () => {
     };
   }, []);
 
-  // close alert eveytime switch steps
+  // close alert and save user history
   useEffect(() => {
     dispatch(setAlertStateRedux({ ...alertState, open: false }));
+    if (historyState === historyStates.new || historyState === historyStates.updated) {
+      const { label, id } = selectedHistory;
+      saveHistory(token, id, label);
+    }
   }, [activeStep]);
 
   useEffect(() => {
@@ -270,6 +281,7 @@ const Calculator = () => {
             activeStep={activeStep}
             setActiveStep={setActiveStep}
             availableSteps={completedStep}
+            setSiteConditionStep={setSiteConditionStep}
           />
         </Grid>
 
@@ -301,6 +313,7 @@ const Calculator = () => {
           <Grid
             item
             xs={12}
+            // FIXME: except last step which does not have the crop bar
             lg={activeStep === 0 ? 12 : 10}
             md={activeStep > 0 ? 11 : 12}
             sx={
@@ -318,7 +331,10 @@ const Calculator = () => {
                 : calculatorList[activeStep],
             )}
           </Grid>
+
+          <HistoryDialog setStep={setActiveStep} setSiteConditionStep={setSiteConditionStep} />
         </Grid>
+
       </Grid>
 
       <Grid item md={0} lg={2} />

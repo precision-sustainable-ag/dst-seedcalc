@@ -26,4 +26,4 @@ export const updateLatlonRedux = (latlon) => updateLatlon({ latlon });
 
 export const setSiteConditionRedux = (siteCondition) => setSiteCondition({ siteCondition });
 
-export const updateTileDrainageRedux = (tileDrainage) => updateTileDrainage({ tileDrainage });
+export const updateTileDrainageRedux = (prevSoilDrainage, tileDrainage) => updateTileDrainage({ prevSoilDrainage, tileDrainage });

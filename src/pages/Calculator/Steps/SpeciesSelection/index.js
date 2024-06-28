@@ -21,8 +21,9 @@ import { removeOptionRedux, removeSeedRedux, updateDiversityRedux } from '../../
 import '../steps.scss';
 import { createUserInput, createCalculator } from '../../../../shared/utils/calculator';
 import { setAlertStateRedux } from '../../../../features/userSlice/actions';
+import { historyStates } from '../../../../features/userSlice/state';
 
-const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
+const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedStep }) => {
   // useSelector for crops reducer data
   const dispatch = useDispatch();
 
@@ -32,6 +33,7 @@ const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
   const {
     soilDrainage, plantingDate, acres, county, council,
   } = useSelector((state) => state.siteCondition);
+  const { historyState } = useSelector((state) => state.user);
 
   const [filteredSeeds, setFilteredSeeds] = useState([]);
   const [query, setQuery] = useState('');
@@ -70,25 +72,45 @@ const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
     setAccordionState({ ...accordionState, [type]: !open });
   };
 
+  const userInput = createUserInput(soilDrainage, plantingDate, acres);
+  // use a region object array for sdk init
+  const regions = [{ label: county }];
+
   /// ///////////////////////////////////////////////////////
   //                    useEffects                         //
   /// ///////////////////////////////////////////////////////
 
   useEffect(() => {
+    setSiteConditionStep(1);
+  }, []);
+
+  useEffect(() => {
     setFilteredSeeds(crops);
   }, [crops]);
 
-  const userInput = createUserInput(soilDrainage, plantingDate, acres);
-  // use a region object array for sdk init
-  const regions = [{ label: county }];
-
   // unselect crops with missing fields
   useEffect(() => {
-    // TODO: NOTE: the calculator here is only used for validating the crop
-    // , the calculator for calculation in initialized in MixRatios
+    // TODO:
+    // NOTE: the calculator here is only used for validating, the calculator for calculation is initialized in MixRatios
     try {
       // eslint-disable-next-line no-unused-vars
       const seedingRateCalculator = createCalculator(seedsSelected, council, regions, userInput);
+
+      // update diversity selected
+      let diversity = [];
+      seedsSelected.forEach((seed) => {
+        diversity.push(seed.group.label);
+      });
+      diversity = diversity.filter((group, index) => diversity.indexOf(group) === index);
+      dispatch(updateDiversityRedux(diversity));
+
+      // validate next button
+      validateForms(
+        seedsSelected.length > 1,
+        1,
+        completedStep,
+        setCompletedStep,
+      );
     } catch (err) {
       // if the crop is not valid, remove it from seedSelected
       const lastAddedSeedName = seedsSelected[seedsSelected.length - 1]?.label;
@@ -102,26 +124,6 @@ const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
     }
   }, [seedsSelected]);
 
-  // update diversity selected
-  useEffect(() => {
-    let diversity = [];
-    seedsSelected.forEach((seed) => {
-      diversity.push(seed.group.label);
-    });
-    diversity = diversity.filter((group, index) => diversity.indexOf(group) === index);
-    dispatch(updateDiversityRedux(diversity));
-  }, [seedsSelected]);
-
-  // validate next button
-  useEffect(() => {
-    validateForms(
-      seedsSelected.length > 1,
-      1,
-      completedStep,
-      setCompletedStep,
-    );
-  }, [seedsSelected]);
-
   /// ///////////////////////////////////////////////////////
   //                      Render                          //
   /// ///////////////////////////////////////////////////////
@@ -132,6 +134,15 @@ const SpeciesSelection = ({ completedStep, setCompletedStep }) => {
         <Typography variant="h2">
           Click 2 or more species for your mix.
         </Typography>
+        {historyState === historyStates.imported && (
+        <Typography sx={{
+          fontWeight: 'bold', margin: '1rem', marginBottom: '0',
+        }}
+        >
+          <span style={{ color: 'red' }}>Warning: </span>
+          Making changes on this page will reset the subsequent steps of the calculation.
+        </Typography>
+        )}
       </Grid>
       <Grid item xs={11}>
         <Box
