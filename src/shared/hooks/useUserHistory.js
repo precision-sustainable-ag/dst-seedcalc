@@ -33,7 +33,6 @@ const useUserHistory = () => {
           const history = histories.find((h) => h.label === name);
           if (history !== undefined) {
             const data = history.json;
-            console.log('loaded history', name, history);
             dispatch(setSiteConditionRedux(data.siteCondition));
             dispatch(setCalculatorRedux(data.calculator));
             dispatch(setHistoryStateRedux(historyStates.imported));
@@ -51,7 +50,6 @@ const useUserHistory = () => {
           // name is null, return a list of history name and id
           const historyList = histories.map((history) => ({ label: history.label, id: history.id }));
           dispatch(setUserHistoryListRedux(historyList));
-          console.log('historyList', historyList);
           return historyList;
         }
       }
@@ -84,7 +82,6 @@ const useUserHistory = () => {
           accessToken: token, historyData: data, name, id,
         };
         const res = await dispatch(updateHistory(params));
-        console.log('updated history', res.payload);
         dispatch(setAlertStateRedux({
           open: true,
           type: 'success',
@@ -99,7 +96,6 @@ const useUserHistory = () => {
           accessToken: token, historyData: data, name,
         };
         const res = await dispatch(createHistory(params));
-        console.log('created history', res.payload);
         dispatch(setAlertStateRedux({
           open: true,
           type: 'success',

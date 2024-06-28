@@ -20,7 +20,7 @@ import Diversity from './diversity';
 import { removeOptionRedux, removeSeedRedux, updateDiversityRedux } from '../../../../features/calculatorSlice/actions';
 import '../steps.scss';
 import { createUserInput, createCalculator } from '../../../../shared/utils/calculator';
-import { setAlertStateRedux, setHistoryDialogStateRedux } from '../../../../features/userSlice/actions';
+import { setAlertStateRedux } from '../../../../features/userSlice/actions';
 import { historyStates } from '../../../../features/userSlice/state';
 
 const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedStep }) => {
@@ -82,9 +82,6 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
 
   useEffect(() => {
     setSiteConditionStep(1);
-    if (historyState === historyStates.imported) {
-      dispatch(setHistoryDialogStateRedux({ open: true, type: 'warning' }));
-    }
   }, []);
 
   useEffect(() => {
@@ -137,6 +134,15 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
         <Typography variant="h2">
           Click 2 or more species for your mix.
         </Typography>
+        {historyState === historyStates.imported && (
+        <Typography sx={{
+          fontWeight: 'bold', margin: '1rem', marginBottom: '0',
+        }}
+        >
+          <span style={{ color: 'red' }}>Warning: </span>
+          Making changes on this page will reset the subsequent steps of the calculation.
+        </Typography>
+        )}
       </Grid>
       <Grid item xs={11}>
         <Box

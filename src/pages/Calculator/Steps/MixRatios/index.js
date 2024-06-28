@@ -236,6 +236,15 @@ const MixRatio = ({
     <Grid container>
       <Grid item xs={12}>
         <Typography variant="h2">Review Proportions</Typography>
+        {historyState === historyStates.imported && (
+        <Typography sx={{
+          fontWeight: 'bold', margin: '1rem', marginBottom: '0',
+        }}
+        >
+          <span style={{ color: 'red' }}>Warning: </span>
+          Making changes on this page will reset the subsequent steps of the calculation.
+        </Typography>
+        )}
       </Grid>
 
       <Grid item xs={6} sx={{ textAlign: 'justify' }}>

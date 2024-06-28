@@ -107,26 +107,13 @@ const HistoryDialog = ({ setStep, setSiteConditionStep }) => {
             </Typography>
           </DialogContent>
           )}
-        {type === 'warning'
-          && (
-          <DialogContent>
-            <Typography>
-              <span style={{ color: 'red' }}>Warning: </span>
-              Making changes on this page will erase the results of subsequent steps you have saved
-              and initiate a new calculation. Please be aware of this.
-            </Typography>
-          </DialogContent>
-          )}
       </DialogContent>
       <DialogActions>
         {type === 'add'
             && <Button onClick={handleCreate} variant="contained">Create</Button>}
         {type === 'update'
             && <Button onClick={handleUpdate} variant="contained">Create a new record</Button>}
-        {type === 'warning'
-            && <Button onClick={handleCancel} variant="contained">Confirm</Button>}
-        {type !== 'warning'
-            && <Button onClick={handleCancel} variant="contained">Cancel</Button>}
+        <Button onClick={handleCancel} variant="contained">Cancel</Button>
       </DialogActions>
 
     </Dialog>
