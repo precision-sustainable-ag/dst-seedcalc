@@ -6,6 +6,7 @@ const initialState = {
   county: '',
   countyId: '',
   soilDrainage: '',
+  prevSoilDrainage: '',
   tileDrainage: false,
   plantingDate: dayjs(new Date()).format('MM/DD/YYYY'),
   acres: 0,
@@ -15,8 +16,6 @@ const initialState = {
   latlon: [],
   loading: false,
   error: false,
-  states: [],
-  counties: [],
 };
 
 export default initialState;

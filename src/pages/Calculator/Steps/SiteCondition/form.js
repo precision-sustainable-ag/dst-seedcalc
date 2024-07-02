@@ -2,7 +2,7 @@
 //                      Imports                         //
 /// ///////////////////////////////////////////////////////
 
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Button,
   Typography, Tooltip,
@@ -12,7 +12,6 @@ import InfoIcon from '@mui/icons-material/Info';
 import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import DatePicker from '../../../../components/DatePicker';
-
 import Dropdown from '../../../../components/Dropdown';
 import NumberTextField from '../../../../components/NumberTextField';
 import DSTSwitch from '../../../../components/Switch';
@@ -20,18 +19,31 @@ import {
   soilDrainagesMCCC, soilDrainagesNECCC, soilFertilityValues, soilDrainageValues,
 } from '../../../../shared/data/dropdown';
 import {
-  checkNRCSRedux,
-  setCouncilRedux, setCountyIdRedux, setStateRedux, updateLatlonRedux,
-  setAcresRedux, setCountyRedux, setPlantingDateRedux, setSoilDrainageRedux,
-  setSoilFertilityRedux, updateTileDrainageRedux,
+  checkNRCSRedux, setAcresRedux, setCountyRedux, setCountyIdRedux, setPlantingDateRedux,
+  setSoilDrainageRedux, setSoilFertilityRedux, updateTileDrainageRedux,
 } from '../../../../features/siteConditionSlice/actions';
-import { getRegion } from '../../../../features/siteConditionSlice/api';
-import statesLatLongDict from '../../../../shared/data/statesLatLongDict';
 import '../steps.scss';
+import { historyStates } from '../../../../features/userSlice/state';
+import { setHistoryDialogStateRedux, setMaxAvailableStepRedux } from '../../../../features/userSlice/actions';
 
 const needTileDrainage = ['Very Poorly Drained', 'Poorly Drained', 'Somewhat Poorly Drained'];
 
-const getTileDrainage = (council, currentDrainage) => {
+const improvedNeedTileDrainage = ['Very Poorly Drained', 'Poorly Drained', 'Somewhat Poorly Drained', 'Moderately Well Drained'];
+
+const getSoilDrainages = (council) => {
+  switch (council) {
+    case 'MCCC':
+      return soilDrainagesMCCC;
+    case 'NECCC':
+      return soilDrainagesNECCC;
+    case 'SCCC':
+      return soilDrainagesNECCC;
+    default:
+      return soilDrainageValues;
+  }
+};
+
+const getTileDrainage = (currentDrainage, council) => {
   if (council === 'MCCC') {
     switch (currentDrainage) {
       case 'Very Poorly Drained':
@@ -60,73 +72,74 @@ const getTileDrainage = (council, currentDrainage) => {
 };
 
 const SiteConditionForm = ({
-  council,
-  counties,
   stateList,
   setStep,
+  regions,
+  setRegions,
+  getRegions,
+  updateStateRedux,
 }) => {
   const dispatch = useDispatch();
   const {
-    state, soilDrainage, tileDrainage, county, plantingDate,
-    soilFertility, checkNRCSStandards, acres,
+    state, soilDrainage, prevSoilDrainage, tileDrainage, county, plantingDate,
+    soilFertility, checkNRCSStandards, acres, council,
   } = useSelector((s) => s.siteCondition);
+  // eslint-disable-next-line no-shadow
+  const { historyState, maxAvailableStep } = useSelector((state) => state.user);
 
-  const [soilDrainagePrev, setSoilDrainagePrev] = useState(soilDrainage);
-
-  const handleSoilDrainage = (e) => {
-    setSoilDrainagePrev(e.target.value);
-    dispatch(setSoilDrainageRedux(e.target.value));
-    dispatch(updateTileDrainageRedux(false));
-  };
-
-  const handleTileDrainage = () => {
-    dispatch(updateTileDrainageRedux(!tileDrainage));
-    if (!tileDrainage) {
-      const newDrainage = getTileDrainage(council, soilDrainage);
-      dispatch(setSoilDrainageRedux(newDrainage));
+  const handleState = async (e) => {
+    if (historyState === historyStates.imported) {
+      dispatch(setHistoryDialogStateRedux({ open: true, type: 'update' }));
+      return;
+    }
+    const stateSelected = stateList.filter((s) => s.label === e.target.value);
+    if (stateSelected.length > 0) {
+      if (maxAvailableStep > -1) dispatch(setMaxAvailableStepRedux(-1));
+      // get new regions for the selected state
+      const res = await getRegions(stateSelected[0]);
+      setRegions(res);
+      updateStateRedux(stateSelected[0]);
     }
   };
 
-  const updateState = (selectedState) => {
-    // Retrieve region
-    dispatch(getRegion({ stateId: selectedState.id }));
-
-    // Clear all the rest forms value
-    dispatch(setCountyRedux(''));
-    dispatch(setCountyIdRedux(''));
-    dispatch(setSoilDrainageRedux(''));
-    dispatch(updateTileDrainageRedux(false));
-    dispatch(setSoilFertilityRedux(''));
-    dispatch(checkNRCSRedux(false));
-
-    // TODO: these are temporarily commented, not sure if need to use in the future
-    // // Clear out all seeds selected in Redux
-    // dispatch(clearSeeds());
-    // dispatch(updateDiversityRedux([]));
-    // dispatch(clearOptions());
-
-    // Update siteCondition Redux
-    const { label } = selectedState;
-    dispatch(updateLatlonRedux(statesLatLongDict[label]));
-    dispatch(setStateRedux(label, selectedState.id));
-    dispatch(setCouncilRedux(selectedState.parents[0].shorthand));
+  const handleRegion = (e) => {
+    if (historyState === historyStates.imported) {
+      dispatch(setHistoryDialogStateRedux({ open: true, type: 'update' }));
+      return;
+    }
+    if (maxAvailableStep > -1) dispatch(setMaxAvailableStepRedux(-1));
+    dispatch(setCountyRedux(e.target.value));
+    const countyId = regions.filter(
+      (c) => c.label === e.target.value,
+    )[0].id;
+    dispatch(setCountyIdRedux(countyId));
   };
 
-  const handleState = (stateName) => {
-    const stateSelected = stateList.filter((s) => s.label === stateName)[0];
-    updateState(stateSelected);
+  const handleSoilDrainage = (e) => {
+    if (historyState === historyStates.imported) {
+      dispatch(setHistoryDialogStateRedux({ open: true, type: 'update' }));
+      return;
+    }
+    if (maxAvailableStep > -1) dispatch(setMaxAvailableStepRedux(-1));
+    dispatch(setSoilDrainageRedux(e.target.value));
+    dispatch(updateTileDrainageRedux('', false));
   };
 
-  const soilDrainages = () => {
-    switch (council) {
-      case 'MCCC':
-        return soilDrainagesMCCC;
-      case 'NECCC':
-        return soilDrainagesNECCC;
-      case 'SCCC':
-        return soilDrainagesNECCC;
-      default:
-        return soilDrainageValues;
+  const handleTileDrainage = () => {
+    if (historyState === historyStates.imported) {
+      dispatch(setHistoryDialogStateRedux({ open: true, type: 'update' }));
+      return;
+    }
+    if (maxAvailableStep > -1) dispatch(setMaxAvailableStepRedux(-1));
+    if (!tileDrainage) {
+      // switch tileDrainage to true
+      const newDrainage = getTileDrainage(soilDrainage, council);
+      dispatch(setSoilDrainageRedux(newDrainage));
+      dispatch(updateTileDrainageRedux(soilDrainage, true));
+    } else {
+      // switch to false
+      dispatch(setSoilDrainageRedux(prevSoilDrainage));
+      dispatch(updateTileDrainageRedux('', false));
     }
   };
 
@@ -137,9 +150,10 @@ const SiteConditionForm = ({
       <Grid item xs={0} md={3} />
       <Grid item xs={12} md={6} p="10px">
         <Dropdown
+          emptyWarning={state.length === 0}
           value={state}
           label="State: "
-          handleChange={(e) => handleState(e.target.value)}
+          handleChange={handleState}
           size={12}
           items={stateList}
         />
@@ -150,13 +164,14 @@ const SiteConditionForm = ({
       <Grid item xs={0} md={3} />
       <Grid item xs={12} md={6} p="10px">
         <Dropdown
+          emptyWarning={county.length === 0}
           value={county}
           label={
             council === 'MCCC' ? 'County: ' : 'USDA Plant Hardiness Zone: '
           }
-          handleChange={(e) => dispatch(setCountyRedux(e.target.value))}
+          handleChange={handleRegion}
           size={12}
-          items={counties}
+          items={regions}
         />
       </Grid>
       <Grid item xs={0} md={3} />
@@ -165,11 +180,12 @@ const SiteConditionForm = ({
       <Grid item xs={0} md={3} />
       <Grid item xs={12} md={6} p="10px">
         <Dropdown
-          value={soilDrainagePrev}
+          emptyWarning={soilDrainage === ''}
+          value={tileDrainage ? prevSoilDrainage : soilDrainage}
           label="Soil Drainage: "
           handleChange={handleSoilDrainage}
           size={12}
-          items={soilDrainages()}
+          items={getSoilDrainages(council)}
         />
       </Grid>
       <Grid item xs={0} md={3} />
@@ -177,6 +193,8 @@ const SiteConditionForm = ({
       {/* Tile Drainage */}
       <Grid item xs={0} md={3} />
       <Grid item xs={12} md={6} p="10px">
+        {(tileDrainage ? improvedNeedTileDrainage.includes(soilDrainage) : needTileDrainage.includes(soilDrainage))
+        && (
         <Grid container alignItems="center">
           <Grid item xs={4}>
             <Grid container direction="column">
@@ -213,20 +231,17 @@ const SiteConditionForm = ({
             </Grid>
           </Grid>
           <Grid item xs={8}>
-            {!tileDrainage && (needTileDrainage.indexOf(soilDrainage) === -1 || council === '')
-              ? <Typography>Tile Drainage not available.</Typography>
-              : (
-                tileDrainage && (
-                <>
-                  <Typography>Your improved drainage class is: </Typography>
-                  <Typography fontWeight="bold">{soilDrainage}</Typography>
-                </>
-                )
-              )}
+            {(tileDrainage)
+            && (
+            <>
+              <Typography>Your improved drainage class is: </Typography>
+              <Typography fontWeight="bold">{soilDrainage}</Typography>
+            </>
+            )}
 
           </Grid>
         </Grid>
-
+        )}
       </Grid>
       <Grid item xs={0} md={3} />
 
@@ -248,6 +263,7 @@ const SiteConditionForm = ({
       <Grid item xs={0} md={3} />
       <Grid item xs={12} md={6} p="10px">
         <NumberTextField
+          emptyWarning={acres <= 0}
           value={acres}
           label="Acres"
           disabled={false}

@@ -20,6 +20,8 @@ import DSTBarChart from '../../../../components/DSTBarChart';
 import SeedingRateCard, { UnitSelection } from '../../../../components/SeedingRateCard';
 import { setBulkSeedingRateRedux, setOptionRedux } from '../../../../features/calculatorSlice/actions';
 import { pieChartUnits, seedDataUnits } from '../../../../shared/data/units';
+import { historyStates } from '../../../../features/userSlice/state';
+import { setHistoryStateRedux } from '../../../../features/userSlice/actions';
 import '../steps.scss';
 
 const getCalculatorResult = (council) => {
@@ -77,6 +79,7 @@ const ReviewMix = ({ calculator }) => {
   const {
     seedsSelected, sideBarSelection, options,
   } = useSelector((state) => state.calculator);
+  const { historyState } = useSelector((state) => state.user);
 
   const [prevOptions, setPrevOptions] = useState({});
   const [piechartData, setPieChartData] = useState(defaultPieChartData);
@@ -116,6 +119,7 @@ const ReviewMix = ({ calculator }) => {
   // function to handle form value change, update options
   const handleFormValueChange = (seed, option, value) => {
     dispatch(setOptionRedux(seed.label, { ...options[seed.label], [option]: value }));
+    if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
   };
 
   const handleExpandAccordion = (label) => {

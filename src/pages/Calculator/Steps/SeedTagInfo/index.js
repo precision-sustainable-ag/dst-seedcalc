@@ -17,23 +17,41 @@ import NumberTextField from '../../../../components/NumberTextField';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 import '../steps.scss';
 import { validateForms } from '../../../../shared/utils/format';
+import { historyStates } from '../../../../features/userSlice/state';
+import { setAlertStateRedux, setHistoryStateRedux } from '../../../../features/userSlice/actions';
 
 const LeftGrid = styled(Grid)({
   '&.MuiGrid-item': {
-    height: '80px',
-    paddingTop: '15px',
+    height: '50px',
+    paddingTop: '8px',
+    paddingLeft: '15px',
+    paddingRight: '20px',
+    textAlign: 'left',
     '& p': {
       fontWeight: 'bold',
     },
   },
 });
 
+const SeedTagNumField = styled(NumberTextField)({
+  '& .MuiOutlinedInput-root': {
+    borderRadius: '0px',
+    backgroundColor: 'white',
+  },
+  '& .MuiInputBase-input': {
+    fontSize: 16,
+    width: 'auto',
+    padding: '10px 10px',
+  },
+});
+
 const SeedTagInfo = ({
-  completedStep, setCompletedStep, alertState, setAlertState,
+  completedStep, setCompletedStep, alertState,
 }) => {
   const dispatch = useDispatch();
   const { council } = useSelector((state) => state.siteCondition);
   const { seedsSelected, options } = useSelector((state) => state.calculator);
+  const { historyState } = useSelector((state) => state.user);
 
   const [accordionState, setAccordionState] = useState(
     seedsSelected.reduce((res, seed) => {
@@ -45,27 +63,30 @@ const SeedTagInfo = ({
   const [haveSeedTagInfo, setHaveSeedTagInfo] = useState(false);
 
   const updateGermination = (seedLabel, value) => {
-    setAlertState({
+    dispatch(setAlertStateRedux({
       ...alertState,
       open: true,
-      severity: 'success',
+      type: 'success',
       message: 'You can also edit this information in furthur steps.',
-    });
+    }));
     dispatch(setOptionRedux(seedLabel, { ...options[seedLabel], germination: value }));
+    if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
   };
 
   const updatePurity = (seedLabel, value) => {
-    setAlertState({
+    dispatch(setAlertStateRedux({
       ...alertState,
       open: true,
-      severity: 'success',
+      type: 'success',
       message: 'You can also edit this information in furthur steps.',
-    });
+    }));
     dispatch(setOptionRedux(seedLabel, { ...options[seedLabel], purity: value }));
+    if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
   };
 
   const updateSeedsPerPound = (seedLabel, value) => {
     dispatch(setOptionRedux(seedLabel, { ...options[seedLabel], seedsPerPound: value }));
+    if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
   };
 
   const seedsPerPound = (seed) => {
@@ -99,12 +120,12 @@ const SeedTagInfo = ({
 
   useEffect(() => {
     if (haveSeedTagInfo) {
-      setAlertState({
+      dispatch(setAlertStateRedux({
         ...alertState,
         open: true,
-        severity: 'success',
+        type: 'success',
         message: 'These are starting values. Adjust as needed based on your seed tag info.',
-      });
+      }));
     }
     validateForms(haveSeedTagInfo, 5, completedStep, setCompletedStep);
   }, [haveSeedTagInfo]);
@@ -154,45 +175,44 @@ const SeedTagInfo = ({
               </AccordionSummary>
               <AccordionDetails>
                 <Grid container>
-
-                  <LeftGrid item xs={6}>
+                  <LeftGrid item xs={4} lg={2} xl={2}>
                     <Typography>% Germination: </Typography>
                   </LeftGrid>
-                  <Grid item xs={4}>
-                    <NumberTextField
+                  <Grid item xs={2} lg={1} xl={1}>
+                    <SeedTagNumField
                       value={(options[seed.label].germination ?? 0.85) * 100}
                       onChange={(val) => {
                         updateGermination(seed.label, val / 100);
                       }}
                     />
                   </Grid>
-                  <Grid item xs={2} />
+                  <Grid item xs={6} lg={1} xl={1} />
 
-                  <LeftGrid item xs={6}>
+                  <LeftGrid item xs={4} lg={2} xl={2}>
                     <Typography>% Purity: </Typography>
                   </LeftGrid>
-                  <Grid item xs={4}>
-                    <NumberTextField
+                  <Grid item xs={2} lg={1} xl={1}>
+                    <SeedTagNumField
                       value={(options[seed.label].purity ?? 0.9) * 100}
                       onChange={(val) => {
                         updatePurity(seed.label, val / 100);
                       }}
                     />
                   </Grid>
-                  <Grid item xs={2} />
+                  <Grid item xs={6} lg={1} xl={1} />
 
-                  <LeftGrid item xs={6}>
+                  <LeftGrid item xs={4} lg={2} xl={2}>
                     <Typography>Seeds per Pound </Typography>
                   </LeftGrid>
-                  <Grid item xs={4}>
-                    <NumberTextField
+                  <Grid item xs={2} lg={1} xl={1}>
+                    <SeedTagNumField
                       value={parseFloat(seedsPerPound(seed))}
                       onChange={(val) => {
                         updateSeedsPerPound(seed.label, val);
                       }}
                     />
                   </Grid>
-                  <Grid item xs={2} />
+                  <Grid item xs={6} lg={1} xl={1} />
                 </Grid>
 
               </AccordionDetails>

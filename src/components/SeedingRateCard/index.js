@@ -27,6 +27,7 @@ const UnitSelection = () => {
         Select data unit:
       </Typography>
       <Button
+        sx={{ borderRadius: '1rem' }}
         variant={unit === 'acre' ? 'outlined' : 'contained'}
         onClick={() => dispatch(selectUnitRedux('sqft'))}
       >
@@ -34,6 +35,7 @@ const UnitSelection = () => {
       </Button>
       {'  '}
       <Button
+        sx={{ borderRadius: '1rem' }}
         variant={unit === 'acre' ? 'contained' : 'outlined'}
         onClick={() => dispatch(selectUnitRedux('acre'))}
       >
@@ -258,9 +260,8 @@ const SeedingRateChip = ({ value }) => (
       width: '100px',
       padding: '0.5rem',
       margin: '0 auto',
-      backgroundColor: '#E5E7D5',
-      border: '#C7C7C7 solid 1px',
-      borderRadius: '16px',
+      border: '#D3D3D3 solid 2px',
+      opacity: '0.6',
     }}
   >
     <Typography>{value}</Typography>

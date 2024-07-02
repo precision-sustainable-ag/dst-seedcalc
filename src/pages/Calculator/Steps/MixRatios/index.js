@@ -19,9 +19,13 @@ import {
   adjustProportionsMCCC, adjustProportionsNECCC, adjustProportionsSCCC,
   createCalculator, createUserInput, calculatePieChartData, calculatePlantsandSeedsPerAcre,
 } from '../../../../shared/utils/calculator';
-import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
+import { setOptionRedux, setMixRatioOptionRedux } from '../../../../features/calculatorSlice/actions';
 import { pieChartUnits } from '../../../../shared/data/units';
 import '../steps.scss';
+import {
+  setAlertStateRedux, setHistoryStateRedux, setMaxAvailableStepRedux,
+} from '../../../../features/userSlice/actions';
+import { historyStates } from '../../../../features/userSlice/state';
 
 const getCalculatorResult = (council) => {
   const defaultResultMCCC = {
@@ -70,7 +74,7 @@ const defaultPieChartData = {
 };
 
 const MixRatio = ({
-  calculator, setCalculator, alertState, setAlertState,
+  calculator, setCalculator, alertState,
 }) => {
   const [initCalculator, setInitCalculator] = useState(false);
   const [prevOptions, setPrevOptions] = useState({});
@@ -78,10 +82,13 @@ const MixRatio = ({
   const [updatedForm, setUpdatedForm] = useState(false);
 
   const dispatch = useDispatch();
-  const { seedsSelected, sideBarSelection, options } = useSelector((state) => state.calculator);
+  const {
+    seedsSelected, sideBarSelection, mixRatioOptions,
+  } = useSelector((state) => state.calculator);
   const {
     council, soilDrainage, plantingDate, acres, county,
   } = useSelector((state) => state.siteCondition);
+  const { historyState, maxAvailableStep } = useSelector((state) => state.user);
 
   const [calculatorResult, setCalculatorResult] = useState(
     seedsSelected.reduce((res, seed) => {
@@ -119,18 +126,22 @@ const MixRatio = ({
     const regions = [{ label: county }];
     const seedingRateCalculator = createCalculator(seedsSelected, council, regions, userInput);
     setCalculator(seedingRateCalculator);
-    seedsSelected.forEach((seed) => {
-      // FIXME: updated percentOfRate here, this is a workaround for calculation errors in SDK
-      let percentOfRate = null;
-      if (council === 'MCCC'
-      || (council === 'SCCC' && seedingRateCalculator.isFreezingZone())) {
-        percentOfRate = 1 / seedsSelected.length;
-      } else if (council === 'SCCC' && !seedingRateCalculator.isFreezingZone()) {
-        percentOfRate = seedingRateCalculator.getFreezingZonesDefaultPercentOfSingleSpeciesSeedingRate(seed, options[seed.label]);
-      }
-      const newOption = { ...options[seed.label], percentOfRate };
-      dispatch(setOptionRedux(seed.label, newOption));
-    });
+    // If historyState is imported, not init options, use mixRatioOptions instead
+    if (historyState !== historyStates.imported) {
+      seedsSelected.forEach((seed) => {
+        // if percentOfRate is not null, skip this step(this happens when add new crop for a imported history)
+        if (mixRatioOptions[seed.label].percentOfRate === null) {
+          // FIXME: updated percentOfRate here, this is a temporary workaround for MCCC
+          const newOption = {
+            ...mixRatioOptions[seed.label],
+            percentOfRate: (council === 'MCCC'
+            || (council === 'SCCC' && !seedingRateCalculator.isFreezingZone()))
+              ? 1 / seedsSelected.length : null,
+          };
+          dispatch(setMixRatioOptionRedux(seed.label, newOption));
+        }
+      });
+    }
     setInitCalculator(true);
   }, []);
 
@@ -138,19 +149,16 @@ const MixRatio = ({
   useEffect(() => {
     if (!initCalculator) return;
     seedsSelected.forEach((seed) => {
-      if (options[seed.label] !== prevOptions[seed.label]) {
+      const seedOption = mixRatioOptions[seed.label];
+      if (seedOption !== prevOptions[seed.label]) {
         let result;
-        if (council === 'MCCC') result = adjustProportionsMCCC(seed, calculator, options[seed.label]);
-        else if (council === 'NECCC') result = adjustProportionsNECCC(seed, calculator, options[seed.label]);
-        else if (council === 'SCCC') result = adjustProportionsSCCC(seed, calculator, options[seed.label]);
+        if (council === 'MCCC') result = adjustProportionsMCCC(seed, calculator, seedOption);
+        else if (council === 'NECCC') result = adjustProportionsNECCC(seed, calculator, seedOption);
+        else if (council === 'SCCC') result = adjustProportionsSCCC(seed, calculator, seedOption);
         setCalculatorResult((prev) => ({ ...prev, [seed.label]: result }));
         const {
           plants, seeds, adjustedPlants, adjustedSeeds,
-        } = calculatePlantsandSeedsPerAcre(
-          seed,
-          calculator,
-          options[seed.label],
-        );
+        } = calculatePlantsandSeedsPerAcre(seed, calculator, seedOption);
         setSeedData((prev) => ({
           ...prev,
           [seed.label]: {
@@ -161,16 +169,19 @@ const MixRatio = ({
           },
         }));
       }
+      // if history is not imported, update mixRatioOptions to options
+      if (historyState !== historyStates.imported && maxAvailableStep <= 1) dispatch(setOptionRedux(seed.label, seedOption));
+      // if history is updated, this will remove previously imported options redux and set it as mixRatioOptions
     });
     // calculate piechart data
     const {
       seedingRateArray,
       plantsPerSqftArray,
       seedsPerSqftArray,
-    } = calculatePieChartData(seedsSelected, calculator, options);
+    } = calculatePieChartData(seedsSelected, calculator, mixRatioOptions);
     setPieChartData({ seedingRateArray, plantsPerSqftArray, seedsPerSqftArray });
-    setPrevOptions(options);
-  }, [options, initCalculator]);
+    setPrevOptions(mixRatioOptions);
+  }, [mixRatioOptions, initCalculator]);
 
   // expand related accordion based on sidebar click
   useEffect(() => {
@@ -189,26 +200,29 @@ const MixRatio = ({
   // function to handle form value change, update options
   const handleFormValueChange = (seed, option, value) => {
     setUpdatedForm(true);
-    setAlertState({
+    dispatch(setAlertStateRedux({
       ...alertState,
       open: true,
-      message:
-      'You now have a custom mix. You can edit this information in furthur steps.',
-    });
-    dispatch(setOptionRedux(seed.label, { ...options[seed.label], [option]: value }));
+      type: 'success',
+      message: 'You now have a custom mix. You can edit this information in furthur steps.',
+    }));
+    dispatch(setMixRatioOptionRedux(seed.label, { ...mixRatioOptions[seed.label], [option]: value }));
+    // set historyStates.updated if change anything
+    if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
+    if (maxAvailableStep > 1) dispatch(setMaxAvailableStepRedux(1));
   };
 
   // handler for click to open accordion
   const handleExpandAccordion = (label) => {
     if (!alertState.open) {
-      setAlertState({
+      dispatch(setAlertStateRedux({
         ...alertState,
         open: true,
-        severity: 'success',
+        type: 'success',
         message: updatedForm ? 'You now have a custom mix. You can edit this information in furthur steps.'
           : 'This is a starting mix based on averages, but not a recommendation. \
           Adjust as needed based on your goals.',
-      });
+      }));
     }
     const open = accordionState[label];
     setAccordionState({ ...accordionState, [label]: !open });
@@ -222,6 +236,15 @@ const MixRatio = ({
     <Grid container>
       <Grid item xs={12}>
         <Typography variant="h2">Review Proportions</Typography>
+        {historyState === historyStates.imported && (
+        <Typography sx={{
+          fontWeight: 'bold', margin: '1rem', marginBottom: '0',
+        }}
+        >
+          <span style={{ color: 'red' }}>Warning: </span>
+          Making changes on this page will reset the subsequent steps of the calculation.
+        </Typography>
+        )}
       </Grid>
 
       <Grid item xs={6} sx={{ textAlign: 'justify' }}>
@@ -271,7 +294,7 @@ const MixRatio = ({
                   calculatorResult={calculatorResult}
                   handleFormValueChange={handleFormValueChange}
                   council={council}
-                  options={options[seed.label]}
+                  options={mixRatioOptions[seed.label]}
                 />
 
                 <Grid item xs={12}>
@@ -280,12 +303,15 @@ const MixRatio = ({
 
                 <Grid item xs={12} pt="1rem">
                   <Button
+                    sx={{
+                      borderRadius: '1rem',
+                    }}
                     onClick={() => {
                       setShowSteps({ ...showSteps, [seed.label]: !showSteps[seed.label] });
                     }}
                     variant="outlined"
                   >
-                    {showSteps[seed.label] ? 'Close Steps' : 'Change My Rate'}
+                    {showSteps[seed.label] ? 'Close Steps' : 'View Calculations'}
                   </Button>
                 </Grid>
 
@@ -294,7 +320,7 @@ const MixRatio = ({
                   <MixRatioSteps
                     council={council}
                     calculatorResult={calculatorResult[seed.label]}
-                    options={options[seed.label]}
+                    options={mixRatioOptions[seed.label]}
                   />
                   )}
                 </Grid>

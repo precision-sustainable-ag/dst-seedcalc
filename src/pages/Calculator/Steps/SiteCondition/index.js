@@ -1,5 +1,4 @@
 /* eslint-disable no-nested-ternary */
-/* eslint-disable no-unused-expressions */
 /// ///////////////////////////////////////////////////////
 //                      Imports                         //
 /// ///////////////////////////////////////////////////////
@@ -14,83 +13,110 @@ import { isEmptyNull, validateForms } from '../../../../shared/utils/format';
 import { getCrops } from '../../../../features/calculatorSlice/api';
 import { getLocality, getRegion } from '../../../../features/siteConditionSlice/api';
 import {
-  checkNRCSRedux, setAcresRedux, setCouncilRedux, setCountyIdRedux, setCountyRedux,
-  setSoilDrainageRedux, setSoilFertilityRedux, setStateRedux, updateLatlonRedux, updateTileDrainageRedux,
+  setCouncilRedux, setSiteConditionRedux, setStateRedux, updateLatlonRedux,
 } from '../../../../features/siteConditionSlice/actions';
 import statesLatLongDict from '../../../../shared/data/statesLatLongDict';
-
-import '../steps.scss';
 import DSTImport from '../../../../components/DSTImport';
 import SiteConditionForm from './form';
 import Map from './Map';
+import initialState from '../../../../features/siteConditionSlice/state';
+import '../steps.scss';
+import { historyStates } from '../../../../features/userSlice/state';
+import { setHistoryDialogStateRedux, setMaxAvailableStepRedux } from '../../../../features/userSlice/actions';
 
-const SiteCondition = ({ completedStep, setCompletedStep }) => {
-  const dispatch = useDispatch();
-
+const SiteCondition = ({
+  siteConditionStep, setSiteConditionStep, completedStep, setCompletedStep, token,
+}) => {
   // Location state
-  const [step, setStep] = useState(1);
   const [mapState, setMapState] = useState({});
-  const [isImported, setIsImported] = useState(false);
+  const [selectedState, setSelectedState] = useState({});
+  const [states, setStates] = useState([]);
+  const [regions, setRegions] = useState([]);
 
+  const dispatch = useDispatch();
   const siteCondition = useSelector((state) => state.siteCondition);
-  const { states, counties, loading } = siteCondition;
+  const { historyState, maxAvailableStep } = useSelector((state) => state.user);
 
-  // update redux based on selectedState change
-  const updateStateRedux = (selectedState) => {
-    // if the state data comes from csv import do not do this to refresh the state
-    if (isImported) return;
-    setIsImported(false);
-    // Retrieve region/counties
-    dispatch(getRegion({ stateId: selectedState.id }));
+  // function to get all regions(counties/zones) of a state
+  const getRegions = async (state) => {
+    const council = state.parents[0].shorthand;
+    const res = await dispatch(getRegion({ stateId: state.id }));
+    const { kids } = res.payload.data;
+    if (council === 'NECCC' || council === 'SCCC') return kids.Zones;
+    if (council === 'MCCC') return kids.Counties;
+    return [];
+  };
 
-    // // Clear all the rest forms value
-    dispatch(setCountyRedux(''));
-    dispatch(setCountyIdRedux(''));
-    dispatch(setSoilDrainageRedux(''));
-    dispatch(updateTileDrainageRedux(false));
-    dispatch(setAcresRedux(0));
-    dispatch(setSoilFertilityRedux(''));
-    dispatch(checkNRCSRedux(false));
+  // update redux based on state change
+  const updateStateRedux = (state) => {
+    if (maxAvailableStep > -1) dispatch(setMaxAvailableStepRedux(-1));
+    // set all siteCondition redux value to default
+    // FIXME: this also set loading and error to false, need to make changes to redux apis
+    // maybe move them to user api
+    dispatch(setSiteConditionRedux(initialState));
 
-    // Update siteCondition Redux
-    const { label } = selectedState;
+    // TODO: if back to prev step is enabled, then also need to initiate calculator redux
+
+    // Update state in siteCondition
+    const { label } = state;
     dispatch(updateLatlonRedux(statesLatLongDict[label]));
-    dispatch(setStateRedux(label, selectedState.id));
-    dispatch(setCouncilRedux(selectedState.parents[0].shorthand));
+    dispatch(setStateRedux(label, state.id));
+    dispatch(setCouncilRedux(state.parents[0].shorthand));
+  };
+
+  const mapStateChange = (state) => {
+    setMapState(state);
+    if (Object.keys(state).length !== 0) {
+      const st = states.filter(
+        (s) => s.label === state.properties.STATE_NAME,
+      );
+      if (st.length > 0) {
+        setSelectedState(st[0]);
+      }
+    }
   };
 
   // initially get states data
   useEffect(() => {
-    if (states.length === 0) dispatch(getLocality());
+    const getStates = async () => {
+      const res = await dispatch(getLocality());
+      setStates([...states, ...res.payload]);
+    };
+    if (states.length === 0) getStates();
   }, []);
 
-  // update state redux based on map state change
   useEffect(() => {
-    if (Object.keys(mapState).length !== 0) {
-      const st = states.filter(
-        (s) => s.label === mapState.properties.STATE_NAME,
-      );
-      if (st.length > 0 && st[0].label !== siteCondition.state) {
-        updateStateRedux(st[0]);
-      }
+    if (states.length) {
+      const state = states.filter((s) => s.label === siteCondition.state);
+      if (state.length > 0) {
+        setSelectedState(state[0]);
+      } else setSelectedState({});
     }
-  }, [mapState]);
+  }, [siteCondition.state, states]);
 
-  // Ensure that county id is updated to the current county
   useEffect(() => {
-    if (siteCondition.county !== '' && counties.length > 0) {
-      // FIXME: temporary workaround for NECCC areas in zone 8(MD, DE and NJ), will update in the future
-      if (siteCondition.council === 'NECCC' && siteCondition.county === 'Zone 8') {
-        dispatch(setCountyRedux('Zone 7'));
-        dispatch(setCountyIdRedux(4));
-      } else {
-        const countyId = counties.filter(
-          (c) => c.label === siteCondition.county,
-        )[0].id;
-        dispatch(setCountyIdRedux(countyId));
+    const fetchRegions = async () => {
+      const res = await getRegions(selectedState);
+      setRegions(res);
+    };
+
+    if (Object.keys(selectedState).length !== 0) {
+      if (historyState === historyStates.imported && selectedState.label !== siteCondition.state) {
+        // open history dialog
+        dispatch(setHistoryDialogStateRedux({ open: true, type: 'update' }));
+        // reset state to previous state in redux
+        const state = states.filter((s) => s.label === siteCondition.state);
+        if (state.length > 0) {
+          setSelectedState(state[0]);
+        } else setSelectedState({});
+        return;
       }
+      // update regions everytime there's a state change FROM MAP
+      fetchRegions();
+      // if select a new state (st[0].label different from redux state), update all related redux values
+      if (selectedState.label !== siteCondition.state) updateStateRedux(selectedState);
     }
-  }, [siteCondition.county, counties]);
+  }, [selectedState]);
 
   // validate all information on this page is selected, then call getCrops api
   useEffect(() => {
@@ -112,15 +138,15 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
       <Grid item xs={12}>
         <Typography variant="h2">Tell us about your planting site</Typography>
       </Grid>
-      <Grid xs={12} lg={8} item>
-        {loading === 'getLocality' ? (
+      <Grid xs={12} item>
+        {siteCondition.loading === 'getLocality' ? (
           <Spinner />
         ) : (
-          step === 1 ? (
+          siteConditionStep === 1 ? (
             <>
               <RegionSelectorMap
-                selectorFunction={setMapState}
-                selectedState={siteCondition.state || ''}
+                selectorFunction={mapStateChange}
+                selectedState={selectedState.label || ''}
                 availableStates={states.map((s) => s.label)}
                 initWidth="100%"
                 initHeight="360px"
@@ -136,8 +162,8 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
                         Would you like to manually enter your site conditions
                         or use your location to prepopulate them?
                       </Typography>
-                      <Button variant="contained" onClick={() => setStep(2)} sx={{ margin: '1rem' }}>Map</Button>
-                      <Button variant="contained" onClick={() => setStep(3)} sx={{ margin: '1rem' }}>Manually Enter</Button>
+                      <Button variant="contained" onClick={() => setSiteConditionStep(2)} sx={{ margin: '1rem' }}>Map</Button>
+                      <Button variant="contained" onClick={() => setSiteConditionStep(3)} sx={{ margin: '1rem' }}>Manually Enter</Button>
                     </Grid>
                   )
                   : (
@@ -148,18 +174,22 @@ const SiteCondition = ({ completedStep, setCompletedStep }) => {
                     </Grid>
                   )
               }
-              <DSTImport setIsImported={setIsImported} />
+              <DSTImport token={token} />
+
             </>
-          ) : step === 2 ? (
+          ) : siteConditionStep === 2 ? (
             <Map
-              setStep={setStep}
+              setStep={setSiteConditionStep}
+              regions={regions}
             />
-          ) : step === 3 ? (
+          ) : siteConditionStep === 3 ? (
             <SiteConditionForm
-              council={siteCondition.council}
-              counties={counties}
               stateList={states}
-              setStep={setStep}
+              setStep={setSiteConditionStep}
+              regions={regions}
+              setRegions={setRegions}
+              getRegions={getRegions}
+              updateStateRedux={updateStateRedux}
             />
           ) : (
             null

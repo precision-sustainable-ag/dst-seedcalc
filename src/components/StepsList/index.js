@@ -1,18 +1,22 @@
 /* eslint-disable no-nested-ternary */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
-import { StepLabel, Tooltip } from '@mui/material';
+import { StepButton, Tooltip } from '@mui/material';
 import Button from '@mui/material/Button';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-// import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { calculatorList } from '../../shared/data/dropdown';
 import { resetCalculator } from '../../features/calculatorSlice';
+import {
+  setHistoryStateRedux, setMaxAvailableStepRedux, setSelectedHistoryRedux,
+} from '../../features/userSlice/actions';
+import { historyStates } from '../../features/userSlice/state';
 
 /*
 {
@@ -30,14 +34,18 @@ import { resetCalculator } from '../../features/calculatorSlice';
 }
 */
 
-const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
+const StepsList = ({
+  activeStep, setActiveStep, availableSteps, setSiteConditionStep,
+}) => {
+  const [hovering, setHovering] = useState(false);
+  const [visible, setVisible] = useState(false);
+
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
 
   const dispatch = useDispatch();
 
-  // this completed step is to determine the latest completed step
-  const [completedStep, setCompletedStep] = useState(-1);
+  const { maxAvailableStep } = useSelector((state) => state.user);
 
   /// ///////////////////////////////////////////////////////
   //                      State Logic                     //
@@ -45,18 +53,51 @@ const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setCompletedStep(activeStep > completedStep ? activeStep : completedStep);
+    dispatch(setMaxAvailableStepRedux(activeStep > maxAvailableStep ? activeStep : maxAvailableStep));
   };
 
-  // const handleBack = () => {
-  //   setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  // };
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
 
   const handleRestart = () => {
     setActiveStep(0);
-    setCompletedStep(-1);
+    setSiteConditionStep(1);
+    dispatch(setMaxAvailableStepRedux(-1));
     dispatch(resetCalculator());
+    dispatch(setHistoryStateRedux(historyStates.none));
+    dispatch(setSelectedHistoryRedux(null));
   };
+
+  const tooltipTitle = () => {
+    if (activeStep === 0 && !availableSteps[0]) {
+      return 'Please enter the necessary info below.';
+    }
+    if (activeStep === 1 && !availableSteps[1]) {
+      return 'Please select at least 2 plants.';
+    }
+    if (activeStep === 5 && !availableSteps[5]) {
+      return 'Please make a selection.';
+    }
+    return '';
+  };
+
+  useEffect(() => {
+    const displayToolTip = () => {
+      if (activeStep === 0 && !availableSteps[0]) {
+        return true;
+      }
+      if (activeStep === 1 && !availableSteps[1] && hovering) {
+        return true;
+      }
+      if (activeStep === 5 && !availableSteps[5]) {
+        return true;
+      }
+      return false;
+    };
+
+    setVisible(displayToolTip());
+  }, [activeStep, availableSteps, hovering]);
 
   return (
     <Box sx={{ color: 'primary.text' }}>
@@ -64,9 +105,10 @@ const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
         {calculatorList.map((label, index) => (
           <Step
             key={label}
+            disabled={maxAvailableStep + 1 < index}
             sx={{
               '& .MuiSvgIcon-root': {
-                color: completedStep + 1 < index ? '' : '#4f5f30',
+                color: maxAvailableStep + 1 < index ? '' : '#4f5f30',
                 '&.Mui-active': {
                   color: '#77b400',
                 },
@@ -78,19 +120,29 @@ const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
               },
             }}
           >
-            <StepLabel>
+            <StepButton onClick={() => setActiveStep(index)}>
               {matches && label}
-            </StepLabel>
+            </StepButton>
           </Step>
         ))}
       </Stepper>
 
       <Box sx={{ display: 'flex', flexDirection: 'row', pt: 1 }}>
+
         {activeStep !== 0 && (
-          <Button variant="stepper" onClick={handleRestart}>
-            <RestartAltIcon />
-            Restart
-          </Button>
+          activeStep === calculatorList.length ? (
+            <Button variant="stepper" onClick={handleRestart}>
+              <RestartAltIcon />
+              Restart
+            </Button>
+          )
+            : (
+              <Button variant="stepper" onClick={handleBack}>
+                <ArrowBackIosNewIcon />
+                {' '}
+                BACK
+              </Button>
+            )
         )}
 
         <Box sx={{ flex: '1 1 auto' }} />
@@ -98,18 +150,11 @@ const StepsList = ({ activeStep, setActiveStep, availableSteps }) => {
         {activeStep !== calculatorList.length
         && (
         <Tooltip
+          onMouseEnter={() => setHovering(true)}
+          onMouseLeave={() => setHovering(false)}
           arrow
-          title={
-              // eslint-disable-next-line no-nested-ternary
-              activeStep === 0 && !availableSteps[0]
-                ? 'Please enter the necessary info below.'
-                : activeStep === 1 && !availableSteps[1]
-                  ? 'Please select at least 2 plants.'
-                  : activeStep === 5 && !availableSteps[5]
-                    ? 'Please make a selection.'
-                    : ''
-            }
-          open
+          open={visible}
+          title={tooltipTitle()}
         >
           <span>
             <Button

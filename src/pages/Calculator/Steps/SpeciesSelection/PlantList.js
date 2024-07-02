@@ -12,32 +12,24 @@ import {
 
 import '../steps.scss';
 import { useDispatch, useSelector } from 'react-redux';
+import { CheckRounded } from '@mui/icons-material';
 import {
-  addSeedRedux, setOptionRedux, removeOptionRedux, removeSeedRedux,
+  addSeedRedux, removeOptionRedux, removeSeedRedux,
+  setMixRatioOptionRedux,
 } from '../../../../features/calculatorSlice/actions';
 import { initialOptions } from '../../../../shared/utils/calculator';
+import { setHistoryStateRedux, setMaxAvailableStepRedux } from '../../../../features/userSlice/actions';
+import { historyStates } from '../../../../features/userSlice/state';
 
 const CheckBoxIcon = ({ style }) => (
   <Box sx={style}>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 18 18"
-      fill="none"
-    >
-      <path
-        d="M14 0H4C1.79086 0 0 1.79086 0 4V14C0 16.2091 1.79086 18 4 18H14C16.2091 18 18 16.2091 18 14V4C18 1.79086 16.2091 0 14 0Z"
-        fill="#5992E6"
-      />
-      <path
-        d="M6 9L8.25 11L12 7"
-        stroke="white"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
+    <CheckRounded style={{
+      color: '#FFFFFF',
+      width: '28.5',
+      height: '28.5',
+    }}
+    />
+
   </Box>
 );
 
@@ -50,6 +42,7 @@ const PlantList = ({
   const {
     acres, stateId, countyId, soilDrainage, plantingDate, soilFertility, council,
   } = useSelector((state) => state.siteCondition);
+  const { historyState, maxAvailableStep } = useSelector((state) => state.user);
 
   const seedsSelected = useSelector((state) => state.calculator.seedsSelected);
 
@@ -74,13 +67,25 @@ const PlantList = ({
 
     if (inFirstPeriod || inSecondPeriod) return '';
     if (secondStart) {
-      return `Seeding date outside of recommended window: 
-        ${firstStart.format('MM/DD')} - ${firstEnd.format('MM/DD')},
-        ${secondStart.format('MM/DD')} - ${secondEnd.format('MM/DD')}`;
+      return `Seeding date outside of recommended window:
+        ${firstStart.format('MM/DD')} - ${firstEnd.format('MM/DD')}, ${secondStart.format('MM/DD')} - ${secondEnd.format('MM/DD')}`;
     }
-    return `Seeding date outside of recommended window: 
+    return `Seeding date outside of recommended window:
       ${firstStart.format('MM/DD')} - ${firstEnd.format('MM/DD')}`;
   };
+
+  seedsList.sort((a, b) => {
+    const checkA = checkPlantingDate(a);
+    const checkB = checkPlantingDate(b);
+
+    if (checkA === '' && checkB !== '') {
+      return -1;
+    }
+    if (checkA !== '' && checkB === '') {
+      return 1;
+    }
+    return 0;
+  });
 
   const checkSoilDrainage = (seed) => {
     if (council === 'MCCC') {
@@ -92,6 +97,9 @@ const PlantList = ({
   };
 
   const handleClick = async (seed) => {
+    // if from user history, set historyState to historyStates.updated to create a new calculation
+    if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
+    if (maxAvailableStep > 0) dispatch(setMaxAvailableStepRedux(0));
     const { id: cropId, label: seedName } = seed;
     // if seed not in seedSelected, add it
     if (seedsSelected.filter((s) => s.label === seedName).length === 0) {
@@ -102,15 +110,17 @@ const PlantList = ({
       const percentSurvival = council === 'MCCC'
         ? parseFloat(attributes.Coefficients['% Live Seed to Emergence'].values[0])
         : '';
-      // set initial options
-      dispatch(setOptionRedux(label, {
+      const initOptions = {
         ...initialOptions,
         acres,
         soilDrainage,
         plantingDate,
         percentSurvival,
         soilFertility: soilFertility.toLowerCase(),
-      }));
+      };
+      // set initial options
+      // dispatch(setOptionRedux(label, initOptions));
+      dispatch(setMixRatioOptionRedux(label, initOptions));
     } else {
     // if seed already in seedSelected, del it
       dispatch(removeSeedRedux(seedName));
@@ -129,13 +139,16 @@ const PlantList = ({
               <CheckBoxIcon
                 style={{
                   position: 'absolute',
-                  right: '-0.5rem',
-                  top: '0.5rem',
+                  right: '0.2rem',
+                  top: '1.1rem',
                   zIndex: 1,
+                  backgroundColor: '#5992E6',
+                  borderTopRightRadius: '1rem',
+                  borderBottomLeftRadius: '0.5rem',
+
                 }}
               />
             )}
-
             <Card
               sx={{
                 backgroundColor: 'transparent',
@@ -160,19 +173,91 @@ const PlantList = ({
                       : seed.thumbnail)
                   }
                   alt={seed.label}
-                  sx={{ border: '2px solid green', borderRadius: '1rem' }}
+                  sx={{
+                    border: '2px solid #4f5f30',
+                    borderRadius: '1rem',
+
+                    ...(seedsSelected.filter((s) => s.label === seed.label).length > 0 && {
+                      border: '6px solid #5992E6',
+                    }),
+                  }}
+
                 />
+                <Typography
+                  sx={{
+                    color: 'primary.text',
+                    position: 'absolute',
+                    top: '2px',
+                    left: 'calc(2px)',
+                    right: 'calc(2px)',
+                    ...(checkPlantingDate(seed) !== '' && {
+                      height: '30px',
+                      paddingTop: '5px',
+                      fontSize: '0.790rem',
+                    }),
+                    borderTopLeftRadius: '0.9rem',
+                    borderTopRightRadius: '0.9rem',
+                    ...(seedsSelected.filter((s) => s.label === seed.label).length > 0
+                    && checkPlantingDate(seed) !== ''
+                    && {
+                      left: 'calc(6px)',
+                      right: 'calc(6px)',
+                      top: '5px',
+                      height: '28.5px',
+                      borderTopLeftRadius: '0.68rem',
+                      borderTopRightRadius: '0.68rem',
+                      overflow: 'hidden',
+                      fontSize: '0.790rem',
+                      '& span': {
+                        zIndex: 5,
+                      },
+                    }),
+                    fontWeight: 'bold',
+                    bgcolor: 'primary.light',
+                    opacity: '90%',
+
+                    paddingRight: '5px',
+                    paddingLeft: '5px',
+
+                  }}
+                >
+                  {
+                    checkPlantingDate(seed) !== ''
+                    && <span>Not Recommended</span>
+                  }
+                </Typography>
 
                 <Typography
                   sx={{
-                    color: '#DA7059',
+                    color: 'primary.text',
                     position: 'absolute',
-                    top: '1rem',
+                    borderBottomLeftRadius: '0.9rem',
+                    borderBottomRightRadius: '0.9rem',
+                    top: '117px',
+                    left: 'calc(2px)',
+                    right: 'calc(2px)',
+                    ...((checkPlantingDate(seed) !== '' || (checkSoilDrainage(seed) !== '')) && {
+                      height: '41px',
+                      ...(seedsSelected.filter((s) => s.label === seed.label).length > 0 && {
+                        left: 'calc(6px)',
+                        right: 'calc(6px)',
+                        height: '41px',
+                        top: '113px',
+                        borderBottomLeftRadius: '0.62rem',
+                        borderBottomRightRadius: '0.62rem',
+                      }),
+                    }),
+
                     fontStyle: 'italic',
                     fontWeight: 'bold',
                     bgcolor: 'primary.light',
-                    opacity: '80%',
-                    fontSize: '0.875rem',
+                    opacity: '90%',
+                    fontSize: '0.575rem',
+                    paddingRight: '5px',
+                    paddingLeft: '5px',
+                    overflow: 'hidden',
+                    whiteSpace: 'pre-line',
+
                   }}
                 >
                   {checkPlantingDate(seed)}
@@ -182,6 +267,7 @@ const PlantList = ({
                 <CardContent>
                   <Typography sx={{ fontWeight: 'bold' }}>
                     {seed.label}
+
                   </Typography>
                 </CardContent>
               </CardActionArea>

@@ -15,6 +15,8 @@ import {
   setAdjustedMixSeedingRateRedux,
   setMixSeedingRateRedux, setOptionRedux,
 } from '../../../../features/calculatorSlice/actions';
+import { historyStates } from '../../../../features/userSlice/state';
+import { setHistoryStateRedux } from '../../../../features/userSlice/actions';
 import '../steps.scss';
 
 const CustomThumb = (props) => {
@@ -66,7 +68,6 @@ const MixSeedingSlider = styled(Slider)(({
       left: '6rem',
       color: theme.palette.primary.text,
       border: '2px solid',
-      borderRadius: '1rem',
       padding: '0.5rem',
       backgroundColor: 'white',
       fontSize: '0.75rem',
@@ -92,12 +93,13 @@ const MixSeedingSlider = styled(Slider)(({
 
 const MixSeedingTypography = styled(Typography)(({ theme }) => ({
   color: theme.palette.primary.text,
-  fontSize: '0.75rem',
-  fontWeight: '600',
-  lineHeight: '0.9375rem',
+  fontSize: '1rem',
+  lineHeight: '1.5rem',
   border: '2px solid #4f5f30',
   padding: '0.5rem',
-  borderRadius: '1rem',
+  textAlign: 'left',
+  alignContent: 'center',
+  height: '25rem',
 }));
 
 const MixSeedingRate = ({ calculator }) => {
@@ -113,6 +115,7 @@ const MixSeedingRate = ({ calculator }) => {
     seedsSelected, options, mixSeedingRate,
     adjustedMixSeedingRate: adjustedRate,
   } = useSelector((state) => state.calculator);
+  const { historyState } = useSelector((state) => state.user);
 
   /// ///////////////////////////////////////////////////////
   //                    State Logic                       //
@@ -126,6 +129,7 @@ const MixSeedingRate = ({ calculator }) => {
       dispatch(setOptionRedux(seed.label, { ...prevOptions, managementImpactOnMix }));
     });
     dispatch(setAdjustedMixSeedingRateRedux(adjustedMixSeedingRate));
+    if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
   };
 
   /// ///////////////////////////////////////////////////////
@@ -135,7 +139,7 @@ const MixSeedingRate = ({ calculator }) => {
   useEffect(() => {
     let sum = mixSeedingRate;
     // if first time visit this page, calculate initial mix seeding rate
-    if (!mixSeedingRate) {
+    if (mixSeedingRate === 0) {
       seedsSelected.forEach((seed) => {
         sum += calculator.seedingRate(seed, options[seed.label]);
         dispatch(setOptionRedux(seed.label, { ...options[seed.label], managementImpactOnMix: 1 }));
@@ -148,7 +152,7 @@ const MixSeedingRate = ({ calculator }) => {
     const calculatedRate = Math.round(sum);
     setMin(minimum);
     setMax(maximum);
-    if (!adjustedRate) setAdjustedMixSeedingRate(calculatedRate);
+    if (adjustedRate === 0) setAdjustedMixSeedingRate(calculatedRate);
     else setAdjustedMixSeedingRate(adjustedRate);
     setMarks([
       {
@@ -175,7 +179,7 @@ const MixSeedingRate = ({ calculator }) => {
       <Grid item xs={12}>
         <Typography variant="h2">Adjust Seeding Rate of Mix</Typography>
       </Grid>
-      <Grid container sx={{ padding: '3% 3%' }}>
+      <Grid container sx={{ padding: '3% 3% 5% 5%' }}>
         <Grid
           container
           item
@@ -183,20 +187,28 @@ const MixSeedingRate = ({ calculator }) => {
           sm={5}
           flexDirection="column"
           justifyContent="space-between"
-          alignItems="center"
+          alignSelf="center"
+          minWidth="20rem"
         >
           <MixSeedingTypography>
-            Factors that may raise Seeding Rate:
+            <b>Your Seeding Rate may vary. </b>
+            Choose a rate based on your needs.
             <br />
-            - Erosion Control
+            <br />
+            Factors that may
+            <b> raise </b>
+            Seeding Rate:
+            <br />
+            -  Erosion Control
             <br />
             - Weed Supression
             <br />
             - Grazing
-          </MixSeedingTypography>
-
-          <MixSeedingTypography>
-            Factors that lower Seeding Rate:
+            <br />
+            <br />
+            Factors that may
+            <b> lower </b>
+            Seeding Rate:
             <br />
             - Cost Saving
             <br />
@@ -213,7 +225,7 @@ const MixSeedingRate = ({ calculator }) => {
           justifyContent="flex-start"
           alignItems="center"
           minHeight="28rem"
-          pl="3rem"
+          pl="10rem"
         >
           <Stack sx={{ height: '100%' }}>
             <Typography

@@ -22,12 +22,15 @@ const Dropdown = ({
   label,
   handleChange,
   items,
+  emptyWarning,
   disabled = false,
+  minWidth = 120,
 }) => (
-  <Box sx={{ minWidth: 120, color: '#4F5F30' }}>
-    <FormControl fullWidth>
+  <Box sx={{ color: '#4F5F30' }}>
+    <FormControl fullWidth sx={{ minWidth }}>
       <InputLabel>{label}</InputLabel>
       <Select
+        sx={{ '.MuiOutlinedInput-notchedOutline': emptyWarning && { borderColor: 'rgba(255, 0, 0, .5)' } }}
         disabled={disabled}
         value={value}
         label={label}

@@ -4,13 +4,13 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Grid from '@mui/material/Grid';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Typography, useMediaQuery } from '@mui/material';
-
 import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { FadeAlert } from '@psa/dst.ui.fade-alert';
+import { useAuth0 } from '@auth0/auth0-react';
 import {
   SiteCondition,
   SpeciesSelection,
@@ -23,39 +23,40 @@ import {
   CompletedPage,
 } from './Steps';
 import SeedsSelectedList from '../../components/SeedsSelectedList';
-
 import { calculatorList, completedList } from '../../shared/data/dropdown';
 import StepsList from '../../components/StepsList';
-
-const defaultAlert = {
-  open: false,
-  severity: 'error',
-  message: 'Network Error - Try again later or refresh the page!',
-};
+import NavBar from '../../components/NavBar';
+import { setAlertStateRedux } from '../../features/userSlice/actions';
+import HistoryDialog from '../../components/HistoryDialog';
+import useUserHistory from '../../shared/hooks/useUserHistory';
+import { historyStates } from '../../features/userSlice/state';
 
 const Calculator = () => {
-  const siteCondition = useSelector((state) => state.siteCondition);
-  const { error: siteConditionError } = siteCondition;
-  const calculatorError = useSelector((state) => state.calculator.error);
-
-  const { seedsSelected } = useSelector((state) => state.calculator);
   // initially set calculator here
   const [calculator, setCalculator] = useState(null);
   const [activeStep, setActiveStep] = useState(0);
+  const [siteConditionStep, setSiteConditionStep] = useState(1);
   // this completedStep is to determine whether the next button is clickable on each page
   const [completedStep, setCompletedStep] = useState([...completedList]);
+  const [token, setToken] = useState(null);
   const [showHeaderLogo, setShowHeaderLogo] = useState(true);
+
+  const siteCondition = useSelector((state) => state.siteCondition);
+  const { error: siteConditionError } = siteCondition;
+  const { error: calculatorError, seedsSelected } = useSelector((state) => state.calculator);
+  const { alertState, historyState, selectedHistory } = useSelector((state) => state.user);
 
   const stepperRef = useRef();
 
+  const dispatch = useDispatch();
+
   const theme = useTheme();
   const matchesSm = useMediaQuery(theme.breakpoints.down('sm'));
-  const [alertState, setAlertState] = useState(defaultAlert);
 
-  // close alert eveytime switch steps
-  useEffect(() => {
-    setAlertState({ ...alertState, open: false });
-  }, [activeStep]);
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+
+  const { saveHistory } = useUserHistory();
+
   /// ///////////////////////////////////////////////////////
   //                      Render                          //
   /// ///////////////////////////////////////////////////////
@@ -65,13 +66,17 @@ const Calculator = () => {
       case 'Site Conditions':
         return (
           <SiteCondition
+            siteConditionStep={siteConditionStep}
+            setSiteConditionStep={setSiteConditionStep}
             completedStep={completedStep}
             setCompletedStep={setCompletedStep}
+            token={token}
           />
         );
       case 'Species Selection':
         return (
           <SpeciesSelection
+            setSiteConditionStep={setSiteConditionStep}
             completedStep={completedStep}
             setCompletedStep={setCompletedStep}
           />
@@ -82,14 +87,12 @@ const Calculator = () => {
             calculator={calculator}
             setCalculator={setCalculator}
             alertState={alertState}
-            setAlertState={setAlertState}
           />
         );
       case 'Seeding Method':
         return (
           <SeedingMethod
             alertState={alertState}
-            setAlertState={setAlertState}
           />
         );
       case 'Mix Seeding Rate':
@@ -102,7 +105,6 @@ const Calculator = () => {
             completedStep={completedStep}
             setCompletedStep={setCompletedStep}
             alertState={alertState}
-            setAlertState={setAlertState}
           />
         );
       case 'Review Mix':
@@ -159,9 +161,46 @@ const Calculator = () => {
     };
   }, []);
 
+  // close alert and save user history
   useEffect(() => {
-    if (siteConditionError || calculatorError) setAlertState({ ...alert, open: true });
+    dispatch(setAlertStateRedux({ ...alertState, open: false }));
+    if (historyState === historyStates.new || historyState === historyStates.updated) {
+      const { label, id } = selectedHistory;
+      saveHistory(token, id, label);
+    }
+  }, [activeStep]);
+
+  useEffect(() => {
+    if (siteConditionError || calculatorError) {
+      dispatch(setAlertStateRedux({
+        ...alertState,
+        open: true,
+        type: 'error',
+        message: 'Network Error - Try again later or refresh the page!',
+      }));
+    }
   }, [siteConditionError, calculatorError]);
+
+  // initially get token
+  useEffect(() => {
+    const fetchToken = async () => {
+      const t = await getAccessTokenSilently();
+      setToken(t);
+    };
+    if (isAuthenticated) {
+      fetchToken();
+    }
+  }, [isAuthenticated]);
+
+  // auto close alert after setting time
+  useEffect(() => {
+    const closeAlertTimeout = 5000;
+    if (alertState.open) {
+      setTimeout(() => {
+        dispatch(setAlertStateRedux({ open: false, type: 'success', message: '' }));
+      }, closeAlertTimeout);
+    }
+  }, [alertState.open]);
 
   return (
     <Grid container justifyContent="center">
@@ -170,14 +209,14 @@ const Calculator = () => {
           && (
           <FadeAlert
             showAlert={alertState.open}
-            severity={alertState.severity}
+            severity={alertState.type}
             variant="filled"
             action={(
               <IconButton
                 aria-label="close"
                 color="inherit"
                 size="small"
-                onClick={() => setAlertState({ ...alert, open: false })}
+                onClick={() => dispatch(setAlertStateRedux({ ...alert, open: false }))}
               >
                 <CloseIcon fontSize="inherit" />
               </IconButton>
@@ -186,31 +225,43 @@ const Calculator = () => {
           />
           )}
       </Grid>
-      <Grid
-        item
-        xs={12}
-        paddingTop="0.625rem"
-        height="85px"
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <img
-          alt={siteCondition.council}
-          src={headerLogo()}
-          height="75px"
-        />
-        <Typography variant="dstHeader" pl="1rem">
-          Seeding Rate Calculator
-        </Typography>
-      </Grid>
 
       <Grid item md={0} lg={2} />
-      <Grid
-        item
-        xs={12}
-        lg={8}
-        sx={
+
+      <Grid item xs={12} lg={8}>
+        {/* header logo & nav */}
+        <Grid
+          container
+          paddingTop="0.625rem"
+          height="85px"
+        >
+          <Grid
+            item
+            xs={9}
+            md={6}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <img
+              alt={siteCondition.council}
+              src={headerLogo()}
+              height="75px"
+            />
+            <Typography variant="dstHeader" pl="1rem">
+              Seeding Rate Calculator
+            </Typography>
+          </Grid>
+          <Grid item xs={3} md={6}>
+            <NavBar />
+          </Grid>
+        </Grid>
+
+        {/* steps list */}
+        <Grid
+          item
+          xs={12}
+          sx={
           matchesSm && !showHeaderLogo
             ? {
               position: 'fixed',
@@ -219,61 +270,71 @@ const Calculator = () => {
               backgroundColor: 'primary.light',
               height: '90px',
               zIndex: '101',
+              top: '0',
             }
             : { paddingTop: '20px' }
         }
         // height={"100px"}
-        ref={stepperRef}
-      >
-        <StepsList
-          activeStep={activeStep}
-          setActiveStep={setActiveStep}
-          availableSteps={completedStep}
-        />
-      </Grid>
-      <Grid item md={0} lg={2} />
+          ref={stepperRef}
+        >
+          <StepsList
+            activeStep={activeStep}
+            setActiveStep={setActiveStep}
+            availableSteps={completedStep}
+            setSiteConditionStep={setSiteConditionStep}
+          />
+        </Grid>
 
-      <Grid item md={0} lg={2} />
-
-      {activeStep > 0 && activeStep < 8 && (
-        <Grid
-          item
-          xs={12}
-          md={1}
-          sx={
+        <Grid container>
+          {/* seeds selected list */}
+          {activeStep > 0 && activeStep < 8 && (
+          <Grid
+            item
+            xs={12}
+            md={1}
+            lg={2}
+            sx={
             matchesSm && !showHeaderLogo
               ? {
                 position: 'fixed',
                 width: '100%',
                 paddingTop: '90px',
                 zIndex: '100',
+                top: '0',
               }
               : {}
           }
-        >
-          <SeedsSelectedList list={seedsSelected} />
-        </Grid>
-      )}
+          >
+            <SeedsSelectedList list={seedsSelected} activeStep={activeStep} />
+          </Grid>
+          )}
 
-      <Grid
-        item
-        xs={12}
-        lg={activeStep === 0 ? 8 : 7}
-        md={activeStep > 0 ? 11 : 12}
-        sx={
-          // eslint-disable-next-line no-nested-ternary
-          matchesSm && !showHeaderLogo
-            ? activeStep === 0
-              ? { paddingTop: '90px' }
-              : { paddingTop: '190px' }
-            : {}
-        }
-      >
-        {renderCalculator(
-          activeStep === calculatorList.length
-            ? 'Finish'
-            : calculatorList[activeStep],
-        )}
+          {/* main calculator */}
+          <Grid
+            item
+            xs={12}
+            // FIXME: except last step which does not have the crop bar
+            lg={activeStep === 0 ? 12 : 10}
+            md={activeStep > 0 ? 11 : 12}
+            sx={
+              // eslint-disable-next-line no-nested-ternary
+              matchesSm && !showHeaderLogo
+                ? activeStep === 0
+                  ? { paddingTop: '90px' }
+                  : { paddingTop: '190px' }
+                : {}
+            }
+          >
+            {renderCalculator(
+              activeStep === calculatorList.length
+                ? 'Finish'
+                : calculatorList[activeStep],
+            )}
+          </Grid>
+
+          <HistoryDialog setStep={setActiveStep} setSiteConditionStep={setSiteConditionStep} />
+        </Grid>
+
       </Grid>
 
       <Grid item md={0} lg={2} />
