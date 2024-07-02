@@ -106,7 +106,7 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
 
       // validate next button
       validateForms(
-        seedsSelected.length > 1,
+        seedsSelected.length > 0,
         1,
         completedStep,
         setCompletedStep,

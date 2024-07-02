@@ -74,7 +74,7 @@ const StepsList = ({
       return 'Please enter the necessary info below.';
     }
     if (activeStep === 1 && !availableSteps[1]) {
-      return 'Please select at least 2 plants.';
+      return 'Please select at least 1 plants.';
     }
     if (activeStep === 5 && !availableSteps[5]) {
       return 'Please make a selection.';
