@@ -11,8 +11,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CancelRounded } from '@mui/icons-material';
 
 import {
+  removeMixRatioOptionRedux,
   removeOptionRedux, removeSeedRedux, selectSidebarSeedRedux,
 } from '../../features/calculatorSlice/actions';
+import { historyStates } from '../../features/userSlice/state';
+import { setHistoryStateRedux } from '../../features/userSlice/actions';
 
 const ExitIcon = ({ style }) => (
   <Box sx={style}>
@@ -28,6 +31,7 @@ const SeedsSelectedList = ({ list, activeStep }) => {
   const dispatch = useDispatch();
 
   const { sideBarSelection } = useSelector((state) => state.calculator);
+  const { historyState } = useSelector((state) => state.user);
 
   const selectSpecies = (seed) => {
     dispatch(selectSidebarSeedRedux(sideBarSelection === seed ? '' : seed));
@@ -35,7 +39,9 @@ const SeedsSelectedList = ({ list, activeStep }) => {
 
   const clickItem = (label) => {
     if (activeStep === 1) {
+      if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
       dispatch(removeSeedRedux(label));
+      dispatch(removeMixRatioOptionRedux(label));
       dispatch(removeOptionRedux(label));
     } else {
       selectSpecies(label);

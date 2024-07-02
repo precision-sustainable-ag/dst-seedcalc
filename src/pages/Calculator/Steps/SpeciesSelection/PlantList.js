@@ -14,7 +14,7 @@ import '../steps.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { CheckRounded } from '@mui/icons-material';
 import {
-  addSeedRedux, removeOptionRedux, removeSeedRedux,
+  addSeedRedux, removeMixRatioOptionRedux, removeOptionRedux, removeSeedRedux,
   setMixRatioOptionRedux,
 } from '../../../../features/calculatorSlice/actions';
 import { initialOptions } from '../../../../shared/utils/calculator';
@@ -124,6 +124,7 @@ const PlantList = ({
     } else {
     // if seed already in seedSelected, del it
       dispatch(removeSeedRedux(seedName));
+      dispatch(removeMixRatioOptionRedux(seedName));
       dispatch(removeOptionRedux(seedName));
     }
   };
