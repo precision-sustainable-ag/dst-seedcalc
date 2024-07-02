@@ -28,7 +28,7 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
   const dispatch = useDispatch();
 
   const {
-    seedsSelected, diversitySelected, loading, crops,
+    seedsSelected, loading, crops,
   } = useSelector((state) => state.calculator);
   const {
     soilDrainage, plantingDate, acres, county, council,
@@ -165,7 +165,7 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
                 Click Show details to see species options, or use the search bar to find a specific species you can pair to create a mix.
               </Typography>
             )
-            : <Diversity diversitySelected={diversitySelected} />}
+            : <Diversity />}
 
         </Box>
       </Grid>
