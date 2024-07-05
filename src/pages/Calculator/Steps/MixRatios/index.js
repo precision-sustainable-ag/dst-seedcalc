@@ -83,7 +83,7 @@ const MixRatio = ({
 
   const dispatch = useDispatch();
   const {
-    seedsSelected, sideBarSelection, mixRatioOptions,
+    seedsSelected, sideBarSelection, options, mixRatioOptions,
   } = useSelector((state) => state.calculator);
   const {
     council, soilDrainage, plantingDate, acres, county,
@@ -127,7 +127,10 @@ const MixRatio = ({
     const seedingRateCalculator = createCalculator(seedsSelected, council, regions, userInput);
     setCalculator(seedingRateCalculator);
     // If historyState is imported, not init options, use mixRatioOptions instead
-    if (historyState !== historyStates.imported) {
+    // or history is imported, but object is {}
+    if (historyState !== historyStates.imported || (
+      historyState === historyStates.imported && Object.keys(options).length === 0
+    )) {
       seedsSelected.forEach((seed) => {
         // if percentOfRate is not null, skip this step(this happens when add new crop for a imported history)
         if (mixRatioOptions[seed.label].percentOfRate === null) {
@@ -170,7 +173,12 @@ const MixRatio = ({
         }));
       }
       // if history is not imported, update mixRatioOptions to options
-      if (historyState !== historyStates.imported && maxAvailableStep <= 1) dispatch(setOptionRedux(seed.label, seedOption));
+      // or history is imported, but object is {}
+      if ((historyState !== historyStates.imported && maxAvailableStep <= 1) || (
+        historyState === historyStates.imported && Object.keys(options).length === 0
+      )) {
+        dispatch(setOptionRedux(seed.label, seedOption));
+      }
       // if history is updated, this will remove previously imported options redux and set it as mixRatioOptions
     });
     // calculate piechart data
