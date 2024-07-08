@@ -74,9 +74,18 @@ const PlantList = ({
       ${firstStart.format('MM/DD')} - ${firstEnd.format('MM/DD')}`;
   };
 
+  const checkSoilDrainage = (seed) => {
+    if (council === 'MCCC') {
+      if (seed.soilDrainage.map((s) => s.toLowerCase()).indexOf(soilDrainage.toLowerCase()) === -1) {
+        return 'Selected soil drainage not recommended for this crop.';
+      }
+    }
+    return '';
+  };
+
   seedsList.sort((a, b) => {
-    const checkA = checkPlantingDate(a);
-    const checkB = checkPlantingDate(b);
+    const checkA = council === 'MCCC' ? checkSoilDrainage(a) : checkPlantingDate(a);
+    const checkB = council === 'MCCC' ? checkSoilDrainage(b) : checkPlantingDate(b);
 
     if (checkA === '' && checkB !== '') {
       return -1;
@@ -136,18 +145,7 @@ const PlantList = ({
         seedsList.map((seed, i) => (
           <Grid item key={i} position="relative">
             {seedsSelected.filter((s) => s.label === seed.label).length > 0 && (
-              <CheckBoxIcon
-                style={{
-                  position: 'absolute',
-                  right: '0.2rem',
-                  top: '1.1rem',
-                  zIndex: 1,
-                  backgroundColor: '#5992E6',
-                  borderTopRightRadius: '1rem',
-                  borderBottomLeftRadius: '0.5rem',
-
-                }}
-              />
+              <CheckBoxIcon />
             )}
             <Card
               sx={{
