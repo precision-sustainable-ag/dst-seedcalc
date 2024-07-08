@@ -157,9 +157,11 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
           {seedsSelected.length === 0
             ? (
               <Typography
-                variant="h2"
                 sx={{
                   backgroundColor: 'transparent',
+                  height: '80px',
+                  display: 'flex',
+                  alignItems: 'center',
                 }}
               >
                 Click Show details to see species options, or use the search bar to find a specific species you can pair to create a mix.
