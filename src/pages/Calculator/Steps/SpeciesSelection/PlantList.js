@@ -42,6 +42,7 @@ const PlantList = ({
   const {
     acres, stateId, countyId, soilDrainage, plantingDate, soilFertility, council,
   } = useSelector((state) => state.siteCondition);
+  const { mixRatioOptions } = useSelector((state) => state.calculator);
   const { historyState, maxAvailableStep } = useSelector((state) => state.user);
 
   const seedsSelected = useSelector((state) => state.calculator.seedsSelected);
@@ -127,6 +128,11 @@ const PlantList = ({
       dispatch(removeMixRatioOptionRedux(seedName));
       dispatch(removeOptionRedux(seedName));
     }
+    // reset percentOfRate in mixRatioOptions when there's any change in species selection
+    seedsSelected.forEach((s) => {
+      const seedOption = mixRatioOptions[s.label];
+      dispatch(setMixRatioOptionRedux(s.label, { ...seedOption, percentOfRate: null }));
+    });
   };
 
   return (

@@ -43,7 +43,7 @@ const Calculator = () => {
 
   const siteCondition = useSelector((state) => state.siteCondition);
   const { error: siteConditionError } = siteCondition;
-  const { error: calculatorError, seedsSelected } = useSelector((state) => state.calculator);
+  const { error: calculatorError } = useSelector((state) => state.calculator);
   const { alertState, historyState, selectedHistory } = useSelector((state) => state.user);
 
   const stepperRef = useRef();
@@ -305,7 +305,7 @@ const Calculator = () => {
               : {}
           }
           >
-            <SeedsSelectedList list={seedsSelected} activeStep={activeStep} />
+            <SeedsSelectedList activeStep={activeStep} />
           </Grid>
           )}
 
