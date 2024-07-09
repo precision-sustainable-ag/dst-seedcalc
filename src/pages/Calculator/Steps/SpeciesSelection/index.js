@@ -132,7 +132,7 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
     <Grid container justifyContent="center">
       <Grid item xs={12}>
         <Typography variant="h2">
-          Click 2 or more species for your mix.
+          Select one or more species for your mix.
         </Typography>
         {historyState === historyStates.imported && (
         <Typography sx={{
