@@ -35,6 +35,7 @@ const SeedsSelectedList = ({ list, activeStep }) => {
 
   const clickItem = (label) => {
     if (activeStep === 1) {
+      // remove selected crop
       dispatch(removeSeedRedux(label));
       dispatch(removeOptionRedux(label));
     } else {
@@ -62,7 +63,6 @@ const SeedsSelectedList = ({ list, activeStep }) => {
     >
       {[...list].reverse().map((s, i) => (
         <Box minWidth={matchesMd ? '120px' : ''} key={i}>
-
           <Card
             sx={{
               backgroundColor: 'transparent',
@@ -70,36 +70,36 @@ const SeedsSelectedList = ({ list, activeStep }) => {
               cursor: 'pointer',
             }}
           >
-            <CardActionArea onClick={() => {
-              clickItem(s.label);
-            }}
-            >
-              {activeStep === 1
-              && (
-              <ExitIcon
-                style={{
-                  position: 'absolute',
-                  right: '0.0rem',
-                  zIndex: 1,
+            <CardActionArea onClick={() => { clickItem(s.label); }}>
 
-                }}
-              />
-              )}
-              <img
-                style={{
-                  borderRadius: '50%',
-                  width: '60px',
-                  height: '60px',
-                  marginTop: '10px',
-                }}
-                src={
+              <Box position="relative" width="90px" margin="auto">
+                {activeStep === 1
+                  && (
+                  <ExitIcon
+                    style={{
+                      position: 'absolute',
+                      right: '0.0rem',
+                      zIndex: 1,
+                    }}
+                  />
+                  )}
+                <img
+                  style={{
+                    borderRadius: '50%',
+                    width: '60px',
+                    height: '60px',
+                    marginTop: '10px',
+                  }}
+                  src={
                     s.thumbnail !== null && s.thumbnail !== ''
                       ? s.thumbnail
                       : 'https://placehold.it/250x150?text=Placeholder'
                   }
-                alt={s.label}
-                loading="lazy"
-              />
+                  alt={s.label}
+                  loading="lazy"
+                />
+              </Box>
+
               <Typography fontSize="12px" lineHeight={1.25}>
                 {s.label}
               </Typography>
