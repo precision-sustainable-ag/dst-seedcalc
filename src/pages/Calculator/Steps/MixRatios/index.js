@@ -9,9 +9,6 @@ import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import { Typography, Button } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
 import MixRatioSteps from './form';
 import DSTPieChart from '../../../../components/DSTPieChart';
 import { UnitSelection, SeedInfo } from '../../../../components/SeedingRateCard';
@@ -26,6 +23,7 @@ import {
   setAlertStateRedux, setHistoryStateRedux, setMaxAvailableStepRedux,
 } from '../../../../features/userSlice/actions';
 import { historyStates } from '../../../../features/userSlice/state';
+import DSTAccordion from '../../../../components/DSTAccordion';
 
 const getCalculatorResult = (council) => {
   const defaultResultMCCC = {
@@ -271,62 +269,50 @@ const MixRatio = ({
 
       {seedsSelected.map((seed, i) => (
         <Grid item xs={12} key={i}>
-          <Accordion
+          <DSTAccordion
             expanded={accordionState[seed.label]}
             onChange={() => handleExpandAccordion(seed.label)}
+            summary={<Typography>{seed.label}</Typography>}
           >
-            <AccordionSummary
-              expandIcon={(
-                <Typography sx={{ textDecoration: 'underline' }}>
-                  {accordionState[seed.label] ? 'Hide ' : 'Show '}
-                  Details
-                </Typography>
-              )}
-            >
-              <Typography>{seed.label}</Typography>
-            </AccordionSummary>
+            <Grid container>
+              <SeedInfo
+                seed={seed}
+                seedData={seedData}
+                calculatorResult={calculatorResult}
+                handleFormValueChange={handleFormValueChange}
+                council={council}
+                options={mixRatioOptions[seed.label]}
+              />
 
-            <AccordionDetails>
-              <Grid container>
-                <SeedInfo
-                  seed={seed}
-                  seedData={seedData}
-                  calculatorResult={calculatorResult}
-                  handleFormValueChange={handleFormValueChange}
+              <Grid item xs={12}>
+                <UnitSelection />
+              </Grid>
+
+              <Grid item xs={12} pt="1rem">
+                <Button
+                  sx={{
+                    borderRadius: '1rem',
+                  }}
+                  onClick={() => {
+                    setShowSteps({ ...showSteps, [seed.label]: !showSteps[seed.label] });
+                  }}
+                  variant="outlined"
+                >
+                  {showSteps[seed.label] ? 'Close Steps' : 'View Calculations'}
+                </Button>
+              </Grid>
+
+              <Grid item xs={12}>
+                {showSteps[seed.label] && (
+                <MixRatioSteps
                   council={council}
+                  calculatorResult={calculatorResult[seed.label]}
                   options={mixRatioOptions[seed.label]}
                 />
-
-                <Grid item xs={12}>
-                  <UnitSelection />
-                </Grid>
-
-                <Grid item xs={12} pt="1rem">
-                  <Button
-                    sx={{
-                      borderRadius: '1rem',
-                    }}
-                    onClick={() => {
-                      setShowSteps({ ...showSteps, [seed.label]: !showSteps[seed.label] });
-                    }}
-                    variant="outlined"
-                  >
-                    {showSteps[seed.label] ? 'Close Steps' : 'View Calculations'}
-                  </Button>
-                </Grid>
-
-                <Grid item xs={12}>
-                  {showSteps[seed.label] && (
-                  <MixRatioSteps
-                    council={council}
-                    calculatorResult={calculatorResult[seed.label]}
-                    options={mixRatioOptions[seed.label]}
-                  />
-                  )}
-                </Grid>
+                )}
               </Grid>
-            </AccordionDetails>
-          </Accordion>
+            </Grid>
+          </DSTAccordion>
         </Grid>
       ))}
     </Grid>
