@@ -107,7 +107,7 @@ const MixRatio = ({
   // create an key/value pair for the seed and related accordion expanded state
   const [accordionState, setAccordionState] = useState(
     seedsSelected.reduce((res, seed) => {
-      res[seed.label] = false;
+      res[seed.label] = seedsSelected.length === 1;
       return res;
     }, {}),
   );
@@ -193,12 +193,14 @@ const MixRatio = ({
 
   // expand related accordion based on sidebar click
   useEffect(() => {
-    setAccordionState(
-      seedsSelected.reduce((res, seed) => {
-        res[seed.label] = seed.label === sideBarSelection;
-        return res;
-      }, {}),
-    );
+    if (sideBarSelection !== '') {
+      setAccordionState(
+        seedsSelected.reduce((res, seed) => {
+          res[seed.label] = seed.label === sideBarSelection;
+          return res;
+        }, {}),
+      );
+    }
   }, [sideBarSelection]);
 
   /// ///////////////////////////////////////////////////////
