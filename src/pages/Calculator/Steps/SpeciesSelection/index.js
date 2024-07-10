@@ -132,10 +132,7 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
           Click 2 or more species for your mix.
         </Typography>
         {historyState === historyStates.imported && (
-        <Typography sx={{
-          fontWeight: 'bold', margin: '1rem', marginBottom: '0',
-        }}
-        >
+        <Typography sx={{ fontWeight: 'bold', margin: '1rem', marginBottom: '0' }}>
           <span style={{ color: 'red' }}>Warning: </span>
           Making changes on this page will reset the subsequent steps of the calculation.
         </Typography>
@@ -149,7 +146,6 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
           flexDirection="column"
           p="1rem"
         >
-
           <SearchField handleChange={updateQuery} value={query} />
           {seedsSelected.length === 0
             ? (
@@ -165,7 +161,6 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
               </Typography>
             )
             : <Diversity diversitySelected={diversitySelected} />}
-
         </Box>
       </Grid>
 
@@ -182,7 +177,6 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
               filteredSeeds={filteredSeeds}
             />
           </DSTAccordion>
-
         </Grid>
       ))}
     </Grid>

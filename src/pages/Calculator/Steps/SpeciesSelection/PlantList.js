@@ -9,7 +9,7 @@ import {
   CardActionArea,
   Box,
 } from '@mui/material';
-
+import Tooltip from '@mui/material/Tooltip';
 import '../steps.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { CheckRounded } from '@mui/icons-material';
@@ -166,23 +166,38 @@ const PlantList = ({
                 }}
                 disableRipple
               >
-                <CardMedia
-                  component="img"
-                  height="160px"
-                  image={
+                <Tooltip
+                  arrow
+                  title={checkCrop(seed)}
+                  componentsProps={{
+                    tooltip: {
+                      sx: {
+                        width: '160px',
+                      },
+                    },
+                  }}
+                >
+                  <CardMedia
+                    component="img"
+                    height="160px"
+                    image={
                     ((seed.thumbnail === null || seed.thumbnail === '')
                       ? 'https://placehold.it/250x150?text=Placeholder'
                       : seed.thumbnail)
                   }
-                  alt={seed.label}
-                  sx={{
-                    border: '2px solid #4f5f30',
-                    borderRadius: '1rem',
-                    ...(seedsSelected.filter((s) => s.label === seed.label).length > 0 && {
-                      border: '6px solid #5992E6',
-                    }),
-                  }}
-                />
+                    alt={seed.label}
+                    sx={{
+                      border: '2px solid #4f5f30',
+                      borderRadius: '1rem',
+                      ...(seedsSelected.filter((s) => s.label === seed.label).length > 0 && {
+                        border: '6px solid #5992E6',
+                      }),
+                    }}
+                  />
+                </Tooltip>
+
+                {checkCrop(seed) !== ''
+                && (
                 <Typography
                   sx={{
                     color: 'primary.text',
@@ -197,13 +212,10 @@ const PlantList = ({
                     opacity: '90%',
                     paddingRight: '5px',
                     paddingLeft: '5px',
-                    ...(checkCrop(seed) !== '' && {
-                      height: '30px',
-                      paddingTop: '5px',
-                      fontSize: '0.790rem',
-                    }),
+                    height: '30px',
+                    paddingTop: '5px',
+                    fontSize: '0.790rem',
                     ...(seedsSelected.filter((s) => s.label === seed.label).length > 0
-                    && checkPlantingDate(seed) !== ''
                     && {
                       left: 'calc(6px)',
                       right: 'calc(6px)',
@@ -221,40 +233,7 @@ const PlantList = ({
                 >
                   { checkCrop(seed) !== '' && <span>Not Recommended</span> }
                 </Typography>
-
-                <Typography
-                  sx={{
-                    color: 'primary.text',
-                    position: 'absolute',
-                    borderBottomLeftRadius: '0.9rem',
-                    borderBottomRightRadius: '0.9rem',
-                    top: '117px',
-                    left: 'calc(2px)',
-                    right: 'calc(2px)',
-                    ...((checkPlantingDate(seed) !== '' || (checkSoilDrainage(seed) !== '')) && {
-                      height: '41px',
-                      ...(seedsSelected.filter((s) => s.label === seed.label).length > 0 && {
-                        left: 'calc(6px)',
-                        right: 'calc(6px)',
-                        height: '41px',
-                        top: '113px',
-                        borderBottomLeftRadius: '0.62rem',
-                        borderBottomRightRadius: '0.62rem',
-                      }),
-                    }),
-                    fontStyle: 'italic',
-                    fontWeight: 'bold',
-                    bgcolor: 'primary.light',
-                    opacity: '90%',
-                    fontSize: '0.575rem',
-                    paddingRight: '5px',
-                    paddingLeft: '5px',
-                    overflow: 'hidden',
-                    whiteSpace: 'pre-line',
-                  }}
-                >
-                  {checkCrop(seed)}
-                </Typography>
+                )}
 
                 <CardContent>
                   <Typography sx={{ fontWeight: 'bold' }}>
