@@ -10,6 +10,7 @@ import {
   Box,
 } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
+import HelpIcon from '@mui/icons-material/Help';
 import '../steps.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { CheckRounded } from '@mui/icons-material';
@@ -166,56 +167,45 @@ const PlantList = ({
                 }}
                 disableRipple
               >
-                <Tooltip
-                  arrow
-                  title={checkCrop(seed)}
-                  componentsProps={{
-                    tooltip: {
-                      sx: {
-                        width: '160px',
-                      },
-                    },
-                  }}
-                >
-                  <CardMedia
-                    component="img"
-                    height="160px"
-                    image={
+                <CardMedia
+                  component="img"
+                  height="160px"
+                  image={
                     ((seed.thumbnail === null || seed.thumbnail === '')
                       ? 'https://placehold.it/250x150?text=Placeholder'
                       : seed.thumbnail)
                   }
-                    alt={seed.label}
-                    sx={{
-                      border: '2px solid #4f5f30',
-                      borderRadius: '1rem',
-                      ...(seedsSelected.filter((s) => s.label === seed.label).length > 0 && {
-                        border: '6px solid #5992E6',
-                      }),
-                    }}
-                  />
-                </Tooltip>
+                  alt={seed.label}
+                  sx={{
+                    border: '2px solid #4f5f30',
+                    borderRadius: '1rem',
+                    ...(seedsSelected.filter((s) => s.label === seed.label).length > 0 && {
+                      border: '6px solid #5992E6',
+                    }),
+                  }}
+                />
 
                 {checkCrop(seed) !== ''
                 && (
-                <Typography
-                  sx={{
-                    color: 'primary.text',
-                    position: 'absolute',
-                    top: '2px',
-                    left: 'calc(2px)',
-                    right: 'calc(2px)',
-                    borderTopLeftRadius: '0.9rem',
-                    borderTopRightRadius: '0.9rem',
-                    fontWeight: 'bold',
-                    bgcolor: 'primary.light',
-                    opacity: '90%',
-                    paddingRight: '5px',
-                    paddingLeft: '5px',
-                    height: '30px',
-                    paddingTop: '5px',
-                    fontSize: '0.790rem',
-                    ...(seedsSelected.filter((s) => s.label === seed.label).length > 0
+                  <>
+                    <Typography
+                      sx={{
+                        color: 'primary.text',
+                        position: 'absolute',
+                        top: '2px',
+                        left: 'calc(2px)',
+                        right: 'calc(2px)',
+                        borderTopLeftRadius: '0.9rem',
+                        borderTopRightRadius: '0.9rem',
+                        fontWeight: 'bold',
+                        bgcolor: 'primary.light',
+                        opacity: '90%',
+                        paddingRight: '5px',
+                        paddingLeft: '5px',
+                        height: '30px',
+                        paddingTop: '5px',
+                        fontSize: '0.790rem',
+                        ...(seedsSelected.filter((s) => s.label === seed.label).length > 0
                     && {
                       left: 'calc(6px)',
                       right: 'calc(6px)',
@@ -229,10 +219,35 @@ const PlantList = ({
                         zIndex: 5,
                       },
                     }),
-                  }}
-                >
-                  { checkCrop(seed) !== '' && <span>Not Recommended</span> }
-                </Typography>
+                      }}
+                    >
+                      { checkCrop(seed) !== '' && <span>Not Recommended</span> }
+                    </Typography>
+
+                    <Tooltip
+                      title={checkCrop(seed)}
+                      arrow
+                      placement="bottom-end"
+                      enterTouchDelay={200}
+                      leaveTouchDelay={200}
+                      componentsProps={{
+                        tooltip: {
+                          sx: {
+                            width: '150px',
+                          },
+                        },
+                      }}
+                    >
+                      <HelpIcon sx={{
+                        color: 'primary.light',
+                        position: 'absolute',
+                        right: '10px',
+                        top: '120px',
+                        fontSize: '2rem',
+                      }}
+                      />
+                    </Tooltip>
+                  </>
                 )}
 
                 <CardContent>
