@@ -12,11 +12,16 @@ import { CancelRounded } from '@mui/icons-material';
 
 import {
   removeMixRatioOptionRedux,
-  removeOptionRedux, removeSeedRedux, selectSidebarSeedRedux,
+  removeOptionRedux,
+  removeSeedRedux,
+  selectSidebarSeedRedux,
   setMixRatioOptionRedux,
 } from '../../features/calculatorSlice/actions';
 import { historyStates } from '../../features/userSlice/state';
-import { setHistoryStateRedux, setMaxAvailableStepRedux } from '../../features/userSlice/actions';
+import {
+  setHistoryStateRedux,
+  setMaxAvailableStepRedux,
+} from '../../features/userSlice/actions';
 
 const ExitIcon = ({ style }) => (
   <Box sx={style}>
@@ -31,7 +36,9 @@ const SeedsSelectedList = ({ activeStep }) => {
 
   const dispatch = useDispatch();
 
-  const { sideBarSelection, seedsSelected, mixRatioOptions } = useSelector((state) => state.calculator);
+  const { sideBarSelection, seedsSelected, mixRatioOptions } = useSelector(
+    (state) => state.calculator,
+  );
   const { historyState, maxAvailableStep } = useSelector((state) => state.user);
 
   const selectSpecies = (seed) => {
@@ -41,6 +48,7 @@ const SeedsSelectedList = ({ activeStep }) => {
   const clickItem = (label) => {
     if (activeStep === 1) {
       if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
+      // remove selected crop
       dispatch(removeSeedRedux(label));
       dispatch(removeMixRatioOptionRedux(label));
       dispatch(removeOptionRedux(label));
@@ -48,7 +56,12 @@ const SeedsSelectedList = ({ activeStep }) => {
       // reset percentOfRate in mixRatioOptions when there's any change in species selection
       seedsSelected.forEach((s) => {
         const seedOption = mixRatioOptions[s.label];
-        dispatch(setMixRatioOptionRedux(s.label, { ...seedOption, percentOfRate: null }));
+        dispatch(
+          setMixRatioOptionRedux(s.label, {
+            ...seedOption,
+            percentOfRate: null,
+          }),
+        );
       });
     } else {
       selectSpecies(label);
@@ -75,7 +88,6 @@ const SeedsSelectedList = ({ activeStep }) => {
     >
       {[...seedsSelected].reverse().map((s, i) => (
         <Box minWidth={matchesMd ? '120px' : ''} key={i}>
-
           <Card
             sx={{
               backgroundColor: 'transparent',
@@ -83,36 +95,38 @@ const SeedsSelectedList = ({ activeStep }) => {
               cursor: 'pointer',
             }}
           >
-            <CardActionArea onClick={() => {
-              clickItem(s.label);
-            }}
+            <CardActionArea
+              onClick={() => {
+                clickItem(s.label);
+              }}
             >
-              {activeStep === 1
-              && (
-              <ExitIcon
-                style={{
-                  position: 'absolute',
-                  right: '0.0rem',
-                  zIndex: 1,
-
-                }}
-              />
-              )}
-              <img
-                style={{
-                  borderRadius: '50%',
-                  width: '60px',
-                  height: '60px',
-                  marginTop: '10px',
-                }}
-                src={
+              <Box position="relative" width="90px" margin="auto">
+                {activeStep === 1 && (
+                  <ExitIcon
+                    style={{
+                      position: 'absolute',
+                      right: '0.0rem',
+                      zIndex: 1,
+                    }}
+                  />
+                )}
+                <img
+                  style={{
+                    borderRadius: '50%',
+                    width: '60px',
+                    height: '60px',
+                    marginTop: '10px',
+                  }}
+                  src={
                     s.thumbnail !== null && s.thumbnail !== ''
                       ? s.thumbnail
                       : 'https://placehold.it/250x150?text=Placeholder'
                   }
-                alt={s.label}
-                loading="lazy"
-              />
+                  alt={s.label}
+                  loading="lazy"
+                />
+              </Box>
+
               <Typography fontSize="12px" lineHeight={1.25}>
                 {s.label}
               </Typography>

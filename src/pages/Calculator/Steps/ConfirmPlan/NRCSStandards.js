@@ -9,6 +9,8 @@ import {
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import styled from '@emotion/styled';
+import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import DSTTable from '../../../../components/DSTTable';
 import '../steps.scss';
 
@@ -86,10 +88,11 @@ const NRCSItem = ({ title, result }) => {
         >
           <NRCSAccordionSummary
             expandIcon={(
-              <Typography>
+              <Typography sx={{ textDecoration: 'underline', display: 'flex', alignItems: 'center' }}>
                 {expanded ? 'Hide' : 'Show'}
                 {' '}
                 Details
+                {expanded ? <KeyboardDoubleArrowUpIcon /> : <KeyboardDoubleArrowDownIcon />}
               </Typography>
               )}
           >

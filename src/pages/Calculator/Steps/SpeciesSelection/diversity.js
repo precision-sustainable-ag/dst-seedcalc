@@ -16,7 +16,7 @@ const Diversity = () => {
   );
 
   return (
-    <Grid container>
+    <Grid container sx={{ height: '80px' }}>
       <Typography pt="1rem" fontWeight={600}>
         Mix Diversity
       </Typography>

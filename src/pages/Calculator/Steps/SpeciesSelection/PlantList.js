@@ -9,7 +9,8 @@ import {
   CardActionArea,
   Box,
 } from '@mui/material';
-
+import Tooltip from '@mui/material/Tooltip';
+import HelpIcon from '@mui/icons-material/Help';
 import '../steps.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { CheckRounded } from '@mui/icons-material';
@@ -22,7 +23,17 @@ import { setHistoryStateRedux, setMaxAvailableStepRedux } from '../../../../feat
 import { historyStates } from '../../../../features/userSlice/state';
 
 const CheckBoxIcon = ({ style }) => (
-  <Box sx={style}>
+  <Box sx={{
+    ...style,
+    position: 'absolute',
+    right: '0.2rem',
+    top: '1.1rem',
+    zIndex: 1,
+    backgroundColor: '#5992E6',
+    borderTopRightRadius: '1rem',
+    borderBottomLeftRadius: '0.5rem',
+  }}
+  >
     <CheckRounded style={{
       color: '#FFFFFF',
       width: '28.5',
@@ -75,9 +86,23 @@ const PlantList = ({
       ${firstStart.format('MM/DD')} - ${firstEnd.format('MM/DD')}`;
   };
 
+  const checkSoilDrainage = (seed) => {
+    if (council === 'MCCC') {
+      if (seed.soilDrainage.map((s) => s.toLowerCase()).indexOf(soilDrainage.toLowerCase()) === -1) {
+        return 'Selected soil drainage not recommended for this crop.';
+      }
+    }
+    return '';
+  };
+
+  const checkCrop = (seed) => {
+    if (council === 'MCCC') return checkSoilDrainage(seed);
+    return checkPlantingDate(seed);
+  };
+
   seedsList.sort((a, b) => {
-    const checkA = checkPlantingDate(a);
-    const checkB = checkPlantingDate(b);
+    const checkA = checkCrop(a);
+    const checkB = checkCrop(b);
 
     if (checkA === '' && checkB !== '') {
       return -1;
@@ -87,15 +112,6 @@ const PlantList = ({
     }
     return 0;
   });
-
-  const checkSoilDrainage = (seed) => {
-    if (council === 'MCCC') {
-      if (seed.soilDrainage.map((s) => s.toLowerCase()).indexOf(soilDrainage.toLowerCase()) === -1) {
-        return 'Selected soil drainage not recommended for this crop.';
-      }
-    }
-    return '';
-  };
 
   const handleClick = async (seed) => {
     // if from user history, set historyState to historyStates.updated to create a new calculation
@@ -120,7 +136,6 @@ const PlantList = ({
         soilFertility: soilFertility.toLowerCase(),
       };
       // set initial options
-      // dispatch(setOptionRedux(label, initOptions));
       dispatch(setMixRatioOptionRedux(label, initOptions));
     } else {
     // if seed already in seedSelected, del it
@@ -143,18 +158,7 @@ const PlantList = ({
         seedsList.map((seed, i) => (
           <Grid item key={i} position="relative">
             {seedsSelected.filter((s) => s.label === seed.label).length > 0 && (
-              <CheckBoxIcon
-                style={{
-                  position: 'absolute',
-                  right: '0.2rem',
-                  top: '1.1rem',
-                  zIndex: 1,
-                  backgroundColor: '#5992E6',
-                  borderTopRightRadius: '1rem',
-                  borderBottomLeftRadius: '0.5rem',
-
-                }}
-              />
+              <CheckBoxIcon />
             )}
             <Card
               sx={{
@@ -166,7 +170,6 @@ const PlantList = ({
             >
               <CardActionArea
                 onClick={() => {
-                  // updated click function
                   handleClick(seed);
                 }}
                 disableRipple
@@ -183,29 +186,33 @@ const PlantList = ({
                   sx={{
                     border: '2px solid #4f5f30',
                     borderRadius: '1rem',
-
                     ...(seedsSelected.filter((s) => s.label === seed.label).length > 0 && {
                       border: '6px solid #5992E6',
                     }),
                   }}
-
                 />
-                <Typography
-                  sx={{
-                    color: 'primary.text',
-                    position: 'absolute',
-                    top: '2px',
-                    left: 'calc(2px)',
-                    right: 'calc(2px)',
-                    ...(checkPlantingDate(seed) !== '' && {
-                      height: '30px',
-                      paddingTop: '5px',
-                      fontSize: '0.790rem',
-                    }),
-                    borderTopLeftRadius: '0.9rem',
-                    borderTopRightRadius: '0.9rem',
-                    ...(seedsSelected.filter((s) => s.label === seed.label).length > 0
-                    && checkPlantingDate(seed) !== ''
+
+                {checkCrop(seed) !== ''
+                && (
+                  <>
+                    <Typography
+                      sx={{
+                        color: 'primary.text',
+                        position: 'absolute',
+                        top: '2px',
+                        left: 'calc(2px)',
+                        right: 'calc(2px)',
+                        borderTopLeftRadius: '0.9rem',
+                        borderTopRightRadius: '0.9rem',
+                        fontWeight: 'bold',
+                        bgcolor: 'primary.light',
+                        opacity: '90%',
+                        paddingRight: '5px',
+                        paddingLeft: '5px',
+                        height: '30px',
+                        paddingTop: '5px',
+                        fontSize: '0.790rem',
+                        ...(seedsSelected.filter((s) => s.label === seed.label).length > 0
                     && {
                       left: 'calc(6px)',
                       right: 'calc(6px)',
@@ -219,62 +226,40 @@ const PlantList = ({
                         zIndex: 5,
                       },
                     }),
-                    fontWeight: 'bold',
-                    bgcolor: 'primary.light',
-                    opacity: '90%',
+                      }}
+                    >
+                      { checkCrop(seed) !== '' && <span>Not Recommended</span> }
+                    </Typography>
 
-                    paddingRight: '5px',
-                    paddingLeft: '5px',
-
-                  }}
-                >
-                  {
-                    checkPlantingDate(seed) !== ''
-                    && <span>Not Recommended</span>
-                  }
-                </Typography>
-
-                <Typography
-                  sx={{
-                    color: 'primary.text',
-                    position: 'absolute',
-                    borderBottomLeftRadius: '0.9rem',
-                    borderBottomRightRadius: '0.9rem',
-                    top: '117px',
-                    left: 'calc(2px)',
-                    right: 'calc(2px)',
-                    ...((checkPlantingDate(seed) !== '' || (checkSoilDrainage(seed) !== '')) && {
-                      height: '41px',
-                      ...(seedsSelected.filter((s) => s.label === seed.label).length > 0 && {
-                        left: 'calc(6px)',
-                        right: 'calc(6px)',
-                        height: '41px',
-                        top: '113px',
-                        borderBottomLeftRadius: '0.62rem',
-                        borderBottomRightRadius: '0.62rem',
-                      }),
-                    }),
-
-                    fontStyle: 'italic',
-                    fontWeight: 'bold',
-                    bgcolor: 'primary.light',
-                    opacity: '90%',
-                    fontSize: '0.575rem',
-                    paddingRight: '5px',
-                    paddingLeft: '5px',
-                    overflow: 'hidden',
-                    whiteSpace: 'pre-line',
-
-                  }}
-                >
-                  {checkPlantingDate(seed)}
-                  {checkSoilDrainage(seed)}
-                </Typography>
+                    <Tooltip
+                      title={checkCrop(seed)}
+                      arrow
+                      placement="bottom-end"
+                      enterTouchDelay={200}
+                      leaveTouchDelay={200}
+                      componentsProps={{
+                        tooltip: {
+                          sx: {
+                            width: '150px',
+                          },
+                        },
+                      }}
+                    >
+                      <HelpIcon sx={{
+                        color: 'primary.light',
+                        position: 'absolute',
+                        right: '10px',
+                        top: '120px',
+                        fontSize: '2rem',
+                      }}
+                      />
+                    </Tooltip>
+                  </>
+                )}
 
                 <CardContent>
                   <Typography sx={{ fontWeight: 'bold' }}>
                     {seed.label}
-
                   </Typography>
                 </CardContent>
               </CardActionArea>
