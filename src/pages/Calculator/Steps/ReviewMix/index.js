@@ -100,7 +100,7 @@ const ReviewMix = ({ calculator }) => {
 
   const [accordionState, setAccordionState] = useState(
     seedsSelected.reduce((res, seed) => {
-      res[seed.label] = false;
+      res[seed.label] = seedsSelected.length === 1;
       return res;
     }, {}),
   );
@@ -133,12 +133,14 @@ const ReviewMix = ({ calculator }) => {
 
   // expand related accordion based on sidebar click
   useEffect(() => {
-    setAccordionState(
-      seedsSelected.reduce((res, seed) => {
-        res[seed.label] = seed.label === sideBarSelection;
-        return res;
-      }, {}),
-    );
+    if (sideBarSelection !== '') {
+      setAccordionState(
+        seedsSelected.reduce((res, seed) => {
+          res[seed.label] = seed.label === sideBarSelection;
+          return res;
+        }, {}),
+      );
+    }
   }, [sideBarSelection]);
 
   // run reviewMix on options change
@@ -198,27 +200,31 @@ const ReviewMix = ({ calculator }) => {
         <Typography variant="h2">Review your mix</Typography>
       </Grid>
 
-      <Grid item xs={6} sx={{ textAlign: 'justify' }}>
-        <DSTPieChart
-          chartData={piechartData.seedingRateArray}
-          label={pieChartUnits.poundsOfSeedPerAcre}
-        />
-      </Grid>
+      {seedsSelected.length > 1 && (
+        <>
+          <Grid item xs={6} sx={{ textAlign: 'justify' }}>
+            <DSTPieChart
+              chartData={piechartData.seedingRateArray}
+              label={pieChartUnits.poundsOfSeedPerAcre}
+            />
+          </Grid>
 
-      <Grid item xs={6} sx={{ textAlign: 'justify' }}>
-        {council === 'MCCC' && (
-          <DSTPieChart
-            chartData={piechartData.plantsPerSqftArray}
-            label={pieChartUnits.plantsPerSqft}
-          />
-        )}
-        {(council === 'NECCC' || council === 'SCCC') && (
-        <DSTPieChart
-          chartData={piechartData.seedsPerSqftArray}
-          label={pieChartUnits.seedsPerSqft}
-        />
-        )}
-      </Grid>
+          <Grid item xs={6} sx={{ textAlign: 'justify' }}>
+            {council === 'MCCC' && (
+            <DSTPieChart
+              chartData={piechartData.plantsPerSqftArray}
+              label={pieChartUnits.plantsPerSqft}
+            />
+            )}
+            {(council === 'NECCC' || council === 'SCCC') && (
+            <DSTPieChart
+              chartData={piechartData.seedsPerSqftArray}
+              label={pieChartUnits.seedsPerSqft}
+            />
+            )}
+          </Grid>
+        </>
+      )}
 
       {seedsSelected.map((seed, i) => (
         <Grid item xs={12} key={i}>

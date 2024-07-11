@@ -11,8 +11,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CancelRounded } from '@mui/icons-material';
 
 import {
+  removeMixRatioOptionRedux,
   removeOptionRedux, removeSeedRedux, selectSidebarSeedRedux,
+  setMixRatioOptionRedux,
 } from '../../features/calculatorSlice/actions';
+import { historyStates } from '../../features/userSlice/state';
+import { setHistoryStateRedux, setMaxAvailableStepRedux } from '../../features/userSlice/actions';
 
 const ExitIcon = ({ style }) => (
   <Box sx={style}>
@@ -20,14 +24,15 @@ const ExitIcon = ({ style }) => (
   </Box>
 );
 
-const SeedsSelectedList = ({ list, activeStep }) => {
+const SeedsSelectedList = ({ activeStep }) => {
   // themes
   const theme = useTheme();
   const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
 
   const dispatch = useDispatch();
 
-  const { sideBarSelection } = useSelector((state) => state.calculator);
+  const { sideBarSelection, seedsSelected, mixRatioOptions } = useSelector((state) => state.calculator);
+  const { historyState, maxAvailableStep } = useSelector((state) => state.user);
 
   const selectSpecies = (seed) => {
     dispatch(selectSidebarSeedRedux(sideBarSelection === seed ? '' : seed));
@@ -35,8 +40,16 @@ const SeedsSelectedList = ({ list, activeStep }) => {
 
   const clickItem = (label) => {
     if (activeStep === 1) {
+      if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
       dispatch(removeSeedRedux(label));
+      dispatch(removeMixRatioOptionRedux(label));
       dispatch(removeOptionRedux(label));
+      if (maxAvailableStep > 0) dispatch(setMaxAvailableStepRedux(0));
+      // reset percentOfRate in mixRatioOptions when there's any change in species selection
+      seedsSelected.forEach((s) => {
+        const seedOption = mixRatioOptions[s.label];
+        dispatch(setMixRatioOptionRedux(s.label, { ...seedOption, percentOfRate: null }));
+      });
     } else {
       selectSpecies(label);
     }
@@ -60,7 +73,7 @@ const SeedsSelectedList = ({ list, activeStep }) => {
       display="flex"
       flexDirection={matchesMd ? 'row' : 'column'}
     >
-      {[...list].reverse().map((s, i) => (
+      {[...seedsSelected].reverse().map((s, i) => (
         <Box minWidth={matchesMd ? '120px' : ''} key={i}>
 
           <Card
