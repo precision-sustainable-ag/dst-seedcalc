@@ -25,7 +25,7 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
   const dispatch = useDispatch();
 
   const {
-    seedsSelected, diversitySelected, loading, crops,
+    seedsSelected, loading, crops,
   } = useSelector((state) => state.calculator);
   const {
     soilDrainage, plantingDate, acres, county, council,
@@ -103,7 +103,7 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
 
       // validate next button
       validateForms(
-        seedsSelected.length > 1,
+        seedsSelected.length > 0,
         1,
         completedStep,
         setCompletedStep,
@@ -129,7 +129,7 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
     <Grid container justifyContent="center">
       <Grid item xs={12}>
         <Typography variant="h2">
-          Click 2 or more species for your mix.
+          Select one or more species for your mix.
         </Typography>
         {historyState === historyStates.imported && (
         <Typography sx={{ fontWeight: 'bold', margin: '1rem', marginBottom: '0' }}>
@@ -160,7 +160,8 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
                 Click Show details to see species options, or use the search bar to find a specific species you can pair to create a mix.
               </Typography>
             )
-            : <Diversity diversitySelected={diversitySelected} />}
+            : <Diversity />}
+
         </Box>
       </Grid>
 
