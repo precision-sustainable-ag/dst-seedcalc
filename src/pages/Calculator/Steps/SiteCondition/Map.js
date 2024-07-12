@@ -84,7 +84,7 @@ const Map = ({
           (slice) => slice.label.toLowerCase() === value.toLowerCase(),
         )[0]?.label ?? '';
         dispatch(setSoilDrainageRedux(soilDrainageValue));
-        dispatch(updateTileDrainageRedux(false));
+        dispatch(updateTileDrainageRedux('', false));
       });
     }
   }, [selectedToEditSite]);

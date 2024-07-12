@@ -6,12 +6,8 @@ import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Typography } from '@mui/material';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-
 import styled from '@emotion/styled';
 import NumberTextField from '../../../../components/NumberTextField';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
@@ -19,6 +15,7 @@ import '../steps.scss';
 import { validateForms } from '../../../../shared/utils/format';
 import { historyStates } from '../../../../features/userSlice/state';
 import { setAlertStateRedux, setHistoryStateRedux } from '../../../../features/userSlice/actions';
+import DSTAccordion from '../../../../components/DSTAccordion';
 
 const LeftGrid = styled(Grid)({
   '&.MuiGrid-item': {
@@ -159,64 +156,53 @@ const SeedTagInfo = ({
       {haveSeedTagInfo === true
         && (seedsSelected.map((seed, i) => (
           <Grid item xs={12} key={i}>
-            <Accordion
+            <DSTAccordion
               expanded={accordionState[seed.label]}
               onChange={() => handleExpandAccordion(seed.label)}
+              summary={<Typography>{seed.label}</Typography>}
             >
-              <AccordionSummary
-                expandIcon={(
-                  <Typography sx={{ textDecoration: 'underline' }}>
-                    {accordionState[seed.label] ? 'Hide ' : 'Show '}
-                    Details
-                  </Typography>
-              )}
-              >
-                <Typography>{seed.label}</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Grid container>
-                  <LeftGrid item xs={4} lg={2} xl={2}>
-                    <Typography>% Germination: </Typography>
-                  </LeftGrid>
-                  <Grid item xs={2} lg={1} xl={1}>
-                    <SeedTagNumField
-                      value={(options[seed.label].germination ?? 0.85) * 100}
-                      onChange={(val) => {
-                        updateGermination(seed.label, val / 100);
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={6} lg={1} xl={1} />
-
-                  <LeftGrid item xs={4} lg={2} xl={2}>
-                    <Typography>% Purity: </Typography>
-                  </LeftGrid>
-                  <Grid item xs={2} lg={1} xl={1}>
-                    <SeedTagNumField
-                      value={(options[seed.label].purity ?? 0.9) * 100}
-                      onChange={(val) => {
-                        updatePurity(seed.label, val / 100);
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={6} lg={1} xl={1} />
-
-                  <LeftGrid item xs={4} lg={2} xl={2}>
-                    <Typography>Seeds per Pound </Typography>
-                  </LeftGrid>
-                  <Grid item xs={2} lg={1} xl={1}>
-                    <SeedTagNumField
-                      value={parseFloat(seedsPerPound(seed))}
-                      onChange={(val) => {
-                        updateSeedsPerPound(seed.label, val);
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={6} lg={1} xl={1} />
+              <Grid container>
+                <LeftGrid item xs={4} lg={2} xl={2}>
+                  <Typography>% Germination: </Typography>
+                </LeftGrid>
+                <Grid item xs={2} lg={1} xl={1}>
+                  <SeedTagNumField
+                    value={(options[seed.label].germination ?? 0.85) * 100}
+                    onChange={(val) => {
+                      updateGermination(seed.label, val / 100);
+                    }}
+                  />
                 </Grid>
+                <Grid item xs={6} lg={1} xl={1} />
 
-              </AccordionDetails>
-            </Accordion>
+                <LeftGrid item xs={4} lg={2} xl={2}>
+                  <Typography>% Purity: </Typography>
+                </LeftGrid>
+                <Grid item xs={2} lg={1} xl={1}>
+                  <SeedTagNumField
+                    value={(options[seed.label].purity ?? 0.9) * 100}
+                    onChange={(val) => {
+                      updatePurity(seed.label, val / 100);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={6} lg={1} xl={1} />
+
+                <LeftGrid item xs={4} lg={2} xl={2}>
+                  <Typography>Seeds per Pound </Typography>
+                </LeftGrid>
+                <Grid item xs={2} lg={1} xl={1}>
+                  <SeedTagNumField
+                    value={parseFloat(seedsPerPound(seed))}
+                    onChange={(val) => {
+                      updateSeedsPerPound(seed.label, val);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={6} lg={1} xl={1} />
+              </Grid>
+            </DSTAccordion>
+
           </Grid>
         )))}
     </Grid>

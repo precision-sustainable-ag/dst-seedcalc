@@ -7,10 +7,6 @@ import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { useSelector, useDispatch } from 'react-redux';
 import { Typography, Box } from '@mui/material';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-
 import { Spinner } from '@psa/dst.ui.spinner';
 import SearchField from '../../../../components/SearchField';
 import { seedsType, seedsLabel } from '../../../../shared/data/species';
@@ -22,13 +18,14 @@ import '../steps.scss';
 import { createUserInput, createCalculator } from '../../../../shared/utils/calculator';
 import { setAlertStateRedux } from '../../../../features/userSlice/actions';
 import { historyStates } from '../../../../features/userSlice/state';
+import DSTAccordion from '../../../../components/DSTAccordion';
 
 const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedStep }) => {
   // useSelector for crops reducer data
   const dispatch = useDispatch();
 
   const {
-    seedsSelected, diversitySelected, loading, crops,
+    seedsSelected, loading, crops,
   } = useSelector((state) => state.calculator);
   const {
     soilDrainage, plantingDate, acres, county, council,
@@ -106,7 +103,7 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
 
       // validate next button
       validateForms(
-        seedsSelected.length > 1,
+        seedsSelected.length > 0,
         1,
         completedStep,
         setCompletedStep,
@@ -132,13 +129,10 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
     <Grid container justifyContent="center">
       <Grid item xs={12}>
         <Typography variant="h2">
-          Click 2 or more species for your mix.
+          Select one or more species for your mix.
         </Typography>
         {historyState === historyStates.imported && (
-        <Typography sx={{
-          fontWeight: 'bold', margin: '1rem', marginBottom: '0',
-        }}
-        >
+        <Typography sx={{ fontWeight: 'bold', margin: '1rem', marginBottom: '0' }}>
           <span style={{ color: 'red' }}>Warning: </span>
           Making changes on this page will reset the subsequent steps of the calculation.
         </Typography>
@@ -152,48 +146,38 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
           flexDirection="column"
           p="1rem"
         >
-
           <SearchField handleChange={updateQuery} value={query} />
           {seedsSelected.length === 0
             ? (
               <Typography
-                variant="h2"
                 sx={{
                   backgroundColor: 'transparent',
+                  height: '80px',
+                  display: 'flex',
+                  alignItems: 'center',
                 }}
               >
                 Click Show details to see species options, or use the search bar to find a specific species you can pair to create a mix.
               </Typography>
             )
-            : <Diversity diversitySelected={diversitySelected} />}
+            : <Diversity />}
 
         </Box>
       </Grid>
 
       {seedsType.map((seedType, i) => (
         <Grid item xs={12} key={i}>
-          <Accordion
+          <DSTAccordion
             expanded={accordionState[seedType]}
             onChange={() => handleExpandAccordion(seedType)}
+            summary={<Typography>{seedsLabel[seedType]}</Typography>}
           >
-            <AccordionSummary
-              expandIcon={(
-                <Typography sx={{ textDecoration: 'underline' }}>
-                  {accordionState[seedType] ? 'Hide ' : 'Show '}
-                  Details
-                </Typography>
-              )}
-            >
-              <Typography>{seedsLabel[seedType]}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              {loading && <Spinner />}
-              <PlantList
-                seedType={seedType}
-                filteredSeeds={filteredSeeds}
-              />
-            </AccordionDetails>
-          </Accordion>
+            {loading && <Spinner />}
+            <PlantList
+              seedType={seedType}
+              filteredSeeds={filteredSeeds}
+            />
+          </DSTAccordion>
         </Grid>
       ))}
     </Grid>

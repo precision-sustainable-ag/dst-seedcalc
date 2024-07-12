@@ -9,9 +9,6 @@ import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import { Typography, Button } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
 import MixRatioSteps from './form';
 import DSTPieChart from '../../../../components/DSTPieChart';
 import { UnitSelection, SeedInfo } from '../../../../components/SeedingRateCard';
@@ -26,6 +23,7 @@ import {
   setAlertStateRedux, setHistoryStateRedux, setMaxAvailableStepRedux,
 } from '../../../../features/userSlice/actions';
 import { historyStates } from '../../../../features/userSlice/state';
+import DSTAccordion from '../../../../components/DSTAccordion';
 
 const getCalculatorResult = (council) => {
   const defaultResultMCCC = {
@@ -83,7 +81,7 @@ const MixRatio = ({
 
   const dispatch = useDispatch();
   const {
-    seedsSelected, sideBarSelection, mixRatioOptions,
+    seedsSelected, sideBarSelection, options, mixRatioOptions,
   } = useSelector((state) => state.calculator);
   const {
     council, soilDrainage, plantingDate, acres, county,
@@ -107,7 +105,7 @@ const MixRatio = ({
   // create an key/value pair for the seed and related accordion expanded state
   const [accordionState, setAccordionState] = useState(
     seedsSelected.reduce((res, seed) => {
-      res[seed.label] = false;
+      res[seed.label] = seedsSelected.length === 1;
       return res;
     }, {}),
   );
@@ -127,7 +125,10 @@ const MixRatio = ({
     const seedingRateCalculator = createCalculator(seedsSelected, council, regions, userInput);
     setCalculator(seedingRateCalculator);
     // If historyState is imported, not init options, use mixRatioOptions instead
-    if (historyState !== historyStates.imported) {
+    // or history is imported, but object is {}
+    if (historyState !== historyStates.imported || (
+      historyState === historyStates.imported && Object.keys(options).length === 0
+    )) {
       seedsSelected.forEach((seed) => {
         // if percentOfRate is not null, skip this step(this happens when add new crop for a imported history)
         if (mixRatioOptions[seed.label].percentOfRate === null) {
@@ -170,7 +171,12 @@ const MixRatio = ({
         }));
       }
       // if history is not imported, update mixRatioOptions to options
-      if (historyState !== historyStates.imported && maxAvailableStep <= 1) dispatch(setOptionRedux(seed.label, seedOption));
+      // or history is imported, but object is {}
+      if ((historyState !== historyStates.imported && maxAvailableStep <= 1) || (
+        historyState === historyStates.imported && Object.keys(options).length === 0
+      )) {
+        dispatch(setOptionRedux(seed.label, seedOption));
+      }
       // if history is updated, this will remove previously imported options redux and set it as mixRatioOptions
     });
     // calculate piechart data
@@ -185,12 +191,14 @@ const MixRatio = ({
 
   // expand related accordion based on sidebar click
   useEffect(() => {
-    setAccordionState(
-      seedsSelected.reduce((res, seed) => {
-        res[seed.label] = seed.label === sideBarSelection;
-        return res;
-      }, {}),
-    );
+    if (sideBarSelection !== '') {
+      setAccordionState(
+        seedsSelected.reduce((res, seed) => {
+          res[seed.label] = seed.label === sideBarSelection;
+          return res;
+        }, {}),
+      );
+    }
   }, [sideBarSelection]);
 
   /// ///////////////////////////////////////////////////////
@@ -247,86 +255,78 @@ const MixRatio = ({
         )}
       </Grid>
 
-      <Grid item xs={6} sx={{ textAlign: 'justify' }}>
-        <DSTPieChart
-          chartData={piechartData.seedingRateArray}
-          label={pieChartUnits.poundsOfSeedPerAcre}
-        />
-      </Grid>
+      {seedsSelected.length > 1 && (
+        <>
+          <Grid item xs={6} sx={{ textAlign: 'justify' }}>
+            <DSTPieChart
+              chartData={piechartData.seedingRateArray}
+              label={pieChartUnits.poundsOfSeedPerAcre}
+            />
+          </Grid>
 
-      <Grid item xs={6} sx={{ textAlign: 'justify' }}>
-        {council === 'MCCC' && (
-          <DSTPieChart
-            chartData={piechartData.plantsPerSqftArray}
-            label={pieChartUnits.plantsPerSqft}
-          />
-        )}
-        {(council === 'NECCC' || council === 'SCCC') && (
-        <DSTPieChart
-          chartData={piechartData.seedsPerSqftArray}
-          label={pieChartUnits.seedsPerSqft}
-        />
-        )}
-      </Grid>
+          <Grid item xs={6} sx={{ textAlign: 'justify' }}>
+            {council === 'MCCC' && (
+            <DSTPieChart
+              chartData={piechartData.plantsPerSqftArray}
+              label={pieChartUnits.plantsPerSqft}
+            />
+            )}
+            {(council === 'NECCC' || council === 'SCCC') && (
+            <DSTPieChart
+              chartData={piechartData.seedsPerSqftArray}
+              label={pieChartUnits.seedsPerSqft}
+            />
+            )}
+          </Grid>
+        </>
+      )}
 
       {seedsSelected.map((seed, i) => (
         <Grid item xs={12} key={i}>
-          <Accordion
+          <DSTAccordion
             expanded={accordionState[seed.label]}
             onChange={() => handleExpandAccordion(seed.label)}
+            summary={<Typography>{seed.label}</Typography>}
           >
-            <AccordionSummary
-              expandIcon={(
-                <Typography sx={{ textDecoration: 'underline' }}>
-                  {accordionState[seed.label] ? 'Hide ' : 'Show '}
-                  Details
-                </Typography>
-              )}
-            >
-              <Typography>{seed.label}</Typography>
-            </AccordionSummary>
+            <Grid container>
+              <SeedInfo
+                seed={seed}
+                seedData={seedData}
+                calculatorResult={calculatorResult}
+                handleFormValueChange={handleFormValueChange}
+                council={council}
+                options={mixRatioOptions[seed.label]}
+              />
 
-            <AccordionDetails>
-              <Grid container>
-                <SeedInfo
-                  seed={seed}
-                  seedData={seedData}
-                  calculatorResult={calculatorResult}
-                  handleFormValueChange={handleFormValueChange}
+              <Grid item xs={12}>
+                <UnitSelection />
+              </Grid>
+
+              <Grid item xs={12} pt="1rem">
+                <Button
+                  sx={{
+                    borderRadius: '1rem',
+                  }}
+                  onClick={() => {
+                    setShowSteps({ ...showSteps, [seed.label]: !showSteps[seed.label] });
+                  }}
+                  variant="outlined"
+                >
+                  {showSteps[seed.label] ? 'Close Steps' : 'View Calculations'}
+                </Button>
+              </Grid>
+
+              <Grid item xs={12}>
+                {showSteps[seed.label] && (
+                <MixRatioSteps
                   council={council}
+                  calculatorResult={calculatorResult[seed.label]}
                   options={mixRatioOptions[seed.label]}
                 />
-
-                <Grid item xs={12}>
-                  <UnitSelection />
-                </Grid>
-
-                <Grid item xs={12} pt="1rem">
-                  <Button
-                    sx={{
-                      borderRadius: '1rem',
-                    }}
-                    onClick={() => {
-                      setShowSteps({ ...showSteps, [seed.label]: !showSteps[seed.label] });
-                    }}
-                    variant="outlined"
-                  >
-                    {showSteps[seed.label] ? 'Close Steps' : 'View Calculations'}
-                  </Button>
-                </Grid>
-
-                <Grid item xs={12}>
-                  {showSteps[seed.label] && (
-                  <MixRatioSteps
-                    council={council}
-                    calculatorResult={calculatorResult[seed.label]}
-                    options={mixRatioOptions[seed.label]}
-                  />
-                  )}
-                </Grid>
+                )}
               </Grid>
-            </AccordionDetails>
-          </Accordion>
+            </Grid>
+          </DSTAccordion>
         </Grid>
       ))}
     </Grid>
