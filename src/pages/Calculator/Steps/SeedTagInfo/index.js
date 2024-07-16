@@ -16,6 +16,7 @@ import { validateForms } from '../../../../shared/utils/format';
 import { historyStates } from '../../../../features/userSlice/state';
 import { setAlertStateRedux, setHistoryStateRedux } from '../../../../features/userSlice/actions';
 import DSTAccordion from '../../../../components/DSTAccordion';
+import pirschAnalytics from '../../../../shared/utils/analytics';
 
 const LeftGrid = styled(Grid)({
   '&.MuiGrid-item': {
@@ -138,14 +139,20 @@ const SeedTagInfo = ({
           <Grid item xs={12} display="flex" justifyContent="center" gap="1rem">
             <Button
               variant="outlined"
-              onClick={() => setHaveSeedTagInfo(true)}
+              onClick={() => {
+                setHaveSeedTagInfo(true);
+                pirschAnalytics('Seed Tag Info', { meta: { 'Have Seed Tag Info': true } });
+              }}
             >
               Yes
               <CheckIcon color="primary.dark" />
             </Button>
             <Button
               variant="outlined"
-              onClick={() => setHaveSeedTagInfo(true)}
+              onClick={() => {
+                setHaveSeedTagInfo(true);
+                pirschAnalytics('Seed Tag Info', { meta: { 'Have Seed Tag Info': false } });
+              }}
             >
               No
               <CloseIcon color="error" />
