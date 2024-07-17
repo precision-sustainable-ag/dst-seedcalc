@@ -10,6 +10,7 @@ import { setSiteConditionRedux } from '../../features/siteConditionSlice/actions
 import useUserHistory from '../../shared/hooks/useUserHistory';
 import Dropdown from '../Dropdown';
 import { setHistoryDialogStateRedux } from '../../features/userSlice/actions';
+import pirschAnalytics from '../../shared/utils/analytics';
 
 const modalStyle = {
   position: 'absolute',
@@ -39,7 +40,22 @@ const DSTImport = ({ token }) => {
   //                  Import Logic                        //
   /// ///////////////////////////////////////////////////////
 
+  const handleCreateNewHistory = () => {
+    pirschAnalytics('History', {
+      meta: {
+        history: 'Create calculation',
+      },
+    });
+    dispatch(setHistoryDialogStateRedux({ open: true, type: 'add' }));
+    setOpenModal(false);
+  };
+
   const handleFileUpload = (event) => {
+    pirschAnalytics('History', {
+      meta: {
+        history: 'Import CSV',
+      },
+    });
     Papa.parse(event.target.files[0], {
       header: true,
       skipEmptyLines: true,
@@ -55,6 +71,11 @@ const DSTImport = ({ token }) => {
   };
 
   const handleLoadUserHistory = () => {
+    pirschAnalytics('History', {
+      meta: {
+        history: 'Import calculation',
+      },
+    });
     loadHistory(token, calculationName);
     setOpenModal(!openModal);
   };
@@ -89,10 +110,7 @@ const DSTImport = ({ token }) => {
                 <Grid item xs={12} display="flex" justifyContent="center">
                   <Button
                     variant="contained"
-                    onClick={() => {
-                      dispatch(setHistoryDialogStateRedux({ open: true, type: 'add' }));
-                      setOpenModal(false);
-                    }}
+                    onClick={handleCreateNewHistory}
                   >
                     create new calculation
                   </Button>
