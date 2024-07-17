@@ -7,7 +7,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
 import AuthButton from '../Auth/AuthButton';
 
-const patchNotesURL = 'https://precision-sustainable-ag.atlassian.net/wiki/spaces/DST/pages/285147137/Seeding+Rate+Calculator+Patch+Notes';
+const patchNotesURL = 'https://precision-sustainable-ag.atlassian.net/wiki/spaces/DST/pages/285147137/Seeding+Rate+Calculator+Release+Notes';
 
 const NavBar = () => {
   const [anchor, setAnchor] = useState(null);
