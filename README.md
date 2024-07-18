@@ -14,7 +14,7 @@ To see the documents for this tool, visit [the wiki pages](https://precision-sus
 
 **Date Created:** 02/16/22
 
-**Date Last Modified:** 06/03/24
+**Date Last Modified:** 07/18/24
 
 ### Table of Contents
 
@@ -56,6 +56,7 @@ The technologies we are currently using in this repo:
     REACT_APP_AUTH0_AUDIENCE="<auth0 audience>"
     REACT_APP_USER_HISTORY_API_URL="<user history url>"
     REACT_APP_USER_HISTORY_SCHEMA="<schema>"
+    REACT_APP_RELEASE_NOTES_URL="<release notes url>"
     ```
 
 5. After the dependencies have been installed and the .env file has been created, run `npm start` to run the code locally. 
