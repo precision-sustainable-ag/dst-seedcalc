@@ -131,7 +131,9 @@ const MixSeedingRate = ({ calculator }) => {
     });
     dispatch(setAdjustedMixSeedingRateRedux(adjustedMixSeedingRate));
     if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
-    pirschAnalytics('Mix Seeding Rate');
+    pirschAnalytics('Mix Seeding Rate', {
+      meta: { mixSeedingRate: 'update Mix Seeding Rate' },
+    });
   };
 
   /// ///////////////////////////////////////////////////////

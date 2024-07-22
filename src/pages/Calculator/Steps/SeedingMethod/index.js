@@ -102,7 +102,9 @@ const SeedingMethod = ({ alertState }) => {
     }));
     setSelectedMethod(method);
     if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
-    pirschAnalytics('Seeding Method');
+    pirschAnalytics('Seeding Method', {
+      meta: { method },
+    });
   };
 
   /// ///////////////////////////////////////////////////////
