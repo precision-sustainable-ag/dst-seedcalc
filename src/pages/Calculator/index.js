@@ -247,8 +247,9 @@ const Calculator = () => {
               alt={siteCondition.council}
               src={headerLogo()}
               height="75px"
+              data-test="header_logo"
             />
-            <Typography variant="dstHeader" pl="1rem">
+            <Typography variant="dstHeader" pl="1rem" data-test="page_caption">
               Seeding Rate Calculator
             </Typography>
           </Grid>

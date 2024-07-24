@@ -161,6 +161,7 @@ const StepsList = ({
               variant="stepper"
               disabled={availableSteps[activeStep] !== true}
               onClick={handleNext}
+              data-test="next_button"
             >
               {activeStep === calculatorList.length - 1
                 ? 'Finish'

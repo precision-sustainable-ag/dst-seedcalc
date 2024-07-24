@@ -17,7 +17,9 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 }
 */
 
-const DatePicker = ({ label, value, handleChange }) => (
+const DatePicker = ({
+  label, value, handleChange, testId,
+}) => (
   <LocalizationProvider dateAdapter={AdapterDayjs}>
     <Stack spacing={3}>
       <DesktopDatePicker
@@ -26,6 +28,7 @@ const DatePicker = ({ label, value, handleChange }) => (
         value={value}
         onChange={handleChange}
         renderInput={(params) => <TextField {...params} />}
+        data-test={testId}
       />
     </Stack>
   </LocalizationProvider>

@@ -162,8 +162,22 @@ const SiteCondition = ({
                         Would you like to manually enter your site conditions
                         or use your location to prepopulate them?
                       </Typography>
-                      <Button variant="contained" onClick={() => setSiteConditionStep(2)} sx={{ margin: '1rem' }}>Map</Button>
-                      <Button variant="contained" onClick={() => setSiteConditionStep(3)} sx={{ margin: '1rem' }}>Manually Enter</Button>
+                      <Button
+                        variant="contained"
+                        onClick={() => setSiteConditionStep(2)}
+                        sx={{ margin: '1rem' }}
+                        data-test="option_map"
+                      >
+                        Map
+                      </Button>
+                      <Button
+                        variant="contained"
+                        onClick={() => setSiteConditionStep(3)}
+                        sx={{ margin: '1rem' }}
+                        data-test="option_manually"
+                      >
+                        Manually Enter
+                      </Button>
                     </Grid>
                   )
                   : (

@@ -25,6 +25,7 @@ const Dropdown = ({
   emptyWarning,
   disabled = false,
   minWidth = 120,
+  testId,
 }) => (
   <Box sx={{ color: '#4F5F30' }}>
     <FormControl fullWidth sx={{ minWidth }}>
@@ -35,9 +36,10 @@ const Dropdown = ({
         value={value}
         label={label}
         onChange={handleChange}
+        data-test={testId}
       >
         {items.map((item, i) => (
-          <MenuItem key={`${item}${i}`} value={item.label} color="#4F5F30">
+          <MenuItem key={`${item}${i}`} value={item.label} color="#4F5F30" data-test={`option-${item.label}`}>
             {item.label}
           </MenuItem>
         ))}

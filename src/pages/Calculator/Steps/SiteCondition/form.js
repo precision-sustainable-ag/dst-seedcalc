@@ -156,6 +156,7 @@ const SiteConditionForm = ({
           handleChange={handleState}
           size={12}
           items={stateList}
+          testId="site_condition_state"
         />
       </Grid>
       <Grid item xs={0} md={3} />
@@ -172,6 +173,7 @@ const SiteConditionForm = ({
           handleChange={handleRegion}
           size={12}
           items={regions}
+          testId="site_condition_region"
         />
       </Grid>
       <Grid item xs={0} md={3} />
@@ -186,6 +188,7 @@ const SiteConditionForm = ({
           handleChange={handleSoilDrainage}
           size={12}
           items={getSoilDrainages(council)}
+          testId="site_condition_soil_drainage"
         />
       </Grid>
       <Grid item xs={0} md={3} />
@@ -223,6 +226,7 @@ const SiteConditionForm = ({
                   checked={tileDrainage}
                   handleChange={handleTileDrainage}
                   disabled={!tileDrainage && (needTileDrainage.indexOf(soilDrainage) === -1 || council === '')}
+                  testId="site_condition_tile_drainage"
                 />
                 <Typography display="inline">
                   Yes
@@ -255,6 +259,7 @@ const SiteConditionForm = ({
             const formattedDate = dayjs(e).format('MM/DD/YYYY');
             dispatch(setPlantingDateRedux(formattedDate));
           }}
+          data-test="site_condition_date"
         />
       </Grid>
       <Grid item xs={0} md={3} />
@@ -271,6 +276,7 @@ const SiteConditionForm = ({
             dispatch(setAcresRedux(value));
           }}
           placeholder="Enter your field acres here"
+          testId="site_condition_acres"
         />
       </Grid>
       <Grid item xs={0} md={3} />

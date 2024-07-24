@@ -12,7 +12,9 @@ import { Switch } from '@mui/material';
 */
 
 const label = { inputProps: { 'aria-label': 'Switch' } };
-const DSTSwitch = ({ checked, handleChange, disabled = false }) => (
+const DSTSwitch = ({
+  checked, handleChange, disabled = false, testId,
+}) => (
   <Switch
     {...label}
     checked={checked}
@@ -25,6 +27,7 @@ const DSTSwitch = ({ checked, handleChange, disabled = false }) => (
       },
     }}
     disabled={disabled}
+    data-test={testId}
   />
 );
 export default DSTSwitch;
