@@ -13,8 +13,10 @@ describe('Site Condition landing page', () => {
   });
 
   it('shows the options of use map or edit manually after click a state on map', () => {
+    cy.get('.mapboxgl-canvas').should('be.visible');
+    cy.get('div[class^="map_loadingContainer"]').should('not.exist');
     // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(3000);
+    cy.wait(1000);
     // click on Indiana
     cy.get('.mapboxgl-canvas').should('be.visible').trigger('click', 525, 160);
     cy.getByTestId('option_map').should('be.visible');
@@ -22,13 +24,19 @@ describe('Site Condition landing page', () => {
   });
 });
 
+const clickStateMap = () => {
+  cy.visit('/');
+  cy.get('.mapboxgl-canvas').should('be.visible');
+  cy.get('div[class^="map_loadingContainer"]').should('not.exist');
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
+  cy.wait(1000);
+  // click on Indiana
+  cy.get('.mapboxgl-canvas').should('be.visible').trigger('click', 525, 160);
+};
+
 describe('Site Condition form', () => {
   beforeEach(() => {
-    cy.visit('/');
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(3000);
-    // click on Indiana
-    cy.get('.mapboxgl-canvas').should('be.visible').trigger('click', 525, 160);
+    clickStateMap();
     cy.getByTestId('option_manually').should('be.visible').click();
   });
 
@@ -57,3 +65,16 @@ describe('Site Condition form', () => {
     cy.getByTestId('next_button').should('not.be.disabled');
   });
 });
+
+const mockSiteCondition = () => {
+  clickStateMap();
+  cy.getByTestId('option_manually').should('be.visible').click();
+  cy.getByTestId('site_condition_region').click();
+  cy.get('[data-test="option-Adams"]').click();
+  cy.getByTestId('site_condition_soil_drainage').click();
+  cy.get('[data-test="option-Poorly Drained"]').click();
+  cy.getByTestId('site_condition_acres').find('input').type('1');
+  cy.getByTestId('next_button').click();
+};
+
+export default mockSiteCondition;
