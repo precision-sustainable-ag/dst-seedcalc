@@ -167,6 +167,7 @@ const PlantList = ({
                 boxShadow: 'none',
                 width: '160px',
               }}
+              data-test={`species-card-${seed.label}`}
             >
               <CardActionArea
                 onClick={() => {

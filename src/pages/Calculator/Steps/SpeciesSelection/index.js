@@ -146,7 +146,7 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
           flexDirection="column"
           p="1rem"
         >
-          <SearchField handleChange={updateQuery} value={query} />
+          <SearchField handleChange={updateQuery} value={query} testId="species-selection-search" />
           {seedsSelected.length === 0
             ? (
               <Typography
@@ -171,6 +171,7 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
             expanded={accordionState[seedType]}
             onChange={() => handleExpandAccordion(seedType)}
             summary={<Typography>{seedsLabel[seedType]}</Typography>}
+            testId={`accordion-${seedType}`}
           >
             {loading && <Spinner />}
             <PlantList
