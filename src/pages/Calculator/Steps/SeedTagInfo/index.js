@@ -100,6 +100,11 @@ const SeedTagInfo = ({
     setAccordionState({ ...accordionState, [label]: !open });
   };
 
+  const handleHaveSeedTagInfo = (selection) => {
+    setHaveSeedTagInfo(selection);
+    pirschAnalytics('Seed Tag Info', { meta: { 'Have Seed Tag Info': true } });
+  };
+
   // initially set germination and purity
   useEffect(() => {
     seedsSelected.forEach((seed) => {
@@ -139,20 +144,14 @@ const SeedTagInfo = ({
           <Grid item xs={12} display="flex" justifyContent="center" gap="1rem">
             <Button
               variant="outlined"
-              onClick={() => {
-                setHaveSeedTagInfo(true);
-                pirschAnalytics('Seed Tag Info', { meta: { 'Have Seed Tag Info': true } });
-              }}
+              onClick={() => handleHaveSeedTagInfo(true)}
             >
               Yes
               <CheckIcon color="primary.dark" />
             </Button>
             <Button
               variant="outlined"
-              onClick={() => {
-                setHaveSeedTagInfo(true);
-                pirschAnalytics('Seed Tag Info', { meta: { 'Have Seed Tag Info': false } });
-              }}
+              onClick={() => handleHaveSeedTagInfo(false)}
             >
               No
               <CloseIcon color="error" />

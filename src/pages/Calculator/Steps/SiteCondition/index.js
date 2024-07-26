@@ -77,6 +77,16 @@ const SiteCondition = ({
     }
   };
 
+  const handleSiteConditionSelection = (selection) => {
+    if (selection === 'use map') setSiteConditionStep(2);
+    if (selection === 'manually enter') setSiteConditionStep(3);
+    pirschAnalytics('Site Condition', {
+      meta: {
+        selection: `${selection}`,
+      },
+    });
+  };
+
   // initially get states data
   useEffect(() => {
     const getStates = async () => {
@@ -165,28 +175,14 @@ const SiteCondition = ({
                       </Typography>
                       <Button
                         variant="contained"
-                        onClick={() => {
-                          setSiteConditionStep(2);
-                          pirschAnalytics('Site Condition', {
-                            meta: {
-                              selection: 'use map',
-                            },
-                          });
-                        }}
+                        onClick={() => handleSiteConditionSelection('use map')}
                         sx={{ margin: '1rem' }}
                       >
                         Map
                       </Button>
                       <Button
                         variant="contained"
-                        onClick={() => {
-                          setSiteConditionStep(3);
-                          pirschAnalytics('Site Condition', {
-                            meta: {
-                              selection: 'manually enter',
-                            },
-                          });
-                        }}
+                        onClick={() => handleSiteConditionSelection('manually enter')}
                         sx={{ margin: '1rem' }}
                       >
                         Manually Enter
