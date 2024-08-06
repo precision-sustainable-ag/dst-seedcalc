@@ -27,3 +27,15 @@ export const mockSpeciesSelection = () => {
   cy.getByTestId(`species-card-${selectSpecies}`).find('button').click();
   cy.getByTestId('next_button').click();
 };
+
+export const mockMixRatio = () => {
+  cy.getByTestId('next_button').click();
+};
+
+export const mockSeedingMethod = () => {
+  cy.getByTestId('next_button').click();
+};
+
+export const mockMixSeedingRate = () => {
+  cy.getByTestId('next_button').click();
+};
