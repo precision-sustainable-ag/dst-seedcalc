@@ -287,6 +287,7 @@ const MixRatio = ({
             expanded={accordionState[seed.label]}
             onChange={() => handleExpandAccordion(seed.label)}
             summary={<Typography>{seed.label}</Typography>}
+            testId={`accordion-${seed.label}`}
           >
             <Grid container>
               <SeedInfo
@@ -311,6 +312,7 @@ const MixRatio = ({
                     setShowSteps({ ...showSteps, [seed.label]: !showSteps[seed.label] });
                   }}
                   variant="outlined"
+                  data-test="show_calculation_button"
                 >
                   {showSteps[seed.label] ? 'Close Steps' : 'View Calculations'}
                 </Button>

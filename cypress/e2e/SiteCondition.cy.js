@@ -32,6 +32,8 @@ describe('Site Condition form', () => {
     cy.getByTestId('option_manually').should('be.visible').click();
   });
 
+  // TODO: test with NECCC, SCCC and NRCS
+
   it('will only have state and planting date filled if select manually enter', () => {
     cy.getByTestId('site_condition_state').find('input').should('have.value', 'Indiana');
     cy.getByTestId('site_condition_region').find('input').should('have.value', '');

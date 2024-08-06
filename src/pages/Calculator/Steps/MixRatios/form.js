@@ -242,7 +242,7 @@ const MixRatioSteps = ({
       {/* Step 2: */}
       <>
         <Grid item xs={12}>
-          <Typography variant="stepHeader">Seeds per Acre</Typography>
+          <Typography variant="stepHeader" data-test="seeds_per_acre">Seeds per Acre</Typography>
         </Grid>
         {renderFormLabel(
           'Seeds per Pound',

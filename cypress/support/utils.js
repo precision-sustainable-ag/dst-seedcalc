@@ -19,3 +19,11 @@ export const mockSiteCondition = () => {
   cy.getByTestId('site_condition_acres').find('input').type('1');
   cy.getByTestId('next_button').click();
 };
+
+export const mockSpeciesSelection = () => {
+  const selectType = 'Brassica';
+  const selectSpecies = 'Radish, Daikon';
+  cy.getByTestId(`accordion-${selectType}`).click();
+  cy.getByTestId(`species-card-${selectSpecies}`).find('button').click();
+  cy.getByTestId('next_button').click();
+};

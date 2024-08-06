@@ -30,6 +30,7 @@ const UnitSelection = () => {
         sx={{ borderRadius: '1rem' }}
         variant={unit === 'acre' ? 'outlined' : 'contained'}
         onClick={() => dispatch(selectUnitRedux('sqft'))}
+        data-test="unit_sqft"
       >
         {seedDataUnits.sqft}
       </Button>
@@ -38,6 +39,7 @@ const UnitSelection = () => {
         sx={{ borderRadius: '1rem' }}
         variant={unit === 'acre' ? 'contained' : 'outlined'}
         onClick={() => dispatch(selectUnitRedux('acre'))}
+        data-test="unit_acre"
       >
         {seedDataUnits.acre}
       </Button>
@@ -135,10 +137,10 @@ const SeedInfo = ({
       <Grid item xs={12} md={8} pt="1rem">
         <Grid container>
           <Grid item xs={4}>
-            <SeedingRateChip value={singleData.seedingRate} />
+            <SeedingRateChip value={singleData.seedingRate} testId={`${seed.label}-${seedDataUnits.defaultSingelSpeciesSeedingRatePLS}-value`} />
           </Grid>
           <Grid item xs={4}>
-            <SeedingRateChip value={formatToHundredth(singleData.plantValue)} />
+            <SeedingRateChip value={formatToHundredth(singleData.plantValue)} testId={`${seed.label}-${seedDataUnits.approxPlantsper}-value`} />
           </Grid>
           <Grid item xs={4}>
             <SeedingRateChip value={formatToHundredth(singleData.seedValue)} />
@@ -147,6 +149,7 @@ const SeedInfo = ({
             <SeedLabel
               label={`${seedDataUnits.defaultSingelSpeciesSeedingRatePLS} per `}
               unit={unit === 'sqft' ? seedDataUnits.tsqft : unitText}
+              testId={`${seed.label}-${seedDataUnits.defaultSingelSpeciesSeedingRatePLS}-label`}
             />
           </Grid>
           <Grid item xs={4}>
@@ -165,7 +168,7 @@ const SeedInfo = ({
 
         <Grid container>
           <Grid item xs={4}>
-            <SeedingRateChip value={mixData.seedingRate} />
+            <SeedingRateChip value={mixData.seedingRate} testId={`${seed.label}-${seedDataUnits.seedingRateinMix}-value`} />
           </Grid>
           <Grid item xs={4}>
             <SeedingRateChip value={formatToHundredth(mixData.plantValue)} />
@@ -220,7 +223,10 @@ const SeedInfo = ({
             max={100}
             value={percentOfRate}
             valueLabelDisplay="auto"
-            onChange={(e) => setPercentOfRate(e.target.value)}
+            onChange={(e, value) => {
+              if (value !== undefined) setPercentOfRate(value);
+              else setPercentOfRate(e.target.value);
+            }}
             onChangeCommitted={() => {
               if (council === 'NECCC') {
                 // TODO: NOTE: if council is NECCC, the percentOfRate need to multiply by soilFertilityModifier
@@ -229,6 +235,7 @@ const SeedInfo = ({
                 handleFormValueChange(seed, 'percentOfRate', parseFloat(percentOfRate) / 100);
               }
             }}
+            data-test="slider_percent_of_rate"
           />
         </Grid>
 
@@ -245,6 +252,7 @@ const SeedInfo = ({
               valueLabelDisplay="auto"
               onChange={(e) => setSurvival(e.target.value)}
               onChangeCommitted={() => handleFormValueChange(seed, 'percentSurvival', parseFloat(survival) / 100)}
+              data-test="slider_survival"
             />
           </Grid>
         )}
@@ -254,7 +262,7 @@ const SeedInfo = ({
   );
 };
 
-const SeedingRateChip = ({ value }) => (
+const SeedingRateChip = ({ value, testId }) => (
   <Box
     sx={{
       width: '100px',
@@ -263,13 +271,14 @@ const SeedingRateChip = ({ value }) => (
       border: '#D3D3D3 solid 2px',
       opacity: '0.6',
     }}
+    data-test={testId}
   >
     <Typography>{value}</Typography>
   </Box>
 );
 
-const SeedLabel = ({ label, unit }) => (
-  <Typography lineHeight="1rem" fontSize="0.8rem" padding="0.5rem 0">
+const SeedLabel = ({ label, unit, testId }) => (
+  <Typography lineHeight="1rem" fontSize="0.8rem" padding="0.5rem 0" data-test={testId}>
     {label}
     <span style={{ fontWeight: 'bold' }}>{unit}</span>
   </Typography>
