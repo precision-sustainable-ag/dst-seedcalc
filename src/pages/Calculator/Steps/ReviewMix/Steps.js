@@ -58,7 +58,7 @@ const ReviewMixSteps = ({
   const { soilFertilityModifier } = calculatorResult.step1;
 
   const FormSlider = ({
-    range, label, val, onChangeCommitted, unit, step = 1,
+    range, label, val, onChangeCommitted, unit, step = 1, testId,
   }) => {
     const [value, setValue] = useState(val);
 
@@ -87,6 +87,7 @@ const ReviewMixSteps = ({
             onChangeCommitted={() => {
               onChangeCommitted(value);
             }}
+            data-test={testId}
           />
         </Grid>
         <Grid item xs={2} md={6} />
@@ -127,6 +128,7 @@ const ReviewMixSteps = ({
               handleFormValueChange(seed, 'percentOfRate', (soilFertilityModifier * parseFloat(val)) / 100);
             }}
             unit="%"
+            testId="percent_slider"
           />
           <Grid item xs={12} p="0.5rem" />
 
@@ -201,6 +203,7 @@ const ReviewMixSteps = ({
               handleFormValueChange(seed, 'percentOfRate', parseFloat(val) / 100);
             }}
             unit="%"
+            testId="percent_slider"
           />
           <Grid item xs={12} p="0.5rem" />
 
@@ -265,6 +268,7 @@ const ReviewMixSteps = ({
             }}
             unit="Lbs per Acre"
             step={0.1}
+            testId="seeding_rate_slider"
           />
 
           <FormSlider
@@ -275,6 +279,7 @@ const ReviewMixSteps = ({
               handleFormValueChange(seed, 'percentOfRate', parseFloat(val) / 100);
             }}
             unit="%"
+            testId="percent_slider"
           />
           <Grid item xs={12} p="0.5rem" />
 
@@ -357,7 +362,7 @@ const ReviewMixSteps = ({
       {/* Step 2: */}
       <>
         <Grid item xs={12}>
-          <Typography variant="stepHeader">Adjustment from Seeding Method</Typography>
+          <Typography variant="stepHeader" data-test="adjustment_from_seeding_method">Adjustment from Seeding Method</Typography>
         </Grid>
         <Grid item xs={3} />
         <Grid item xs={6} paddingLeft="1rem" paddingBottom="1rem">
@@ -376,6 +381,7 @@ const ReviewMixSteps = ({
               });
             }}
             items={getSeedingMethods()}
+            testId="seeding_method_selection"
           />
         </Grid>
         {renderStepsForm(
@@ -478,6 +484,7 @@ const ReviewMixSteps = ({
             handleFormValueChange(seed, 'germination', parseFloat(val) / 100);
           }}
           unit="%"
+          testId="germination_slider"
         />
         <FormSlider
           range={[0, 100]}
@@ -487,6 +494,7 @@ const ReviewMixSteps = ({
             handleFormValueChange(seed, 'purity', parseFloat(val) / 100);
           }}
           unit="%"
+          testId="purity_slider"
         />
         <Grid item xs={12} p="0.5rem" />
 

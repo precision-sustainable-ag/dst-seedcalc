@@ -260,6 +260,7 @@ const ReviewMix = ({ calculator }) => {
                     setShowSteps({ ...showSteps, [seed.label]: !showSteps[seed.label] });
                   }}
                   variant="outlined"
+                  data-test="change_my_rate_button"
                 >
                   {showSteps[seed.label] ? 'Close Steps' : 'Change My Rate'}
                 </Button>

@@ -39,3 +39,12 @@ export const mockSeedingMethod = () => {
 export const mockMixSeedingRate = () => {
   cy.getByTestId('next_button').click();
 };
+
+export const mockSeedTagInfo = () => {
+  cy.getByTestId('selection_yes').click();
+  cy.getByTestId('next_button').click();
+};
+
+export const mockReviewMix = () => {
+  cy.getByTestId('next_button').click();
+};

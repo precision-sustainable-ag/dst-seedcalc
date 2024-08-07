@@ -97,6 +97,7 @@ const DSTBarChart = ({ seed, calculatorResult }) => {
         <Button
           onClick={() => setIndex(index - 1)}
           disabled={index === 0}
+          data-test="barchart_back"
         >
           <ArrowBackIosNewIcon />
           Back
@@ -107,6 +108,7 @@ const DSTBarChart = ({ seed, calculatorResult }) => {
         <Button
           onClick={() => setIndex((index + 1) % 5)}
           disabled={index === 4}
+          data-test="barchart_next"
         >
           Next
           <ArrowForwardIosIcon />

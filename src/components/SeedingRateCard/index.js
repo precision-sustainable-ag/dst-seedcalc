@@ -311,10 +311,14 @@ const SeedingRateCard = ({
       </Typography>
 
       <SeedLabel
-        label="Seeding Rate "
+        label={seedDataUnits.seedingRate}
         unit={seedDataUnits.lbsper + (unit === 'acre' ? seedDataUnits.acre : seedDataUnits.tsqft)}
+        testId={`${seedingRateLabel}-${seedDataUnits.seedingRate}-label`}
       />
-      <SeedingRateChip value={displayValue.seedingRateValue} />
+      <SeedingRateChip
+        value={displayValue.seedingRateValue}
+        testId={`${seedingRateLabel}-${seedDataUnits.seedingRate}-value`}
+      />
 
       <SeedLabel
         label={seedDataUnits.approxPlantsper}
