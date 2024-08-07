@@ -48,3 +48,7 @@ export const mockSeedTagInfo = () => {
 export const mockReviewMix = () => {
   cy.getByTestId('next_button').click();
 };
+
+export const mockConfirmPlan = () => {
+  cy.getByTestId('next_button').click();
+};

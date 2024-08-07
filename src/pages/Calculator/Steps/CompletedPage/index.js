@@ -23,7 +23,7 @@ const CompletedPage = () => {
           <Typography sx={{ fontWeight: 600 }}>
             Questions or Comments?
           </Typography>
-          <Link to="/feedback">
+          <Link to="/feedback" data-test="link_to_feedback">
             <Typography style={{ textDecoration: 'underline' }}>
               Click here to leave feedback
             </Typography>

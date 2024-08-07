@@ -131,13 +131,13 @@ const StepsList = ({
 
         {activeStep !== 0 && (
           activeStep === calculatorList.length ? (
-            <Button variant="stepper" onClick={handleRestart}>
+            <Button variant="stepper" onClick={handleRestart} data-test="restart_button">
               <RestartAltIcon />
               Restart
             </Button>
           )
             : (
-              <Button variant="stepper" onClick={handleBack}>
+              <Button variant="stepper" onClick={handleBack} data-test="back_button">
                 <ArrowBackIosNewIcon />
                 {' '}
                 BACK
