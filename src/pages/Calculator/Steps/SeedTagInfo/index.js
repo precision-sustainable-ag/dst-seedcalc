@@ -139,6 +139,7 @@ const SeedTagInfo = ({
             <Button
               variant="outlined"
               onClick={() => setHaveSeedTagInfo(true)}
+              data-test="selection_yes"
             >
               Yes
               <CheckIcon color="primary.dark" />
@@ -146,6 +147,7 @@ const SeedTagInfo = ({
             <Button
               variant="outlined"
               onClick={() => setHaveSeedTagInfo(true)}
+              data-test="selection_no"
             >
               No
               <CloseIcon color="error" />
@@ -171,6 +173,7 @@ const SeedTagInfo = ({
                     onChange={(val) => {
                       updateGermination(seed.label, val / 100);
                     }}
+                    testId={`${seed.label}-germination`}
                   />
                 </Grid>
                 <Grid item xs={6} lg={1} xl={1} />
@@ -184,6 +187,7 @@ const SeedTagInfo = ({
                     onChange={(val) => {
                       updatePurity(seed.label, val / 100);
                     }}
+                    testId={`${seed.label}-purity`}
                   />
                 </Grid>
                 <Grid item xs={6} lg={1} xl={1} />
@@ -197,6 +201,7 @@ const SeedTagInfo = ({
                     onChange={(val) => {
                       updateSeedsPerPound(seed.label, val);
                     }}
+                    testId={`${seed.label}-seedsPerPound`}
                   />
                 </Grid>
                 <Grid item xs={6} lg={1} xl={1} />
