@@ -50,7 +50,7 @@ describe('Species Selection', () => {
       .should('not.exist');
   });
 
-  it.only('should be able to use the search field to search a species', () => {
+  it('should be able to use the search field to search a species', () => {
     cy.getByTestId('species-selection-search').should('be.visible').type('Radish');
     cy.get('[data-test^="accordion-"]').should('have.class', 'Mui-expanded');
     cy.getByTestId(`accordion-${selectType}`).getByTestId(`species-card-${selectSpecies}`).should('be.visible');

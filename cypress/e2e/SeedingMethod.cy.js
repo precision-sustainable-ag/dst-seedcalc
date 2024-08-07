@@ -19,7 +19,7 @@ describe('Seeding Method', () => {
       .and('have.css', 'border-color', 'rgb(79, 95, 48)');
   });
 
-  it.only('should be able to update the seeding method', () => {
+  it('should be able to update the seeding method', () => {
     const selectMethod = 'Aerial';
     cy.getByTestId('seeding_method_dropdown').click();
     cy.getByTestId(`option-${selectMethod}`).click();

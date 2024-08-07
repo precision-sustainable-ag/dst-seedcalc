@@ -15,7 +15,7 @@ describe('Seed Tag Info', () => {
     mockReviewMix();
   });
 
-  it.only('should be able to export a csv file', () => {
+  it('should be able to export a csv file', () => {
     cy.getByTestId('export_button').click();
     cy.getByTestId('export_csv').should('be.visible');
     cy.getByTestId('export_csv').click();

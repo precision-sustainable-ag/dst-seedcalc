@@ -19,7 +19,7 @@ describe('Seed Tag Info', () => {
     cy.getByTestId('next_button').should('not.be.disabled');
   });
 
-  it.only('should be able to update value after make selection', () => {
+  it('should be able to update value after make selection', () => {
     const testValue = 50;
     cy.getByTestId('selection_yes').click();
     cy.getByTestId(`${selectSpecies}-germination`).find('input').clear();
