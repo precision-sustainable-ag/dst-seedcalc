@@ -64,13 +64,13 @@ const ExportModal = () => {
               </Typography>
             </Grid>
             <Grid item xs={12} display="flex" justifyContent="center">
-              <Button variant="contained" onClick={handleExportcsv}>Export to csv</Button>
+              <Button variant="contained" onClick={handleExportcsv} data-test="export_csv">Export to csv</Button>
             </Grid>
           </Grid>
 
         </Box>
       </Modal>
-      <Button sx={buttonStyles} onClick={() => setOpen(true)}>
+      <Button sx={buttonStyles} onClick={() => setOpen(true)} data-test="export_button">
         Export
       </Button>
     </>
