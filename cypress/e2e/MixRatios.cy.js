@@ -44,52 +44,7 @@ describe('Mix Ratios', () => {
     cy.getByTestId('seeds_per_acre').should('be.visible');
   });
 
-  // it.only('should be able to update calculation when adjust values from scoller', { scrollBehavior: 'center' }, () => {
-  //   cy.getByTestId('slider_percent_of_rate').then((slider) => {
-  //     const boundingBox = slider[0].getBoundingClientRect();
-  //     const { width } = boundingBox;
-  //     const stepLength = width / 100;
-
-  //     cy.wrap(slider).find('.MuiSlider-thumb').trigger('mousedown', { which: 1, force: true });
-  //     // eslint-disable-next-line cypress/unsafe-to-chain-command
-  //     cy.wrap(slider)
-  //       .trigger('mousemove', { which: 1, pageX: boundingBox.right - 50 * stepLength, force: true })
-  //       .trigger('mouseup');
-  //   });
-
-  //   // cy.getByTestId('slider_percent_of_rate').reactComponent()
-  //   //   .its('memoizedProps.ownerState').then((state) => {
-  //   //     cy.wrap(state).invoke('onChange', null, 50);
-  //   //     // cy.wait(1000);
-  //   //     // cy.wrap(state).invoke('onChangeCommitted');
-  //   //   });
-  //   // cy.getByTestId('slider_percent_of_rate').find('.MuiSlider-thumb')
-  //   //   .trigger('mousedown').trigger('mouseup');
-
-  //   // cy.getByTestId('slider_percent_of_rate');
-  // });
-
-  // it('mui slider tests', () => {
-  //   cy.visit('https://mui.com/material-ui/react-slider/');
-  //   // eslint-disable-next-line cypress/unsafe-to-chain-command
-  //   // cy.get('.MuiSlider-root .MuiSlider-thumb').first().then((slider) => {
-  //   //   cy.wrap(slider).trigger('mousedown', { which: 1, force: true })
-  //   //     .trigger('mousemove', { which: 1, pageX: 546, force: true })
-  //   //     .trigger('mouseup');
-  //   // });
-
-  //   cy.get('.MuiSlider-root').first().then((slider) => {
-  //     const boundingBox = slider[0].getBoundingClientRect();
-  //     const { width } = boundingBox;
-  //     const stepLength = width / 100;
-
-  //     cy.wrap(slider).click('left', 0);
-  //   });
-
-  //   // cy.get('.MuiSlider-root').first().reactComponent()
-  //   //   .its('memoizedProps.ownerState')
-  //   //   .then((state) => {
-  //   //     cy.wrap(state).invoke('onChange', null, 50);
-  //   //   });
-  // });
+  it.only('should be able to update calculation when adjust values from scoller', { scrollBehavior: 'center' }, () => {
+    cy.updateSlider('slider_percent_of_rate', 65);
+  });
 });

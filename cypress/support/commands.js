@@ -49,3 +49,12 @@ Cypress.Commands.add('reactComponent', { prevSubject: 'element' }, ($el) => {
 
   return domFiber.return;
 });
+
+Cypress.Commands.add('updateSlider', (testId, value) => {
+  cy.getByTestId(testId).reactComponent()
+    .its('memoizedProps.ownerState').then((state) => {
+      cy.wrap(state).invoke('onChange', null, value);
+    });
+  cy.getByTestId(testId).find('.MuiSlider-thumb')
+    .click();
+});
