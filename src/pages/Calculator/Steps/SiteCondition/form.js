@@ -25,6 +25,7 @@ import {
 import '../steps.scss';
 import { historyStates } from '../../../../features/userSlice/state';
 import { setHistoryDialogStateRedux, setMaxAvailableStepRedux } from '../../../../features/userSlice/actions';
+import pirschAnalytics from '../../../../shared/utils/analytics';
 
 const needTileDrainage = ['Very Poorly Drained', 'Poorly Drained', 'Somewhat Poorly Drained'];
 
@@ -113,6 +114,9 @@ const SiteConditionForm = ({
       (c) => c.label === e.target.value,
     )[0].id;
     dispatch(setCountyIdRedux(countyId));
+    pirschAnalytics('Site Condition', {
+      meta: { region: 'update region' },
+    });
   };
 
   const handleSoilDrainage = (e) => {
@@ -123,6 +127,9 @@ const SiteConditionForm = ({
     if (maxAvailableStep > -1) dispatch(setMaxAvailableStepRedux(-1));
     dispatch(setSoilDrainageRedux(e.target.value));
     dispatch(updateTileDrainageRedux('', false));
+    pirschAnalytics('Site Condition', {
+      meta: { 'soil drainage': 'update soil drainage' },
+    });
   };
 
   const handleTileDrainage = () => {
@@ -136,6 +143,9 @@ const SiteConditionForm = ({
       const newDrainage = getTileDrainage(soilDrainage, council);
       dispatch(setSoilDrainageRedux(newDrainage));
       dispatch(updateTileDrainageRedux(soilDrainage, true));
+      pirschAnalytics('Site Condition', {
+        meta: { 'tile drainage': 'tile drainage' },
+      });
     } else {
       // switch to false
       dispatch(setSoilDrainageRedux(prevSoilDrainage));

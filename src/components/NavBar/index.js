@@ -6,6 +6,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
 import AuthButton from '../Auth/AuthButton';
+import { releaseNotesUrl } from '../../shared/data/keys';
 
 const NavBar = () => {
   const [anchor, setAnchor] = useState(null);
@@ -33,34 +34,33 @@ const NavBar = () => {
               <MenuIcon />
             </Button>
             <Menu anchorEl={anchor} open={open} onClose={closeMenu}>
-              <MenuItem sx={{ p: '0 1rem' }}>
-                <AuthButton
-                  variant="text"
-                  type={isAuthenticated ? 'Logout' : 'Login'}
-                />
-              </MenuItem>
-              {/* <MenuItem>
+              <MenuItem onClick={() => window.open(releaseNotesUrl)}>
                 <Typography fontSize="0.875rem" fontWeight="bold">
-                  Profile
+                  Release Notes
                 </Typography>
-              </MenuItem> */}
+              </MenuItem>
               <MenuItem onClick={() => navigate('/feedback')}>
                 <Typography fontSize="0.875rem" fontWeight="bold">
                   Feedback
                 </Typography>
               </MenuItem>
-
+              <MenuItem sx={{ p: '0 0.5rem' }}>
+                <AuthButton
+                  variant="text"
+                  type={isAuthenticated ? 'Logout' : 'Login'}
+                />
+              </MenuItem>
             </Menu>
           </>
         )
         : (
           <>
-            {/* <Button>
+            <Button onClick={() => window.open(releaseNotesUrl)} sx={{ textTransform: 'none' }}>
               <Typography fontSize="0.875rem" fontWeight="bold">
-                Profile
+                Release Notes
               </Typography>
-            </Button> */}
-            <Button onClick={() => navigate('/feedback')}>
+            </Button>
+            <Button onClick={() => navigate('/feedback')} sx={{ textTransform: 'none' }}>
               <Typography fontSize="0.875rem" fontWeight="bold">
                 Feedback
               </Typography>

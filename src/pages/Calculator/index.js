@@ -30,6 +30,7 @@ import { setAlertStateRedux } from '../../features/userSlice/actions';
 import HistoryDialog from '../../components/HistoryDialog';
 import useUserHistory from '../../shared/hooks/useUserHistory';
 import { historyStates } from '../../features/userSlice/state';
+import pirschAnalytics from '../../shared/utils/analytics';
 
 const Calculator = () => {
   // initially set calculator here
@@ -167,6 +168,13 @@ const Calculator = () => {
     if (historyState === historyStates.new || historyState === historyStates.updated) {
       const { label, id } = selectedHistory;
       saveHistory(token, id, label);
+    }
+    if (activeStep !== calculatorList.length) {
+      pirschAnalytics('visit step', {
+        meta: {
+          step: calculatorList[activeStep],
+        },
+      });
     }
   }, [activeStep]);
 

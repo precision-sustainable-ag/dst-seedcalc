@@ -23,6 +23,7 @@ import initialState from '../../../../features/siteConditionSlice/state';
 import '../steps.scss';
 import { historyStates } from '../../../../features/userSlice/state';
 import { setHistoryDialogStateRedux, setMaxAvailableStepRedux } from '../../../../features/userSlice/actions';
+import pirschAnalytics from '../../../../shared/utils/analytics';
 
 const SiteCondition = ({
   siteConditionStep, setSiteConditionStep, completedStep, setCompletedStep, token,
@@ -74,6 +75,16 @@ const SiteCondition = ({
         setSelectedState(st[0]);
       }
     }
+  };
+
+  const handleSiteConditionSelection = (selection) => {
+    if (selection === 'use map') setSiteConditionStep(2);
+    if (selection === 'manually enter') setSiteConditionStep(3);
+    pirschAnalytics('Site Condition', {
+      meta: {
+        selection: `${selection}`,
+      },
+    });
   };
 
   // initially get states data
@@ -162,8 +173,20 @@ const SiteCondition = ({
                         Would you like to manually enter your site conditions
                         or use your location to prepopulate them?
                       </Typography>
-                      <Button variant="contained" onClick={() => setSiteConditionStep(2)} sx={{ margin: '1rem' }}>Map</Button>
-                      <Button variant="contained" onClick={() => setSiteConditionStep(3)} sx={{ margin: '1rem' }}>Manually Enter</Button>
+                      <Button
+                        variant="contained"
+                        onClick={() => handleSiteConditionSelection('use map')}
+                        sx={{ margin: '1rem' }}
+                      >
+                        Map
+                      </Button>
+                      <Button
+                        variant="contained"
+                        onClick={() => handleSiteConditionSelection('manually enter')}
+                        sx={{ margin: '1rem' }}
+                      >
+                        Manually Enter
+                      </Button>
                     </Grid>
                   )
                   : (
