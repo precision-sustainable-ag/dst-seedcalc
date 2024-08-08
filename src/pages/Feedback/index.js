@@ -172,6 +172,7 @@ const Feedback = () => {
             placeholder="Enter Your Title"
             value={feedback.title}
             onChange={(e) => setFeedback({ ...feedback, title: e.target.value })}
+            data-test="feedback_title"
           />
         </Grid>
 
@@ -191,6 +192,7 @@ const Feedback = () => {
             fullWidth
             value={feedback.comments}
             onChange={(e) => setFeedback({ ...feedback, comments: e.target.value })}
+            data-test="feedback_message"
           />
         </Grid>
 
@@ -208,6 +210,7 @@ const Feedback = () => {
                   checked={feedback.labels.indexOf('About the Cover Crop Data') > -1}
                   onChange={handleCheckbox}
                   name="About the Cover Crop Data"
+                  data-test="feedback_data"
                 />
               )}
               label="About the Cover Crop Data"
@@ -218,6 +221,7 @@ const Feedback = () => {
                   checked={feedback.labels.indexOf('About the Website') > -1}
                   onChange={handleCheckbox}
                   name="About the Website"
+                  data-test="feedback_website"
                 />
               )}
               label="About the Website"
@@ -228,6 +232,7 @@ const Feedback = () => {
                   checked={feedback.labels.indexOf('Other') > -1}
                   onChange={handleCheckbox}
                   name="Other"
+                  data-test="feedback_other"
                 />
               )}
               label="Other"
@@ -242,6 +247,7 @@ const Feedback = () => {
             placeholder="Enter Name"
             value={feedback.name}
             onChange={(e) => setFeedback({ ...feedback, name: e.target.value })}
+            data-test="feedback_name"
           />
         </Grid>
 
@@ -252,18 +258,19 @@ const Feedback = () => {
             placeholder="Enter Email"
             value={feedback.email}
             onChange={(e) => setFeedback({ ...feedback, email: e.target.value })}
+            data-test="feedback_email"
           />
         </Grid>
 
         <Grid item xs={12} p="1rem">
           {alertMessage !== ''
           && (
-          <Typography variant="body1" style={{ color: 'red' }} p="0.5rem 0">
+          <Typography variant="body1" style={{ color: 'red' }} p="0.5rem 0" data-test="feedback_alert">
             {alertMessage}
             . Please fill all required fields before submitting.
           </Typography>
           )}
-          <Button variant="contained" onClick={() => navigate('/')}>
+          <Button variant="contained" onClick={() => navigate('/')} data-test="feedback_back">
             Back
           </Button>
           <Button
@@ -271,6 +278,7 @@ const Feedback = () => {
             style={{ marginLeft: '1rem' }}
             disabled={alertMessage !== ''}
             onClick={handleSubmit}
+            data-test="feedback_submit"
           >
             Submit
           </Button>
