@@ -39,7 +39,7 @@ stages:
         echo REACT_APP_AUTH0_AUDIENCE="$(REACT_APP_AUTH0_AUDIENCE)" >> /home/vsts/work/1/s/.env
         echo REACT_APP_USER_HISTORY_API_URL="$(REACT_APP_USER_HISTORY_API_URL)" >> /home/vsts/work/1/s/.env
         echo REACT_APP_USER_HISTORY_SCHEMA="$(REACT_APP_USER_HISTORY_SCHEMA)" >> /home/vsts/work/1/s/.env
-        echo REACT_APP_RELEASE_NOTES="$(REACT_APP_RELEASE_NOTES)" >> /home/vsts/work/1/s/.env
+        echo REACT_APP_RELEASE_NOTES_URL="$(REACT_APP_RELEASE_NOTES_URL)" >> /home/vsts/work/1/s/.env
     - script: |
         chmod +x ./npm-ci.sh
         npm config set '@psa:registry' https://node.bit.cloud
