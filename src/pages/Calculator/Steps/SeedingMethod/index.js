@@ -14,6 +14,7 @@ import { setOptionRedux, setSeedingMethodsRedux } from '../../../../features/cal
 import { historyStates } from '../../../../features/userSlice/state';
 import { setAlertStateRedux, setHistoryStateRedux } from '../../../../features/userSlice/actions';
 import DSTAccordion from '../../../../components/DSTAccordion';
+import pirschAnalytics from '../../../../shared/utils/analytics';
 
 // styles for left grid
 const FullGrid = styled(Grid)(() => ({
@@ -101,6 +102,9 @@ const SeedingMethod = ({ alertState }) => {
     }));
     setSelectedMethod(method);
     if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
+    pirschAnalytics('Seeding Method', {
+      meta: { method },
+    });
   };
 
   /// ///////////////////////////////////////////////////////

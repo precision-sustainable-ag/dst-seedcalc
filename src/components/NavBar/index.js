@@ -6,8 +6,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
 import AuthButton from '../Auth/AuthButton';
-
-const patchNotesURL = 'https://precision-sustainable-ag.atlassian.net/wiki/spaces/DST/pages/285147137/Seeding+Rate+Calculator+Patch+Notes';
+import { releaseNotesUrl } from '../../shared/data/keys';
 
 const NavBar = () => {
   const [anchor, setAnchor] = useState(null);
@@ -35,7 +34,7 @@ const NavBar = () => {
               <MenuIcon />
             </Button>
             <Menu anchorEl={anchor} open={open} onClose={closeMenu}>
-              <MenuItem onClick={() => window.open(patchNotesURL)}>
+              <MenuItem onClick={() => window.open(releaseNotesUrl)}>
                 <Typography fontSize="0.875rem" fontWeight="bold">
                   Release Notes
                 </Typography>
@@ -56,7 +55,7 @@ const NavBar = () => {
         )
         : (
           <>
-            <Button onClick={() => window.open(patchNotesURL)} sx={{ textTransform: 'none' }}>
+            <Button onClick={() => window.open(releaseNotesUrl)} sx={{ textTransform: 'none' }}>
               <Typography fontSize="0.875rem" fontWeight="bold">
                 Release Notes
               </Typography>
