@@ -44,7 +44,17 @@ describe('Mix Ratios', () => {
     cy.getByTestId('seeds_per_acre').should('be.visible');
   });
 
-  it.only('should be able to update calculation when adjust values from scoller', { scrollBehavior: 'center' }, () => {
-    cy.updateSlider('slider_percent_of_rate', 65);
+  it.only('should be able to update calculation when adjust values from scoller', () => {
+    cy.getByTestId('slider_percent_of_rate').find('input').should('have.value', 100);
+    cy.updateSlider('slider_percent_of_rate', 50);
+    cy.getByTestId('slider_percent_of_rate').find('input').should('have.value', 50);
+    cy.getByTestId(`${selectSpecies}-${seedDataUnits.defaultSingelSpeciesSeedingRatePLS}-value`).find('p').invoke('text')
+      .then((val1) => {
+        cy.getByTestId(`${selectSpecies}-${seedDataUnits.seedingRateinMix}-value`).find('p').invoke('text')
+          .then((val2) => {
+            cy.log(val2, val1, Math.abs(val2 - val1 * 0.5));
+            expect(Math.abs(val2 - val1 * 0.5)).to.be.lessThan(0.1);
+          });
+      });
   });
 });

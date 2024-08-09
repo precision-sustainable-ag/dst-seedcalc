@@ -137,10 +137,16 @@ const SeedInfo = ({
       <Grid item xs={12} md={8} pt="1rem">
         <Grid container>
           <Grid item xs={4}>
-            <SeedingRateChip value={singleData.seedingRate} testId={`${seed.label}-${seedDataUnits.defaultSingelSpeciesSeedingRatePLS}-value`} />
+            <SeedingRateChip
+              value={singleData.seedingRate}
+              testId={`${seed.label}-${seedDataUnits.defaultSingelSpeciesSeedingRatePLS}-value`}
+            />
           </Grid>
           <Grid item xs={4}>
-            <SeedingRateChip value={formatToHundredth(singleData.plantValue)} testId={`${seed.label}-${seedDataUnits.approxPlantsper}-value`} />
+            <SeedingRateChip
+              value={formatToHundredth(singleData.plantValue)}
+              testId={`${seed.label}-${seedDataUnits.approxPlantsper}-value`}
+            />
           </Grid>
           <Grid item xs={4}>
             <SeedingRateChip value={formatToHundredth(singleData.seedValue)} />
