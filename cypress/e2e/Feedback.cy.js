@@ -8,7 +8,7 @@ describe('Site Condition landing page', () => {
     cy.url().should('equal', Cypress.config().baseUrl);
   });
 
-  it.only('should not be available to submit until all fields are filled', () => {
+  it('should not be available to submit until all fields are filled', () => {
     cy.getByTestId('feedback_alert').should('be.visible');
     cy.getByTestId('feedback_title').type('title');
     cy.getByTestId('feedback_alert').should('be.visible');

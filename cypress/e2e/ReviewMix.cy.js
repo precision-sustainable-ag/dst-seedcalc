@@ -57,8 +57,39 @@ describe('Seed Tag Info', () => {
     cy.getByTestId('option-Aerial').click();
     cy.getByTestId('seeding_method_selection').find('input').should('have.value', 'Aerial');
 
-    // cy.getByTestId('percent_slider').click('center');
-    // cy.getByTestId('germination_slider').click('center');
-    // cy.getByTestId('purity_slider').click('center');
+    cy.updateSlider('percent_slider', 100);
+    cy.updateSlider('percent_slider', 50);
+    cy.getByTestId('percent_rate').find('input').invoke('val').should('be.equal', (50).toString());
+    cy.getByTestId('single_rate').find('input').invoke('val')
+      .then((val1) => {
+        cy.getByTestId('mix_rate').find('input').invoke('val')
+          .then((val2) => {
+            cy.log(val2, val1, Math.abs(val2 - val1 * 0.5));
+            expect(Math.abs(val2 - val1 * 0.5)).to.be.lessThan(0.1);
+          });
+      });
+
+    cy.updateSlider('purity_slider', 100);
+    cy.updateSlider('germination_slider', 100);
+    cy.updateSlider('germination_slider', 50);
+    cy.getByTestId('seeding_rate_in_mix').find('input').invoke('val')
+      .then((val1) => {
+        cy.getByTestId('bulk_seeding_rate').find('input').invoke('val')
+          .then((val2) => {
+            cy.log(val2, val1, Math.abs(val2 - val1 / 0.5));
+            expect(Math.abs(val2 - val1 / 0.5)).to.be.lessThan(0.1);
+          });
+      });
+
+    cy.updateSlider('germination_slider', 100);
+    cy.updateSlider('purity_slider', 50);
+    cy.getByTestId('seeding_rate_in_mix').find('input').invoke('val')
+      .then((val1) => {
+        cy.getByTestId('bulk_seeding_rate').find('input').invoke('val')
+          .then((val2) => {
+            cy.log(val2, val1, Math.abs(val2 - val1 / 0.5));
+            expect(Math.abs(val2 - val1 / 0.5)).to.be.lessThan(0.1);
+          });
+      });
   });
 });

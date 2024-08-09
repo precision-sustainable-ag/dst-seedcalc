@@ -83,7 +83,10 @@ const ReviewMixSteps = ({
             step={step}
             value={value}
             valueLabelDisplay="auto"
-            onChange={(e) => setValue(e.target.value)}
+            onChange={(e, v) => {
+              if (v !== undefined) setValue(v);
+              else setValue(e.target.value);
+            }}
             onChangeCommitted={() => {
               onChangeCommitted(value);
             }}
@@ -218,6 +221,7 @@ const ReviewMixSteps = ({
                 disabled
                 label={matchesMd ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
                 value={step1.singleSpeciesSeedingRate}
+                testId="single_rate"
               />
             </Grid>
 
@@ -233,6 +237,7 @@ const ReviewMixSteps = ({
                 //   handleFormValueChange(seed, 'percentOfRate', parseFloat(e.target.value) / 100);
                 // }}
                 value={convertToPercent(step1.percentOfRate)}
+                testId="percent_rate"
               />
             </Grid>
 
@@ -245,6 +250,7 @@ const ReviewMixSteps = ({
                 label={matchesMd ? '' : 'Seeding Rate in Mix (Lbs per Acre)'}
                 disabled
                 value={step1.seedingRate}
+                testId="mix_rate"
               />
             </Grid>
 
@@ -505,6 +511,7 @@ const ReviewMixSteps = ({
               label={matchesMd ? '' : 'Seeding Rate in Mix (Lbs per Acre)'}
               disabled
               value={step4.seedingRateAfterManagementImpact}
+              testId="seeding_rate_in_mix"
             />
           </Grid>
 
@@ -549,6 +556,7 @@ const ReviewMixSteps = ({
               label="Bulk Seeding Rate (Lbs per Acre)"
               disabled
               value={step4.bulkSeedingRate}
+              testId="bulk_seeding_rate"
             />
           </Grid>
           <Grid item xs={1} />
