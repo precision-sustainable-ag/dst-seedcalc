@@ -239,7 +239,7 @@ const SiteConditionForm = ({
             && (
             <>
               <Typography>Your improved drainage class is: </Typography>
-              <Typography fontWeight="bold">{soilDrainage}</Typography>
+              <Typography fontWeight="bold" data-test="tile_drainage_class">{soilDrainage}</Typography>
             </>
             )}
 

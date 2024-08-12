@@ -50,6 +50,17 @@ describe('Site Condition form', () => {
     cy.getByTestId('site_condition_tile_drainage').should('not.exist');
   });
 
+  it('will show correct tile drainage information when tile drainage is checked', () => {
+    cy.getByTestId('site_condition_soil_drainage').click();
+    cy.get('[data-test="option-Poorly Drained"]').click();
+    cy.getByTestId('site_condition_tile_drainage').click();
+    cy.getByTestId('tile_drainage_class').should('contain', 'Moderately Well Drained');
+    cy.getByTestId('site_condition_soil_drainage').click();
+    cy.get('[data-test="option-Somewhat Poorly Drained"]').click();
+    cy.getByTestId('site_condition_tile_drainage').click();
+    cy.getByTestId('tile_drainage_class').should('contain', 'Moderately Well Drained');
+  });
+
   it('will make the next step button available after input all required information', () => {
     cy.getByTestId('site_condition_region').click();
     cy.get('[data-test="option-Adams"]').click();
