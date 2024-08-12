@@ -8,8 +8,6 @@ describe('Species Selection', () => {
     mockSiteCondition();
   });
 
-  // TODO: test with multiple crops and invalid crops
-
   it('should be able to click on species card to select or unselect a species', () => {
     cy.getByTestId(`accordion-${selectType}`).click();
     cy.getByTestId(`species-card-${selectSpecies}`).find('button').click();
@@ -55,5 +53,18 @@ describe('Species Selection', () => {
     cy.get('[data-test^="accordion-"]').should('have.class', 'Mui-expanded');
     cy.getByTestId(`accordion-${selectType}`).getByTestId(`species-card-${selectSpecies}`).should('be.visible');
     cy.get('[data-test^="accordion-"]').get('[data-test^="species-card-"]').should('have.length', 1);
+  });
+
+  it.only('should show the diversity bar with ratio of species', () => {
+    const grasses = ['Barley, Winter', 'Sudangrass'];
+    cy.getByTestId(`accordion-${selectType}`).click();
+    cy.getByTestId(`species-card-${selectSpecies}`).find('button').click();
+    cy.getByTestId('diversity_bar').should('be.visible');
+    cy.getByTestId('accordion-Grass').click();
+    grasses.forEach((grass) => {
+      cy.getByTestId(`species-card-${grass}`).find('button').click();
+    });
+    cy.getByTestId('diversity-Brassica').should('have.css', 'flex-grow', '1');
+    cy.getByTestId('diversity-Grass').should('have.css', 'flex-grow', '2');
   });
 });

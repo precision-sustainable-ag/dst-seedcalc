@@ -22,9 +22,18 @@ export const mockSiteCondition = () => {
 
 export const mockSpeciesSelection = () => {
   const selectType = 'Brassica';
-  const selectSpecies = 'Radish, Daikon';
+  const selectSpecies = ['Radish, Daikon', 'Rapeseed'];
   cy.getByTestId(`accordion-${selectType}`).click();
-  cy.getByTestId(`species-card-${selectSpecies}`).find('button').click();
+  selectSpecies.forEach((species) => {
+    cy.getByTestId(`species-card-${species}`).find('button').click();
+    cy.getByTestId(`species-card-${species}`).find('img')
+      .should('have.css', 'border-width', '6px')
+      .and('have.css', 'border-style', 'solid')
+      .and('have.css', 'border-color', 'rgb(89, 146, 230)');
+    cy.getByTestId(`species-card-${species}`).parent().children()
+      .get('[data-testid="CheckRoundedIcon"]')
+      .should('be.visible');
+  });
   cy.getByTestId('next_button').click();
 };
 

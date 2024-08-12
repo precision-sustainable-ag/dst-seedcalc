@@ -241,7 +241,7 @@ const SeedInfo = ({
                 handleFormValueChange(seed, 'percentOfRate', parseFloat(percentOfRate) / 100);
               }
             }}
-            data-test="slider_percent_of_rate"
+            data-test={`${seed.label}-slider_percent_of_rate`}
           />
         </Grid>
 
@@ -258,7 +258,7 @@ const SeedInfo = ({
               valueLabelDisplay="auto"
               onChange={(e) => setSurvival(e.target.value)}
               onChangeCommitted={() => handleFormValueChange(seed, 'percentSurvival', parseFloat(survival) / 100)}
-              data-test="slider_survival"
+              data-test={`${seed.label}-slider_survival`}
             />
           </Grid>
         )}

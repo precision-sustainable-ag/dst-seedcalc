@@ -312,7 +312,7 @@ const MixRatio = ({
                     setShowSteps({ ...showSteps, [seed.label]: !showSteps[seed.label] });
                   }}
                   variant="outlined"
-                  data-test="show_calculation_button"
+                  data-test={`${seed.label}-show_calculation_button`}
                 >
                   {showSteps[seed.label] ? 'Close Steps' : 'View Calculations'}
                 </Button>
