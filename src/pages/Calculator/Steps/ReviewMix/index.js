@@ -230,6 +230,7 @@ const ReviewMix = ({ calculator }) => {
             expanded={accordionState[seed.label]}
             onChange={() => handleExpandAccordion(seed.label)}
             summary={<Typography>{seed.label}</Typography>}
+            testId={`accordion-${seed.label}`}
           >
             <Grid container>
               <DSTBarChart seed={seed} calculatorResult={calculatorResult} />

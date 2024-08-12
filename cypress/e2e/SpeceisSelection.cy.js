@@ -55,7 +55,7 @@ describe('Species Selection', () => {
     cy.get('[data-test^="accordion-"]').get('[data-test^="species-card-"]').should('have.length', 1);
   });
 
-  it.only('should show the diversity bar with ratio of species', () => {
+  it('should show the diversity bar with ratio of species', () => {
     const grasses = ['Barley, Winter', 'Sudangrass'];
     cy.getByTestId(`accordion-${selectType}`).click();
     cy.getByTestId(`species-card-${selectSpecies}`).find('button').click();

@@ -61,7 +61,7 @@ describe('Mix Ratios', () => {
     cy.getByTestId('seeds_per_acre').should('be.visible');
   });
 
-  it.only('should be able to update calculation when adjust values from scoller', () => {
+  it('should be able to update calculation when adjust values from scoller', () => {
     cy.updateSlider(`${selectSpecies}-slider_percent_of_rate`, 100);
     cy.getByTestId(`${selectSpecies}-slider_percent_of_rate`).find('input').should('have.value', 100);
     cy.updateSlider(`${selectSpecies}-slider_percent_of_rate`, 50);
