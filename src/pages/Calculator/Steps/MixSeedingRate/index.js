@@ -18,6 +18,7 @@ import {
 import { historyStates } from '../../../../features/userSlice/state';
 import { setHistoryStateRedux } from '../../../../features/userSlice/actions';
 import '../steps.scss';
+import pirschAnalytics from '../../../../shared/utils/analytics';
 
 const CustomThumb = (props) => {
   const { children, ...other } = props;
@@ -130,6 +131,9 @@ const MixSeedingRate = ({ calculator }) => {
     });
     dispatch(setAdjustedMixSeedingRateRedux(adjustedMixSeedingRate));
     if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
+    pirschAnalytics('Mix Seeding Rate', {
+      meta: { mixSeedingRate: 'update Mix Seeding Rate' },
+    });
   };
 
   /// ///////////////////////////////////////////////////////

@@ -21,6 +21,7 @@ import {
 import { initialOptions } from '../../../../shared/utils/calculator';
 import { setHistoryStateRedux, setMaxAvailableStepRedux } from '../../../../features/userSlice/actions';
 import { historyStates } from '../../../../features/userSlice/state';
+import pirschAnalytics from '../../../../shared/utils/analytics';
 
 const CheckBoxIcon = ({ style }) => (
   <Box sx={{
@@ -147,6 +148,9 @@ const PlantList = ({
     seedsSelected.forEach((s) => {
       const seedOption = mixRatioOptions[s.label];
       dispatch(setMixRatioOptionRedux(s.label, { ...seedOption, percentOfRate: null }));
+    });
+    pirschAnalytics('Species Selection', {
+      meta: { seedName },
     });
   };
 

@@ -23,6 +23,7 @@ import initialState from '../../../../features/siteConditionSlice/state';
 import '../steps.scss';
 import { historyStates } from '../../../../features/userSlice/state';
 import { setHistoryDialogStateRedux, setMaxAvailableStepRedux } from '../../../../features/userSlice/actions';
+import pirschAnalytics from '../../../../shared/utils/analytics';
 
 const SiteCondition = ({
   siteConditionStep, setSiteConditionStep, completedStep, setCompletedStep, token,
@@ -74,6 +75,16 @@ const SiteCondition = ({
         setSelectedState(st[0]);
       }
     }
+  };
+
+  const handleSiteConditionSelection = (selection) => {
+    if (selection === 'use map') setSiteConditionStep(2);
+    if (selection === 'manually enter') setSiteConditionStep(3);
+    pirschAnalytics('Site Condition', {
+      meta: {
+        selection: `${selection}`,
+      },
+    });
   };
 
   // initially get states data
@@ -164,7 +175,7 @@ const SiteCondition = ({
                       </Typography>
                       <Button
                         variant="contained"
-                        onClick={() => setSiteConditionStep(2)}
+                        onClick={() => handleSiteConditionSelection('use map')}
                         sx={{ margin: '1rem' }}
                         data-test="option_map"
                       >
@@ -172,7 +183,7 @@ const SiteCondition = ({
                       </Button>
                       <Button
                         variant="contained"
-                        onClick={() => setSiteConditionStep(3)}
+                        onClick={() => handleSiteConditionSelection('manually enter')}
                         sx={{ margin: '1rem' }}
                         data-test="option_manually"
                       >

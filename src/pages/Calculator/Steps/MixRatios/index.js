@@ -24,6 +24,7 @@ import {
 } from '../../../../features/userSlice/actions';
 import { historyStates } from '../../../../features/userSlice/state';
 import DSTAccordion from '../../../../components/DSTAccordion';
+import pirschAnalytics from '../../../../shared/utils/analytics';
 
 const getCalculatorResult = (council) => {
   const defaultResultMCCC = {
@@ -218,6 +219,7 @@ const MixRatio = ({
     // set historyStates.updated if change anything
     if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
     if (maxAvailableStep > 1) dispatch(setMaxAvailableStepRedux(1));
+    pirschAnalytics('Mix Ratios', { meta: { option } });
   };
 
   // handler for click to open accordion
