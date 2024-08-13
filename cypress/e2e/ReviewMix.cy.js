@@ -55,7 +55,7 @@ describe('Seed Tag Info', () => {
     cy.getByTestId('adjustment_from_seeding_method').should('be.visible');
   });
 
-  it.only('should be able to update the calculation', () => {
+  it('should be able to update the calculation', () => {
     cy.getByTestId('change_my_rate_button').eq(0).click();
 
     cy.getByTestId('seeding_method_selection').click();
