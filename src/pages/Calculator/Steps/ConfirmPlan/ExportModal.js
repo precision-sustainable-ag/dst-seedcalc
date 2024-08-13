@@ -4,6 +4,7 @@ import {
 } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { handleDownload } from '../../../../shared/utils/exportExcel';
+import pirschAnalytics from '../../../../shared/utils/analytics';
 
 const modalStyle = {
   position: 'absolute',
@@ -53,6 +54,13 @@ const ExportModal = () => {
     setOpen(false);
   };
 
+  const handleClick = () => {
+    setOpen(true);
+    pirschAnalytics('Confirm Plan', {
+      meta: { export: 'export to csv' },
+    });
+  };
+
   return (
     <>
       <Modal open={open} onClose={() => setOpen(false)}>
@@ -70,7 +78,7 @@ const ExportModal = () => {
 
         </Box>
       </Modal>
-      <Button sx={buttonStyles} onClick={() => setOpen(true)} data-test="export_button">
+      <Button sx={buttonStyles} onClick={handleClick} data-test="export_button">
         Export
       </Button>
     </>

@@ -12,6 +12,7 @@ import {
 import { setHistoryDialogStateRedux, setMaxAvailableStepRedux } from '../../../../features/userSlice/actions';
 import { getZoneData, getSSURGOData } from '../../../../features/siteConditionSlice/api';
 import { historyStates } from '../../../../features/userSlice/state';
+import pirschAnalytics from '../../../../shared/utils/analytics';
 import '../steps.scss';
 
 const Map = ({
@@ -20,10 +21,18 @@ const Map = ({
   const [selectedToEditSite, setSelectedToEditSite] = useState({});
   const [mapFeatures, setMapFeatures] = useState([]);
 
-  const { council, latlon } = useSelector((state) => state.siteCondition);
+  const { state: stateName, council, latlon } = useSelector((state) => state.siteCondition);
   const { historyState, maxAvailableStep } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (historyState !== historyStates.imported) {
+      pirschAnalytics('Site Condition', {
+        meta: { state: stateName },
+      });
+    }
+  }, []);
 
   // update county/zone, latlon, soil drainage based on address
   useEffect(() => {
