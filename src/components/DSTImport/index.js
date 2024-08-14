@@ -11,6 +11,7 @@ import useUserHistory from '../../shared/hooks/useUserHistory';
 import Dropdown from '../Dropdown';
 import { setHistoryDialogStateRedux } from '../../features/userSlice/actions';
 import pirschAnalytics from '../../shared/utils/analytics';
+import { getAuthToken } from '../../shared/utils/authToken';
 
 const modalStyle = {
   position: 'absolute',
@@ -25,7 +26,7 @@ const modalStyle = {
   maxWidth: '500px',
 };
 
-const DSTImport = ({ token }) => {
+const DSTImport = () => {
   const [openModal, setOpenModal] = useState(false);
   const [histories, setHistories] = useState([]);
   const [calculationName, setCaclulationName] = useState('');
@@ -76,19 +77,20 @@ const DSTImport = ({ token }) => {
         history: 'Import calculation',
       },
     });
-    loadHistory(token, calculationName);
+    loadHistory(calculationName);
     setOpenModal(!openModal);
   };
 
   // initially load all history records
   useEffect(() => {
     const loadHistories = async () => {
-      const historyList = await loadHistory(token);
+      const historyList = await loadHistory();
       setHistories(historyList);
     };
+    const token = getAuthToken();
     // token is null initially so only call when token is available
     if (token !== null) loadHistories();
-  }, [token]);
+  }, [openModal]);
 
   return (
     <>

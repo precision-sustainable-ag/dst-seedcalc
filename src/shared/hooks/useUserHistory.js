@@ -8,6 +8,7 @@ import {
 import { setCalculatorRedux } from '../../features/calculatorSlice/actions';
 import { getHistories, createHistory, updateHistory } from '../../features/userSlice/api';
 import { historyStates } from '../../features/userSlice/state';
+import { getAuthToken } from '../utils/authToken';
 
 const useUserHistory = () => {
   const dispatch = useDispatch();
@@ -22,8 +23,9 @@ const useUserHistory = () => {
  * If `name` is specified, return relevant history object.
  * @param {string} name - The name of history record, default to `null`.
  */
-  const loadHistory = async (token = null, name = null) => {
+  const loadHistory = async (name = null) => {
     try {
+      const token = getAuthToken();
       if (!token) throw new Error('Access token not available!');
       const res = await dispatch(getHistories({ accessToken: token }));
       if (res.payload.data.length > 0) {
@@ -72,8 +74,9 @@ const useUserHistory = () => {
  * @param {string} name - The name of history to update, default to `null`.
  */
   // eslint-disable-next-line consistent-return
-  const saveHistory = async (token = null, id = null, name = null) => {
+  const saveHistory = async (id = null, name = null) => {
     try {
+      const token = getAuthToken();
       if (!token) throw new Error('Access token not available!');
       const data = { siteCondition, calculator };
       if (id !== null) {
@@ -103,7 +106,7 @@ const useUserHistory = () => {
         }));
         // dispatch(setHistoryStateRedux(historyStates.imported));
         dispatch(setSelectedHistoryRedux({ ...selectedHistory, id: res.payload.data.id }));
-        loadHistory(token);
+        loadHistory();
         return res;
       }
     } catch (err) {
