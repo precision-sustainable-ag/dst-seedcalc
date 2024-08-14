@@ -269,7 +269,6 @@ const SiteConditionForm = ({
             const formattedDate = dayjs(e).format('MM/DD/YYYY');
             dispatch(setPlantingDateRedux(formattedDate));
           }}
-          data-test="site_condition_date"
         />
       </Grid>
       <Grid item xs={0} md={3} />

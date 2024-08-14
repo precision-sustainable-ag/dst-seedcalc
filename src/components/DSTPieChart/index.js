@@ -97,6 +97,7 @@ const DSTPieChartLegend = ({ chartData }) => {
           <Typography
             fontSize={matchesMd ? '0.75rem' : '1rem'}
             sx={{ display: 'flex', alignItems: 'center' }}
+            data-test="piechart_label"
           >
             <Square sx={{ color: COLORS[i] }} />
             {data.name}
@@ -104,6 +105,7 @@ const DSTPieChartLegend = ({ chartData }) => {
           <Typography
             fontSize={matchesMd ? '0.75rem' : '1rem'}
             sx={{ display: 'flex', alignItems: 'center' }}
+            data-test="piechart_value"
           >
             {twoDigit(data.value)}
           </Typography>
