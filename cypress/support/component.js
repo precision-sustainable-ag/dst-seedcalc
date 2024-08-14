@@ -14,14 +14,21 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
+import React from 'react';
+import { ThemeProvider } from '@emotion/react';
+import './commands';
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
-import { mount } from 'cypress/react18'
+import { mount } from 'cypress/react18';
+import dstTheme from '../../src/shared/themes';
 
-Cypress.Commands.add('mount', mount)
+Cypress.Commands.add('mount', (component) => mount(
+  <ThemeProvider theme={dstTheme}>
+    {component}
+  </ThemeProvider>,
+));
 
 // Example use:
 // cy.mount(<MyComponent />)

@@ -30,17 +30,17 @@ const NavBar = () => {
       {matchesMd
         ? (
           <>
-            <Button onClick={openMenu}>
+            <Button onClick={openMenu} data-test="open_menu">
               <MenuIcon />
             </Button>
             <Menu anchorEl={anchor} open={open} onClose={closeMenu}>
               <MenuItem onClick={() => window.open(releaseNotesUrl)}>
-                <Typography fontSize="0.875rem" fontWeight="bold">
+                <Typography fontSize="0.875rem" fontWeight="bold" data-test="release_notes">
                   Release Notes
                 </Typography>
               </MenuItem>
               <MenuItem onClick={() => navigate('/feedback')}>
-                <Typography fontSize="0.875rem" fontWeight="bold">
+                <Typography fontSize="0.875rem" fontWeight="bold" data-test="feedback">
                   Feedback
                 </Typography>
               </MenuItem>
