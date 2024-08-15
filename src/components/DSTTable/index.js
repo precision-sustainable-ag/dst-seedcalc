@@ -32,7 +32,7 @@ const DSTTable = ({ rows, cells }) => (
     >
       <TableHead>
         <TableRow>
-          {cells.map((c, i) => <TableCell key={i}>{c}</TableCell>)}
+          {cells.map((c, i) => <TableCell key={i} data-test={`head-${c}`}>{c}</TableCell>)}
         </TableRow>
       </TableHead>
       <TableBody>
@@ -41,12 +41,12 @@ const DSTTable = ({ rows, cells }) => (
             key={row[cells[0]]}
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
           >
-            <TableCell component="th" scope="row" key={`${i}-0`}>
+            <TableCell component="th" scope="row" key={`${i}-0`} data-test={row[cells[0]]}>
               {row[cells[0]]}
             </TableCell>
             {cells.map((cell, idx) => {
               if (idx !== 0) {
-                return <TableCell key={`${i}-${idx}`}>{row[cell]}</TableCell>;
+                return <TableCell key={`${i}-${idx}`} data-test={row[cell]}>{row[cell]}</TableCell>;
               }
               return null;
             })}

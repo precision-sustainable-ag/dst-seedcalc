@@ -59,7 +59,7 @@ const AuthButton = ({
   };
 
   return (
-    <Button variant={variant} onClick={handleClick}>
+    <Button variant={variant} onClick={handleClick} data-test="auth_button">
       <Typography sx={{ fontSize: '0.875rem', fontWeight: 'bold' }} color={getColor()}>
         {type}
       </Typography>
