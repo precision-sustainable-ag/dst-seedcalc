@@ -11,4 +11,6 @@ module.exports = defineConfig({
       bundler: 'webpack',
     },
   },
+
+  numTestsKeptInMemory: 1,
 });
