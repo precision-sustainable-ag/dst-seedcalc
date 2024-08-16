@@ -120,7 +120,7 @@ const StepsList = ({
               },
             }}
           >
-            <StepButton onClick={() => setActiveStep(index)}>
+            <StepButton onClick={() => setActiveStep(index)} data-test={`step-${index}`}>
               {matches && label}
             </StepButton>
           </Step>
