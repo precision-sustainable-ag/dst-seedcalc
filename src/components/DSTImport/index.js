@@ -136,7 +136,7 @@ const DSTImport = ({ token }) => {
                 />
                 {/* eslint-disable-next-line */}
               <label htmlFor="contained-button-file">
-                <Button variant="contained" color="primary" component="span">
+                <Button variant="contained" color="primary" component="span" data-test="import_from_csv">
                   Import from CSV
                 </Button>
               </label>
@@ -175,6 +175,7 @@ const DSTImport = ({ token }) => {
         variant="contained"
         onClick={() => setOpenModal(true)}
         sx={{ textDecoration: 'none', margin: '1rem' }}
+        data-test="import_button"
       >
         {isAuthenticated ? 'Import / Create calculation' : 'Import Calculation'}
       </Button>

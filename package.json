@@ -40,7 +40,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "cy:open": "cypress open"
+    "cy:open": "cypress open cross-env NODE_OPTIONS=--max_old_space_size=8192 webpack"
   },
   "eslintConfig": {
     "extends": [
