@@ -93,3 +93,5 @@ Cypress.Commands.add('loginToAuth0', () => {
   log.snapshot('after');
   log.end();
 });
+
+Cypress.Commands.add('getReduxState', () => cy.window().its('store').invoke('getState'));
