@@ -1,15 +1,9 @@
 import React from 'react';
-import { Provider } from 'react-redux';
 import DSTImport from './index';
-import store from '../../store';
 
 describe('<DSTImport />', () => {
   beforeEach(() => {
-    cy.mount(
-      <Provider store={store}>
-        <DSTImport />
-      </Provider>,
-    );
+    cy.mount(<DSTImport />);
   });
   it('should only show an option to import from csv file when not logged in', () => {
     cy.getByTestId('import_button').click();

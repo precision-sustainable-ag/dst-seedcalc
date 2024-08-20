@@ -1,5 +1,4 @@
 import React from 'react';
-import { Provider } from 'react-redux';
 import SeedsSelectedList from './index';
 import store from '../../store';
 import rapeseed from '../../../cypress/fixtures/Rapeseed.json';
@@ -12,11 +11,7 @@ describe('<SeedsSelectedList />', () => {
     store.dispatch({ type: 'calculator/addSeed', payload: { seed: turnip } });
   });
   it('should show selected species', () => {
-    cy.mount(
-      <Provider store={store}>
-        <SeedsSelectedList />
-      </Provider>,
-    );
+    cy.mount(<SeedsSelectedList />);
     selectedSpecies.forEach((species) => {
       cy.getByTestId(`sidebar-${species}`).should('be.visible');
     });
@@ -25,11 +20,7 @@ describe('<SeedsSelectedList />', () => {
   it('should trigger selectSidebarSeed when click on any species', () => {
     const dispatchStub = cy.stub();
     store.dispatch = dispatchStub;
-    cy.mount(
-      <Provider store={store}>
-        <SeedsSelectedList />
-      </Provider>,
-    );
+    cy.mount(<SeedsSelectedList />);
     cy.getByTestId('sidebar-Rapeseed').click();
     cy.wrap(dispatchStub).should('have.been.calledWith', {
       type: 'calculator/selectSidebarSeed',
@@ -42,11 +33,7 @@ describe('<SeedsSelectedList />', () => {
   it('should trigger removeSeed when click on any species on step 1', () => {
     const dispatchStub = cy.stub();
     store.dispatch = dispatchStub;
-    cy.mount(
-      <Provider store={store}>
-        <SeedsSelectedList activeStep={1} />
-      </Provider>,
-    );
+    cy.mount(<SeedsSelectedList activeStep={1} />);
     cy.getByTestId('sidebar-Rapeseed').click();
     cy.wrap(dispatchStub).should(
       'have.been.calledWith',

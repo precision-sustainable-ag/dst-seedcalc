@@ -1,15 +1,10 @@
 import React from 'react';
-import { Provider } from 'react-redux';
 import HistoryDialog from './index';
 import store from '../../store';
 
 describe('<HistoryDialog />', () => {
   beforeEach(() => {
-    cy.mount(
-      <Provider store={store}>
-        <HistoryDialog />
-      </Provider>,
-    );
+    cy.mount(<HistoryDialog />);
   });
 
   it('should show a dialog for adding calculation', () => {

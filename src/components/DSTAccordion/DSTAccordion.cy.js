@@ -1,15 +1,9 @@
 import React from 'react';
-import { ThemeProvider } from '@emotion/react';
 import DSTAccordion from './index';
-import dstTheme from '../../shared/themes';
 
 describe('<DSTAccordion />', () => {
   beforeEach(() => {
-    cy.mount(
-      <ThemeProvider theme={dstTheme}>
-        <DSTAccordion />
-      </ThemeProvider>,
-    );
+    cy.mount(<DSTAccordion />);
   });
 
   it('should render the accordion with given title', () => {

@@ -1,15 +1,10 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
 import NavBar from './index';
 import { releaseNotesUrl } from '../../shared/data/keys';
 
 describe('<NavBar />', () => {
   beforeEach(() => {
-    cy.mount(
-      <BrowserRouter>
-        <NavBar />
-      </BrowserRouter>,
-    );
+    cy.mount(<NavBar />);
   });
   it('should be rendered as menu on larger screen and an icon on smaller screen', () => {
     cy.getByTestId('open_menu').should('be.visible');
