@@ -111,6 +111,7 @@ const DSTImport = ({ token }) => {
                   <Button
                     variant="contained"
                     onClick={handleCreateNewHistory}
+                    data-test="create_calculation"
                   >
                     create new calculation
                   </Button>
@@ -161,7 +162,7 @@ const DSTImport = ({ token }) => {
                     />
                   </Grid>
                   <Grid item xs={12} display="flex" justifyContent="center" alignItems="center">
-                    <Button variant="contained" onClick={handleLoadUserHistory}>
+                    <Button variant="contained" onClick={handleLoadUserHistory} data-test="import_calculation">
                       Import
                     </Button>
                   </Grid>
