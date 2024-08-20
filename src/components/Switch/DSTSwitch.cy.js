@@ -2,10 +2,6 @@ import React from 'react';
 import DSTSwitch from './index';
 
 describe('DSTSwitch', () => {
-  beforeEach(() => {
-    // cy.mount(<DSTSwitch checked={false} handleChange={() => {}} disabled={false} testId="dst_switch" />);
-  });
-
   it('should be initially unchecked', () => {
     cy.mount(<DSTSwitch checked={false} testId="dst_switch" />);
     cy.getByTestId('dst_switch').should('not.be.checked');

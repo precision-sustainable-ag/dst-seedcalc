@@ -25,7 +25,7 @@ describe('<DSTAccordion />', () => {
     cy.get('@onChangeSpy').should('have.been.calledOnce');
   });
 
-  it.only('should expand or collapse the accordion when clicked', () => {
+  it('should expand or collapse the accordion when clicked', () => {
     cy.mount(<DSTAccordion />);
     cy.getByTestId('accordion_details').should('not.be.visible');
     cy.getByTestId('accordion_summary').click();

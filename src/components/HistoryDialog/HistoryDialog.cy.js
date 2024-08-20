@@ -10,7 +10,6 @@ describe('<HistoryDialog />', () => {
         <HistoryDialog />
       </Provider>,
     );
-    // store.dispatch({ type: 'user/setHistoryDialogState', payload: { open: true, type: 'add' } });
   });
 
   it('should show a dialog for adding calculation', () => {
@@ -31,7 +30,7 @@ describe('<HistoryDialog />', () => {
     cy.getByTestId('create_record_button').should('be.visible');
   });
 
-  it.only('should have validation for adding new calculations', () => {
+  it('should have validation for adding new calculations', () => {
     store.dispatch({
       type: 'user/setUserHistoryList',
       payload: {
