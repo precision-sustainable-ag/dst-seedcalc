@@ -159,6 +159,7 @@ const DSTImport = ({ token }) => {
                       items={histories}
                       handleChange={(e) => setCaclulationName(e.target.value)}
                       minWidth={220}
+                      testId="select_calculation"
                     />
                   </Grid>
                   <Grid item xs={12} display="flex" justifyContent="center" alignItems="center">

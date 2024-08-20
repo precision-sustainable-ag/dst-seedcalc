@@ -1,22 +1,13 @@
 describe('Creating user history', () => {
   beforeEach(() => {
     cy.intercept('POST', 'https://develophistory.covercrop-data.org/v1/history', {
-      statusCode: 200,
-      body: {
-        data: { id: 0 },
-      },
+      statusCode: 200, body: { data: { id: 0 } },
     }).as('createHistory');
-
-    cy.intercept('POST', 'https://develophistory.covercrop-data.org/v1/history/*', {
-      statusCode: 200,
-      body: {},
-    }).as('updateHistory');
-
     cy.loginToAuth0();
     cy.visit('/');
   });
 
-  it.only('should be able to create a history', () => {
+  it('should be able to create a history', () => {
     cy.getByTestId('import_button').click();
     cy.getByTestId('create_calculation').click();
     cy.getByTestId('input_calculation_name').type('cyTest');
@@ -50,6 +41,74 @@ describe('Creating user history', () => {
       expect(historyState).to.equal('new');
     });
   });
+});
 
-  it('should be able to create a history', () => {});
+describe('Importing user history', () => {
+  beforeEach(() => {
+    cy.intercept('https://develophistory.covercrop-data.org/v1/histories?schema=*').as('getHistory');
+    cy.loginToAuth0();
+    cy.visit('/');
+  });
+
+  it('should be able to import a history', () => {
+    cy.getByTestId('import_button').click();
+    cy.getByTestId('select_calculation').click();
+    cy.getByTestId('option-10').click();
+    cy.getByTestId('import_calculation').click();
+    cy.wait('@getHistory');
+    cy.wait(1000);
+    cy.getReduxState().then((state) => {
+      const { historyState } = state.user;
+      cy.log(historyState);
+      expect(historyState).to.equal('imported');
+    });
+  });
+});
+
+describe('Updating user history', () => {
+  beforeEach(() => {
+    cy.intercept('POST', 'https://develophistory.covercrop-data.org/v1/history/*', {
+      statusCode: 200,
+      body: {},
+    }).as('updateHistory');
+
+    cy.intercept('https://develophistory.covercrop-data.org/v1/histories?schema=*').as('getHistory');
+
+    cy.loginToAuth0();
+    cy.visit('/');
+  });
+
+  it('should not be able to update history on site condition', () => {
+    cy.getByTestId('import_button').click();
+    cy.getByTestId('select_calculation').click();
+    cy.getByTestId('option-10').click();
+    cy.getByTestId('import_calculation').click();
+    cy.wait('@getHistory');
+    cy.wait(1000);
+    cy.getReduxState().then((state) => {
+      const { historyState } = state.user;
+      cy.log(historyState);
+      expect(historyState).to.equal('imported');
+    });
+    cy.get('.mapboxgl-canvas').should('be.visible').trigger('click', 525, 200);
+    cy.getByTestId('warning_text').should('be.visible');
+    cy.getByTestId('cancel_button').click();
+    cy.getByTestId('option_manually').click();
+    cy.getByTestId('site_condition_state').click();
+    cy.get('[data-test="option-Alabama"]').click();
+    cy.getByTestId('warning_text').should('be.visible');
+    cy.getByTestId('cancel_button').click();
+    cy.getByTestId('site_condition_region').click();
+    cy.get('[data-test="option-Adams"]').click();
+    cy.getByTestId('warning_text').should('be.visible');
+    cy.getByTestId('cancel_button').click();
+    cy.getByTestId('site_condition_soil_drainage').click();
+    cy.get('[data-test="option-Poorly Drained"]').click();
+    cy.getByTestId('warning_text').should('be.visible');
+    cy.getByTestId('cancel_button').click();
+  });
+
+  it.only('should be able to update a history on the rest steps', () => {
+
+  });
 });
