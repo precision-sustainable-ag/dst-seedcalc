@@ -1,15 +1,9 @@
 import React from 'react';
-import { ThemeProvider } from '@emotion/react';
 import DSTAccordion from './index';
-import dstTheme from '../../shared/themes';
 
 describe('<DSTAccordion />', () => {
   beforeEach(() => {
-    cy.mount(
-      <ThemeProvider theme={dstTheme}>
-        <DSTAccordion />
-      </ThemeProvider>,
-    );
+    cy.mount(<DSTAccordion />);
   });
 
   it('should render the accordion with given title', () => {
@@ -25,7 +19,7 @@ describe('<DSTAccordion />', () => {
     cy.get('@onChangeSpy').should('have.been.calledOnce');
   });
 
-  it.only('should expand or collapse the accordion when clicked', () => {
+  it('should expand or collapse the accordion when clicked', () => {
     cy.mount(<DSTAccordion />);
     cy.getByTestId('accordion_details').should('not.be.visible');
     cy.getByTestId('accordion_summary').click();

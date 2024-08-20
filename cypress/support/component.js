@@ -22,12 +22,22 @@ import './commands';
 // require('./commands')
 
 import { mount } from 'cypress/react18';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import Auth0ProviderWithNavigate from '../../src/components/Auth/Auth0ProviderWithNavigate';
+import store from '../../src/store';
 import dstTheme from '../../src/shared/themes';
 
 Cypress.Commands.add('mount', (component) => mount(
-  <ThemeProvider theme={dstTheme}>
-    {component}
-  </ThemeProvider>,
+  <Provider store={store}>
+    <ThemeProvider theme={dstTheme}>
+      <BrowserRouter>
+        <Auth0ProviderWithNavigate>
+          {component}
+        </Auth0ProviderWithNavigate>
+      </BrowserRouter>
+    </ThemeProvider>
+  </Provider>,
 ));
 
 // Example use:

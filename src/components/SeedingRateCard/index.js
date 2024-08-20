@@ -293,7 +293,6 @@ const SeedLabel = ({ label, unit, testId }) => (
 const SeedingRateCard = ({
   seedingRateLabel, seedingRateValue, plantValue, seedValue,
 }) => {
-  console.log(seedingRateLabel, seedingRateValue, plantValue, seedValue);
   // default value is always seeds/palnts per acre
   const [displayValue, setDisplayValue] = useState({ plantValue, seedValue, seedingRateValue });
 

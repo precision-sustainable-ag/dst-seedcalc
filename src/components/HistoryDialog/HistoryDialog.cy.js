@@ -1,16 +1,10 @@
 import React from 'react';
-import { Provider } from 'react-redux';
 import HistoryDialog from './index';
 import store from '../../store';
 
 describe('<HistoryDialog />', () => {
   beforeEach(() => {
-    cy.mount(
-      <Provider store={store}>
-        <HistoryDialog />
-      </Provider>,
-    );
-    // store.dispatch({ type: 'user/setHistoryDialogState', payload: { open: true, type: 'add' } });
+    cy.mount(<HistoryDialog />);
   });
 
   it('should show a dialog for adding calculation', () => {
@@ -31,7 +25,7 @@ describe('<HistoryDialog />', () => {
     cy.getByTestId('create_record_button').should('be.visible');
   });
 
-  it.only('should have validation for adding new calculations', () => {
+  it('should have validation for adding new calculations', () => {
     store.dispatch({
       type: 'user/setUserHistoryList',
       payload: {

@@ -1,6 +1,4 @@
 import React from 'react';
-import { Provider } from 'react-redux';
-import store from '../../store';
 import SeedingRateCard from './index';
 
 describe('<SeedingRateCard />', () => {
@@ -10,16 +8,12 @@ describe('<SeedingRateCard />', () => {
   const seedValue = 287272;
 
   beforeEach(() => {
-    cy.mount(
-      <Provider store={store}>
-        <SeedingRateCard
-          seedingRateLabel={seedingRateLabel}
-          seedingRateValue={seedingRateValue}
-          plantValue={plantValue}
-          seedValue={seedValue}
-        />
-      </Provider>,
-    );
+    cy.mount(<SeedingRateCard
+      seedingRateLabel={seedingRateLabel}
+      seedingRateValue={seedingRateValue}
+      plantValue={plantValue}
+      seedValue={seedValue}
+    />);
   });
   it('should show correct seeding rate value and label', () => {
     cy.get('.MuiBox-root').find('p').eq(0).invoke('text')
