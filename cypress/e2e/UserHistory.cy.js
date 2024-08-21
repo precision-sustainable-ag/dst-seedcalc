@@ -55,8 +55,8 @@ describe('Importing user history', () => {
     cy.getByTestId('select_calculation').click();
     cy.getByTestId('option-10').click();
     cy.getByTestId('import_calculation').click();
-    cy.wait('@getHistory');
-    cy.wait(1000);
+    cy.wait('@getHistory').wait(1000);
+    // history state should be imported
     cy.getReduxState().then((state) => {
       const { historyState } = state.user;
       cy.log(historyState);
@@ -67,7 +67,7 @@ describe('Importing user history', () => {
 
 describe('Updating user history', () => {
   beforeEach(() => {
-    cy.intercept('POST', 'https://develophistory.covercrop-data.org/v1/history/*', {
+    cy.intercept('PUT', 'https://develophistory.covercrop-data.org/v1/history/*', {
       statusCode: 200,
       body: {},
     }).as('updateHistory');
@@ -79,21 +79,23 @@ describe('Updating user history', () => {
   });
 
   it('should not be able to update history on site condition', () => {
+    // import history 10
     cy.getByTestId('import_button').click();
     cy.getByTestId('select_calculation').click();
     cy.getByTestId('option-10').click();
     cy.getByTestId('import_calculation').click();
-    cy.wait('@getHistory');
-    cy.wait(1000);
+    cy.wait('@getHistory').wait(1000);
     cy.getReduxState().then((state) => {
       const { historyState } = state.user;
       cy.log(historyState);
       expect(historyState).to.equal('imported');
     });
+    // should not be able to update state on map
     cy.get('.mapboxgl-canvas').should('be.visible').trigger('click', 525, 200);
     cy.getByTestId('warning_text').should('be.visible');
     cy.getByTestId('cancel_button').click();
     cy.getByTestId('option_manually').click();
+    // should not be able to update forms
     cy.getByTestId('site_condition_state').click();
     cy.get('[data-test="option-Alabama"]').click();
     cy.getByTestId('warning_text').should('be.visible');
@@ -108,7 +110,27 @@ describe('Updating user history', () => {
     cy.getByTestId('cancel_button').click();
   });
 
-  it.only('should be able to update a history on the rest steps', () => {
-
+  it.only('should be able to update history on the rest steps', () => {
+    // import history 10
+    cy.getByTestId('import_button').click();
+    cy.getByTestId('select_calculation').click();
+    cy.getByTestId('option-10').click();
+    cy.getByTestId('import_calculation').click();
+    cy.getByTestId('next_button').click();
+    // remove a species on step 2
+    cy.getByTestId('sidebar-Turnip, Forage').click();
+    cy.getReduxState().then((state) => {
+      const { historyState } = state.user;
+      cy.log(historyState);
+      expect(historyState).to.equal('updated');
+    });
+    cy.getByTestId('next_button').click();
+    // updatehistory should be called and history state should be reset to imported
+    cy.wait('@updateHistory').wait(1000);
+    cy.getReduxState().then((state) => {
+      const { historyState } = state.user;
+      cy.log(historyState);
+      expect(historyState).to.equal('imported');
+    });
   });
 });
