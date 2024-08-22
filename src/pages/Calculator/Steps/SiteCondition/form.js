@@ -315,6 +315,7 @@ const SiteConditionForm = ({
           p="10px"
         >
           <Dropdown
+            emptyWarning={soilFertility === ''}
             value={soilFertility}
             label="Soil Fertility: "
             handleChange={(e) => {

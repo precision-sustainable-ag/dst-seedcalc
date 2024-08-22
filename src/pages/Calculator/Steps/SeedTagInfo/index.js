@@ -151,7 +151,7 @@ const SeedTagInfo = ({
             </Button>
             <Button
               variant="outlined"
-              onClick={() => handleHaveSeedTagInfo(false)}
+              onClick={() => handleHaveSeedTagInfo(true)}
             >
               No
               <CloseIcon color="error" />
