@@ -110,7 +110,7 @@ describe('Updating user history', () => {
     cy.getByTestId('cancel_button').click();
   });
 
-  it.only('should be able to update history on the rest steps', () => {
+  it('should be able to update history on the rest steps', () => {
     // import history 10
     cy.getByTestId('import_button').click();
     cy.getByTestId('select_calculation').click();
