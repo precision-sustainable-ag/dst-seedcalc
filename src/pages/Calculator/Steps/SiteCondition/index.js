@@ -26,7 +26,7 @@ import { setHistoryDialogStateRedux, setMaxAvailableStepRedux } from '../../../.
 import pirschAnalytics from '../../../../shared/utils/analytics';
 
 const SiteCondition = ({
-  siteConditionStep, setSiteConditionStep, completedStep, setCompletedStep, token,
+  siteConditionStep, setSiteConditionStep, completedStep, setCompletedStep,
 }) => {
   // Location state
   const [mapState, setMapState] = useState({});
@@ -197,7 +197,7 @@ const SiteCondition = ({
                     </Grid>
                   )
               }
-              <DSTImport token={token} />
+              <DSTImport />
 
             </>
           ) : siteConditionStep === 2 ? (
