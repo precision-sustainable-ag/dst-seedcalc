@@ -36,7 +36,6 @@ describe('Seed Tag Info', () => {
 
 describe('Seed Tag Info NECCC & SCCC', () => {
   it('should work in NECCC', () => {
-    const selectSpecies = ['Brassica, Forage', 'Mustard'];
     mockSiteCondition('NECCC');
     mockSpeciesSelection('NECCC');
     mockMixRatio('NECCC');
@@ -46,7 +45,6 @@ describe('Seed Tag Info NECCC & SCCC', () => {
   });
 
   it('should work in SCCC', () => {
-    const selectSpecies = ['Millet, Japanese', 'Sorghum-sudangrass'];
     mockSiteCondition('SCCC');
     mockSpeciesSelection('SCCC');
     mockMixRatio('SCCC');
