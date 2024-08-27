@@ -76,3 +76,26 @@ describe('Mix Ratios', () => {
       });
   });
 });
+
+describe('Mix Ratios NECCC & SCCC', () => {
+  it('should only have scroller for percent of single species rate in NECCC', () => {
+    const selectSpecies = 'Brassica, Forage';
+    mockSiteCondition('NECCC');
+    mockSpeciesSelection('NECCC');
+    cy.getByTestId(`accordion-${selectSpecies}`).click();
+    cy.getByTestId(`${selectSpecies}-${seedDataUnits.defaultSingelSpeciesSeedingRatePLS}-value`)
+      .find('p').invoke('text').should('not.equal', '0');
+    cy.get(`[data-test*="${selectSpecies}-slider"]`).should('have.length', 1);
+  });
+
+  it('should have 2 scrollers in SCCC', () => {
+    const selectSpecies = 'Millet, Japanese';
+    mockSiteCondition('SCCC');
+    mockSpeciesSelection('SCCC');
+    cy.getByTestId(`accordion-${selectSpecies}`).click();
+    cy.getByTestId(`${selectSpecies}-${seedDataUnits.defaultSingelSpeciesSeedingRatePLS}-value`)
+      .find('p').invoke('text').should('not.equal', '0');
+    cy.get(`[data-test*="${selectSpecies}-slider_single_species_seeding_rate"]`).should('be.visible');
+    cy.get(`[data-test*="${selectSpecies}-slider_percent_of_rate"]`).should('be.visible');
+  });
+});

@@ -37,9 +37,19 @@ export const mockSiteCondition = (council) => {
   cy.getByTestId('next_button').click();
 };
 
-export const mockSpeciesSelection = () => {
-  const selectType = 'Brassica';
-  const selectSpecies = ['Radish, Daikon', 'Rapeseed'];
+export const mockSpeciesSelection = (council) => {
+  let selectType;
+  let selectSpecies;
+  if (council === undefined) {
+    selectType = 'Brassica';
+    selectSpecies = ['Radish, Daikon', 'Rapeseed'];
+  } else if (council === 'NECCC') {
+    selectType = 'Brassica';
+    selectSpecies = ['Brassica, Forage', 'Mustard'];
+  } else if (council === 'SCCC') {
+    selectType = 'Grass';
+    selectSpecies = ['Millet, Japanese', 'Sorghum-sudangrass'];
+  }
   cy.getByTestId(`accordion-${selectType}`).click();
   selectSpecies.forEach((species) => {
     cy.getByTestId(`species-card-${species}`).find('button').click();
