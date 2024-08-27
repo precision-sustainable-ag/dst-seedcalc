@@ -32,7 +32,11 @@ describe('Site Condition form', () => {
     cy.getByTestId('option_manually').should('be.visible').click();
   });
 
-  // TODO: test with NECCC, SCCC and NRCS
+  it('will be able to update state', () => {
+    cy.getByTestId('site_condition_state').click();
+    cy.get('[data-test="option-Alabama"]').click();
+    cy.getByTestId('site_condition_state').find('input').should('have.value', 'Alabama');
+  });
 
   it('will only have state and planting date filled if select manually enter', () => {
     cy.getByTestId('site_condition_state').find('input').should('have.value', 'Indiana');
@@ -52,6 +56,10 @@ describe('Site Condition form', () => {
 
   it('will show correct tile drainage information when tile drainage is checked', () => {
     cy.getByTestId('site_condition_soil_drainage').click();
+    cy.get('[data-test="option-Very Poorly Drained"]').click();
+    cy.getByTestId('site_condition_tile_drainage').click();
+    cy.getByTestId('tile_drainage_class').should('contain', 'Somewhat Poorly Drained');
+    cy.getByTestId('site_condition_soil_drainage').click();
     cy.get('[data-test="option-Poorly Drained"]').click();
     cy.getByTestId('site_condition_tile_drainage').click();
     cy.getByTestId('tile_drainage_class').should('contain', 'Moderately Well Drained');
@@ -59,6 +67,8 @@ describe('Site Condition form', () => {
     cy.get('[data-test="option-Somewhat Poorly Drained"]').click();
     cy.getByTestId('site_condition_tile_drainage').click();
     cy.getByTestId('tile_drainage_class').should('contain', 'Moderately Well Drained');
+    cy.getByTestId('site_condition_tile_drainage').click();
+    cy.getByTestId('tile_drainage_class').should('not.exist');
   });
 
   it('will make the next step button available after input all required information', () => {
@@ -69,12 +79,34 @@ describe('Site Condition form', () => {
     cy.getByTestId('site_condition_acres').find('input').type('1');
     cy.getByTestId('next_button').should('not.be.disabled');
   });
+
+  it('should be able to go back to state selection page', () => {
+    cy.getByTestId('back_button').click();
+    cy.get('.mapboxgl-canvas').should('be.visible');
+  });
 });
 
 describe('Site Condition NECCC', () => {
   beforeEach(() => {
     clickStateMap('NECCC');
     cy.getByTestId('option_manually').should('be.visible').click();
+  });
+
+  it('will show correct tile drainage information when tile drainage is checked', () => {
+    cy.getByTestId('site_condition_soil_drainage').click();
+    cy.get('[data-test="option-Very Poorly Drained"]').click();
+    cy.getByTestId('site_condition_tile_drainage').click();
+    cy.getByTestId('tile_drainage_class').should('contain', 'Poorly Drained');
+    cy.getByTestId('site_condition_soil_drainage').click();
+    cy.get('[data-test="option-Poorly Drained"]').click();
+    cy.getByTestId('site_condition_tile_drainage').click();
+    cy.getByTestId('tile_drainage_class').should('contain', 'Somewhat Poorly Drained');
+    cy.getByTestId('site_condition_soil_drainage').click();
+    cy.get('[data-test="option-Somewhat Poorly Drained"]').click();
+    cy.getByTestId('site_condition_tile_drainage').click();
+    cy.getByTestId('tile_drainage_class').should('contain', 'Moderately Well Drained');
+    cy.getByTestId('site_condition_tile_drainage').click();
+    cy.getByTestId('tile_drainage_class').should('not.exist');
   });
 
   it('should have the option of soil fertility', () => {
@@ -99,7 +131,7 @@ describe('Site Condition SCCC', () => {
     cy.getByTestId('option_manually').should('be.visible').click();
   });
 
-  it.only('will make the next step button available after input all required information', () => {
+  it('will make the next step button available after input all required information', () => {
     cy.getByTestId('site_condition_region').click();
     cy.get('[data-test="option-Zone 6"]').click();
     cy.getByTestId('site_condition_soil_drainage').click();
