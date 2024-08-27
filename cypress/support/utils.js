@@ -1,22 +1,31 @@
-export const clickStateMap = () => {
+export const clickStateMap = (council) => {
   cy.visit('/');
   cy.get('.mapboxgl-canvas').should('be.visible');
   cy.get('div[class^="map_loadingContainer"]').should('not.exist');
   // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(1000);
-  // click on Indiana
-  cy.get('.mapboxgl-canvas').should('be.visible').trigger('click', 525, 160);
+  if (council === undefined) {
+    // click on Indiana
+    cy.get('.mapboxgl-canvas').should('be.visible').trigger('click', 525, 160);
+  } else if (council === 'NECCC') {
+    // click on Pennsylvania
+    cy.get('.mapboxgl-canvas').should('be.visible').trigger('click', 620, 150);
+  } else if (council === 'SCCC') {
+    // click on NC
+    cy.get('.mapboxgl-canvas').should('be.visible').trigger('click', 600, 220);
+  }
 };
 
 // eslint-disable-next-line import/prefer-default-export
-export const mockSiteCondition = () => {
-  clickStateMap();
+export const mockSiteCondition = (council) => {
+  clickStateMap(council);
   cy.getByTestId('option_manually').should('be.visible').click();
   cy.getByTestId('site_condition_region').click();
   cy.get('[data-test="option-Adams"]').click();
   cy.getByTestId('site_condition_soil_drainage').click();
   cy.get('[data-test="option-Poorly Drained"]').click();
   cy.getByTestId('site_condition_acres').find('input').type('1');
+  cy.getByTestId('check_nrcs').click();
   cy.getByTestId('next_button').click();
 };
 

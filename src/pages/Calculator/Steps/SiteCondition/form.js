@@ -307,6 +307,7 @@ const SiteConditionForm = ({
             handleChange={() => {
               dispatch(checkNRCSRedux(!checkNRCSStandards));
             }}
+            testId="check_nrcs"
           />
         </Grid>
       )}
@@ -328,6 +329,7 @@ const SiteConditionForm = ({
             }}
             size={12}
             items={soilFertilityValues}
+            testId="site_condition_soil_fertility"
           />
         </Grid>
       )}

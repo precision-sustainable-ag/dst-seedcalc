@@ -70,3 +70,41 @@ describe('Site Condition form', () => {
     cy.getByTestId('next_button').should('not.be.disabled');
   });
 });
+
+describe('Site Condition NECCC', () => {
+  beforeEach(() => {
+    clickStateMap('NECCC');
+    cy.getByTestId('option_manually').should('be.visible').click();
+  });
+
+  it('should have the option of soil fertility', () => {
+    cy.getByTestId('site_condition_soil_fertility').should('be.visible');
+  });
+
+  it('will make the next step button available after input all required information', () => {
+    cy.getByTestId('site_condition_region').click();
+    cy.get('[data-test="option-Zone 6"]').click();
+    cy.getByTestId('site_condition_soil_drainage').click();
+    cy.get('[data-test="option-Poorly Drained"]').click();
+    cy.getByTestId('site_condition_acres').find('input').type('1');
+    cy.getByTestId('site_condition_soil_fertility').click();
+    cy.get('[data-test="option-Low"]').click();
+    cy.getByTestId('next_button').should('not.be.disabled');
+  });
+});
+
+describe('Site Condition SCCC', () => {
+  beforeEach(() => {
+    clickStateMap('SCCC');
+    cy.getByTestId('option_manually').should('be.visible').click();
+  });
+
+  it.only('will make the next step button available after input all required information', () => {
+    cy.getByTestId('site_condition_region').click();
+    cy.get('[data-test="option-Zone 6"]').click();
+    cy.getByTestId('site_condition_soil_drainage').click();
+    cy.get('[data-test="option-Poorly Drained"]').click();
+    cy.getByTestId('site_condition_acres').find('input').type('1');
+    cy.getByTestId('next_button').should('not.be.disabled');
+  });
+});
