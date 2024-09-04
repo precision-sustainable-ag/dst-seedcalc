@@ -8,4 +8,14 @@ export default defineConfig(() => ({
   plugins: [
     react(),
   ],
+  // // setup for Kubernetes
+  // server: {
+  //   open: true,
+  //   watch: {
+  //     usePolling: true,
+  //   },
+  //   host: true, // needed for the Docker Container port mapping to work
+  //   strictPort: true,
+  //   port: 3000,
+  // },
 }));

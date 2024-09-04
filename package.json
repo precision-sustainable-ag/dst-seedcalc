@@ -12,7 +12,6 @@
     "@mui/x-date-pickers": "^5.0.20",
     "@psa/dst.ui.fade-alert": "^0.0.3",
     "@psa/dst.ui.map": "^0.0.61",
-    "@psa/dst.ui.region-selector-map": "^0.0.20",
     "@psa/dst.ui.spinner": "^0.0.2",
     "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^5.17.0",
@@ -31,6 +30,7 @@
     "react-router-dom": "^6.16.0",
     "recharts": "^2.8.0",
     "redux": "^4.2.1",
+    "shared-react-components": "github:precision-sustainable-ag/shared-react-components",
     "web-vitals": "^2.1.4",
     "xlsx": "^0.18.5"
   },
