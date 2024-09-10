@@ -14,7 +14,7 @@ To see the documents for this tool, visit [the wiki pages](https://precision-sus
 
 **Date Created:** 02/16/22
 
-**Date Last Modified:** 07/18/24
+**Date Last Modified:** 09/10/24
 
 ### Table of Contents
 
@@ -51,12 +51,13 @@ The technologies we are currently using in this repo:
 4. Create a `.env` file in the root directory. The file will contain following keys, ask @mikahpinegar for the values of the keys.
 
     ```
-    REACT_APP_AUTH0_DOMAIN = "<auth0 domain>"
-    REACT_APP_AUTH0_CLIENT_ID = "<auth0 client id>"
-    REACT_APP_AUTH0_AUDIENCE="<auth0 audience>"
-    REACT_APP_USER_HISTORY_API_URL="<user history url>"
-    REACT_APP_USER_HISTORY_SCHEMA="<schema>"
-    REACT_APP_RELEASE_NOTES_URL="<release notes url>"
+    VITE_API_AUTH0_DOMAIN=<auth0 domain>
+    VITE_API_AUTH0_CLIENT_ID=<auth0 client id>
+    VITE_API_AUTH0_AUDIENCE=<auth0 audience>
+    VITE_API_USER_HISTORY_API_URL=<user history url>
+    VITE_API_USER_HISTORY_SCHEMA=<schema>
+    VITE_API_RELEASE_NOTES_URL=<release notes url>
+    VITE_API_MAPBOX_TOKEN=<mapbox token>
     ```
 
 5. After the dependencies have been installed and the .env file has been created, run `npm start` to run the code locally. 

@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Button, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { Spinner } from '@psa/dst.ui.spinner';
-import { RegionSelectorMap } from '@psa/dst.ui.region-selector-map';
+import { RegionSelectorMap } from 'shared-react-components/src';
 import { isEmptyNull, validateForms } from '../../../../shared/utils/format';
 import { getCrops } from '../../../../features/calculatorSlice/api';
 import { getLocality, getRegion } from '../../../../features/siteConditionSlice/api';
@@ -24,6 +24,7 @@ import '../steps.scss';
 import { historyStates } from '../../../../features/userSlice/state';
 import { setHistoryDialogStateRedux, setMaxAvailableStepRedux } from '../../../../features/userSlice/actions';
 import pirschAnalytics from '../../../../shared/utils/analytics';
+import { mapBoxToken } from '../../../../shared/data/keys';
 
 const SiteCondition = ({
   siteConditionStep, setSiteConditionStep, completedStep, setCompletedStep,
@@ -164,6 +165,7 @@ const SiteCondition = ({
                 initLon={-90}
                 initLat={39}
                 initStartZoom={3}
+                mapBoxToken={mapBoxToken}
               />
               {
                 Object.keys(mapState).length > 0
