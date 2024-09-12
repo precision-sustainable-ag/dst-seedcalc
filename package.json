@@ -37,7 +37,7 @@
   },
   "scripts": {
     "start": "react-scripts -r @cypress/instrument-cra start",
-    "build": "react-scripts build",
+    "build": "react-scripts build --profile --no-minify",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "cy:open": "npx cypress open cross-env NODE_OPTIONS=--max_old_space_size=8192 webpack",
