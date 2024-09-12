@@ -86,7 +86,7 @@ Cypress.Commands.add('loginToAuth0', () => {
       });
 
       // Ensure Auth0 has redirected us back to the RWA.
-      cy.url().should('equal', 'http://localhost:3000/');
+      cy.url().should('equal', Cypress.config().baseUrl);
     },
   );
 

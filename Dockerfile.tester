@@ -11,7 +11,7 @@ COPY . .
 RUN npm install
 
 # Set the base URL for Cypress tests
-ENV CYPRESS_baseUrl=http://localhost:3000
+ENV CYPRESS_baseUrl="http://localhost:80/"
 
 # Specify the command to run Cypress tests
-CMD ["npx", "cypress", "run"]
+CMD ["npx", "cypress", "run", "--browser", "chrome"]

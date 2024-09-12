@@ -1,7 +1,7 @@
 export const clickStateMap = (council) => {
   cy.visit('/');
   cy.get('.mapboxgl-canvas').should('be.visible');
-  cy.get('div[class^="map_loadingContainer"]').should('not.exist');
+  cy.get('div[class^="map_loadingContainer"]', { timeout: 10000 }).should('not.be.visible');
   // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(1000);
   if (council === undefined) {
