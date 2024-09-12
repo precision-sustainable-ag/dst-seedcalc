@@ -3,7 +3,7 @@ require('dotenv').config();
 
 module.exports = defineConfig({
   e2e: {
-    baseUrl: 'http://localhost:80/',
+    baseUrl: 'http://localhost/',
     experimentalRunAllSpecs: true,
     trashAssetsBeforeRuns: true,
     setupNodeEvents(on, config) {
