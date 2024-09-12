@@ -17,10 +17,11 @@ const DSTAccordion = ({
           {expanded ? <KeyboardDoubleArrowUpIcon /> : <KeyboardDoubleArrowDownIcon />}
         </Typography>
       )}
+      data-test="accordion_summary"
     >
       {summary}
     </AccordionSummary>
-    <AccordionDetails>
+    <AccordionDetails data-test="accordion_details">
       {children}
     </AccordionDetails>
   </Accordion>

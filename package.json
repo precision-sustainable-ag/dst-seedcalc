@@ -36,11 +36,11 @@
     "xlsx": "^0.18.5"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-scripts -r @cypress/instrument-cra start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "cy:open": "cypress open"
+    "cy:open": "cypress open cross-env NODE_OPTIONS=--max_old_space_size=8192 webpack"
   },
   "eslintConfig": {
     "extends": [
@@ -65,7 +65,9 @@
     ]
   },
   "devDependencies": {
-    "cypress": "^13.13.1",
+    "@cypress/code-coverage": "^3.12.45",
+    "@cypress/instrument-cra": "^1.4.0",
+    "cypress": "^13.13.3",
     "eslint": "^8.53.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-cypress": "^3.3.0",

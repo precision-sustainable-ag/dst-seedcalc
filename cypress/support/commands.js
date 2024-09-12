@@ -58,3 +58,40 @@ Cypress.Commands.add('updateSlider', (testId, value) => {
   cy.getByTestId(testId).find('.MuiSlider-thumb')
     .click();
 });
+
+Cypress.Commands.add('loginToAuth0', () => {
+  const username = Cypress.env('auth0_username');
+  const password = Cypress.env('auth0_password');
+  const log = Cypress.log({
+    displayName: 'AUTH0 LOGIN',
+    message: [`🔐 Authenticating | ${username}`],
+    // @ts-ignore
+    autoEnd: false,
+  });
+  log.snapshot('before');
+
+  const args = { username, password };
+  cy.session(
+    `auth0-${username}`,
+    () => {
+      // App landing page redirects to Auth0.
+      cy.visit('/');
+      cy.getByTestId('auth_button').click();
+
+      // Login on Auth0.
+      cy.origin(Cypress.env('auth0_domain'), { args }, ({ username, password }) => {
+        cy.get('input#username').type(username);
+        cy.get('input#password').type(password);
+        cy.contains('button[value=default]', 'Continue').click();
+      });
+
+      // Ensure Auth0 has redirected us back to the RWA.
+      cy.url().should('equal', 'http://localhost:3000/');
+    },
+  );
+
+  log.snapshot('after');
+  log.end();
+});
+
+Cypress.Commands.add('getReduxState', () => cy.window().its('store').invoke('getState'));

@@ -98,3 +98,33 @@ describe('Seed Tag Info', () => {
       });
   });
 });
+
+describe('Seed Tag Info NECCC & SCCC', () => {
+  it('should work in NECCC', () => {
+    const selectSpecies = ['Brassica, Forage', 'Mustard'];
+    mockSiteCondition('NECCC');
+    mockSpeciesSelection('NECCC');
+    mockMixRatio('NECCC');
+    mockSeedingMethod();
+    mockMixRatio();
+    mockSeedTagInfo();
+    selectSpecies.forEach((species) => {
+      cy.getByTestId(`accordion-${species}`).click();
+    });
+    cy.getByTestId('change_my_rate_button').eq(0).click();
+  });
+
+  it('should work in SCCC', () => {
+    const selectSpecies = ['Millet, Japanese', 'Sorghum-sudangrass'];
+    mockSiteCondition('SCCC');
+    mockSpeciesSelection('SCCC');
+    mockMixRatio('SCCC');
+    mockSeedingMethod();
+    mockMixRatio();
+    mockSeedTagInfo();
+    selectSpecies.forEach((species) => {
+      cy.getByTestId(`accordion-${species}`).click();
+    });
+    cy.getByTestId('change_my_rate_button').eq(0).click();
+  });
+});

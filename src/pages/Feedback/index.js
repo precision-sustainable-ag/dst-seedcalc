@@ -33,6 +33,7 @@ const Feedback = () => {
     if (siteCondition.council === '') return './PSALogo.png';
     if (siteCondition.council === 'MCCC') return './mccc-logo.png';
     if (siteCondition.council === 'NECCC') return './neccc-logo.png';
+    if (siteCondition.council === 'SCCC') return './sccc_logo.png';
     return undefined;
   };
 
@@ -293,6 +294,7 @@ const Feedback = () => {
         message={snackbarData.message}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         color={snackbarData.color}
+        data-test="feedback_snackbar"
       />
     </Grid>
 

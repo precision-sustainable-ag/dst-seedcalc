@@ -1,5 +1,5 @@
 import {
-  mockMixRatio, mockSeedingMethod, mockSiteCondition, mockSpeciesSelection,
+  mockMixRatio, mockMixSeedingRate, mockSeedingMethod, mockSiteCondition, mockSpeciesSelection,
 } from '../support/utils';
 
 describe('Seed Tag Info', () => {
@@ -10,7 +10,7 @@ describe('Seed Tag Info', () => {
     mockSpeciesSelection();
     mockMixRatio();
     mockSeedingMethod();
-    mockMixRatio();
+    mockMixSeedingRate();
   });
 
   it('should not be able to click next before make selection', () => {
@@ -25,5 +25,31 @@ describe('Seed Tag Info', () => {
     cy.getByTestId(`${selectSpecies}-germination`).find('input').clear();
     cy.getByTestId(`${selectSpecies}-germination`).type(testValue);
     cy.getByTestId(`${selectSpecies}-germination`).find('input').should('have.value', '50');
+    cy.getByTestId(`${selectSpecies}-purity`).find('input').clear();
+    cy.getByTestId(`${selectSpecies}-purity`).type(testValue);
+    cy.getByTestId(`${selectSpecies}-purity`).find('input').should('have.value', '50');
+    cy.getByTestId(`${selectSpecies}-seedsPerPound`).find('input').clear();
+    cy.getByTestId(`${selectSpecies}-seedsPerPound`).type(10000);
+    cy.getByTestId(`${selectSpecies}-seedsPerPound`).find('input').should('have.value', '10000');
+  });
+});
+
+describe('Seed Tag Info NECCC & SCCC', () => {
+  it('should work in NECCC', () => {
+    mockSiteCondition('NECCC');
+    mockSpeciesSelection('NECCC');
+    mockMixRatio('NECCC');
+    mockSeedingMethod();
+    mockMixSeedingRate();
+    cy.getByTestId('selection_no').click();
+  });
+
+  it('should work in SCCC', () => {
+    mockSiteCondition('SCCC');
+    mockSpeciesSelection('SCCC');
+    mockMixRatio('SCCC');
+    mockSeedingMethod();
+    mockMixSeedingRate();
+    cy.getByTestId('selection_no').click();
   });
 });

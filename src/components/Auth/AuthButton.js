@@ -10,10 +10,11 @@ import React from 'react';
 const AuthButton = ({
   type, variant = 'text', onClickCallback = () => {},
 }) => {
-  const { logout, loginWithPopup } = useAuth0();
+  const { logout, loginWithPopup, loginWithRedirect } = useAuth0();
 
   const handleLogin = async () => {
-    await loginWithPopup();
+    if (window.Cypress) await loginWithRedirect();
+    else await loginWithPopup();
   };
 
   const handleSignUp = async () => {
@@ -59,7 +60,7 @@ const AuthButton = ({
   };
 
   return (
-    <Button variant={variant} onClick={handleClick}>
+    <Button variant={variant} onClick={handleClick} data-test="auth_button">
       <Typography sx={{ fontSize: '0.875rem', fontWeight: 'bold' }} color={getColor()}>
         {type}
       </Typography>
