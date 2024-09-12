@@ -42,8 +42,11 @@
     "eject": "react-scripts eject",
     "cy:open": "npx cypress open cross-env NODE_OPTIONS=--max_old_space_size=8192 webpack",
     "e2e:chrome": "npx cypress run --e2e --browser chrome",
-    "component:chrome": "cypress run --component --browser chrome",
-    "test:all": "npm run component:chrome && npm run e2e:chrome"
+    "dev:e2e:chrome": "npx cypress run --e2e --browser chrome --config-file dev.cypress.config.js",
+    "component:chrome": "npx cypress run --component --browser chrome",
+    "dev:component:chrome": "npx cypress run --component --browser chrome --config-file dev.cypress.config.js",
+    "test:all": "npm run component:chrome && npm run e2e:chrome",
+    "dev:test:all": "npm run dev:component:chrome && npm run dev:e2e:chrome"
   },
   "eslintConfig": {
     "extends": [
