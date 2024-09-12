@@ -14,4 +14,4 @@ RUN npm install
 ENV CYPRESS_baseUrl="http://localhost/"
 
 # Specify the command to run Cypress tests
-CMD ["npx", "cypress", "run", "--browser", "chrome"]
+CMD ["npm", "run", "test:all"]
