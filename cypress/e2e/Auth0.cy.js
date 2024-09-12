@@ -4,7 +4,10 @@ describe('auth0', () => {
     cy.visit('/');
   });
 
-  it('shoule be able to login', () => {
-
+  it('shoule show logout button and import calculation from history after login', () => {
+    cy.getByTestId('auth_button').find('p').invoke('text').should('equal', 'Logout');
+    cy.getByTestId('import_button').click();
+    cy.getByTestId('create_calculation').should('be.visible');
+    cy.getByTestId('import_calculation').should('be.visible');
   });
 });

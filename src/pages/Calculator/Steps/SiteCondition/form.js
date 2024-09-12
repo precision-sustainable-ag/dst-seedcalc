@@ -307,6 +307,7 @@ const SiteConditionForm = ({
             handleChange={() => {
               dispatch(checkNRCSRedux(!checkNRCSStandards));
             }}
+            testId="check_nrcs"
           />
         </Grid>
       )}
@@ -328,13 +329,14 @@ const SiteConditionForm = ({
             }}
             size={12}
             items={soilFertilityValues}
+            testId="site_condition_soil_fertility"
           />
         </Grid>
       )}
       <Grid item xs={0} md={3} />
 
       <Grid item xs={12} margin="1rem">
-        <Button variant="contained" onClick={() => setStep(1)}>Back</Button>
+        <Button variant="contained" onClick={() => setStep(1)} data-test="back_button">Back</Button>
       </Grid>
 
     </Grid>

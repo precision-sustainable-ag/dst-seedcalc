@@ -216,6 +216,7 @@ const SeedInfo = ({
               valueLabelDisplay="auto"
               onChange={(e) => setSingleSpeciesSeedingRate(e.target.value)}
               onChangeCommitted={() => handleFormValueChange(seed, 'singleSpeciesSeedingRate', singleSpeciesSeedingRate)}
+              data-test={`${seed.label}-slider_single_species_seeding_rate`}
             />
           </Grid>
         )}

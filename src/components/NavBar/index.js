@@ -55,12 +55,12 @@ const NavBar = () => {
         )
         : (
           <>
-            <Button onClick={() => window.open(releaseNotesUrl)} sx={{ textTransform: 'none' }}>
+            <Button onClick={() => window.open(releaseNotesUrl)} sx={{ textTransform: 'none' }} data-test="release_notes">
               <Typography fontSize="0.875rem" fontWeight="bold">
                 Release Notes
               </Typography>
             </Button>
-            <Button onClick={() => navigate('/feedback')} sx={{ textTransform: 'none' }}>
+            <Button onClick={() => navigate('/feedback')} sx={{ textTransform: 'none' }} data-test="feedback">
               <Typography fontSize="0.875rem" fontWeight="bold">
                 Feedback
               </Typography>
