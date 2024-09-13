@@ -17,4 +17,4 @@ ENV CYPRESS_baseUrl="http://localhost/"
 RUN chmod +x ./run_tests.sh
 
 # Run the bash script
-ENTRYPOINT ["./run_tests.sh"]
+ENTRYPOINT ["npm", "run", "test:all"]
