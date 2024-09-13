@@ -13,5 +13,5 @@ RUN npm install
 # Set the base URL for Cypress tests
 ENV CYPRESS_baseUrl="http://localhost/"
 
-# Specify the command to run Cypress tests
-CMD ["npx", "cypress", "run", "--component", "&&", "npx", "cypress", "run"]
+# Use the shell form of CMD to run both component and E2E tests sequentially
+CMD npx cypress run --component && npx cypress run --e2e
