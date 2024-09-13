@@ -13,5 +13,8 @@ RUN npm install
 # Set the base URL for Cypress tests
 ENV CYPRESS_baseUrl="http://localhost/"
 
+# Make the script executable
+RUN chmod +x ./run_tests.s
+
 # Run the bash script
-CMD ["npx", "cypress", "run", "--component"]
+CMD ["bash", "./run_tests.sh"]
