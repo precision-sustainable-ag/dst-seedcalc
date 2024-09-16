@@ -17,6 +17,7 @@ export default defineConfig({
       framework: 'react',
       bundler: 'vite',
     },
+    supportFile: "cypress/support/component.jsx",
     specPattern: 'src/**/*.cy.{js,jsx,ts,tsx}', // Specify the path to your component tests
     numTestsKeptInMemory: 1,
     experimentalMemoryManagement: true,
