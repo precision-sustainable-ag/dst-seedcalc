@@ -39,6 +39,7 @@
           "namedComponents": "arrow-function",
           "unnamedComponents": "arrow-function"
         }
-      ]
+      ],
+      "import/no-extraneous-dependencies": ["error", {"devDependencies": true}]
     }
 }

@@ -41,9 +41,9 @@
     "preview": "vite preview",
     "cy:open": "npx cypress open cross-env NODE_OPTIONS=--max_old_space_size=8192 webpack",
     "e2e:chrome": "npx cypress run --e2e --browser chrome",
-    "dev:e2e:chrome": "npx cypress run --e2e --browser chrome --config-file dev.cypress.config.js",
+    "dev:e2e:chrome": "npx cypress run --e2e --browser chrome --config-file dev.cypress.config.mjs",
     "component:chrome": "npx cypress run --component --browser chrome",
-    "dev:component:chrome": "npx cypress run --component --browser chrome --config-file dev.cypress.config.js",
+    "dev:component:chrome": "npx cypress run --component --browser chrome --config-file dev.cypress.config.mjs",
     "test:all": "npm run component:chrome && npm run e2e:chrome",
     "dev:test:all": "npm run dev:component:chrome && npm run dev:e2e:chrome"
   },

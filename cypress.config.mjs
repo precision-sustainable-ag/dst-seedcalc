@@ -7,23 +7,15 @@ export default defineConfig({
     experimentalRunAllSpecs: true,
     trashAssetsBeforeRuns: true,
     setupNodeEvents(on, config) {
-
       coverageTask(on, config);
       return config;
-
-      // require('@cypress/code-coverage/task')(on, config);
-      // // include any other plugin code...
-
-      // // It's IMPORTANT to return the config object
-      // // with any changed environment variables
-      // return config;
     },
   },
 
   component: {
     devServer: {
-      framework: 'create-react-app',
-      bundler: 'webpack',
+      framework: 'react',
+      bundler: 'vite',
     },
     specPattern: 'src/**/*.cy.{js,jsx,ts,tsx}', // Specify the path to your component tests
     numTestsKeptInMemory: 1,
