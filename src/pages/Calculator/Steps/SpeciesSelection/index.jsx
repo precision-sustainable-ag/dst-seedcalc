@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { useSelector, useDispatch } from 'react-redux';
 import { Typography, Box } from '@mui/material';
-import { Spinner } from '@psa/dst.ui.spinner';
+import { Spinner } from 'shared-react-components/src';
 import SearchField from '../../../../components/SearchField';
 import { seedsType, seedsLabel } from '../../../../shared/data/species';
 import { validateForms } from '../../../../shared/utils/format';

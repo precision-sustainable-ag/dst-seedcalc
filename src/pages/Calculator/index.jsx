@@ -9,7 +9,7 @@ import { Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { FadeAlert } from '@psa/dst.ui.fade-alert';
+import { FadeAlert } from 'shared-react-components/src';
 import { useAuth0 } from '@auth0/auth0-react';
 import {
   SiteCondition,

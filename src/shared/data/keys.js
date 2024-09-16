@@ -14,4 +14,4 @@ export const auth0Audience = VITE_API_AUTH0_AUDIENCE;
 export const userHistoryApiUrl = VITE_API_USER_HISTORY_API_URL;
 export const userHistorySchema = VITE_API_USER_HISTORY_SCHEMA;
 export const releaseNotesUrl = VITE_API_RELEASE_NOTES_URL;
-export const mapBoxToken = VITE_API_MAPBOX_TOKEN;
+export const mapboxToken = VITE_API_MAPBOX_TOKEN;
