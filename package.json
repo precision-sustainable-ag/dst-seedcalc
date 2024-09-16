@@ -38,7 +38,7 @@
   },
   "type": "module",
   "scripts": {
-    "start": "vite",
+    "start": "vite --port 3000",
     "build": "vite build",
     "serve": "vite preview",
     "cy:open": "npx cypress open cross-env NODE_OPTIONS=--max_old_space_size=8192 webpack",

@@ -1,18 +1,22 @@
-const { defineConfig } = require('cypress');
-require('dotenv').config();
+import { defineConfig } from 'cypress';
+import coverageTask from "@cypress/code-coverage/task.js";
 
-module.exports = defineConfig({
+export default defineConfig({
   e2e: {
-    baseUrl: 'http://localhost/',
+    baseUrl: 'http://localhost:3000/',
     experimentalRunAllSpecs: true,
     trashAssetsBeforeRuns: true,
     setupNodeEvents(on, config) {
-      require('@cypress/code-coverage/task')(on, config);
-      // include any other plugin code...
 
-      // It's IMPORTANT to return the config object
-      // with any changed environment variables
+      coverageTask(on, config);
       return config;
+
+      // require('@cypress/code-coverage/task')(on, config);
+      // // include any other plugin code...
+
+      // // It's IMPORTANT to return the config object
+      // // with any changed environment variables
+      // return config;
     },
   },
 
