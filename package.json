@@ -84,5 +84,8 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "sass": "^1.67.0",
     "vite-plugin-eslint": "^1.8.1"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.9.5"
   }
 }
