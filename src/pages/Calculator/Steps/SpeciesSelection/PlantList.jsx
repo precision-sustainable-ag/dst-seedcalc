@@ -121,7 +121,9 @@ const PlantList = ({
     const { id: cropId, label: seedName } = seed;
     // if seed not in seedSelected, add it
     if (seedsSelected.filter((s) => s.label === seedName).length === 0) {
-      const url = `https://developapi.covercrop-selector.org/v2/crops/${cropId}?regions=${stateId}&context=seed_calc&regions=${countyId}`;
+      const url = `https://${
+        /(localhost|dev)/i.test(window.location) ? 'developapi' : 'api'
+      }.covercrop-selector.org/v2/crops/${cropId}?regions=${stateId}&context=seed_calc&regions=${countyId}`;
       const { data } = await fetch(url).then((res) => res.json());
       dispatch(addSeedRedux(data));
       const { label, attributes } = data;

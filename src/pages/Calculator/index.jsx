@@ -31,6 +31,7 @@ import HistoryDialog from '../../components/HistoryDialog';
 import useUserHistory from '../../shared/hooks/useUserHistory';
 import { historyStates } from '../../features/userSlice/state';
 import pirschAnalytics from '../../shared/utils/analytics';
+import { setAuthToken } from '../../shared/utils/authToken';
 
 const Calculator = () => {
   // initially set calculator here
@@ -39,7 +40,6 @@ const Calculator = () => {
   const [siteConditionStep, setSiteConditionStep] = useState(1);
   // this completedStep is to determine whether the next button is clickable on each page
   const [completedStep, setCompletedStep] = useState([...completedList]);
-  const [token, setToken] = useState(null);
   const [showHeaderLogo, setShowHeaderLogo] = useState(true);
 
   const siteCondition = useSelector((state) => state.siteCondition);
@@ -71,7 +71,6 @@ const Calculator = () => {
             setSiteConditionStep={setSiteConditionStep}
             completedStep={completedStep}
             setCompletedStep={setCompletedStep}
-            token={token}
           />
         );
       case 'Species Selection':
@@ -167,7 +166,7 @@ const Calculator = () => {
     dispatch(setAlertStateRedux({ ...alertState, open: false }));
     if (historyState === historyStates.new || historyState === historyStates.updated) {
       const { label, id } = selectedHistory;
-      saveHistory(token, id, label);
+      saveHistory(id, label);
     }
     if (activeStep !== calculatorList.length) {
       pirschAnalytics('visit step', {
@@ -193,7 +192,7 @@ const Calculator = () => {
   useEffect(() => {
     const fetchToken = async () => {
       const t = await getAccessTokenSilently();
-      setToken(t);
+      setAuthToken(t);
     };
     if (isAuthenticated) {
       fetchToken();
