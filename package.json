@@ -39,7 +39,7 @@
     "build": "vite build",
     "serve": "vite preview",
     "preview": "vite preview",
-    "cy:open": "npx cypress open cross-env NODE_OPTIONS=--max_old_space_size=8192 webpack",
+    "cy:open": "npx cypress open cross-env NODE_OPTIONS=--max_old_space_size=8192 webpack --config-file dev.cypress.config.mjs",
     "e2e:chrome": "npx cypress run --e2e --browser chrome",
     "dev:e2e:chrome": "npx cypress run --e2e --browser chrome --config-file dev.cypress.config.mjs",
     "component:chrome": "npx cypress run --component --browser chrome",
