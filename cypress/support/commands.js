@@ -60,26 +60,24 @@ Cypress.Commands.add('updateSlider', (testId, value) => {
 });
 
 Cypress.Commands.add('loginToAuth0', () => {
-  const username = Cypress.env('auth0_username');
-  const password = Cypress.env('auth0_password');
+  const args = { username: Cypress.env('auth0_username'), password: Cypress.env('auth0_password') };
   const log = Cypress.log({
     displayName: 'AUTH0 LOGIN',
-    message: [`🔐 Authenticating | ${username}`],
+    message: [`🔐 Authenticating | ${args.username}`],
     // @ts-ignore
     autoEnd: false,
   });
   log.snapshot('before');
 
-  const args = { username, password };
   cy.session(
-    `auth0-${username}`,
+    `auth0-${args.username}`,
     () => {
       // App landing page redirects to Auth0.
       cy.visit('/');
       cy.getByTestId('auth_button').click();
 
       // Login on Auth0.
-      cy.origin(Cypress.env('auth0_domain'), { args }, () => {
+      cy.origin(Cypress.env('auth0_domain'), { args }, ({ username, password }) => {
         cy.get('input#username').type(username);
         cy.get('input#password').type(password);
         cy.contains('button[value=default]', 'Continue').click();

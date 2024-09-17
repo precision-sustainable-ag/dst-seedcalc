@@ -1,4 +1,6 @@
 export const clickStateMap = (council) => {
+  cy.intercept({ url: 'https://api.mapbox.com/**' }, { log: false });
+  cy.intercept({ url: 'https://events.mapbox.com/**' }, { log: false });
   cy.visit('/');
   cy.get('.mapboxgl-canvas').should('be.visible');
   cy.get('div[class^="map_loadingContainer"]', { timeout: 10000 }).should('not.exist');
