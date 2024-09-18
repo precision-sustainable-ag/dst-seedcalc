@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { ThemeProvider } from '@emotion/react';
+import { ThemeProvider } from '@mui/material';
 import Auth0ProviderWithNavigate from './components/Auth/Auth0ProviderWithNavigate';
 
 import Calculator from './pages/Calculator';

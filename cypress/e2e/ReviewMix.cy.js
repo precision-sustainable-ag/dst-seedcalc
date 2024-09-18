@@ -3,7 +3,7 @@ import {
 } from '../support/utils';
 import { seedDataUnits } from '../../src/shared/data/units';
 
-describe('Seed Tag Info', () => {
+describe('Review Mix', () => {
   const selectSpecies = 'Radish, Daikon';
 
   beforeEach(() => {
@@ -99,7 +99,7 @@ describe('Seed Tag Info', () => {
   });
 });
 
-describe('Seed Tag Info NECCC & SCCC', () => {
+describe('Review Mix NECCC & SCCC', () => {
   it('should work in NECCC', () => {
     const selectSpecies = ['Brassica, Forage', 'Mustard'];
     mockSiteCondition('NECCC');
