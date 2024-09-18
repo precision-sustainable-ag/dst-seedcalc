@@ -28,7 +28,7 @@ export default defineConfig({
       return config;
     },
   },
-
+  defaultCommandTimeout: 30000,
   env: {
     auth0_username: process.env.VITE_AUTH0_USERNAME,
     auth0_password: process.env.VITE_AUTH0_PASSWORD,

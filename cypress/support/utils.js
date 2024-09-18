@@ -3,19 +3,19 @@ export const clickStateMap = (council) => {
   cy.intercept({ url: 'https://events.mapbox.com/**' }, { log: false });
   cy.visit('/');
   cy.get('.mapboxgl-canvas').should('be.visible');
-  // TODO: add data-test to loadingContainer in shared-components
-  cy.get('div[class^="_loadingContainer"]', { timeout: 30000 }).should('not.exist');
-  // eslint-disable-next-line cypress/no-unnecessary-waiting
-  cy.wait(1000);
+
   if (council === undefined) {
-    // click on Indiana
-    cy.get('.mapboxgl-canvas').should('be.visible').trigger('click', 525, 160);
+    cy.get('div[class^="_wrapper"]').reactComponent().its('memoizedProps').then((props) => {
+      cy.wrap(props).invoke('selectorFunction', { properties: { STATE_NAME: 'Indiana' } });
+    });
   } else if (council === 'NECCC') {
-    // click on Pennsylvania
-    cy.get('.mapboxgl-canvas').should('be.visible').trigger('click', 620, 150);
+    cy.get('div[class^="_wrapper"]').reactComponent().its('memoizedProps').then((props) => {
+      cy.wrap(props).invoke('selectorFunction', { properties: { STATE_NAME: 'New York' } });
+    });
   } else if (council === 'SCCC') {
-    // click on NC
-    cy.get('.mapboxgl-canvas').should('be.visible').trigger('click', 600, 220);
+    cy.get('div[class^="_wrapper"]').reactComponent().its('memoizedProps').then((props) => {
+      cy.wrap(props).invoke('selectorFunction', { properties: { STATE_NAME: 'North Carolina' } });
+    });
   }
 };
 

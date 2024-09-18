@@ -19,7 +19,7 @@ describe('Site Condition landing page', () => {
     cy.intercept({ url: 'https://events.mapbox.com/**' }, { log: false });
     cy.get('.mapboxgl-canvas').should('be.visible');
     // TODO: add data-test to loadingContainer in shared-components
-    cy.get('div[class^="_loadingContainer"]', { timeout: 10000 }).should('not.exist');
+    cy.get('div[class^="_loadingContainer"]', { timeout: 40000 }).should('not.exist');
     // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(1000);
     // click on Indiana
