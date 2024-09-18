@@ -35,7 +35,7 @@
   },
   "type": "module",
   "scripts": {
-    "start": "vite --port 3000",
+    "start": "vite",
     "build": "vite build",
     "serve": "vite preview",
     "preview": "vite preview",
