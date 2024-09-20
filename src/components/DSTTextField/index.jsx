@@ -7,6 +7,7 @@ const DSTTextField = ({
   handleChange,
   className,
   disabled,
+  testId,
 }) => (
   <TextField
     fullWidth
@@ -18,6 +19,7 @@ const DSTTextField = ({
       shrink: true,
     }}
     InputProps={{ inputProps: { min: 0 }, disabled }}
+    data-test={testId}
   />
 );
 

@@ -10,6 +10,7 @@ const NumberTextField = ({
   placeholder,
   sx,
   className,
+  testId,
 }) => {
   const [displayValue, setDisplayValue] = useState(value);
   const [error, setError] = useState(false);
@@ -80,6 +81,7 @@ const NumberTextField = ({
       helperText={helperText}
       onFocus={handleFocus}
       onBlur={handleBlur}
+      data-test={testId}
     />
   );
 };

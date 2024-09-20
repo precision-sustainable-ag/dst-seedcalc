@@ -94,6 +94,7 @@ const SeedsSelectedList = ({ activeStep }) => {
               boxShadow: 'none',
               cursor: 'pointer',
             }}
+            data-test={`sidebar-${s.label}`}
           >
             <CardActionArea
               onClick={() => {

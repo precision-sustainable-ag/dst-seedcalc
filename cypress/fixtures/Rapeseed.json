@@ -1,0 +1,195 @@
+{
+  "id": 161,
+  "label": "Rapeseed",
+  "scientificName": "Brassica napus",
+  "isMix": false,
+  "thumbnail": null,
+  "thumbnailNotes": null,
+  "familyId": 9,
+  "groupId": 1,
+  "createdAt": "2023-02-28T13:48:27.237Z",
+  "updatedAt": "2023-02-28T13:48:27.237Z",
+  "deletedAt": null,
+  "group": {
+    "id": 1,
+    "label": "Brassica",
+    "regions": [
+      55,
+      56,
+      57
+    ],
+    "createdAt": "2022-10-06T23:54:22.761Z",
+    "updatedAt": "2022-11-25T17:29:13.246Z",
+    "deletedAt": null
+  },
+  "family": {
+    "id": 9,
+    "commonName": "Brassicas",
+    "scientificName": "Brassica",
+    "createdAt": "2023-03-27T15:49:46.026Z",
+    "updatedAt": "2023-03-27T15:49:46.026Z",
+    "deletedAt": null
+  },
+  "attributes": {
+    "Planting Information": {
+      "Seed Count": {
+        "units": "seeds/lb",
+        "description": "Typical number of seeds in one pound of pure seed.",
+        "details": "",
+        "isArray": true,
+        "isFilter": true,
+        "values": [
+          "156960"
+        ]
+      },
+      "Planting Methods": {
+        "units": "",
+        "description": null,
+        "details": "",
+        "isArray": true,
+        "isFilter": true,
+        "values": [
+          "Aerial",
+          "Drilled",
+          "Broadcast",
+          "Precision"
+        ]
+      }
+    },
+    "Cultural Traits": {
+      "Winter Survival": {
+        "units": "",
+        "description": "The likelihood that a crop will survive a typical winter",
+        "details": "",
+        "isArray": false,
+        "isFilter": true,
+        "values": [
+          "4",
+          "2",
+          "3"
+        ]
+      }
+    },
+    "Planting and Growth Windows": {
+      "Freeze/Moisture Risk to Establishment": {
+        "units": "",
+        "description": null,
+        "details": "",
+        "isArray": false,
+        "isFilter": false,
+        "values": [
+          "10/27/2009 - 11/09/2009"
+        ]
+      },
+      "Reliable Establishment": {
+        "units": "",
+        "description": null,
+        "details": "",
+        "isArray": false,
+        "isFilter": false,
+        "values": [
+          "07/21/2009 - 10/27/2009"
+        ]
+      }
+    },
+    "Soil Conditions": {
+      "Soil Drainage": {
+        "units": "",
+        "description": "Level of soil drainage needed for acceptable cover crop growth given regular rainfall.",
+        "details": "",
+        "isArray": true,
+        "isFilter": false,
+        "values": [
+          "Well drained muck",
+          "Well drained",
+          "Somewhat poorly drained",
+          "Moderately well drained"
+        ]
+      }
+    },
+    "Coefficients": {
+      "Single Species Seeding Rate": {
+        "units": "lbs/acre",
+        "description": null,
+        "details": "",
+        "isArray": false,
+        "isFilter": true,
+        "values": [
+          "2.50"
+        ]
+      },
+      "Broadcast Coefficient": {
+        "units": "",
+        "description": null,
+        "details": "",
+        "isArray": false,
+        "isFilter": true,
+        "values": [
+          "1.1"
+        ]
+      },
+      "Aerial Coefficient": {
+        "units": "",
+        "description": null,
+        "details": "",
+        "isArray": false,
+        "isFilter": true,
+        "values": [
+          "1.25"
+        ]
+      },
+      "Precision Coefficient": {
+        "units": "",
+        "description": null,
+        "details": "",
+        "isArray": false,
+        "isFilter": true,
+        "values": [
+          "0.9"
+        ]
+      },
+      "% Live Seed to Emergence": {
+        "units": "",
+        "description": null,
+        "details": "",
+        "isArray": false,
+        "isFilter": true,
+        "values": [
+          "0.85"
+        ]
+      },
+      "Max % Allowed in Mix": {
+        "units": "%",
+        "description": null,
+        "details": "",
+        "isArray": false,
+        "isFilter": true,
+        "values": [
+          "0.6"
+        ]
+      },
+      "% Chance of Winter Survial": {
+        "units": "%",
+        "description": null,
+        "details": "",
+        "isArray": false,
+        "isFilter": true,
+        "values": [
+          "0.6"
+        ]
+      }
+    },
+    "NRCS": {
+      "Single Species Seeding Rate": {
+        "units": "",
+        "description": "base single species seeding rate for NRCS",
+        "details": "",
+        "isArray": false,
+        "isFilter": false,
+        "values": [
+          "2.94"
+        ]
+      }
+    }
+  }
+}

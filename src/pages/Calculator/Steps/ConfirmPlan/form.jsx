@@ -59,6 +59,7 @@ const ConfirmPlanForm = ({
               disabled
               label={matchesMd ? '' : 'Bulk Lbs per Acre'}
               value={result.bulkSeedingRate}
+              testId={`${seed.label}-bulk-seeding-rate`}
             />
           </Grid>
 
@@ -77,6 +78,7 @@ const ConfirmPlanForm = ({
                 });
                 if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
               }}
+              testId={`${seed.label}-acres`}
             />
           </Grid>
 
@@ -89,6 +91,7 @@ const ConfirmPlanForm = ({
               label={matchesMd ? '' : 'Total Pounds'}
               disabled
               value={result.totalPounds}
+              testId={`${seed.label}-total-pounds`}
             />
           </Grid>
 
@@ -108,6 +111,7 @@ const ConfirmPlanForm = ({
                 );
                 if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
               }}
+              testId={`${seed.label}-cost-per-pound`}
             />
           </Grid>
           <Grid item xs={3} />
@@ -120,6 +124,7 @@ const ConfirmPlanForm = ({
               disabled
               label={matchesMd ? '' : 'Cost per Pound'}
               value={result.costPerPound}
+              testId={`${seed.label}-cost-per-pound-disabled`}
             />
           </Grid>
           <Grid item xs={1}>
@@ -140,6 +145,7 @@ const ConfirmPlanForm = ({
               label={matchesMd ? '' : 'Total Cost'}
               disabled
               value={result.totalCost}
+              testId={`${seed.label}-total-cost`}
             />
           </Grid>
         </Grid>

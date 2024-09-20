@@ -15,6 +15,7 @@ const seedDataUnits = {
   seedingRateinMix: 'Seeding Rate in Mix',
   pureLiveSeed: 'Pure Live Seed',
   bulkSeed: 'Bulk Seed',
+  seedingRate: 'Seeding Rate ',
 };
 
 export { pieChartUnits, seedDataUnits };

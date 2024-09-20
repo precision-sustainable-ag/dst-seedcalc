@@ -230,6 +230,7 @@ const ReviewMix = ({ calculator }) => {
             expanded={accordionState[seed.label]}
             onChange={() => handleExpandAccordion(seed.label)}
             summary={<Typography>{seed.label}</Typography>}
+            testId={`accordion-${seed.label}`}
           >
             <Grid container>
               <DSTBarChart seed={seed} calculatorResult={calculatorResult} />
@@ -260,6 +261,7 @@ const ReviewMix = ({ calculator }) => {
                     setShowSteps({ ...showSteps, [seed.label]: !showSteps[seed.label] });
                   }}
                   variant="outlined"
+                  data-test="change_my_rate_button"
                 >
                   {showSteps[seed.label] ? 'Close Steps' : 'Change My Rate'}
                 </Button>

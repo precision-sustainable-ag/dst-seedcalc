@@ -201,7 +201,7 @@ const SeedingMethod = ({ alertState }) => {
   const renderMethod = (type, comment, seedingMethods, method) => {
     const value = seedingMethods?.[method];
     return (
-      <Grid container margin={1} border={selectedMethod === method ? '2px solid #4f5f30' : ''}>
+      <Grid container margin={1} border={selectedMethod === method ? '2px solid #4f5f30' : ''} data-test={`method-${method}`}>
         <FullGrid item xs={14}>
           <LeftGrid item xs={6}>
             <Box textAlign="left" pl="25%">
@@ -245,6 +245,7 @@ const SeedingMethod = ({ alertState }) => {
           }}
           size={12}
           items={getSeedingMethods()}
+          testId="seeding_method_dropdown"
         />
       </Grid>
       <Grid item xs={0} md={3} />
@@ -254,6 +255,7 @@ const SeedingMethod = ({ alertState }) => {
             expanded={accordionState[seed.label]}
             onChange={() => handleExpandAccordion(seed.label)}
             summary={<Typography>{seed.label}</Typography>}
+            testId={`accordion-${seed.label}`}
           >
             <Grid container>
               {council === 'MCCC'

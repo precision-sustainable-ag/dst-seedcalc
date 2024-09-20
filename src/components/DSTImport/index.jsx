@@ -113,6 +113,7 @@ const DSTImport = () => {
                   <Button
                     variant="contained"
                     onClick={handleCreateNewHistory}
+                    data-test="create_calculation"
                   >
                     create new calculation
                   </Button>
@@ -138,7 +139,7 @@ const DSTImport = () => {
                 />
                 {/* eslint-disable-next-line */}
               <label htmlFor="contained-button-file">
-                <Button variant="contained" color="primary" component="span">
+                <Button variant="contained" color="primary" component="span" data-test="import_from_csv">
                   Import from CSV
                 </Button>
               </label>
@@ -160,10 +161,11 @@ const DSTImport = () => {
                       items={histories}
                       handleChange={(e) => setCaclulationName(e.target.value)}
                       minWidth={220}
+                      testId="select_calculation"
                     />
                   </Grid>
                   <Grid item xs={12} display="flex" justifyContent="center" alignItems="center">
-                    <Button variant="contained" onClick={handleLoadUserHistory}>
+                    <Button variant="contained" onClick={handleLoadUserHistory} data-test="import_calculation">
                       Import
                     </Button>
                   </Grid>
@@ -177,6 +179,7 @@ const DSTImport = () => {
         variant="contained"
         onClick={() => setOpenModal(true)}
         sx={{ textDecoration: 'none', margin: '1rem' }}
+        data-test="import_button"
       >
         {isAuthenticated ? 'Import / Create calculation' : 'Import Calculation'}
       </Button>

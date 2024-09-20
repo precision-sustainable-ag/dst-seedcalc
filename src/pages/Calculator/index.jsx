@@ -9,7 +9,7 @@ import { Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { FadeAlert } from '@psa/dst.ui.fade-alert';
+import { FadeAlert } from 'shared-react-components/src';
 import { useAuth0 } from '@auth0/auth0-react';
 import {
   SiteCondition,
@@ -254,8 +254,9 @@ const Calculator = () => {
               alt={siteCondition.council}
               src={headerLogo()}
               height="75px"
+              data-test="header_logo"
             />
-            <Typography variant="dstHeader" pl="1rem">
+            <Typography variant="dstHeader" pl="1rem" data-test="page_caption">
               Seeding Rate Calculator
             </Typography>
           </Grid>

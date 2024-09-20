@@ -166,6 +166,7 @@ const SiteConditionForm = ({
           handleChange={handleState}
           size={12}
           items={stateList}
+          testId="site_condition_state"
         />
       </Grid>
       <Grid item xs={0} md={3} />
@@ -182,6 +183,7 @@ const SiteConditionForm = ({
           handleChange={handleRegion}
           size={12}
           items={regions}
+          testId="site_condition_region"
         />
       </Grid>
       <Grid item xs={0} md={3} />
@@ -196,6 +198,7 @@ const SiteConditionForm = ({
           handleChange={handleSoilDrainage}
           size={12}
           items={getSoilDrainages(council)}
+          testId="site_condition_soil_drainage"
         />
       </Grid>
       <Grid item xs={0} md={3} />
@@ -233,6 +236,7 @@ const SiteConditionForm = ({
                   checked={tileDrainage}
                   handleChange={handleTileDrainage}
                   disabled={!tileDrainage && (needTileDrainage.indexOf(soilDrainage) === -1 || council === '')}
+                  testId="site_condition_tile_drainage"
                 />
                 <Typography display="inline">
                   Yes
@@ -245,7 +249,7 @@ const SiteConditionForm = ({
             && (
             <>
               <Typography>Your improved drainage class is: </Typography>
-              <Typography fontWeight="bold">{soilDrainage}</Typography>
+              <Typography fontWeight="bold" data-test="tile_drainage_class">{soilDrainage}</Typography>
             </>
             )}
 
@@ -281,6 +285,7 @@ const SiteConditionForm = ({
             dispatch(setAcresRedux(value));
           }}
           placeholder="Enter your field acres here"
+          testId="site_condition_acres"
         />
       </Grid>
       <Grid item xs={0} md={3} />
@@ -302,6 +307,7 @@ const SiteConditionForm = ({
             handleChange={() => {
               dispatch(checkNRCSRedux(!checkNRCSStandards));
             }}
+            testId="check_nrcs"
           />
         </Grid>
       )}
@@ -323,13 +329,14 @@ const SiteConditionForm = ({
             }}
             size={12}
             items={soilFertilityValues}
+            testId="site_condition_soil_fertility"
           />
         </Grid>
       )}
       <Grid item xs={0} md={3} />
 
       <Grid item xs={12} margin="1rem">
-        <Button variant="contained" onClick={() => setStep(1)}>Back</Button>
+        <Button variant="contained" onClick={() => setStep(1)} data-test="back_button">Back</Button>
       </Grid>
 
     </Grid>

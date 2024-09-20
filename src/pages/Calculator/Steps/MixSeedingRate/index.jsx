@@ -23,7 +23,7 @@ import pirschAnalytics from '../../../../shared/utils/analytics';
 const CustomThumb = (props) => {
   const { children, ...other } = props;
   return (
-    <SliderThumb {...other}>
+    <SliderThumb {...other} data-test="slider_thumb">
       {children}
       <MenuRounded />
     </SliderThumb>
@@ -236,6 +236,7 @@ const MixSeedingRate = ({ calculator }) => {
               width="30px"
               fontWeight="bold"
               fontSize="1.25rem"
+              data-test="max_value"
             >
               {max}
             </Typography>
@@ -250,11 +251,13 @@ const MixSeedingRate = ({ calculator }) => {
               marks={marks}
               theme={theme}
               slots={{ thumb: CustomThumb }}
+              data-test="seeding_rate_slider"
             />
             <Typography
               width="30px"
               fontWeight="bold"
               fontSize="1.25rem"
+              data-test="min_value"
             >
               {min}
             </Typography>

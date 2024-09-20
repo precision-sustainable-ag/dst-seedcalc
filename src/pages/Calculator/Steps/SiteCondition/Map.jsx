@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
-import { Map as MapComponent } from '@psa/dst.ui.map';
+// import { Map as MapComponent } from '@psa/dst.ui.map';
+import { Map as MapComponent } from 'shared-react-components/src';
 
 import { Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,6 +14,7 @@ import { setHistoryDialogStateRedux, setMaxAvailableStepRedux } from '../../../.
 import { getZoneData, getSSURGOData } from '../../../../features/siteConditionSlice/api';
 import { historyStates } from '../../../../features/userSlice/state';
 import pirschAnalytics from '../../../../shared/utils/analytics';
+import { mapboxToken } from '../../../../shared/data/keys';
 import '../steps.scss';
 
 const Map = ({
@@ -121,6 +123,7 @@ const Map = ({
           hasFullScreen
           hasMarkerPopup
           hasMarkerMovable
+          mapboxToken={mapboxToken}
         />
         <Grid item xs={12} p="1rem">
           <Button variant="contained" onClick={() => setStep(1)} sx={{ margin: '1rem' }}>Back</Button>

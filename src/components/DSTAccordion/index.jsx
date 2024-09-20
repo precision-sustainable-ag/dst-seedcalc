@@ -6,9 +6,9 @@ import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 
 const DSTAccordion = ({
-  expanded, onChange, summary, children,
+  expanded, onChange, summary, children, testId,
 }) => (
-  <Accordion expanded={expanded} onChange={onChange}>
+  <Accordion expanded={expanded} onChange={onChange} data-test={testId}>
     <AccordionSummary
       expandIcon={(
         <Typography sx={{ textDecoration: 'underline', display: 'flex', alignItems: 'center' }}>
@@ -17,10 +17,11 @@ const DSTAccordion = ({
           {expanded ? <KeyboardDoubleArrowUpIcon /> : <KeyboardDoubleArrowDownIcon />}
         </Typography>
       )}
+      data-test="accordion_summary"
     >
       {summary}
     </AccordionSummary>
-    <AccordionDetails>
+    <AccordionDetails data-test="accordion_details">
       {children}
     </AccordionDetails>
   </Accordion>

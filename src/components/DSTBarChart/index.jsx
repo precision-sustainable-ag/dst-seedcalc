@@ -97,6 +97,7 @@ const DSTBarChart = ({ seed, calculatorResult }) => {
         <Button
           onClick={() => setIndex(index - 1)}
           disabled={index === 0}
+          data-test="barchart_back"
         >
           <ArrowBackIosNewIcon />
           Back
@@ -107,28 +108,31 @@ const DSTBarChart = ({ seed, calculatorResult }) => {
         <Button
           onClick={() => setIndex((index + 1) % 5)}
           disabled={index === 4}
+          data-test="barchart_next"
         >
           Next
           <ArrowForwardIosIcon />
         </Button>
       </Grid>
 
-      {/* list under barchart */}
-      {labels.map((l, i) => (
-        <Grid
-          container
-          sx={{ backgroundColor: !(i % 2) && '#e3e5d3' }}
-          key={i}
-        >
-          <Grid item xs={1} />
-          <Grid item sx={{ textAlign: 'justify' }} xs={9} pl={1}>
-            {l.caption}
+      <Grid container data-test="list_container">
+        {/* list under barchart */}
+        {labels.map((l, i) => (
+          <Grid
+            container
+            sx={{ backgroundColor: !(i % 2) && '#e3e5d3' }}
+            key={i}
+          >
+            <Grid item xs={1} />
+            <Grid item sx={{ textAlign: 'justify' }} xs={9} pl={1}>
+              {l.caption}
+            </Grid>
+            <Grid item xs={2}>
+              {twoDigit(l.val)}
+            </Grid>
           </Grid>
-          <Grid item xs={2}>
-            {twoDigit(l.val)}
-          </Grid>
-        </Grid>
-      ))}
+        ))}
+      </Grid>
     </Grid>
   );
 };

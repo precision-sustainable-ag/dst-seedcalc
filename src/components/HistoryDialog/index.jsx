@@ -79,7 +79,7 @@ const HistoryDialog = ({ setStep, setSiteConditionStep }) => {
 
   return (
     <Dialog open={open}>
-      <DialogTitle>
+      <DialogTitle data-test="dialog_title">
         { type === 'add' && 'Are you creating a new record?'}
         { type === 'update' && 'Are you updating your record?'}
       </DialogTitle>
@@ -95,12 +95,13 @@ const HistoryDialog = ({ setStep, setSiteConditionStep }) => {
             onChange={(e) => setHistoryName(e.target.value)}
             error={error}
             helperText={helperText}
+            data-test="input_calculation_name"
           />
           )}
         {type === 'update'
           && (
           <DialogContent>
-            <Typography>
+            <Typography data-test="warning_text">
               <span style={{ color: 'red' }}>Warning: </span>
               Making changes may affect the results of subsequent steps
               that you have saved. Please create a new record instead.
@@ -110,10 +111,10 @@ const HistoryDialog = ({ setStep, setSiteConditionStep }) => {
       </DialogContent>
       <DialogActions>
         {type === 'add'
-            && <Button onClick={handleCreate} variant="contained">Create</Button>}
+            && <Button onClick={handleCreate} variant="contained" data-test="create_button">Create</Button>}
         {type === 'update'
-            && <Button onClick={handleUpdate} variant="contained">Create a new record</Button>}
-        <Button onClick={handleCancel} variant="contained">Cancel</Button>
+            && <Button onClick={handleUpdate} variant="contained" data-test="create_record_button">Create a new record</Button>}
+        <Button onClick={handleCancel} variant="contained" data-test="cancel_button">Cancel</Button>
       </DialogActions>
 
     </Dialog>

@@ -8,6 +8,8 @@
 # testing
 /coverage
 .vscode/*
+.nyc_output/
+cypress/screenshots/*
 
 # production
 /build
@@ -24,3 +26,4 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .env
+/cypress/downloads

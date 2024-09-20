@@ -1,12 +1,10 @@
 import React from 'react';
+import { ThemeProvider } from '@mui/material/styles';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { ThemeProvider } from '@emotion/react';
 import Auth0ProviderWithNavigate from './components/Auth/Auth0ProviderWithNavigate';
-
 import Calculator from './pages/Calculator';
-// import Home from './pages/Home';
-import dstTheme from './shared/themes';
 import Feedback from './pages/Feedback';
+import dstTheme from './shared/themes';
 
 const App = () => (
   <ThemeProvider theme={dstTheme}>
@@ -22,7 +20,6 @@ const App = () => (
       <BrowserRouter>
         <Auth0ProviderWithNavigate>
           <Routes>
-            {/* <Route path="/" element={<Home />} /> */}
             <Route path="/" element={<Calculator />} />
             <Route path="/feedback" element={<Feedback />} />
           </Routes>

@@ -120,7 +120,7 @@ const StepsList = ({
               },
             }}
           >
-            <StepButton onClick={() => setActiveStep(index)}>
+            <StepButton onClick={() => setActiveStep(index)} data-test={`step-${index}`}>
               {matches && label}
             </StepButton>
           </Step>
@@ -131,13 +131,13 @@ const StepsList = ({
 
         {activeStep !== 0 && (
           activeStep === calculatorList.length ? (
-            <Button variant="stepper" onClick={handleRestart}>
+            <Button variant="stepper" onClick={handleRestart} data-test="restart_button">
               <RestartAltIcon />
               Restart
             </Button>
           )
             : (
-              <Button variant="stepper" onClick={handleBack}>
+              <Button variant="stepper" onClick={handleBack} data-test="back_button">
                 <ArrowBackIosNewIcon />
                 {' '}
                 BACK
@@ -161,6 +161,7 @@ const StepsList = ({
               variant="stepper"
               disabled={availableSteps[activeStep] !== true}
               onClick={handleNext}
+              data-test="next_button"
             >
               {activeStep === calculatorList.length - 1
                 ? 'Finish'

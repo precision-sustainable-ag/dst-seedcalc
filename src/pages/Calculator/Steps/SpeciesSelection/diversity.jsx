@@ -16,7 +16,7 @@ const Diversity = () => {
   );
 
   return (
-    <Grid container sx={{ height: '80px' }}>
+    <Grid container sx={{ height: '80px' }} data-test="diversity_bar">
       <Typography pt="1rem" fontWeight={600}>
         Mix Diversity
       </Typography>
@@ -35,6 +35,7 @@ const Diversity = () => {
                 sx={{ bgcolor: `${COLORS[i]}`, flex: `${diversityGroupLength[i]}` }}
                 borderRadius="0.6875rem"
                 key={i}
+                data-test={`diversity-${d}`}
               />
             ))}
         </Box>

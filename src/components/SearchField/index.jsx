@@ -15,7 +15,7 @@ import SearchIcon from '@mui/icons-material/Search';
 }
 */
 
-const SearchField = ({ value, handleChange }) => (
+const SearchField = ({ value, handleChange, testId }) => (
   <Paper
     sx={{
       p: '2px 4px',
@@ -30,6 +30,7 @@ const SearchField = ({ value, handleChange }) => (
       placeholder="Search Filter list"
       inputProps={{ 'aria-label': 'Search Filter List' }}
       onChange={handleChange}
+      data-test={testId}
     />
     <IconButton
       type="button"
