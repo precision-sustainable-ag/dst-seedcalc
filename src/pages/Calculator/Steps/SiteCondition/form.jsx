@@ -292,7 +292,7 @@ const SiteConditionForm = ({
 
       {/* NRCS Standards */}
       <Grid item xs={0} md={3} />
-      {council === 'MCCC' && (
+      {council === 'MCCC' && state === 'Indiana' && (
         <Grid
           item
           xs={12}
