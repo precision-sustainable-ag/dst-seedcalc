@@ -326,6 +326,8 @@ const MixRatio = ({
                   council={council}
                   calculatorResult={calculatorResult[seed.label]}
                   options={mixRatioOptions[seed.label]}
+                  seed={seed}
+                  handleFormValueChange={handleFormValueChange}
                 />
                 )}
               </Grid>

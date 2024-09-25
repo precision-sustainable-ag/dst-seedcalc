@@ -54,7 +54,6 @@ const SeedInfo = ({
   const baseSeedingRate = council === 'SCCC' ? seed.attributes.Planting['Base Seeding Rate'].values[0] : 0;
   const [singleSpeciesSeedingRate, setSingleSpeciesSeedingRate] = useState(parseFloat(baseSeedingRate));
   const [percentOfRate, setPercentOfRate] = useState(0);
-  const [survival, setSurvival] = useState(0);
   const [singleData, setSingleData] = useState({
     seedingRate: calculatorResult[seed.label].step1.defaultSingleSpeciesSeedingRatePLS,
     plantValue: seedData[seed.label].defaultPlant,
@@ -97,7 +96,6 @@ const SeedInfo = ({
         seedValue: Math.round(seedData[seed.label].adjustedSeed),
       });
     }
-    setSurvival(Math.round(twoDigit(calculatorResult[seed.label].step3.percentSurvival) * 100));
     if (council === 'NECCC') {
       if (options.percentOfRate) setPercentOfRate(Math.round((options.percentOfRate / soilFertilityModifier) * 100));
       else setPercentOfRate(Math.round((1 / calculatorResult[seed.label].step1.sumGroupInMix) * 100));
@@ -245,24 +243,6 @@ const SeedInfo = ({
             data-test={`${seed.label}-slider_percent_of_rate`}
           />
         </Grid>
-
-        {council === 'MCCC'
-        && (
-          <Grid item xs={12}>
-            <Typography>
-              {`% Survival: ${survival}%`}
-            </Typography>
-            <Slider
-              min={0}
-              max={100}
-              value={survival}
-              valueLabelDisplay="auto"
-              onChange={(e) => setSurvival(e.target.value)}
-              onChangeCommitted={() => handleFormValueChange(seed, 'percentSurvival', parseFloat(survival) / 100)}
-              data-test={`${seed.label}-slider_survival`}
-            />
-          </Grid>
-        )}
 
       </Grid>
     </Grid>
