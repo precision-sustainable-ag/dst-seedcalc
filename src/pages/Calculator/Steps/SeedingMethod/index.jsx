@@ -218,9 +218,9 @@ const SeedingMethod = ({ alertState }) => {
               <>
                 {/*  <Typography sx={{ width: '50px' }}>{value}</Typography> */}
                 <Typography>
-                  {value}
-                  {' '}
-                  Lbs per Acre
+                  {Math.round(value * 100)}
+                  {'% '}
+                  of drilled seeding rate
                 </Typography>
               </>
             )}
