@@ -5,6 +5,7 @@ import Auth0ProviderWithNavigate from './components/Auth/Auth0ProviderWithNaviga
 import Calculator from './pages/Calculator';
 import Feedback from './pages/Feedback';
 import dstTheme from './shared/themes';
+import About from './pages/About';
 
 const App = () => (
   <ThemeProvider theme={dstTheme}>
@@ -21,6 +22,7 @@ const App = () => (
         <Auth0ProviderWithNavigate>
           <Routes>
             <Route path="/" element={<Calculator />} />
+            <Route path="/about" element={<About />} />
             <Route path="/feedback" element={<Feedback />} />
           </Routes>
         </Auth0ProviderWithNavigate>
