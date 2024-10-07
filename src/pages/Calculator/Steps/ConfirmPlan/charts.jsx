@@ -64,9 +64,8 @@ const ConfirmPlanCharts = ({ council, calculator, calculatorResult }) => {
         }}
       >
         <ConfirmPlanChip
-          label="Amount of Mix for 50 Acres"
-          // FIXME: temporary, need verification
-          value={`${mixSeedingRate * 50}lbs`}
+          label={`Amount of Mix for ${acres} Acres`}
+          value={`${mixSeedingRate * acres}lbs`}
         />
       </Grid>
       <Grid

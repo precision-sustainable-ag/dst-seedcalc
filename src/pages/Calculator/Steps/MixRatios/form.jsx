@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
-import { Typography, useTheme, useMediaQuery } from '@mui/material';
-
+import {
+  Typography, useTheme, useMediaQuery, Slider,
+} from '@mui/material';
+import { twoDigit, convertToPercent } from '../../../../shared/utils/calculator';
 import NumberTextField from '../../../../components/NumberTextField';
-import { convertToPercent } from '../../../../shared/utils/calculator';
 import '../steps.scss';
 
 const MixRatioSteps = ({
-  council, calculatorResult, options,
+  council, calculatorResult, options, seed, handleFormValueChange,
 }) => {
   const theme = useTheme();
   const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
+
+  const [survival, setSurvival] = useState(0);
 
   const renderFormLabel = (label1, label2, label3) => (
     matchesMd && (
@@ -43,6 +46,10 @@ const MixRatioSteps = ({
   const { soilFertilityModifier } = calculatorResult.step1;
 
   const percentOfRateNECCC = convertToPercent(options.percentOfRate / soilFertilityModifier || 1 / step1.sumGroupInMix);
+
+  useEffect(() => {
+    setSurvival(Math.round(twoDigit(calculatorResult.step3.percentSurvival) * 100));
+  }, [calculatorResult]);
 
   return (
     <Grid container>
@@ -333,6 +340,24 @@ const MixRatioSteps = ({
           <Grid item xs={12}>
             <Typography variant="stepHeader">Plants per Acre</Typography>
           </Grid>
+
+          <Grid container justifyContent="center" pb="1rem">
+            <Grid item xs={8}>
+              <Typography>
+                {`% Survival: ${survival}%`}
+              </Typography>
+              <Slider
+                min={0}
+                max={100}
+                value={survival}
+                valueLabelDisplay="auto"
+                onChange={(e) => setSurvival(e.target.value)}
+                onChangeCommitted={() => handleFormValueChange(seed, 'percentSurvival', parseFloat(survival) / 100)}
+                data-test={`${seed.label}-slider_survival`}
+              />
+            </Grid>
+          </Grid>
+
           {renderFormLabel('Seeds per Acre', '% Survival', 'Plants per Acre')}
           <Grid container justifyContent="space-evenly">
             <Grid item xs={3}>
