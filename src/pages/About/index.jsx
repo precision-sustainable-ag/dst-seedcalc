@@ -17,16 +17,16 @@ const About = () => {
       menuOption: 'License and Copyright',
       title: 'License and Copyright',
     },
-    {
-      id: 1,
-      menuOption: 'Funding and Acknowledgements',
-      title: 'Funding and Acknowledgements',
-    },
-    {
-      id: 2,
-      menuOption: 'About the Experts',
-      title: 'About The Experts',
-    },
+    // {
+    //   id: 1,
+    //   menuOption: 'Funding and Acknowledgements',
+    //   title: 'Funding and Acknowledgements',
+    // },
+    // {
+    //   id: 2,
+    //   menuOption: 'About the Experts',
+    //   title: 'About The Experts',
+    // },
   ];
 
   const getContent = () => {
