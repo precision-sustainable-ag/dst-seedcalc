@@ -9,11 +9,16 @@ const Header = () => {
   const { council } = useSelector((state) => state.siteCondition);
 
   const headerLogo = () => {
-    if (council === '') return './PSALogo.png';
-    if (council === 'MCCC') return './mccc-logo.png';
-    if (council === 'NECCC') return './neccc-logo.png';
-    if (council === 'SCCC') return './sccc_logo.png';
-    return undefined;
+    switch (council) {
+      case 'MCCC':
+        return './mccc-logo.png';
+      case 'NECCC':
+        return './neccc-logo.png';
+      case 'SCCC':
+        return './sccc_logo.png';
+      default:
+        return './PSALogo.png';
+    }
   };
 
   return (
