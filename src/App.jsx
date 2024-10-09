@@ -1,6 +1,8 @@
 import React from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Grid } from '@mui/material';
+import Header from './components/Header';
 import Auth0ProviderWithNavigate from './components/Auth/Auth0ProviderWithNavigate';
 import Calculator from './pages/Calculator';
 import Feedback from './pages/Feedback';
@@ -20,11 +22,16 @@ const App = () => (
     >
       <BrowserRouter>
         <Auth0ProviderWithNavigate>
-          <Routes>
-            <Route path="/" element={<Calculator />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/feedback" element={<Feedback />} />
-          </Routes>
+          <Grid container justifyContent="center">
+            <Grid item xs={12} lg={8}>
+              <Header />
+              <Routes>
+                <Route path="/" element={<Calculator />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/feedback" element={<Feedback />} />
+              </Routes>
+            </Grid>
+          </Grid>
         </Auth0ProviderWithNavigate>
       </BrowserRouter>
     </div>
