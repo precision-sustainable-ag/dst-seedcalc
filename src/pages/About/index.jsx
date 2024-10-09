@@ -81,6 +81,7 @@ const About = () => {
                 }}
                 onClick={() => setValue(section.id)}
                 variant={value === section.id ? 'contained' : 'text'}
+                data-test={`section-${section.menuOption}`}
               >
                 {section.menuOption}
               </Button>
@@ -107,7 +108,7 @@ const About = () => {
                 </Typography>
               </center>
               {getContent()}
-              <Typography fontSize="12px">{attribution}</Typography>
+              <Typography fontSize="12px" data-test="about_attribution">{attribution}</Typography>
             </Stack>
           </div>
         </Grid>

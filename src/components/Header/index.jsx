@@ -31,7 +31,7 @@ const Header = () => {
         justifyContent="center"
         alignItems="center"
       >
-        <Button onClick={() => navigate('/')}>
+        <Button onClick={() => navigate('/')} data-test="header_logo_button">
           <img
             alt={council}
             src={headerLogo()}
