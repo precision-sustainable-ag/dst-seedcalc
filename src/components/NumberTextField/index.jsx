@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import TextField from '@mui/material/TextField';
+import { PSATextField } from 'shared-react-components/src';
 
 const NumberTextField = ({
   value,
@@ -56,7 +56,7 @@ const NumberTextField = ({
   };
 
   return (
-    <TextField
+    <PSATextField
       fullWidth
       value={displayValue}
       label={label}

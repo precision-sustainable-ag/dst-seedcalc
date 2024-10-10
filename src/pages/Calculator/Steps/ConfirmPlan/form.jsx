@@ -5,7 +5,6 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import NumberTextField from '../../../../components/NumberTextField';
-import DSTTextField from '../../../../components/DSTTextField';
 import NRCSStandards from './NRCSStandards';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 import { setAcresRedux } from '../../../../features/siteConditionSlice/actions';
@@ -167,7 +166,7 @@ const ConfirmPlanForm = ({
         {seedsSelected.map((seed, i) => (
           <Fragment key={i}>
             <Grid item xs={3} sx={{ p: '0.625rem' }}>
-              <DSTTextField
+              <NumberTextField
                 label={`${seed.label}`}
                 disabled
                 value={`$${calculatorResult[seed.label].totalCost.toFixed(2)}`}
@@ -182,7 +181,7 @@ const ConfirmPlanForm = ({
           </Fragment>
         ))}
         <Grid item xs={6} sx={{ p: '0.625rem' }}>
-          <DSTTextField
+          <NumberTextField
             label="Total Cost of Mix"
             disabled
             value={`$${totalCostOfMix.toFixed(2)}`}
