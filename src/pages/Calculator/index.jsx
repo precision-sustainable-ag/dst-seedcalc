@@ -5,7 +5,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { useDispatch, useSelector } from 'react-redux';
-import { Typography, useMediaQuery } from '@mui/material';
+import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
@@ -25,7 +25,6 @@ import {
 import SeedsSelectedList from '../../components/SeedsSelectedList';
 import { calculatorList, completedList } from '../../shared/data/dropdown';
 import StepsList from '../../components/StepsList';
-import NavBar from '../../components/NavBar';
 import { setAlertStateRedux } from '../../features/userSlice/actions';
 import HistoryDialog from '../../components/HistoryDialog';
 import useUserHistory from '../../shared/hooks/useUserHistory';
@@ -122,14 +121,6 @@ const Calculator = () => {
       default:
         return null;
     }
-  };
-
-  const headerLogo = () => {
-    if (siteCondition.council === '') return './PSALogo.png';
-    if (siteCondition.council === 'MCCC') return './mccc-logo.png';
-    if (siteCondition.council === 'NECCC') return './neccc-logo.png';
-    if (siteCondition.council === 'SCCC') return './sccc_logo.png';
-    return undefined;
   };
 
   // set favicon based on redux council value
@@ -233,43 +224,11 @@ const Calculator = () => {
           )}
       </Grid>
 
-      <Grid item md={0} lg={2} />
-
-      <Grid item xs={12} lg={8}>
-        {/* header logo & nav */}
-        <Grid
-          container
-          paddingTop="0.625rem"
-          height="85px"
-        >
-          <Grid
-            item
-            xs={9}
-            md={6}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <img
-              alt={siteCondition.council}
-              src={headerLogo()}
-              height="75px"
-              data-test="header_logo"
-            />
-            <Typography variant="dstHeader" pl="1rem" data-test="page_caption">
-              Seeding Rate Calculator
-            </Typography>
-          </Grid>
-          <Grid item xs={3} md={6}>
-            <NavBar />
-          </Grid>
-        </Grid>
-
-        {/* steps list */}
-        <Grid
-          item
-          xs={12}
-          sx={
+      {/* steps list */}
+      <Grid
+        item
+        xs={12}
+        sx={
           matchesSm && !showHeaderLogo
             ? {
               position: 'fixed',
@@ -283,19 +242,19 @@ const Calculator = () => {
             : { paddingTop: '20px' }
         }
         // height={"100px"}
-          ref={stepperRef}
-        >
-          <StepsList
-            activeStep={activeStep}
-            setActiveStep={setActiveStep}
-            availableSteps={completedStep}
-            setSiteConditionStep={setSiteConditionStep}
-          />
-        </Grid>
+        ref={stepperRef}
+      >
+        <StepsList
+          activeStep={activeStep}
+          setActiveStep={setActiveStep}
+          availableSteps={completedStep}
+          setSiteConditionStep={setSiteConditionStep}
+        />
+      </Grid>
 
-        <Grid container>
-          {/* seeds selected list */}
-          {activeStep > 0 && activeStep < 8 && (
+      <Grid container>
+        {/* seeds selected list */}
+        {activeStep > 0 && activeStep < 8 && (
           <Grid
             item
             xs={12}
@@ -315,16 +274,16 @@ const Calculator = () => {
           >
             <SeedsSelectedList activeStep={activeStep} />
           </Grid>
-          )}
+        )}
 
-          {/* main calculator */}
-          <Grid
-            item
-            xs={12}
+        {/* main calculator */}
+        <Grid
+          item
+          xs={12}
             // FIXME: except last step which does not have the crop bar
-            lg={activeStep === 0 ? 12 : 10}
-            md={activeStep > 0 ? 11 : 12}
-            sx={
+          lg={activeStep === 0 ? 12 : 10}
+          md={activeStep > 0 ? 11 : 12}
+          sx={
               // eslint-disable-next-line no-nested-ternary
               matchesSm && !showHeaderLogo
                 ? activeStep === 0
@@ -332,20 +291,17 @@ const Calculator = () => {
                   : { paddingTop: '190px' }
                 : {}
             }
-          >
-            {renderCalculator(
-              activeStep === calculatorList.length
-                ? 'Finish'
-                : calculatorList[activeStep],
-            )}
-          </Grid>
-
-          <HistoryDialog setStep={setActiveStep} setSiteConditionStep={setSiteConditionStep} />
+        >
+          {renderCalculator(
+            activeStep === calculatorList.length
+              ? 'Finish'
+              : calculatorList[activeStep],
+          )}
         </Grid>
 
+        <HistoryDialog setStep={setActiveStep} setSiteConditionStep={setSiteConditionStep} />
       </Grid>
 
-      <Grid item md={0} lg={2} />
     </Grid>
   );
 };

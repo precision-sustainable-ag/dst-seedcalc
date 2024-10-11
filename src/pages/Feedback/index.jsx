@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import {
   Grid, Typography, TextField, Button, FormGroup, FormControlLabel, Checkbox, Snackbar, useTheme,
 } from '@mui/material';
@@ -26,16 +25,6 @@ const Feedback = () => {
   const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
 
   const navigate = useNavigate();
-
-  const siteCondition = useSelector((state) => state.siteCondition);
-
-  const headerLogo = () => {
-    if (siteCondition.council === '') return './PSALogo.png';
-    if (siteCondition.council === 'MCCC') return './mccc-logo.png';
-    if (siteCondition.council === 'NECCC') return './neccc-logo.png';
-    if (siteCondition.council === 'SCCC') return './sccc_logo.png';
-    return undefined;
-  };
 
   const handleCheckbox = (e) => {
     if (e.target.checked) {
@@ -135,26 +124,7 @@ const Feedback = () => {
 
   return (
     <Grid container>
-      <Grid
-        item
-        xs={12}
-        paddingTop="0.625rem"
-        height="85px"
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <img
-          alt={siteCondition.council}
-          src={headerLogo()}
-          height="75px"
-        />
-        <Typography variant="dstHeader" pl="1rem">
-          Seeding Rate Calculator
-        </Typography>
-      </Grid>
-
-      <Grid container item spacing={1} padding="0 10%" style={{ textAlign: 'justify' }}>
+      <Grid container item spacing={1} padding="1rem 0" style={{ textAlign: 'justify' }}>
         {/* Title */}
         <Grid item xs={12}>
           <Typography variant={matchesMd ? 'h6' : 'h4'}>
