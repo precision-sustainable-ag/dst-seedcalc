@@ -6,16 +6,16 @@ describe('Feedback', () => {
   });
 
   it('should display different council logo in different councils', () => {
-    cy.get('img').should('have.attr', 'src', './PSALogo.png');
+    cy.getByTestId('header_logo_button').find('img').should('have.attr', 'src', 'images/PSA_logo.png');
     clickStateMap();
     cy.getByTestId('feedback').click();
-    cy.get('img').should('have.attr', 'src', './mccc-logo.png');
+    cy.getByTestId('header_logo_button').find('img').should('have.attr', 'src', 'images/mwccc_logo.png');
     clickStateMap('NECCC');
     cy.getByTestId('feedback').click();
-    cy.get('img').should('have.attr', 'src', './neccc-logo.png');
+    cy.getByTestId('header_logo_button').find('img').should('have.attr', 'src', 'images/neccc_logo.png');
     clickStateMap('SCCC');
     cy.getByTestId('feedback').click();
-    cy.get('img').should('have.attr', 'src', './sccc_logo.png');
+    cy.getByTestId('header_logo_button').find('img').should('have.attr', 'src', 'images/sccc_logo.png');
   });
 
   it('should be return back to map if click back button', () => {

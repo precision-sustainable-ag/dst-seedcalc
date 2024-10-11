@@ -6,7 +6,7 @@ describe('Site Condition landing page', () => {
   });
 
   it('shows the header and logo of the app', () => {
-    cy.getByTestId('header_logo').should('be.visible');
+    cy.getByTestId('header_logo_button').should('be.visible');
     cy.getByTestId('page_caption').should('be.visible').and('contain', 'Seeding Rate Calculator');
   });
 
