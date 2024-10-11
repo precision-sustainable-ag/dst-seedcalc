@@ -2,24 +2,12 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Button, Grid, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { PSALogoDisplayer } from 'shared-react-components/src';
 import NavBar from '../NavBar';
 
 const Header = () => {
   const navigate = useNavigate();
   const { council } = useSelector((state) => state.siteCondition);
-
-  const headerLogo = () => {
-    switch (council) {
-      case 'MCCC':
-        return './mccc-logo.png';
-      case 'NECCC':
-        return './neccc-logo.png';
-      case 'SCCC':
-        return './sccc_logo.png';
-      default:
-        return './PSALogo.png';
-    }
-  };
 
   return (
     <Grid
@@ -37,11 +25,12 @@ const Header = () => {
         alignItems="center"
       >
         <Button onClick={() => navigate('/')} data-test="header_logo_button">
-          <img
+          <PSALogoDisplayer
+            council={council}
             alt={council}
-            src={headerLogo()}
-            height="75px"
-            data-test="header_logo"
+            style={{
+              height: '75px',
+            }}
           />
         </Button>
         <Typography variant="dstHeader" pl="1rem" data-test="page_caption">
