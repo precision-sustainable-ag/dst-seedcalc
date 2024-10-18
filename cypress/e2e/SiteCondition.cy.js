@@ -18,12 +18,9 @@ describe('Site Condition landing page', () => {
     cy.intercept({ url: 'https://api.mapbox.com/**' }, { log: false });
     cy.intercept({ url: 'https://events.mapbox.com/**' }, { log: false });
     cy.get('.mapboxgl-canvas').should('be.visible');
-    // TODO: add data-test to loadingContainer in shared-components
-    cy.get('div[class^="_loadingContainer"]', { timeout: 40000 }).should('not.exist');
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(1000);
     // click on Indiana
-    cy.get('.mapboxgl-canvas').should('be.visible').trigger('click', 525, 160);
+    // cy.get('.mapboxgl-canvas').should('be.visible').trigger('click', 525, 160);
+    clickStateMap();
     cy.getByTestId('option_map').should('be.visible');
     cy.getByTestId('option_manually').should('be.visible');
   });
