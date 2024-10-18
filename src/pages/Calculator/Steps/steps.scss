@@ -4,7 +4,7 @@ $primary-light: #fffff2;
 $primary-dark: #eff1e0;
 $primary-text: #4f5f30;
 
-div[class*="map_infobar__"] {
+div[class*="_infobar_"] {
   /* hide the info bar(currently have overflow issue) */
   display: none;
 }
