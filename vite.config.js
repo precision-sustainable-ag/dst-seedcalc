@@ -20,4 +20,11 @@ export default defineConfig(() => ({
     open: true,
     port: 3000,
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern',
+      },
+    },
+  },
 }));
