@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import {
-  Box, Button, Menu, MenuItem, Typography, useMediaQuery, useTheme,
+  Box, Menu, MenuItem, Typography, useMediaQuery, useTheme,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
+import { PSAButton } from 'shared-react-components/src';
 import AuthButton from '../Auth/AuthButton';
 import { releaseNotesUrl } from '../../shared/data/keys';
 
@@ -30,9 +31,12 @@ const NavBar = () => {
       {matchesMd
         ? (
           <>
-            <Button onClick={openMenu} data-test="open_menu">
-              <MenuIcon />
-            </Button>
+            <PSAButton
+              buttonType=""
+              onClick={openMenu}
+              data-test="open_menu"
+              title={<MenuIcon />}
+            />
             <Menu anchorEl={anchor} open={open} onClose={closeMenu}>
               <MenuItem onClick={() => window.open(releaseNotesUrl)}>
                 <Typography fontSize="0.875rem" fontWeight="bold" data-test="release_notes">
@@ -60,21 +64,39 @@ const NavBar = () => {
         )
         : (
           <>
-            <Button onClick={() => window.open(releaseNotesUrl)} sx={{ textTransform: 'none' }} data-test="release_notes">
-              <Typography fontSize="0.875rem" fontWeight="bold">
-                Release Notes
-              </Typography>
-            </Button>
-            <Button onClick={() => navigate('/about')} sx={{ textTransform: 'none' }} data-test="about">
-              <Typography fontSize="0.875rem" fontWeight="bold">
-                About
-              </Typography>
-            </Button>
-            <Button onClick={() => navigate('/feedback')} sx={{ textTransform: 'none' }} data-test="feedback">
-              <Typography fontSize="0.875rem" fontWeight="bold">
-                Feedback
-              </Typography>
-            </Button>
+            <PSAButton
+              buttonType=""
+              onClick={() => window.open(releaseNotesUrl)}
+              sx={{ textTransform: 'none' }}
+              data-test="release_notes"
+              title={(
+                <Typography fontSize="0.875rem" fontWeight="bold">
+                  Release Notes
+                </Typography>
+                )}
+            />
+            <PSAButton
+              buttonType=""
+              onClick={() => navigate('/about')}
+              sx={{ textTransform: 'none' }}
+              data-test="about"
+              title={(
+                <Typography fontSize="0.875rem" fontWeight="bold">
+                  About
+                </Typography>
+)}
+            />
+            <PSAButton
+              onClick={() => navigate('/feedback')}
+              sx={{ textTransform: 'none' }}
+              data-test="feedback"
+              buttonType=""
+              title={(
+                <Typography fontSize="0.875rem" fontWeight="bold">
+                  Feedback
+                </Typography>
+)}
+            />
             <AuthButton
               variant="text"
               type={isAuthenticated ? 'Logout' : 'Login'}

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Box, Grid, Stack, Typography, Button,
+  Box, Grid, Stack, Typography,
 } from '@mui/material';
 import { useSelector } from 'react-redux';
+import { PSAButton } from 'shared-react-components/src';
 import LicenseAndCopyright from './LicenseAndCopyright';
 
 const About = () => {
@@ -70,7 +71,8 @@ const About = () => {
             }}
           >
             {pageSections.map((section) => (
-              <Button
+              <PSAButton
+                buttonType=""
                 key={section.id}
                 style={{
                   display: 'flex',
@@ -82,9 +84,8 @@ const About = () => {
                 onClick={() => setValue(section.id)}
                 variant={value === section.id ? 'contained' : 'text'}
                 data-test={`section-${section.menuOption}`}
-              >
-                {section.menuOption}
-              </Button>
+                title={section.menuOption}
+              />
             ))}
           </div>
         </Grid>

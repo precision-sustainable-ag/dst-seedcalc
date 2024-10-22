@@ -5,9 +5,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Button, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
-import { RegionSelectorMap, Spinner } from 'shared-react-components/src';
+import { PSAButton, RegionSelectorMap, Spinner } from 'shared-react-components/src';
 import { isEmptyNull, validateForms } from '../../../../shared/utils/format';
 import { getCrops } from '../../../../features/calculatorSlice/api';
 import { getLocality, getRegion } from '../../../../features/siteConditionSlice/api';
@@ -174,22 +174,22 @@ const SiteCondition = ({
                         Would you like to manually enter your site conditions
                         or use your location to prepopulate them?
                       </Typography>
-                      <Button
+                      <PSAButton
+                        buttonType=""
                         variant="contained"
                         onClick={() => handleSiteConditionSelection('use map')}
                         sx={{ margin: '1rem' }}
                         data-test="option_map"
-                      >
-                        Map
-                      </Button>
-                      <Button
+                        title="Map"
+                      />
+                      <PSAButton
+                        buttonType=""
                         variant="contained"
                         onClick={() => handleSiteConditionSelection('manually enter')}
                         sx={{ margin: '1rem' }}
                         data-test="option_manually"
-                      >
-                        Manually Enter
-                      </Button>
+                        title="Manually Enter"
+                      />
                     </Grid>
                   )
                   : (

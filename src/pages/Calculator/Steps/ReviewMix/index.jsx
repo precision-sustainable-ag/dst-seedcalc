@@ -4,8 +4,9 @@
 
 import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
-import { Typography, Button } from '@mui/material';
+import { Typography } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
+import { PSAButton } from 'shared-react-components/src';
 import {
   reviewMixMCCC, reviewMixNECCC, calculatePieChartData,
   calculatePlantsandSeedsPerAcre,
@@ -256,15 +257,15 @@ const ReviewMix = ({ calculator }) => {
               </Grid>
 
               <Grid item xs={12} pt="1rem">
-                <Button
+                <PSAButton
+                  buttonType=""
                   onClick={() => {
                     setShowSteps({ ...showSteps, [seed.label]: !showSteps[seed.label] });
                   }}
                   variant="outlined"
                   data-test="change_my_rate_button"
-                >
-                  {showSteps[seed.label] ? 'Close Steps' : 'Change My Rate'}
-                </Button>
+                  title={showSteps[seed.label] ? 'Close Steps' : 'Change My Rate'}
+                />
               </Grid>
 
               <Grid item xs={12}>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTheme } from '@emotion/react';
 import {
-  useMediaQuery, Grid, Typography, Button,
+  useMediaQuery, Grid, Typography,
 } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -14,6 +14,7 @@ import {
   LabelList,
   Cell,
 } from 'recharts';
+import { PSAButton } from 'shared-react-components/src';
 import { twoDigit } from '../../shared/utils/calculator';
 
 const DSTBarChart = ({ seed, calculatorResult }) => {
@@ -94,25 +95,33 @@ const DSTBarChart = ({ seed, calculatorResult }) => {
         </ResponsiveContainer>
       </Grid>
       <Grid item xs={12}>
-        <Button
+        <PSAButton
+          buttonType=""
           onClick={() => setIndex(index - 1)}
           disabled={index === 0}
           data-test="barchart_back"
-        >
-          <ArrowBackIosNewIcon />
-          Back
-        </Button>
+          title={(
+            <>
+              <ArrowBackIosNewIcon />
+              Back
+            </>
+)}
+        />
         <Typography display="inline-block" padding="0 1rem">
           {`${index + 1} / 5`}
         </Typography>
-        <Button
+        <PSAButton
           onClick={() => setIndex((index + 1) % 5)}
           disabled={index === 4}
           data-test="barchart_next"
-        >
-          Next
-          <ArrowForwardIosIcon />
-        </Button>
+          buttonType=""
+          title={(
+            <>
+              Next
+              <ArrowForwardIosIcon />
+            </>
+)}
+        />
       </Grid>
 
       <Grid container data-test="list_container">
