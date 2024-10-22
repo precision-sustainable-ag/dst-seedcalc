@@ -1,7 +1,8 @@
 import React from 'react';
 import {
-  Box, Grid, Modal, Typography, Button,
+  Box, Grid, Modal, Typography,
 } from '@mui/material';
+import { PSAAccordion } from 'shared-react-components/src';
 
 // TODO: not used now
 const DSTModal = ({
@@ -37,9 +38,12 @@ const DSTModal = ({
         <Grid xs={2} item />
         <Grid xs={8} item />
         <Grid xs={4} item>
-          <Button sx={{ marginTop: '15px' }} onClick={handleClose}>
-            Close
-          </Button>
+          <PSAAccordion
+            buttonType=""
+            sx={{ marginTop: '15px' }}
+            onClick={handleClose}
+            title="Close"
+          />
         </Grid>
       </Grid>
     </Box>

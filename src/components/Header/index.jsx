@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Button, Grid, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { PSALogoDisplayer } from 'shared-react-components/src';
+import { PSAButton, PSALogoDisplayer } from 'shared-react-components/src';
 import NavBar from '../NavBar';
 
 const Header = () => {
@@ -24,15 +24,20 @@ const Header = () => {
         justifyContent="center"
         alignItems="center"
       >
-        <Button onClick={() => navigate('/')} data-test="header_logo_button">
-          <PSALogoDisplayer
-            council={council}
-            alt={council}
-            style={{
-              height: '75px',
-            }}
-          />
-        </Button>
+        <PSAButton
+          buttonType=""
+          onClick={() => navigate('/')}
+          data-test="header_logo_button"
+          title={(
+            <PSALogoDisplayer
+              council={council}
+              alt={council}
+              style={{
+                height: '75px',
+              }}
+            />
+)}
+        />
         <Typography variant="dstHeader" pl="1rem" data-test="page_caption">
           Seeding Rate Calculator
         </Typography>

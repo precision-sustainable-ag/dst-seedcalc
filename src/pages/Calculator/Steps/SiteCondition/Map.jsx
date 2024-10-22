@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 // import { Map as MapComponent } from '@psa/dst.ui.map';
-import { Map as MapComponent } from 'shared-react-components/src';
-
-import { Button } from '@mui/material';
+import { PSAButton, Map as MapComponent } from 'shared-react-components/src';
 import { useDispatch, useSelector } from 'react-redux';
 import { soilDrainageValues } from '../../../../shared/data/dropdown';
 import {
@@ -126,8 +124,8 @@ const Map = ({
           mapboxToken={mapboxToken}
         />
         <Grid item xs={12} p="1rem">
-          <Button variant="contained" onClick={() => setStep(1)} sx={{ margin: '1rem' }}>Back</Button>
-          <Button variant="contained" onClick={() => setStep(3)} sx={{ margin: '1rem' }}>Edit Details</Button>
+          <PSAButton buttonType="" variant="contained" onClick={() => setStep(1)} sx={{ margin: '1rem' }} title="Back" />
+          <PSAButton buttonType="" variant="contained" onClick={() => setStep(3)} sx={{ margin: '1rem' }} title="Edit Details" />
         </Grid>
       </Grid>
     </Grid>

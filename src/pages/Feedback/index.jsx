@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Grid, Typography, TextField, Button, FormGroup, FormControlLabel, Checkbox, Snackbar, useTheme,
+  Grid, Typography, TextField, FormGroup, FormControlLabel, Checkbox, Snackbar, useTheme,
 } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useNavigate } from 'react-router-dom';
+import { PSAButton } from 'shared-react-components/src';
 
 const defaultFeedback = {
   repository: 'dst-feedback',
@@ -241,18 +242,22 @@ const Feedback = () => {
             . Please fill all required fields before submitting.
           </Typography>
           )}
-          <Button variant="contained" onClick={() => navigate('/')} data-test="feedback_back">
-            Back
-          </Button>
-          <Button
+          <PSAButton
+            buttonType=""
+            variant="contained"
+            onClick={() => navigate('/')}
+            data-test="feedback_back"
+            title="Back"
+          />
+          <PSAButton
+            buttonType=""
             variant="outlined"
             style={{ marginLeft: '1rem' }}
             disabled={alertMessage !== ''}
             onClick={handleSubmit}
             data-test="feedback_submit"
-          >
-            Submit
-          </Button>
+            title="Submit"
+          />
         </Grid>
 
       </Grid>

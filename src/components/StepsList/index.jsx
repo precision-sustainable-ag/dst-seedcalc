@@ -6,11 +6,11 @@ import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import { StepButton, Tooltip } from '@mui/material';
-import Button from '@mui/material/Button';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { useDispatch, useSelector } from 'react-redux';
+import { PSAButton } from 'shared-react-components/src';
 import { calculatorList } from '../../shared/data/dropdown';
 import { resetCalculator } from '../../features/calculatorSlice';
 import {
@@ -131,17 +131,33 @@ const StepsList = ({
 
         {activeStep !== 0 && (
           activeStep === calculatorList.length ? (
-            <Button variant="stepper" onClick={handleRestart} data-test="restart_button">
-              <RestartAltIcon />
-              Restart
-            </Button>
+            <PSAButton
+              buttonType=""
+              variant="stepper"
+              onClick={handleRestart}
+              data-test="restart_button"
+              title={(
+                <>
+                  <RestartAltIcon />
+                  Restart
+                </>
+)}
+            />
           )
             : (
-              <Button variant="stepper" onClick={handleBack} data-test="back_button">
-                <ArrowBackIosNewIcon />
-                {' '}
-                BACK
-              </Button>
+              <PSAButton
+                buttonType=""
+                variant="stepper"
+                onClick={handleBack}
+                data-test="back_button"
+                title={(
+                  <>
+                    <ArrowBackIosNewIcon />
+                    {' '}
+                    BACK
+                  </>
+)}
+              />
             )
         )}
 
@@ -157,18 +173,22 @@ const StepsList = ({
           title={tooltipTitle()}
         >
           <span>
-            <Button
+            <PSAButton
+              buttonType=""
               variant="stepper"
               disabled={availableSteps[activeStep] !== true}
               onClick={handleNext}
               data-test="next_button"
-            >
-              {activeStep === calculatorList.length - 1
-                ? 'Finish'
-                : calculatorList[activeStep + 1]}
-              {' '}
-              <ArrowForwardIosIcon />
-            </Button>
+              title={(
+                <>
+                  {activeStep === calculatorList.length - 1
+                    ? 'Finish'
+                    : calculatorList[activeStep + 1]}
+                  {' '}
+                  <ArrowForwardIosIcon />
+                </>
+)}
+            />
           </span>
         </Tooltip>
         )}

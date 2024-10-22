@@ -5,10 +5,11 @@
 import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import { useSelector, useDispatch } from 'react-redux';
-import { Button, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import styled from '@emotion/styled';
+import { PSAButton } from 'shared-react-components/src';
 import NumberTextField from '../../../../components/NumberTextField';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 import '../steps.scss';
@@ -142,22 +143,30 @@ const SeedTagInfo = ({
         && (
         <Grid container sx={{ padding: '1rem' }}>
           <Grid item xs={12} display="flex" justifyContent="center" gap="1rem">
-            <Button
+            <PSAButton
+              buttonType=""
               variant="outlined"
               onClick={() => handleHaveSeedTagInfo(true)}
               data-test="selection_yes"
-            >
-              Yes
-              <CheckIcon color="primary.dark" />
-            </Button>
-            <Button
+              title={(
+                <>
+                  Yes
+                  <CheckIcon color="primary.dark" />
+                </>
+)}
+            />
+            <PSAButton
+              buttonType=""
               variant="outlined"
               onClick={() => handleHaveSeedTagInfo(true)}
               data-test="selection_no"
-            >
-              No
-              <CloseIcon color="error" />
-            </Button>
+              title={(
+                <>
+                  No
+                  <CloseIcon color="error" />
+                </>
+)}
+            />
           </Grid>
         </Grid>
         )}

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import {
-  Button, Modal, Box, Typography, Grid,
+  Modal, Box, Typography, Grid,
 } from '@mui/material';
 import { useSelector } from 'react-redux';
+import { PSAButton } from 'shared-react-components/src';
 import { handleDownload } from '../../../../shared/utils/exportExcel';
 import pirschAnalytics from '../../../../shared/utils/analytics';
 
@@ -72,15 +73,19 @@ const ExportModal = () => {
               </Typography>
             </Grid>
             <Grid item xs={12} display="flex" justifyContent="center">
-              <Button variant="contained" onClick={handleExportcsv} data-test="export_csv">Export to csv</Button>
+              <PSAButton buttonType="" variant="contained" onClick={handleExportcsv} data-test="export_csv" title="Export to csv" />
             </Grid>
           </Grid>
 
         </Box>
       </Modal>
-      <Button sx={buttonStyles} onClick={handleClick} data-test="export_button">
-        Export
-      </Button>
+      <PSAButton
+        buttonType=""
+        sx={buttonStyles}
+        onClick={handleClick}
+        data-test="export_button"
+        title="Export"
+      />
     </>
   );
 };
