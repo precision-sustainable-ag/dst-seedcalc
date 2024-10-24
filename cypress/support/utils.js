@@ -24,18 +24,18 @@ export const mockSiteCondition = (council) => {
   clickStateMap(council);
   cy.getByTestId('option_manually').should('be.visible').click();
   cy.getByTestId('site_condition_region').click();
-  if (council === undefined) cy.get('[data-test="option-Adams"]').click();
-  else if (council === 'NECCC') cy.get('[data-test="option-Zone 6"]').click();
-  else if (council === 'SCCC') cy.get('[data-test="option-Zone 7"]').click();
+  if (council === undefined) cy.get('[data-test="site_condition_region-Adams"]').click();
+  else if (council === 'NECCC') cy.get('[data-test="site_condition_region-Zone 6"]').click();
+  else if (council === 'SCCC') cy.get('[data-test="site_condition_region-Zone 7"]').click();
   cy.getByTestId('site_condition_soil_drainage').click();
-  cy.get('[data-test="option-Poorly Drained"]').click();
+  cy.get('[data-test="site_condition_soil_drainage-Poorly Drained"]').click();
   cy.getByTestId('site_condition_acres').find('input').type('1');
   if (council === undefined) {
     cy.getByTestId('check_nrcs').click();
   }
   if (council === 'NECCC') {
     cy.getByTestId('site_condition_soil_fertility').click();
-    cy.get('[data-test="option-Low"]').click();
+    cy.get('[data-test="site_condition_soil_fertility-Low"]').click();
   }
   cy.getByTestId('next_button').click();
 };
