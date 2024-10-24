@@ -23,7 +23,7 @@ describe('Seeding Method', () => {
   it('should be able to update the seeding method', () => {
     const selectMethod = 'Aerial';
     cy.getByTestId('seeding_method_dropdown').click();
-    cy.getByTestId(`option-${selectMethod}`).click();
+    cy.getByTestId(`seeding_method_dropdown-${selectMethod}`).click();
     cy.getByTestId('seeding_method_dropdown').find('input').should('have.value', selectMethod);
     selectSpecies.forEach(() => {
       cy.getByTestId(`method-${selectMethod}`)
@@ -51,7 +51,7 @@ describe('Seeding Method NECCC & SCCC', () => {
     });
     const selectMethod = 'Aerial';
     cy.getByTestId('seeding_method_dropdown').click();
-    cy.getByTestId(`option-${selectMethod}`).click();
+    cy.getByTestId(`seeding_method_dropdown-${selectMethod}`).click();
     cy.getByTestId('seeding_method_dropdown').find('input').should('have.value', selectMethod);
     selectSpecies.forEach(() => {
       cy.getByTestId(`method-${selectMethod}`)
@@ -77,7 +77,7 @@ describe('Seeding Method NECCC & SCCC', () => {
     });
     const selectMethod = 'Broadcast(With No Cultivation)';
     cy.getByTestId('seeding_method_dropdown').click();
-    cy.getByTestId(`option-${selectMethod}`).click();
+    cy.getByTestId(`seeding_method_dropdown-${selectMethod}`).click();
     cy.getByTestId('seeding_method_dropdown').find('input').should('have.value', selectMethod);
     selectSpecies.forEach(() => {
       cy.getByTestId(`method-${selectMethod}`)

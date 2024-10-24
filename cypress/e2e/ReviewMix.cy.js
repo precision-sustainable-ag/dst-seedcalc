@@ -59,7 +59,7 @@ describe('Review Mix', () => {
     cy.getByTestId('change_my_rate_button').eq(0).click();
 
     cy.getByTestId('seeding_method_selection').click();
-    cy.getByTestId('option-Aerial').click();
+    cy.getByTestId('seeding_method_selection-Aerial').click();
     cy.getByTestId('seeding_method_selection').find('input').should('have.value', 'Aerial');
 
     cy.updateSlider('percent_slider', 100);
