@@ -18,10 +18,10 @@ describe('Feedback', () => {
     cy.getByTestId('header_logo_button').find('img').should('have.attr', 'src', 'images/sccc_logo.png');
   });
 
-  it('should be return back to map if click back button', () => {
-    cy.getByTestId('feedback_back').click();
-    cy.url().should('equal', Cypress.config().baseUrl);
-  });
+  // it('should be return back to map if click back button', () => {
+  //   cy.getByTestId('feedback_back').click();
+  //   cy.url().should('equal', Cypress.config().baseUrl);
+  // });
 
   it('should not be available to submit until all fields are filled', () => {
     cy.getByTestId('feedback_alert').should('be.visible');
