@@ -7,7 +7,6 @@ import { PSALogoDisplayer } from 'shared-react-components/src';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import TextSnippetOutlinedIcon from '@mui/icons-material/TextSnippetOutlined';
-import NavBar from '../NavBar';
 // import PSAHeader from './psaheader';
 import { releaseNotesUrl } from '../../shared/data/keys';
 import { PSAHeader } from 'shared-react-components/src';
@@ -72,7 +71,7 @@ const Header = () => {
               }}
             />
           </Button>
-          <Typography variant="dstHeader" pl="1rem" data-test="page_caption">
+          <Typography variant="dstHeader" pl="1rem" data-test="header_title">
             Seeding Rate Calculator
           </Typography>
         </Grid>
