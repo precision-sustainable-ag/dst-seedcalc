@@ -7,8 +7,8 @@ import Grid from '@mui/material/Grid';
 import { useSelector, useDispatch } from 'react-redux';
 import { Typography, Box } from '@mui/material';
 import styled from '@emotion/styled';
+import { PSADropdown } from 'shared-react-components/src';
 import { seedingMethodsMCCC, seedingMethodsNECCC, seedingMethodsSCCC } from '../../../../shared/data/dropdown';
-import Dropdown from '../../../../components/Dropdown';
 import '../steps.scss';
 import { setOptionRedux, setSeedingMethodsRedux } from '../../../../features/calculatorSlice/actions';
 import { historyStates } from '../../../../features/userSlice/state';
@@ -128,20 +128,20 @@ const SeedingMethod = ({ alertState }) => {
             return {
               Drilled: 1,
               'Broadcast(With Cultivation)':
-              parseFloat(coefficients['Broadcast with Cultivation Coefficient']?.values[0]) || null,
+                parseFloat(coefficients['Broadcast with Cultivation Coefficient']?.values[0]) || null,
               'Broadcast(With No Cultivation)':
-              parseFloat(coefficients['Broadcast without Cultivation Coefficient']?.values[0]) || null,
+                parseFloat(coefficients['Broadcast without Cultivation Coefficient']?.values[0]) || null,
               Aerial: parseFloat(coefficients['Aerial Coefficient']?.values[0]) || null,
             };
           case 'SCCC':
             return {
               Drilled: 1,
               'Broadcast(With Cultivation)':
-              parseFloat(coefficients['Broadcast with Cultivation Coefficient']?.values[0]) || null,
+                parseFloat(coefficients['Broadcast with Cultivation Coefficient']?.values[0]) || null,
               'Broadcast(With Cultivation), No Packing':
-              parseFloat(coefficients['Broadcast with Cultivation, No Packing Coefficient']?.values[0]) || null,
+                parseFloat(coefficients['Broadcast with Cultivation, No Packing Coefficient']?.values[0]) || null,
               'Broadcast(With No Cultivation)':
-              parseFloat(coefficients['Broadcast without Cultivation Coefficient']?.values[0]) || null,
+                parseFloat(coefficients['Broadcast without Cultivation Coefficient']?.values[0]) || null,
             };
           default:
             return null;
@@ -237,15 +237,18 @@ const SeedingMethod = ({ alertState }) => {
       </Grid>
       <Grid item xs={0} md={3} />
       <Grid item xs={12} md={6} padding="15px">
-        <Dropdown
-          value={options[seedsSelected[0].label].plantingMethod ?? ''}
-          label="Seeding Method: "
-          handleChange={(e) => {
-            updateOptions(e.target.value);
+        <PSADropdown
+          label="Seeding Method:"
+          items={getSeedingMethods().map((method) => ({ label: method.label, value: method.label }))}
+          formSx={{ minWidth: '100%' }}
+          SelectProps={{
+            value: options[seedsSelected[0].label].plantingMethod ?? '',
+            onChange: (e) => updateOptions(e.target.value),
+            MenuProps: {
+              style: { color: '#4F5F30' },
+            },
+            'data-cy': 'seeding_method_dropdown',
           }}
-          size={12}
-          items={getSeedingMethods()}
-          testId="seeding_method_dropdown"
         />
       </Grid>
       <Grid item xs={0} md={3} />
@@ -259,7 +262,7 @@ const SeedingMethod = ({ alertState }) => {
           >
             <Grid container>
               {council === 'MCCC'
-                  && (
+                && (
                   <>
                     {renderMethod('Precision', '', methods[seed.label], 'Precision')}
                     {renderMethod('Drilled', '', methods[seed.label], 'Drilled')}
@@ -276,9 +279,9 @@ const SeedingMethod = ({ alertState }) => {
                       'Aerial',
                     )}
                   </>
-                  )}
+                )}
               {council === 'NECCC'
-                  && (
+                && (
                   <>
                     {renderMethod('Drilled', '', methods[seed.label], 'Drilled')}
                     {renderMethod(
@@ -295,9 +298,9 @@ const SeedingMethod = ({ alertState }) => {
                     )}
                     {renderMethod('Aerial', '', methods[seed.label], 'Aerial')}
                   </>
-                  )}
+                )}
               {council === 'SCCC'
-                  && (
+                && (
                   <>
                     {renderMethod('Drilled', '', methods[seed.label], 'Drilled')}
                     {renderMethod(
@@ -319,7 +322,7 @@ const SeedingMethod = ({ alertState }) => {
                       'Broadcast(With No Cultivation)',
                     )}
                   </>
-                  )}
+                )}
             </Grid>
           </DSTAccordion>
         </Grid>

@@ -10,9 +10,8 @@ import Grid from '@mui/material/Grid';
 import InfoIcon from '@mui/icons-material/Info';
 import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
-import { PSAButton } from 'shared-react-components/src';
+import { PSAButton, PSADropdown } from 'shared-react-components/src';
 import DatePicker from '../../../../components/DatePicker';
-import Dropdown from '../../../../components/Dropdown';
 import NumberTextField from '../../../../components/NumberTextField';
 import DSTSwitch from '../../../../components/Switch';
 import {
@@ -159,14 +158,18 @@ const SiteConditionForm = ({
       {/* State */}
       <Grid item xs={0} md={3} />
       <Grid item xs={12} md={6} p="10px">
-        <Dropdown
-          emptyWarning={state.length === 0}
-          value={state}
+        <PSADropdown
           label="State: "
-          handleChange={handleState}
-          size={12}
-          items={stateList}
-          testId="site_condition_state"
+          items={stateList.map((s) => ({ label: s.label, value: s.label }))}
+          formSx={{ minWidth: '100%' }}
+          SelectProps={{
+            value: state,
+            onChange: handleState,
+            MenuProps: {
+              style: { color: '#4F5F30' },
+            },
+            'data-cy': 'site_condition_state',
+          }}
         />
       </Grid>
       <Grid item xs={0} md={3} />
@@ -174,16 +177,19 @@ const SiteConditionForm = ({
       {/* County / Zone */}
       <Grid item xs={0} md={3} />
       <Grid item xs={12} md={6} p="10px">
-        <Dropdown
-          emptyWarning={county.length === 0}
-          value={county}
-          label={
-            council === 'MCCC' ? 'County: ' : 'USDA Plant Hardiness Zone: '
-          }
-          handleChange={handleRegion}
-          size={12}
-          items={regions}
-          testId="site_condition_region"
+        <PSADropdown
+          label={council === 'MCCC' ? 'County: ' : 'USDA Plant Hardiness Zone: '}
+          items={regions.map((region) => ({ label: region.label, value: region.label }))}
+          SelectProps={{
+            value: county,
+            onChange: handleRegion,
+            MenuProps: {
+              style: { color: '#4F5F30' },
+            },
+            sx: { '.MuiOutlinedInput-notchedOutline': county.length === 0 && { borderColor: 'rgba(255, 0, 0, .5)' } },
+            'data-cy': 'site_condition_region',
+          }}
+          formSx={{ minWidth: '100%' }}
         />
       </Grid>
       <Grid item xs={0} md={3} />
@@ -191,14 +197,19 @@ const SiteConditionForm = ({
       {/* Soil Drainage */}
       <Grid item xs={0} md={3} />
       <Grid item xs={12} md={6} p="10px">
-        <Dropdown
-          emptyWarning={soilDrainage === ''}
-          value={tileDrainage ? prevSoilDrainage : soilDrainage}
+        <PSADropdown
           label="Soil Drainage: "
-          handleChange={handleSoilDrainage}
-          size={12}
-          items={getSoilDrainages(council)}
-          testId="site_condition_soil_drainage"
+          items={getSoilDrainages(council).map((drainage) => ({ label: drainage.label, value: drainage.label }))}
+          SelectProps={{
+            value: tileDrainage ? prevSoilDrainage : soilDrainage,
+            onChange: handleSoilDrainage,
+            MenuProps: {
+              style: { color: '#4F5F30' },
+            },
+            sx: { '.MuiOutlinedInput-notchedOutline': soilDrainage === '' && { borderColor: 'rgba(255, 0, 0, .5)' } },
+            'data-cy': 'site_condition_soil_drainage',
+          }}
+          formSx={{ minWidth: '100%' }}
         />
       </Grid>
       <Grid item xs={0} md={3} />
@@ -207,55 +218,55 @@ const SiteConditionForm = ({
       <Grid item xs={0} md={3} />
       <Grid item xs={12} md={6} p="10px">
         {(tileDrainage ? improvedNeedTileDrainage.includes(soilDrainage) : needTileDrainage.includes(soilDrainage))
-        && (
-        <Grid container alignItems="center">
-          <Grid item xs={4}>
-            <Grid container direction="column">
-              <Grid item>
-                <Typography>
-                  Tile drainage
-                  <Tooltip
-                    type="text"
-                    title={(
-                      <Typography color="primary.light">
-                        Indicate if the field of interest has tile installed.
-                        If you have selected very poorly to somewhat poorly drained soils,
-                        selecting “yes” will increase your drainage class.
-                      </Typography>
-                  )}
-                  >
-                    <InfoIcon fontSize="1rem" />
-                  </Tooltip>
-                </Typography>
+          && (
+            <Grid container alignItems="center">
+              <Grid item xs={4}>
+                <Grid container direction="column">
+                  <Grid item>
+                    <Typography>
+                      Tile drainage
+                      <Tooltip
+                        type="text"
+                        title={(
+                          <Typography color="primary.light">
+                            Indicate if the field of interest has tile installed.
+                            If you have selected very poorly to somewhat poorly drained soils,
+                            selecting “yes” will increase your drainage class.
+                          </Typography>
+                        )}
+                      >
+                        <InfoIcon fontSize="1rem" />
+                      </Tooltip>
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <Typography display="inline">
+                      No
+                    </Typography>
+                    <DSTSwitch
+                      checked={tileDrainage}
+                      handleChange={handleTileDrainage}
+                      disabled={!tileDrainage && (needTileDrainage.indexOf(soilDrainage) === -1 || council === '')}
+                      testId="site_condition_tile_drainage"
+                    />
+                    <Typography display="inline">
+                      Yes
+                    </Typography>
+                  </Grid>
+                </Grid>
               </Grid>
-              <Grid item>
-                <Typography display="inline">
-                  No
-                </Typography>
-                <DSTSwitch
-                  checked={tileDrainage}
-                  handleChange={handleTileDrainage}
-                  disabled={!tileDrainage && (needTileDrainage.indexOf(soilDrainage) === -1 || council === '')}
-                  testId="site_condition_tile_drainage"
-                />
-                <Typography display="inline">
-                  Yes
-                </Typography>
+              <Grid item xs={8}>
+                {(tileDrainage)
+                  && (
+                    <>
+                      <Typography>Your improved drainage class is: </Typography>
+                      <Typography fontWeight="bold" data-test="tile_drainage_class">{soilDrainage}</Typography>
+                    </>
+                  )}
+
               </Grid>
             </Grid>
-          </Grid>
-          <Grid item xs={8}>
-            {(tileDrainage)
-            && (
-            <>
-              <Typography>Your improved drainage class is: </Typography>
-              <Typography fontWeight="bold" data-test="tile_drainage_class">{soilDrainage}</Typography>
-            </>
-            )}
-
-          </Grid>
-        </Grid>
-        )}
+          )}
       </Grid>
       <Grid item xs={0} md={3} />
 
@@ -320,16 +331,21 @@ const SiteConditionForm = ({
           md={6}
           p="10px"
         >
-          <Dropdown
-            emptyWarning={soilFertility === ''}
-            value={soilFertility}
+          <PSADropdown
             label="Soil Fertility: "
-            handleChange={(e) => {
-              dispatch(setSoilFertilityRedux(e.target.value));
+            items={soilFertilityValues.map((fertility) => ({ label: fertility.label, value: fertility.label }))}
+            formSx={{ minWidth: '100%' }}
+            SelectProps={{
+              value: soilFertility,
+              onChange: (e) => {
+                dispatch(setSoilFertilityRedux(e.target.value));
+              },
+              MenuProps: {
+                style: { color: '#4F5F30' },
+              },
+              'data-cy': 'site_condition_soil_fertility',
+              error: soilFertility === '',
             }}
-            size={12}
-            items={soilFertilityValues}
-            testId="site_condition_soil_fertility"
           />
         </Grid>
       )}

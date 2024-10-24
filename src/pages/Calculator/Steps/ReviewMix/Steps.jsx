@@ -5,10 +5,9 @@ import Grid from '@mui/material/Grid';
 import {
   Typography, useTheme, useMediaQuery, Slider,
 } from '@mui/material';
-
+import { PSADropdown } from 'shared-react-components/src';
 import NumberTextField from '../../../../components/NumberTextField';
 import { convertToPercent } from '../../../../shared/utils/calculator';
-import Dropdown from '../../../../components/Dropdown';
 import { seedingMethodsMCCC, seedingMethodsNECCC, seedingMethodsSCCC } from '../../../../shared/data/dropdown';
 import '../steps.scss';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
@@ -29,25 +28,25 @@ const ReviewMixSteps = ({
 
   const renderStepsForm = (label1, label2, label3) => (
     matchesMd && (
-    <Grid container justifyContent="space-evenly">
-      <Grid item xs={3}>
-        <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
-          {label1}
-        </Typography>
+      <Grid container justifyContent="space-evenly">
+        <Grid item xs={3}>
+          <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
+            {label1}
+          </Typography>
+        </Grid>
+        <Grid item xs={1} />
+        <Grid item xs={3}>
+          <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
+            {label2}
+          </Typography>
+        </Grid>
+        <Grid item xs={1} />
+        <Grid item xs={3}>
+          <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
+            {label3}
+          </Typography>
+        </Grid>
       </Grid>
-      <Grid item xs={1} />
-      <Grid item xs={3}>
-        <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
-          {label2}
-        </Typography>
-      </Grid>
-      <Grid item xs={1} />
-      <Grid item xs={3}>
-        <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
-          {label3}
-        </Typography>
-      </Grid>
-    </Grid>
     )
   );
 
@@ -372,23 +371,30 @@ const ReviewMixSteps = ({
         </Grid>
         <Grid item xs={3} />
         <Grid item xs={6} paddingLeft="1rem" paddingBottom="1rem">
-          <Dropdown
-            value={options.plantingMethod ?? ''}
+          <PSADropdown
             label="Seeding Method: "
-            handleChange={(e) => {
-              seedsSelected.forEach((s) => {
-                dispatch(
-                  setOptionRedux(s.label, {
-                    ...options,
-                    plantingMethod: e.target.value,
-                    plantingMethodModifier: seedingMethods[seed.label][e.target.value],
-                  }),
-                );
-              });
+            items={getSeedingMethods().map((method) => ({ label: method.label, value: method.label }))}
+            formSx={{ minWidth: '100%' }}
+            SelectProps={{
+              value: options.plantingMethod ?? '',
+              onChange: (e) => {
+                seedsSelected.forEach((s) => {
+                  dispatch(
+                    setOptionRedux(s.label, {
+                      ...options,
+                      plantingMethod: e.target.value,
+                      plantingMethodModifier: seedingMethods[seed.label][e.target.value],
+                    }),
+                  );
+                });
+              },
+              MenuProps: {
+                style: { color: '#4F5F30' },
+              },
+              'data-cy': 'seeding_method_selection',
             }}
-            items={getSeedingMethods()}
-            testId="seeding_method_selection"
           />
+
         </Grid>
         {renderStepsForm(
           'Seeding Rate in Mix (Lbs per Acre)',
