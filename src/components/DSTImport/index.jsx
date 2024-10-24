@@ -170,7 +170,7 @@ const DSTImport = () => {
                         MenuProps: {
                           style: { color: '#4F5F30' },
                         },
-                        'data-cy': 'select_calculation',
+                        'data-test': 'select_calculation',
                       }}
                     />
                   </Grid>

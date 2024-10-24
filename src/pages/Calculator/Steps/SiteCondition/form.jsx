@@ -168,7 +168,7 @@ const SiteConditionForm = ({
             MenuProps: {
               style: { color: '#4F5F30' },
             },
-            'data-cy': 'site_condition_state',
+            'data-test': 'site_condition_state',
           }}
         />
       </Grid>
@@ -187,7 +187,7 @@ const SiteConditionForm = ({
               style: { color: '#4F5F30' },
             },
             sx: { '.MuiOutlinedInput-notchedOutline': county.length === 0 && { borderColor: 'rgba(255, 0, 0, .5)' } },
-            'data-cy': 'site_condition_region',
+            'data-test': 'site_condition_region',
           }}
           formSx={{ minWidth: '100%' }}
         />
@@ -207,7 +207,7 @@ const SiteConditionForm = ({
               style: { color: '#4F5F30' },
             },
             sx: { '.MuiOutlinedInput-notchedOutline': soilDrainage === '' && { borderColor: 'rgba(255, 0, 0, .5)' } },
-            'data-cy': 'site_condition_soil_drainage',
+            'data-test': 'site_condition_soil_drainage',
           }}
           formSx={{ minWidth: '100%' }}
         />
@@ -343,7 +343,7 @@ const SiteConditionForm = ({
               MenuProps: {
                 style: { color: '#4F5F30' },
               },
-              'data-cy': 'site_condition_soil_fertility',
+              'data-test': 'site_condition_soil_fertility',
               error: soilFertility === '',
             }}
           />

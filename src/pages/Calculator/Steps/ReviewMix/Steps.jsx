@@ -391,7 +391,7 @@ const ReviewMixSteps = ({
               MenuProps: {
                 style: { color: '#4F5F30' },
               },
-              'data-cy': 'seeding_method_selection',
+              'data-test': 'seeding_method_selection',
             }}
           />
 

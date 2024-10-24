@@ -247,7 +247,7 @@ const SeedingMethod = ({ alertState }) => {
             MenuProps: {
               style: { color: '#4F5F30' },
             },
-            'data-cy': 'seeding_method_dropdown',
+            'data-test': 'seeding_method_dropdown',
           }}
         />
       </Grid>
