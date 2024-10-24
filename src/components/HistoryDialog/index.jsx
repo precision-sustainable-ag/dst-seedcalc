@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import {
-  Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField,
+  Dialog, DialogActions, DialogContent, DialogTitle, TextField,
   Typography,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
+import { PSAButton } from 'shared-react-components/src';
 import {
   setHistoryStateRedux, setHistoryDialogStateRedux, setSelectedHistoryRedux,
 } from '../../features/userSlice/actions';
@@ -111,10 +112,10 @@ const HistoryDialog = ({ setStep, setSiteConditionStep }) => {
       </DialogContent>
       <DialogActions>
         {type === 'add'
-            && <Button onClick={handleCreate} variant="contained" data-test="create_button">Create</Button>}
+            && <PSAButton buttonType="" onClick={handleCreate} variant="contained" data-test="create_button" title="Create" />}
         {type === 'update'
-            && <Button onClick={handleUpdate} variant="contained" data-test="create_record_button">Create a new record</Button>}
-        <Button onClick={handleCancel} variant="contained" data-test="cancel_button">Cancel</Button>
+            && <PSAButton buttonType="" onClick={handleUpdate} variant="contained" data-test="create_record_button" title="Create a new record" />}
+        <PSAButton buttonType="" onClick={handleCancel} variant="contained" data-test="cancel_button" title="Cancel" />
       </DialogActions>
 
     </Dialog>

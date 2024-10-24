@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import Papa from 'papaparse';
 import {
-  Box, Grid, Modal, Typography, Button,
+  Box, Grid, Modal, Typography,
 } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { useAuth0 } from '@auth0/auth0-react';
+import { PSAButton } from 'shared-react-components/src';
 import { importFromCSVCalculator } from '../../features/calculatorSlice/actions';
 import { setSiteConditionRedux } from '../../features/siteConditionSlice/actions';
 import useUserHistory from '../../shared/hooks/useUserHistory';
@@ -110,13 +111,13 @@ const DSTImport = () => {
                   </Typography>
                 </Grid>
                 <Grid item xs={12} display="flex" justifyContent="center">
-                  <Button
+                  <PSAButton
+                    buttonType=""
                     variant="contained"
                     onClick={handleCreateNewHistory}
                     data-test="create_calculation"
-                  >
-                    create new calculation
-                  </Button>
+                    title="create new calculation"
+                  />
                 </Grid>
               </Grid>
 
@@ -139,9 +140,14 @@ const DSTImport = () => {
                 />
                 {/* eslint-disable-next-line */}
               <label htmlFor="contained-button-file">
-                <Button variant="contained" color="primary" component="span" data-test="import_from_csv">
-                  Import from CSV
-                </Button>
+                <PSAButton
+                  buttonType=""
+                  variant="contained"
+                  color="primary"
+                  component="span"
+                  data-test="import_from_csv"
+                  title="Import from CSV"
+                />
               </label>
               </Grid>
             </Grid>
@@ -165,9 +171,13 @@ const DSTImport = () => {
                     />
                   </Grid>
                   <Grid item xs={12} display="flex" justifyContent="center" alignItems="center">
-                    <Button variant="contained" onClick={handleLoadUserHistory} data-test="import_calculation">
-                      Import
-                    </Button>
+                    <PSAButton
+                      buttonType=""
+                      variant="contained"
+                      onClick={handleLoadUserHistory}
+                      data-test="import_calculation"
+                      title="Import"
+                    />
                   </Grid>
                 </Grid>
               </Grid>
@@ -175,14 +185,14 @@ const DSTImport = () => {
           </Grid>
         </Box>
       </Modal>
-      <Button
+      <PSAButton
+        buttonType=""
         variant="contained"
         onClick={() => setOpenModal(true)}
         sx={{ textDecoration: 'none', margin: '1rem' }}
         data-test="import_button"
-      >
-        {isAuthenticated ? 'Import / Create calculation' : 'Import Calculation'}
-      </Button>
+        title={isAuthenticated ? 'Import / Create calculation' : 'Import Calculation'}
+      />
     </>
   );
 };

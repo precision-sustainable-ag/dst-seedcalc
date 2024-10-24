@@ -3,9 +3,10 @@
   The authorization functions includes Login, SignUp and LogOut, you can also define custom onClick callbacks and use it like a normal MUI Button.
 */
 
-import { Button, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react';
+import { PSAButton } from 'shared-react-components/src';
 
 const AuthButton = ({
   type, variant = 'text', onClickCallback = () => {},
@@ -60,11 +61,17 @@ const AuthButton = ({
   };
 
   return (
-    <Button variant={variant} onClick={handleClick} data-test="auth_button">
-      <Typography sx={{ fontSize: '0.875rem', fontWeight: 'bold' }} color={getColor()}>
-        {type}
-      </Typography>
-    </Button>
+    <PSAButton
+      buttonType=""
+      variant={variant}
+      onClick={handleClick}
+      data-test="auth_button"
+      title={(
+        <Typography sx={{ fontSize: '0.875rem', fontWeight: 'bold' }} color={getColor()}>
+          {type}
+        </Typography>
+)}
+    />
   );
 };
 

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Typography, Box, Button, Grid, Card, CardContent, CardMedia, Slider,
+  Typography, Box, Grid, Card, CardContent, CardMedia, Slider,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
+import { PSAButton } from 'shared-react-components/src';
 import { twoDigit } from '../../shared/utils/calculator';
 import { selectUnitRedux } from '../../features/calculatorSlice/actions';
 import { seedDataUnits } from '../../shared/data/units';
@@ -26,23 +27,23 @@ const UnitSelection = () => {
       <Typography>
         Select data unit:
       </Typography>
-      <Button
+      <PSAButton
         sx={{ borderRadius: '1rem' }}
         variant={unit === 'acre' ? 'outlined' : 'contained'}
         onClick={() => dispatch(selectUnitRedux('sqft'))}
         data-test="unit_sqft"
-      >
-        {seedDataUnits.sqft}
-      </Button>
+        title={seedDataUnits.sqft}
+        buttonType=""
+      />
       {'  '}
-      <Button
+      <PSAButton
         sx={{ borderRadius: '1rem' }}
         variant={unit === 'acre' ? 'contained' : 'outlined'}
         onClick={() => dispatch(selectUnitRedux('acre'))}
         data-test="unit_acre"
-      >
-        {seedDataUnits.acre}
-      </Button>
+        title={seedDataUnits.acre}
+        buttonType=""
+      />
     </>
   );
 };

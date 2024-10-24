@@ -4,13 +4,13 @@
 
 import React from 'react';
 import {
-  Button,
   Typography, Tooltip,
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import InfoIcon from '@mui/icons-material/Info';
 import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
+import { PSAButton } from 'shared-react-components/src';
 import DatePicker from '../../../../components/DatePicker';
 import Dropdown from '../../../../components/Dropdown';
 import NumberTextField from '../../../../components/NumberTextField';
@@ -336,7 +336,7 @@ const SiteConditionForm = ({
       <Grid item xs={0} md={3} />
 
       <Grid item xs={12} margin="1rem">
-        <Button variant="contained" onClick={() => setStep(1)} data-test="back_button">Back</Button>
+        <PSAButton buttonType="" variant="contained" onClick={() => setStep(1)} data-test="back_button" title="Back" />
       </Grid>
 
     </Grid>

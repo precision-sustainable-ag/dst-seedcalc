@@ -7,8 +7,9 @@
 
 import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
-import { Typography, Button } from '@mui/material';
+import { Typography } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
+import { PSAButton } from 'shared-react-components/src';
 import MixRatioSteps from './form';
 import DSTPieChart from '../../../../components/DSTPieChart';
 import { UnitSelection, SeedInfo } from '../../../../components/SeedingRateCard';
@@ -306,7 +307,8 @@ const MixRatio = ({
               </Grid>
 
               <Grid item xs={12} pt="1rem">
-                <Button
+                <PSAButton
+                  buttonType=""
                   sx={{
                     borderRadius: '1rem',
                   }}
@@ -315,9 +317,8 @@ const MixRatio = ({
                   }}
                   variant="outlined"
                   data-test={`${seed.label}-show_calculation_button`}
-                >
-                  {showSteps[seed.label] ? 'Close Steps' : 'View Calculations'}
-                </Button>
+                  title={showSteps[seed.label] ? 'Close Steps' : 'View Calculations'}
+                />
               </Grid>
 
               <Grid item xs={12}>

@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Button, Grid, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { PSALogoDisplayer } from 'shared-react-components/src';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
