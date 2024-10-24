@@ -8,6 +8,8 @@ import Calculator from './pages/Calculator';
 import Feedback from './pages/Feedback';
 import dstTheme from './shared/themes';
 import About from './pages/About';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import '@fontsource/ibm-plex-sans';
 
 const App = () => (
   <ThemeProvider theme={dstTheme}>

@@ -2,6 +2,7 @@
 import React from 'react';
 import Header from './index';
 import store from '../../store';
+import { releaseNotesUrl } from '../../shared/data/keys';
 
 describe('<Header />', () => {
   beforeEach(() => {
@@ -29,5 +30,24 @@ describe('<Header />', () => {
 
   it('should show the navbar', () => {
     cy.getByTestId('open_menu').should('be.visible');
+  });
+
+  it('should render navbar as menu on larger screen and an icon on smaller screen', () => {
+    cy.getByTestId('open_menu').should('be.visible');
+    cy.viewport(1024, 768);
+    cy.getByTestId('open_menu').should('not.exist');
+  });
+
+  it('should have available links', () => {
+    cy.getByTestId('open_menu').click();
+
+    cy.window().then((win) => {
+      cy.stub(win, 'open').as('windowOpen');
+    });
+    cy.getByTestId('navbar-Release Notes').click();
+    cy.get('@windowOpen').should('be.calledWith', releaseNotesUrl);
+
+    cy.getByTestId('navbar-Feedback').click();
+    cy.url().should('contain', '/feedback');
   });
 });
