@@ -1,3 +1,5 @@
+import { clickStateMap } from '../support/utils';
+
 /* eslint-disable cypress/no-unnecessary-waiting */
 describe('Creating user history', () => {
   beforeEach(() => {
@@ -24,7 +26,8 @@ describe('Creating user history', () => {
     // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(1000);
     // click on Indiana
-    cy.get('.mapboxgl-canvas').should('be.visible').trigger('click', 525, 160);
+    // cy.get('.mapboxgl-canvas').should('be.visible').trigger('click', 525, 160);
+    clickStateMap();
     cy.getByTestId('option_manually').should('be.visible').click();
     cy.getByTestId('site_condition_region').click();
     cy.get('[data-test="site_condition_region-Adams"]').click();
