@@ -27,7 +27,9 @@ describe('Creating user history', () => {
     cy.wait(1000);
     // click on Indiana
     // cy.get('.mapboxgl-canvas').should('be.visible').trigger('click', 525, 160);
-    clickStateMap();
+    cy.get('div[class^="_wrapper"]').reactComponent().its('memoizedProps').then((props) => {
+      cy.wrap(props).invoke('selectorFunction', { properties: { STATE_NAME: 'Indiana' } });
+    });
     cy.getByTestId('option_manually').should('be.visible').click();
     cy.getByTestId('site_condition_region').click();
     cy.get('[data-test="site_condition_region-Adams"]').click();

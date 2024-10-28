@@ -47,45 +47,12 @@ const Header = () => {
   ];
 
   return (
-    <>
-      {/* <Grid
-        container
-        paddingTop="0.625rem"
-        height="85px"
-        justifyContent="center"
-      >
-        <Grid
-          item
-          xs={9}
-          md={6}
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Button onClick={() => navigate('/')} data-test="header_logo_button">
-            <PSALogoDisplayer
-              council={council}
-              alt={council}
-              style={{
-                height: '75px',
-              }}
-            />
-          </Button>
-          <Typography variant="dstHeader" pl="1rem" data-test="header_title">
-            Seeding Rate Calculator
-          </Typography>
-        </Grid>
-        <Grid item xs={3} md={6}>
-          <NavBar />
-        </Grid>
-      </Grid> */}
       <PSAHeader
         title="Seeding Rate Calculator"
         council={council}
         navButtons={navButtons}
         onLogoClick={() => navigate('/')}
       />
-    </>
   );
 };
 export default Header;
