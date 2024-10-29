@@ -68,11 +68,7 @@ const NumberTextField = ({
       placeholder={placeholder}
       disabled={disabled}
       sx={{
-      // custom style for undisabled textbox
-        '& .MuiOutlinedInput-notchedOutline': {
-          border: '1px solid #4F5F30',
-        },
-        '.MuiOutlinedInput-notchedOutline': emptyWarning && {
+        '.MuiOutlinedInput-root fieldset': emptyWarning && {
           borderColor: 'rgba(255, 0, 0, .5)',
         },
         ...sx,
