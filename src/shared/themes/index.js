@@ -1,6 +1,8 @@
 import { createTheme } from '@mui/material/styles';
+import { deepmerge } from '@mui/utils';
+import { PSATheme } from 'shared-react-components/src';
 
-const dstTheme = createTheme({
+const theme = createTheme({
   palette: {
     primary: {
       main: '#4F5F30',
@@ -114,5 +116,7 @@ const dstTheme = createTheme({
     },
   },
 });
+
+const dstTheme = createTheme(deepmerge(PSATheme, theme));
 
 export default dstTheme;
