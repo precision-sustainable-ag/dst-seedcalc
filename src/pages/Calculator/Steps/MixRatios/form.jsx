@@ -16,27 +16,31 @@ const MixRatioSteps = ({
   const [survival, setSurvival] = useState(0);
 
   const renderFormLabel = (label1, label2, label3) => (
-    matchesMd && (
-    <Grid container justifyContent="space-evenly">
-      <Grid item xs={3}>
-        <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
-          {label1}
-        </Typography>
+    <>
+      {matchesMd && (
+      <Grid container justifyContent="space-evenly">
+        <Grid item xs={3}>
+          <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
+            {label1}
+          </Typography>
+        </Grid>
+        <Grid item xs={1} />
+        <Grid item xs={3}>
+          <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
+            {label2}
+          </Typography>
+        </Grid>
+        <Grid item xs={1} />
+        <Grid item xs={3}>
+          <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
+            {label3}
+          </Typography>
+        </Grid>
       </Grid>
-      <Grid item xs={1} />
-      <Grid item xs={3}>
-        <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
-          {label2}
-        </Typography>
-      </Grid>
-      <Grid item xs={1} />
-      <Grid item xs={3}>
-        <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
-          {label3}
-        </Typography>
-      </Grid>
-    </Grid>
-    )
+      )}
+      <Grid item xs={12} p="0.5rem" />
+    </>
+
   );
 
   const {
