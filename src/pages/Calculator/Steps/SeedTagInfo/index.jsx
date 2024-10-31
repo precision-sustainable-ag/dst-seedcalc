@@ -33,14 +33,8 @@ const LeftGrid = styled(Grid)({
 });
 
 const SeedTagNumField = styled(NumberTextField)({
-  '& .MuiOutlinedInput-root': {
-    borderRadius: '0px',
-    backgroundColor: 'white',
-  },
-  '& .MuiInputBase-input': {
-    fontSize: 16,
-    width: 'auto',
-    padding: '10px 10px',
+  fieldset: {
+    top: 0,
   },
 });
 

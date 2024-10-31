@@ -27,7 +27,8 @@ const ReviewMixSteps = ({
   const { seedsSelected, seedingMethods } = useSelector((state) => state.calculator);
 
   const renderStepsForm = (label1, label2, label3) => (
-    matchesMd && (
+    <>
+      {matchesMd && (
       <Grid container justifyContent="space-evenly">
         <Grid item xs={3}>
           <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
@@ -47,7 +48,9 @@ const ReviewMixSteps = ({
           </Typography>
         </Grid>
       </Grid>
-    )
+      )}
+      <Grid item xs={12} p="0.5rem" />
+    </>
   );
 
   const {
@@ -207,7 +210,6 @@ const ReviewMixSteps = ({
             unit="%"
             testId="percent_slider"
           />
-          <Grid item xs={12} p="0.5rem" />
 
           {renderStepsForm(
             'Single Species Seeding Rate PLS (Lbs per Acre)',
