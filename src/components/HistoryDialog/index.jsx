@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import {
-  Dialog, DialogActions, DialogContent, DialogTitle, TextField,
+  Dialog, DialogActions, DialogContent, DialogTitle,
   Typography,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { PSAButton } from 'shared-react-components/src';
+import { PSAButton, PSATextField } from 'shared-react-components/src';
 import {
   setHistoryStateRedux, setHistoryDialogStateRedux, setSelectedHistoryRedux,
 } from '../../features/userSlice/actions';
@@ -87,7 +87,7 @@ const HistoryDialog = ({ setStep, setSiteConditionStep }) => {
       <DialogContent>
         {type === 'add'
           && (
-          <TextField
+          <PSATextField
             autoFocus
             fullWidth
             variant="standard"
