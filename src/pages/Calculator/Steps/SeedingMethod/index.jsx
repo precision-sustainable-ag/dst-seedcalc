@@ -13,7 +13,7 @@ import '../steps.scss';
 import { setOptionRedux, setSeedingMethodsRedux } from '../../../../features/calculatorSlice/actions';
 import { historyStates } from '../../../../features/userSlice/state';
 import { setAlertStateRedux, setHistoryStateRedux } from '../../../../features/userSlice/actions';
-import DSTAccordion from '../../../../components/DSTAccordion';
+import PSAAccordion from '../../../../components/DSTAccordion/PSAAccordion';
 import pirschAnalytics from '../../../../shared/utils/analytics';
 
 // styles for left grid
@@ -254,14 +254,19 @@ const SeedingMethod = ({ alertState }) => {
       <Grid item xs={0} md={3} />
       {seedsSelected.map((seed, i) => (
         <Grid item xs={12} key={i}>
-          <DSTAccordion
+          <PSAAccordion
             expanded={accordionState[seed.label]}
             onChange={() => handleExpandAccordion(seed.label)}
-            summary={<Typography>{seed.label}</Typography>}
-            testId={`accordion-${seed.label}`}
-          >
-            <Grid container>
-              {council === 'MCCC'
+            summaryContent={<Typography>{seed.label}</Typography>}
+            summarySx={{
+              backgroundColor: 'primary.dark',
+              '.MuiAccordionSummary-expandIconWrapper p': {
+                color: 'primary.text',
+              },
+            }}
+            detailsContent={(
+              <Grid container>
+                {council === 'MCCC'
                 && (
                   <>
                     {renderMethod('Precision', '', methods[seed.label], 'Precision')}
@@ -280,7 +285,7 @@ const SeedingMethod = ({ alertState }) => {
                     )}
                   </>
                 )}
-              {council === 'NECCC'
+                {council === 'NECCC'
                 && (
                   <>
                     {renderMethod('Drilled', '', methods[seed.label], 'Drilled')}
@@ -299,7 +304,7 @@ const SeedingMethod = ({ alertState }) => {
                     {renderMethod('Aerial', '', methods[seed.label], 'Aerial')}
                   </>
                 )}
-              {council === 'SCCC'
+                {council === 'SCCC'
                 && (
                   <>
                     {renderMethod('Drilled', '', methods[seed.label], 'Drilled')}
@@ -323,8 +328,10 @@ const SeedingMethod = ({ alertState }) => {
                     )}
                   </>
                 )}
-            </Grid>
-          </DSTAccordion>
+              </Grid>
+            )}
+            testId={`accordion-${seed.label}`}
+          />
         </Grid>
       ))}
     </Grid>

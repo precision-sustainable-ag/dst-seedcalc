@@ -16,7 +16,7 @@ import '../steps.scss';
 import { validateForms } from '../../../../shared/utils/format';
 import { historyStates } from '../../../../features/userSlice/state';
 import { setAlertStateRedux, setHistoryStateRedux } from '../../../../features/userSlice/actions';
-import DSTAccordion from '../../../../components/DSTAccordion';
+import PSAAccordion from '../../../../components/DSTAccordion/PSAAccordion';
 import pirschAnalytics from '../../../../shared/utils/analytics';
 
 const LeftGrid = styled(Grid)({
@@ -167,55 +167,62 @@ const SeedTagInfo = ({
       {haveSeedTagInfo === true
         && (seedsSelected.map((seed, i) => (
           <Grid item xs={12} key={i}>
-            <DSTAccordion
+            <PSAAccordion
               expanded={accordionState[seed.label]}
               onChange={() => handleExpandAccordion(seed.label)}
-              summary={<Typography>{seed.label}</Typography>}
-            >
-              <Grid container>
-                <LeftGrid item xs={4} lg={2} xl={2}>
-                  <Typography>% Germination: </Typography>
-                </LeftGrid>
-                <Grid item xs={2} lg={1} xl={1}>
-                  <SeedTagNumField
-                    value={(options[seed.label].germination ?? 0.85) * 100}
-                    onChange={(val) => {
-                      updateGermination(seed.label, val / 100);
-                    }}
-                    testId={`${seed.label}-germination`}
-                  />
-                </Grid>
-                <Grid item xs={6} lg={1} xl={1} />
+              summaryContent={<Typography>{seed.label}</Typography>}
+              summarySx={{
+                backgroundColor: 'primary.dark',
+                '.MuiAccordionSummary-expandIconWrapper p': {
+                  color: 'primary.text',
+                },
+              }}
+              detailsContent={(
+                <Grid container>
+                  <LeftGrid item xs={4} lg={2} xl={2}>
+                    <Typography>% Germination: </Typography>
+                  </LeftGrid>
+                  <Grid item xs={2} lg={1} xl={1}>
+                    <SeedTagNumField
+                      value={(options[seed.label].germination ?? 0.85) * 100}
+                      onChange={(val) => {
+                        updateGermination(seed.label, val / 100);
+                      }}
+                      testId={`${seed.label}-germination`}
+                    />
+                  </Grid>
+                  <Grid item xs={6} lg={1} xl={1} />
 
-                <LeftGrid item xs={4} lg={2} xl={2}>
-                  <Typography>% Purity: </Typography>
-                </LeftGrid>
-                <Grid item xs={2} lg={1} xl={1}>
-                  <SeedTagNumField
-                    value={(options[seed.label].purity ?? 0.9) * 100}
-                    onChange={(val) => {
-                      updatePurity(seed.label, val / 100);
-                    }}
-                    testId={`${seed.label}-purity`}
-                  />
-                </Grid>
-                <Grid item xs={6} lg={1} xl={1} />
+                  <LeftGrid item xs={4} lg={2} xl={2}>
+                    <Typography>% Purity: </Typography>
+                  </LeftGrid>
+                  <Grid item xs={2} lg={1} xl={1}>
+                    <SeedTagNumField
+                      value={(options[seed.label].purity ?? 0.9) * 100}
+                      onChange={(val) => {
+                        updatePurity(seed.label, val / 100);
+                      }}
+                      testId={`${seed.label}-purity`}
+                    />
+                  </Grid>
+                  <Grid item xs={6} lg={1} xl={1} />
 
-                <LeftGrid item xs={4} lg={2} xl={2}>
-                  <Typography>Seeds per Pound </Typography>
-                </LeftGrid>
-                <Grid item xs={2} lg={1} xl={1}>
-                  <SeedTagNumField
-                    value={parseFloat(seedsPerPound(seed))}
-                    onChange={(val) => {
-                      updateSeedsPerPound(seed.label, val);
-                    }}
-                    testId={`${seed.label}-seedsPerPound`}
-                  />
+                  <LeftGrid item xs={4} lg={2} xl={2}>
+                    <Typography>Seeds per Pound </Typography>
+                  </LeftGrid>
+                  <Grid item xs={2} lg={1} xl={1}>
+                    <SeedTagNumField
+                      value={parseFloat(seedsPerPound(seed))}
+                      onChange={(val) => {
+                        updateSeedsPerPound(seed.label, val);
+                      }}
+                      testId={`${seed.label}-seedsPerPound`}
+                    />
+                  </Grid>
+                  <Grid item xs={6} lg={1} xl={1} />
                 </Grid>
-                <Grid item xs={6} lg={1} xl={1} />
-              </Grid>
-            </DSTAccordion>
+              )}
+            />
 
           </Grid>
         )))}

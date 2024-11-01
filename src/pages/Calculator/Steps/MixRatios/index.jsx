@@ -24,7 +24,7 @@ import {
   setAlertStateRedux, setHistoryStateRedux, setMaxAvailableStepRedux,
 } from '../../../../features/userSlice/actions';
 import { historyStates } from '../../../../features/userSlice/state';
-import DSTAccordion from '../../../../components/DSTAccordion';
+import PSAAccordion from '../../../../components/DSTAccordion/PSAAccordion';
 import pirschAnalytics from '../../../../shared/utils/analytics';
 
 const getCalculatorResult = (council) => {
@@ -286,54 +286,61 @@ const MixRatio = ({
 
       {seedsSelected.map((seed, i) => (
         <Grid item xs={12} key={i}>
-          <DSTAccordion
+          <PSAAccordion
             expanded={accordionState[seed.label]}
             onChange={() => handleExpandAccordion(seed.label)}
-            summary={<Typography>{seed.label}</Typography>}
-            testId={`accordion-${seed.label}`}
-          >
-            <Grid container>
-              <SeedInfo
-                seed={seed}
-                seedData={seedData}
-                calculatorResult={calculatorResult}
-                handleFormValueChange={handleFormValueChange}
-                council={council}
-                options={mixRatioOptions[seed.label]}
-              />
-
-              <Grid item xs={12}>
-                <UnitSelection />
-              </Grid>
-
-              <Grid item xs={12} pt="1rem">
-                <PSAButton
-                  buttonType=""
-                  sx={{
-                    borderRadius: '1rem',
-                  }}
-                  onClick={() => {
-                    setShowSteps({ ...showSteps, [seed.label]: !showSteps[seed.label] });
-                  }}
-                  variant="outlined"
-                  data-test={`${seed.label}-show_calculation_button`}
-                  title={showSteps[seed.label] ? 'Close Steps' : 'View Calculations'}
-                />
-              </Grid>
-
-              <Grid item xs={12}>
-                {showSteps[seed.label] && (
-                <MixRatioSteps
-                  council={council}
-                  calculatorResult={calculatorResult[seed.label]}
-                  options={mixRatioOptions[seed.label]}
+            summaryContent={<Typography>{seed.label}</Typography>}
+            summarySx={{
+              backgroundColor: 'primary.dark',
+              '.MuiAccordionSummary-expandIconWrapper p': {
+                color: 'primary.text',
+              },
+            }}
+            detailsContent={(
+              <Grid container>
+                <SeedInfo
                   seed={seed}
+                  seedData={seedData}
+                  calculatorResult={calculatorResult}
                   handleFormValueChange={handleFormValueChange}
+                  council={council}
+                  options={mixRatioOptions[seed.label]}
                 />
-                )}
+
+                <Grid item xs={12}>
+                  <UnitSelection />
+                </Grid>
+
+                <Grid item xs={12} pt="1rem">
+                  <PSAButton
+                    buttonType=""
+                    sx={{
+                      borderRadius: '1rem',
+                    }}
+                    onClick={() => {
+                      setShowSteps({ ...showSteps, [seed.label]: !showSteps[seed.label] });
+                    }}
+                    variant="outlined"
+                    data-test={`${seed.label}-show_calculation_button`}
+                    title={showSteps[seed.label] ? 'Close Steps' : 'View Calculations'}
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  {showSteps[seed.label] && (
+                  <MixRatioSteps
+                    council={council}
+                    calculatorResult={calculatorResult[seed.label]}
+                    options={mixRatioOptions[seed.label]}
+                    seed={seed}
+                    handleFormValueChange={handleFormValueChange}
+                  />
+                  )}
+                </Grid>
               </Grid>
-            </Grid>
-          </DSTAccordion>
+            )}
+            testId={`accordion-${seed.label}`}
+          />
         </Grid>
       ))}
     </Grid>

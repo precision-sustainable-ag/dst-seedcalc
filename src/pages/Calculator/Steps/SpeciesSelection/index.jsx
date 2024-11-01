@@ -18,7 +18,7 @@ import '../steps.scss';
 import { createUserInput, createCalculator } from '../../../../shared/utils/calculator';
 import { setAlertStateRedux } from '../../../../features/userSlice/actions';
 import { historyStates } from '../../../../features/userSlice/state';
-import DSTAccordion from '../../../../components/DSTAccordion';
+import PSAAccordion from '../../../../components/DSTAccordion/PSAAccordion';
 
 const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedStep }) => {
   // useSelector for crops reducer data
@@ -167,18 +167,27 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
 
       {seedsType.map((seedType, i) => (
         <Grid item xs={12} key={i}>
-          <DSTAccordion
+          <PSAAccordion
             expanded={accordionState[seedType]}
             onChange={() => handleExpandAccordion(seedType)}
-            summary={<Typography>{seedsLabel[seedType]}</Typography>}
+            summaryContent={<Typography>{seedsLabel[seedType]}</Typography>}
+            summarySx={{
+              backgroundColor: 'primary.dark',
+              '.MuiAccordionSummary-expandIconWrapper p': {
+                color: 'primary.text',
+              },
+            }}
+            detailsContent={(
+              <>
+                {loading && <Spinner />}
+                <PlantList
+                  seedType={seedType}
+                  filteredSeeds={filteredSeeds}
+                />
+              </>
+            )}
             testId={`accordion-${seedType}`}
-          >
-            {loading && <Spinner />}
-            <PlantList
-              seedType={seedType}
-              filteredSeeds={filteredSeeds}
-            />
-          </DSTAccordion>
+          />
         </Grid>
       ))}
     </Grid>
