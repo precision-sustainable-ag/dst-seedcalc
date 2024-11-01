@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { Typography } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
-import { PSAButton } from 'shared-react-components/src';
+import { PSAButton, PSAAccordion } from 'shared-react-components/src';
 import {
   reviewMixMCCC, reviewMixNECCC, calculatePieChartData,
   calculatePlantsandSeedsPerAcre,
@@ -21,7 +21,6 @@ import { pieChartUnits, seedDataUnits } from '../../../../shared/data/units';
 import { historyStates } from '../../../../features/userSlice/state';
 import { setHistoryStateRedux } from '../../../../features/userSlice/actions';
 import '../steps.scss';
-import PSAAccordion from '../../../../components/DSTAccordion/PSAAccordion';
 
 const getCalculatorResult = (council) => {
   const defaultResultMCCC = {

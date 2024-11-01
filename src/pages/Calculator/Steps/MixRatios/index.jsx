@@ -9,7 +9,7 @@ import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import { Typography } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
-import { PSAButton } from 'shared-react-components/src';
+import { PSAButton, PSAAccordion } from 'shared-react-components/src';
 import MixRatioSteps from './form';
 import DSTPieChart from '../../../../components/DSTPieChart';
 import { UnitSelection, SeedInfo } from '../../../../components/SeedingRateCard';
@@ -24,7 +24,6 @@ import {
   setAlertStateRedux, setHistoryStateRedux, setMaxAvailableStepRedux,
 } from '../../../../features/userSlice/actions';
 import { historyStates } from '../../../../features/userSlice/state';
-import PSAAccordion from '../../../../components/DSTAccordion/PSAAccordion';
 import pirschAnalytics from '../../../../shared/utils/analytics';
 
 const getCalculatorResult = (council) => {

@@ -9,14 +9,13 @@ import { Typography } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import styled from '@emotion/styled';
-import { PSAButton } from 'shared-react-components/src';
+import { PSAButton, PSAAccordion } from 'shared-react-components/src';
 import NumberTextField from '../../../../components/NumberTextField';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
 import '../steps.scss';
 import { validateForms } from '../../../../shared/utils/format';
 import { historyStates } from '../../../../features/userSlice/state';
 import { setAlertStateRedux, setHistoryStateRedux } from '../../../../features/userSlice/actions';
-import PSAAccordion from '../../../../components/DSTAccordion/PSAAccordion';
 import pirschAnalytics from '../../../../shared/utils/analytics';
 
 const LeftGrid = styled(Grid)({

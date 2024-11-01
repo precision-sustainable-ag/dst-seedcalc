@@ -7,13 +7,12 @@ import Grid from '@mui/material/Grid';
 import { useSelector, useDispatch } from 'react-redux';
 import { Typography, Box } from '@mui/material';
 import styled from '@emotion/styled';
-import { PSADropdown } from 'shared-react-components/src';
+import { PSADropdown, PSAAccordion } from 'shared-react-components/src';
 import { seedingMethodsMCCC, seedingMethodsNECCC, seedingMethodsSCCC } from '../../../../shared/data/dropdown';
 import '../steps.scss';
 import { setOptionRedux, setSeedingMethodsRedux } from '../../../../features/calculatorSlice/actions';
 import { historyStates } from '../../../../features/userSlice/state';
 import { setAlertStateRedux, setHistoryStateRedux } from '../../../../features/userSlice/actions';
-import PSAAccordion from '../../../../components/DSTAccordion/PSAAccordion';
 import pirschAnalytics from '../../../../shared/utils/analytics';
 
 // styles for left grid
