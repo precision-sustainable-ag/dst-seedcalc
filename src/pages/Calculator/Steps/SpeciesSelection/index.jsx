@@ -171,10 +171,15 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
             expanded={accordionState[seedType]}
             onChange={() => handleExpandAccordion(seedType)}
             summaryContent={<Typography>{seedsLabel[seedType]}</Typography>}
-            summarySx={{
-              backgroundColor: 'primary.dark',
-              '.MuiAccordionSummary-expandIconWrapper p': {
-                color: 'primary.text',
+            sx={{
+              '.MuiAccordionSummary-root': {
+                backgroundColor: 'primary.dark',
+                '.MuiAccordionSummary-expandIconWrapper p': {
+                  color: 'primary.text',
+                },
+              },
+              '.MuiAccordionDetails-root': {
+                backgroundColor: 'primary.light',
               },
             }}
             detailsContent={(

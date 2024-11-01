@@ -258,10 +258,15 @@ const SeedingMethod = ({ alertState }) => {
             expanded={accordionState[seed.label]}
             onChange={() => handleExpandAccordion(seed.label)}
             summaryContent={<Typography>{seed.label}</Typography>}
-            summarySx={{
-              backgroundColor: 'primary.dark',
-              '.MuiAccordionSummary-expandIconWrapper p': {
-                color: 'primary.text',
+            sx={{
+              '.MuiAccordionSummary-root': {
+                backgroundColor: 'primary.dark',
+                '.MuiAccordionSummary-expandIconWrapper p': {
+                  color: 'primary.text',
+                },
+              },
+              '.MuiAccordionDetails-root': {
+                backgroundColor: 'primary.light',
               },
             }}
             detailsContent={(
