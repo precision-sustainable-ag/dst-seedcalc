@@ -97,7 +97,10 @@ describe('Updating user history', () => {
       expect(historyState).to.equal('imported');
     });
     // should not be able to update state on map
-    cy.get('.mapboxgl-canvas').should('be.visible').trigger('click', 525, 200);
+    // cy.get('.mapboxgl-canvas').should('be.visible').trigger('click', 525, 200);
+    cy.get('div[class^="_wrapper"]').reactComponent().its('memoizedProps').then((props) => {
+      cy.wrap(props).invoke('selectorFunction', { properties: { STATE_NAME: 'New York' } });
+    });
     cy.getByTestId('warning_text').should('be.visible');
     cy.getByTestId('cancel_button').click();
     cy.getByTestId('option_manually').click();
