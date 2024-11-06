@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { Typography } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
-import { PSAButton } from 'shared-react-components/src';
+import { PSAButton, PSAAccordion } from 'shared-react-components/src';
 import {
   reviewMixMCCC, reviewMixNECCC, calculatePieChartData,
   calculatePlantsandSeedsPerAcre,
@@ -21,7 +21,6 @@ import { pieChartUnits, seedDataUnits } from '../../../../shared/data/units';
 import { historyStates } from '../../../../features/userSlice/state';
 import { setHistoryStateRedux } from '../../../../features/userSlice/actions';
 import '../steps.scss';
-import DSTAccordion from '../../../../components/DSTAccordion';
 
 const getCalculatorResult = (council) => {
   const defaultResultMCCC = {
@@ -227,60 +226,72 @@ const ReviewMix = ({ calculator }) => {
 
       {seedsSelected.map((seed, i) => (
         <Grid item xs={12} key={i}>
-          <DSTAccordion
+          <PSAAccordion
             expanded={accordionState[seed.label]}
             onChange={() => handleExpandAccordion(seed.label)}
-            summary={<Typography>{seed.label}</Typography>}
+            summaryContent={<Typography>{seed.label}</Typography>}
+            sx={{
+              '.MuiAccordionSummary-root': {
+                backgroundColor: 'primary.dark',
+                '.MuiAccordionSummary-expandIconWrapper p': {
+                  color: 'primary.text',
+                },
+              },
+              '.MuiAccordionDetails-root': {
+                backgroundColor: 'primary.light',
+              },
+            }}
+            detailsContent={(
+              <Grid container>
+                <DSTBarChart seed={seed} calculatorResult={calculatorResult} />
+                <Grid item xs={6} pt="1rem">
+                  <SeedingRateCard
+                    seedingRateLabel={seedDataUnits.pureLiveSeed}
+                    seedingRateValue={calculatorResult[seed.label].step2.seedingRate}
+                    plantValue={seedData[seed.label].defaultPlant}
+                    seedValue={seedData[seed.label].defaultSeed}
+                  />
+                </Grid>
+
+                <Grid item xs={6} pt="1rem">
+                  <SeedingRateCard
+                    seedingRateLabel={seedDataUnits.bulkSeed}
+                    seedingRateValue={calculatorResult[seed.label].step4.bulkSeedingRate}
+                    plantValue={seedData[seed.label].adjustedPlant}
+                    seedValue={seedData[seed.label].adjustedSeed}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <UnitSelection />
+                </Grid>
+
+                <Grid item xs={12} pt="1rem">
+                  <PSAButton
+                    buttonType=""
+                    onClick={() => {
+                      setShowSteps({ ...showSteps, [seed.label]: !showSteps[seed.label] });
+                    }}
+                    variant="outlined"
+                    data-test="change_my_rate_button"
+                    title={showSteps[seed.label] ? 'Close Steps' : 'Change My Rate'}
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  {showSteps[seed.label] && (
+                  <ReviewMixSteps
+                    council={council}
+                    seed={seed}
+                    handleFormValueChange={handleFormValueChange}
+                    calculatorResult={calculatorResult[seed.label]}
+                    options={options[seed.label]}
+                  />
+                  )}
+                </Grid>
+              </Grid>
+)}
             testId={`accordion-${seed.label}`}
-          >
-            <Grid container>
-              <DSTBarChart seed={seed} calculatorResult={calculatorResult} />
-              <Grid item xs={6} pt="1rem">
-                <SeedingRateCard
-                  seedingRateLabel={seedDataUnits.pureLiveSeed}
-                  seedingRateValue={calculatorResult[seed.label].step2.seedingRate}
-                  plantValue={seedData[seed.label].defaultPlant}
-                  seedValue={seedData[seed.label].defaultSeed}
-                />
-              </Grid>
-
-              <Grid item xs={6} pt="1rem">
-                <SeedingRateCard
-                  seedingRateLabel={seedDataUnits.bulkSeed}
-                  seedingRateValue={calculatorResult[seed.label].step4.bulkSeedingRate}
-                  plantValue={seedData[seed.label].adjustedPlant}
-                  seedValue={seedData[seed.label].adjustedSeed}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <UnitSelection />
-              </Grid>
-
-              <Grid item xs={12} pt="1rem">
-                <PSAButton
-                  buttonType=""
-                  onClick={() => {
-                    setShowSteps({ ...showSteps, [seed.label]: !showSteps[seed.label] });
-                  }}
-                  variant="outlined"
-                  data-test="change_my_rate_button"
-                  title={showSteps[seed.label] ? 'Close Steps' : 'Change My Rate'}
-                />
-              </Grid>
-
-              <Grid item xs={12}>
-                {showSteps[seed.label] && (
-                <ReviewMixSteps
-                  council={council}
-                  seed={seed}
-                  handleFormValueChange={handleFormValueChange}
-                  calculatorResult={calculatorResult[seed.label]}
-                  options={options[seed.label]}
-                />
-                )}
-              </Grid>
-            </Grid>
-          </DSTAccordion>
+          />
 
         </Grid>
       ))}

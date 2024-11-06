@@ -78,42 +78,6 @@ const theme = createTheme({
         },
       },
     },
-    MuiAccordionSummary: {
-      styleOverrides: {
-        root: {
-          backgroundColor: '#eff1e0',
-          height: '3rem',
-
-        },
-        content: {
-          '& .MuiTypography-root': {
-            fontSize: '1.25rem',
-            lineHeight: '1.5rem',
-            fontWeight: '600',
-            textAlign: 'justify',
-          },
-        },
-        expandIconWrapper: {
-          transform: 'none',
-          WebkitTransform: 'none',
-          transition: 'none',
-          WebkitTransition: 'none',
-          '&.Mui-expanded': {
-            transform: 'none',
-            WebkitTransform: 'none',
-          },
-        },
-      },
-    },
-    MuiAccordionDetails: {
-      styleOverrides: {
-        root: {
-          color: '#4F5F30',
-          padding: '1rem 0',
-          backgroundColor: '#fffff2',
-        },
-      },
-    },
   },
 });
 

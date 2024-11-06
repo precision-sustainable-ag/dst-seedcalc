@@ -7,13 +7,12 @@ import Grid from '@mui/material/Grid';
 import { useSelector, useDispatch } from 'react-redux';
 import { Typography, Box } from '@mui/material';
 import styled from '@emotion/styled';
-import { PSADropdown } from 'shared-react-components/src';
+import { PSADropdown, PSAAccordion } from 'shared-react-components/src';
 import { seedingMethodsMCCC, seedingMethodsNECCC, seedingMethodsSCCC } from '../../../../shared/data/dropdown';
 import '../steps.scss';
 import { setOptionRedux, setSeedingMethodsRedux } from '../../../../features/calculatorSlice/actions';
 import { historyStates } from '../../../../features/userSlice/state';
 import { setAlertStateRedux, setHistoryStateRedux } from '../../../../features/userSlice/actions';
-import DSTAccordion from '../../../../components/DSTAccordion';
 import pirschAnalytics from '../../../../shared/utils/analytics';
 
 // styles for left grid
@@ -254,14 +253,24 @@ const SeedingMethod = ({ alertState }) => {
       <Grid item xs={0} md={3} />
       {seedsSelected.map((seed, i) => (
         <Grid item xs={12} key={i}>
-          <DSTAccordion
+          <PSAAccordion
             expanded={accordionState[seed.label]}
             onChange={() => handleExpandAccordion(seed.label)}
-            summary={<Typography>{seed.label}</Typography>}
-            testId={`accordion-${seed.label}`}
-          >
-            <Grid container>
-              {council === 'MCCC'
+            summaryContent={<Typography>{seed.label}</Typography>}
+            sx={{
+              '.MuiAccordionSummary-root': {
+                backgroundColor: 'primary.dark',
+                '.MuiAccordionSummary-expandIconWrapper p': {
+                  color: 'primary.text',
+                },
+              },
+              '.MuiAccordionDetails-root': {
+                backgroundColor: 'primary.light',
+              },
+            }}
+            detailsContent={(
+              <Grid container>
+                {council === 'MCCC'
                 && (
                   <>
                     {renderMethod('Precision', '', methods[seed.label], 'Precision')}
@@ -280,7 +289,7 @@ const SeedingMethod = ({ alertState }) => {
                     )}
                   </>
                 )}
-              {council === 'NECCC'
+                {council === 'NECCC'
                 && (
                   <>
                     {renderMethod('Drilled', '', methods[seed.label], 'Drilled')}
@@ -299,7 +308,7 @@ const SeedingMethod = ({ alertState }) => {
                     {renderMethod('Aerial', '', methods[seed.label], 'Aerial')}
                   </>
                 )}
-              {council === 'SCCC'
+                {council === 'SCCC'
                 && (
                   <>
                     {renderMethod('Drilled', '', methods[seed.label], 'Drilled')}
@@ -323,8 +332,10 @@ const SeedingMethod = ({ alertState }) => {
                     )}
                   </>
                 )}
-            </Grid>
-          </DSTAccordion>
+              </Grid>
+            )}
+            testId={`accordion-${seed.label}`}
+          />
         </Grid>
       ))}
     </Grid>

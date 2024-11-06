@@ -9,7 +9,7 @@ import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import { Typography } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
-import { PSAButton } from 'shared-react-components/src';
+import { PSAButton, PSAAccordion } from 'shared-react-components/src';
 import MixRatioSteps from './form';
 import DSTPieChart from '../../../../components/DSTPieChart';
 import { UnitSelection, SeedInfo } from '../../../../components/SeedingRateCard';
@@ -24,7 +24,6 @@ import {
   setAlertStateRedux, setHistoryStateRedux, setMaxAvailableStepRedux,
 } from '../../../../features/userSlice/actions';
 import { historyStates } from '../../../../features/userSlice/state';
-import DSTAccordion from '../../../../components/DSTAccordion';
 import pirschAnalytics from '../../../../shared/utils/analytics';
 
 const getCalculatorResult = (council) => {
@@ -286,54 +285,66 @@ const MixRatio = ({
 
       {seedsSelected.map((seed, i) => (
         <Grid item xs={12} key={i}>
-          <DSTAccordion
+          <PSAAccordion
             expanded={accordionState[seed.label]}
             onChange={() => handleExpandAccordion(seed.label)}
-            summary={<Typography>{seed.label}</Typography>}
-            testId={`accordion-${seed.label}`}
-          >
-            <Grid container>
-              <SeedInfo
-                seed={seed}
-                seedData={seedData}
-                calculatorResult={calculatorResult}
-                handleFormValueChange={handleFormValueChange}
-                council={council}
-                options={mixRatioOptions[seed.label]}
-              />
-
-              <Grid item xs={12}>
-                <UnitSelection />
-              </Grid>
-
-              <Grid item xs={12} pt="1rem">
-                <PSAButton
-                  buttonType=""
-                  sx={{
-                    borderRadius: '1rem',
-                  }}
-                  onClick={() => {
-                    setShowSteps({ ...showSteps, [seed.label]: !showSteps[seed.label] });
-                  }}
-                  variant="outlined"
-                  data-test={`${seed.label}-show_calculation_button`}
-                  title={showSteps[seed.label] ? 'Close Steps' : 'View Calculations'}
-                />
-              </Grid>
-
-              <Grid item xs={12}>
-                {showSteps[seed.label] && (
-                <MixRatioSteps
-                  council={council}
-                  calculatorResult={calculatorResult[seed.label]}
-                  options={mixRatioOptions[seed.label]}
+            summaryContent={<Typography>{seed.label}</Typography>}
+            sx={{
+              '.MuiAccordionSummary-root': {
+                backgroundColor: 'primary.dark',
+                '.MuiAccordionSummary-expandIconWrapper p': {
+                  color: 'primary.text',
+                },
+              },
+              '.MuiAccordionDetails-root': {
+                backgroundColor: 'primary.light',
+              },
+            }}
+            detailsContent={(
+              <Grid container>
+                <SeedInfo
                   seed={seed}
+                  seedData={seedData}
+                  calculatorResult={calculatorResult}
                   handleFormValueChange={handleFormValueChange}
+                  council={council}
+                  options={mixRatioOptions[seed.label]}
                 />
-                )}
+
+                <Grid item xs={12}>
+                  <UnitSelection />
+                </Grid>
+
+                <Grid item xs={12} pt="1rem">
+                  <PSAButton
+                    buttonType=""
+                    sx={{
+                      borderRadius: '1rem',
+                    }}
+                    onClick={() => {
+                      setShowSteps({ ...showSteps, [seed.label]: !showSteps[seed.label] });
+                    }}
+                    variant="outlined"
+                    data-test={`${seed.label}-show_calculation_button`}
+                    title={showSteps[seed.label] ? 'Close Steps' : 'View Calculations'}
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  {showSteps[seed.label] && (
+                  <MixRatioSteps
+                    council={council}
+                    calculatorResult={calculatorResult[seed.label]}
+                    options={mixRatioOptions[seed.label]}
+                    seed={seed}
+                    handleFormValueChange={handleFormValueChange}
+                  />
+                  )}
+                </Grid>
               </Grid>
-            </Grid>
-          </DSTAccordion>
+            )}
+            testId={`accordion-${seed.label}`}
+          />
         </Grid>
       ))}
     </Grid>
