@@ -9,9 +9,8 @@ import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import { Typography } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
-import { PSAButton, PSAAccordion } from 'shared-react-components/src';
+import { PSAButton, PSAAccordion, PSAPiechart } from 'shared-react-components/src';
 import MixRatioSteps from './form';
-import DSTPieChart from '../../../../components/DSTPieChart';
 import { UnitSelection, SeedInfo } from '../../../../components/SeedingRateCard';
 import {
   adjustProportionsMCCC, adjustProportionsNECCC, adjustProportionsSCCC,
@@ -260,7 +259,7 @@ const MixRatio = ({
       {seedsSelected.length > 1 && (
         <>
           <Grid item xs={6} sx={{ textAlign: 'justify' }}>
-            <DSTPieChart
+            <PSAPiechart
               chartData={piechartData.seedingRateArray}
               label={pieChartUnits.poundsOfSeedPerAcre}
             />
@@ -268,13 +267,13 @@ const MixRatio = ({
 
           <Grid item xs={6} sx={{ textAlign: 'justify' }}>
             {council === 'MCCC' && (
-            <DSTPieChart
+            <PSAPiechart
               chartData={piechartData.plantsPerSqftArray}
               label={pieChartUnits.plantsPerSqft}
             />
             )}
             {(council === 'NECCC' || council === 'SCCC') && (
-            <DSTPieChart
+            <PSAPiechart
               chartData={piechartData.seedsPerSqftArray}
               label={pieChartUnits.seedsPerSqft}
             />

@@ -6,14 +6,13 @@ import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { Typography } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
-import { PSAButton, PSAAccordion } from 'shared-react-components/src';
+import { PSAButton, PSAAccordion, PSAPiechart } from 'shared-react-components/src';
 import {
   reviewMixMCCC, reviewMixNECCC, calculatePieChartData,
   calculatePlantsandSeedsPerAcre,
   reviewMixSCCC,
 } from '../../../../shared/utils/calculator';
 import ReviewMixSteps from './Steps';
-import DSTPieChart from '../../../../components/DSTPieChart';
 import DSTBarChart from '../../../../components/DSTBarChart';
 import SeedingRateCard, { UnitSelection } from '../../../../components/SeedingRateCard';
 import { setBulkSeedingRateRedux, setOptionRedux } from '../../../../features/calculatorSlice/actions';
@@ -201,7 +200,7 @@ const ReviewMix = ({ calculator }) => {
       {seedsSelected.length > 1 && (
         <>
           <Grid item xs={6} sx={{ textAlign: 'justify' }}>
-            <DSTPieChart
+            <PSAPiechart
               chartData={piechartData.seedingRateArray}
               label={pieChartUnits.poundsOfSeedPerAcre}
             />
@@ -209,13 +208,13 @@ const ReviewMix = ({ calculator }) => {
 
           <Grid item xs={6} sx={{ textAlign: 'justify' }}>
             {council === 'MCCC' && (
-            <DSTPieChart
+            <PSAPiechart
               chartData={piechartData.plantsPerSqftArray}
               label={pieChartUnits.plantsPerSqft}
             />
             )}
             {(council === 'NECCC' || council === 'SCCC') && (
-            <DSTPieChart
+            <PSAPiechart
               chartData={piechartData.seedsPerSqftArray}
               label={pieChartUnits.seedsPerSqft}
             />
