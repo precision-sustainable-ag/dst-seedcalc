@@ -25,7 +25,7 @@
     "react-router-dom": "^6.16.0",
     "recharts": "^2.8.0",
     "redux": "^4.2.1",
-    "shared-react-components": "github:precision-sustainable-ag/shared-react-components",
+    "shared-react-components": "github:precision-sustainable-ag/shared-react-components#feature/updateHeaderNav",
     "vite": "^5.4.2",
     "xlsx": "^0.18.5"
   },
