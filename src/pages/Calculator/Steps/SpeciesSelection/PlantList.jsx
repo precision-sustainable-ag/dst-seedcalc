@@ -9,10 +9,10 @@ import {
   CardActionArea,
   Box,
 } from '@mui/material';
-import Tooltip from '@mui/material/Tooltip';
 import HelpIcon from '@mui/icons-material/Help';
 import '../steps.scss';
 import { useDispatch, useSelector } from 'react-redux';
+import { PSATooltip } from 'shared-react-components/src';
 import { CheckRounded } from '@mui/icons-material';
 import {
   addSeedRedux, removeMixRatioOptionRedux, removeOptionRedux, removeSeedRedux,
@@ -238,7 +238,7 @@ const PlantList = ({
                       { checkCrop(seed) !== '' && <span>Not Recommended</span> }
                     </Typography>
 
-                    <Tooltip
+                    <PSATooltip
                       title={checkCrop(seed)}
                       arrow
                       placement="bottom-end"
@@ -251,16 +251,17 @@ const PlantList = ({
                           },
                         },
                       }}
-                    >
-                      <HelpIcon sx={{
-                        color: 'primary.light',
-                        position: 'absolute',
-                        right: '10px',
-                        top: '120px',
-                        fontSize: '2rem',
-                      }}
-                      />
-                    </Tooltip>
+                      tooltipContent={(
+                        <HelpIcon sx={{
+                          color: 'primary.light',
+                          position: 'absolute',
+                          right: '10px',
+                          top: '120px',
+                          fontSize: '2rem',
+                        }}
+                        />
+                    )}
+                    />
                   </>
                 )}
 
