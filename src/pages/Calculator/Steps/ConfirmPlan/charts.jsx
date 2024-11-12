@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import { Typography, Box } from '@mui/material';
 import { useSelector } from 'react-redux';
+import { PSAPiechart } from 'shared-react-components/src';
 import { calculatePieChartData, twoDigit } from '../../../../shared/utils/calculator';
-import DSTPieChart from '../../../../components/DSTPieChart';
 import { pieChartUnits } from '../../../../shared/data/units';
 import '../steps.scss';
 
@@ -88,7 +88,7 @@ const ConfirmPlanCharts = ({ council, calculator, calculatorResult }) => {
           textAlign: 'justify',
         }}
       >
-        <DSTPieChart
+        <PSAPiechart
           chartData={piechartData.seedingRateArray}
           label={pieChartUnits.poundsOfSeedPerAcre}
         />
@@ -103,13 +103,13 @@ const ConfirmPlanCharts = ({ council, calculator, calculatorResult }) => {
         }}
       >
         {council === 'MCCC' && (
-          <DSTPieChart
+          <PSAPiechart
             chartData={piechartData.plantsPerSqftArray}
             label={pieChartUnits.plantsPerSqft}
           />
         )}
         {(council === 'NECCC' || council === 'SCCC') && (
-        <DSTPieChart
+        <PSAPiechart
           chartData={piechartData.seedsPerSqftArray}
           label={pieChartUnits.seedsPerSqft}
         />
