@@ -1,22 +1,19 @@
-/* eslint-disable */
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Grid, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { PSALogoDisplayer } from 'shared-react-components/src';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import TextSnippetOutlinedIcon from '@mui/icons-material/TextSnippetOutlined';
-// import PSAHeader from './psaheader';
+import { PSAHeader, PSAAuthButton } from 'shared-react-components/src';
 import { releaseNotesUrl } from '../../shared/data/keys';
-import { PSAHeader } from 'shared-react-components/src';
 
 const Header = () => {
   const navigate = useNavigate();
   const { council } = useSelector((state) => state.siteCondition);
 
-  const navButtons = [
+  const navContent = [
     {
+      type: 'button',
       variant: 'text',
       text: 'Release Notes',
       icon: <TextSnippetOutlinedIcon />,
@@ -24,9 +21,9 @@ const Header = () => {
       style: { fontSize: '1rem' },
       textSx: { fontSize: '1rem' },
       onClick: () => window.open(releaseNotesUrl),
-      
     },
     {
+      type: 'button',
       variant: 'text',
       text: 'About',
       icon: <InfoOutlinedIcon />,
@@ -35,24 +32,27 @@ const Header = () => {
       onClick: () => navigate('/about'),
     },
     {
+      type: 'button',
       variant: 'text',
       text: 'Feedback',
       icon: <ChatBubbleOutlineIcon />,
       rightIcon: true,
       textSx: { fontSize: '1rem' },
       onClick: () => navigate('/feedback'),
-
     },
-
+    {
+      type: 'component',
+      component: <PSAAuthButton />,
+    },
   ];
 
   return (
-      <PSAHeader
-        title="Seeding Rate Calculator"
-        council={council}
-        navButtons={navButtons}
-        onLogoClick={() => navigate('/')}
-      />
+    <PSAHeader
+      title="Seeding Rate Calculator"
+      council={council}
+      onLogoClick={() => navigate('/')}
+      navContent={navContent}
+    />
   );
 };
 export default Header;
