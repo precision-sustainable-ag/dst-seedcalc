@@ -5,12 +5,12 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
-import { StepButton, Tooltip } from '@mui/material';
+import { StepButton } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { useDispatch, useSelector } from 'react-redux';
-import { PSAButton } from 'shared-react-components/src';
+import { PSAButton, PSATooltip } from 'shared-react-components/src';
 import { calculatorList } from '../../shared/data/dropdown';
 import { resetCalculator } from '../../features/calculatorSlice';
 import {
@@ -165,32 +165,33 @@ const StepsList = ({
 
         {activeStep !== calculatorList.length
         && (
-        <Tooltip
+        <PSATooltip
           onMouseEnter={() => setHovering(true)}
           onMouseLeave={() => setHovering(false)}
           arrow
           open={visible}
           title={tooltipTitle()}
-        >
-          <span>
-            <PSAButton
-              buttonType=""
-              variant="stepper"
-              disabled={availableSteps[activeStep] !== true}
-              onClick={handleNext}
-              data-test="next_button"
-              title={(
-                <>
-                  {activeStep === calculatorList.length - 1
-                    ? 'Finish'
-                    : calculatorList[activeStep + 1]}
-                  {' '}
-                  <ArrowForwardIosIcon />
-                </>
-)}
-            />
-          </span>
-        </Tooltip>
+          tooltipContent={(
+            <span>
+              <PSAButton
+                buttonType=""
+                variant="stepper"
+                disabled={availableSteps[activeStep] !== true}
+                onClick={handleNext}
+                data-test="next_button"
+                title={(
+                  <>
+                    {activeStep === calculatorList.length - 1
+                      ? 'Finish'
+                      : calculatorList[activeStep + 1]}
+                    {' '}
+                    <ArrowForwardIosIcon />
+                  </>
+                )}
+              />
+            </span>
+          )}
+        />
         )}
       </Box>
     </Box>

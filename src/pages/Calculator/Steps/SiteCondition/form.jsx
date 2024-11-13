@@ -4,13 +4,13 @@
 
 import React from 'react';
 import {
-  Typography, Tooltip,
+  Typography,
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import InfoIcon from '@mui/icons-material/Info';
 import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
-import { PSAButton, PSADropdown } from 'shared-react-components/src';
+import { PSAButton, PSADropdown, PSATooltip } from 'shared-react-components/src';
 import DatePicker from '../../../../components/DatePicker';
 import NumberTextField from '../../../../components/NumberTextField';
 import DSTSwitch from '../../../../components/Switch';
@@ -225,7 +225,7 @@ const SiteConditionForm = ({
                   <Grid item>
                     <Typography>
                       Tile drainage
-                      <Tooltip
+                      <PSATooltip
                         type="text"
                         title={(
                           <Typography color="primary.light">
@@ -234,9 +234,10 @@ const SiteConditionForm = ({
                             selecting “yes” will increase your drainage class.
                           </Typography>
                         )}
-                      >
-                        <InfoIcon fontSize="1rem" />
-                      </Tooltip>
+                        tooltipContent={(
+                          <InfoIcon fontSize="1rem" />
+                        )}
+                      />
                     </Typography>
                   </Grid>
                   <Grid item>
