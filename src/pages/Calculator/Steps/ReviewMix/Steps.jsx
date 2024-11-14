@@ -92,7 +92,7 @@ const ReviewMixSteps = ({
             onChangeCommitted={() => {
               onChangeCommitted(value);
             }}
-            dataTestId={testId}
+            data-test={testId}
           />
         </Grid>
         <Grid item xs={2} md={6} />

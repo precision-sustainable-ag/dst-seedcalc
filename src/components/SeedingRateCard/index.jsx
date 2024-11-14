@@ -240,7 +240,7 @@ const SeedInfo = ({
                 'singleSpeciesSeedingRate',
                 singleSpeciesSeedingRate,
               )}
-              dataTestId={`${seed.label}-slider_single_species_seeding_rate`}
+              data-test={`${seed.label}-slider_single_species_seeding_rate`}
             />
           </Grid>
         )}
@@ -274,7 +274,7 @@ const SeedInfo = ({
                 );
               }
             }}
-            dataTestId={`${seed.label}-slider_percent_of_rate`}
+            data-test={`${seed.label}-slider_percent_of_rate`}
           />
         </Grid>
       </Grid>
