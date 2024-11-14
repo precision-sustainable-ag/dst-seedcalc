@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import {
-  Typography, useTheme, useMediaQuery, Slider,
+  Typography, useTheme, useMediaQuery,
 } from '@mui/material';
+import { PSASlider } from 'shared-react-components/src';
 import { twoDigit, convertToPercent } from '../../../../shared/utils/calculator';
 import NumberTextField from '../../../../components/NumberTextField';
 import '../steps.scss';
@@ -350,14 +351,14 @@ const MixRatioSteps = ({
               <Typography>
                 {`% Survival: ${survival}%`}
               </Typography>
-              <Slider
+              <PSASlider
                 min={0}
                 max={100}
                 value={survival}
                 valueLabelDisplay="auto"
                 onChange={(e) => setSurvival(e.target.value)}
                 onChangeCommitted={() => handleFormValueChange(seed, 'percentSurvival', parseFloat(survival) / 100)}
-                data-test={`${seed.label}-slider_survival`}
+                dataTestId={`${seed.label}-slider_survival`}
               />
             </Grid>
           </Grid>

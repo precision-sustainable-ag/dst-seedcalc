@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Typography, Box, Grid, Card, CardContent, CardMedia, Slider,
+  Typography,
+  Box,
+  Grid,
+  Card,
+  CardContent,
+  CardMedia,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { PSAButton } from 'shared-react-components/src';
+import { PSAButton, PSASlider } from 'shared-react-components/src';
 import { twoDigit } from '../../shared/utils/calculator';
 import { selectUnitRedux } from '../../features/calculatorSlice/actions';
 import { seedDataUnits } from '../../shared/data/units';
@@ -15,7 +20,7 @@ const roundToMillionth = (num) => {
 
 const formatToHundredth = (num) => {
   if (num < 100) return num;
-  const res = Math.round((num / 100)) * 100;
+  const res = Math.round(num / 100) * 100;
   return res.toLocaleString();
 };
 
@@ -24,9 +29,7 @@ const UnitSelection = () => {
   const dispatch = useDispatch();
   return (
     <>
-      <Typography>
-        Select data unit:
-      </Typography>
+      <Typography>Select data unit:</Typography>
       <PSAButton
         sx={{ borderRadius: '1rem' }}
         variant={unit === 'acre' ? 'outlined' : 'contained'}
@@ -49,14 +52,24 @@ const UnitSelection = () => {
 };
 
 const SeedInfo = ({
-  seed, seedData, calculatorResult, handleFormValueChange, council, options,
+  seed,
+  seedData,
+  calculatorResult,
+  handleFormValueChange,
+  council,
+  options,
 }) => {
   // TODO: the scrollable seeding rate only works for SCCC for now
-  const baseSeedingRate = council === 'SCCC' ? seed.attributes.Planting['Base Seeding Rate'].values[0] : 0;
-  const [singleSpeciesSeedingRate, setSingleSpeciesSeedingRate] = useState(parseFloat(baseSeedingRate));
+  const baseSeedingRate = council === 'SCCC'
+    ? seed.attributes.Planting['Base Seeding Rate'].values[0]
+    : 0;
+  const [singleSpeciesSeedingRate, setSingleSpeciesSeedingRate] = useState(
+    parseFloat(baseSeedingRate),
+  );
   const [percentOfRate, setPercentOfRate] = useState(0);
   const [singleData, setSingleData] = useState({
-    seedingRate: calculatorResult[seed.label].step1.defaultSingleSpeciesSeedingRatePLS,
+    seedingRate:
+      calculatorResult[seed.label].step1.defaultSingleSpeciesSeedingRatePLS,
     plantValue: seedData[seed.label].defaultPlant,
     seedValue: seedData[seed.label].defaultSeed,
   });
@@ -69,25 +82,35 @@ const SeedInfo = ({
   const { unit } = useSelector((state) => state.calculator);
   const { soilFertilityModifier } = calculatorResult[seed.label].step1;
   // eslint-disable-next-line no-nested-ternary
-  const unitText = unit === 'acre' ? seedDataUnits.acre : unit === 'sqft' ? seedDataUnits.sqft : '';
+  const unitText = unit === 'acre'
+    ? seedDataUnits.acre
+    : unit === 'sqft'
+      ? seedDataUnits.sqft
+      : '';
 
   useEffect(() => {
     if (unit === 'sqft') {
       setSingleData((prev) => ({
         ...prev,
-        seedingRate: roundToMillionth(calculatorResult[seed.label].step1.defaultSingleSpeciesSeedingRatePLS / 43560),
+        seedingRate: roundToMillionth(
+          calculatorResult[seed.label].step1
+            .defaultSingleSpeciesSeedingRatePLS / 43560,
+        ),
         plantValue: Math.round(seedData[seed.label].defaultPlant / 43560),
         seedValue: Math.round(seedData[seed.label].defaultSeed / 43560),
       }));
       setMixData({
-        seedingRate: roundToMillionth(calculatorResult[seed.label].step1.seedingRate / 43560),
+        seedingRate: roundToMillionth(
+          calculatorResult[seed.label].step1.seedingRate / 43560,
+        ),
         plantValue: Math.round(seedData[seed.label].adjustedPlant / 43560),
         seedValue: Math.round(seedData[seed.label].adjustedSeed / 43560),
       });
     } else if (unit === 'acre') {
       setSingleData((prev) => ({
         ...prev,
-        seedingRate: calculatorResult[seed.label].step1.defaultSingleSpeciesSeedingRatePLS,
+        seedingRate:
+          calculatorResult[seed.label].step1.defaultSingleSpeciesSeedingRatePLS,
         plantValue: Math.round(seedData[seed.label].defaultPlant),
         seedValue: Math.round(seedData[seed.label].defaultSeed),
       }));
@@ -98,10 +121,21 @@ const SeedInfo = ({
       });
     }
     if (council === 'NECCC') {
-      if (options.percentOfRate) setPercentOfRate(Math.round((options.percentOfRate / soilFertilityModifier) * 100));
-      else setPercentOfRate(Math.round((1 / calculatorResult[seed.label].step1.sumGroupInMix) * 100));
+      if (options.percentOfRate) {
+        setPercentOfRate(
+          Math.round((options.percentOfRate / soilFertilityModifier) * 100),
+        );
+      } else {
+        setPercentOfRate(
+          Math.round(
+            (1 / calculatorResult[seed.label].step1.sumGroupInMix) * 100,
+          ),
+        );
+      }
     } else {
-      setPercentOfRate(Math.round(calculatorResult[seed.label].step1.percentOfRate * 100));
+      setPercentOfRate(
+        Math.round(calculatorResult[seed.label].step1.percentOfRate * 100),
+      );
     }
   }, [seedData, calculatorResult, unit]);
 
@@ -117,17 +151,14 @@ const SeedInfo = ({
           }}
         >
           <CardContent>
-            <Typography sx={{ fontWeight: 'bold' }}>
-              {seed.label}
-            </Typography>
+            <Typography sx={{ fontWeight: 'bold' }}>{seed.label}</Typography>
           </CardContent>
           <CardMedia
             component="img"
             height="160px"
             image={
-                  seed.thumbnail
-                  ?? 'https://placehold.it/250x150?text=Placeholder'
-                }
+              seed.thumbnail ?? 'https://placehold.it/250x150?text=Placeholder'
+            }
             alt={seed.label}
             sx={{ border: '2px solid green', borderRadius: '1rem' }}
           />
@@ -158,22 +189,19 @@ const SeedInfo = ({
             />
           </Grid>
           <Grid item xs={4}>
-            <SeedLabel
-              label={seedDataUnits.approxPlantsper}
-              unit={unitText}
-            />
+            <SeedLabel label={seedDataUnits.approxPlantsper} unit={unitText} />
           </Grid>
           <Grid item xs={4}>
-            <SeedLabel
-              label={seedDataUnits.seedsper}
-              unit={unitText}
-            />
+            <SeedLabel label={seedDataUnits.seedsper} unit={unitText} />
           </Grid>
         </Grid>
 
         <Grid container>
           <Grid item xs={4}>
-            <SeedingRateChip value={mixData.seedingRate} testId={`${seed.label}-${seedDataUnits.seedingRateinMix}-value`} />
+            <SeedingRateChip
+              value={mixData.seedingRate}
+              testId={`${seed.label}-${seedDataUnits.seedingRateinMix}-value`}
+            />
           </Grid>
           <Grid item xs={4}>
             <SeedingRateChip value={formatToHundredth(mixData.plantValue)} />
@@ -188,34 +216,31 @@ const SeedInfo = ({
             />
           </Grid>
           <Grid item xs={4}>
-            <SeedLabel
-              label={seedDataUnits.approxPlantsper}
-              unit={unitText}
-            />
+            <SeedLabel label={seedDataUnits.approxPlantsper} unit={unitText} />
           </Grid>
           <Grid item xs={4}>
-            <SeedLabel
-              label={seedDataUnits.seedsper}
-              unit={unitText}
-            />
+            <SeedLabel label={seedDataUnits.seedsper} unit={unitText} />
           </Grid>
         </Grid>
 
-        {council === 'SCCC'
-        && (
+        {council === 'SCCC' && (
           <Grid item xs={12}>
             <Typography>
               {`Single Species Seeding Rate PLS: ${singleSpeciesSeedingRate} Lbs per Acre`}
             </Typography>
-            <Slider
+            <PSASlider
               min={baseSeedingRate * 0.5}
               max={baseSeedingRate * 1.5}
               step={0.1}
               value={singleSpeciesSeedingRate}
               valueLabelDisplay="auto"
               onChange={(e) => setSingleSpeciesSeedingRate(e.target.value)}
-              onChangeCommitted={() => handleFormValueChange(seed, 'singleSpeciesSeedingRate', singleSpeciesSeedingRate)}
-              data-test={`${seed.label}-slider_single_species_seeding_rate`}
+              onChangeCommitted={() => handleFormValueChange(
+                seed,
+                'singleSpeciesSeedingRate',
+                singleSpeciesSeedingRate,
+              )}
+              dataTestId={`${seed.label}-slider_single_species_seeding_rate`}
             />
           </Grid>
         )}
@@ -224,7 +249,7 @@ const SeedInfo = ({
           <Typography>
             {`% of Single Species Rate: ${percentOfRate}%`}
           </Typography>
-          <Slider
+          <PSASlider
             min={0}
             max={100}
             value={percentOfRate}
@@ -236,15 +261,22 @@ const SeedInfo = ({
             onChangeCommitted={() => {
               if (council === 'NECCC') {
                 // TODO: NOTE: if council is NECCC, the percentOfRate need to multiply by soilFertilityModifier
-                handleFormValueChange(seed, 'percentOfRate', (soilFertilityModifier * parseFloat(percentOfRate)) / 100);
+                handleFormValueChange(
+                  seed,
+                  'percentOfRate',
+                  (soilFertilityModifier * parseFloat(percentOfRate)) / 100,
+                );
               } else {
-                handleFormValueChange(seed, 'percentOfRate', parseFloat(percentOfRate) / 100);
+                handleFormValueChange(
+                  seed,
+                  'percentOfRate',
+                  parseFloat(percentOfRate) / 100,
+                );
               }
             }}
-            data-test={`${seed.label}-slider_percent_of_rate`}
+            dataTestId={`${seed.label}-slider_percent_of_rate`}
           />
         </Grid>
-
       </Grid>
     </Grid>
   );
@@ -266,17 +298,29 @@ const SeedingRateChip = ({ value, testId }) => (
 );
 
 const SeedLabel = ({ label, unit, testId }) => (
-  <Typography lineHeight="1rem" fontSize="0.8rem" padding="0.5rem 0" data-test={testId}>
+  <Typography
+    lineHeight="1rem"
+    fontSize="0.8rem"
+    padding="0.5rem 0"
+    data-test={testId}
+  >
     {label}
     <span style={{ fontWeight: 'bold' }}>{unit}</span>
   </Typography>
 );
 
 const SeedingRateCard = ({
-  seedingRateLabel, seedingRateValue, plantValue, seedValue,
+  seedingRateLabel,
+  seedingRateValue,
+  plantValue,
+  seedValue,
 }) => {
   // default value is always seeds/palnts per acre
-  const [displayValue, setDisplayValue] = useState({ plantValue, seedValue, seedingRateValue });
+  const [displayValue, setDisplayValue] = useState({
+    plantValue,
+    seedValue,
+    seedingRateValue,
+  });
 
   const unit = useSelector((state) => state.calculator.unit);
 
@@ -294,13 +338,22 @@ const SeedingRateCard = ({
 
   return (
     <>
-      <Typography display="flex" alignItems="center" justifyContent="center" pb="0.5rem" fontWeight="bold">
+      <Typography
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        pb="0.5rem"
+        fontWeight="bold"
+      >
         {seedingRateLabel}
       </Typography>
 
       <SeedLabel
         label={seedDataUnits.seedingRate}
-        unit={seedDataUnits.lbsper + (unit === 'acre' ? seedDataUnits.acre : seedDataUnits.tsqft)}
+        unit={
+          seedDataUnits.lbsper
+          + (unit === 'acre' ? seedDataUnits.acre : seedDataUnits.tsqft)
+        }
         testId={`${seedingRateLabel}-${seedDataUnits.seedingRate}-label`}
       />
       <SeedingRateChip
@@ -312,14 +365,17 @@ const SeedingRateCard = ({
         label={seedDataUnits.approxPlantsper}
         unit={unit === 'acre' ? seedDataUnits.acre : seedDataUnits.sqft}
       />
-      <SeedingRateChip value={formatToHundredth(twoDigit(displayValue.plantValue))} />
+      <SeedingRateChip
+        value={formatToHundredth(twoDigit(displayValue.plantValue))}
+      />
 
       <SeedLabel
         label={seedDataUnits.seedsper}
         unit={unit === 'acre' ? seedDataUnits.acre : seedDataUnits.sqft}
       />
-      <SeedingRateChip value={formatToHundredth(twoDigit(displayValue.seedValue))} />
-
+      <SeedingRateChip
+        value={formatToHundredth(twoDigit(displayValue.seedValue))}
+      />
     </>
   );
 };
