@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Grid from '@mui/material/Grid';
 import {
-  Typography, useTheme, useMediaQuery, Slider,
+  Typography, useTheme, useMediaQuery,
 } from '@mui/material';
-import { PSADropdown } from 'shared-react-components/src';
+import { PSADropdown, PSASlider } from 'shared-react-components/src';
 import NumberTextField from '../../../../components/NumberTextField';
 import { convertToPercent } from '../../../../shared/utils/calculator';
 import { seedingMethodsMCCC, seedingMethodsNECCC, seedingMethodsSCCC } from '../../../../shared/data/dropdown';
@@ -79,7 +79,7 @@ const ReviewMixSteps = ({
         <Grid item xs={2} md={3} />
         <Grid item xs={2} md={3} />
         <Grid item xs={8} md={6}>
-          <Slider
+          <PSASlider
             min={range[0]}
             max={range[1]}
             step={step}
