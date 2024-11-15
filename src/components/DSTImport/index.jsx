@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import Papa from 'papaparse';
 import {
-  Box, Grid, Modal, Typography,
+  Box, Grid, Typography,
 } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { useAuth0 } from '@auth0/auth0-react';
-import { PSAButton, PSADropdown } from 'shared-react-components/src';
+import { PSAButton, PSADropdown, PSAModal } from 'shared-react-components/src';
 import { importFromCSVCalculator } from '../../features/calculatorSlice/actions';
 import { setSiteConditionRedux } from '../../features/siteConditionSlice/actions';
 import useUserHistory from '../../shared/hooks/useUserHistory';
@@ -94,101 +94,102 @@ const DSTImport = () => {
 
   return (
     <>
-      <Modal
+      <PSAModal
         open={openModal}
         onClose={() => setOpenModal(!openModal)}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-      >
-        <Box sx={modalStyle}>
-          <Grid container spacing={5}>
-            {isAuthenticated && (
-              <Grid container item spacing={1}>
-                <Grid item xs={12} display="flex" justifyContent="center">
-                  <Typography variant="h6">
-                    Create New Calculation
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} display="flex" justifyContent="center">
-                  <PSAButton
-                    buttonType=""
-                    variant="contained"
-                    onClick={handleCreateNewHistory}
-                    data-test="create_calculation"
-                    title="create new calculation"
-                  />
-                </Grid>
-              </Grid>
-
-            )}
-
-            <Grid container item spacing={1}>
-              <Grid item xs={12} display="flex" justifyContent="center">
-                <Typography variant="h6">
-                  Import from CSV
-                </Typography>
-              </Grid>
-
-              <Grid xs={12} item display="flex" justifyContent="center" alignItems="center">
-                <input
-                  id="contained-button-file"
-                  type="file"
-                  accept=".csv"
-                  onChange={handleFileUpload}
-                  hidden
-                />
-                {/* eslint-disable-next-line */}
-                <label htmlFor="contained-button-file">
-                  <PSAButton
-                    buttonType=""
-                    variant="contained"
-                    color="primary"
-                    component="span"
-                    data-test="import_from_csv"
-                    title="Import from CSV"
-                  />
-                </label>
-              </Grid>
-            </Grid>
-
-            {isAuthenticated && (
-              <Grid container item xs={12} spacing={1}>
-                <Grid item xs={12} display="flex" justifyContent="center">
-                  <Typography variant="h6">
-                    Import from User History
-                  </Typography>
-                </Grid>
-                <Grid container item xs={12} spacing={2}>
-                  <Grid item xs={12} display="flex" justifyContent="center" alignItems="center">
-                    <PSADropdown
-                      label="Select your calculation"
-                      items={histories.map((history) => ({ label: history.label, value: history.label }))}
-                      formSx={{ minWidth: 220 }}
-                      SelectProps={{
-                        value: calculationName,
-                        onChange: (e) => setCaclulationName(e.target.value),
-                        MenuProps: {
-                          style: { color: '#4F5F30' },
-                        },
-                        'data-test': 'select_calculation',
-                      }}
-                    />
+        modalContent={(
+          <Box sx={modalStyle}>
+            <Grid container spacing={5}>
+              {isAuthenticated && (
+                <Grid container item spacing={1}>
+                  <Grid item xs={12} display="flex" justifyContent="center">
+                    <Typography variant="h6">
+                      Create New Calculation
+                    </Typography>
                   </Grid>
-                  <Grid item xs={12} display="flex" justifyContent="center" alignItems="center">
+                  <Grid item xs={12} display="flex" justifyContent="center">
                     <PSAButton
                       buttonType=""
                       variant="contained"
-                      onClick={handleLoadUserHistory}
-                      data-test="import_calculation"
-                      title="Import"
+                      onClick={handleCreateNewHistory}
+                      data-test="create_calculation"
+                      title="create new calculation"
                     />
                   </Grid>
                 </Grid>
+
+              )}
+
+              <Grid container item spacing={1}>
+                <Grid item xs={12} display="flex" justifyContent="center">
+                  <Typography variant="h6">
+                    Import from CSV
+                  </Typography>
+                </Grid>
+
+                <Grid xs={12} item display="flex" justifyContent="center" alignItems="center">
+                  <input
+                    id="contained-button-file"
+                    type="file"
+                    accept=".csv"
+                    onChange={handleFileUpload}
+                    hidden
+                  />
+                  {/* eslint-disable-next-line */}
+                  <label htmlFor="contained-button-file">
+                    <PSAButton
+                      buttonType=""
+                      variant="contained"
+                      color="primary"
+                      component="span"
+                      data-test="import_from_csv"
+                      title="Import from CSV"
+                    />
+                  </label>
+                </Grid>
               </Grid>
-            )}
-          </Grid>
-        </Box>
-      </Modal>
+
+              {isAuthenticated && (
+                <Grid container item xs={12} spacing={1}>
+                  <Grid item xs={12} display="flex" justifyContent="center">
+                    <Typography variant="h6">
+                      Import from User History
+                    </Typography>
+                  </Grid>
+                  <Grid container item xs={12} spacing={2}>
+                    <Grid item xs={12} display="flex" justifyContent="center" alignItems="center">
+                      <PSADropdown
+                        label="Select your calculation"
+                        items={histories.map((history) => ({ label: history.label, value: history.label }))}
+                        formSx={{ minWidth: 220 }}
+                        SelectProps={{
+                          value: calculationName,
+                          onChange: (e) => setCaclulationName(e.target.value),
+                          MenuProps: {
+                            style: { color: '#4F5F30' },
+                          },
+                          'data-test': 'select_calculation',
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={12} display="flex" justifyContent="center" alignItems="center">
+                      <PSAButton
+                        buttonType=""
+                        variant="contained"
+                        onClick={handleLoadUserHistory}
+                        data-test="import_calculation"
+                        title="Import"
+                      />
+                    </Grid>
+                  </Grid>
+                </Grid>
+              )}
+            </Grid>
+          </Box>
+        )}
+      />
       <PSAButton
         buttonType=""
         variant="contained"
