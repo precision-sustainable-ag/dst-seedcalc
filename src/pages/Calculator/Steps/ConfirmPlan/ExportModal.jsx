@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import {
-  Modal, Box, Typography, Grid,
+  Box, Typography, Grid,
 } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { PSAButton } from 'shared-react-components/src';
+import { PSAButton, PSAModal } from 'shared-react-components/src';
 import { handleDownload } from '../../../../shared/utils/exportExcel';
 import pirschAnalytics from '../../../../shared/utils/analytics';
 
@@ -64,21 +64,25 @@ const ExportModal = () => {
 
   return (
     <>
-      <Modal open={open} onClose={() => setOpen(false)}>
-        <Box sx={modalStyle}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} display="flex" justifyContent="center">
-              <Typography variant="h6">
-                How would you like to save your calculation?
-              </Typography>
+      <PSAModal
+        open={open}
+        onClose={() => setOpen(false)}
+        modalContent={(
+          <Box sx={modalStyle}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} display="flex" justifyContent="center">
+                <Typography variant="h6">
+                  How would you like to save your calculation?
+                </Typography>
+              </Grid>
+              <Grid item xs={12} display="flex" justifyContent="center">
+                <PSAButton buttonType="" variant="contained" onClick={handleExportcsv} data-test="export_csv" title="Export to csv" />
+              </Grid>
             </Grid>
-            <Grid item xs={12} display="flex" justifyContent="center">
-              <PSAButton buttonType="" variant="contained" onClick={handleExportcsv} data-test="export_csv" title="Export to csv" />
-            </Grid>
-          </Grid>
 
-        </Box>
-      </Modal>
+          </Box>
+        )}
+      />
       <PSAButton
         buttonType=""
         sx={buttonStyles}
