@@ -6,11 +6,12 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from '@emotion/styled';
 import {
-  Typography, Slider, Stack, SliderThumb,
+  Typography, Stack, SliderThumb,
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
 import { MenuRounded } from '@mui/icons-material';
+import { PSASlider } from 'shared-react-components/src';
 import {
   setAdjustedMixSeedingRateRedux,
   setMixSeedingRateRedux, setOptionRedux,
@@ -30,7 +31,7 @@ const CustomThumb = (props) => {
   );
 };
 
-const MixSeedingSlider = styled(Slider)(({
+const MixSeedingSlider = styled(PSASlider)(({
   theme,
 }) => ({
   '&.MuiSlider-root': {
