@@ -2,6 +2,7 @@ import React from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Grid } from '@mui/material';
+import { PSAProfile } from 'shared-react-components/src';
 import Header from './components/Header';
 import Auth0ProviderWithNavigate from './components/Auth/Auth0ProviderWithNavigate';
 import Calculator from './pages/Calculator';
@@ -31,6 +32,7 @@ const App = () => (
                 <Route path="/" element={<Calculator />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/feedback" element={<Feedback />} />
+                <Route path="/profile" element={<PSAProfile />} />
               </Routes>
             </Grid>
           </Grid>

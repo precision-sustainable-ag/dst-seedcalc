@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import TextSnippetOutlinedIcon from '@mui/icons-material/TextSnippetOutlined';
+import SupervisedUserCircleOutlinedIcon from '@mui/icons-material/SupervisedUserCircleOutlined';
 import { PSAHeader, PSAAuthButton } from 'shared-react-components/src';
 import { releaseNotesUrl } from '../../shared/data/keys';
 
@@ -12,6 +13,15 @@ const Header = () => {
   const { council } = useSelector((state) => state.siteCondition);
 
   const navContent = [
+    {
+      type: 'button',
+      variant: 'text',
+      text: 'Profile',
+      icon: <SupervisedUserCircleOutlinedIcon />,
+      rightIcon: true,
+      textSx: { fontSize: '1rem' },
+      onClick: () => navigate('/profile'),
+    },
     {
       type: 'button',
       variant: 'text',
