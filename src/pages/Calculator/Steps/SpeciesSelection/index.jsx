@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { useSelector, useDispatch } from 'react-redux';
 import { Typography, Box } from '@mui/material';
-import { Spinner, PSAAccordion } from 'shared-react-components/src';
+import { Spinner, PSAAccordion, PSALoadingspinner } from 'shared-react-components/src';
 import SearchField from '../../../../components/SearchField';
 import { seedsType, seedsLabel } from '../../../../shared/data/species';
 import { validateForms } from '../../../../shared/utils/format';
@@ -131,10 +131,10 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
           Select one or more species for your mix.
         </Typography>
         {historyState === historyStates.imported && (
-        <Typography sx={{ fontWeight: 'bold', margin: '1rem', marginBottom: '0' }}>
-          <span style={{ color: 'red' }}>Warning: </span>
-          Making changes on this page will reset the subsequent steps of the calculation.
-        </Typography>
+          <Typography sx={{ fontWeight: 'bold', margin: '1rem', marginBottom: '0' }}>
+            <span style={{ color: 'red' }}>Warning: </span>
+            Making changes on this page will reset the subsequent steps of the calculation.
+          </Typography>
         )}
       </Grid>
       <Grid item xs={11}>
@@ -164,36 +164,56 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
         </Box>
       </Grid>
 
-      {seedsType.map((seedType, i) => (
-        <Grid item xs={12} key={i}>
-          <PSAAccordion
-            expanded={accordionState[seedType]}
-            onChange={() => handleExpandAccordion(seedType)}
-            summaryContent={<Typography>{seedsLabel[seedType]}</Typography>}
-            sx={{
-              '.MuiAccordionSummary-root': {
-                backgroundColor: 'primary.dark',
-                '.MuiAccordionSummary-expandIconWrapper p': {
-                  color: 'primary.text',
-                },
-              },
-              '.MuiAccordionDetails-root': {
-                backgroundColor: 'primary.light',
-              },
-            }}
-            detailsContent={(
-              <>
-                {loading && <Spinner />}
-                <PlantList
-                  seedType={seedType}
-                  filteredSeeds={filteredSeeds}
-                />
-              </>
-            )}
-            testId={`accordion-${seedType}`}
-          />
-        </Grid>
-      ))}
+      {
+        seedsType.length > 0 ? (
+          seedsType.map((seedType, i) => (
+            <Grid item xs={12} key={i}>
+              <PSAAccordion
+                expanded={accordionState[seedType]}
+                onChange={() => handleExpandAccordion(seedType)}
+                summaryContent={<Typography>{seedsLabel[seedType]}</Typography>}
+                sx={{
+                  '.MuiAccordionSummary-root': {
+                    backgroundColor: 'primary.dark',
+                    '.MuiAccordionSummary-expandIconWrapper p': {
+                      color: 'primary.text',
+                    },
+                  },
+                  '.MuiAccordionDetails-root': {
+                    backgroundColor: 'primary.light',
+                  },
+                }}
+                detailsContent={(
+                  <>
+                    {loading && <Spinner />}
+                    <PlantList
+                      seedType={seedType}
+                      filteredSeeds={filteredSeeds}
+                    />
+                  </>
+                )}
+                testId={`accordion-${seedType}`}
+              />
+            </Grid>
+
+          ))) : (
+            <Grid
+              item
+              container
+              spacing={1}
+              justifyContent="center"
+              alignItems="center"
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                minHeight: '100px',
+              }}
+            >
+              <PSALoadingspinner />
+            </Grid>
+        )
+      }
     </Grid>
   );
 };
