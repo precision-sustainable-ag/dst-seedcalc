@@ -103,7 +103,7 @@ const StepsList = ({
         onStepClick={(tab, index) => handleStepClick(index)}
         boxProps={{ sx: { marginBottom: '1rem' } }}
         stepperProps={{ activeStep }}
-        stepButtonProps={{
+        stepButtonProps={(step, index) => ({
           sx: {
             '.MuiStepLabel-label': {
               '&.Mui-active,&.Mui-completed': {
@@ -111,7 +111,8 @@ const StepsList = ({
               },
             },
           },
-        }}
+          'data-test': `step-${index}`,
+        })}
       />
 
       <Box sx={{ display: 'flex', flexDirection: 'row', pt: 1 }}>
