@@ -22,7 +22,7 @@ describe('<StepsList />', () => {
     cy.wrap(mockSetStep).should('have.been.calledTwice');
   });
 
-  it.only('should show current step', () => {
+  it('should show current step', () => {
     cy.mount(<StepsList activeStep={3} availableSteps={completedList} />);
     cy.getByTestId(`step-${3}`).should('have.attr', 'aria-current', 'step');
   });
