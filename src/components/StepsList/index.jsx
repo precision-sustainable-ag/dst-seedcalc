@@ -99,11 +99,11 @@ const StepsList = ({
       <PSAStepper
         steps={calculatorList}
         strokeColor="#fffff2"
-        maxAvailableStep={maxAvailableStep}
+        maxAvailableStep={maxAvailableStep + 1}
         onStepClick={(tab, index) => handleStepClick(index)}
         boxProps={{ sx: { marginBottom: '1rem' } }}
         stepperProps={{ activeStep }}
-        stepButtonProps={(step, index) => ({
+        stepButtonProps={{
           sx: {
             '.MuiStepLabel-label': {
               '&.Mui-active,&.Mui-completed': {
@@ -111,8 +111,7 @@ const StepsList = ({
               },
             },
           },
-          'data-test': `step-${index}`,
-        })}
+        }}
       />
 
       <Box sx={{ display: 'flex', flexDirection: 'row', pt: 1 }}>
