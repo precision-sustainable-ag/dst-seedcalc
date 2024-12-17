@@ -21,10 +21,9 @@ import pirschAnalytics from '../../../../shared/utils/analytics';
 const LeftGrid = styled(Grid)({
   '&.MuiGrid-item': {
     height: '50px',
-    paddingTop: '8px',
-    paddingLeft: '15px',
-    paddingRight: '20px',
-    textAlign: 'left',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
     '& p': {
       fontWeight: 'bold',
     },
@@ -32,9 +31,8 @@ const LeftGrid = styled(Grid)({
 });
 
 const SeedTagNumField = styled(NumberTextField)({
-  fieldset: {
-    top: 0,
-  },
+  marginTop: 0,
+  paddingRight: '1rem',
 });
 
 const SeedTagInfo = ({
@@ -146,7 +144,7 @@ const SeedTagInfo = ({
                   Yes
                   <CheckIcon color="primary.dark" />
                 </>
-)}
+              )}
             />
             <PSAButton
               buttonType=""
@@ -158,7 +156,7 @@ const SeedTagInfo = ({
                   No
                   <CloseIcon color="error" />
                 </>
-)}
+              )}
             />
           </Grid>
         </Grid>
@@ -183,10 +181,10 @@ const SeedTagInfo = ({
               }}
               detailsContent={(
                 <Grid container>
-                  <LeftGrid item xs={4} lg={2} xl={2}>
+                  <LeftGrid item xs={6} sm={2}>
                     <Typography>% Germination: </Typography>
                   </LeftGrid>
-                  <Grid item xs={2} lg={1} xl={1}>
+                  <Grid item xs={6} sm={2}>
                     <SeedTagNumField
                       value={(options[seed.label].germination ?? 0.85) * 100}
                       onChange={(val) => {
@@ -195,12 +193,11 @@ const SeedTagInfo = ({
                       testId={`${seed.label}-germination`}
                     />
                   </Grid>
-                  <Grid item xs={6} lg={1} xl={1} />
 
-                  <LeftGrid item xs={4} lg={2} xl={2}>
+                  <LeftGrid item xs={6} sm={2}>
                     <Typography>% Purity: </Typography>
                   </LeftGrid>
-                  <Grid item xs={2} lg={1} xl={1}>
+                  <Grid item xs={6} sm={2}>
                     <SeedTagNumField
                       value={(options[seed.label].purity ?? 0.9) * 100}
                       onChange={(val) => {
@@ -209,12 +206,11 @@ const SeedTagInfo = ({
                       testId={`${seed.label}-purity`}
                     />
                   </Grid>
-                  <Grid item xs={6} lg={1} xl={1} />
 
-                  <LeftGrid item xs={4} lg={2} xl={2}>
+                  <LeftGrid item xs={6} sm={2}>
                     <Typography>Seeds per Pound </Typography>
                   </LeftGrid>
-                  <Grid item xs={2} lg={1} xl={1}>
+                  <Grid item xs={6} sm={2}>
                     <SeedTagNumField
                       value={parseFloat(seedsPerPound(seed))}
                       onChange={(val) => {
@@ -223,7 +219,6 @@ const SeedTagInfo = ({
                       testId={`${seed.label}-seedsPerPound`}
                     />
                   </Grid>
-                  <Grid item xs={6} lg={1} xl={1} />
                 </Grid>
               )}
             />
