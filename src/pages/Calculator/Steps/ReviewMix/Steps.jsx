@@ -27,8 +27,8 @@ const ReviewMixSteps = ({
   const { seedsSelected, seedingMethods } = useSelector((state) => state.calculator);
 
   const renderStepsForm = (label1, label2, label3) => (
-    <>
-      {matchesMd && (
+
+    matchesMd && (
       <Grid container justifyContent="space-evenly">
         <Grid item xs={3}>
           <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
@@ -48,9 +48,8 @@ const ReviewMixSteps = ({
           </Typography>
         </Grid>
       </Grid>
-      )}
-      <Grid item xs={12} p="0.5rem" />
-    </>
+    )
+
   );
 
   const {
@@ -175,7 +174,7 @@ const ReviewMixSteps = ({
               />
             </Grid>
           </Grid>
-          <Grid container p="1rem 0 0 0" justifyContent="space-evenly">
+          <Grid container justifyContent="space-evenly">
             <Grid item xs={3}>
               <Typography variant="mathIcon">=</Typography>
             </Grid>
@@ -336,7 +335,7 @@ const ReviewMixSteps = ({
             'Seeding Rate In Mix (Lbs per Acre)',
           )}
 
-          <Grid container p="1rem 0 0 0" justifyContent="space-evenly">
+          <Grid container justifyContent="space-evenly">
             <Grid item xs={3} />
             <Grid item xs={1}>
               <Typography variant="mathIcon">&#215;</Typography>
@@ -553,7 +552,7 @@ const ReviewMixSteps = ({
             />
           </Grid>
         </Grid>
-        <Grid container p="1rem 0 0 0" justifyContent="space-evenly">
+        <Grid container justifyContent="space-evenly">
           <Grid item xs={3}>
             <Typography variant="mathIcon">=</Typography>
           </Grid>

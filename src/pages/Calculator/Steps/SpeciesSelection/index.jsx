@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { useSelector, useDispatch } from 'react-redux';
 import { Typography, Box } from '@mui/material';
-import { Spinner, PSAAccordion, PSALoadingspinner } from 'shared-react-components/src';
+import { Spinner, PSAAccordion, PSALoadingSpinner } from 'shared-react-components/src';
 import SearchField from '../../../../components/SearchField';
 import { seedsType, seedsLabel } from '../../../../shared/data/species';
 import { validateForms } from '../../../../shared/utils/format';
@@ -210,7 +210,7 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
                 minHeight: '100px',
               }}
             >
-              <PSALoadingspinner />
+              <PSALoadingSpinner />
             </Grid>
         )
       }
