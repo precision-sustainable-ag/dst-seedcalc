@@ -1,16 +1,12 @@
 /* eslint-disable no-nested-ternary */
 import React, { useState, useEffect } from 'react';
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import { StepButton } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { useDispatch, useSelector } from 'react-redux';
-import { PSAButton, PSATooltip } from 'shared-react-components/src';
+import { PSAButton, PSATooltip, PSAStepper } from 'shared-react-components/src';
+import { useMediaQuery, useTheme } from '@mui/material';
 import { calculatorList } from '../../shared/data/dropdown';
 import { resetCalculator } from '../../features/calculatorSlice';
 import {
@@ -40,13 +36,12 @@ const StepsList = ({
   const [hovering, setHovering] = useState(false);
   const [visible, setVisible] = useState(false);
 
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up('sm'));
-
   const dispatch = useDispatch();
 
-  const { maxAvailableStep } = useSelector((state) => state.user);
+  const theme = useTheme();
+  const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
 
+  const { maxAvailableStep } = useSelector((state) => state.user);
   /// ///////////////////////////////////////////////////////
   //                      State Logic                     //
   /// ///////////////////////////////////////////////////////
@@ -99,52 +94,48 @@ const StepsList = ({
     setVisible(displayToolTip());
   }, [activeStep, availableSteps, hovering]);
 
+  const handleStepClick = (index) => {
+    setActiveStep(index);
+  };
+
   return (
-    <Box sx={{ color: 'primary.text' }}>
-      <Stepper activeStep={activeStep} alternativeLabel nonLinear>
-        {calculatorList.map((label, index) => (
-          <Step
-            key={label}
-            disabled={maxAvailableStep + 1 < index}
-            sx={{
-              '& .MuiSvgIcon-root': {
-                color: maxAvailableStep + 1 < index ? '' : '#4f5f30',
-                '&.Mui-active': {
-                  color: '#77b400',
-                },
+    <Box sx={{ paddingTop: matchesMd ? 0 : '1rem' }}>
+      <PSAStepper
+        steps={calculatorList}
+        strokeColor="#fffff2"
+        maxAvailableStep={maxAvailableStep + 1}
+        onStepClick={(index) => handleStepClick(index)}
+        stepperProps={{ activeStep }}
+        stepButtonProps={{
+          styles: {
+            '.MuiStepLabel-label': {
+              '&.Mui-active,&.Mui-completed': {
+                color: 'primary.text',
               },
-              '& .MuiStepLabel-label': {
-                '&.Mui-active,&.Mui-completed': {
-                  color: 'primary.text',
-                },
-              },
-            }}
-          >
-            <StepButton onClick={() => setActiveStep(index)} data-test={`step-${index}`}>
-              {matches && label}
-            </StepButton>
-          </Step>
-        ))}
-      </Stepper>
+            },
+          },
+        }}
+        mobile={matchesMd}
+        nextButtonDisabled={availableSteps[activeStep] !== true}
+      />
 
-      <Box sx={{ display: 'flex', flexDirection: 'row', pt: 1 }}>
-
-        {activeStep !== 0 && (
-          activeStep === calculatorList.length ? (
-            <PSAButton
-              buttonType=""
-              variant="stepper"
-              onClick={handleRestart}
-              data-test="restart_button"
-              title={(
-                <>
-                  <RestartAltIcon />
-                  Restart
-                </>
-)}
-            />
-          )
-            : (
+      {!matchesMd && (
+        <Box sx={{ display: 'flex', pt: '0.5rem', color: 'primary.text' }}>
+          {activeStep !== 0 && (
+            activeStep === calculatorList.length ? (
+              <PSAButton
+                buttonType=""
+                variant="stepper"
+                onClick={handleRestart}
+                data-test="restart_button"
+                title={(
+                  <>
+                    <RestartAltIcon />
+                    Restart
+                  </>
+                )}
+              />
+            ) : (
               <PSAButton
                 buttonType=""
                 variant="stepper"
@@ -156,44 +147,44 @@ const StepsList = ({
                     {' '}
                     BACK
                   </>
-)}
-              />
-            )
-        )}
-
-        <Box sx={{ flex: '1 1 auto' }} />
-
-        {activeStep !== calculatorList.length
-        && (
-        <PSATooltip
-          onMouseEnter={() => setHovering(true)}
-          onMouseLeave={() => setHovering(false)}
-          arrow
-          open={visible}
-          title={tooltipTitle()}
-          tooltipContent={(
-            <span>
-              <PSAButton
-                buttonType=""
-                variant="stepper"
-                disabled={availableSteps[activeStep] !== true}
-                onClick={handleNext}
-                data-test="next_button"
-                title={(
-                  <>
-                    {activeStep === calculatorList.length - 1
-                      ? 'Finish'
-                      : calculatorList[activeStep + 1]}
-                    {' '}
-                    <ArrowForwardIosIcon />
-                  </>
                 )}
               />
-            </span>
+            )
           )}
-        />
-        )}
-      </Box>
+
+          <Box sx={{ flex: '1 1 auto' }} />
+
+          {activeStep !== calculatorList.length && (
+          <PSATooltip
+            onMouseEnter={() => setHovering(true)}
+            onMouseLeave={() => setHovering(false)}
+            arrow
+            open={visible}
+            title={tooltipTitle()}
+            tooltipContent={(
+              <span>
+                <PSAButton
+                  buttonType=""
+                  variant="stepper"
+                  disabled={availableSteps[activeStep] !== true}
+                  onClick={handleNext}
+                  data-test="next_button"
+                  title={(
+                    <>
+                      {activeStep === calculatorList.length - 1
+                        ? 'Finish'
+                        : calculatorList[activeStep + 1]}
+                      {' '}
+                      <ArrowForwardIosIcon />
+                    </>
+                    )}
+                />
+              </span>
+              )}
+          />
+          )}
+        </Box>
+      )}
     </Box>
   );
 };

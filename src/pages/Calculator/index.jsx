@@ -4,8 +4,8 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Grid from '@mui/material/Grid';
+import { Box, useMediaQuery } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
@@ -51,7 +51,7 @@ const Calculator = () => {
   const dispatch = useDispatch();
 
   const theme = useTheme();
-  const matchesSm = useMediaQuery(theme.breakpoints.down('sm'));
+  const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
 
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
@@ -188,7 +188,7 @@ const Calculator = () => {
 
   return (
     <Grid container justifyContent="center">
-      <Grid item style={{ position: 'fixed', bottom: '0px', zIndex: 1000 }}>
+      <Grid item style={{ position: 'fixed', bottom: '45px', zIndex: 1000 }}>
         {alertState.open
           && (
           <FadeAlert
@@ -214,20 +214,6 @@ const Calculator = () => {
       <Grid
         item
         xs={12}
-        sx={
-          matchesSm && !showHeaderLogo
-            ? {
-              position: 'fixed',
-              width: '100%',
-              paddingTop: '20px',
-              backgroundColor: 'primary.light',
-              height: '90px',
-              zIndex: '101',
-              top: '0',
-            }
-            : { paddingTop: '20px' }
-        }
-        // height={"100px"}
         ref={stepperRef}
       >
         <StepsList
@@ -247,11 +233,10 @@ const Calculator = () => {
             md={1}
             lg={2}
             sx={
-            matchesSm && !showHeaderLogo
+            matchesMd && !showHeaderLogo
               ? {
                 position: 'fixed',
                 width: '100%',
-                paddingTop: '90px',
                 zIndex: '100',
                 top: '0',
               }
@@ -269,14 +254,7 @@ const Calculator = () => {
             // FIXME: except last step which does not have the crop bar
           lg={activeStep === 0 ? 12 : 10}
           md={activeStep > 0 ? 11 : 12}
-          sx={
-              // eslint-disable-next-line no-nested-ternary
-              matchesSm && !showHeaderLogo
-                ? activeStep === 0
-                  ? { paddingTop: '90px' }
-                  : { paddingTop: '190px' }
-                : {}
-            }
+          sx={{ paddingTop: matchesMd && !showHeaderLogo && activeStep !== 0 ? '100px' : 0 }}
         >
           {renderCalculator(
             activeStep === calculatorList.length
@@ -287,7 +265,7 @@ const Calculator = () => {
 
         <HistoryDialog setStep={setActiveStep} setSiteConditionStep={setSiteConditionStep} />
       </Grid>
-
+      {matchesMd && <Box sx={{ height: '50px', width: '100%' }} />}
     </Grid>
   );
 };
