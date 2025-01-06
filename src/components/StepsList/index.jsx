@@ -6,6 +6,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { useDispatch, useSelector } from 'react-redux';
 import { PSAButton, PSATooltip, PSAStepper } from 'shared-react-components/src';
+import { useMediaQuery, useTheme } from '@mui/material';
 import { calculatorList } from '../../shared/data/dropdown';
 import { resetCalculator } from '../../features/calculatorSlice';
 import {
@@ -36,6 +37,9 @@ const StepsList = ({
   const [visible, setVisible] = useState(false);
 
   const dispatch = useDispatch();
+
+  const theme = useTheme();
+  const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
 
   const { maxAvailableStep } = useSelector((state) => state.user);
   /// ///////////////////////////////////////////////////////
@@ -95,16 +99,15 @@ const StepsList = ({
   };
 
   return (
-    <Box sx={{ color: 'primary.text' }}>
+    <Box sx={{ paddingTop: matchesMd ? 0 : '1rem' }}>
       <PSAStepper
         steps={calculatorList}
         strokeColor="#fffff2"
         maxAvailableStep={maxAvailableStep + 1}
-        onStepClick={(tab, index) => handleStepClick(index)}
-        boxProps={{ sx: { marginBottom: '1rem' } }}
+        onStepClick={(index) => handleStepClick(index)}
         stepperProps={{ activeStep }}
         stepButtonProps={{
-          sx: {
+          styles: {
             '.MuiStepLabel-label': {
               '&.Mui-active,&.Mui-completed': {
                 color: 'primary.text',
@@ -112,43 +115,46 @@ const StepsList = ({
             },
           },
         }}
+        mobile={matchesMd}
+        nextButtonDisabled={availableSteps[activeStep] !== true}
       />
 
-      <Box sx={{ display: 'flex', flexDirection: 'row', pt: 1 }}>
-        {activeStep !== 0 && (
-          activeStep === calculatorList.length ? (
-            <PSAButton
-              buttonType=""
-              variant="stepper"
-              onClick={handleRestart}
-              data-test="restart_button"
-              title={(
-                <>
-                  <RestartAltIcon />
-                  Restart
-                </>
-              )}
-            />
-          ) : (
-            <PSAButton
-              buttonType=""
-              variant="stepper"
-              onClick={handleBack}
-              data-test="back_button"
-              title={(
-                <>
-                  <ArrowBackIosNewIcon />
-                  {' '}
-                  BACK
-                </>
-              )}
-            />
-          )
-        )}
+      {!matchesMd && (
+        <Box sx={{ display: 'flex', pt: '0.5rem', color: 'primary.text' }}>
+          {activeStep !== 0 && (
+            activeStep === calculatorList.length ? (
+              <PSAButton
+                buttonType=""
+                variant="stepper"
+                onClick={handleRestart}
+                data-test="restart_button"
+                title={(
+                  <>
+                    <RestartAltIcon />
+                    Restart
+                  </>
+                )}
+              />
+            ) : (
+              <PSAButton
+                buttonType=""
+                variant="stepper"
+                onClick={handleBack}
+                data-test="back_button"
+                title={(
+                  <>
+                    <ArrowBackIosNewIcon />
+                    {' '}
+                    BACK
+                  </>
+                )}
+              />
+            )
+          )}
 
-        <Box sx={{ flex: '1 1 auto' }} />
+          <Box sx={{ flex: '1 1 auto' }} />
 
-        {activeStep !== calculatorList.length && (
+          {activeStep !== calculatorList.length && (
           <PSATooltip
             onMouseEnter={() => setHovering(true)}
             onMouseLeave={() => setHovering(false)}
@@ -171,13 +177,14 @@ const StepsList = ({
                       {' '}
                       <ArrowForwardIosIcon />
                     </>
-                  )}
+                    )}
                 />
               </span>
-            )}
+              )}
           />
-        )}
-      </Box>
+          )}
+        </Box>
+      )}
     </Box>
   );
 };
