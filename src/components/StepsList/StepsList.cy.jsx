@@ -4,10 +4,10 @@ import { completedList, calculatorList } from '../../shared/data/dropdown';
 
 describe('<StepsList />', () => {
   beforeEach(() => {
+    cy.viewport(1024, 768);
     cy.mount(<StepsList availableSteps={completedList} activeStep={0} />);
   });
   it('should show all steps and labels in order on larger screen', () => {
-    cy.viewport(1024, 768);
     calculatorList.forEach((step, i) => {
       cy.get('.MuiStepLabel-label').eq(i).invoke('text').should('equal', step);
     });
