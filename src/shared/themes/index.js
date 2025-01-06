@@ -35,7 +35,7 @@ const theme = createTheme({
       backgroundColor: 'rgba(79, 95, 48, 0.09)',
     },
     mathIcon: {
-      marginTop: '15px',
+      marginTop: '30px',
       fontWeight: 600,
       lineHeight: '1.5',
       fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
