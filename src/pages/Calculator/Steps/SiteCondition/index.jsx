@@ -7,7 +7,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
-import { PSAButton, RegionSelectorMap, PSALoadingspinner } from 'shared-react-components/src';
+import { PSAButton, RegionSelectorMap, PSALoadingSpinner } from 'shared-react-components/src';
 import { isEmptyNull, validateForms } from '../../../../shared/utils/format';
 import { getCrops } from '../../../../features/calculatorSlice/api';
 import { getLocality, getRegion } from '../../../../features/siteConditionSlice/api';
@@ -164,7 +164,7 @@ const SiteCondition = ({
               minHeight: '100px',
             }}
           >
-            <PSALoadingspinner />
+            <PSALoadingSpinner />
           </Grid>
         ) : (
           siteConditionStep === 1 ? (

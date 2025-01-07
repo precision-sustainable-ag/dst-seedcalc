@@ -17,8 +17,7 @@ const MixRatioSteps = ({
   const [survival, setSurvival] = useState(0);
 
   const renderFormLabel = (label1, label2, label3) => (
-    <>
-      {matchesMd && (
+    matchesMd && (
       <Grid container justifyContent="space-evenly">
         <Grid item xs={3}>
           <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
@@ -38,10 +37,7 @@ const MixRatioSteps = ({
           </Typography>
         </Grid>
       </Grid>
-      )}
-      <Grid item xs={12} p="0.5rem" />
-    </>
-
+    )
   );
 
   const {
@@ -103,7 +99,7 @@ const MixRatioSteps = ({
             </Grid>
           </Grid>
 
-          <Grid container p="1rem 0 0 0" justifyContent="space-evenly">
+          <Grid container justifyContent="space-evenly">
             <Grid item xs={3}>
               <Typography variant="mathIcon">=</Typography>
             </Grid>
@@ -111,7 +107,7 @@ const MixRatioSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label="Seeding Rate In Mix (Lbs per Acre)"
+                label={matchesMd ? '' : 'Seeding Rate In Mix (Lbs per Acre)'}
                 disabled
                 value={step1.seedingRate}
               />
@@ -221,7 +217,7 @@ const MixRatioSteps = ({
             'Seeding Rate In Mix (Lbs per Acre)',
           )}
 
-          <Grid container p="1rem 0 0 0" justifyContent="space-evenly">
+          <Grid container justifyContent="space-evenly">
             <Grid item xs={3} />
             <Grid item xs={1}>
               <Typography variant="mathIcon">&#215;</Typography>
@@ -241,7 +237,7 @@ const MixRatioSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label="Seeding Rate In Mix (Lbs per Acre)"
+                label={matchesMd ? '' : 'Seeding Rate In Mix (Lbs per Acre)'}
                 disabled
                 value={step1.seedingRate}
               />
