@@ -188,7 +188,7 @@ const Calculator = () => {
 
   return (
     <Grid container justifyContent="center">
-      <Grid item style={{ position: 'fixed', bottom: '45px', zIndex: 1000 }}>
+      <Grid item style={{ position: 'fixed', bottom: matchesMd ? '45px' : 0, zIndex: 1000 }}>
         {alertState.open
           && (
           <FadeAlert

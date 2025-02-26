@@ -129,7 +129,10 @@ const DSTBarChart = ({ seed, calculatorResult }) => {
         {labels.map((l, i) => (
           <Grid
             container
-            sx={{ backgroundColor: !(i % 2) && '#e3e5d3' }}
+            sx={{
+              backgroundColor: !(i % 2) && '#e3e5d3',
+              color: 'primary.text',
+            }}
             key={i}
           >
             <Grid item xs={1} />

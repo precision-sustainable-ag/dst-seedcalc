@@ -289,7 +289,7 @@ const SeedingRateChip = ({ value, testId }) => (
       padding: '0.5rem',
       margin: '0 auto',
       border: '#D3D3D3 solid 2px',
-      opacity: '0.6',
+      opacity: '0.85',
     }}
     data-test={testId}
   >

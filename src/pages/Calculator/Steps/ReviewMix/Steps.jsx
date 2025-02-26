@@ -392,6 +392,7 @@ const ReviewMixSteps = ({
               MenuProps: {
                 style: { color: '#4F5F30' },
               },
+              sx: { '.MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(0, 0, 0, .45)' } },
               'data-test': 'seeding_method_selection',
             }}
           />

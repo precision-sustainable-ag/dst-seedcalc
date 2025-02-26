@@ -22,7 +22,9 @@ const SearchField = ({ value, handleChange, testId }) => (
       display: 'flex',
       alignItems: 'center',
       width: '80%',
+      borderColor: 'rgba(0, 0, 0, .45)',
     }}
+    variant="outlined"
   >
     <InputBase
       sx={{ pl: 1, flex: 1 }}

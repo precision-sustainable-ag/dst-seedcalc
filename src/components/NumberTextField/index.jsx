@@ -72,9 +72,9 @@ const NumberTextField = ({
       placeholder={placeholder}
       disabled={disabled}
       sx={{
-        '.MuiOutlinedInput-root fieldset': emptyWarning && {
-          borderColor: 'rgba(255, 0, 0, .5)',
-        },
+        '.MuiOutlinedInput-root fieldset':
+          emptyWarning ? { borderColor: 'rgba(255, 0, 0, .75)' } : { borderColor: 'rgba(0, 0, 0, .45)' },
+
         marginTop: matchesMd ? ' 0' : '20px',
         ...sx,
       }}

@@ -168,6 +168,7 @@ const SiteConditionForm = ({
             MenuProps: {
               style: { color: '#4F5F30' },
             },
+            sx: { '.MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(0, 0, 0, .45)' } },
             'data-test': 'site_condition_state',
           }}
         />
@@ -186,7 +187,10 @@ const SiteConditionForm = ({
             MenuProps: {
               style: { color: '#4F5F30' },
             },
-            sx: { '.MuiOutlinedInput-notchedOutline': county.length === 0 && { borderColor: 'rgba(255, 0, 0, .5)' } },
+            sx: {
+              '.MuiOutlinedInput-notchedOutline':
+              county.length === 0 ? { borderColor: 'rgba(255, 0, 0, .75)' } : { borderColor: 'rgba(0, 0, 0, .45)' },
+            },
             'data-test': 'site_condition_region',
           }}
           formSx={{ minWidth: '100%' }}
@@ -206,7 +210,10 @@ const SiteConditionForm = ({
             MenuProps: {
               style: { color: '#4F5F30' },
             },
-            sx: { '.MuiOutlinedInput-notchedOutline': soilDrainage === '' && { borderColor: 'rgba(255, 0, 0, .5)' } },
+            sx: {
+              '.MuiOutlinedInput-notchedOutline':
+              soilDrainage === '' ? { borderColor: 'rgba(255, 0, 0, .75)' } : { borderColor: 'rgba(0, 0, 0, .45)' },
+            },
             'data-test': 'site_condition_soil_drainage',
           }}
           formSx={{ minWidth: '100%' }}
