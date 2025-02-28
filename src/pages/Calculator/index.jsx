@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { FadeAlert } from 'shared-react-components/src';
+import { FadeAlert, PSASkipContent } from 'shared-react-components/src';
 import { useAuth0 } from '@auth0/auth0-react';
 import {
   SiteCondition,
@@ -264,6 +264,18 @@ const Calculator = () => {
         </Grid>
 
         <HistoryDialog setStep={setActiveStep} setSiteConditionStep={setSiteConditionStep} />
+        <PSASkipContent
+          href="#step-button"
+          text="Skip to Step Button"
+          sx={{
+            top: 'auto',
+            bottom: '-80px',
+            '&:focus': {
+              bottom: '60px',
+              transition: 'bottom 225ms cubic-bezier(0, 0, 0.2, 1)',
+            },
+          }}
+        />
       </Grid>
       {matchesMd && <Box sx={{ height: '50px', width: '100%' }} />}
     </Grid>
