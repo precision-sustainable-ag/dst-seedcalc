@@ -1,13 +1,14 @@
 import {
-  mockMixRatio, mockSeedingMethod, mockSiteCondition, mockSpeciesSelection,
+  mockMixRatio, mockSeedingMethod, mockSpeciesSelection,
 } from '../support/utils';
 
 describe('Mix Seeding Rate', () => {
   beforeEach(() => {
-    mockSiteCondition();
-    mockSpeciesSelection();
-    mockMixRatio();
-    mockSeedingMethod();
+    cy.mockSiteCondition().then(() => {
+      mockSpeciesSelection();
+      mockMixRatio();
+      mockSeedingMethod();
+    });
   });
 
   it('should be able to change value', () => {

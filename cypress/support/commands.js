@@ -56,9 +56,10 @@ Cypress.Commands.add('updateSlider', (testId, value) => {
   cy.getByTestId(testId).reactComponent()
     .its('memoizedProps.ownerState').then((state) => {
       cy.wrap(state).invoke('onChange', null, value);
+      cy.wrap(state).invoke('onChangeCommitted', null, value);
     });
-  cy.getByTestId(testId).find('.MuiSlider-thumb')
-    .click();
+  // cy.getByTestId(testId).find('.MuiSlider-thumb')
+  //   .click();
 });
 
 Cypress.Commands.add('loginToAuth0', () => {

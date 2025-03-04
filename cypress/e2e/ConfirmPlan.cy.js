@@ -1,18 +1,21 @@
 import {
-  mockMixRatio, mockReviewMix, mockSeedingMethod, mockSeedTagInfo, mockSiteCondition, mockSpeciesSelection,
+  mockMixRatio, mockReviewMix, mockSeedingMethod, mockSeedTagInfo, mockSpeciesSelection,
 } from '../support/utils';
 
 describe('Seed Tag Info', () => {
-  const selectSpecies = 'Radish, Daikon';
+  let selectSpecies;
 
   beforeEach(() => {
-    mockSiteCondition();
-    mockSpeciesSelection();
-    mockMixRatio();
-    mockSeedingMethod();
-    mockMixRatio();
-    mockSeedTagInfo();
-    mockReviewMix();
+    cy.mockSiteCondition().then(() => {
+      // eslint-disable-next-line prefer-destructuring
+      selectSpecies = Cypress.env('selectCrops')[0];
+      mockSpeciesSelection();
+      mockMixRatio();
+      mockSeedingMethod();
+      mockMixRatio();
+      mockSeedTagInfo();
+      mockReviewMix();
+    });
   });
 
   it('should be able to export a csv file', () => {

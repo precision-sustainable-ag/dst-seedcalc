@@ -496,6 +496,7 @@ const ReviewMixSteps = ({
           val={convertToPercent(options.germination)}
           onChangeCommitted={(val) => {
             handleFormValueChange(seed, 'germination', parseFloat(val) / 100);
+            console.log('handleFormValueChange');
           }}
           unit="%"
           testId="germination_slider"
