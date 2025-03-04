@@ -1,36 +1,35 @@
-import { mockSiteCondition, mockSpeciesSelection } from '../support/utils';
+import { mockSpeciesSelection } from '../support/utils';
 import { seedDataUnits } from '../../src/shared/data/units';
 
 describe('Mix Ratios single species selection', () => {
-  const selectSpecies = 'Radish, Daikon';
-
   beforeEach(() => {
-    mockSiteCondition();
-    const selectType = 'Brassica';
-    const species = 'Radish, Daikon';
-    cy.getByTestId(`accordion-${selectType}`).click();
-    cy.getByTestId(`species-card-${species}`).find('button').click();
-    cy.getByTestId('next_button').click();
-
-    cy.getByTestId(`${species}-${seedDataUnits.defaultSingelSpeciesSeedingRatePLS}-value`)
-      .find('p').invoke('text').should('not.equal', '0');
+    cy.mockSiteCondition();
   });
 
   it('should automatically open accordion if only one species is selected', () => {
+    const selectType = Cypress.env('selectTypes')[0];
+    const selectSpecies = Cypress.env('selectCrops')[0];
+    cy.getByTestId(`accordion-${selectType}`).click();
+    cy.getByTestId(`species-card-${selectSpecies}`).find('button').click();
+    cy.getByTestId('next_button').click();
+
+    cy.getByTestId(`${selectSpecies}-${seedDataUnits.defaultSingelSpeciesSeedingRatePLS}-value`)
+      .find('p').invoke('text').should('not.equal', '0');
     cy.getByTestId(`accordion-${selectSpecies}`).should('have.class', 'Mui-expanded');
   });
 });
 
 describe('Mix Ratios', () => {
-  // const selectSpecies = ['Radish, Daikon', 'Rapeseed'];
-  const selectSpecies = 'Radish, Daikon';
-
+  let selectSpecies;
   beforeEach(() => {
-    mockSiteCondition();
-    mockSpeciesSelection();
-    cy.getByTestId(`accordion-${selectSpecies}`).click();
-    cy.getByTestId(`${selectSpecies}-${seedDataUnits.defaultSingelSpeciesSeedingRatePLS}-value`)
-      .find('p').invoke('text').should('not.equal', '0');
+    cy.mockSiteCondition().then(() => {
+      mockSpeciesSelection();
+      // eslint-disable-next-line prefer-destructuring
+      selectSpecies = Cypress.env('selectCrops')[0];
+      cy.getByTestId(`accordion-${selectSpecies}`).click();
+      cy.getByTestId(`${selectSpecies}-${seedDataUnits.defaultSingelSpeciesSeedingRatePLS}-value`)
+        .find('p').invoke('text').should('not.equal', '0');
+    });
   });
 
   // TODO: test with NECCC and SCCC species
@@ -79,23 +78,25 @@ describe('Mix Ratios', () => {
 
 describe('Mix Ratios NECCC & SCCC', () => {
   it('should only have scroller for percent of single species rate in NECCC', () => {
-    const selectSpecies = 'Brassica, Forage';
-    mockSiteCondition('NECCC');
-    mockSpeciesSelection('NECCC');
-    cy.getByTestId(`accordion-${selectSpecies}`).click();
-    cy.getByTestId(`${selectSpecies}-${seedDataUnits.defaultSingelSpeciesSeedingRatePLS}-value`)
-      .find('p').invoke('text').should('not.equal', '0');
-    cy.get(`[data-test*="${selectSpecies}-slider"]`).should('have.length', 1);
+    cy.mockSiteCondition('NECCC').then(() => {
+      const selectSpecies = Cypress.env('selectCrops')[0];
+      mockSpeciesSelection('NECCC');
+      cy.getByTestId(`accordion-${selectSpecies}`).click();
+      cy.getByTestId(`${selectSpecies}-${seedDataUnits.defaultSingelSpeciesSeedingRatePLS}-value`)
+        .find('p').invoke('text').should('not.equal', '0');
+      cy.get(`[data-test*="${selectSpecies}-slider"]`).should('have.length', 1);
+    });
   });
 
   it('should have 2 scrollers in SCCC', () => {
-    const selectSpecies = 'Millet, Japanese';
-    mockSiteCondition('SCCC');
-    mockSpeciesSelection('SCCC');
-    cy.getByTestId(`accordion-${selectSpecies}`).click();
-    cy.getByTestId(`${selectSpecies}-${seedDataUnits.defaultSingelSpeciesSeedingRatePLS}-value`)
-      .find('p').invoke('text').should('not.equal', '0');
-    cy.get(`[data-test*="${selectSpecies}-slider_single_species_seeding_rate"]`).should('be.visible');
-    cy.get(`[data-test*="${selectSpecies}-slider_percent_of_rate"]`).should('be.visible');
+    cy.mockSiteCondition('SCCC').then(() => {
+      const selectSpecies = Cypress.env('selectCrops')[0];
+      mockSpeciesSelection('SCCC');
+      cy.getByTestId(`accordion-${selectSpecies}`).click();
+      cy.getByTestId(`${selectSpecies}-${seedDataUnits.defaultSingelSpeciesSeedingRatePLS}-value`)
+        .find('p').invoke('text').should('not.equal', '0');
+      cy.get(`[data-test*="${selectSpecies}-slider_single_species_seeding_rate"]`).should('be.visible');
+      cy.get(`[data-test*="${selectSpecies}-slider_percent_of_rate"]`).should('be.visible');
+    });
   });
 });

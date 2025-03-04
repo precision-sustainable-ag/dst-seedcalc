@@ -1,14 +1,16 @@
 /* eslint-disable prefer-destructuring */
-import { mockSiteCondition } from '../support/utils';
 
 describe('Species Selection', () => {
+  let selectType; let
+    selectSpecies;
   beforeEach(() => {
-    mockSiteCondition();
+    cy.mockSiteCondition().then(() => {
+      selectType = Cypress.env('selectTypes')[0];
+      selectSpecies = Cypress.env('selectCrops')[0];
+    });
   });
 
   it('should be able to click on species card to select or unselect a species', () => {
-    const selectType = Cypress.env('selectTypes')[0];
-    const selectSpecies = Cypress.env('selectCrops')[0];
     cy.getByTestId(`accordion-${selectType}`).click();
     cy.getByTestId(`species-card-${selectSpecies}`).find('button').click();
     cy.getByTestId(`species-card-${selectSpecies}`).find('img')
@@ -28,8 +30,6 @@ describe('Species Selection', () => {
   });
 
   it('next button should be disabled at first, and be available after select >=1 species', () => {
-    const selectType = Cypress.env('selectTypes')[0];
-    const selectSpecies = Cypress.env('selectCrops')[0];
     cy.getByTestId('next_button').should('be.disabled');
     cy.getByTestId(`accordion-${selectType}`).click();
     cy.getByTestId(`species-card-${selectSpecies}`).find('button').click();
@@ -37,8 +37,6 @@ describe('Species Selection', () => {
   });
 
   it('should be able to unselect a species by clicking on the sidebar', () => {
-    const selectType = Cypress.env('selectTypes')[0];
-    const selectSpecies = Cypress.env('selectCrops')[0];
     cy.getByTestId(`accordion-${selectType}`).click();
     cy.getByTestId(`species-card-${selectSpecies}`).find('button').click();
     cy.getByTestId(`sidebar-${selectSpecies}`).should('be.visible');
@@ -53,22 +51,20 @@ describe('Species Selection', () => {
   });
 
   it('should be able to use the search field to search a species', () => {
-    const selectType = Cypress.env('selectTypes')[0];
-    const selectSpecies = Cypress.env('selectCrops')[0];
     cy.getByTestId('species-selection-search').should('be.visible').type(selectSpecies);
     cy.get('[data-test^="accordion-"]').should('have.class', 'Mui-expanded');
     cy.getByTestId(`accordion-${selectType}`).getByTestId(`species-card-${selectSpecies}`).should('be.visible');
     cy.get('[data-test^="accordion-"]').get('[data-test^="species-card-"]').should('have.length', 1);
   });
 
-  it.only('should show the diversity bar with ratio of species', () => {
+  it('should show the diversity bar with ratio of species', () => {
     const selectTypes = Cypress.env('selectTypes');
-    const selectSpecies = Cypress.env('selectCrops');
+    const selectCrops = Cypress.env('selectCrops');
     cy.getByTestId(`accordion-${selectTypes[0]}`).click();
     if (selectTypes[1] !== selectTypes[0]) cy.getByTestId(`accordion-${selectTypes[1]}`).click();
 
-    selectSpecies.forEach((species) => {
-      cy.getByTestId(`species-card-${species}`).find('button').click();
+    selectCrops.forEach((crop) => {
+      cy.getByTestId(`species-card-${crop}`).find('button').click();
     });
 
     if (selectTypes[0] !== selectTypes[1]) {
@@ -82,7 +78,7 @@ describe('Species Selection', () => {
 
 describe('Species Selection NECCC', () => {
   beforeEach(() => {
-    mockSiteCondition('NECCC');
+    cy.mockSiteCondition('NECCC');
   });
 
   it('should be able to select species for NECCC', () => {
@@ -107,7 +103,7 @@ describe('Species Selection NECCC', () => {
 
 describe('Species Selection SCCC', () => {
   beforeEach(() => {
-    mockSiteCondition('SCCC');
+    cy.mockSiteCondition('SCCC');
   });
 
   it('should work for SCCC', () => {
