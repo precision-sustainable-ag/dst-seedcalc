@@ -82,7 +82,7 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
   }, []);
 
   useEffect(() => {
-    setFilteredSeeds(crops);
+    if (filteredSeeds.length === 0) setFilteredSeeds(crops);
   }, [crops]);
 
   // unselect crops with missing fields
@@ -151,7 +151,7 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
             onChange={updateQuery}
             value={query}
             sx={{ width: '80%' }}
-            testId="species-selection-search"
+            data-test="species-selection-search"
           />
           {seedsSelected.length === 0
             ? (
