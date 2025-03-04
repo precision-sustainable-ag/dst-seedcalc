@@ -21,6 +21,7 @@ export const clickStateMap = (council) => {
 
 // eslint-disable-next-line import/prefer-default-export
 export const mockSiteCondition = (council) => {
+  cy.intercept('GET', '**/v2/crops/?regions=**&context=seed_calc').as('getCropsData');
   clickStateMap(council);
   cy.getByTestId('option_manually').should('be.visible').click();
   cy.getByTestId('site_condition_region').click();
@@ -37,6 +38,17 @@ export const mockSiteCondition = (council) => {
     cy.getByTestId('site_condition_soil_fertility').click();
     cy.get('[data-test="site_condition_soil_fertility-Low"]').click();
   }
+  cy.wait('@getCropsData').then((interception) => {
+    const { data } = interception.response.body;
+    if (data.length < 2) throw new Error('Less than 2 crops available!');
+    // TODO: save crop data in cy env and then pass in next functions
+    const selectCrops = [data[0].label, data[1].label];
+    const selectTypes = [data[0].group.label, data[1].group.label];
+    Cypress.env('selectCrops', selectCrops);
+    Cypress.env('selectTypes', selectTypes);
+    Cypress.env('cropsData', data);
+    cy.log(selectCrops, selectTypes);
+  });
   cy.getByTestId('next_button').click();
 };
 
