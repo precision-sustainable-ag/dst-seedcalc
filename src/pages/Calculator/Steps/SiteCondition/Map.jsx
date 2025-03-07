@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 // import { Map as MapComponent } from '@psa/dst.ui.map';
-import { PSAButton, Map as MapComponent } from 'shared-react-components/src';
+import MapComponent from 'redux-map';
+// import { PSAButton, Map as MapComponent } from 'shared-react-components/src';
+import { PSAButton } from 'shared-react-components/src';
 import { useDispatch, useSelector } from 'react-redux';
 import { soilDrainageValues } from '../../../../shared/data/dropdown';
 import {
@@ -12,7 +14,6 @@ import { setHistoryDialogStateRedux, setMaxAvailableStepRedux } from '../../../.
 import { getZoneData, getSSURGOData } from '../../../../features/siteConditionSlice/api';
 import { historyStates } from '../../../../features/userSlice/state';
 import pirschAnalytics from '../../../../shared/utils/analytics';
-import { mapboxToken } from '../../../../shared/data/keys';
 import '../steps.scss';
 
 const Map = ({
@@ -36,9 +37,17 @@ const Map = ({
 
   // update county/zone, latlon, soil drainage based on address
   useEffect(() => {
-    const {
-      latitude, longitude, zipCode, county,
-    } = selectedToEditSite;
+    const latitude = selectedToEditSite.lat;
+    const longitude = selectedToEditSite.lon;
+    const zipCode = selectedToEditSite?.address?.zipCode;
+    const county = selectedToEditSite?.address?.county;
+
+    // console.log({
+    //   latitude,
+    //   longitude,
+    //   zipCode,
+    //   county,
+    // });
 
     if (Object.keys(selectedToEditSite).length > 0) {
       if (latitude === latlon[0] && longitude === latlon[1]) return;
@@ -102,7 +111,7 @@ const Map = ({
     <Grid container>
       <Grid xs={12} md={12} item>
         <MapComponent
-          setAddress={setSelectedToEditSite}
+          setProperties={(map) => setSelectedToEditSite(map)}
           initWidth="100%"
           padding="20px"
           initHeight="360px"
@@ -121,7 +130,9 @@ const Map = ({
           hasFullScreen
           hasMarkerPopup
           hasMarkerMovable
-          mapboxToken={mapboxToken}
+          hasElevation
+          hasFreehand
+          hasHelp
         />
         <Grid item xs={12} p="1rem">
           <PSAButton buttonType="" variant="contained" onClick={() => setStep(1)} sx={{ margin: '1rem' }} title="Back" />
