@@ -249,9 +249,8 @@ const Calculator = ({ calculator, setCalculator }) => {
         <Grid
           item
           xs={12}
-            // FIXME: except last step which does not have the crop bar
-          lg={activeStep === 0 ? 12 : 10}
-          md={activeStep > 0 ? 11 : 12}
+          lg={(activeStep === 0 || activeStep === 8) ? 12 : 10}
+          md={(activeStep === 0 || activeStep === 8) ? 12 : 11}
           sx={{ paddingTop: matchesMd && !showHeaderLogo && activeStep !== 0 ? '100px' : 0 }}
         >
           {renderCalculator(
