@@ -32,9 +32,7 @@ import { historyStates } from '../../features/userSlice/state';
 import pirschAnalytics from '../../shared/utils/analytics';
 import { setAuthToken } from '../../shared/utils/authToken';
 
-const Calculator = () => {
-  // initially set calculator here
-  const [calculator, setCalculator] = useState(null);
+const Calculator = ({ calculator, setCalculator }) => {
   const [activeStep, setActiveStep] = useState(0);
   const [siteConditionStep, setSiteConditionStep] = useState(1);
   // this completedStep is to determine whether the next button is clickable on each page
