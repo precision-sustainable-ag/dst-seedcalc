@@ -180,6 +180,7 @@ const PlantList = ({
                   handleClick(seed);
                 }}
                 disableRipple
+                aria-pressed={seedsSelected.filter((s) => s.label === seed.label).length > 0}
               >
                 <CardMedia
                   component="img"
@@ -190,6 +191,7 @@ const PlantList = ({
                       : seed.thumbnail)
                   }
                   alt={seed.label}
+                  aria-hidden="true"
                   sx={{
                     border: '2px solid #4f5f30',
                     borderRadius: '1rem',
@@ -235,7 +237,7 @@ const PlantList = ({
                     }),
                       }}
                     >
-                      { checkCrop(seed) !== '' && <span>Not Recommended</span> }
+                      { checkCrop(seed) !== '' && <span aria-label={`Not Recommended: ${checkCrop(seed)}`}>Not Recommended</span> }
                     </Typography>
 
                     <PSATooltip

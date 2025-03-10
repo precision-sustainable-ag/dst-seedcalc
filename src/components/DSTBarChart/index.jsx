@@ -68,7 +68,7 @@ const DSTBarChart = ({ seed, calculatorResult }) => {
       <Grid item xs={12}>
         <Typography fontWeight="bold">Seeding Rate Impact From Your Decisions (Lbs per Acre)</Typography>
       </Grid>
-      <Grid item xs={12} display="flex" justifyContent="center">
+      <Grid item xs={12} display="flex" justifyContent="center" aria-hidden>
         <ResponsiveContainer width="100%" height={200}>
           <BarChart
             data={matchesSm ? [labels[index]] : labels}
@@ -94,7 +94,7 @@ const DSTBarChart = ({ seed, calculatorResult }) => {
           </BarChart>
         </ResponsiveContainer>
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} aria-hidden>
         <PSAButton
           buttonType=""
           onClick={() => setIndex(index - 1)}
