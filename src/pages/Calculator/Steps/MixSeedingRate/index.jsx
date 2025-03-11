@@ -238,6 +238,7 @@ const MixSeedingRate = ({ calculator }) => {
               fontWeight="bold"
               fontSize="1.25rem"
               data-test="max_value"
+              aria-label={`High Limit: ${max}`}
             >
               {max}
             </Typography>
@@ -259,6 +260,7 @@ const MixSeedingRate = ({ calculator }) => {
               fontWeight="bold"
               fontSize="1.25rem"
               data-test="min_value"
+              aria-label={`Low Limit: ${min}`}
             >
               {min}
             </Typography>
