@@ -32,9 +32,7 @@ import { historyStates } from '../../features/userSlice/state';
 import pirschAnalytics from '../../shared/utils/analytics';
 import { setAuthToken } from '../../shared/utils/authToken';
 
-const Calculator = () => {
-  // initially set calculator here
-  const [calculator, setCalculator] = useState(null);
+const Calculator = ({ calculator, setCalculator }) => {
   const [activeStep, setActiveStep] = useState(0);
   const [siteConditionStep, setSiteConditionStep] = useState(1);
   // this completedStep is to determine whether the next button is clickable on each page
@@ -188,7 +186,7 @@ const Calculator = () => {
 
   return (
     <Grid container justifyContent="center">
-      <Grid item style={{ position: 'fixed', bottom: '45px', zIndex: 1000 }}>
+      <Grid item style={{ position: 'fixed', bottom: matchesMd ? '45px' : 0, zIndex: 1000 }}>
         {alertState.open
           && (
           <FadeAlert
@@ -251,9 +249,8 @@ const Calculator = () => {
         <Grid
           item
           xs={12}
-            // FIXME: except last step which does not have the crop bar
-          lg={activeStep === 0 ? 12 : 10}
-          md={activeStep > 0 ? 11 : 12}
+          lg={(activeStep === 0 || activeStep === 8) ? 12 : 10}
+          md={(activeStep === 0 || activeStep === 8) ? 12 : 11}
           sx={{ paddingTop: matchesMd && !showHeaderLogo && activeStep !== 0 ? '100px' : 0 }}
         >
           {renderCalculator(
