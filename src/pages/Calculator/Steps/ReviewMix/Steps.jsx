@@ -496,7 +496,6 @@ const ReviewMixSteps = ({
           val={convertToPercent(options.germination)}
           onChangeCommitted={(val) => {
             handleFormValueChange(seed, 'germination', parseFloat(val) / 100);
-            console.log('handleFormValueChange');
           }}
           unit="%"
           testId="germination_slider"
@@ -532,10 +531,8 @@ const ReviewMixSteps = ({
             <NumberTextField
               label={matchesMd ? '' : '% Germination'}
               disabled
-              // handleChange={(e) => {
-              //   handleFormValueChange(seed, 'germination', parseFloat(e.target.value) / 100);
-              // }}
               value={convertToPercent(step4.germination)}
+              testId="germination_value"
             />
           </Grid>
 
@@ -547,10 +544,8 @@ const ReviewMixSteps = ({
             <NumberTextField
               label={matchesMd ? '' : '% Purity'}
               disabled
-              // handleChange={(e) => {
-              //   handleFormValueChange(seed, 'purity', parseFloat(e.target.value) / 100);
-              // }}
               value={convertToPercent(step4.purity)}
+              testId="purity_value"
             />
           </Grid>
         </Grid>

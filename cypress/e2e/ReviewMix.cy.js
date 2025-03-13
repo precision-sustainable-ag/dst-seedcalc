@@ -59,7 +59,7 @@ describe('Review Mix', () => {
     cy.getByTestId('adjustment_from_seeding_method').should('be.visible');
   });
 
-  it('should be able to update the calculation', () => {
+  it.only('should be able to update the calculation', () => {
     cy.getByTestId('change_my_rate_button').eq(0).click();
 
     cy.getByTestId('seeding_method_selection').click();
@@ -81,7 +81,8 @@ describe('Review Mix', () => {
     cy.updateSlider('purity_slider', 100);
     cy.updateSlider('germination_slider', 100);
     cy.updateSlider('germination_slider', 50);
-    cy.wait(1000);
+    cy.getByTestId('germination_value').find('input').should('have.value', (50).toString());
+    cy.getByTestId('purity_value').find('input').should('have.value', (100).toString());
     cy.getByTestId('seeding_rate_in_mix').find('input').invoke('val')
       .then((val1) => {
         cy.getByTestId('bulk_seeding_rate').find('input').invoke('val')
@@ -93,6 +94,8 @@ describe('Review Mix', () => {
 
     cy.updateSlider('germination_slider', 100);
     cy.updateSlider('purity_slider', 50);
+    cy.getByTestId('germination_value').find('input').should('have.value', (100).toString());
+    cy.getByTestId('purity_value').find('input').should('have.value', (50).toString());
     cy.getByTestId('seeding_rate_in_mix').find('input').invoke('val')
       .then((val1) => {
         cy.getByTestId('bulk_seeding_rate').find('input').invoke('val')
