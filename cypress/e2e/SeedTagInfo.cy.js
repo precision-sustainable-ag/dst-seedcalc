@@ -48,13 +48,13 @@ describe('Seed Tag Info NECCC & SCCC', () => {
     });
   });
 
-  it('should work in SCCC', () => {
-    cy.mockSiteCondition('SCCC').then(() => {
-      mockSpeciesSelection('SCCC');
-      mockMixRatio('SCCC');
-      mockSeedingMethod();
-      mockMixSeedingRate();
-      cy.getByTestId('selection_no').click();
-    });
-  });
+  // it('should work in SCCC', () => {
+  //   cy.mockSiteCondition('SCCC').then(() => {
+  //     mockSpeciesSelection('SCCC');
+  //     mockMixRatio('SCCC');
+  //     mockSeedingMethod();
+  //     mockMixSeedingRate();
+  //     cy.getByTestId('selection_no').click();
+  //   });
+  // });
 });

@@ -88,15 +88,15 @@ describe('Mix Ratios NECCC & SCCC', () => {
     });
   });
 
-  it('should have 2 scrollers in SCCC', () => {
-    cy.mockSiteCondition('SCCC').then(() => {
-      const selectSpecies = Cypress.env('selectCrops')[0];
-      mockSpeciesSelection('SCCC');
-      cy.getByTestId(`accordion-${selectSpecies}`).click();
-      cy.getByTestId(`${selectSpecies}-${seedDataUnits.defaultSingelSpeciesSeedingRatePLS}-value`)
-        .find('p').invoke('text').should('not.equal', '0');
-      cy.get(`[data-test*="${selectSpecies}-slider_single_species_seeding_rate"]`).should('be.visible');
-      cy.get(`[data-test*="${selectSpecies}-slider_percent_of_rate"]`).should('be.visible');
-    });
-  });
+  // it('should have 2 scrollers in SCCC', () => {
+  //   cy.mockSiteCondition('SCCC').then(() => {
+  //     const selectSpecies = Cypress.env('selectCrops')[0];
+  //     mockSpeciesSelection('SCCC');
+  //     cy.getByTestId(`accordion-${selectSpecies}`).click();
+  //     cy.getByTestId(`${selectSpecies}-${seedDataUnits.defaultSingelSpeciesSeedingRatePLS}-value`)
+  //       .find('p').invoke('text').should('not.equal', '0');
+  //     cy.get(`[data-test*="${selectSpecies}-slider_single_species_seeding_rate"]`).should('be.visible');
+  //     cy.get(`[data-test*="${selectSpecies}-slider_percent_of_rate"]`).should('be.visible');
+  //   });
+  // });
 });

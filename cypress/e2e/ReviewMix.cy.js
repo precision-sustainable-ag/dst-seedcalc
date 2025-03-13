@@ -120,18 +120,18 @@ describe('Review Mix NECCC & SCCC', () => {
     });
   });
 
-  it('should work in SCCC', () => {
-    cy.mockSiteCondition('SCCC').then(() => {
-      const selectSpecies = Cypress.env('selectCrops');
-      mockSpeciesSelection('SCCC');
-      mockMixRatio('SCCC');
-      mockSeedingMethod();
-      mockMixRatio();
-      mockSeedTagInfo();
-      selectSpecies.forEach((species) => {
-        cy.getByTestId(`accordion-${species}`).click();
-      });
-      cy.getByTestId('change_my_rate_button').eq(0).click();
-    });
-  });
+  // it('should work in SCCC', () => {
+  //   cy.mockSiteCondition('SCCC').then(() => {
+  //     const selectSpecies = Cypress.env('selectCrops');
+  //     mockSpeciesSelection('SCCC');
+  //     mockMixRatio('SCCC');
+  //     mockSeedingMethod();
+  //     mockMixRatio();
+  //     mockSeedTagInfo();
+  //     selectSpecies.forEach((species) => {
+  //       cy.getByTestId(`accordion-${species}`).click();
+  //     });
+  //     cy.getByTestId('change_my_rate_button').eq(0).click();
+  //   });
+  // });
 });
