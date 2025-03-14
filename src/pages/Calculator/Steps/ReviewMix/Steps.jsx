@@ -88,8 +88,8 @@ const ReviewMixSteps = ({
               if (v !== undefined) setValue(v);
               else setValue(e.target.value);
             }}
-            onChangeCommitted={() => {
-              onChangeCommitted(value);
+            onChangeCommitted={(_, v) => {
+              onChangeCommitted(v);
             }}
             data-test={testId}
           />

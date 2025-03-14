@@ -73,11 +73,9 @@ const getTileDrainage = (currentDrainage, council) => {
 
 const SiteConditionForm = ({
   stateList,
+  handleStateSelection,
   setStep,
   regions,
-  setRegions,
-  getRegions,
-  updateStateRedux,
 }) => {
   const dispatch = useDispatch();
   const {
@@ -86,21 +84,6 @@ const SiteConditionForm = ({
   } = useSelector((s) => s.siteCondition);
   // eslint-disable-next-line no-shadow
   const { historyState, maxAvailableStep } = useSelector((state) => state.user);
-
-  const handleState = async (e) => {
-    if (historyState === historyStates.imported) {
-      dispatch(setHistoryDialogStateRedux({ open: true, type: 'update' }));
-      return;
-    }
-    const stateSelected = stateList.filter((s) => s.label === e.target.value);
-    if (stateSelected.length > 0) {
-      if (maxAvailableStep > -1) dispatch(setMaxAvailableStepRedux(-1));
-      // get new regions for the selected state
-      const res = await getRegions(stateSelected[0]);
-      setRegions(res);
-      updateStateRedux(stateSelected[0]);
-    }
-  };
 
   const handleRegion = (e) => {
     if (historyState === historyStates.imported) {
@@ -164,7 +147,7 @@ const SiteConditionForm = ({
           formSx={{ minWidth: '100%' }}
           SelectProps={{
             value: state,
-            onChange: handleState,
+            onChange: handleStateSelection,
             MenuProps: {
               style: { color: '#4F5F30' },
             },

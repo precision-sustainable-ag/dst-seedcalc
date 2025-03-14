@@ -235,10 +235,10 @@ const SeedInfo = ({
               value={singleSpeciesSeedingRate}
               valueLabelDisplay="auto"
               onChange={(e) => setSingleSpeciesSeedingRate(e.target.value)}
-              onChangeCommitted={() => handleFormValueChange(
+              onChangeCommitted={(_, value) => handleFormValueChange(
                 seed,
                 'singleSpeciesSeedingRate',
-                singleSpeciesSeedingRate,
+                value,
               )}
               data-test={`${seed.label}-slider_single_species_seeding_rate`}
             />
@@ -258,19 +258,19 @@ const SeedInfo = ({
               if (value !== undefined) setPercentOfRate(value);
               else setPercentOfRate(e.target.value);
             }}
-            onChangeCommitted={() => {
+            onChangeCommitted={(_, value) => {
               if (council === 'NECCC') {
                 // TODO: NOTE: if council is NECCC, the percentOfRate need to multiply by soilFertilityModifier
                 handleFormValueChange(
                   seed,
                   'percentOfRate',
-                  (soilFertilityModifier * parseFloat(percentOfRate)) / 100,
+                  (soilFertilityModifier * parseFloat(value)) / 100,
                 );
               } else {
                 handleFormValueChange(
                   seed,
                   'percentOfRate',
-                  parseFloat(percentOfRate) / 100,
+                  parseFloat(value) / 100,
                 );
               }
             }}

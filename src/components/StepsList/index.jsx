@@ -120,7 +120,7 @@ const StepsList = ({
       />
 
       {!matchesMd && (
-        <Box sx={{ display: 'flex', pt: '0.5rem', color: 'primary.text' }}>
+        <Box id="step-button" sx={{ display: 'flex', pt: '0.5rem', color: 'primary.text' }}>
           {activeStep !== 0 && (
             activeStep === calculatorList.length ? (
               <PSAButton
