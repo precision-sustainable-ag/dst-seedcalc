@@ -19,7 +19,7 @@ import {
   setMixRatioOptionRedux,
 } from '../../../../features/calculatorSlice/actions';
 import { initialOptions } from '../../../../shared/utils/calculator';
-import { setHistoryStateRedux, setMaxAvailableStepRedux } from '../../../../features/userSlice/actions';
+import { setHistoryStateRedux, setMaxAvailableStepRedux, setAlertStateRedux } from '../../../../features/userSlice/actions';
 import { historyStates } from '../../../../features/userSlice/state';
 import pirschAnalytics from '../../../../shared/utils/analytics';
 
@@ -121,27 +121,40 @@ const PlantList = ({
     const { id: cropId, label: seedName } = seed;
     // if seed not in seedSelected, add it
     if (seedsSelected.filter((s) => s.label === seedName).length === 0) {
-      const url = `https://${
-        /(localhost|dev)/i.test(window.location) ? 'developapi' : 'api'
+      const url = `https://${/(localhost|dev)/i.test(window.location) ? 'developapi' : 'api'
       }.covercrop-selector.org/v2/crops/${cropId}?regions=${stateId}&context=seed_calc&regions=${countyId}`;
-      const { data } = await fetch(url).then((res) => res.json());
-      dispatch(addSeedRedux(data));
-      const { label, attributes } = data;
-      const percentSurvival = council === 'MCCC'
-        ? parseFloat(attributes.Coefficients['% Live Seed to Emergence'].values[0])
-        : '';
-      const initOptions = {
-        ...initialOptions,
-        acres,
-        soilDrainage,
-        plantingDate,
-        percentSurvival,
-        soilFertility: soilFertility.toLowerCase(),
-      };
-      // set initial options
-      dispatch(setMixRatioOptionRedux(label, initOptions));
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+        const { data } = await response.json();
+        dispatch(addSeedRedux(data));
+
+        const { label, attributes } = data;
+        const percentSurvival = council === 'MCCC'
+          ? parseFloat(attributes.Coefficients['% Live Seed to Emergence'].values[0])
+          : '';
+
+        const initOptions = {
+          ...initialOptions,
+          acres,
+          soilDrainage,
+          plantingDate,
+          percentSurvival,
+          soilFertility: soilFertility.toLowerCase(),
+        };
+
+        dispatch(setMixRatioOptionRedux(label, initOptions));
+      } catch (err) {
+        dispatch(setAlertStateRedux({
+          open: true,
+          type: 'error',
+          message: 'Network error - Please check your internet connection.',
+        }));
+      }
     } else {
-    // if seed already in seedSelected, del it
+      // if seed already in seedSelected, del it
       dispatch(removeSeedRedux(seedName));
       dispatch(removeMixRatioOptionRedux(seedName));
       dispatch(removeOptionRedux(seedName));
@@ -200,70 +213,70 @@ const PlantList = ({
                 />
 
                 {checkCrop(seed) !== ''
-                && (
-                  <>
-                    <Typography
-                      sx={{
-                        color: 'primary.text',
-                        position: 'absolute',
-                        top: '2px',
-                        left: 'calc(2px)',
-                        right: 'calc(2px)',
-                        borderTopLeftRadius: '0.9rem',
-                        borderTopRightRadius: '0.9rem',
-                        fontWeight: 'bold',
-                        bgcolor: 'primary.light',
-                        opacity: '90%',
-                        paddingRight: '5px',
-                        paddingLeft: '5px',
-                        height: '30px',
-                        paddingTop: '5px',
-                        fontSize: '0.790rem',
-                        ...(seedsSelected.filter((s) => s.label === seed.label).length > 0
-                    && {
-                      left: 'calc(6px)',
-                      right: 'calc(6px)',
-                      top: '5px',
-                      height: '28.5px',
-                      borderTopLeftRadius: '0.68rem',
-                      borderTopRightRadius: '0.68rem',
-                      overflow: 'hidden',
-                      fontSize: '0.790rem',
-                      '& span': {
-                        zIndex: 5,
-                      },
-                    }),
-                      }}
-                    >
-                      { checkCrop(seed) !== '' && <span>Not Recommended</span> }
-                    </Typography>
-
-                    <PSATooltip
-                      title={checkCrop(seed)}
-                      arrow
-                      placement="bottom-end"
-                      enterTouchDelay={200}
-                      leaveTouchDelay={200}
-                      componentsProps={{
-                        tooltip: {
-                          sx: {
-                            width: '150px',
-                          },
-                        },
-                      }}
-                      tooltipContent={(
-                        <HelpIcon sx={{
-                          color: 'primary.light',
+                  && (
+                    <>
+                      <Typography
+                        sx={{
+                          color: 'primary.text',
                           position: 'absolute',
-                          right: '10px',
-                          top: '120px',
-                          fontSize: '2rem',
+                          top: '2px',
+                          left: 'calc(2px)',
+                          right: 'calc(2px)',
+                          borderTopLeftRadius: '0.9rem',
+                          borderTopRightRadius: '0.9rem',
+                          fontWeight: 'bold',
+                          bgcolor: 'primary.light',
+                          opacity: '90%',
+                          paddingRight: '5px',
+                          paddingLeft: '5px',
+                          height: '30px',
+                          paddingTop: '5px',
+                          fontSize: '0.790rem',
+                          ...(seedsSelected.filter((s) => s.label === seed.label).length > 0
+                            && {
+                              left: 'calc(6px)',
+                              right: 'calc(6px)',
+                              top: '5px',
+                              height: '28.5px',
+                              borderTopLeftRadius: '0.68rem',
+                              borderTopRightRadius: '0.68rem',
+                              overflow: 'hidden',
+                              fontSize: '0.790rem',
+                              '& span': {
+                                zIndex: 5,
+                              },
+                            }),
                         }}
-                        />
-                    )}
-                    />
-                  </>
-                )}
+                      >
+                        {checkCrop(seed) !== '' && <span>Not Recommended</span>}
+                      </Typography>
+
+                      <PSATooltip
+                        title={checkCrop(seed)}
+                        arrow
+                        placement="bottom-end"
+                        enterTouchDelay={200}
+                        leaveTouchDelay={200}
+                        componentsProps={{
+                          tooltip: {
+                            sx: {
+                              width: '150px',
+                            },
+                          },
+                        }}
+                        tooltipContent={(
+                          <HelpIcon sx={{
+                            color: 'primary.light',
+                            position: 'absolute',
+                            right: '10px',
+                            top: '120px',
+                            fontSize: '2rem',
+                          }}
+                          />
+                        )}
+                      />
+                    </>
+                  )}
 
                 <CardContent>
                   <Typography sx={{ fontWeight: 'bold' }}>
