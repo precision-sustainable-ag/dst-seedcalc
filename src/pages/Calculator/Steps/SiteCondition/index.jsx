@@ -62,6 +62,10 @@ const SiteCondition = ({
 
     // Update state in siteCondition
     const { label } = state;
+
+    // reset all redux values when state changes
+    dispatch(setCalculatorRedux(initialCalculatorState));
+
     dispatch(updateLatlonRedux(statesLatLongDict[label]));
     dispatch(setStateRedux(label, state.id));
     dispatch(setCouncilRedux(state.parents[0].shorthand));
@@ -88,11 +92,6 @@ const SiteCondition = ({
       },
     });
   };
-
-  // reset all redux values when state changes
-  useEffect(() => {
-    dispatch(setCalculatorRedux(initialCalculatorState));
-  }, [siteCondition.state]);
 
   // initially get states data
   useEffect(() => {
