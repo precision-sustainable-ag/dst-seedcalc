@@ -531,10 +531,8 @@ const ReviewMixSteps = ({
             <NumberTextField
               label={matchesMd ? '' : '% Germination'}
               disabled
-              // handleChange={(e) => {
-              //   handleFormValueChange(seed, 'germination', parseFloat(e.target.value) / 100);
-              // }}
               value={convertToPercent(step4.germination)}
+              testId="germination_value"
             />
           </Grid>
 
@@ -546,10 +544,8 @@ const ReviewMixSteps = ({
             <NumberTextField
               label={matchesMd ? '' : '% Purity'}
               disabled
-              // handleChange={(e) => {
-              //   handleFormValueChange(seed, 'purity', parseFloat(e.target.value) / 100);
-              // }}
               value={convertToPercent(step4.purity)}
+              testId="purity_value"
             />
           </Grid>
         </Grid>

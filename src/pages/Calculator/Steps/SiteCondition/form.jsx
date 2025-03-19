@@ -225,7 +225,14 @@ const SiteConditionForm = ({
                           </Typography>
                         )}
                         tooltipContent={(
-                          <InfoIcon fontSize="1rem" />
+                          <span
+                            role="button"
+                            aria-label="Indicate if the field of interest has tile installed.
+                            If you have selected very poorly to somewhat poorly drained soils,
+                            selecting “yes” will increase your drainage class."
+                          >
+                            <InfoIcon fontSize="1rem" />
+                          </span>
                         )}
                       />
                     </Typography>
