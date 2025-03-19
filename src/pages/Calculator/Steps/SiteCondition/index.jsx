@@ -18,6 +18,8 @@ import statesLatLongDict from '../../../../shared/data/statesLatLongDict';
 import DSTImport from '../../../../components/DSTImport';
 import SiteConditionForm from './form';
 import Map from './Map';
+import { setCalculatorRedux } from '../../../../features/calculatorSlice/actions';
+import initialCalculatorState from '../../../../features/calculatorSlice/state';
 import initialState from '../../../../features/siteConditionSlice/state';
 import '../steps.scss';
 import { historyStates } from '../../../../features/userSlice/state';
@@ -86,6 +88,11 @@ const SiteCondition = ({
       },
     });
   };
+
+  // reset all redux values when state changes
+  useEffect(() => {
+    dispatch(setCalculatorRedux(initialCalculatorState));
+  }, [siteCondition.state]);
 
   // initially get states data
   useEffect(() => {
