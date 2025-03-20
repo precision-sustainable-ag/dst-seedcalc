@@ -20,6 +20,8 @@ import statesLatLongDict from '../../../../shared/data/statesLatLongDict';
 import DSTImport from '../../../../components/DSTImport';
 import SiteConditionForm from './form';
 import Map from './Map';
+import { setCalculatorRedux } from '../../../../features/calculatorSlice/actions';
+import initialCalculatorState from '../../../../features/calculatorSlice/state';
 import initialState from '../../../../features/siteConditionSlice/state';
 import '../steps.scss';
 import { historyStates } from '../../../../features/userSlice/state';
@@ -62,6 +64,10 @@ const SiteCondition = ({
 
     // Update state in siteCondition
     const { label } = state;
+
+    // reset all redux values when state changes
+    dispatch(setCalculatorRedux(initialCalculatorState));
+
     dispatch(updateLatlonRedux(statesLatLongDict[label]));
     dispatch(setStateRedux(label, state.id));
     dispatch(setCouncilRedux(state.parents[0].shorthand));
