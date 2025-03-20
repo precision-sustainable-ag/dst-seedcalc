@@ -7,7 +7,7 @@ import Header from './components/Header';
 import Auth0ProviderWithNavigate from './components/Auth/Auth0ProviderWithNavigate';
 import Calculator from './pages/Calculator';
 import dstTheme from './shared/themes';
-import About from './pages/About';
+import About from './pages/About/About';
 import Feedback from './pages/Feedback/Feedback';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import '@fontsource/ibm-plex-sans';
