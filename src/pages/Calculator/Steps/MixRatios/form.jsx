@@ -353,7 +353,7 @@ const MixRatioSteps = ({
                 value={survival}
                 valueLabelDisplay="auto"
                 onChange={(e) => setSurvival(e.target.value)}
-                onChangeCommitted={() => handleFormValueChange(seed, 'percentSurvival', parseFloat(survival) / 100)}
+                onChangeCommitted={(_, value) => handleFormValueChange(seed, 'percentSurvival', parseFloat(value) / 100)}
                 data-test={`${seed.label}-slider_survival`}
               />
             </Grid>

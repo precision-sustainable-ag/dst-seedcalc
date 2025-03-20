@@ -1,5 +1,3 @@
-import { clickStateMap } from '../support/utils';
-
 /* eslint-disable cypress/no-unnecessary-waiting */
 describe('Creating user history', () => {
   beforeEach(() => {

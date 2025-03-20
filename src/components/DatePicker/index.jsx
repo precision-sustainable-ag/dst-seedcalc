@@ -27,7 +27,15 @@ const DatePicker = ({
         inputFormat="MM/DD/YYYY"
         value={value}
         onChange={handleChange}
-        renderInput={(params) => <TextField {...params} />}
+        renderInput={(params) => (
+          <TextField
+            sx={{
+              '.MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(0, 0, 0, .45)' },
+              color: 'red',
+            }}
+            {...params}
+          />
+        )}
       />
     </Stack>
   </LocalizationProvider>

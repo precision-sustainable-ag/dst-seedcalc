@@ -88,8 +88,8 @@ const ReviewMixSteps = ({
               if (v !== undefined) setValue(v);
               else setValue(e.target.value);
             }}
-            onChangeCommitted={() => {
-              onChangeCommitted(value);
+            onChangeCommitted={(_, v) => {
+              onChangeCommitted(v);
             }}
             data-test={testId}
           />
@@ -392,6 +392,7 @@ const ReviewMixSteps = ({
               MenuProps: {
                 style: { color: '#4F5F30' },
               },
+              sx: { '.MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(0, 0, 0, .45)' } },
               'data-test': 'seeding_method_selection',
             }}
           />
@@ -530,10 +531,8 @@ const ReviewMixSteps = ({
             <NumberTextField
               label={matchesMd ? '' : '% Germination'}
               disabled
-              // handleChange={(e) => {
-              //   handleFormValueChange(seed, 'germination', parseFloat(e.target.value) / 100);
-              // }}
               value={convertToPercent(step4.germination)}
+              testId="germination_value"
             />
           </Grid>
 
@@ -545,10 +544,8 @@ const ReviewMixSteps = ({
             <NumberTextField
               label={matchesMd ? '' : '% Purity'}
               disabled
-              // handleChange={(e) => {
-              //   handleFormValueChange(seed, 'purity', parseFloat(e.target.value) / 100);
-              // }}
               value={convertToPercent(step4.purity)}
+              testId="purity_value"
             />
           </Grid>
         </Grid>

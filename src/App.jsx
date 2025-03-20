@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Grid } from '@mui/material';
-import { PSAProfile } from 'shared-react-components/src';
+import { Box, Grid } from '@mui/material';
+import { PSAProfile, PSASkipContent } from 'shared-react-components/src';
 import Header from './components/Header';
 import Auth0ProviderWithNavigate from './components/Auth/Auth0ProviderWithNavigate';
 import Calculator from './pages/Calculator';
@@ -31,13 +31,16 @@ const App = () => {
           <Auth0ProviderWithNavigate>
             <Grid container justifyContent="center">
               <Grid item xs={12} lg={8}>
+                <PSASkipContent href="#main-content" text="Skip to main content" />
                 <Header />
-                <Routes>
-                  <Route path="/" element={<Calculator calculator={calculator} setCalculator={setCalculator} />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/feedback" element={<Feedback />} />
-                  <Route path="/profile" element={<PSAProfile />} />
-                </Routes>
+                <Box id="main-content">
+                  <Routes>
+                    <Route path="/" element={<Calculator calculator={calculator} setCalculator={setCalculator} />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/feedback" element={<Feedback />} />
+                    <Route path="/profile" element={<PSAProfile />} />
+                  </Routes>
+                </Box>
               </Grid>
             </Grid>
           </Auth0ProviderWithNavigate>

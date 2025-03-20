@@ -1,3 +1,5 @@
+import './commands';
+
 export const clickStateMap = (council) => {
   cy.intercept({ url: 'https://api.mapbox.com/**' }, { log: false });
   cy.intercept({ url: 'https://events.mapbox.com/**' }, { log: false });
@@ -19,8 +21,8 @@ export const clickStateMap = (council) => {
   }
 };
 
-// eslint-disable-next-line import/prefer-default-export
-export const mockSiteCondition = (council) => {
+Cypress.Commands.add('mockSiteCondition', (council) => {
+  cy.intercept('GET', '**/v2/crops/?regions=**&context=seed_calc').as('getCropsData');
   clickStateMap(council);
   cy.getByTestId('option_manually').should('be.visible').click();
   cy.getByTestId('site_condition_region').click();
@@ -37,23 +39,26 @@ export const mockSiteCondition = (council) => {
     cy.getByTestId('site_condition_soil_fertility').click();
     cy.get('[data-test="site_condition_soil_fertility-Low"]').click();
   }
+  cy.wait('@getCropsData').then((interception) => {
+    const { data } = interception.response.body;
+    if (data.length < 2) throw new Error('Less than 2 crops available!');
+    const selectCrops = [data[0].label, data[1].label];
+    const selectTypes = [data[0].group.label, data[1].group.label];
+    Cypress.env('selectCrops', selectCrops);
+    Cypress.env('selectTypes', selectTypes);
+    Cypress.env('cropsData', data);
+    cy.log(selectCrops, selectTypes);
+  });
   cy.getByTestId('next_button').click();
-};
+});
 
-export const mockSpeciesSelection = (council) => {
-  let selectType;
-  let selectSpecies;
-  if (council === undefined) {
-    selectType = 'Brassica';
-    selectSpecies = ['Radish, Daikon', 'Rapeseed'];
-  } else if (council === 'NECCC') {
-    selectType = 'Brassica';
-    selectSpecies = ['Brassica, Forage', 'Mustard'];
-  } else if (council === 'SCCC') {
-    selectType = 'Grass';
-    selectSpecies = ['Millet, Japanese', 'Sorghum-sudangrass'];
-  }
-  cy.getByTestId(`accordion-${selectType}`).click();
+export const mockSpeciesSelection = () => {
+  const selectTypes = Cypress.env('selectTypes');
+  const selectSpecies = Cypress.env('selectCrops');
+
+  cy.getByTestId(`accordion-${selectTypes[0]}`).click();
+  if (selectTypes[1] !== selectTypes[0]) cy.getByTestId(`accordion-${selectTypes[1]}`).click();
+
   selectSpecies.forEach((species) => {
     cy.getByTestId(`species-card-${species}`).find('button').click();
     cy.getByTestId(`species-card-${species}`).find('img')

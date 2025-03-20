@@ -73,11 +73,9 @@ const getTileDrainage = (currentDrainage, council) => {
 
 const SiteConditionForm = ({
   stateList,
+  handleStateSelection,
   setStep,
   regions,
-  setRegions,
-  getRegions,
-  updateStateRedux,
 }) => {
   const dispatch = useDispatch();
   const {
@@ -86,21 +84,6 @@ const SiteConditionForm = ({
   } = useSelector((s) => s.siteCondition);
   // eslint-disable-next-line no-shadow
   const { historyState, maxAvailableStep } = useSelector((state) => state.user);
-
-  const handleState = async (e) => {
-    if (historyState === historyStates.imported) {
-      dispatch(setHistoryDialogStateRedux({ open: true, type: 'update' }));
-      return;
-    }
-    const stateSelected = stateList.filter((s) => s.label === e.target.value);
-    if (stateSelected.length > 0) {
-      if (maxAvailableStep > -1) dispatch(setMaxAvailableStepRedux(-1));
-      // get new regions for the selected state
-      const res = await getRegions(stateSelected[0]);
-      setRegions(res);
-      updateStateRedux(stateSelected[0]);
-    }
-  };
 
   const handleRegion = (e) => {
     if (historyState === historyStates.imported) {
@@ -164,10 +147,11 @@ const SiteConditionForm = ({
           formSx={{ minWidth: '100%' }}
           SelectProps={{
             value: state,
-            onChange: handleState,
+            onChange: handleStateSelection,
             MenuProps: {
               style: { color: '#4F5F30' },
             },
+            sx: { '.MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(0, 0, 0, .45)' } },
             'data-test': 'site_condition_state',
           }}
         />
@@ -186,7 +170,10 @@ const SiteConditionForm = ({
             MenuProps: {
               style: { color: '#4F5F30' },
             },
-            sx: { '.MuiOutlinedInput-notchedOutline': county.length === 0 && { borderColor: 'rgba(255, 0, 0, .5)' } },
+            sx: {
+              '.MuiOutlinedInput-notchedOutline':
+              county.length === 0 ? { borderColor: 'rgba(255, 0, 0, .75)' } : { borderColor: 'rgba(0, 0, 0, .45)' },
+            },
             'data-test': 'site_condition_region',
           }}
           formSx={{ minWidth: '100%' }}
@@ -206,7 +193,10 @@ const SiteConditionForm = ({
             MenuProps: {
               style: { color: '#4F5F30' },
             },
-            sx: { '.MuiOutlinedInput-notchedOutline': soilDrainage === '' && { borderColor: 'rgba(255, 0, 0, .5)' } },
+            sx: {
+              '.MuiOutlinedInput-notchedOutline':
+              soilDrainage === '' ? { borderColor: 'rgba(255, 0, 0, .75)' } : { borderColor: 'rgba(0, 0, 0, .45)' },
+            },
             'data-test': 'site_condition_soil_drainage',
           }}
           formSx={{ minWidth: '100%' }}
@@ -235,7 +225,14 @@ const SiteConditionForm = ({
                           </Typography>
                         )}
                         tooltipContent={(
-                          <InfoIcon fontSize="1rem" />
+                          <span
+                            role="button"
+                            aria-label="Indicate if the field of interest has tile installed.
+                            If you have selected very poorly to somewhat poorly drained soils,
+                            selecting “yes” will increase your drainage class."
+                          >
+                            <InfoIcon fontSize="1rem" />
+                          </span>
                         )}
                       />
                     </Typography>

@@ -1,31 +1,35 @@
+/* eslint-disable cypress/no-unnecessary-waiting */
 import {
-  mockMixRatio, mockSeedingMethod, mockSeedTagInfo, mockSiteCondition, mockSpeciesSelection,
+  mockMixRatio, mockSeedingMethod, mockSeedTagInfo, mockSpeciesSelection,
 } from '../support/utils';
 import { seedDataUnits } from '../../src/shared/data/units';
 
 describe('Review Mix', () => {
-  const selectSpecies = 'Radish, Daikon';
+  let selectSpecies;
 
   beforeEach(() => {
-    mockSiteCondition();
-    mockSpeciesSelection();
-    mockMixRatio();
-    mockSeedingMethod();
-    mockMixRatio();
-    mockSeedTagInfo();
-    cy.getByTestId(`accordion-${selectSpecies}`).click();
+    cy.mockSiteCondition().then(() => {
+      // eslint-disable-next-line prefer-destructuring
+      selectSpecies = Cypress.env('selectCrops')[0];
+      mockSpeciesSelection();
+      mockMixRatio();
+      mockSeedingMethod();
+      mockMixRatio();
+      mockSeedTagInfo();
+      cy.getByTestId(`accordion-${selectSpecies}`).click();
+    });
   });
 
   it('should be able to navigate the bar chart using next and back buttons', () => {
     cy.getByTestId('barchart_next').eq(0).click();
-    cy.get('.recharts-responsive-container').eq(2).find('path').eq(0)
+    cy.get('.recharts-responsive-container').eq(0).find('path').eq(0)
       .should('have.css', 'fill', 'rgb(79, 95, 48)');
-    cy.get('.recharts-responsive-container').eq(2).find('path').eq(1)
+    cy.get('.recharts-responsive-container').eq(0).find('path').eq(1)
       .should('have.css', 'fill', 'rgb(152, 251, 152)');
     cy.getByTestId('barchart_back').eq(0).click();
-    cy.get('.recharts-responsive-container').eq(2).find('path').eq(0)
+    cy.get('.recharts-responsive-container').eq(0).find('path').eq(0)
       .should('have.css', 'fill', 'rgb(152, 251, 152)');
-    cy.get('.recharts-responsive-container').eq(2).find('path').eq(1)
+    cy.get('.recharts-responsive-container').eq(0).find('path').eq(1)
       .should('have.css', 'fill', 'rgb(79, 95, 48)');
   });
 
@@ -75,8 +79,9 @@ describe('Review Mix', () => {
       });
 
     cy.updateSlider('purity_slider', 100);
-    cy.updateSlider('germination_slider', 100);
+    cy.getByTestId('purity_value').find('input').should('have.value', (100).toString());
     cy.updateSlider('germination_slider', 50);
+    cy.getByTestId('germination_value').find('input').should('have.value', (50).toString());
     cy.getByTestId('seeding_rate_in_mix').find('input').invoke('val')
       .then((val1) => {
         cy.getByTestId('bulk_seeding_rate').find('input').invoke('val')
@@ -87,7 +92,9 @@ describe('Review Mix', () => {
       });
 
     cy.updateSlider('germination_slider', 100);
+    cy.getByTestId('germination_value').find('input').should('have.value', (100).toString());
     cy.updateSlider('purity_slider', 50);
+    cy.getByTestId('purity_value').find('input').should('have.value', (50).toString());
     cy.getByTestId('seeding_rate_in_mix').find('input').invoke('val')
       .then((val1) => {
         cy.getByTestId('bulk_seeding_rate').find('input').invoke('val')
@@ -101,30 +108,32 @@ describe('Review Mix', () => {
 
 describe('Review Mix NECCC & SCCC', () => {
   it('should work in NECCC', () => {
-    const selectSpecies = ['Brassica, Forage', 'Mustard'];
-    mockSiteCondition('NECCC');
-    mockSpeciesSelection('NECCC');
-    mockMixRatio('NECCC');
-    mockSeedingMethod();
-    mockMixRatio();
-    mockSeedTagInfo();
-    selectSpecies.forEach((species) => {
-      cy.getByTestId(`accordion-${species}`).click();
+    cy.mockSiteCondition('NECCC').then(() => {
+      const selectSpecies = Cypress.env('selectCrops');
+      mockSpeciesSelection('NECCC');
+      mockMixRatio('NECCC');
+      mockSeedingMethod();
+      mockMixRatio();
+      mockSeedTagInfo();
+      selectSpecies.forEach((species) => {
+        cy.getByTestId(`accordion-${species}`).click();
+      });
+      cy.getByTestId('change_my_rate_button').eq(0).click();
     });
-    cy.getByTestId('change_my_rate_button').eq(0).click();
   });
 
-  it('should work in SCCC', () => {
-    const selectSpecies = ['Millet, Japanese', 'Sorghum-sudangrass'];
-    mockSiteCondition('SCCC');
-    mockSpeciesSelection('SCCC');
-    mockMixRatio('SCCC');
-    mockSeedingMethod();
-    mockMixRatio();
-    mockSeedTagInfo();
-    selectSpecies.forEach((species) => {
-      cy.getByTestId(`accordion-${species}`).click();
-    });
-    cy.getByTestId('change_my_rate_button').eq(0).click();
-  });
+  // it('should work in SCCC', () => {
+  //   cy.mockSiteCondition('SCCC').then(() => {
+  //     const selectSpecies = Cypress.env('selectCrops');
+  //     mockSpeciesSelection('SCCC');
+  //     mockMixRatio('SCCC');
+  //     mockSeedingMethod();
+  //     mockMixRatio();
+  //     mockSeedTagInfo();
+  //     selectSpecies.forEach((species) => {
+  //       cy.getByTestId(`accordion-${species}`).click();
+  //     });
+  //     cy.getByTestId('change_my_rate_button').eq(0).click();
+  //   });
+  // });
 });

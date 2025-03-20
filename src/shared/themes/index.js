@@ -66,7 +66,13 @@ const theme = createTheme({
           props: { variant: 'stepper' },
           style: {
             textTransform: 'none',
-            padding: '0.5rem 0',
+            padding: '0.5rem',
+            // border: '1px solid #4F5F30',
+            // '&.Mui-disabled': {
+            //   color: '#757575',
+            //   border: '1px solid #737373',
+            //   backgroundColor: '#F0F0F0',
+            // },
           },
         },
       ],

@@ -7,8 +7,9 @@ import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { useSelector, useDispatch } from 'react-redux';
 import { Typography, Box } from '@mui/material';
-import { Spinner, PSAAccordion, PSALoadingSpinner } from 'shared-react-components/src';
-import SearchField from '../../../../components/SearchField';
+import {
+  Spinner, PSAAccordion, PSALoadingSpinner, PSATextField,
+} from 'shared-react-components/src';
 import { seedsType, seedsLabel } from '../../../../shared/data/species';
 import { validateForms } from '../../../../shared/utils/format';
 import PlantList from './PlantList';
@@ -81,7 +82,7 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
   }, []);
 
   useEffect(() => {
-    setFilteredSeeds(crops);
+    if (filteredSeeds.length === 0) setFilteredSeeds(crops);
   }, [crops]);
 
   // unselect crops with missing fields
@@ -145,7 +146,13 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
           flexDirection="column"
           p="1rem"
         >
-          <SearchField handleChange={updateQuery} value={query} testId="species-selection-search" />
+          <PSATextField
+            placeholder="Search Filter list"
+            onChange={updateQuery}
+            value={query}
+            sx={{ width: '80%' }}
+            data-test="species-selection-search"
+          />
           {seedsSelected.length === 0
             ? (
               <Typography

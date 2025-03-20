@@ -1,18 +1,18 @@
 import {
-  mockConfirmPlan,
-  mockMixRatio, mockReviewMix, mockSeedingMethod, mockSeedTagInfo, mockSiteCondition, mockSpeciesSelection,
+  mockConfirmPlan, mockMixRatio, mockReviewMix, mockSeedingMethod, mockSeedTagInfo, mockSpeciesSelection,
 } from '../support/utils';
 
 describe('Seed Tag Info', () => {
   beforeEach(() => {
-    mockSiteCondition();
-    mockSpeciesSelection();
-    mockMixRatio();
-    mockSeedingMethod();
-    mockMixRatio();
-    mockSeedTagInfo();
-    mockReviewMix();
-    mockConfirmPlan();
+    cy.mockSiteCondition().then(() => {
+      mockSpeciesSelection();
+      mockMixRatio();
+      mockSeedingMethod();
+      mockMixRatio();
+      mockSeedTagInfo();
+      mockReviewMix();
+      mockConfirmPlan();
+    });
   });
 
   it('should be able to restart the calculation', () => {
