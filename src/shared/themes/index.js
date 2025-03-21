@@ -1,6 +1,8 @@
 import { createTheme } from '@mui/material/styles';
+import { deepmerge } from '@mui/utils';
+import { PSATheme } from 'shared-react-components/src';
 
-const dstTheme = createTheme({
+const theme = createTheme({
   palette: {
     primary: {
       main: '#4F5F30',
@@ -33,7 +35,7 @@ const dstTheme = createTheme({
       backgroundColor: 'rgba(79, 95, 48, 0.09)',
     },
     mathIcon: {
-      marginTop: '15px',
+      marginTop: '30px',
       fontWeight: 600,
       lineHeight: '1.5',
       fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
@@ -64,7 +66,13 @@ const dstTheme = createTheme({
           props: { variant: 'stepper' },
           style: {
             textTransform: 'none',
-            padding: '0.5rem 0',
+            padding: '0.5rem',
+            // border: '1px solid #4F5F30',
+            // '&.Mui-disabled': {
+            //   color: '#757575',
+            //   border: '1px solid #737373',
+            //   backgroundColor: '#F0F0F0',
+            // },
           },
         },
       ],
@@ -76,43 +84,9 @@ const dstTheme = createTheme({
         },
       },
     },
-    MuiAccordionSummary: {
-      styleOverrides: {
-        root: {
-          backgroundColor: '#eff1e0',
-          height: '3rem',
-
-        },
-        content: {
-          '& .MuiTypography-root': {
-            fontSize: '1.25rem',
-            lineHeight: '1.5rem',
-            fontWeight: '600',
-            textAlign: 'justify',
-          },
-        },
-        expandIconWrapper: {
-          transform: 'none',
-          WebkitTransform: 'none',
-          transition: 'none',
-          WebkitTransition: 'none',
-          '&.Mui-expanded': {
-            transform: 'none',
-            WebkitTransform: 'none',
-          },
-        },
-      },
-    },
-    MuiAccordionDetails: {
-      styleOverrides: {
-        root: {
-          color: '#4F5F30',
-          padding: '1rem 0',
-          backgroundColor: '#fffff2',
-        },
-      },
-    },
   },
 });
+
+const dstTheme = createTheme(deepmerge(PSATheme, theme));
 
 export default dstTheme;

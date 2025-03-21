@@ -5,41 +5,43 @@
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
     "@date-io/jalaali": "^2.17.0",
-    "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0",
-    "@mui/icons-material": "^5.14.9",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^5.16.7",
     "@mui/material": "^5.14.10",
+    "@mui/utils": "^6.1.4",
     "@mui/x-date-pickers": "^5.0.20",
-    "@psa/dst.ui.fade-alert": "^0.0.3",
-    "@psa/dst.ui.map": "^0.0.61",
-    "@psa/dst.ui.region-selector-map": "^0.0.20",
-    "@psa/dst.ui.spinner": "^0.0.2",
     "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
+    "@vitejs/plugin-react": "^4.3.1",
     "dayjs": "^1.11.10",
     "file-saver": "^2.0.5",
-    "install": "^0.13.0",
-    "mapbox-gl": "^2.10.0",
-    "moment": "^2.29.4",
-    "npm": "^8.19.4",
     "papaparse": "^5.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.1.2",
     "react-router-dom": "^6.16.0",
-    "react-scripts": "5.0.1",
     "recharts": "^2.8.0",
     "redux": "^4.2.1",
-    "web-vitals": "^2.1.4",
+    "shared-react-components": "github:precision-sustainable-ag/shared-react-components#feature/a11y",
+    "vite": "^5.4.2",
     "xlsx": "^0.18.5"
   },
+  "type": "module",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "preview": "vite preview",
+    "cy:open": "npx cypress open cross-env NODE_OPTIONS=--max_old_space_size=8192 webpack --config-file dev.cypress.config.mjs",
+    "e2e:chrome": "npx cypress run --e2e --browser chrome",
+    "dev:e2e:chrome": "npx cypress run --e2e --browser chrome --config-file dev.cypress.config.mjs",
+    "component:chrome": "npx cypress run --component --browser chrome",
+    "dev:component:chrome": "npx cypress run --component --browser chrome --config-file dev.cypress.config.mjs",
+    "test:all": "npm run component:chrome && npm run e2e:chrome",
+    "dev:test:all": "npm run dev:component:chrome && npm run dev:e2e:chrome"
   },
   "eslintConfig": {
     "extends": [
@@ -64,12 +66,22 @@
     ]
   },
   "devDependencies": {
+    "@cypress/code-coverage": "^3.12.45",
+    "@cypress/instrument-cra": "^1.4.0",
+    "cypress": "^13.15.0",
+    "dotenv": "^16.4.5",
     "eslint": "^8.53.0",
     "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-cypress": "^3.3.0",
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "sass": "^1.67.0"
+    "sass": "^1.67.0",
+    "vite-plugin-eslint": "^1.8.1",
+    "vite-plugin-istanbul": "^6.0.2"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.9.5"
   }
 }
