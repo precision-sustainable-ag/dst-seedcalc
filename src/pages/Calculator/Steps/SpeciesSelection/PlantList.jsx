@@ -197,11 +197,11 @@ const PlantList = ({
               >
                 <CardMedia
                   component="img"
-                  height="160px"
+                  height="140px"
                   image={
-                    ((seed.thumbnail === null || seed.thumbnail === '')
-                      ? 'https://placehold.it/250x150?text=Placeholder'
-                      : seed.thumbnail)
+                    ((seed.thumbnailMobile === null || seed.thumbnailMobile === '')
+                      ? 'https://placehold.co/160x140?text=Placeholder'
+                      : seed.thumbnailMobile)
                   }
                   alt={seed.label}
                   aria-hidden="true"
@@ -270,8 +270,8 @@ const PlantList = ({
                           <HelpIcon sx={{
                             color: 'primary.light',
                             position: 'absolute',
-                            right: '10px',
-                            top: '120px',
+                            right: '5px',
+                            top: '105px',
                             fontSize: '2rem',
                           }}
                           />
