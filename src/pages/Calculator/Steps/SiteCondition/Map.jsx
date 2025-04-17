@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 // import { Map as MapComponent } from '@psa/dst.ui.map';
-import { PSAButton, Map as MapComponent } from 'shared-react-components/src';
+import { PSAButton, PSAReduxMap as MapComponent } from 'shared-react-components/src';
 import { useDispatch, useSelector } from 'react-redux';
 import { soilDrainageValues } from '../../../../shared/data/dropdown';
 import {
@@ -19,12 +19,20 @@ const Map = ({
   setStep, regions,
 }) => {
   const [selectedToEditSite, setSelectedToEditSite] = useState({});
-  const [mapFeatures, setMapFeatures] = useState([]);
 
   const { state: stateName, council, latlon } = useSelector((state) => state.siteCondition);
   const { historyState, maxAvailableStep } = useSelector((state) => state.user);
 
+  // State variable for lat lon
+  const [localLatLon, setLocalLatLon] = useState(latlon);
+
   const dispatch = useDispatch();
+
+  // call back function that is passed to shared map to update 'selectedToEditSite'
+  const updateSelectedToEditSite = (properties) => {
+    setSelectedToEditSite(properties?.address);
+    setLocalLatLon([properties?.lat, properties?.lon]);
+  };
 
   useEffect(() => {
     if (historyState !== historyStates.imported) {
@@ -44,15 +52,9 @@ const Map = ({
       if (latitude === latlon[0] && longitude === latlon[1]) return;
       if (maxAvailableStep > -1) dispatch(setMaxAvailableStepRedux(-1));
       if (historyState === historyStates.imported) {
+        // set the state variable lat lon back to the redux store value
+        setLocalLatLon(latlon);
         dispatch(setHistoryDialogStateRedux({ open: true, type: 'update' }));
-        // reset map location to history redux
-        setMapFeatures([{
-          type: 'Feature',
-          geometry: {
-            coordinates: [latlon[1], latlon[0]],
-            type: 'Point',
-          },
-        }]);
         return;
       }
       // update county/zone for MCCC/NECCC
@@ -102,13 +104,12 @@ const Map = ({
     <Grid container>
       <Grid xs={12} md={12} item>
         <MapComponent
-          setAddress={setSelectedToEditSite}
+          setProperties={updateSelectedToEditSite}
           initWidth="100%"
           padding="20px"
           initHeight="360px"
-          initLat={latlon[0]}
-          initLon={latlon[1]}
-          initFeatures={mapFeatures}
+          initLat={localLatLon[0]}
+          initLon={localLatLon[1]}
           initStartZoom={12}
           initMinZoom={4}
           initMaxZoom={18}

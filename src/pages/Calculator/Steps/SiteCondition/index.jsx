@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import {
-  PSAButton, RegionSelectorMap, PSALoadingSpinner, PSADropdown,
+  PSAButton, PSARegionSelectorMap, PSALoadingSpinner, PSADropdown,
 } from 'shared-react-components/src';
 import { isEmptyNull, validateForms } from '../../../../shared/utils/format';
 import { getCrops } from '../../../../features/calculatorSlice/api';
@@ -192,7 +192,7 @@ const SiteCondition = ({
         ) : (
           siteConditionStep === 1 ? (
             <>
-              <RegionSelectorMap
+              <PSARegionSelectorMap
                 selectorFunction={mapStateChange}
                 selectedState={selectedState.label || ''}
                 availableStates={states.map((s) => s.label)}
