@@ -1,4 +1,4 @@
-import { clickStateMap } from '../support/utils';
+import { selectMapState } from '../support/utils';
 
 describe('Feedback', () => {
   beforeEach(() => {
@@ -7,13 +7,13 @@ describe('Feedback', () => {
 
   it('should display different council logo in different councils', () => {
     cy.getByTestId('header_logo_button').find('img').should('have.attr', 'src', 'images/PSA_logo.png');
-    clickStateMap();
+    selectMapState();
     cy.getByTestId('navbar-Feedback').click();
     cy.getByTestId('header_logo_button').find('img').should('have.attr', 'src', 'images/mwccc_logo.png');
-    clickStateMap('NECCC');
+    selectMapState('NECCC');
     cy.getByTestId('navbar-Feedback').click();
     cy.getByTestId('header_logo_button').find('img').should('have.attr', 'src', 'images/neccc_logo.png');
-    clickStateMap('SCCC');
+    selectMapState('SCCC');
     cy.getByTestId('navbar-Feedback').click();
     cy.getByTestId('header_logo_button').find('img').should('have.attr', 'src', 'images/sccc_logo.png');
   });
