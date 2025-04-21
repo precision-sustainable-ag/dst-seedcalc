@@ -1,29 +1,26 @@
 import './commands';
 
-export const clickStateMap = (council) => {
+export const selectMapState = (council) => {
   cy.intercept({ url: 'https://api.mapbox.com/**' }, { log: false });
   cy.intercept({ url: 'https://events.mapbox.com/**' }, { log: false });
   cy.visit('/');
-  cy.get('.mapboxgl-canvas').should('be.visible');
 
+  cy.getByTestId('site_condition_state').click();
   if (council === undefined) {
-    cy.get('div[class^="_wrapper"]').reactComponent().its('memoizedProps').then((props) => {
-      cy.wrap(props).invoke('selectorFunction', { properties: { STATE_NAME: 'Indiana' } });
-    });
+    cy.get('[data-test="site_condition_state-Indiana"]').click();
+    cy.getByTestId('site_condition_state').find('input').should('have.value', 'Indiana');
   } else if (council === 'NECCC') {
-    cy.get('div[class^="_wrapper"]').reactComponent().its('memoizedProps').then((props) => {
-      cy.wrap(props).invoke('selectorFunction', { properties: { STATE_NAME: 'New York' } });
-    });
+    cy.get('[data-test="site_condition_state-New York"]').click();
+    cy.getByTestId('site_condition_state').find('input').should('have.value', 'New York');
   } else if (council === 'SCCC') {
-    cy.get('div[class^="_wrapper"]').reactComponent().its('memoizedProps').then((props) => {
-      cy.wrap(props).invoke('selectorFunction', { properties: { STATE_NAME: 'North Carolina' } });
-    });
+    cy.get('[data-test="site_condition_state-North Carolina"]').click();
+    cy.getByTestId('site_condition_state').find('input').should('have.value', 'North Carolina');
   }
 };
 
 Cypress.Commands.add('mockSiteCondition', (council) => {
   cy.intercept('GET', '**/v2/crops/?regions=**&context=seed_calc').as('getCropsData');
-  clickStateMap(council);
+  selectMapState(council);
   cy.getByTestId('option_manually').should('be.visible').click();
   cy.getByTestId('site_condition_region').click();
   if (council === undefined) cy.get('[data-test="site_condition_region-Adams"]').click();

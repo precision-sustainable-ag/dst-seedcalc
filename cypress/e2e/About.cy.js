@@ -1,4 +1,4 @@
-import { clickStateMap } from '../support/utils';
+import { selectMapState } from '../support/utils';
 
 describe('Feedback', () => {
   beforeEach(() => {
@@ -11,13 +11,13 @@ describe('Feedback', () => {
 
   it('should show different attribution text based on selected council', () => {
     cy.getByTestId('about_attribution').should('include.text', 'We, MCCC, NECCC, SCCC, ');
-    clickStateMap();
+    selectMapState();
     cy.getByTestId('navbar-About').click();
     cy.getByTestId('about_attribution').should('include.text', 'Midwestern Cover Crops Species Selector Data');
-    clickStateMap('NECCC');
+    selectMapState('NECCC');
     cy.getByTestId('navbar-About').click();
     cy.getByTestId('about_attribution').should('include.text', 'Northeastern Cover Crops Species Selector Data');
-    clickStateMap('SCCC');
+    selectMapState('SCCC');
     cy.getByTestId('navbar-About').click();
     cy.getByTestId('about_attribution').should('include.text', 'Southern Cover Crops Species Selector Data');
   });
