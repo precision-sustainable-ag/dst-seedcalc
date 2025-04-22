@@ -7,6 +7,7 @@ import { soilDrainageValues } from '../../../../shared/data/dropdown';
 import {
   setCountyRedux, setSoilDrainageRedux, updateLatlonRedux, updateTileDrainageRedux,
   setCountyIdRedux,
+  updateFieldsRedux,
 } from '../../../../features/siteConditionSlice/actions';
 import { setHistoryDialogStateRedux, setMaxAvailableStepRedux } from '../../../../features/userSlice/actions';
 import { getZoneData, getSSURGOData } from '../../../../features/siteConditionSlice/api';
@@ -20,18 +21,40 @@ const Map = ({
 }) => {
   const [selectedToEditSite, setSelectedToEditSite] = useState({});
 
-  const { state: stateName, council, latlon } = useSelector((state) => state.siteCondition);
+  const {
+    state: stateName,
+    council,
+    latlon,
+    fields,
+  } = useSelector((state) => state.siteCondition);
   const { historyState, maxAvailableStep } = useSelector((state) => state.user);
 
-  // State variable for lat lon
+  // State variable for lat lon and map features
   const [localLatLon, setLocalLatLon] = useState(latlon);
+  const [mapFeatures, setMapFeatures] = useState(fields);
 
   const dispatch = useDispatch();
+
+  const updateMapFeatures = (newFeatures) => {
+    if (JSON.stringify(mapFeatures) === JSON.stringify(newFeatures)) return;
+
+    // if user imported a history, this will prevent the user from changing the polygons
+    if (historyState === historyStates.imported) {
+      setMapFeatures([...mapFeatures]);
+      dispatch(setHistoryDialogStateRedux({ open: true, type: 'update' }));
+      return;
+    }
+
+    // update redux state variable with new features
+    setMapFeatures(newFeatures);
+    dispatch(updateFieldsRedux(newFeatures));
+  };
 
   // call back function that is passed to shared map to update 'selectedToEditSite'
   const updateSelectedToEditSite = (properties) => {
     setSelectedToEditSite(properties?.address);
     setLocalLatLon([properties?.lat, properties?.lon]);
+    updateMapFeatures(properties?.features);
   };
 
   useEffect(() => {
@@ -110,6 +133,7 @@ const Map = ({
           initHeight="360px"
           initLat={localLatLon[0]}
           initLon={localLatLon[1]}
+          initFeatures={mapFeatures}
           initStartZoom={12}
           initMinZoom={4}
           initMaxZoom={18}
@@ -118,10 +142,12 @@ const Map = ({
           hasNavigation
           hasCoordBar
           hasDrawing
+          hasFreehand
           hasGeolocate
           hasFullScreen
           hasMarkerPopup
           hasMarkerMovable
+          hasHelp
           mapboxToken={mapboxToken}
         />
         <Grid item xs={12} p="1rem">
