@@ -2,6 +2,7 @@ import {
   updateState, updateCounty, updateCountyId, updateSoilDrainage,
   updatePlantingDate, updateAcres, checkNRCS, updateCouncil,
   updateSoilFertility, updateLatlon, setSiteCondition, updateTileDrainage,
+  updateFields,
 } from './index';
 
 export const setStateRedux = (state, stateId) => updateState({ state, stateId });
@@ -23,6 +24,8 @@ export const setCouncilRedux = (council) => updateCouncil({ council });
 export const setSoilFertilityRedux = (soilFertility) => updateSoilFertility({ soilFertility });
 
 export const updateLatlonRedux = (latlon) => updateLatlon({ latlon });
+
+export const updateFieldsRedux = (fields) => updateFields({ fields });
 
 export const setSiteConditionRedux = (siteCondition) => setSiteCondition({ siteCondition });
 

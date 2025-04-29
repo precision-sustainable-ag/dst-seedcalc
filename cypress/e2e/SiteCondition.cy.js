@@ -1,4 +1,4 @@
-import { clickStateMap } from '../support/utils';
+import { selectMapState } from '../support/utils';
 
 describe('Site Condition landing page', () => {
   beforeEach(() => {
@@ -14,13 +14,13 @@ describe('Site Condition landing page', () => {
     cy.getByTestId('next_button').should('be.disabled');
   });
 
-  it('shows the options of use map or edit manually after click a state on map', () => {
+  it('shows the options of use map or edit manually after select a state', () => {
     cy.intercept({ url: 'https://api.mapbox.com/**' }, { log: false });
     cy.intercept({ url: 'https://events.mapbox.com/**' }, { log: false });
     cy.get('.mapboxgl-canvas').should('be.visible');
     // click on Indiana
     // cy.get('.mapboxgl-canvas').should('be.visible').trigger('click', 525, 160);
-    clickStateMap();
+    selectMapState();
     cy.getByTestId('option_map').should('be.visible');
     cy.getByTestId('option_manually').should('be.visible');
   });
@@ -28,7 +28,7 @@ describe('Site Condition landing page', () => {
 
 describe('Site Condition form', () => {
   beforeEach(() => {
-    clickStateMap();
+    selectMapState();
     cy.getByTestId('option_manually').should('be.visible').click();
   });
 
@@ -88,7 +88,7 @@ describe('Site Condition form', () => {
 
 describe('Site Condition NECCC', () => {
   beforeEach(() => {
-    clickStateMap('NECCC');
+    selectMapState('NECCC');
     cy.getByTestId('option_manually').should('be.visible').click();
   });
 
@@ -127,7 +127,7 @@ describe('Site Condition NECCC', () => {
 
 describe('Site Condition SCCC', () => {
   beforeEach(() => {
-    clickStateMap('SCCC');
+    selectMapState('SCCC');
     cy.getByTestId('option_manually').should('be.visible').click();
   });
 

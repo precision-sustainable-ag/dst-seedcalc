@@ -46,6 +46,10 @@ const siteConditionSlice = createSlice({
       const { latlon } = payload;
       return { ...state, latlon };
     },
+    updateFields: (state, { payload }) => {
+      const { fields } = payload;
+      return { ...state, fields };
+    },
     setSiteCondition: (state, { payload }) => {
       const { siteCondition } = payload;
       return { ...state, ...siteCondition };
@@ -87,7 +91,7 @@ const siteConditionSlice = createSlice({
 export const {
   updateState, updateCounty, updateCountyId, updateSoilDrainage,
   updatePlantingDate, updateAcres, checkNRCS, updateCouncil, updateSoilFertility,
-  updateLatlon, setSiteCondition, updateTileDrainage,
+  updateLatlon, updateFields, setSiteCondition, updateTileDrainage,
 } = siteConditionSlice.actions;
 
 export default siteConditionSlice;

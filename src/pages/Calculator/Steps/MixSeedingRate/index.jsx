@@ -195,30 +195,30 @@ const MixSeedingRate = ({ calculator }) => {
           alignSelf="center"
           minWidth="20rem"
         >
-          <MixSeedingTypography>
+          <MixSeedingTypography role="article">
             <b>Your Seeding Rate may vary. </b>
             Choose a rate based on your needs.
-            <br />
-            <br />
+            <br aria-hidden="true" />
+            <br aria-hidden="true" />
             Factors that may
             <b> raise </b>
             Seeding Rate:
-            <br />
+            <br aria-hidden="true" />
             -  Erosion Control
-            <br />
+            <br aria-hidden="true" />
             - Weed Supression
-            <br />
+            <br aria-hidden="true" />
             - Grazing
-            <br />
-            <br />
+            <br aria-hidden="true" />
+            <br aria-hidden="true" />
             Factors that may
             <b> lower </b>
             Seeding Rate:
-            <br />
+            <br aria-hidden="true" />
             - Cost Saving
-            <br />
+            <br aria-hidden="true" />
             - Low Biomass
-            <br />
+            <br aria-hidden="true" />
             - Planting Green
           </MixSeedingTypography>
         </Grid>
@@ -238,6 +238,7 @@ const MixSeedingRate = ({ calculator }) => {
               fontWeight="bold"
               fontSize="1.25rem"
               data-test="max_value"
+              aria-label={`High Limit: ${max}`}
             >
               {max}
             </Typography>
@@ -259,6 +260,7 @@ const MixSeedingRate = ({ calculator }) => {
               fontWeight="bold"
               fontSize="1.25rem"
               data-test="min_value"
+              aria-label={`Low Limit: ${min}`}
             >
               {min}
             </Typography>

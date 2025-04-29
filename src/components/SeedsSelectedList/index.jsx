@@ -100,6 +100,7 @@ const SeedsSelectedList = ({ activeStep }) => {
               onClick={() => {
                 clickItem(s.label);
               }}
+              aria-label={`click to ${activeStep === 1 ? 'remove' : 'open'} selected crop: ${s.label}`}
             >
               <Box position="relative" width="90px" margin="auto">
                 {activeStep === 1 && (
@@ -125,6 +126,7 @@ const SeedsSelectedList = ({ activeStep }) => {
                   }
                   alt={s.label}
                   loading="lazy"
+                  aria-hidden="true"
                 />
               </Box>
 

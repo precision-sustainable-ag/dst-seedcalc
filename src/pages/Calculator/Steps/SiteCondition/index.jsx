@@ -7,7 +7,9 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
-import { PSAButton, RegionSelectorMap, PSALoadingSpinner } from 'shared-react-components/src';
+import {
+  PSAButton, PSARegionSelectorMap, PSALoadingSpinner, PSADropdown,
+} from 'shared-react-components/src';
 import { isEmptyNull, validateForms } from '../../../../shared/utils/format';
 import { getCrops } from '../../../../features/calculatorSlice/api';
 import { getLocality, getRegion } from '../../../../features/siteConditionSlice/api';
@@ -18,6 +20,8 @@ import statesLatLongDict from '../../../../shared/data/statesLatLongDict';
 import DSTImport from '../../../../components/DSTImport';
 import SiteConditionForm from './form';
 import Map from './Map';
+import { setCalculatorRedux } from '../../../../features/calculatorSlice/actions';
+import initialCalculatorState from '../../../../features/calculatorSlice/state';
 import initialState from '../../../../features/siteConditionSlice/state';
 import '../steps.scss';
 import { historyStates } from '../../../../features/userSlice/state';
@@ -60,6 +64,10 @@ const SiteCondition = ({
 
     // Update state in siteCondition
     const { label } = state;
+
+    // reset all redux values when state changes
+    dispatch(setCalculatorRedux(initialCalculatorState));
+
     dispatch(updateLatlonRedux(statesLatLongDict[label]));
     dispatch(setStateRedux(label, state.id));
     dispatch(setCouncilRedux(state.parents[0].shorthand));
@@ -74,6 +82,21 @@ const SiteCondition = ({
       if (st.length > 0) {
         setSelectedState(st[0]);
       }
+    }
+  };
+
+  const handleStateSelection = async (e) => {
+    if (historyState === historyStates.imported) {
+      dispatch(setHistoryDialogStateRedux({ open: true, type: 'update' }));
+      return;
+    }
+    const stateSelected = states.filter((s) => s.label === e.target.value);
+    if (stateSelected.length > 0) {
+      if (maxAvailableStep > -1) dispatch(setMaxAvailableStepRedux(-1));
+      // get new regions for the selected state
+      const res = await getRegions(stateSelected[0]);
+      setRegions(res);
+      updateStateRedux(stateSelected[0]);
     }
   };
 
@@ -169,7 +192,7 @@ const SiteCondition = ({
         ) : (
           siteConditionStep === 1 ? (
             <>
-              <RegionSelectorMap
+              <PSARegionSelectorMap
                 selectorFunction={mapStateChange}
                 selectedState={selectedState.label || ''}
                 availableStates={states.map((s) => s.label)}
@@ -180,10 +203,32 @@ const SiteCondition = ({
                 initStartZoom={3}
                 mapboxToken={mapboxToken}
               />
+
+              <Grid container pt="1rem">
+                <Grid item xs={0} md={3} />
+                <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'center' }}>
+                  <PSADropdown
+                    label="State: "
+                    items={states.map((s) => ({ label: s.label, value: s.label }))}
+                    formSx={{ minWidth: '100%' }}
+                    SelectProps={{
+                      value: siteCondition.state,
+                      onChange: handleStateSelection,
+                      MenuProps: {
+                        style: { color: '#4F5F30' },
+                      },
+                      sx: { '.MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(0, 0, 0, .45)' } },
+                      'data-test': 'site_condition_state',
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={0} md={3} />
+              </Grid>
+
               {
                 Object.keys(mapState).length > 0
                   ? (
-                    <Grid item xs={12} p="1rem">
+                    <Grid item xs={12} pt="1rem">
                       <Typography>
                         Would you like to manually enter your site conditions
                         or use your location to prepopulate them?
@@ -209,7 +254,7 @@ const SiteCondition = ({
                   : (
                     <Grid item xs={12} p="1rem">
                       <Typography fontWeight="bold">
-                        Please select your state above.
+                        Please select your state from the dropdown or using the map.
                       </Typography>
                     </Grid>
                   )
@@ -225,11 +270,9 @@ const SiteCondition = ({
           ) : siteConditionStep === 3 ? (
             <SiteConditionForm
               stateList={states}
+              handleStateSelection={handleStateSelection}
               setStep={setSiteConditionStep}
               regions={regions}
-              setRegions={setRegions}
-              getRegions={getRegions}
-              updateStateRedux={updateStateRedux}
             />
           ) : (
             null
