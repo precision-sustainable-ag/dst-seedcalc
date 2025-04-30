@@ -19,8 +19,8 @@ const AboutTheExperts = () => {
 
   const expertGroups = [
     { id: 0, menuOption: 'Development Team', dataType: 'array' },
-    { id: 1, menuOption: 'Testing Team', dataType: 'array' },
-    { id: 2, menuOption: 'Midwest Cover Crops Council', dataType: 'JSX' },
+    { id: 1, menuOption: 'Testing Team', dataType: 'empty' },
+    { id: 2, menuOption: 'Midwest Cover Crops Council', dataType: 'empty' },
     { id: 3, menuOption: 'Northeast Cover Crops Council', dataType: 'array' },
     { id: 4, menuOption: 'Southern Cover Crops Council', dataType: 'array' },
     { id: 5, menuOption: 'Western Cover Crops Council', dataType: 'JSX' },
@@ -51,18 +51,19 @@ const AboutTheExperts = () => {
         />
 
       ))}
-      <Typography style={{ paddingTop: '15px' }} variant="body1" align="left">
+      <Box style={{ paddingTop: '15px' }} textAlign="left">
         {expertGroups[value].dataType === 'array'
           ? getExpertsData(value)
-            .sort((a, b) => (a.lastName.localeCompare(b.lastName)))
-            .map((expert) => (
-              <p>
+            .sort((a, b) => a.lastName.localeCompare(b.lastName))
+            .map((expert, idx) => (
+              <Typography key={idx} variant="body1" gutterBottom sx={{ mb: 1.5, lineHeight: 1.75 }}>
                 <strong>{`${expert.lastName}, ${expert.firstName}; `}</strong>
                 <span>{expert.Affiliation}</span>
-              </p>
+              </Typography>
             ))
           : getExpertsData(value)}
-      </Typography>
+      </Box>
+
     </Box>
   );
 };
