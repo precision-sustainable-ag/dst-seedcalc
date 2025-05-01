@@ -33,9 +33,26 @@ export const getExpertsData = (councilId) => {
       return [
         { lastName: 'Norton', firstName: 'Juliet', Affiliation: 'Purdue University' },
         { lastName: 'Raturi', firstName: 'Ankita', Affiliation: 'Purdue University' },
-        { lastName: 'Ackroyd', firstName: 'Victoria', Affiliation: 'UMD/USDA-ARS' },
+        { lastName: 'Ackroyd', firstName: 'Victoria', Affiliation: 'University of Maryland' },
         { lastName: 'Gaskin', firstName: 'Julia', Affiliation: 'Univ. of Georgia' },
         { lastName: 'Mirsky', firstName: 'Steven', Affiliation: 'USDA ARS' },
+        { lastName: 'Reberg-Horton', firstName: 'Chris', Affiliation: 'North Carolina State University' },
+        { lastName: 'Bandooni', firstName: 'Rohit', Affiliation: 'North Carolina State University' },
+        { lastName: 'Morrow', firstName: 'Anna', Affiliation: 'Purdue University' },
+        { lastName: 'Darby', firstName: 'Heather', Affiliation: 'University of Vermont' },
+        { lastName: 'Davis', firstName: 'Brian', Affiliation: 'North Carolina State University' },
+        { lastName: 'Pinegar', firstName: 'Mikah', Affiliation: 'North Carolina State University' },
+        { lastName: 'Hitchcock', firstName: 'Rick', Affiliation: 'University of Georga' },
+        { lastName: 'Smith', firstName: 'Adam', Affiliation: 'North Carolina State University' },
+        { lastName: 'Puckett', firstName: 'Trevor', Affiliation: 'North Carolina State University' },
+        { lastName: 'Agamohammadnia', firstName: 'Milad', Affiliation: 'North Carolina State University' },
+        { lastName: 'Xu', firstName: 'Jingtong', Affiliation: 'North Carolina State University' },
+        { lastName: 'Adusumelli', firstName: 'Vyshnavi', Affiliation: 'North Carolina State University' },
+        { lastName: 'Chittilapilly', firstName: 'Boscosylvester John', Affiliation: 'North Carolina State University' },
+        { lastName: 'Chavan', firstName: 'Ameya', Affiliation: 'North Carolina State University' },
+        { lastName: 'Darby ', firstName: 'Heather ', Affiliation: 'University of Vermont' },
+        { lastName: 'Paul', firstName: 'Salon', Affiliation: 'USDA NRCS, retired' },
+        { lastName: 'Bjorkman ', firstName: 'Thomas', Affiliation: 'Cornell University' },
       ];
     case 1:
       return (
@@ -51,8 +68,28 @@ export const getExpertsData = (councilId) => {
       );
     case 3:
       return [
-        { lastName: 'Ackroyd', firstName: 'Victoria', Affiliation: 'UMD/USDA-ARS' },
+        { lastName: 'Ackroyd', firstName: 'Victoria', Affiliation: 'University of Maryland' },
         { lastName: 'Mirsky', firstName: 'Steven', Affiliation: 'USDA ARS' },
+        { lastName: 'Paul', firstName: 'Salon', Affiliation: 'USDA NRCS, retired' },
+        { lastName: 'VanGessel', firstName: 'Mark ', Affiliation: 'University of Delaware' },
+        { lastName: 'Raubenstein', firstName: 'Scott', Affiliation: 'Perdue AgriBusinesses' },
+        { lastName: 'Cooper', firstName: 'Aaron', Affiliation: 'Maryland farmer' },
+        { lastName: 'Workman', firstName: 'Kirsten', Affiliation: 'Cornell University' },
+        { lastName: 'Goodson', firstName: 'Mark', Affiliation: 'USDA NRCS' },
+        { lastName: 'Wilson', firstName: 'Dave', Affiliation: ' Kings AgriSeeds' },
+        { lastName: 'Verhallen', firstName: 'Anne ', Affiliation: 'Ontario Ministry of Agriculture, Food, and Rural Affairs, ret.' },
+        { lastName: 'Majewski', firstName: 'Carl', Affiliation: 'University of New Hampshire Extension' },
+        { lastName: 'Cochrane', firstName: 'Chad', Affiliation: 'USDA NRCS' },
+        { lastName: 'Bench', firstName: 'Christian', Affiliation: 'New Jersey farmer, USDA NRCS' },
+        { lastName: 'Hyde', firstName: 'Jim', Affiliation: 'USDA NRCS' },
+        { lastName: 'Gates', firstName: 'Dale', Affiliation: 'USDA NRCS' },
+        { lastName: 'Larson', firstName: 'Zach', Affiliation: 'Bayer' },
+        { lastName: 'Shawnna ', firstName: 'Clark', Affiliation: 'USDA NRCS Plant Materials Center' },
+        { lastName: 'Wallace ', firstName: 'John', Affiliation: 'Penn State University' },
+        { lastName: 'Bjorkman ', firstName: 'Thomas', Affiliation: 'Cornell University' },
+        { lastName: 'Brown ', firstName: 'Kate', Affiliation: 'Rutgers University' },
+        { lastName: 'Hashemi ', firstName: 'Masoud', Affiliation: 'University of Massachusetts-Amherst' },
+        { lastName: 'Darby ', firstName: 'Heather ', Affiliation: 'University of Vermont' },
       ];
     case 4:
       return [
