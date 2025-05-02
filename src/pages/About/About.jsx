@@ -11,26 +11,19 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { PSAButton } from 'shared-react-components/src';
-import { CustomStyles } from '../../shared/themes/constants';
 import LicenseAndCopyright from './LicenseAndCopyright/LicenseAndCopyright';
 import FundingAndAcknowledgements from './FundingAndAcknowledgements/FundingAndAcknowledgements';
 import AboutTheExperts from './AboutTheExperts/AboutTheExperts';
-import pirschAnalytics from '../../shared/analytics';
 
 const About = () => {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
   const [attribution, setAttribution] = useState(null);
-  const consentRedux = useSelector((stateRedux) => stateRedux.userData?.consent);
 
-  const councilShorthandRedux = useSelector((stateRedux) => stateRedux.mapData?.councilShorthand);
+  const { council } = useSelector((state) => state.siteCondition);
 
   const handleChange = (newValue) => {
     setValue(newValue);
   };
-
-  useEffect(() => {
-    pirschAnalytics('Visited Page', { meta: { visited: 'About' } });
-  }, [consentRedux]);
 
   const pageSections = [
     {
@@ -74,11 +67,11 @@ const About = () => {
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
-        setAttribution(councilShorthandRedux === null
+        setAttribution(council === ''
           ? data.attributions.generalStatement
-          : data.attributions[councilShorthandRedux].withoutModifications);
+          : data.attributions[council].withoutModifications);
       });
-  }, [councilShorthandRedux]);
+  }, [council]);
 
   return (
     <Box sx={{ border: 0.5, borderColor: 'grey.300' }} ml={2} mr={2} mt={5}>
@@ -86,7 +79,7 @@ const About = () => {
         <Grid item xs={12} sm={12} md={3.4} lg={3.4} xl={3.4}>
           <div
             style={{
-              border: `1px solid ${CustomStyles().darkGreen}`,
+              border: '1px solid #4F5F30',
               borderRight: '0px',
             }}
           >
@@ -103,6 +96,7 @@ const About = () => {
                 }}
                 onClick={() => handleChange(section.id)}
                 variant={value === section.id ? 'contained' : 'text'}
+                data-test={`section-${section.menuOption}`}
                 title={section.menuOption}
               />
             ))}
@@ -120,7 +114,7 @@ const About = () => {
             xs: 3, sm: 3, md: 0, lg: 0, xl: 0,
           }}
         >
-          <div style={{ border: `1px solid ${CustomStyles().darkGreen}`, minHeight: '320px' }}>
+          <div style={{ border: '1px solid #4F5F30', minHeight: '320px' }}>
             <Stack pl={3} pr={3} pb={4}>
               <center>
                 <Typography variant="h4" gutterBottom>
@@ -130,7 +124,7 @@ const About = () => {
               {getContent()}
               <br />
               <br />
-              <Typography fontSize="12px">{attribution}</Typography>
+              <Typography fontSize="12px" data-test="about_attribution">{attribution}</Typography>
             </Stack>
           </div>
         </Grid>
