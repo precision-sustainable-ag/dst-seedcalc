@@ -1,10 +1,19 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable react/no-unescaped-entities */
+/*
+  This file contains the About component, helper functions, and styles
+  The about page is a static pages that has information about the project
+  RenderContent contains all the text listed in the about section
+*/
+
 import {
   Box, Grid, Stack, Typography,
 } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { PSAButton } from 'shared-react-components/src';
-import LicenseAndCopyright from './LicenseAndCopyright';
+import LicenseAndCopyright from './LicenseAndCopyright/LicenseAndCopyright';
+import FundingAndAcknowledgements from './FundingAndAcknowledgements/FundingAndAcknowledgements';
+import AboutTheExperts from './AboutTheExperts/AboutTheExperts';
 
 const About = () => {
   const [value, setValue] = useState(0);
@@ -12,22 +21,26 @@ const About = () => {
 
   const { council } = useSelector((state) => state.siteCondition);
 
+  const handleChange = (newValue) => {
+    setValue(newValue);
+  };
+
   const pageSections = [
     {
       id: 0,
       menuOption: 'License and Copyright',
       title: 'License and Copyright',
     },
-    // {
-    //   id: 1,
-    //   menuOption: 'Funding and Acknowledgements',
-    //   title: 'Funding and Acknowledgements',
-    // },
-    // {
-    //   id: 2,
-    //   menuOption: 'About the Experts',
-    //   title: 'About The Experts',
-    // },
+    {
+      id: 1,
+      menuOption: 'Funding and Acknowledgements',
+      title: 'Funding and Acknowledgements',
+    },
+    {
+      id: 2,
+      menuOption: 'About the Experts',
+      title: 'About The Experts',
+    },
   ];
 
   const getContent = () => {
@@ -36,13 +49,13 @@ const About = () => {
         return (
           <LicenseAndCopyright />
         );
-      // case 1:
-      //   return (
-      //     <FundingAndAcknowledgements />
-      //   );
-      // case 2: return (
-      //   <AboutTheExperts />
-      // );
+      case 1:
+        return (
+          <FundingAndAcknowledgements />
+        );
+      case 2: return (
+        <AboutTheExperts />
+      );
       default: return null;
     }
   };
@@ -58,7 +71,7 @@ const About = () => {
           ? data.attributions.generalStatement
           : data.attributions[council].withoutModifications);
       });
-  }, []);
+  }, [council]);
 
   return (
     <Box sx={{ border: 0.5, borderColor: 'grey.300' }} ml={2} mr={2} mt={5}>
@@ -81,7 +94,7 @@ const About = () => {
                   borderRadius: '0px',
                   width: '100%',
                 }}
-                onClick={() => setValue(section.id)}
+                onClick={() => handleChange(section.id)}
                 variant={value === section.id ? 'contained' : 'text'}
                 data-test={`section-${section.menuOption}`}
                 title={section.menuOption}
@@ -109,6 +122,8 @@ const About = () => {
                 </Typography>
               </center>
               {getContent()}
+              <br />
+              <br />
               <Typography fontSize="12px" data-test="about_attribution">{attribution}</Typography>
             </Stack>
           </div>
