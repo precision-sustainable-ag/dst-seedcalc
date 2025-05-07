@@ -8,7 +8,7 @@
 */
 
 import {
-  Box, Typography,
+  Box, Grid, Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
 import { PSAButton } from 'shared-react-components/src';
@@ -157,25 +157,28 @@ const AboutTheExperts = () => {
 
   return (
     <Box sx={{ border: 0.5, borderColor: 'grey.300' }} ml={2} mr={2} mt={5}>
-      {expertGroups.map((group) => (
-        <PSAButton
-          buttonType=""
-          key={group.id}
-          size="Small"
-          sx={{
-            width: '16.6%',
-            minHeight: '61px',
-            fontSize: '0.6rem',
-            backgroundColor: (group.id === value) ? '#598444' : 'white',
-            color: (group.id === value) ? 'white' : '#8abc62',
-            '&:hover': { backgroundColor: (group.id === value) ? '#598444' : 'white' },
-          }}
-          onClick={() => handleChange(group.id)}
-          variant="contained"
-          title={group.menuOption}
-        />
-
-      ))}
+      <Grid container>
+        {expertGroups.map((group) => (
+          <Grid item xs={6} sm={4} md={2}>
+            <PSAButton
+              buttonType=""
+              key={group.id}
+              size="Small"
+              sx={{
+                width: '100%',
+                height: '100%',
+                fontSize: '0.6rem',
+                backgroundColor: (group.id === value) ? '#598444' : 'white',
+                color: (group.id === value) ? 'white' : '#8abc62',
+                '&:hover': { backgroundColor: (group.id === value) ? '#598444' : 'white' },
+              }}
+              onClick={() => handleChange(group.id)}
+              variant="contained"
+              title={group.menuOption}
+            />
+          </Grid>
+        ))}
+      </Grid>
       <Box style={{ paddingTop: '15px' }} textAlign="left">
         {expertGroups[value].dataType === 'array'
           ? getExpertsData(value)
