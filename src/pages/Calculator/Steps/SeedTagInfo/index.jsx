@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Typography } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import { PSAButton, PSAAccordion } from 'shared-react-components/src';
 import NumberTextField from '../../../../components/NumberTextField';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';

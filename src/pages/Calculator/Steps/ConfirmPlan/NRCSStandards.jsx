@@ -8,7 +8,8 @@ import {
 } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
-import styled from '@emotion/styled';
+// import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import DSTTable from '../../../../components/DSTTable';
