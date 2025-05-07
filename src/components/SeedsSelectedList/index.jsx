@@ -1,9 +1,7 @@
 import React from 'react';
-import { useTheme } from '@mui/material/styles';
 import {
   Typography,
   Box,
-  useMediaQuery,
   Card,
   CardActionArea,
 } from '@mui/material';
@@ -22,6 +20,7 @@ import {
   setHistoryStateRedux,
   setMaxAvailableStepRedux,
 } from '../../features/userSlice/actions';
+import useIsMobile from '../../shared/hooks/useIsMobile';
 
 const ExitIcon = ({ style }) => (
   <Box sx={style}>
@@ -30,9 +29,7 @@ const ExitIcon = ({ style }) => (
 );
 
 const SeedsSelectedList = ({ activeStep }) => {
-  // themes
-  const theme = useTheme();
-  const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useIsMobile('md');
 
   const dispatch = useDispatch();
 
@@ -71,7 +68,7 @@ const SeedsSelectedList = ({ activeStep }) => {
   return (
     <Box
       sx={
-        matchesMd
+        isMobile
           ? {
             minHeight: '100px',
             whiteSpace: 'normal',
@@ -84,10 +81,10 @@ const SeedsSelectedList = ({ activeStep }) => {
       bgcolor="#e5e7d5"
       border="#c7c7c7 solid 1px"
       display="flex"
-      flexDirection={matchesMd ? 'row' : 'column'}
+      flexDirection={isMobile ? 'row' : 'column'}
     >
       {[...seedsSelected].reverse().map((s, i) => (
-        <Box minWidth={matchesMd ? '120px' : ''} key={i}>
+        <Box minWidth={isMobile ? '120px' : ''} key={i}>
           <Card
             sx={{
               backgroundColor: 'transparent',

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useTheme, useMediaQuery } from '@mui/material';
 import { PSATextField } from 'shared-react-components/src';
+import useIsMobile from '../../shared/hooks/useIsMobile';
 
 const NumberTextField = ({
   value,
@@ -17,8 +17,7 @@ const NumberTextField = ({
   const [error, setError] = useState(false);
   const [helperText, setHelperText] = useState('');
 
-  const theme = useTheme();
-  const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useIsMobile('md');
 
   useEffect(() => {
     // TODO: for editable textfields, not use toLocalString since it'll not pass regex check
@@ -75,7 +74,7 @@ const NumberTextField = ({
         '.MuiOutlinedInput-root fieldset':
           emptyWarning ? { borderColor: 'rgba(255, 0, 0, .75)' } : { borderColor: 'rgba(0, 0, 0, .45)' },
 
-        marginTop: matchesMd ? ' 0' : '20px',
+        marginTop: isMobile ? ' 0' : '20px',
         ...sx,
       }}
       error={error}

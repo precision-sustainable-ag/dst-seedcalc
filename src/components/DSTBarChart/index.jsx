@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { useTheme } from '@emotion/react';
 import {
-  useMediaQuery, Grid, Typography,
+  Grid, Typography,
 } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -16,11 +15,11 @@ import {
 } from 'recharts';
 import { PSAButton } from 'shared-react-components/src';
 import { twoDigit } from '../../shared/utils/calculator';
+import useIsMobile from '../../shared/hooks/useIsMobile';
 
 const DSTBarChart = ({ seed, calculatorResult }) => {
   const [index, setIndex] = useState(0);
-  const theme = useTheme();
-  const matchesSm = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useIsMobile('sm');
 
   const labels = [
     {
@@ -71,7 +70,7 @@ const DSTBarChart = ({ seed, calculatorResult }) => {
       <Grid item xs={12} display="flex" justifyContent="center" aria-hidden>
         <ResponsiveContainer width="100%" height={200}>
           <BarChart
-            data={matchesSm ? [labels[index]] : labels}
+            data={isMobile ? [labels[index]] : labels}
             barCategoryGap="35%"
             margin={{
               top: 15, right: 50, bottom: 15, left: 15,
@@ -88,7 +87,7 @@ const DSTBarChart = ({ seed, calculatorResult }) => {
             />
             <Bar dataKey="val" fill="#4f5f30">
               <LabelList dataKey="val" position="top" style={{ fill: '#4f5f30' }} />
-              {!matchesSm
+              {!isMobile
               && labels.map((l, i) => (<Cell key={i} fill={index === i ? '#98FB98' : '#4f5f30'} />))}
             </Bar>
           </BarChart>

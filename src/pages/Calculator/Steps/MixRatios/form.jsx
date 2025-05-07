@@ -12,12 +12,12 @@ const MixRatioSteps = ({
   council, calculatorResult, options, seed, handleFormValueChange,
 }) => {
   const theme = useTheme();
-  const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const [survival, setSurvival] = useState(0);
 
   const renderFormLabel = (label1, label2, label3) => (
-    matchesMd && (
+    isMobile && (
       <Grid container justifyContent="space-evenly">
         <Grid item xs={3}>
           <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
@@ -68,7 +68,7 @@ const MixRatioSteps = ({
           <Grid container justifyContent="space-evenly">
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
+                label={isMobile ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
                 disabled
                 value={step1.defaultSingleSpeciesSeedingRatePLS}
               />
@@ -80,7 +80,7 @@ const MixRatioSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Soil Fertility Modifier'}
+                label={isMobile ? '' : 'Soil Fertility Modifier'}
                 disabled
                 value={step1.soilFertilityModifier}
               />
@@ -93,7 +93,7 @@ const MixRatioSteps = ({
             <Grid item xs={3}>
               <NumberTextField
                 disabled
-                label={matchesMd ? '' : '% of Single Species Rate'}
+                label={isMobile ? '' : '% of Single Species Rate'}
                 value={percentOfRateNECCC}
               />
             </Grid>
@@ -107,7 +107,7 @@ const MixRatioSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Seeding Rate In Mix (Lbs per Acre)'}
+                label={isMobile ? '' : 'Seeding Rate In Mix (Lbs per Acre)'}
                 disabled
                 value={step1.seedingRate}
               />
@@ -133,7 +133,7 @@ const MixRatioSteps = ({
           <Grid container justifyContent="space-evenly">
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
+                label={isMobile ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
                 disabled
                 value={step1.defaultSingleSpeciesSeedingRatePLS}
               />
@@ -145,7 +145,7 @@ const MixRatioSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : '% of Single Species Rate'}
+                label={isMobile ? '' : '% of Single Species Rate'}
                 disabled
                 value={convertToPercent(step1.percentOfRate)}
               />
@@ -157,7 +157,7 @@ const MixRatioSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Seeding Rate In Mix (Lbs per Acre)'}
+                label={isMobile ? '' : 'Seeding Rate In Mix (Lbs per Acre)'}
                 disabled
                 value={step1.seedingRate}
               />
@@ -180,7 +180,7 @@ const MixRatioSteps = ({
           <Grid container justifyContent="space-evenly" pb="1rem">
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
+                label={isMobile ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
                 disabled
                 value={step1.defaultSingleSpeciesSeedingRatePLS}
               />
@@ -192,7 +192,7 @@ const MixRatioSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : '% of Single Species Rate'}
+                label={isMobile ? '' : '% of Single Species Rate'}
                 disabled
                 value={convertToPercent(step1.percentOfRate)}
               />
@@ -205,7 +205,7 @@ const MixRatioSteps = ({
             <Grid item xs={3}>
               <NumberTextField
                 disabled
-                label={matchesMd ? '' : 'Planting Time Modifier'}
+                label={isMobile ? '' : 'Planting Time Modifier'}
                 value={step1.plantingTimeModifier}
               />
             </Grid>
@@ -226,7 +226,7 @@ const MixRatioSteps = ({
             <Grid item xs={3}>
               <NumberTextField
                 disabled
-                label={matchesMd ? '' : 'Mix Competition Coefficient'}
+                label={isMobile ? '' : 'Mix Competition Coefficient'}
                 value={step1.mixCompetitionCoefficient}
               />
             </Grid>
@@ -237,7 +237,7 @@ const MixRatioSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Seeding Rate In Mix (Lbs per Acre)'}
+                label={isMobile ? '' : 'Seeding Rate In Mix (Lbs per Acre)'}
                 disabled
                 value={step1.seedingRate}
               />
@@ -261,7 +261,7 @@ const MixRatioSteps = ({
           <Grid item xs={3}>
             <NumberTextField
               disabled
-              label={matchesMd ? '' : 'Seeds per Pound'}
+              label={isMobile ? '' : 'Seeds per Pound'}
               value={step2.seedsPerPound}
             />
           </Grid>
@@ -273,7 +273,7 @@ const MixRatioSteps = ({
           <Grid item xs={3}>
             <NumberTextField
               disabled
-              label={matchesMd ? '' : 'Seeding Rate In Mix (Lbs per Acre)'}
+              label={isMobile ? '' : 'Seeding Rate In Mix (Lbs per Acre)'}
               value={step2.seedingRate}
             />
           </Grid>
@@ -284,7 +284,7 @@ const MixRatioSteps = ({
 
           <Grid item xs={3}>
             <NumberTextField
-              label={matchesMd ? '' : 'Seeds per Acre'}
+              label={isMobile ? '' : 'Seeds per Acre'}
               disabled
               value={step2.seedsPerAcre}
             />
@@ -302,7 +302,7 @@ const MixRatioSteps = ({
           <Grid container justifyContent="space-evenly">
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Seeds per Acre'}
+                label={isMobile ? '' : 'Seeds per Acre'}
                 disabled
                 value={step3.seedsPerAcre}
               />
@@ -314,7 +314,7 @@ const MixRatioSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'SqFt per Acre'}
+                label={isMobile ? '' : 'SqFt per Acre'}
                 disabled
                 value={step3.sqftPerAcre}
               />
@@ -326,7 +326,7 @@ const MixRatioSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Seeds per SqFt'}
+                label={isMobile ? '' : 'Seeds per SqFt'}
                 disabled
                 value={step3.seedsPerSqft}
               />
@@ -363,7 +363,7 @@ const MixRatioSteps = ({
           <Grid container justifyContent="space-evenly">
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Seeds per Acre'}
+                label={isMobile ? '' : 'Seeds per Acre'}
                 disabled
                 value={step3.seedsPerAcre}
               />
@@ -375,7 +375,7 @@ const MixRatioSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : '% Survival'}
+                label={isMobile ? '' : '% Survival'}
                 disabled
                 value={convertToPercent(step3.percentSurvival)}
               />
@@ -387,7 +387,7 @@ const MixRatioSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Plants per Acre'}
+                label={isMobile ? '' : 'Plants per Acre'}
                 disabled
                 value={step3.plantsPerAcre}
               />
@@ -405,7 +405,7 @@ const MixRatioSteps = ({
           <Grid container justifyContent="space-evenly">
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Plants per Acre'}
+                label={isMobile ? '' : 'Plants per Acre'}
                 disabled
                 value={step4.plantsPerAcre}
               />
@@ -417,7 +417,7 @@ const MixRatioSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'SqFt per Acre'}
+                label={isMobile ? '' : 'SqFt per Acre'}
                 disabled
                 value={step4.sqftPerAcre}
               />
@@ -429,7 +429,7 @@ const MixRatioSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Aproximate Plants per SqFt'}
+                label={isMobile ? '' : 'Aproximate Plants per SqFt'}
                 disabled
                 value={step4.plantsPerSqft}
               />
