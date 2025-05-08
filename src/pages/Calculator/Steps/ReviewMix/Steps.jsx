@@ -175,7 +175,7 @@ const ReviewMixSteps = ({
               />
             </Grid>
           </Grid>
-          <Grid container justifyContent="space-evenly">
+          <Grid container justifyContent="space-evenly" marginTop={isMobile ? '20px' : 0}>
             <Grid item xs={3}>
               <Typography variant="mathIcon">=</Typography>
             </Grid>
@@ -356,7 +356,7 @@ const ReviewMixSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label="Seeding Rate In Mix (Lbs per Acre)"
+                label={isMobile ? '' : 'Seeding Rate In Mix (Lbs per Acre)'}
                 disabled
                 value={step1.seedingRate}
               />
@@ -550,7 +550,7 @@ const ReviewMixSteps = ({
             />
           </Grid>
         </Grid>
-        <Grid container justifyContent="space-evenly">
+        <Grid container justifyContent="space-evenly" marginTop={isMobile ? '20px' : 0}>
           <Grid item xs={3}>
             <Typography variant="mathIcon">=</Typography>
           </Grid>
