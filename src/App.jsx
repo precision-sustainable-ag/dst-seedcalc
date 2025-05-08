@@ -58,7 +58,7 @@ window.addEventListener('error', (err) => {
     title: 'CRASH',
     name: 'error',
     email: 'error@error.com',
-    comments: err?.message,
+    comments: `${err?.message}: ${err?.filename}`,
     labels: ['crash', 'dst-seedcalc'],
   };
 
