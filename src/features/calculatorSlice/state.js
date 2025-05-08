@@ -12,6 +12,7 @@ const initialState = {
   bulkSeedingRate: {},
   unit: 'acre',
   seedingMethods: {},
+  seedTagInfoSelected: false,
 };
 
 export default initialState;
