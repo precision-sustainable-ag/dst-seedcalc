@@ -1,7 +1,5 @@
 import React, { Fragment } from 'react';
 import Grid from '@mui/material/Grid';
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import { Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import NumberTextField from '../../../../components/NumberTextField';
@@ -11,12 +9,12 @@ import { setAcresRedux } from '../../../../features/siteConditionSlice/actions';
 import { historyStates } from '../../../../features/userSlice/state';
 import { setHistoryStateRedux } from '../../../../features/userSlice/actions';
 import '../steps.scss';
+import useIsMobile from '../../../../shared/hooks/useIsMobile';
 
 const ConfirmPlanForm = ({
   nrcsResult, seedsSelected, calculatorResult, options,
 }) => {
-  const theme = useTheme();
-  const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useIsMobile('md');
 
   const dispatch = useDispatch();
 
@@ -24,7 +22,7 @@ const ConfirmPlanForm = ({
   const { historyState } = useSelector((state) => state.user);
 
   const renderStepsForm = (label1, label2, label3) => (
-    matchesMd && (
+    isMobile && (
     <Grid container>
       <Grid item xs={3}>
         <Typography sx={{ fontSize: '0.75rem', pb: '1rem' }}>
@@ -56,7 +54,7 @@ const ConfirmPlanForm = ({
           <Grid item xs={3}>
             <NumberTextField
               disabled
-              label={matchesMd ? '' : 'Bulk Lbs per Acre'}
+              label={isMobile ? '' : 'Bulk Lbs per Acre'}
               value={result.bulkSeedingRate}
               testId={`${seed.label}-bulk-seeding-rate`}
             />
@@ -68,7 +66,7 @@ const ConfirmPlanForm = ({
 
           <Grid item xs={3}>
             <NumberTextField
-              label={matchesMd ? '' : 'Acres'}
+              label={isMobile ? '' : 'Acres'}
               value={result.acres}
               onChange={(val) => {
                 dispatch(setAcresRedux(val));
@@ -87,7 +85,7 @@ const ConfirmPlanForm = ({
 
           <Grid item xs={3}>
             <NumberTextField
-              label={matchesMd ? '' : 'Total Pounds'}
+              label={isMobile ? '' : 'Total Pounds'}
               disabled
               value={result.totalPounds}
               testId={`${seed.label}-total-pounds`}
@@ -121,7 +119,7 @@ const ConfirmPlanForm = ({
           <Grid item xs={3}>
             <NumberTextField
               disabled
-              label={matchesMd ? '' : 'Cost per Pound'}
+              label={isMobile ? '' : 'Cost per Pound'}
               value={result.costPerPound}
               testId={`${seed.label}-cost-per-pound-disabled`}
             />
@@ -132,7 +130,7 @@ const ConfirmPlanForm = ({
           <Grid item xs={3}>
             <NumberTextField
               disabled
-              label={matchesMd ? '' : 'Total Pounds'}
+              label={isMobile ? '' : 'Total Pounds'}
               value={result.totalPounds}
             />
           </Grid>
@@ -141,7 +139,7 @@ const ConfirmPlanForm = ({
           </Grid>
           <Grid item xs={3}>
             <NumberTextField
-              label={matchesMd ? '' : 'Total Cost'}
+              label={isMobile ? '' : 'Total Cost'}
               disabled
               value={result.totalCost}
               testId={`${seed.label}-total-cost`}

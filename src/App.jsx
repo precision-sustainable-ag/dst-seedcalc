@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import {
+  BrowserRouter, Routes, Route,
+} from 'react-router-dom';
 import { Box, Grid } from '@mui/material';
 import { PSAProfile, PSASkipContent } from 'shared-react-components/src';
 import Header from './components/Header';
@@ -11,6 +13,7 @@ import About from './pages/About/About';
 import Feedback from './pages/Feedback/Feedback';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import '@fontsource/ibm-plex-sans';
+import BackButton from './components/BackButton';
 
 const App = () => {
   // initially set calculator here
@@ -41,6 +44,7 @@ const App = () => {
                     <Route path="/profile" element={<PSAProfile />} />
                   </Routes>
                 </Box>
+                <BackButton />
               </Grid>
             </Grid>
           </Auth0ProviderWithNavigate>

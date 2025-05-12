@@ -33,7 +33,6 @@ const SiteCondition = ({
   siteConditionStep, setSiteConditionStep, completedStep, setCompletedStep,
 }) => {
   // Location state
-  const [mapState, setMapState] = useState({});
   const [selectedState, setSelectedState] = useState({});
   const [states, setStates] = useState([]);
   const [regions, setRegions] = useState([]);
@@ -74,7 +73,6 @@ const SiteCondition = ({
   };
 
   const mapStateChange = (state) => {
-    setMapState(state);
     if (Object.keys(state).length !== 0) {
       const st = states.filter(
         (s) => s.label === state.properties.STATE_NAME,
@@ -212,7 +210,7 @@ const SiteCondition = ({
                     items={states.map((s) => ({ label: s.label, value: s.label }))}
                     formSx={{ minWidth: '100%' }}
                     SelectProps={{
-                      value: siteCondition.state,
+                      value: selectedState.label || '',
                       onChange: handleStateSelection,
                       MenuProps: {
                         style: { color: '#4F5F30' },
@@ -226,7 +224,7 @@ const SiteCondition = ({
               </Grid>
 
               {
-                Object.keys(mapState).length > 0
+                Object.keys(selectedState).length > 0
                   ? (
                     <Grid item xs={12} pt="1rem">
                       <Typography>
