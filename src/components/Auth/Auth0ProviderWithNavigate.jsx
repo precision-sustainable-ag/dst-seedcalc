@@ -1,9 +1,33 @@
-import { Auth0Provider } from '@auth0/auth0-react';
-import React from 'react';
+import React, { useMemo } from 'react';
+import { Auth0Provider, Auth0Context } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
-import { auth0Domain, auth0ClientId, auth0Audience } from '../../shared/data/keys';
+import {
+  auth0Domain, auth0ClientId, auth0Audience, testAuth0Env,
+} from '../../shared/data/keys';
+
+// This is a mock Auth0Provider which does not provide real auth0 features, this is only for testing build
+const TestAuth0Provider = ({ children }) => {
+  const testAuth0Values = useMemo(() => ({
+    // Mock all the values and functions that useAuth0 provides
+    isAuthenticated: false,
+    getAccessTokenSilently: async () => 'mock-token',
+    loginWithPopup: () => console.log('Auth0: loginWithPopup called'),
+    loginWithRedirect: () => console.log('Auth0: loginWithRedirect called'),
+    logout: () => console.log('Auth0: logout called'),
+  }), []);
+
+  return (
+    <Auth0Context.Provider value={testAuth0Values}>
+      {children}
+    </Auth0Context.Provider>
+  );
+};
 
 const Auth0ProviderWithNavigate = ({ children }) => {
+  if (testAuth0Env) {
+    return <TestAuth0Provider>{children}</TestAuth0Provider>;
+  }
+
   const navigate = useNavigate();
   const redirectUri = window.location.origin;
 

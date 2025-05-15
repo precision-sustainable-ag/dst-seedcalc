@@ -3,10 +3,14 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-- develop
+  branches:
+    include:
+      - develop
 
-resources:
-- repo: self
+pr:
+  branches:
+    include:
+      - develop
 
 variables:
 
@@ -43,6 +47,7 @@ stages:
         echo VITE_API_MAPBOX_TOKEN="$(VITE_API_MAPBOX_TOKEN)" >> /home/vsts/work/1/s/.env
         echo VITE_AUTH0_USERNAME="$(VITE_AUTH0_USERNAME)" >> /home/vsts/work/1/s/.env
         echo VITE_AUTH0_PASSWORD="$(VITE_AUTH0_PASSWORD)" >> /home/vsts/work/1/s/.env
+        echo VITE_TEST_AUTH0_ENV="true" >> /home/vsts/work/1/s/.env
     - task: Docker@2
       displayName: Build and push an image to container registry
       inputs:
