@@ -1,5 +1,10 @@
+const testAuth0Env = process.env.VITE_TEST_AUTH0_ENV;
+
 describe('auth0', () => {
-  beforeEach(() => {
+  beforeEach(function () {
+    if (testAuth0Env) {
+      this.skip();
+    }
     cy.loginToAuth0();
     cy.visit('/');
   });
