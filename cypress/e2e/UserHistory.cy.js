@@ -1,9 +1,7 @@
 /* eslint-disable cypress/no-unnecessary-waiting */
-const testAuth0Env = process.env.VITE_TEST_AUTH0_ENV;
-
 describe('Creating user history', () => {
   beforeEach(function () {
-    if (testAuth0Env) {
+    if (Cypress.env('test_auth0_env')) {
       this.skip();
     }
     cy.intercept('POST', 'https://develophistory.covercrop-data.org/v1/history', {
@@ -52,7 +50,7 @@ describe('Creating user history', () => {
 
 describe('Importing user history', () => {
   beforeEach(function () {
-    if (testAuth0Env) {
+    if (Cypress.env('test_auth0_env')) {
       this.skip();
     }
     cy.intercept('https://develophistory.covercrop-data.org/v1/histories?schema=*').as('getHistory');
@@ -77,7 +75,7 @@ describe('Importing user history', () => {
 
 describe('Updating user history', () => {
   beforeEach(function () {
-    if (testAuth0Env) {
+    if (Cypress.env('test_auth0_env')) {
       this.skip();
     }
     cy.intercept('PUT', 'https://develophistory.covercrop-data.org/v1/history/*', {
