@@ -11,6 +11,8 @@ pr:
   branches:
     include:
       - develop
+      - feature/*
+      - bugfix/*
 
 variables:
 
