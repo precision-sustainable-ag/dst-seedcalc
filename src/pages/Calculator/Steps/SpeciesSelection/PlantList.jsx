@@ -122,7 +122,7 @@ const PlantList = ({
     const { id: cropId, label: seedName } = seed;
     // if seed not in seedSelected, add it
     if (seedsSelected.filter((s) => s.label === seedName).length === 0) {
-      const url = `${apiBaseURL}/crops/${cropId}?regions=${stateId}&context=seed_calc&regions=${countyId}`;
+      const url = `${apiBaseURL}/v2/crops/${cropId}?regions=${stateId}&context=seed_calc&regions=${countyId}`;
       try {
         const response = await fetch(url);
         if (!response.ok) {
