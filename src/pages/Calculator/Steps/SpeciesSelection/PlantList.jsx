@@ -22,6 +22,7 @@ import { initialOptions } from '../../../../shared/utils/calculator';
 import { setHistoryStateRedux, setMaxAvailableStepRedux, setAlertStateRedux } from '../../../../features/userSlice/actions';
 import { historyStates } from '../../../../features/userSlice/state';
 import pirschAnalytics from '../../../../shared/utils/analytics';
+import apiBaseURL from '../../../../shared/utils/apiBaseURL';
 
 const CheckBoxIcon = ({ style }) => (
   <Box sx={{
@@ -121,8 +122,7 @@ const PlantList = ({
     const { id: cropId, label: seedName } = seed;
     // if seed not in seedSelected, add it
     if (seedsSelected.filter((s) => s.label === seedName).length === 0) {
-      const url = `https://${/(localhost|dev)/i.test(window.location) ? 'developapi' : 'api'
-      }.covercrop-selector.org/v2/crops/${cropId}?regions=${stateId}&context=seed_calc&regions=${countyId}`;
+      const url = `${apiBaseURL}/crops/${cropId}?regions=${stateId}&context=seed_calc&regions=${countyId}`;
       try {
         const response = await fetch(url);
         if (!response.ok) {
