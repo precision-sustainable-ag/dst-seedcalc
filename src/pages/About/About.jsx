@@ -15,6 +15,7 @@ import LicenseAndCopyright from './LicenseAndCopyright/LicenseAndCopyright';
 import FundingAndAcknowledgements from './FundingAndAcknowledgements/FundingAndAcknowledgements';
 import AboutTheExperts from './AboutTheExperts/AboutTheExperts';
 import useIsMobile from '../../shared/hooks/useIsMobile';
+import apiBaseURL from '../../shared/utils/apiBaseURL';
 
 const About = () => {
   const [value, setValue] = useState(0);
@@ -64,9 +65,7 @@ const About = () => {
   };
 
   useEffect(() => {
-    const url = `https://${
-      /(localhost|dev)/i.test(window.location) ? 'developapi' : 'api'
-    }.covercrop-selector.org/v2/regions?locality=state&context=seed_calc`;
+    const url = `${apiBaseURL}/v2/regions?locality=state&context=seed_calc`;
     fetch(url)
       .then((res) => res.json())
       .then((data) => {

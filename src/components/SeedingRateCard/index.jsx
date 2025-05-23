@@ -157,7 +157,7 @@ const SeedInfo = ({
             component="img"
             height="160px"
             image={
-              seed.thumbnail ?? 'https://placehold.it/250x150?text=Placeholder'
+              seed.thumbnailWide ?? 'https://placehold.it/250x150?text=Placeholder'
             }
             alt={seed.label}
             sx={{ border: '2px solid green', borderRadius: '1rem' }}

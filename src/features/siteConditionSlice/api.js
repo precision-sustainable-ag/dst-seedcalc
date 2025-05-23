@@ -1,12 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import apiBaseURL from '../../shared/utils/apiBaseURL';
 
 // api to get all states
 export const getLocality = createAsyncThunk(
   'siteCondition/getLocality',
   async () => {
-    const url = `https://${
-      /(localhost|dev)/i.test(window.location) ? 'developapi' : 'api'
-    }.covercrop-selector.org/v2/regions?locality=state&context=seed_calc`;
+    const url = `${apiBaseURL}/v2/regions?locality=state&context=seed_calc`;
     const res = await fetch(url).then((data) => data.json());
     return res.data;
   },
@@ -16,7 +15,7 @@ export const getLocality = createAsyncThunk(
 export const getRegion = createAsyncThunk(
   'siteCondition/getRegion',
   async ({ stateId }) => {
-    const url = `https://${/(localhost|dev)/i.test(window.location) ? 'developapi' : 'api'}.covercrop-selector.org/v2/regions/${stateId}`;
+    const url = `${apiBaseURL}/v2/regions/${stateId}`;
     const res = await fetch(url).then((data) => data.json());
     return res;
   },
