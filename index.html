@@ -19,7 +19,7 @@
     <!-- Here we load the sdk from seedcal api -->
     <script>
       (function () {
-        const testAuth0Env = '%VITE_TEST_AUTH0_ENV%' === true;
+        const testAuth0Env = '%VITE_TEST_AUTH0_ENV%' === 'true';
         const useDevelopApi = testAuth0Env || /(localhost|dev)/i.test(window.location); // Set this to false to use 'api' instead of 'developapi'
         const subdomain = useDevelopApi ? 'developapi' : 'api';
         const script = document.createElement('script');
