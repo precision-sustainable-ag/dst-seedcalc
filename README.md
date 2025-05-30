@@ -2,41 +2,41 @@
 
 [![PSA](./public/PSALogo.png)](https://www.precisionsustainableag.org/)
 
-### DST Seeding Rate Calculator
+# DST Seeding Rate Calculator
 
 </div>
 
-This is the Seeding Rate Calculator codebase for [PSA](https://www.precisionsustainableag.org/). Helping MCCC/NECCC/SCCC farmers calculate their seeding rate.
+## About
 
-To access the live tool, visit [here](https://covercrop-seedcalc.org/).
+The DST Seeding Rate Calculator is a web-based tool developed for [Precision Sustainable Agriculture (PSA)](https://www.precisionsustainableag.org/). This application helps farmers in the MCCC/NECCC/SCCC regions calculate optimal seeding rates for their crops, supporting sustainable agricultural practices.
 
-To see the documents for this tool, visit [the wiki pages](https://precision-sustainable-ag.atlassian.net/wiki/spaces/DST/pages/162037825/Seeding+Rate+Calculator).
+**Live Application:** [https://covercrop-seedcalc.org/](https://covercrop-seedcalc.org/)
 
-**Date Created:** 02/16/22
+**Documentation:** [PSA Wiki - Seeding Rate Calculator](https://precision-sustainable-ag.atlassian.net/wiki/spaces/DST/pages/162037825/Seeding+Rate+Calculator)
 
-**Date Last Modified:** 09/10/24
+**Date Created**:          02/16/22  
+**Date Last Modified:**    05/30/25
 
-### Table of Contents
+## Quick Links
 
-- [Contributing](#contributing)
-  - [Technologies](#technologies)
-  - [First time setup](#first-time-setup)
-  - [Folder structure](#folder-structure)
-  - [File structure](#file-structure)
-- [Runbook](#runbook)
+- [DST Seeding Rate Calculator](#dst-seeding-rate-calculator)
+  - [About](#about)
+  - [Quick Links](#quick-links)
+  - [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Installation Steps](#installation-steps)
+  - [Development Guide](#development-guide)
+    - [Tech Stack](#tech-stack)
+    - [Project Structure](#project-structure)
+  - [Troubleshooting](#troubleshooting)
 
-## Contributing
+## Getting Started
 
-### Technologies
+### Prerequisites
+- Node.js and npm
+- Git
 
-The technologies we are currently using in this repo:
-
-- **React**: Front-end Reat app
-- **Redux**: State management
-- **Material UI**: UI Library
-
-
-### First time setup
+### Installation Steps
 
 1. The first step is downloading the code by cloning the repository:
 
@@ -44,26 +44,34 @@ The technologies we are currently using in this repo:
     git clone https://github.com/precision-sustainable-ag/dst-seedcalc.git
     ```
 
-2. Then run `npm config set @psa:registry https://node.bit.cloud`
+2. Run `npm install` to install project dependencies. A full list of the dependencies can be found in package.json. If you are running on a windows machine delete `package-lock.json` prior to running the below command.
 
-3. Run `npm install` to install project dependencies. A full list of the dependencies can be found in package.json. If you are running on a windows machine delete `package-lock.json` prior to running the below command.
+3. Create a `.env` file in the root directory. The file will contain following keys, ask @mikahpinegar for the values of the keys.
+   ```
+   VITE_API_AUTH0_DOMAIN=<auth0 domain>
+   VITE_API_AUTH0_CLIENT_ID=<auth0 client id>
+   VITE_API_AUTH0_AUDIENCE=<auth0 audience>
+   VITE_API_USER_HISTORY_API_URL=<user history url>
+   VITE_API_USER_HISTORY_SCHEMA=<schema>
+   VITE_API_RELEASE_NOTES_URL=<release notes url>
+   VITE_API_MAPBOX_TOKEN=<mapbox token>
+   VITE_AUTH0_USERNAME=<auth0 username>
+   VITE_AUTH0_PASSWORD=<auth0 password>
+   ```
 
-4. Create a `.env` file in the root directory. The file will contain following keys, ask @mikahpinegar for the values of the keys.
+4. After the dependencies have been installed and the .env file has been created, run `npm start` to run the code locally.
 
-    ```
-    VITE_API_AUTH0_DOMAIN=<auth0 domain>
-    VITE_API_AUTH0_CLIENT_ID=<auth0 client id>
-    VITE_API_AUTH0_AUDIENCE=<auth0 audience>
-    VITE_API_USER_HISTORY_API_URL=<user history url>
-    VITE_API_USER_HISTORY_SCHEMA=<schema>
-    VITE_API_RELEASE_NOTES_URL=<release notes url>
-    VITE_API_MAPBOX_TOKEN=<mapbox token>
-    ```
+## Development Guide
 
-5. After the dependencies have been installed and the .env file has been created, run `npm start` to run the code locally. 
+### Tech Stack
 
+The technologies we are currently using in this repo:
 
-### Folder structure
+- **React**: Front-end React app
+- **Redux**: State management
+- **Material UI**: UI Library
+
+### Project Structure
 
 ```sh
 src/
@@ -73,45 +81,10 @@ src/
 ├── shared            # Constant data, theme and utility functions
 ```
 
-### File structure
+## Troubleshooting
 
-Generally for the core pages, we have comments that specify the section of the page as such:
-
-```sh
-//////////////////////////////////////////////////////////
-//                      Imports                         //      # Imports
-//////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////
-//                      Redux                           //      # Redux logic
-//////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////
-//                   State Logic                        //      # Core logic
-//////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////
-//                     useEffect                        //      # useEffect
-//////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////
-//                      Render                          //      # Render
-//////////////////////////////////////////////////////////
-```
-
-
-## Runbook
-
-**Symptom:**
-After running `npm install` you might run into an `Error E404 - Not Found - GET https://registry.npmjs.org/@psa%2fdst.ui.map - Not found`
-
-**Solution:**
-Follow these steps:
-1. Install the `react-scripts` package using `npm install react-scripts --save`
-2. Run  `npm start`
-
-**Line Spacing**
-Set Line spacing (CRLF -> LF)
+**Line Ending Issues**  
+To fix CRLF/LF line ending problems (CRLF -> LF): 
 ```
 git config core.autocrlf false
 git rm --cached -r .
