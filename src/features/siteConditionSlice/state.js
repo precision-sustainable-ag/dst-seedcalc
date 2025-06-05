@@ -14,6 +14,7 @@ const initialState = {
   council: '',
   soilFertility: '',
   latlon: [],
+  fields: [],
   loading: false,
   error: false,
 };

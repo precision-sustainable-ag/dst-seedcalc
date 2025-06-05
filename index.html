@@ -17,13 +17,16 @@
     <link rel="manifest" href="/manifest.json" />
 
     <!-- Here we load the sdk from seedcal api -->
-    <!-- <script src="https://developapi.covercrop-seedcalc.org/v1/scripts/js/sdk.js"></script> -->
     <script>
-      var useDevelopApi = /(localhost|dev)/i.test(window.location); // Set this to false to use 'api' instead of 'developapi'
-      var subdomain = useDevelopApi ? 'developapi' : 'api';
-      var script = document.createElement('script');
-      script.src = `https://${subdomain}.covercrop-seedcalc.org/v1/scripts/js/sdk.js`;
-      document.head.appendChild(script);
+      (function () {
+        const testAuth0Env = '%VITE_TEST_AUTH0_ENV%' === 'true';
+        const useDevelopApi = testAuth0Env || /(localhost|dev)/i.test(window.location); // Set this to false to use 'api' instead of 'developapi'
+        const subdomain = useDevelopApi ? 'developapi' : 'api';
+        const script = document.createElement('script');
+        script.src = `https://${subdomain}.covercrop-seedcalc.org/v1/scripts/js/sdk.js`;
+        script.defer = true;
+        document.head.appendChild(script);
+      })();
     </script>
     <!-- Pirsch analytics -->
     <script defer src="https://api.pirsch.io/pa.js"

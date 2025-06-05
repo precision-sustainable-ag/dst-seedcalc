@@ -8,10 +8,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Typography } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import { PSAButton, PSAAccordion } from 'shared-react-components/src';
 import NumberTextField from '../../../../components/NumberTextField';
-import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
+import { setOptionRedux, setSeedTagInfoSelectedRedux } from '../../../../features/calculatorSlice/actions';
 import '../steps.scss';
 import { validateForms } from '../../../../shared/utils/format';
 import { historyStates } from '../../../../features/userSlice/state';
@@ -40,7 +40,7 @@ const SeedTagInfo = ({
 }) => {
   const dispatch = useDispatch();
   const { council } = useSelector((state) => state.siteCondition);
-  const { seedsSelected, options } = useSelector((state) => state.calculator);
+  const { seedsSelected, options, seedTagInfoSelected } = useSelector((state) => state.calculator);
   const { historyState } = useSelector((state) => state.user);
 
   const [accordionState, setAccordionState] = useState(
@@ -49,8 +49,6 @@ const SeedTagInfo = ({
       return res;
     }, {}),
   );
-
-  const [haveSeedTagInfo, setHaveSeedTagInfo] = useState(false);
 
   const updateGermination = (seedLabel, value) => {
     dispatch(setAlertStateRedux({
@@ -93,7 +91,7 @@ const SeedTagInfo = ({
   };
 
   const handleHaveSeedTagInfo = (selection) => {
-    setHaveSeedTagInfo(selection);
+    dispatch(setSeedTagInfoSelectedRedux(selection));
     pirschAnalytics('Seed Tag Info', { meta: { 'Have Seed Tag Info': true } });
   };
 
@@ -114,7 +112,7 @@ const SeedTagInfo = ({
   }, []);
 
   useEffect(() => {
-    if (haveSeedTagInfo) {
+    if (seedTagInfoSelected) {
       dispatch(setAlertStateRedux({
         ...alertState,
         open: true,
@@ -122,15 +120,15 @@ const SeedTagInfo = ({
         message: 'These are starting values. Adjust as needed based on your seed tag info.',
       }));
     }
-    validateForms(haveSeedTagInfo, 5, completedStep, setCompletedStep);
-  }, [haveSeedTagInfo]);
+    validateForms(seedTagInfoSelected, 5, completedStep, setCompletedStep);
+  }, [seedTagInfoSelected]);
 
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Typography variant="h2">{haveSeedTagInfo ? 'Enter seed tag info' : 'Do you have seed tag info?'}</Typography>
+        <Typography variant="h2">{seedTagInfoSelected ? 'Enter seed tag info' : 'Do you have seed tag info?'}</Typography>
       </Grid>
-      {haveSeedTagInfo === false
+      {seedTagInfoSelected === false
         && (
         <Grid container sx={{ padding: '1rem' }}>
           <Grid item xs={12} display="flex" justifyContent="center" gap="1rem">
@@ -161,7 +159,7 @@ const SeedTagInfo = ({
           </Grid>
         </Grid>
         )}
-      {haveSeedTagInfo === true
+      {seedTagInfoSelected === true
         && (seedsSelected.map((seed, i) => (
           <Grid item xs={12} key={i}>
             <PSAAccordion

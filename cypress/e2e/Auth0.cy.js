@@ -1,5 +1,8 @@
 describe('auth0', () => {
-  beforeEach(() => {
+  beforeEach(function () {
+    if (Cypress.env('test_auth0_env')) {
+      this.skip();
+    }
     cy.loginToAuth0();
     cy.visit('/');
   });

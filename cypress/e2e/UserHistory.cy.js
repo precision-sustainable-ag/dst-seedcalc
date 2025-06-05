@@ -1,6 +1,9 @@
 /* eslint-disable cypress/no-unnecessary-waiting */
 describe('Creating user history', () => {
-  beforeEach(() => {
+  beforeEach(function () {
+    if (Cypress.env('test_auth0_env')) {
+      this.skip();
+    }
     cy.intercept('POST', 'https://develophistory.covercrop-data.org/v1/history', {
       statusCode: 200, body: { data: { id: 0 } },
     }).as('createHistory');
@@ -23,11 +26,9 @@ describe('Creating user history', () => {
     cy.get('div[class^="map_loadingContainer"]').should('not.exist');
     // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(1000);
-    // click on Indiana
-    // cy.get('.mapboxgl-canvas').should('be.visible').trigger('click', 525, 160);
-    cy.get('div[class^="_wrapper"]').reactComponent().its('memoizedProps').then((props) => {
-      cy.wrap(props).invoke('selectorFunction', { properties: { STATE_NAME: 'Indiana' } });
-    });
+    // select Indiana
+    cy.getByTestId('site_condition_state').click();
+    cy.get('[data-test="site_condition_state-Indiana"]').click();
     cy.getByTestId('option_manually').should('be.visible').click();
     cy.getByTestId('site_condition_region').click();
     cy.get('[data-test="site_condition_region-Adams"]').click();
@@ -48,7 +49,10 @@ describe('Creating user history', () => {
 });
 
 describe('Importing user history', () => {
-  beforeEach(() => {
+  beforeEach(function () {
+    if (Cypress.env('test_auth0_env')) {
+      this.skip();
+    }
     cy.intercept('https://develophistory.covercrop-data.org/v1/histories?schema=*').as('getHistory');
     cy.loginToAuth0();
     cy.visit('/');
@@ -70,7 +74,10 @@ describe('Importing user history', () => {
 });
 
 describe('Updating user history', () => {
-  beforeEach(() => {
+  beforeEach(function () {
+    if (Cypress.env('test_auth0_env')) {
+      this.skip();
+    }
     cy.intercept('PUT', 'https://develophistory.covercrop-data.org/v1/history/*', {
       statusCode: 200,
       body: {},
@@ -94,11 +101,9 @@ describe('Updating user history', () => {
       cy.log(historyState);
       expect(historyState).to.equal('imported');
     });
-    // should not be able to update state on map
-    // cy.get('.mapboxgl-canvas').should('be.visible').trigger('click', 525, 200);
-    cy.get('div[class^="_wrapper"]').reactComponent().its('memoizedProps').then((props) => {
-      cy.wrap(props).invoke('selectorFunction', { properties: { STATE_NAME: 'New York' } });
-    });
+    // should not be able to update state to New York
+    cy.getByTestId('site_condition_state').click();
+    cy.get('[data-test="site_condition_state-New York"]').click();
     cy.getByTestId('warning_text').should('be.visible');
     cy.getByTestId('cancel_button').click();
     cy.getByTestId('option_manually').click();

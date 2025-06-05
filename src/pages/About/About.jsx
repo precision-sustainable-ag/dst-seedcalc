@@ -1,10 +1,21 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable react/no-unescaped-entities */
+/*
+  This file contains the About component, helper functions, and styles
+  The about page is a static pages that has information about the project
+  RenderContent contains all the text listed in the about section
+*/
+
 import {
   Box, Grid, Stack, Typography,
 } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { PSAButton } from 'shared-react-components/src';
-import LicenseAndCopyright from './LicenseAndCopyright';
+import LicenseAndCopyright from './LicenseAndCopyright/LicenseAndCopyright';
+import FundingAndAcknowledgements from './FundingAndAcknowledgements/FundingAndAcknowledgements';
+import AboutTheExperts from './AboutTheExperts/AboutTheExperts';
+import useIsMobile from '../../shared/hooks/useIsMobile';
+import apiBaseURL from '../../shared/utils/apiBaseURL';
 
 const About = () => {
   const [value, setValue] = useState(0);
@@ -12,22 +23,28 @@ const About = () => {
 
   const { council } = useSelector((state) => state.siteCondition);
 
+  const isMobile = useIsMobile('md');
+
+  const handleChange = (newValue) => {
+    setValue(newValue);
+  };
+
   const pageSections = [
     {
       id: 0,
       menuOption: 'License and Copyright',
       title: 'License and Copyright',
     },
-    // {
-    //   id: 1,
-    //   menuOption: 'Funding and Acknowledgements',
-    //   title: 'Funding and Acknowledgements',
-    // },
-    // {
-    //   id: 2,
-    //   menuOption: 'About the Experts',
-    //   title: 'About The Experts',
-    // },
+    {
+      id: 1,
+      menuOption: 'Funding and Acknowledgements',
+      title: 'Funding and Acknowledgements',
+    },
+    {
+      id: 2,
+      menuOption: 'About the Experts',
+      title: 'About The Experts',
+    },
   ];
 
   const getContent = () => {
@@ -36,21 +53,19 @@ const About = () => {
         return (
           <LicenseAndCopyright />
         );
-      // case 1:
-      //   return (
-      //     <FundingAndAcknowledgements />
-      //   );
-      // case 2: return (
-      //   <AboutTheExperts />
-      // );
+      case 1:
+        return (
+          <FundingAndAcknowledgements />
+        );
+      case 2: return (
+        <AboutTheExperts />
+      );
       default: return null;
     }
   };
 
   useEffect(() => {
-    const url = `https://${
-      /(localhost|dev)/i.test(window.location) ? 'developapi' : 'api'
-    }.covercrop-selector.org/v2/regions?locality=state&context=seed_calc`;
+    const url = `${apiBaseURL}/v2/regions?locality=state&context=seed_calc`;
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
@@ -58,11 +73,11 @@ const About = () => {
           ? data.attributions.generalStatement
           : data.attributions[council].withoutModifications);
       });
-  }, []);
+  }, [council]);
 
   return (
     <Box sx={{ border: 0.5, borderColor: 'grey.300' }} ml={2} mr={2} mt={5}>
-      <Grid container spacing={0} justifyContent="center" mt={4} mb={5} pt={3}>
+      <Grid container spacing={0} justifyContent="center" mt={isMobile ? 0 : 5} mb={isMobile ? 0 : 5}>
         <Grid item xs={12} sm={12} md={3.4} lg={3.4} xl={3.4}>
           <div
             style={{
@@ -81,7 +96,7 @@ const About = () => {
                   borderRadius: '0px',
                   width: '100%',
                 }}
-                onClick={() => setValue(section.id)}
+                onClick={() => handleChange(section.id)}
                 variant={value === section.id ? 'contained' : 'text'}
                 data-test={`section-${section.menuOption}`}
                 title={section.menuOption}
@@ -102,13 +117,15 @@ const About = () => {
           }}
         >
           <div style={{ border: '1px solid #4F5F30', minHeight: '320px' }}>
-            <Stack pl={3} pr={3} pb={4}>
+            <Stack pl={isMobile ? 0 : 3} pr={isMobile ? 0 : 3} pb={4}>
               <center>
                 <Typography variant="h4" gutterBottom>
                   {pageSections.filter((section) => section.id === value)[0].title}
                 </Typography>
               </center>
               {getContent()}
+              <br />
+              <br />
               <Typography fontSize="12px" data-test="about_attribution">{attribution}</Typography>
             </Stack>
           </div>

@@ -4,9 +4,8 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Grid from '@mui/material/Grid';
-import { Box, useMediaQuery } from '@mui/material';
+import { Box } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { FadeAlert, PSASkipContent } from 'shared-react-components/src';
@@ -31,6 +30,7 @@ import useUserHistory from '../../shared/hooks/useUserHistory';
 import { historyStates } from '../../features/userSlice/state';
 import pirschAnalytics from '../../shared/utils/analytics';
 import { setAuthToken } from '../../shared/utils/authToken';
+import useIsMobile from '../../shared/hooks/useIsMobile';
 
 const Calculator = ({ calculator, setCalculator }) => {
   const [activeStep, setActiveStep] = useState(0);
@@ -48,8 +48,7 @@ const Calculator = ({ calculator, setCalculator }) => {
 
   const dispatch = useDispatch();
 
-  const theme = useTheme();
-  const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useIsMobile('md');
 
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
@@ -186,7 +185,7 @@ const Calculator = ({ calculator, setCalculator }) => {
 
   return (
     <Grid container justifyContent="center">
-      <Grid item style={{ position: 'fixed', bottom: matchesMd ? '45px' : 0, zIndex: 1000 }}>
+      <Grid item style={{ position: 'fixed', bottom: isMobile ? '45px' : 0, zIndex: 1000 }}>
         {alertState.open
           && (
           <FadeAlert
@@ -231,7 +230,7 @@ const Calculator = ({ calculator, setCalculator }) => {
             md={1}
             lg={2}
             sx={
-            matchesMd && !showHeaderLogo
+            isMobile && !showHeaderLogo
               ? {
                 position: 'fixed',
                 width: '100%',
@@ -251,7 +250,7 @@ const Calculator = ({ calculator, setCalculator }) => {
           xs={12}
           lg={(activeStep === 0 || activeStep === 8) ? 12 : 10}
           md={(activeStep === 0 || activeStep === 8) ? 12 : 11}
-          sx={{ paddingTop: matchesMd && !showHeaderLogo && activeStep !== 0 ? '100px' : 0 }}
+          sx={{ paddingTop: isMobile && !showHeaderLogo && activeStep !== 0 ? '100px' : 0 }}
         >
           {renderCalculator(
             activeStep === calculatorList.length
@@ -274,7 +273,7 @@ const Calculator = ({ calculator, setCalculator }) => {
           }}
         />
       </Grid>
-      {matchesMd && <Box sx={{ height: '50px', width: '100%' }} />}
+      {isMobile && <Box sx={{ height: '50px', width: '100%' }} />}
     </Grid>
   );
 };

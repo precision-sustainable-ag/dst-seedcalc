@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Grid from '@mui/material/Grid';
 import {
-  Typography, useTheme, useMediaQuery,
+  Typography,
 } from '@mui/material';
 import { PSADropdown, PSASlider } from 'shared-react-components/src';
 import NumberTextField from '../../../../components/NumberTextField';
@@ -11,6 +11,7 @@ import { convertToPercent } from '../../../../shared/utils/calculator';
 import { seedingMethodsMCCC, seedingMethodsNECCC, seedingMethodsSCCC } from '../../../../shared/data/dropdown';
 import '../steps.scss';
 import { setOptionRedux } from '../../../../features/calculatorSlice/actions';
+import useIsMobile from '../../../../shared/hooks/useIsMobile';
 
 const ReviewMixSteps = ({
   council,
@@ -21,14 +22,14 @@ const ReviewMixSteps = ({
 }) => {
   // TODO: the scrollable seeding rate only works for SCCC for now
   const baseSeedingRate = council === 'SCCC' ? seed.attributes.Planting['Base Seeding Rate'].values[0] : 0;
-  const theme = useTheme();
-  const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useIsMobile('md');
+
   const dispatch = useDispatch();
   const { seedsSelected, seedingMethods } = useSelector((state) => state.calculator);
 
   const renderStepsForm = (label1, label2, label3) => (
 
-    matchesMd && (
+    isMobile && (
       <Grid container justifyContent="space-evenly">
         <Grid item xs={3}>
           <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
@@ -144,7 +145,7 @@ const ReviewMixSteps = ({
           <Grid container justifyContent="space-evenly">
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
+                label={isMobile ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
                 disabled
                 value={step1.singleSpeciesSeedingRate}
               />
@@ -156,7 +157,7 @@ const ReviewMixSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Soil Fertility Modifier'}
+                label={isMobile ? '' : 'Soil Fertility Modifier'}
                 disabled
                 value={step1.soilFertilityModifier}
               />
@@ -169,12 +170,12 @@ const ReviewMixSteps = ({
             <Grid item xs={3}>
               <NumberTextField
                 disabled
-                label={matchesMd ? '' : '% of Single Species Rate'}
+                label={isMobile ? '' : '% of Single Species Rate'}
                 value={percentOfRateNECCC}
               />
             </Grid>
           </Grid>
-          <Grid container justifyContent="space-evenly">
+          <Grid container justifyContent="space-evenly" marginTop={isMobile ? '20px' : 0}>
             <Grid item xs={3}>
               <Typography variant="mathIcon">=</Typography>
             </Grid>
@@ -219,7 +220,7 @@ const ReviewMixSteps = ({
             <Grid item xs={3}>
               <NumberTextField
                 disabled
-                label={matchesMd ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
+                label={isMobile ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
                 value={step1.singleSpeciesSeedingRate}
                 testId="single_rate"
               />
@@ -231,7 +232,7 @@ const ReviewMixSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : '% of Single Species Rate'}
+                label={isMobile ? '' : '% of Single Species Rate'}
                 disabled
                 // handleChange={(e) => {
                 //   handleFormValueChange(seed, 'percentOfRate', parseFloat(e.target.value) / 100);
@@ -247,7 +248,7 @@ const ReviewMixSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Seeding Rate in Mix (Lbs per Acre)'}
+                label={isMobile ? '' : 'Seeding Rate in Mix (Lbs per Acre)'}
                 disabled
                 value={step1.seedingRate}
                 testId="mix_rate"
@@ -298,7 +299,7 @@ const ReviewMixSteps = ({
             <Grid item xs={3}>
               <NumberTextField
                 disabled
-                label={matchesMd ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
+                label={isMobile ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
                 value={step1.singleSpeciesSeedingRate}
               />
             </Grid>
@@ -309,7 +310,7 @@ const ReviewMixSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Percent Of Rate'}
+                label={isMobile ? '' : 'Percent Of Rate'}
                 disabled
                 value={convertToPercent(step1.percentOfRate)}
               />
@@ -321,7 +322,7 @@ const ReviewMixSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label={matchesMd ? '' : 'Planting Time Modifier'}
+                label={isMobile ? '' : 'Planting Time Modifier'}
                 disabled
                 value={step1.plantingTimeModifier}
               />
@@ -344,7 +345,7 @@ const ReviewMixSteps = ({
             <Grid item xs={3}>
               <NumberTextField
                 disabled
-                label={matchesMd ? '' : 'Mix Competition Coefficient'}
+                label={isMobile ? '' : 'Mix Competition Coefficient'}
                 value={step1.mixCompetitionCoefficient}
               />
             </Grid>
@@ -355,7 +356,7 @@ const ReviewMixSteps = ({
 
             <Grid item xs={3}>
               <NumberTextField
-                label="Seeding Rate In Mix (Lbs per Acre)"
+                label={isMobile ? '' : 'Seeding Rate In Mix (Lbs per Acre)'}
                 disabled
                 value={step1.seedingRate}
               />
@@ -407,7 +408,7 @@ const ReviewMixSteps = ({
           <Grid item xs={3}>
             <NumberTextField
               disabled
-              label={matchesMd ? '' : 'Seeding Rate in Mix (Lbs per Acre)'}
+              label={isMobile ? '' : 'Seeding Rate in Mix (Lbs per Acre)'}
               value={step2.seedingRate}
             />
           </Grid>
@@ -418,7 +419,7 @@ const ReviewMixSteps = ({
 
           <Grid item xs={3}>
             <NumberTextField
-              label={matchesMd ? '' : 'Planting Method'}
+              label={isMobile ? '' : 'Planting Method'}
               value={step2.plantingMethodModifier ?? 1}
               disabled
             />
@@ -430,7 +431,7 @@ const ReviewMixSteps = ({
 
           <Grid item xs={3}>
             <NumberTextField
-              label={matchesMd ? '' : 'Seeding Rate in Mix (Lbs per Acre)'}
+              label={isMobile ? '' : 'Seeding Rate in Mix (Lbs per Acre)'}
               disabled
               value={step2.seedingRateAfterPlantingMethodModifier}
             />
@@ -451,7 +452,7 @@ const ReviewMixSteps = ({
         <Grid container justifyContent="space-evenly">
           <Grid item xs={3}>
             <NumberTextField
-              label={matchesMd ? '' : 'Seeding Rate in Mix (Lbs per Acre)'}
+              label={isMobile ? '' : 'Seeding Rate in Mix (Lbs per Acre)'}
               disabled
               value={step3.seedingRate}
             />
@@ -463,7 +464,7 @@ const ReviewMixSteps = ({
 
           <Grid item xs={3}>
             <NumberTextField
-              label={matchesMd ? '' : 'Management Impact on Mix'}
+              label={isMobile ? '' : 'Management Impact on Mix'}
               disabled
               value={step3.managementImpactOnMix ?? 1}
             />
@@ -475,7 +476,7 @@ const ReviewMixSteps = ({
 
           <Grid item xs={3}>
             <NumberTextField
-              label={matchesMd ? '' : 'Seeding Rate in Mix (Lbs per Acre)'}
+              label={isMobile ? '' : 'Seeding Rate in Mix (Lbs per Acre)'}
               disabled
               value={step3.seedingRateAfterManagementImpact}
             />
@@ -516,7 +517,7 @@ const ReviewMixSteps = ({
         <Grid container justifyContent="space-evenly">
           <Grid item xs={3}>
             <NumberTextField
-              label={matchesMd ? '' : 'Seeding Rate in Mix (Lbs per Acre)'}
+              label={isMobile ? '' : 'Seeding Rate in Mix (Lbs per Acre)'}
               disabled
               value={step4.seedingRateAfterManagementImpact}
               testId="seeding_rate_in_mix"
@@ -529,7 +530,7 @@ const ReviewMixSteps = ({
 
           <Grid item xs={3}>
             <NumberTextField
-              label={matchesMd ? '' : '% Germination'}
+              label={isMobile ? '' : '% Germination'}
               disabled
               value={convertToPercent(step4.germination)}
               testId="germination_value"
@@ -542,14 +543,14 @@ const ReviewMixSteps = ({
 
           <Grid item xs={3}>
             <NumberTextField
-              label={matchesMd ? '' : '% Purity'}
+              label={isMobile ? '' : '% Purity'}
               disabled
               value={convertToPercent(step4.purity)}
               testId="purity_value"
             />
           </Grid>
         </Grid>
-        <Grid container justifyContent="space-evenly">
+        <Grid container justifyContent="space-evenly" marginTop={isMobile ? '20px' : 0}>
           <Grid item xs={3}>
             <Typography variant="mathIcon">=</Typography>
           </Grid>
@@ -578,7 +579,7 @@ const ReviewMixSteps = ({
         <Grid container justifyContent="space-evenly">
           <Grid item xs={3}>
             <NumberTextField
-              label={matchesMd ? '' : 'Bulk Seeding Rate (Lbs per Acre)'}
+              label={isMobile ? '' : 'Bulk Seeding Rate (Lbs per Acre)'}
               disabled
               value={step5.bulkSeedingRate}
             />
@@ -590,7 +591,7 @@ const ReviewMixSteps = ({
 
           <Grid item xs={3}>
             <NumberTextField
-              label={matchesMd ? '' : 'Acres'}
+              label={isMobile ? '' : 'Acres'}
               disabled
               value={step5.acres}
             />
@@ -602,7 +603,7 @@ const ReviewMixSteps = ({
 
           <Grid item xs={3}>
             <NumberTextField
-              label={matchesMd ? '' : 'Pounds for Purchase'}
+              label={isMobile ? '' : 'Pounds for Purchase'}
               disabled
               value={step5.poundsForPurchase}
             />

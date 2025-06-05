@@ -6,13 +6,13 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { useDispatch, useSelector } from 'react-redux';
 import { PSAButton, PSATooltip, PSAStepper } from 'shared-react-components/src';
-import { useMediaQuery, useTheme } from '@mui/material';
 import { calculatorList } from '../../shared/data/dropdown';
 import { resetCalculator } from '../../features/calculatorSlice';
 import {
   setHistoryStateRedux, setMaxAvailableStepRedux, setSelectedHistoryRedux,
 } from '../../features/userSlice/actions';
 import { historyStates } from '../../features/userSlice/state';
+import useIsMobile from '../../shared/hooks/useIsMobile';
 
 /*
 {
@@ -38,8 +38,7 @@ const StepsList = ({
 
   const dispatch = useDispatch();
 
-  const theme = useTheme();
-  const matchesMd = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useIsMobile('md');
 
   const { maxAvailableStep } = useSelector((state) => state.user);
   /// ///////////////////////////////////////////////////////
@@ -99,7 +98,7 @@ const StepsList = ({
   };
 
   return (
-    <Box sx={{ paddingTop: matchesMd ? 0 : '1rem' }}>
+    <Box sx={{ paddingTop: isMobile ? 0 : '1rem' }}>
       <PSAStepper
         steps={calculatorList}
         strokeColor="#fffff2"
@@ -115,11 +114,11 @@ const StepsList = ({
             },
           },
         }}
-        mobile={matchesMd}
+        mobile={isMobile}
         nextButtonDisabled={availableSteps[activeStep] !== true}
       />
 
-      {!matchesMd && (
+      {!isMobile && (
         <Box id="step-button" sx={{ display: 'flex', pt: '0.5rem', color: 'primary.text' }}>
           {activeStep !== 0 && (
             activeStep === calculatorList.length ? (

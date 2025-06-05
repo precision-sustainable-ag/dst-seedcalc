@@ -36,5 +36,6 @@ export default defineConfig({
     auth0_domain: process.env.VITE_API_AUTH0_DOMAIN,
     auth0_audience: process.env.VITE_API_AUTH0_AUDIENCE,
     auth0_client_id: process.env.VITE_API_AUTH0_CLIENT_ID,
+    test_auth0_env: process.env.VITE_TEST_AUTH0_ENV === 'true',
   },
 });
