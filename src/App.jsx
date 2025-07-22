@@ -55,7 +55,7 @@ const App = () => {
 };
 
 window.addEventListener('error', (err) => {
-  if (/(localhost|dev)/i.test(window.location)) return;
+  if (!/^https:/.test(window.location.href)) return;
 
   const requestPayload = {
     repository: 'dst-feedback',
