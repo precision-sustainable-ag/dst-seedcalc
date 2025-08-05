@@ -233,7 +233,7 @@ const SeedingMethod = ({ alertState }) => {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Typography variant="h2">Select Seeding Method</Typography>
+        <Typography variant="stepCaption">Select Seeding Method</Typography>
       </Grid>
       <Grid item xs={0} md={3} />
       <Grid item xs={12} md={6} padding="15px">

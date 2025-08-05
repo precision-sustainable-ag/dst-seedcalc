@@ -65,7 +65,7 @@ const ConfirmPlan = ({ calculator }) => {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Typography variant="h2">Confirm Plan and Enter Costs Below</Typography>
+        <Typography variant="stepCaption">Confirm Plan and Enter Costs Below</Typography>
 
         {/* Export Button */}
         <Grid item xs={12} display="flex" justifyContent="flex-end" pt="5px">

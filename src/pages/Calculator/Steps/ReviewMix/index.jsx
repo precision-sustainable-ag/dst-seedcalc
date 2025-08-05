@@ -194,7 +194,7 @@ const ReviewMix = ({ calculator }) => {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Typography variant="h2">Review your mix</Typography>
+        <Typography variant="stepCaption">Review your mix</Typography>
       </Grid>
 
       {seedsSelected.length > 1 && (

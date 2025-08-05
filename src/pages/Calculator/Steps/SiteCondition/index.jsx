@@ -168,7 +168,7 @@ const SiteCondition = ({
   return (
     <Grid container justifyContent="center">
       <Grid item xs={12}>
-        <Typography variant="h2">Tell us about your planting site</Typography>
+        <Typography variant="stepCaption">Tell us about your planting site</Typography>
       </Grid>
       <Grid xs={12} item>
         {siteCondition.loading === 'getLocality' ? (

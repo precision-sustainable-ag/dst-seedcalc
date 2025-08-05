@@ -244,7 +244,7 @@ const MixRatio = ({
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Typography variant="h2">Review Proportions</Typography>
+        <Typography variant="stepCaption">Review Proportions</Typography>
         {historyState === historyStates.imported && (
         <Typography sx={{
           fontWeight: 'bold', margin: '1rem', marginBottom: '0',

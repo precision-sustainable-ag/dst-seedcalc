@@ -126,7 +126,7 @@ const SeedTagInfo = ({
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Typography variant="h2">{seedTagInfoSelected ? 'Enter seed tag info' : 'Do you have seed tag info?'}</Typography>
+        <Typography variant="stepCaption">{seedTagInfoSelected ? 'Enter seed tag info' : 'Do you have seed tag info?'}</Typography>
       </Grid>
       {seedTagInfoSelected === false
         && (

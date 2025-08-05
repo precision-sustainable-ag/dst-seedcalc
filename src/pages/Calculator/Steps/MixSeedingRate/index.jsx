@@ -182,7 +182,7 @@ const MixSeedingRate = ({ calculator }) => {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Typography variant="h2">Adjust Seeding Rate of Mix</Typography>
+        <Typography variant="stepCaption">Adjust Seeding Rate of Mix</Typography>
       </Grid>
       <Grid container sx={{ padding: '3% 3% 5% 5%' }}>
         <Grid
