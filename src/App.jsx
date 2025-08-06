@@ -41,13 +41,16 @@ const App = () => {
               }}
             >
               <PSASkipContent href="#main-content" text="Skip to main content" />
-              <Header />
+              <Grid container sx={{ backgroundColor: 'white', justifyContent: 'center' }}>
+                <Grid item xs={12} lg={8}>
+                  <Header />
+                </Grid>
+              </Grid>
               <Grid
                 container
-                justifyContent="center"
                 sx={{
-                  flex: 1,
                   backgroundColor: 'main.background1',
+                  justifyContent: 'center',
                 }}
               >
                 <Grid
@@ -72,6 +75,7 @@ const App = () => {
                   <BackButton />
                 </Grid>
               </Grid>
+              <Grid container sx={{ flex: 1, backgroundColor: 'main.background1' }} />
             </div>
           </Auth0ProviderWithNavigate>
         </ThemeProvider>

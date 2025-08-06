@@ -72,7 +72,7 @@ const defaultPieChartData = {
 };
 
 const MixRatio = ({
-  calculator, setCalculator, alertState,
+  calculator, setCalculator, alertState, isMobile,
 }) => {
   const [initCalculator, setInitCalculator] = useState(false);
   const [prevOptions, setPrevOptions] = useState({});
@@ -244,7 +244,8 @@ const MixRatio = ({
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Typography variant="stepCaption">Review Proportions</Typography>
+
+        {isMobile && (<Typography variant="stepCaption">Review Proportions</Typography>)}
         {historyState === historyStates.imported && (
         <Typography sx={{
           fontWeight: 'bold', margin: '1rem', marginBottom: '0',

@@ -16,7 +16,7 @@ const defaultResult = {
   totalCost: 0,
 };
 
-const ConfirmPlan = ({ calculator }) => {
+const ConfirmPlan = ({ calculator, isMobile }) => {
   const siteCondition = useSelector((state) => state.siteCondition);
   const calculatorRedux = useSelector((state) => state.calculator);
   const { council, checkNRCSStandards } = siteCondition;
@@ -65,7 +65,7 @@ const ConfirmPlan = ({ calculator }) => {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Typography variant="stepCaption">Confirm Plan and Enter Costs Below</Typography>
+        {isMobile && (<Typography variant="stepCaption">Confirm Plan and Enter Costs Below</Typography>)}
 
         {/* Export Button */}
         <Grid item xs={12} display="flex" justifyContent="flex-end" pt="5px">

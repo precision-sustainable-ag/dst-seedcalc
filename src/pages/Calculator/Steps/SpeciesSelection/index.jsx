@@ -20,7 +20,9 @@ import { createUserInput, createCalculator } from '../../../../shared/utils/calc
 import { setAlertStateRedux } from '../../../../features/userSlice/actions';
 import { historyStates } from '../../../../features/userSlice/state';
 
-const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedStep }) => {
+const SpeciesSelection = ({
+  setSiteConditionStep, completedStep, setCompletedStep, isMobile,
+}) => {
   // useSelector for crops reducer data
   const dispatch = useDispatch();
 
@@ -128,9 +130,11 @@ const SpeciesSelection = ({ setSiteConditionStep, completedStep, setCompletedSte
   return (
     <Grid container justifyContent="center">
       <Grid item xs={12}>
-        <Typography variant="stepCaption">
-          Select one or more species for your mix.
-        </Typography>
+        {isMobile && (
+          <Typography variant="stepCaption">
+            Select one or more species for your mix.
+          </Typography>
+        )}
         {historyState === historyStates.imported && (
           <Typography sx={{ fontWeight: 'bold', margin: '1rem', marginBottom: '0' }}>
             <span style={{ color: 'red' }}>Warning: </span>

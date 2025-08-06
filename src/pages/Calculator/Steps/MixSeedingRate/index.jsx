@@ -104,7 +104,7 @@ const MixSeedingTypography = styled(Typography)(({ theme }) => ({
   height: '25rem',
 }));
 
-const MixSeedingRate = ({ calculator }) => {
+const MixSeedingRate = ({ calculator, isMobile }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
 
@@ -182,7 +182,7 @@ const MixSeedingRate = ({ calculator }) => {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Typography variant="stepCaption">Adjust Seeding Rate of Mix</Typography>
+        {isMobile && (<Typography variant="stepCaption">Adjust Seeding Rate of Mix</Typography>)}
       </Grid>
       <Grid container sx={{ padding: '3% 3% 5% 5%' }}>
         <Grid

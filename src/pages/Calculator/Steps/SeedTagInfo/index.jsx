@@ -36,7 +36,7 @@ const SeedTagNumField = styled(NumberTextField)({
 });
 
 const SeedTagInfo = ({
-  completedStep, setCompletedStep, alertState,
+  completedStep, setCompletedStep, alertState, isMobile,
 }) => {
   const dispatch = useDispatch();
   const { council } = useSelector((state) => state.siteCondition);
@@ -126,7 +126,12 @@ const SeedTagInfo = ({
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Typography variant="stepCaption">{seedTagInfoSelected ? 'Enter seed tag info' : 'Do you have seed tag info?'}</Typography>
+        {isMobile
+          && (
+          <Typography variant="stepCaption">
+            {seedTagInfoSelected ? 'Enter seed tag info' : 'Do you have seed tag info?'}
+          </Typography>
+          )}
       </Grid>
       {seedTagInfoSelected === false
         && (

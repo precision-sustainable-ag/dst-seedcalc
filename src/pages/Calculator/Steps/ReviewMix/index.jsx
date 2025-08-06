@@ -70,7 +70,7 @@ const defaultPieChartData = {
 };
 
 // eslint-disable-next-line no-unused-vars
-const ReviewMix = ({ calculator }) => {
+const ReviewMix = ({ calculator, isMobile }) => {
   const dispatch = useDispatch();
   const { council } = useSelector((state) => state.siteCondition);
   const {
@@ -194,7 +194,7 @@ const ReviewMix = ({ calculator }) => {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Typography variant="stepCaption">Review your mix</Typography>
+        {isMobile && (<Typography variant="stepCaption">Review your mix</Typography>)}
       </Grid>
 
       {seedsSelected.length > 1 && (

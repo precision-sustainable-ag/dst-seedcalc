@@ -20,6 +20,8 @@ const theme = createTheme({
       lineHeight: '1.5rem',
       paddingTop: '0.75rem',
       paddingBottom: '0.75rem',
+      background: '#598445',
+      color: 'white',
       fontFamily: [
         '"IBM Plex Sans"',
         '"Roboto"',
@@ -68,23 +70,6 @@ const theme = createTheme({
           // overline: 'span',
         },
       },
-    },
-    MuiButton: {
-      variants: [
-        {
-          props: { variant: 'stepper' },
-          style: {
-            textTransform: 'none',
-            padding: '0.5rem',
-            // border: '1px solid #4F5F30',
-            // '&.Mui-disabled': {
-            //   color: '#757575',
-            //   border: '1px solid #737373',
-            //   backgroundColor: '#F0F0F0',
-            // },
-          },
-        },
-      ],
     },
     MuiInputBase: {
       styleOverrides: {
