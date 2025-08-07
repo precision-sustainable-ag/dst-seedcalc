@@ -259,17 +259,6 @@ const SeedingMethod = ({ alertState, isMobile }) => {
             expanded={accordionState[seed.label]}
             onChange={() => handleExpandAccordion(seed.label)}
             summaryContent={<Typography>{seed.label}</Typography>}
-            sx={{
-              '.MuiAccordionSummary-root': {
-                backgroundColor: 'primary.dark',
-                '.MuiAccordionSummary-expandIconWrapper p': {
-                  color: 'primary.text',
-                },
-              },
-              '.MuiAccordionDetails-root': {
-                backgroundColor: 'primary.light',
-              },
-            }}
             detailsContent={(
               <Grid container>
                 {council === 'MCCC'
