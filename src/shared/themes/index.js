@@ -3,16 +3,7 @@ import { deepmerge } from '@mui/utils';
 import { PSATheme } from 'shared-react-components/src';
 
 const theme = createTheme({
-  // palette: {
-  //   primary: {
-  //     main: '#4F5F30',
-  //     light: '#FFFFF2',
-  //     dark: '#eff1e0',
-  //     text: '#4F5F30',
-  //   },
-  // },
   typography: {
-    // TODO: need to review every variants here
     stepCaption: {
       fontSize: '1.25rem',
       fontWeight: 800,
@@ -67,13 +58,6 @@ const theme = createTheme({
           // button: 'span',
           // caption: 'span',
           // overline: 'span',
-        },
-      },
-    },
-    MuiInputBase: {
-      styleOverrides: {
-        input: {
-          // color: '#4F5F30',
         },
       },
     },
