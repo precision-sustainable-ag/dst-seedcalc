@@ -42,7 +42,7 @@ const App = () => {
             >
               <PSASkipContent href="#main-content" text="Skip to main content" />
               <Grid container sx={{ backgroundColor: 'white', justifyContent: 'center' }}>
-                <Grid item xs={12} lg={8}>
+                <Grid item xs={12} lg={10}>
                   <Header />
                 </Grid>
               </Grid>
@@ -56,7 +56,7 @@ const App = () => {
                 <Grid
                   item
                   xs={12}
-                  lg={8}
+                  lg={10}
                   sx={{
                     backgroundColor: 'white',
                     margin: isNotFullScreen ? 0 : '30px 0',
