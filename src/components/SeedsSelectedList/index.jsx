@@ -24,7 +24,7 @@ import useIsMobile from '../../shared/hooks/useIsMobile';
 
 const ExitIcon = ({ style }) => (
   <Box sx={style}>
-    <CancelRounded style={{ color: '#FF0000' }} />
+    <CancelRounded sx={{ color: 'error.main' }} />
   </Box>
 );
 
@@ -73,13 +73,17 @@ const SeedsSelectedList = ({ activeStep }) => {
             minHeight: '100px',
             whiteSpace: 'normal',
             overflowX: 'auto',
+            border: 'solid 1px',
+            borderColor: 'primary.main',
           }
           : {
             height: '100%',
+            borderLeft: 'solid 1px',
+            borderRight: 'solid 1px',
+            borderColor: 'primary.main',
           }
       }
-      bgcolor="#e5e7d5"
-      border="#c7c7c7 solid 1px"
+      bgcolor="white"
       display="flex"
       flexDirection={isMobile ? 'row' : 'column'}
     >

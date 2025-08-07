@@ -22,7 +22,7 @@ const DSTSwitch = ({
     color="default"
     sx={{
       '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-        backgroundColor: 'primary.text',
+        backgroundColor: 'text.primary',
         opacity: '0.9',
       },
     }}

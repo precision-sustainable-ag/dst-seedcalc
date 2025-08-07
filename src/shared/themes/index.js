@@ -37,7 +37,7 @@ const theme = createTheme({
     stepHeader: {
       lineHeight: '1.5',
       padding: '0 1rem',
-      background: '#e5e7d5',
+      background: '#e9e6e0',
       margin: '1rem 0',
       fontSize: '1rem',
       fontWeight: 600,

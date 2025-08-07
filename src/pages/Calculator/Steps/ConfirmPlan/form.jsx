@@ -191,7 +191,7 @@ const ConfirmPlanForm = ({
   };
 
   return (
-    <Grid container color="primary.text">
+    <Grid container color="text.primary">
       {/* NRCS Standards */}
       {checkNRCSStandards && <NRCSStandards nrcsResult={nrcsResult} />}
       <Grid item xs={12}>

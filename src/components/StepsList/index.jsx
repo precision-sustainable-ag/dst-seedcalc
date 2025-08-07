@@ -45,7 +45,7 @@ const StepsList = ({
             styles: {
               '.MuiStepLabel-label': {
                 '&.Mui-active,&.Mui-completed': {
-                  color: 'primary.text',
+                  color: 'text.primary',
                 },
               },
             },
