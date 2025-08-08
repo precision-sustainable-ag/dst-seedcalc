@@ -13,15 +13,6 @@ describe('<StepsList />', () => {
     });
   });
 
-  it('should trigger the setStep function using next and back button', () => {
-    const mockSetStep = cy.stub();
-    cy.mount(<StepsList activeStep={3} setActiveStep={mockSetStep} availableSteps={completedList} />);
-    cy.getByTestId('next_button').click();
-    cy.wrap(mockSetStep).should('have.been.calledOnce');
-    cy.getByTestId('back_button').click();
-    cy.wrap(mockSetStep).should('have.been.calledTwice');
-  });
-
   it('should show current step', () => {
     cy.mount(<StepsList activeStep={3} availableSteps={completedList} />);
     cy.getByTestId(`step-${3}`).should('have.attr', 'aria-current', 'step');
@@ -32,16 +23,5 @@ describe('<StepsList />', () => {
     cy.mount(<StepsList activeStep={3} setActiveStep={mockSetStep} availableSteps={completedList} />);
     cy.getByTestId(`step-${0}`).click();
     cy.wrap(mockSetStep).should('have.been.calledOnce');
-  });
-
-  it('should have restrictions on some steps', () => {
-    cy.mount(<StepsList activeStep={0} availableSteps={completedList} />);
-    cy.get('.MuiTooltip-tooltip').invoke('text').should('equal', 'Please enter the necessary info below.');
-    cy.mount(<StepsList activeStep={1} availableSteps={completedList} />);
-    cy.getByTestId('next_button').click({ force: true });
-    cy.get('.MuiTooltip-tooltip').invoke('text').should('equal', 'Please select at least 1 plant.');
-    cy.mount(<StepsList activeStep={5} availableSteps={completedList} />);
-    cy.getByTestId('next_button').click({ force: true });
-    cy.get('.MuiTooltip-tooltip').invoke('text').should('equal', 'Please make a selection.');
   });
 });

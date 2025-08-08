@@ -103,7 +103,7 @@ const NavButtons = ({
 
       <Box sx={{ flex: '1 1 auto', minHeight: '3rem', display: 'flex' }}>
         { placement === 'top' && (
-          <Typography variant="stepCaption" sx={{ margin: 'auto' }}>
+          <Typography variant="stepCaption" sx={{ margin: 'auto' }} data-test="step_caption">
             {stepCaptions[activeStep]}
           </Typography>
         )}
@@ -123,6 +123,7 @@ const NavButtons = ({
                   },
                 },
               }}
+              data-test="restart_link"
             />
           </Box>
         )}

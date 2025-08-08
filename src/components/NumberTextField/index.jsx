@@ -73,7 +73,9 @@ const NumberTextField = ({
       sx={{
         '.MuiOutlinedInput-root fieldset':
           emptyWarning ? { borderColor: 'rgba(255, 0, 0, .75)' } : { borderColor: 'rgba(0, 0, 0, .45)' },
-
+        input: {
+          minHeight: '40px',
+        },
         marginTop: isMobile ? ' 0' : '20px',
         ...sx,
       }}
