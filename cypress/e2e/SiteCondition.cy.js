@@ -81,7 +81,7 @@ describe('Site Condition form', () => {
   });
 
   it('should be able to go back to state selection page', () => {
-    cy.getByTestId('back_button').click();
+    cy.getByTestId('site_condition_back_button').click();
     cy.get('.mapboxgl-canvas').should('be.visible');
   });
 });

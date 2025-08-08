@@ -46,7 +46,7 @@ Cypress.Commands.add('mockSiteCondition', (council) => {
     Cypress.env('cropsData', data);
     cy.log(selectCrops, selectTypes);
   });
-  cy.getByTestId('next_button').click();
+  cy.getByTestId('next_button').first().click();
 });
 
 export const mockSpeciesSelection = () => {
@@ -66,30 +66,30 @@ export const mockSpeciesSelection = () => {
       .get('[data-testid="CheckRoundedIcon"]')
       .should('be.visible');
   });
-  cy.getByTestId('next_button').click();
+  cy.getByTestId('next_button').first().click();
 };
 
 export const mockMixRatio = () => {
-  cy.getByTestId('next_button').click();
+  cy.getByTestId('next_button').first().click();
 };
 
 export const mockSeedingMethod = () => {
-  cy.getByTestId('next_button').click();
+  cy.getByTestId('next_button').first().click();
 };
 
 export const mockMixSeedingRate = () => {
-  cy.getByTestId('next_button').click();
+  cy.getByTestId('next_button').first().click();
 };
 
 export const mockSeedTagInfo = () => {
   cy.getByTestId('selection_yes').click();
-  cy.getByTestId('next_button').click();
+  cy.getByTestId('next_button').first().click();
 };
 
 export const mockReviewMix = () => {
-  cy.getByTestId('next_button').click();
+  cy.getByTestId('next_button').first().click();
 };
 
 export const mockConfirmPlan = () => {
-  cy.getByTestId('next_button').click();
+  cy.getByTestId('next_button').first().click();
 };

@@ -30,10 +30,10 @@ describe('Species Selection', () => {
   });
 
   it('next button should be disabled at first, and be available after select >=1 species', () => {
-    cy.getByTestId('next_button').should('be.disabled');
+    cy.getByTestId('next_button').first().should('be.disabled');
     cy.getByTestId(`accordion-${selectType}`).click();
     cy.getByTestId(`species-card-${selectSpecies}`).find('button').click();
-    cy.getByTestId('next_button').should('not.be.disabled');
+    cy.getByTestId('next_button').first().should('not.be.disabled');
   });
 
   it('should be able to unselect a species by clicking on the sidebar', () => {
