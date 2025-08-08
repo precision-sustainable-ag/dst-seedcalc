@@ -36,7 +36,7 @@ const SeedTagNumField = styled(NumberTextField)({
 });
 
 const SeedTagInfo = ({
-  completedStep, setCompletedStep, alertState,
+  completedStep, setCompletedStep, alertState, isMobile,
 }) => {
   const dispatch = useDispatch();
   const { council } = useSelector((state) => state.siteCondition);
@@ -126,7 +126,12 @@ const SeedTagInfo = ({
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Typography variant="h2">{seedTagInfoSelected ? 'Enter seed tag info' : 'Do you have seed tag info?'}</Typography>
+        {isMobile
+          && (
+          <Typography variant="stepCaption">
+            {seedTagInfoSelected ? 'Enter seed tag info' : 'Do you have seed tag info?'}
+          </Typography>
+          )}
       </Grid>
       {seedTagInfoSelected === false
         && (
@@ -166,17 +171,6 @@ const SeedTagInfo = ({
               expanded={accordionState[seed.label]}
               onChange={() => handleExpandAccordion(seed.label)}
               summaryContent={<Typography>{seed.label}</Typography>}
-              sx={{
-                '.MuiAccordionSummary-root': {
-                  backgroundColor: 'primary.dark',
-                  '.MuiAccordionSummary-expandIconWrapper p': {
-                    color: 'primary.text',
-                  },
-                },
-                '.MuiAccordionDetails-root': {
-                  backgroundColor: 'primary.light',
-                },
-              }}
               detailsContent={(
                 <Grid container>
                   <LeftGrid item xs={6} sm={2}>

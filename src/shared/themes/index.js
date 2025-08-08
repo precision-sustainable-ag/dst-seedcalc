@@ -3,48 +3,32 @@ import { deepmerge } from '@mui/utils';
 import { PSATheme } from 'shared-react-components/src';
 
 const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#4F5F30',
-      light: '#FFFFF2',
-      dark: '#eff1e0',
-      text: '#4F5F30',
-    },
-  },
-  breakpoints: {
-    values: {
-      xs: 280,
-      sm: 600,
-      md: 912,
-      lg: 1200,
-      xl: 1536,
-    },
-  },
   typography: {
-    dstHeader: {
-      fontSize: '1.25rem',
-      fontWeight: 800,
-      textShadow: '0px 4px 4px rgba(0, 0, 0, 0.15)',
-    },
-    h2: {
+    stepCaption: {
       fontSize: '1.25rem',
       fontWeight: 800,
       lineHeight: '1.5rem',
       paddingTop: '0.75rem',
       paddingBottom: '0.75rem',
-      backgroundColor: 'rgba(79, 95, 48, 0.09)',
+      background: '#598445',
+      color: 'white',
+      fontFamily: [
+        '"IBM Plex Sans"',
+        '"Roboto"',
+        '"Helvetica Neue"',
+        '"Arial"',
+        'sans-serif',
+      ].join(','),
     },
     mathIcon: {
       marginTop: '30px',
       fontWeight: 600,
       lineHeight: '1.5',
-      fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
     },
     stepHeader: {
-      fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
       lineHeight: '1.5',
       padding: '0 1rem',
-      background: '#e5e7d5',
+      background: '#e9e6e0',
       margin: '1rem 0',
       fontSize: '1rem',
       fontWeight: 600,
@@ -53,40 +37,33 @@ const theme = createTheme({
   components: {
     MuiTypography: {
       defaultProps: {
-        color: '#4F5F30',
         variantMapping: {
           mathIcon: 'p',
           stepHeader: 'p',
-        },
-      },
-    },
-    MuiButton: {
-      variants: [
-        {
-          props: { variant: 'stepper' },
-          style: {
-            textTransform: 'none',
-            padding: '0.5rem',
-            // border: '1px solid #4F5F30',
-            // '&.Mui-disabled': {
-            //   color: '#757575',
-            //   border: '1px solid #737373',
-            //   backgroundColor: '#F0F0F0',
-            // },
-          },
-        },
-      ],
-    },
-    MuiInputBase: {
-      styleOverrides: {
-        input: {
-          color: '#4F5F30',
+          stepCaption: 'p',
+
+          // --- MUI Defaults ---
+          // TODO: MUI Defaults might be replaced when provide custom variants
+          // h1: 'h1',
+          // h2: 'h2',
+          // h3: 'h3',
+          // h4: 'h4',
+          // h5: 'h5',
+          // h6: 'h6',
+          // subtitle1: 'h6',
+          // subtitle2: 'h6',
+          // body1: 'p',
+          // body2: 'p',
+          // inherit: 'p',
+          // button: 'span',
+          // caption: 'span',
+          // overline: 'span',
         },
       },
     },
   },
 });
 
-const dstTheme = createTheme(deepmerge(PSATheme, theme));
+const dstTheme = createTheme(deepmerge(theme, PSATheme));
 
 export default dstTheme;

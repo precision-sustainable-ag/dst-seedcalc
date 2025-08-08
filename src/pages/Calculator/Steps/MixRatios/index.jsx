@@ -72,7 +72,7 @@ const defaultPieChartData = {
 };
 
 const MixRatio = ({
-  calculator, setCalculator, alertState,
+  calculator, setCalculator, alertState, isMobile,
 }) => {
   const [initCalculator, setInitCalculator] = useState(false);
   const [prevOptions, setPrevOptions] = useState({});
@@ -244,7 +244,8 @@ const MixRatio = ({
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Typography variant="h2">Review Proportions</Typography>
+
+        {isMobile && (<Typography variant="stepCaption">Review Proportions</Typography>)}
         {historyState === historyStates.imported && (
         <Typography sx={{
           fontWeight: 'bold', margin: '1rem', marginBottom: '0',
@@ -288,17 +289,6 @@ const MixRatio = ({
             expanded={accordionState[seed.label]}
             onChange={() => handleExpandAccordion(seed.label)}
             summaryContent={<Typography>{seed.label}</Typography>}
-            sx={{
-              '.MuiAccordionSummary-root': {
-                backgroundColor: 'primary.dark',
-                '.MuiAccordionSummary-expandIconWrapper p': {
-                  color: 'primary.text',
-                },
-              },
-              '.MuiAccordionDetails-root': {
-                backgroundColor: 'primary.light',
-              },
-            }}
             detailsContent={(
               <Grid container>
                 <SeedInfo

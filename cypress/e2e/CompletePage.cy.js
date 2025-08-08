@@ -16,9 +16,9 @@ describe('Seed Tag Info', () => {
   });
 
   it('should be able to restart the calculation', () => {
-    cy.getByTestId('restart_button').click();
+    cy.getByTestId('restart_button').first().click();
     cy.get('.mapboxgl-canvas').should('exist');
-    cy.getByTestId('next_button').should('not.be.disabled');
+    cy.getByTestId('next_button').first().should('not.be.disabled');
   });
 
   it('should be able to navigate to feedback page', () => {

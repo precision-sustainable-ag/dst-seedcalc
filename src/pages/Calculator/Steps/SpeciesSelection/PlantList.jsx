@@ -219,7 +219,7 @@ const PlantList = ({
                     <>
                       <Typography
                         sx={{
-                          color: 'primary.text',
+                          color: 'text.primary',
                           position: 'absolute',
                           top: '2px',
                           left: 'calc(2px)',
@@ -227,7 +227,7 @@ const PlantList = ({
                           borderTopLeftRadius: '0.9rem',
                           borderTopRightRadius: '0.9rem',
                           fontWeight: 'bold',
-                          bgcolor: 'primary.light',
+                          bgcolor: 'main.background1',
                           opacity: '90%',
                           paddingRight: '5px',
                           paddingLeft: '5px',
@@ -268,7 +268,7 @@ const PlantList = ({
                         }}
                         tooltipContent={(
                           <HelpIcon sx={{
-                            color: 'primary.light',
+                            color: 'main.background1',
                             position: 'absolute',
                             right: '5px',
                             top: '105px',
