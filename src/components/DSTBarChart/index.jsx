@@ -129,8 +129,8 @@ const DSTBarChart = ({ seed, calculatorResult }) => {
           <Grid
             container
             sx={{
-              backgroundColor: !(i % 2) && '#e3e5d3',
-              color: 'primary.text',
+              backgroundColor: !(i % 2) && 'main.background1',
+              color: 'text.primary',
             }}
             key={i}
           >

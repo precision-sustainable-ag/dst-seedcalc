@@ -11,7 +11,7 @@ describe('Mix Ratios single species selection', () => {
     const selectSpecies = Cypress.env('selectCrops')[0];
     cy.getByTestId(`accordion-${selectType}`).click();
     cy.getByTestId(`species-card-${selectSpecies}`).find('button').click();
-    cy.getByTestId('next_button').click();
+    cy.getByTestId('next_button').first().click();
 
     cy.getByTestId(`${selectSpecies}-${seedDataUnits.defaultSingelSpeciesSeedingRatePLS}-value`)
       .find('p').invoke('text').should('not.equal', '0');

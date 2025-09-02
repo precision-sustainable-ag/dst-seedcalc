@@ -55,7 +55,7 @@ const RightGrid = styled(Grid)(() => ({
   },
 }));
 
-const SeedingMethod = ({ alertState }) => {
+const SeedingMethod = ({ alertState, isMobile }) => {
   const [selectedMethod, setSelectedMethod] = useState('');
   const [methods, setMethods] = useState({});
   const [updatedMethods, setUpdatedMethods] = useState(false);
@@ -233,7 +233,7 @@ const SeedingMethod = ({ alertState }) => {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Typography variant="h2">Select Seeding Method</Typography>
+        {isMobile && (<Typography variant="stepCaption">Select Seeding Method</Typography>)}
       </Grid>
       <Grid item xs={0} md={3} />
       <Grid item xs={12} md={6} padding="15px">
@@ -259,17 +259,6 @@ const SeedingMethod = ({ alertState }) => {
             expanded={accordionState[seed.label]}
             onChange={() => handleExpandAccordion(seed.label)}
             summaryContent={<Typography>{seed.label}</Typography>}
-            sx={{
-              '.MuiAccordionSummary-root': {
-                backgroundColor: 'primary.dark',
-                '.MuiAccordionSummary-expandIconWrapper p': {
-                  color: 'primary.text',
-                },
-              },
-              '.MuiAccordionDetails-root': {
-                backgroundColor: 'primary.light',
-              },
-            }}
             detailsContent={(
               <Grid container>
                 {council === 'MCCC'

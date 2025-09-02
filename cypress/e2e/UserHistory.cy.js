@@ -35,7 +35,7 @@ describe('Creating user history', () => {
     cy.getByTestId('site_condition_soil_drainage').click();
     cy.get('[data-test="site_condition_soil_drainage-Poorly Drained"]').click();
     cy.getByTestId('site_condition_acres').find('input').type('1');
-    cy.getByTestId('next_button').click();
+    cy.getByTestId('next_button').first().click();
 
     cy.wait('@createHistory').its('response.statusCode').should('equal', 200);
 
@@ -128,7 +128,7 @@ describe('Updating user history', () => {
     cy.getByTestId('select_calculation').click();
     cy.getByTestId('select_calculation-10').click();
     cy.getByTestId('import_calculation').click();
-    cy.getByTestId('next_button').click();
+    cy.getByTestId('next_button').first().click();
     // remove a species on step 2
     cy.getByTestId('sidebar-Turnip, Forage').click();
     cy.getReduxState().then((state) => {
@@ -136,7 +136,7 @@ describe('Updating user history', () => {
       cy.log(historyState);
       expect(historyState).to.equal('updated');
     });
-    cy.getByTestId('next_button').click();
+    cy.getByTestId('next_button').first().click();
     // updatehistory should be called and history state should be reset to imported
     cy.wait('@updateHistory').wait(1000);
     cy.getReduxState().then((state) => {

@@ -31,6 +31,7 @@ import { historyStates } from '../../features/userSlice/state';
 import pirschAnalytics from '../../shared/utils/analytics';
 import { setAuthToken } from '../../shared/utils/authToken';
 import useIsMobile from '../../shared/hooks/useIsMobile';
+import NavButtons from '../../components/NavButtons/NavButtons';
 
 const Calculator = ({ calculator, setCalculator }) => {
   const [activeStep, setActiveStep] = useState(0);
@@ -67,6 +68,7 @@ const Calculator = ({ calculator, setCalculator }) => {
             setSiteConditionStep={setSiteConditionStep}
             completedStep={completedStep}
             setCompletedStep={setCompletedStep}
+            isMobile={isMobile}
           />
         );
       case 'Species Selection':
@@ -75,6 +77,7 @@ const Calculator = ({ calculator, setCalculator }) => {
             setSiteConditionStep={setSiteConditionStep}
             completedStep={completedStep}
             setCompletedStep={setCompletedStep}
+            isMobile={isMobile}
           />
         );
       case 'Mix Ratios':
@@ -83,17 +86,22 @@ const Calculator = ({ calculator, setCalculator }) => {
             calculator={calculator}
             setCalculator={setCalculator}
             alertState={alertState}
+            isMobile={isMobile}
           />
         );
       case 'Seeding Method':
         return (
           <SeedingMethod
             alertState={alertState}
+            isMobile={isMobile}
           />
         );
       case 'Mix Seeding Rate':
         return (
-          <MixSeedingRate calculator={calculator} />
+          <MixSeedingRate
+            calculator={calculator}
+            isMobile={isMobile}
+          />
         );
       case 'Seed Tag Info':
         return (
@@ -101,15 +109,22 @@ const Calculator = ({ calculator, setCalculator }) => {
             completedStep={completedStep}
             setCompletedStep={setCompletedStep}
             alertState={alertState}
+            isMobile={isMobile}
           />
         );
       case 'Review Mix':
         return (
-          <ReviewMix calculator={calculator} />
+          <ReviewMix
+            calculator={calculator}
+            isMobile={isMobile}
+          />
         );
       case 'Confirm Plan':
         return (
-          <ConfirmPlan calculator={calculator} />
+          <ConfirmPlan
+            calculator={calculator}
+            isMobile={isMobile}
+          />
         );
       case 'Finish':
         return (
@@ -258,6 +273,17 @@ const Calculator = ({ calculator, setCalculator }) => {
               : calculatorList[activeStep],
           )}
         </Grid>
+
+        {!isMobile
+          && (
+          <NavButtons
+            activeStep={activeStep}
+            setActiveStep={setActiveStep}
+            availableSteps={completedStep}
+            setSiteConditionStep={setSiteConditionStep}
+            placement="bottom"
+          />
+          )}
 
         <HistoryDialog setStep={setActiveStep} setSiteConditionStep={setSiteConditionStep} />
         <PSASkipContent

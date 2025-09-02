@@ -17,7 +17,7 @@ export const calculatorList = [
   'Review Mix',
   'Confirm Plan',
 ];
-export const completedList = [false, false, true, true, true, false, true, true];
+export const completedList = [false, false, true, true, true, false, true, true, true];
 
 // TODO: not used anymore
 export const availableStates = [

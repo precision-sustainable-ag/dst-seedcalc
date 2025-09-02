@@ -3,8 +3,11 @@ import { ThemeProvider } from '@mui/material/styles';
 import {
   BrowserRouter, Routes, Route,
 } from 'react-router-dom';
-import { Box, Grid } from '@mui/material';
+import { Box, CssBaseline, Grid } from '@mui/material';
 import { PSAProfile, PSASkipContent } from 'shared-react-components/src';
+import { Provider } from 'react-redux';
+import store from './store';
+
 import Header from './components/Header';
 import Auth0ProviderWithNavigate from './components/Auth/Auth0ProviderWithNavigate';
 import Calculator from './pages/Calculator';
@@ -14,48 +17,75 @@ import Feedback from './pages/Feedback/Feedback';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import '@fontsource/ibm-plex-sans';
 import BackButton from './components/BackButton';
+import useIsMobile from './shared/hooks/useIsMobile';
 
 const App = () => {
   // initially set calculator here
   const [calculator, setCalculator] = useState(null);
+  const isNotFullScreen = useIsMobile('lg');
 
   return (
-    <ThemeProvider theme={dstTheme}>
-      <div
-        className="App"
-        style={{
-          textAlign: 'center',
-          backgroundColor: '#fffff2',
-          minHeight: '100vh',
-          overflowX: 'hidden',
-        }}
-      >
-        <BrowserRouter>
+    <BrowserRouter>
+      <Provider store={store}>
+        <ThemeProvider theme={dstTheme}>
+          <CssBaseline />
           <Auth0ProviderWithNavigate>
-            <Grid container justifyContent="center">
-              <Grid item xs={12} lg={8}>
-                <PSASkipContent href="#main-content" text="Skip to main content" />
-                <Header />
-                <Box id="main-content">
-                  <Routes>
-                    <Route path="/" element={<Calculator calculator={calculator} setCalculator={setCalculator} />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/feedback" element={<Feedback />} />
-                    <Route path="/profile" element={<PSAProfile />} />
-                  </Routes>
-                </Box>
-                <BackButton />
+            <div
+              className="App"
+              style={{
+                minHeight: '100vh',
+                display: 'flex',
+                flexDirection: 'column',
+                overflowX: 'hidden',
+                textAlign: 'center',
+              }}
+            >
+              <PSASkipContent href="#main-content" text="Skip to main content" />
+              <Grid container sx={{ backgroundColor: 'white', justifyContent: 'center' }}>
+                <Grid item xs={12} lg={10}>
+                  <Header />
+                </Grid>
               </Grid>
-            </Grid>
+              <Grid
+                container
+                sx={{
+                  backgroundColor: 'main.background1',
+                  justifyContent: 'center',
+                }}
+              >
+                <Grid
+                  item
+                  xs={12}
+                  lg={10}
+                  sx={{
+                    backgroundColor: 'white',
+                    margin: isNotFullScreen ? 0 : '30px 0',
+                    borderRadius: isNotFullScreen ? 0 : '25px',
+                    boxShadow: isNotFullScreen ? 'none' : '0 2px 20px 0 rgba(0, 0, 0, 0.10)',
+                  }}
+                >
+                  <Box id="main-content">
+                    <Routes>
+                      <Route path="/" element={<Calculator calculator={calculator} setCalculator={setCalculator} />} />
+                      <Route path="/about" element={<About />} />
+                      <Route path="/feedback" element={<Feedback />} />
+                      <Route path="/profile" element={<PSAProfile />} />
+                    </Routes>
+                  </Box>
+                  <BackButton />
+                </Grid>
+              </Grid>
+              <Grid container sx={{ flex: 1, backgroundColor: 'main.background1' }} />
+            </div>
           </Auth0ProviderWithNavigate>
-        </BrowserRouter>
-      </div>
-    </ThemeProvider>
+        </ThemeProvider>
+      </Provider>
+    </BrowserRouter>
   );
 };
 
 window.addEventListener('error', (err) => {
-  if (/(localhost|dev)/i.test(window.location)) return;
+  if (!/^https:/.test(window.location.href)) return;
 
   const requestPayload = {
     repository: 'dst-feedback',
@@ -92,5 +122,10 @@ window.addEventListener('error', (err) => {
     });
 }, { once: true });
 /* eslint-enable no-alert */
+
+// expose store when run in Cypress
+if (window.Cypress) {
+  window.store = store;
+}
 
 export default App;

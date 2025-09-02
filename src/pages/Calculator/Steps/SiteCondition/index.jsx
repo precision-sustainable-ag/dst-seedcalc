@@ -30,7 +30,7 @@ import pirschAnalytics from '../../../../shared/utils/analytics';
 import { mapboxToken } from '../../../../shared/data/keys';
 
 const SiteCondition = ({
-  siteConditionStep, setSiteConditionStep, completedStep, setCompletedStep,
+  siteConditionStep, setSiteConditionStep, completedStep, setCompletedStep, isMobile,
 }) => {
   // Location state
   const [selectedState, setSelectedState] = useState({});
@@ -167,9 +167,11 @@ const SiteCondition = ({
 
   return (
     <Grid container justifyContent="center">
-      <Grid item xs={12}>
-        <Typography variant="h2">Tell us about your planting site</Typography>
-      </Grid>
+      {isMobile && (
+        <Grid item xs={12}>
+          <Typography variant="stepCaption">Tell us about your planting site</Typography>
+        </Grid>
+      )}
       <Grid xs={12} item>
         {siteCondition.loading === 'getLocality' ? (
           <Grid

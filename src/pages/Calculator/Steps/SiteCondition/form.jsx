@@ -350,7 +350,7 @@ const SiteConditionForm = ({
       <Grid item xs={0} md={3} />
 
       <Grid item xs={12} margin="1rem">
-        <PSAButton buttonType="" variant="contained" onClick={() => setStep(1)} data-test="back_button" title="Back" />
+        <PSAButton buttonType="" variant="contained" onClick={() => setStep(1)} data-test="site_condition_back_button" title="Back" />
       </Grid>
 
     </Grid>

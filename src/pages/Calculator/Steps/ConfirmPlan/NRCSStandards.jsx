@@ -20,7 +20,7 @@ const NRCSAccordionSummary = styled(AccordionSummary)(({ theme }) => ({
     minHeight: '1.5rem',
     padding: '0.3125rem 1rem',
     backgroundColor: theme.palette.primary.dark,
-    color: theme.palette.primary.text,
+    color: theme.palette.text.primary,
     '.MuiAccordionSummary-content': {
       margin: '0',
     },
@@ -37,7 +37,7 @@ const NRCSAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
   '&.MuiAccordionDetails-root': {
     padding: ' 2%',
     'th,td': {
-      color: theme.palette.primary.text,
+      color: theme.palette.text.primary,
     },
   },
 }));

@@ -62,13 +62,13 @@ const MixSeedingSlider = styled(PSASlider)(({
       position: 'absolute',
       content: '""',
       width: '6rem',
-      color: theme.palette.primary.text,
+      color: theme.palette.primary.main,
       borderTop: '2px dotted',
     },
     '&Label': {
       pointerEvents: 'none',
       left: '6rem',
-      color: theme.palette.primary.text,
+      color: theme.palette.text.primary,
       border: '2px solid',
       padding: '0.5rem',
       backgroundColor: 'white',
@@ -82,11 +82,11 @@ const MixSeedingSlider = styled(PSASlider)(({
   '& .MuiSlider-rail': {
     zIndex: 1,
     opacity: 1,
-    color: theme.palette.primary.dark,
+    color: theme.palette.main.background1,
     width: '1rem',
   },
   '& .MuiSlider-track': {
-    color: theme.palette.primary.text,
+    color: theme.palette.primary.main,
     zIndex: 2,
     position: 'absolute',
     width: ' 1rem',
@@ -94,7 +94,7 @@ const MixSeedingSlider = styled(PSASlider)(({
 }));
 
 const MixSeedingTypography = styled(Typography)(({ theme }) => ({
-  color: theme.palette.primary.text,
+  color: theme.palette.text.primary,
   fontSize: '1rem',
   lineHeight: '1.5rem',
   border: '2px solid #4f5f30',
@@ -104,7 +104,7 @@ const MixSeedingTypography = styled(Typography)(({ theme }) => ({
   height: '25rem',
 }));
 
-const MixSeedingRate = ({ calculator }) => {
+const MixSeedingRate = ({ calculator, isMobile }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
 
@@ -182,7 +182,7 @@ const MixSeedingRate = ({ calculator }) => {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Typography variant="h2">Adjust Seeding Rate of Mix</Typography>
+        {isMobile && (<Typography variant="stepCaption">Adjust Seeding Rate of Mix</Typography>)}
       </Grid>
       <Grid container sx={{ padding: '3% 3% 5% 5%' }}>
         <Grid
