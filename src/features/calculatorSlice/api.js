@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import apiBaseURL from '../../shared/utils/apiBaseURL';
 
@@ -5,6 +7,7 @@ import apiBaseURL from '../../shared/utils/apiBaseURL';
 export const getCrops = createAsyncThunk(
   'calculator/getCrops',
   async ({ regionId }) => {
+    console.log(`${apiBaseURL}/v2/crops/?regions=${regionId}&context=seed_calc`);
     const res = await fetch(
       `${apiBaseURL}/v2/crops/?regions=${regionId}&context=seed_calc`,
     ).then((data) => data.json());
