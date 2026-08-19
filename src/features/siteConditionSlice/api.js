@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import apiBaseURL from '../../shared/utils/apiBaseURL';
 
@@ -6,6 +7,7 @@ export const getLocality = createAsyncThunk(
   'siteCondition/getLocality',
   async () => {
     const url = `${apiBaseURL}/v2/regions?locality=state&context=seed_calc`;
+    console.log(url);
     const res = await fetch(url).then((data) => data.json());
     return res.data;
   },
@@ -16,6 +18,7 @@ export const getRegion = createAsyncThunk(
   'siteCondition/getRegion',
   async ({ stateId }) => {
     const url = `${apiBaseURL}/v2/regions/${stateId}`;
+    console.log(url);
     const res = await fetch(url).then((data) => data.json());
     return res;
   },

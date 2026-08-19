@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from 'react';
 import dayjs from 'dayjs';
 import Grid from '@mui/material/Grid';
@@ -123,6 +124,7 @@ const PlantList = ({
     // if seed not in seedSelected, add it
     if (seedsSelected.filter((s) => s.label === seedName).length === 0) {
       const url = `${apiBaseURL}/v2/crops/${cropId}?regions=${stateId}&context=seed_calc&regions=${countyId}`;
+      console.log(url);
       try {
         const response = await fetch(url);
         if (!response.ok) {

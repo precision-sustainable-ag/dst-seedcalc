@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable react/no-unescaped-entities */
 /*
   This file contains the About component, helper functions, and styles
@@ -66,6 +67,7 @@ const About = () => {
 
   useEffect(() => {
     const url = `${apiBaseURL}/v2/regions?locality=state&context=seed_calc`;
+    console.log(url);
     fetch(url)
       .then((res) => res.json())
       .then((data) => {

@@ -1,3 +1,4 @@
+/* eslint-disable */
 /* eslint-disable no-shadow */
 /// ///////////////////////////////////////////////////////
 //                      Imports                         //
@@ -111,6 +112,7 @@ const SpeciesSelection = ({
         setCompletedStep,
       );
     } catch (err) {
+      console.log(err);
       // if the crop is not valid, remove it from seedSelected
       const lastAddedSeedName = seedsSelected[seedsSelected.length - 1]?.label;
       dispatch(removeSeedRedux(lastAddedSeedName));
