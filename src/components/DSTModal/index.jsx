@@ -22,22 +22,22 @@ const DSTModal = ({
     modalContent={(
       <Box className="home-import-modal">
         <Grid container>
-          <Grid xs={3} item />
-          <Grid xs={6} item>
+          <Grid size={3} />
+          <Grid size={6}>
             <Typography id="modal-modal-title" variant="h6" component="h2">
               {title}
             </Typography>
           </Grid>
-          <Grid xs={3} item />
-          <Grid xs={2} item />
-          <Grid xs={8} item>
+          <Grid size={3} />
+          <Grid size={2} />
+          <Grid size={8}>
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
               {description}
             </Typography>
           </Grid>
-          <Grid xs={2} item />
-          <Grid xs={8} item />
-          <Grid xs={4} item>
+          <Grid size={2} />
+          <Grid size={8} />
+          <Grid size={4}>
             <PSAAccordion
               buttonType=""
               sx={{ marginTop: '15px' }}

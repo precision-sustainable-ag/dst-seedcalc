@@ -42,7 +42,7 @@ const Diversity = () => {
       </Box>
 
       {diversitySelected.length === 0 && (
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Typography fontSize="0.75rem">Select a species</Typography>
         </Grid>
       )}

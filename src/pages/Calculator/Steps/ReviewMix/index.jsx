@@ -193,20 +193,20 @@ const ReviewMix = ({ calculator, isMobile }) => {
 
   return (
     <Grid container>
-      <Grid item xs={12}>
+      <Grid size={12}>
         {isMobile && (<Typography variant="stepCaption">Review your mix</Typography>)}
       </Grid>
 
       {seedsSelected.length > 1 && (
         <>
-          <Grid item xs={6} sx={{ textAlign: 'justify' }}>
+          <Grid sx={{ textAlign: 'justify' }} size={6}>
             <PSAPiechart
               chartData={piechartData.seedingRateArray}
               label={pieChartUnits.poundsOfSeedPerAcre}
             />
           </Grid>
 
-          <Grid item xs={6} sx={{ textAlign: 'justify' }}>
+          <Grid sx={{ textAlign: 'justify' }} size={6}>
             {council === 'MCCC' && (
             <PSAPiechart
               chartData={piechartData.plantsPerSqftArray}
@@ -224,7 +224,7 @@ const ReviewMix = ({ calculator, isMobile }) => {
       )}
 
       {seedsSelected.map((seed, i) => (
-        <Grid item xs={12} key={i}>
+        <Grid key={i} size={12}>
           <PSAAccordion
             expanded={accordionState[seed.label]}
             onChange={() => handleExpandAccordion(seed.label)}
@@ -232,7 +232,7 @@ const ReviewMix = ({ calculator, isMobile }) => {
             detailsContent={(
               <Grid container>
                 <DSTBarChart seed={seed} calculatorResult={calculatorResult} />
-                <Grid item xs={6} pt="1rem">
+                <Grid pt="1rem" size={6}>
                   <SeedingRateCard
                     seedingRateLabel={seedDataUnits.pureLiveSeed}
                     seedingRateValue={calculatorResult[seed.label].step2.seedingRate}
@@ -241,7 +241,7 @@ const ReviewMix = ({ calculator, isMobile }) => {
                   />
                 </Grid>
 
-                <Grid item xs={6} pt="1rem">
+                <Grid pt="1rem" size={6}>
                   <SeedingRateCard
                     seedingRateLabel={seedDataUnits.bulkSeed}
                     seedingRateValue={calculatorResult[seed.label].step4.bulkSeedingRate}
@@ -249,11 +249,11 @@ const ReviewMix = ({ calculator, isMobile }) => {
                     seedValue={seedData[seed.label].adjustedSeed}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <UnitSelection />
                 </Grid>
 
-                <Grid item xs={12} pt="1rem">
+                <Grid pt="1rem" size={12}>
                   <PSAButton
                     buttonType=""
                     onClick={() => {
@@ -265,7 +265,7 @@ const ReviewMix = ({ calculator, isMobile }) => {
                   />
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid size={12}>
                   {showSteps[seed.label] && (
                   <ReviewMixSteps
                     council={council}

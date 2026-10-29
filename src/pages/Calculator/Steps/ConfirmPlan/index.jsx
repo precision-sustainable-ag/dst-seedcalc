@@ -64,11 +64,11 @@ const ConfirmPlan = ({ calculator, isMobile }) => {
 
   return (
     <Grid container>
-      <Grid item xs={12}>
+      <Grid size={12}>
         {isMobile && (<Typography variant="stepCaption">Confirm Plan and Enter Costs Below</Typography>)}
 
         {/* Export Button */}
-        <Grid item xs={12} display="flex" justifyContent="flex-end" pt="5px">
+        <Grid display="flex" justifyContent="flex-end" pt="5px" size={12}>
           <ExportModal />
         </Grid>
 

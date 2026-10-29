@@ -175,7 +175,7 @@ const PlantList = ({
         <Typography variant="h6">No available seeds in this type!</Typography>
       ) : (
         seedsList.map((seed, i) => (
-          <Grid item key={i} position="relative">
+          <Grid key={i} position="relative">
             {seedsSelected.filter((s) => s.label === seed.label).length > 0 && (
               <CheckBoxIcon />
             )}

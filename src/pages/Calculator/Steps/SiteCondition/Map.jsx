@@ -125,7 +125,12 @@ const Map = ({
 
   return (
     <Grid container>
-      <Grid xs={12} md={12} item>
+      <Grid
+        size={{
+          xs: 12,
+          md: 12,
+        }}
+      >
         <MapComponent
           setProperties={updateSelectedToEditSite}
           initWidth="100%"
@@ -150,7 +155,7 @@ const Map = ({
           hasHelp
           mapboxToken={mapboxToken}
         />
-        <Grid item xs={12} p="1rem">
+        <Grid p="1rem" size={12}>
           <PSAButton buttonType="" variant="contained" onClick={() => setStep(1)} sx={{ margin: '1rem' }} title="Back" />
           <PSAButton buttonType="" variant="contained" onClick={() => setStep(3)} sx={{ margin: '1rem' }} title="Edit Details" />
         </Grid>

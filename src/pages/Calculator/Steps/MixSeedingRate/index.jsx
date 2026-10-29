@@ -181,19 +181,20 @@ const MixSeedingRate = ({ calculator, isMobile }) => {
 
   return (
     <Grid container>
-      <Grid item xs={12}>
+      <Grid size={12}>
         {isMobile && (<Typography variant="stepCaption">Adjust Seeding Rate of Mix</Typography>)}
       </Grid>
       <Grid container sx={{ padding: '3% 3% 5% 5%' }}>
         <Grid
           container
-          item
-          xs={4}
-          sm={5}
           flexDirection="column"
           justifyContent="space-between"
           alignSelf="center"
           minWidth="20rem"
+          size={{
+            xs: 4,
+            sm: 5,
+          }}
         >
           <MixSeedingTypography role="article">
             <b>Your Seeding Rate may vary. </b>
@@ -224,13 +225,14 @@ const MixSeedingRate = ({ calculator, isMobile }) => {
         </Grid>
         <Grid
           container
-          item
-          xs={8}
-          sm={7}
           justifyContent="flex-start"
           alignItems="center"
           minHeight="28rem"
           pl="10rem"
+          size={{
+            xs: 8,
+            sm: 7,
+          }}
         >
           <Stack sx={{ height: '100%' }}>
             <Typography

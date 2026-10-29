@@ -125,7 +125,7 @@ const SeedTagInfo = ({
 
   return (
     <Grid container>
-      <Grid item xs={12}>
+      <Grid size={12}>
         {isMobile
           && (
           <Typography variant="stepCaption">
@@ -136,7 +136,7 @@ const SeedTagInfo = ({
       {seedTagInfoSelected === false
         && (
         <Grid container sx={{ padding: '1rem' }}>
-          <Grid item xs={12} display="flex" justifyContent="center" gap="1rem">
+          <Grid display="flex" justifyContent="center" gap="1rem" size={12}>
             <PSAButton
               buttonType=""
               variant="outlined"
@@ -166,7 +166,7 @@ const SeedTagInfo = ({
         )}
       {seedTagInfoSelected === true
         && (seedsSelected.map((seed, i) => (
-          <Grid item xs={12} key={i}>
+          <Grid key={i} size={12}>
             <PSAAccordion
               expanded={accordionState[seed.label]}
               onChange={() => handleExpandAccordion(seed.label)}
@@ -176,7 +176,12 @@ const SeedTagInfo = ({
                   <LeftGrid item xs={6} sm={2}>
                     <Typography>% Germination: </Typography>
                   </LeftGrid>
-                  <Grid item xs={6} sm={2}>
+                  <Grid
+                    size={{
+                      xs: 6,
+                      sm: 2,
+                    }}
+                  >
                     <SeedTagNumField
                       value={(options[seed.label].germination ?? 0.85) * 100}
                       onChange={(val) => {
@@ -189,7 +194,12 @@ const SeedTagInfo = ({
                   <LeftGrid item xs={6} sm={2}>
                     <Typography>% Purity: </Typography>
                   </LeftGrid>
-                  <Grid item xs={6} sm={2}>
+                  <Grid
+                    size={{
+                      xs: 6,
+                      sm: 2,
+                    }}
+                  >
                     <SeedTagNumField
                       value={(options[seed.label].purity ?? 0.9) * 100}
                       onChange={(val) => {
@@ -202,7 +212,12 @@ const SeedTagInfo = ({
                   <LeftGrid item xs={6} sm={2}>
                     <Typography>Seeds per Pound </Typography>
                   </LeftGrid>
-                  <Grid item xs={6} sm={2}>
+                  <Grid
+                    size={{
+                      xs: 6,
+                      sm: 2,
+                    }}
+                  >
                     <SeedTagNumField
                       value={parseFloat(seedsPerPound(seed))}
                       onChange={(val) => {

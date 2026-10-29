@@ -31,19 +31,19 @@ const ReviewMixSteps = ({
 
     isMobile && (
       <Grid container justifyContent="space-evenly">
-        <Grid item xs={3}>
+        <Grid size={3}>
           <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
             {label1}
           </Typography>
         </Grid>
-        <Grid item xs={1} />
-        <Grid item xs={3}>
+        <Grid size={1} />
+        <Grid size={3}>
           <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
             {label2}
           </Typography>
         </Grid>
-        <Grid item xs={1} />
-        <Grid item xs={3}>
+        <Grid size={1} />
+        <Grid size={3}>
           <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
             {label3}
           </Typography>
@@ -70,15 +70,40 @@ const ReviewMixSteps = ({
 
     return (
       <Grid container>
-        <Grid item xs={2} md={3} />
-        <Grid item xs={8} md={6}>
+        <Grid
+          size={{
+            xs: 2,
+            md: 3,
+          }}
+        />
+        <Grid
+          size={{
+            xs: 8,
+            md: 6,
+          }}
+        >
           <Typography>
             {`${label}: ${value} ${unit}`}
           </Typography>
         </Grid>
-        <Grid item xs={2} md={3} />
-        <Grid item xs={2} md={3} />
-        <Grid item xs={8} md={6}>
+        <Grid
+          size={{
+            xs: 2,
+            md: 3,
+          }}
+        />
+        <Grid
+          size={{
+            xs: 2,
+            md: 3,
+          }}
+        />
+        <Grid
+          size={{
+            xs: 8,
+            md: 6,
+          }}
+        >
           <PSASlider
             min={range[0]}
             max={range[1]}
@@ -95,7 +120,12 @@ const ReviewMixSteps = ({
             data-test={testId}
           />
         </Grid>
-        <Grid item xs={2} md={6} />
+        <Grid
+          size={{
+            xs: 2,
+            md: 6,
+          }}
+        />
       </Grid>
     );
   };
@@ -120,7 +150,7 @@ const ReviewMixSteps = ({
       {/* NECCC Step 1:  */}
       {council === 'NECCC' && (
         <>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography variant="stepHeader">Seeding Rate in Mix</Typography>
           </Grid>
 
@@ -135,7 +165,7 @@ const ReviewMixSteps = ({
             unit="%"
             testId="percent_slider"
           />
-          <Grid item xs={12} p="0.5rem" />
+          <Grid p="0.5rem" size={12} />
 
           {renderStepsForm(
             'Single Species Seeding Rate PLS (Lbs per Acre)',
@@ -143,7 +173,7 @@ const ReviewMixSteps = ({
             '% of Single Species Rate',
           )}
           <Grid container justifyContent="space-evenly">
-            <Grid item xs={3}>
+            <Grid size={3}>
               <NumberTextField
                 label={isMobile ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
                 disabled
@@ -151,11 +181,11 @@ const ReviewMixSteps = ({
               />
             </Grid>
 
-            <Grid item xs={1}>
+            <Grid size={1}>
               <Typography variant="mathIcon">&#215;</Typography>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid size={3}>
               <NumberTextField
                 label={isMobile ? '' : 'Soil Fertility Modifier'}
                 disabled
@@ -163,11 +193,11 @@ const ReviewMixSteps = ({
               />
             </Grid>
 
-            <Grid item xs={1}>
+            <Grid size={1}>
               <Typography variant="mathIcon">&#215;</Typography>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid size={3}>
               <NumberTextField
                 disabled
                 label={isMobile ? '' : '% of Single Species Rate'}
@@ -176,19 +206,19 @@ const ReviewMixSteps = ({
             </Grid>
           </Grid>
           <Grid container justifyContent="space-evenly" marginTop={isMobile ? '20px' : 0}>
-            <Grid item xs={3}>
+            <Grid size={3}>
               <Typography variant="mathIcon">=</Typography>
             </Grid>
-            <Grid item xs={1} />
-            <Grid item xs={3}>
+            <Grid size={1} />
+            <Grid size={3}>
               <NumberTextField
                 label="Seeding Rate In Mix (Lbs per Acre)"
                 disabled
                 value={step1.seedingRate}
               />
             </Grid>
-            <Grid item xs={1} />
-            <Grid item xs={3} />
+            <Grid size={1} />
+            <Grid size={3} />
           </Grid>
         </>
       )}
@@ -196,7 +226,7 @@ const ReviewMixSteps = ({
       {/* MCCC Step 1: */}
       {council === 'MCCC' && (
         <>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography variant="stepHeader">Seeding Rate in Mix</Typography>
           </Grid>
 
@@ -217,7 +247,7 @@ const ReviewMixSteps = ({
             'Seeding Rate in Mix (Lbs per Acre)',
           )}
           <Grid container justifyContent="space-evenly">
-            <Grid item xs={3}>
+            <Grid size={3}>
               <NumberTextField
                 disabled
                 label={isMobile ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
@@ -226,11 +256,11 @@ const ReviewMixSteps = ({
               />
             </Grid>
 
-            <Grid item xs={1}>
+            <Grid size={1}>
               <Typography variant="mathIcon">&#215;</Typography>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid size={3}>
               <NumberTextField
                 label={isMobile ? '' : '% of Single Species Rate'}
                 disabled
@@ -242,11 +272,11 @@ const ReviewMixSteps = ({
               />
             </Grid>
 
-            <Grid item xs={1}>
+            <Grid size={1}>
               <Typography variant="mathIcon">=</Typography>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid size={3}>
               <NumberTextField
                 label={isMobile ? '' : 'Seeding Rate in Mix (Lbs per Acre)'}
                 disabled
@@ -262,7 +292,7 @@ const ReviewMixSteps = ({
       {/* SCCC Step 1: */}
       {council === 'SCCC' && (
         <>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography variant="stepHeader">Seeding Rate in Mix</Typography>
           </Grid>
 
@@ -288,7 +318,7 @@ const ReviewMixSteps = ({
             unit="%"
             testId="percent_slider"
           />
-          <Grid item xs={12} p="0.5rem" />
+          <Grid p="0.5rem" size={12} />
 
           {renderStepsForm(
             'Single Species Seeding Rate PLS (Lbs per Acre)',
@@ -296,7 +326,7 @@ const ReviewMixSteps = ({
             'Planting Time Modifier',
           )}
           <Grid container justifyContent="space-evenly" pb="1rem">
-            <Grid item xs={3}>
+            <Grid size={3}>
               <NumberTextField
                 disabled
                 label={isMobile ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
@@ -304,11 +334,11 @@ const ReviewMixSteps = ({
               />
             </Grid>
 
-            <Grid item xs={1}>
+            <Grid size={1}>
               <Typography variant="mathIcon">&#215;</Typography>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid size={3}>
               <NumberTextField
                 label={isMobile ? '' : 'Percent Of Rate'}
                 disabled
@@ -316,11 +346,11 @@ const ReviewMixSteps = ({
               />
             </Grid>
 
-            <Grid item xs={1}>
+            <Grid size={1}>
               <Typography variant="mathIcon">&#215;</Typography>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid size={3}>
               <NumberTextField
                 label={isMobile ? '' : 'Planting Time Modifier'}
                 disabled
@@ -337,12 +367,12 @@ const ReviewMixSteps = ({
           )}
 
           <Grid container justifyContent="space-evenly">
-            <Grid item xs={3} />
-            <Grid item xs={1}>
+            <Grid size={3} />
+            <Grid size={1}>
               <Typography variant="mathIcon">&#215;</Typography>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid size={3}>
               <NumberTextField
                 disabled
                 label={isMobile ? '' : 'Mix Competition Coefficient'}
@@ -350,11 +380,11 @@ const ReviewMixSteps = ({
               />
             </Grid>
 
-            <Grid item xs={1}>
+            <Grid size={1}>
               <Typography variant="mathIcon">=</Typography>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid size={3}>
               <NumberTextField
                 label={isMobile ? '' : 'Seeding Rate In Mix (Lbs per Acre)'}
                 disabled
@@ -368,11 +398,11 @@ const ReviewMixSteps = ({
 
       {/* Step 2: */}
       <>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Typography variant="stepHeader" data-test="adjustment_from_seeding_method">Adjustment from Seeding Method</Typography>
         </Grid>
-        <Grid item xs={3} />
-        <Grid item xs={6} paddingLeft="1rem" paddingBottom="1rem">
+        <Grid size={3} />
+        <Grid paddingLeft="1rem" paddingBottom="1rem" size={6}>
           <PSADropdown
             label="Seeding Method: "
             items={getSeedingMethods().map((method) => ({ label: method.label, value: method.label }))}
@@ -405,7 +435,7 @@ const ReviewMixSteps = ({
           'Seeding Rate in Mix (Lbs per Acre)',
         )}
         <Grid container justifyContent="space-evenly">
-          <Grid item xs={3}>
+          <Grid size={3}>
             <NumberTextField
               disabled
               label={isMobile ? '' : 'Seeding Rate in Mix (Lbs per Acre)'}
@@ -413,11 +443,11 @@ const ReviewMixSteps = ({
             />
           </Grid>
 
-          <Grid item xs={1}>
+          <Grid size={1}>
             <Typography variant="mathIcon">&#215;</Typography>
           </Grid>
 
-          <Grid item xs={3}>
+          <Grid size={3}>
             <NumberTextField
               label={isMobile ? '' : 'Planting Method'}
               value={step2.plantingMethodModifier ?? 1}
@@ -425,11 +455,11 @@ const ReviewMixSteps = ({
             />
           </Grid>
 
-          <Grid item xs={1}>
+          <Grid size={1}>
             <Typography variant="mathIcon">=</Typography>
           </Grid>
 
-          <Grid item xs={3}>
+          <Grid size={3}>
             <NumberTextField
               label={isMobile ? '' : 'Seeding Rate in Mix (Lbs per Acre)'}
               disabled
@@ -441,7 +471,7 @@ const ReviewMixSteps = ({
 
       {/* Step 3: */}
       <>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Typography variant="stepHeader">Adjustment from Management Goals</Typography>
         </Grid>
         {renderStepsForm(
@@ -450,7 +480,7 @@ const ReviewMixSteps = ({
           'Seeding Rate in Mix (Lbs per Acre)',
         )}
         <Grid container justifyContent="space-evenly">
-          <Grid item xs={3}>
+          <Grid size={3}>
             <NumberTextField
               label={isMobile ? '' : 'Seeding Rate in Mix (Lbs per Acre)'}
               disabled
@@ -458,11 +488,11 @@ const ReviewMixSteps = ({
             />
           </Grid>
 
-          <Grid item xs={1}>
+          <Grid size={1}>
             <Typography variant="mathIcon">&#215;</Typography>
           </Grid>
 
-          <Grid item xs={3}>
+          <Grid size={3}>
             <NumberTextField
               label={isMobile ? '' : 'Management Impact on Mix'}
               disabled
@@ -470,11 +500,11 @@ const ReviewMixSteps = ({
             />
           </Grid>
 
-          <Grid item xs={1}>
+          <Grid size={1}>
             <Typography variant="mathIcon">=</Typography>
           </Grid>
 
-          <Grid item xs={3}>
+          <Grid size={3}>
             <NumberTextField
               label={isMobile ? '' : 'Seeding Rate in Mix (Lbs per Acre)'}
               disabled
@@ -482,12 +512,12 @@ const ReviewMixSteps = ({
             />
           </Grid>
         </Grid>
-        <Grid item xs={1} />
+        <Grid size={1} />
       </>
 
       {/* Step 4: */}
       <>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Typography variant="stepHeader">Bulk Seeding Rate</Typography>
         </Grid>
 
@@ -511,11 +541,11 @@ const ReviewMixSteps = ({
           unit="%"
           testId="purity_slider"
         />
-        <Grid item xs={12} p="0.5rem" />
+        <Grid p="0.5rem" size={12} />
 
         {renderStepsForm('Seeding Rate in Mix (Lbs per Acre)', '% Germination', '% Purity')}
         <Grid container justifyContent="space-evenly">
-          <Grid item xs={3}>
+          <Grid size={3}>
             <NumberTextField
               label={isMobile ? '' : 'Seeding Rate in Mix (Lbs per Acre)'}
               disabled
@@ -524,11 +554,11 @@ const ReviewMixSteps = ({
             />
           </Grid>
 
-          <Grid item xs={1}>
+          <Grid size={1}>
             <Typography variant="mathIcon">÷</Typography>
           </Grid>
 
-          <Grid item xs={3}>
+          <Grid size={3}>
             <NumberTextField
               label={isMobile ? '' : '% Germination'}
               disabled
@@ -537,11 +567,11 @@ const ReviewMixSteps = ({
             />
           </Grid>
 
-          <Grid item xs={1}>
+          <Grid size={1}>
             <Typography variant="mathIcon">÷</Typography>
           </Grid>
 
-          <Grid item xs={3}>
+          <Grid size={3}>
             <NumberTextField
               label={isMobile ? '' : '% Purity'}
               disabled
@@ -551,12 +581,12 @@ const ReviewMixSteps = ({
           </Grid>
         </Grid>
         <Grid container justifyContent="space-evenly" marginTop={isMobile ? '20px' : 0}>
-          <Grid item xs={3}>
+          <Grid size={3}>
             <Typography variant="mathIcon">=</Typography>
           </Grid>
-          <Grid item xs={1} />
+          <Grid size={1} />
 
-          <Grid item xs={3}>
+          <Grid size={3}>
             <NumberTextField
               label="Bulk Seeding Rate (Lbs per Acre)"
               disabled
@@ -564,20 +594,20 @@ const ReviewMixSteps = ({
               testId="bulk_seeding_rate"
             />
           </Grid>
-          <Grid item xs={1} />
-          <Grid item xs={3} />
+          <Grid size={1} />
+          <Grid size={3} />
 
         </Grid>
       </>
 
       {/* Step 5: */}
       <>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Typography variant="stepHeader">Pounds for Purchase</Typography>
         </Grid>
         {renderStepsForm('Bulk Seeding Rate (Lbs per Acre)', 'Acres', 'Pounds for Purchase')}
         <Grid container justifyContent="space-evenly">
-          <Grid item xs={3}>
+          <Grid size={3}>
             <NumberTextField
               label={isMobile ? '' : 'Bulk Seeding Rate (Lbs per Acre)'}
               disabled
@@ -585,11 +615,11 @@ const ReviewMixSteps = ({
             />
           </Grid>
 
-          <Grid item xs={1}>
+          <Grid size={1}>
             <Typography variant="mathIcon">&#215;</Typography>
           </Grid>
 
-          <Grid item xs={3}>
+          <Grid size={3}>
             <NumberTextField
               label={isMobile ? '' : 'Acres'}
               disabled
@@ -597,11 +627,11 @@ const ReviewMixSteps = ({
             />
           </Grid>
 
-          <Grid item xs={1}>
+          <Grid size={1}>
             <Typography variant="mathIcon">=</Typography>
           </Grid>
 
-          <Grid item xs={3}>
+          <Grid size={3}>
             <NumberTextField
               label={isMobile ? '' : 'Pounds for Purchase'}
               disabled

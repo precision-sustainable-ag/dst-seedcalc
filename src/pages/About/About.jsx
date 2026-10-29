@@ -78,7 +78,15 @@ const About = () => {
   return (
     <Box sx={{ border: 0.5, borderColor: 'grey.300' }} ml={2} mr={2} mt={5}>
       <Grid container spacing={0} justifyContent="center" mt={isMobile ? 0 : 5} mb={isMobile ? 0 : 5}>
-        <Grid item xs={12} sm={12} md={3.4} lg={3.4} xl={3.4}>
+        <Grid
+          size={{
+            xs: 12,
+            sm: 12,
+            md: 3.4,
+            lg: 3.4,
+            xl: 3.4,
+          }}
+        >
           <div
             style={{
               border: '1px solid #4F5F30',
@@ -106,14 +114,15 @@ const About = () => {
         </Grid>
 
         <Grid
-          item
-          xs={12}
-          sm={12}
-          md={8}
-          lg={8}
-          xl={8}
           mt={{
             xs: 3, sm: 3, md: 0, lg: 0, xl: 0,
+          }}
+          size={{
+            xs: 12,
+            sm: 12,
+            md: 8,
+            lg: 8,
+            xl: 8,
           }}
         >
           <div style={{ border: '1px solid #4F5F30', minHeight: '320px' }}>

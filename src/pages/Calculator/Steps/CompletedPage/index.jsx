@@ -13,13 +13,13 @@ const CompletedPage = () => {
   return (
     <>
       <Grid container>
-        <Grid xs={12} item sx={{ pt: '50px' }} justifyContent="center">
+        <Grid sx={{ pt: '50px' }} justifyContent="center" size={12}>
           <Typography>
             Thank you for trying out the Seeding Rate Calculator!
           </Typography>
         </Grid>
 
-        <Grid xs={12} item sx={{ pt: '50px' }} justifyContent="center">
+        <Grid sx={{ pt: '50px' }} justifyContent="center" size={12}>
           <Typography sx={{ fontWeight: 600 }}>
             Questions or Comments?
           </Typography>
@@ -32,28 +32,28 @@ const CompletedPage = () => {
       </Grid>
 
       <Grid container sx={{ pt: '150px' }}>
-        <Grid xs={!matchesUpMd ? 6 : 3} item>
+        <Grid size={!matchesUpMd ? 6 : 3}>
           <img
             alt="axilab"
             src="./axilab.png"
             width={!matchesUpMd ? '80%' : '50%'}
           />
         </Grid>
-        <Grid xs={!matchesUpMd ? 6 : 3} item>
+        <Grid size={!matchesUpMd ? 6 : 3}>
           <img
             alt="MCCC"
             src="./MCCCLogo.png"
             width={!matchesUpMd ? '80%' : '50%'}
           />
         </Grid>
-        <Grid xs={!matchesUpMd ? 3 : 2} item>
+        <Grid size={!matchesUpMd ? 3 : 2}>
           <img
             alt="PSA"
             src="./PSALogo.png"
             width={!matchesUpMd ? '80%' : '50%'}
           />
         </Grid>
-        <Grid xs={!matchesUpMd ? 9 : 4} item>
+        <Grid size={!matchesUpMd ? 9 : 4}>
           <img
             alt="NECCC"
             src="./NECCCWideLogo.png"

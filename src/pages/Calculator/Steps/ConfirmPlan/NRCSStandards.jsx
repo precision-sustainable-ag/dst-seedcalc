@@ -66,8 +66,18 @@ const NRCSItem = ({ title, result }) => {
 
   return (
     <Grid container>
-      <Grid item xs={0} md={1} />
-      <Grid item xs={12} md={10}>
+      <Grid
+        size={{
+          xs: 0,
+          md: 1,
+        }}
+      />
+      <Grid
+        size={{
+          xs: 12,
+          md: 10,
+        }}
+      >
         <Typography
           sx={{
             fontSize: '20px',
@@ -79,10 +89,25 @@ const NRCSItem = ({ title, result }) => {
           {title}
         </Typography>
       </Grid>
-      <Grid item xs={0} md={1} />
+      <Grid
+        size={{
+          xs: 0,
+          md: 1,
+        }}
+      />
 
-      <Grid item xs={0} md={1} />
-      <Grid item xs={12} md={10}>
+      <Grid
+        size={{
+          xs: 0,
+          md: 1,
+        }}
+      />
+      <Grid
+        size={{
+          xs: 12,
+          md: 10,
+        }}
+      >
         <Accordion
           expanded={expanded}
           onChange={() => setExpanded(!expanded)}
@@ -109,7 +134,12 @@ const NRCSItem = ({ title, result }) => {
           <NRCSAccordionDetails>{renderTable(result)}</NRCSAccordionDetails>
         </Accordion>
       </Grid>
-      <Grid item xs={0} md={1} />
+      <Grid
+        size={{
+          xs: 0,
+          md: 1,
+        }}
+      />
     </Grid>
   );
 };
@@ -117,7 +147,7 @@ const NRCSItem = ({ title, result }) => {
 const NRCSStandards = ({ nrcsResult }) => (
 
   <>
-    <Grid item xs={12}>
+    <Grid size={12}>
       <Typography sx={{ fontWeight: 600, fontSize: '20px', margin: '20px' }}>
         Indiana NRCS Standards
       </Typography>

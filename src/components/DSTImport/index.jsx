@@ -103,13 +103,13 @@ const DSTImport = () => {
           <Box sx={modalStyle}>
             <Grid container spacing={5}>
               {isAuthenticated && (
-                <Grid container item spacing={1}>
-                  <Grid item xs={12} display="flex" justifyContent="center">
+                <Grid container spacing={1}>
+                  <Grid display="flex" justifyContent="center" size={12}>
                     <Typography variant="h6">
                       Create New Calculation
                     </Typography>
                   </Grid>
-                  <Grid item xs={12} display="flex" justifyContent="center">
+                  <Grid display="flex" justifyContent="center" size={12}>
                     <PSAButton
                       buttonType=""
                       variant="contained"
@@ -122,14 +122,14 @@ const DSTImport = () => {
 
               )}
 
-              <Grid container item spacing={1}>
-                <Grid item xs={12} display="flex" justifyContent="center">
+              <Grid container spacing={1}>
+                <Grid display="flex" justifyContent="center" size={12}>
                   <Typography variant="h6">
                     Import from CSV
                   </Typography>
                 </Grid>
 
-                <Grid xs={12} item display="flex" justifyContent="center" alignItems="center">
+                <Grid display="flex" justifyContent="center" alignItems="center" size={12}>
                   <input
                     id="contained-button-file"
                     type="file"
@@ -152,14 +152,14 @@ const DSTImport = () => {
               </Grid>
 
               {isAuthenticated && (
-                <Grid container item xs={12} spacing={1}>
-                  <Grid item xs={12} display="flex" justifyContent="center">
+                <Grid container spacing={1} size={12}>
+                  <Grid display="flex" justifyContent="center" size={12}>
                     <Typography variant="h6">
                       Import from User History
                     </Typography>
                   </Grid>
-                  <Grid container item xs={12} spacing={2}>
-                    <Grid item xs={12} display="flex" justifyContent="center" alignItems="center">
+                  <Grid container spacing={2} size={12}>
+                    <Grid display="flex" justifyContent="center" alignItems="center" size={12}>
                       <PSADropdown
                         label="Select your calculation"
                         items={histories.map((history) => ({ label: history.label, value: history.label }))}
@@ -175,7 +175,7 @@ const DSTImport = () => {
                         }}
                       />
                     </Grid>
-                    <Grid item xs={12} display="flex" justifyContent="center" alignItems="center">
+                    <Grid display="flex" justifyContent="center" alignItems="center" size={12}>
                       <PSAButton
                         buttonType=""
                         variant="contained"

@@ -232,11 +232,22 @@ const SeedingMethod = ({ alertState, isMobile }) => {
 
   return (
     <Grid container>
-      <Grid item xs={12}>
+      <Grid size={12}>
         {isMobile && (<Typography variant="stepCaption">Select Seeding Method</Typography>)}
       </Grid>
-      <Grid item xs={0} md={3} />
-      <Grid item xs={12} md={6} padding="15px">
+      <Grid
+        size={{
+          xs: 0,
+          md: 3,
+        }}
+      />
+      <Grid
+        padding="15px"
+        size={{
+          xs: 12,
+          md: 6,
+        }}
+      >
         <PSADropdown
           label="Seeding Method:"
           items={getSeedingMethods().map((method) => ({ label: method.label, value: method.label }))}
@@ -252,9 +263,14 @@ const SeedingMethod = ({ alertState, isMobile }) => {
           }}
         />
       </Grid>
-      <Grid item xs={0} md={3} />
+      <Grid
+        size={{
+          xs: 0,
+          md: 3,
+        }}
+      />
       {seedsSelected.map((seed, i) => (
-        <Grid item xs={12} key={i}>
+        <Grid key={i} size={12}>
           <PSAAccordion
             expanded={accordionState[seed.label]}
             onChange={() => handleExpandAccordion(seed.label)}

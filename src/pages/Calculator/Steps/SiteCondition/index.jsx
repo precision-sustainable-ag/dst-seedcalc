@@ -168,14 +168,13 @@ const SiteCondition = ({
   return (
     <Grid container justifyContent="center">
       {isMobile && (
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Typography variant="stepCaption">Tell us about your planting site</Typography>
         </Grid>
       )}
-      <Grid xs={12} item>
+      <Grid size={12}>
         {siteCondition.loading === 'getLocality' ? (
           <Grid
-            item
             container
             spacing={1}
             justifyContent="center"
@@ -205,8 +204,19 @@ const SiteCondition = ({
               />
 
               <Grid container pt="1rem">
-                <Grid item xs={0} md={3} />
-                <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'center' }}>
+                <Grid
+                  size={{
+                    xs: 0,
+                    md: 3,
+                  }}
+                />
+                <Grid
+                  sx={{ display: 'flex', justifyContent: 'center' }}
+                  size={{
+                    xs: 12,
+                    md: 6,
+                  }}
+                >
                   <PSADropdown
                     label="State: "
                     items={states.map((s) => ({ label: s.label, value: s.label }))}
@@ -222,13 +232,18 @@ const SiteCondition = ({
                     }}
                   />
                 </Grid>
-                <Grid item xs={0} md={3} />
+                <Grid
+                  size={{
+                    xs: 0,
+                    md: 3,
+                  }}
+                />
               </Grid>
 
               {
                 Object.keys(selectedState).length > 0
                   ? (
-                    <Grid item xs={12} pt="1rem">
+                    <Grid pt="1rem" size={12}>
                       <Typography>
                         Would you like to manually enter your site conditions
                         or use your location to prepopulate them?
@@ -252,7 +267,7 @@ const SiteCondition = ({
                     </Grid>
                   )
                   : (
-                    <Grid item xs={12} p="1rem">
+                    <Grid p="1rem" size={12}>
                       <Typography fontWeight="bold">
                         Please select your state from the dropdown or using the map.
                       </Typography>

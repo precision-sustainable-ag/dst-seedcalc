@@ -24,19 +24,19 @@ const ConfirmPlanForm = ({
   const renderStepsForm = (label1, label2, label3) => (
     isMobile && (
     <Grid container>
-      <Grid item xs={3}>
+      <Grid size={3}>
         <Typography sx={{ fontSize: '0.75rem', pb: '1rem' }}>
           {label1}
         </Typography>
       </Grid>
-      <Grid item xs={1} />
-      <Grid item xs={3}>
+      <Grid size={1} />
+      <Grid size={3}>
         <Typography sx={{ fontSize: '0.75rem', pb: '1rem' }}>
           {label2}
         </Typography>
       </Grid>
-      <Grid item xs={1} />
-      <Grid item xs={3}>
+      <Grid size={1} />
+      <Grid size={3}>
         <Typography sx={{ fontSize: '0.75rem', pb: '1rem' }}>
           {label3}
         </Typography>
@@ -51,7 +51,7 @@ const ConfirmPlanForm = ({
       <Grid container>
         <Grid container sx={{ p: '0.625rem' }}>
           {renderStepsForm('Bulk Lbs per Acre', 'Acres', 'Total Pounds')}
-          <Grid item xs={3}>
+          <Grid size={3}>
             <NumberTextField
               disabled
               label={isMobile ? '' : 'Bulk Lbs per Acre'}
@@ -60,11 +60,11 @@ const ConfirmPlanForm = ({
             />
           </Grid>
 
-          <Grid item xs={1}>
+          <Grid size={1}>
             <Typography variant="mathIcon">&#215;</Typography>
           </Grid>
 
-          <Grid item xs={3}>
+          <Grid size={3}>
             <NumberTextField
               label={isMobile ? '' : 'Acres'}
               value={result.acres}
@@ -79,11 +79,11 @@ const ConfirmPlanForm = ({
             />
           </Grid>
 
-          <Grid item xs={1}>
+          <Grid size={1}>
             <Typography variant="mathIcon">=</Typography>
           </Grid>
 
-          <Grid item xs={3}>
+          <Grid size={3}>
             <NumberTextField
               label={isMobile ? '' : 'Total Pounds'}
               disabled
@@ -92,13 +92,13 @@ const ConfirmPlanForm = ({
             />
           </Grid>
 
-          <Grid item xs={1} />
+          <Grid size={1} />
         </Grid>
 
         <Grid container sx={{ p: '0.625rem' }}>
-          <Grid item xs={3} />
-          <Grid item xs={1} />
-          <Grid item xs={3}>
+          <Grid size={3} />
+          <Grid size={1} />
+          <Grid size={3}>
             <NumberTextField
               label="Cost per Pound"
               value={result.costPerPound}
@@ -111,12 +111,12 @@ const ConfirmPlanForm = ({
               testId={`${seed.label}-cost-per-pound`}
             />
           </Grid>
-          <Grid item xs={3} />
+          <Grid size={3} />
         </Grid>
 
         <Grid container sx={{ p: '0.625rem' }}>
           {renderStepsForm('Cost per Pound', 'Total Pounds', 'Total Cost')}
-          <Grid item xs={3}>
+          <Grid size={3}>
             <NumberTextField
               disabled
               label={isMobile ? '' : 'Cost per Pound'}
@@ -124,20 +124,20 @@ const ConfirmPlanForm = ({
               testId={`${seed.label}-cost-per-pound-disabled`}
             />
           </Grid>
-          <Grid item xs={1}>
+          <Grid size={1}>
             <Typography variant="mathIcon">&#215;</Typography>
           </Grid>
-          <Grid item xs={3}>
+          <Grid size={3}>
             <NumberTextField
               disabled
               label={isMobile ? '' : 'Total Pounds'}
               value={result.totalPounds}
             />
           </Grid>
-          <Grid item xs={1}>
+          <Grid size={1}>
             <Typography variant="mathIcon">=</Typography>
           </Grid>
-          <Grid item xs={3}>
+          <Grid size={3}>
             <NumberTextField
               label={isMobile ? '' : 'Total Cost'}
               disabled
@@ -157,13 +157,13 @@ const ConfirmPlanForm = ({
     );
     return (
       <Grid container>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Typography variant="stepHeader">Total Cost of mix:</Typography>
         </Grid>
 
         {seedsSelected.map((seed, i) => (
           <Fragment key={i}>
-            <Grid item xs={3} sx={{ p: '0.625rem' }}>
+            <Grid sx={{ p: '0.625rem' }} size={3}>
               <NumberTextField
                 label={`${seed.label}`}
                 disabled
@@ -171,14 +171,14 @@ const ConfirmPlanForm = ({
               />
               {' '}
             </Grid>
-            <Grid item xs={1} sx={{ p: '0.625rem' }}>
+            <Grid sx={{ p: '0.625rem' }} size={1}>
               <Typography variant="mathIcon">
                 {i !== seedsSelected.length - 1 ? '+' : '='}
               </Typography>
             </Grid>
           </Fragment>
         ))}
-        <Grid item xs={6} sx={{ p: '0.625rem' }}>
+        <Grid sx={{ p: '0.625rem' }} size={6}>
           <NumberTextField
             label="Total Cost of Mix"
             disabled
@@ -194,13 +194,13 @@ const ConfirmPlanForm = ({
     <Grid container color="text.primary">
       {/* NRCS Standards */}
       {checkNRCSStandards && <NRCSStandards nrcsResult={nrcsResult} />}
-      <Grid item xs={12}>
+      <Grid size={12}>
         {seedsSelected.map((seed, i) => (
           <Grid container key={i}>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Typography variant="stepHeader">{seed.label}</Typography>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               {renderConfirmPlanForm(seed)}
             </Grid>
           </Grid>
