@@ -65,8 +65,10 @@ const NumberTextField = ({
       label={label}
       onChange={handleChange}
       className={className}
-      InputLabelProps={{
-        shrink: true,
+      slotProps={{
+        inputLabel: {
+          shrink: true,
+        },
       }}
       placeholder={placeholder}
       disabled={disabled}

@@ -259,7 +259,7 @@ const PlantList = ({
                         placement="bottom-end"
                         enterTouchDelay={200}
                         leaveTouchDelay={200}
-                        componentsProps={{
+                        slotProps={{
                           tooltip: {
                             sx: {
                               width: '150px',
