@@ -199,7 +199,7 @@ const Calculator = ({ calculator, setCalculator }) => {
   }, [alertState.open]);
 
   return (
-    <Grid container justifyContent="center">
+    <Grid container sx={{ justifyContent: 'center' }}>
       <Grid
         style={{ position: 'fixed', bottom: isMobile ? '45px' : 0, zIndex: 1000 }}
       >
@@ -234,7 +234,7 @@ const Calculator = ({ calculator, setCalculator }) => {
         />
       </Grid>
 
-      <Grid container>
+      <Grid container size={12}>
         {/* seeds selected list */}
         {activeStep > 0 && activeStep < 8 && (
           <Grid
