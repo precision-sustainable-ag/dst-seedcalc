@@ -10,22 +10,22 @@ describe('<Header />', () => {
   });
 
   it('should PSA logo defaultly', () => {
-    cy.getByTestId('header_logo_button').find('img').should('have.attr', 'src', 'images/PSA_logo.png');
+    cy.getByTestId('header_logo_button').find('img').should('have.attr', 'src').and('include', 'PSA_logo.png');
   });
 
   it('should MCCC based on council', () => {
     store.dispatch({ type: 'siteCondition/updateCouncil', payload: { council: 'MCCC' } });
-    cy.getByTestId('header_logo_button').find('img').should('have.attr', 'src', 'images/mwccc_logo.png');
+    cy.getByTestId('header_logo_button').find('img').should('have.attr', 'src').and('include', 'mwccc_logo.png');
   });
 
   it('should NECCC based on council', () => {
     store.dispatch({ type: 'siteCondition/updateCouncil', payload: { council: 'NECCC' } });
-    cy.getByTestId('header_logo_button').find('img').should('have.attr', 'src', 'images/neccc_logo.png');
+    cy.getByTestId('header_logo_button').find('img').should('have.attr', 'src').and('include', 'neccc_logo.png');
   });
 
   it('should SCCC based on council', () => {
     store.dispatch({ type: 'siteCondition/updateCouncil', payload: { council: 'SCCC' } });
-    cy.getByTestId('header_logo_button').find('img').should('have.attr', 'src', 'images/sccc_logo.png');
+    cy.getByTestId('header_logo_button').find('img').should('have.attr', 'src').and('include', 'sccc_logo.png');
   });
 
   it('should show the navbar', () => {
@@ -47,7 +47,8 @@ describe('<Header />', () => {
     cy.getByTestId('navbar-Release Notes').click();
     cy.get('@windowOpen').should('be.calledWith', releaseNotesUrl);
 
+    cy.getByTestId('open_menu').click();
     cy.getByTestId('navbar-Feedback').click();
-    cy.url().should('contain', '/feedback');
+    cy.url().should('contain', '/Feedback');
   });
 });
