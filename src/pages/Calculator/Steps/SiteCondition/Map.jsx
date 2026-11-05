@@ -155,7 +155,7 @@ const Map = ({
           hasHelp
           mapboxToken={mapboxToken}
         />
-        <Grid p="1rem" size={12}>
+        <Grid sx={{ p: '1rem' }} size={12}>
           <PSAButton buttonType="" variant="contained" onClick={() => setStep(1)} sx={{ margin: '1rem' }} title="Back" />
           <PSAButton buttonType="" variant="contained" onClick={() => setStep(3)} sx={{ margin: '1rem' }} title="Edit Details" />
         </Grid>

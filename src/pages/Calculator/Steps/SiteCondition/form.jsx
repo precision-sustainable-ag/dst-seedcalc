@@ -4,7 +4,7 @@
 
 import React from 'react';
 import {
-  Typography,
+  Box, Stack, Typography,
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import InfoIcon from '@mui/icons-material/Info';
@@ -146,7 +146,7 @@ const SiteConditionForm = ({
         }}
       />
       <Grid
-        p="10px"
+        sx={{ p: '10px' }}
         size={{
           xs: 12,
           md: 6,
@@ -182,7 +182,7 @@ const SiteConditionForm = ({
         }}
       />
       <Grid
-        p="10px"
+        sx={{ p: '10px' }}
         size={{
           xs: 12,
           md: 6,
@@ -221,7 +221,7 @@ const SiteConditionForm = ({
         }}
       />
       <Grid
-        p="10px"
+        sx={{ p: '10px' }}
         size={{
           xs: 12,
           md: 6,
@@ -260,7 +260,7 @@ const SiteConditionForm = ({
         }}
       />
       <Grid
-        p="10px"
+        sx={{ p: '10px' }}
         size={{
           xs: 12,
           md: 6,
@@ -268,10 +268,10 @@ const SiteConditionForm = ({
       >
         {(tileDrainage ? improvedNeedTileDrainage.includes(soilDrainage) : needTileDrainage.includes(soilDrainage))
           && (
-            <Grid container alignItems="center">
+            <Grid container size={12} sx={{ alignItems: 'center' }}>
               <Grid size={4}>
-                <Grid container direction="column">
-                  <Grid>
+                <Stack>
+                  <Box>
                     <Typography>
                       Tile drainage
                       <PSATooltip
@@ -295,8 +295,8 @@ const SiteConditionForm = ({
                         )}
                       />
                     </Typography>
-                  </Grid>
-                  <Grid>
+                  </Box>
+                  <Box>
                     <Typography display="inline">
                       No
                     </Typography>
@@ -309,8 +309,8 @@ const SiteConditionForm = ({
                     <Typography display="inline">
                       Yes
                     </Typography>
-                  </Grid>
-                </Grid>
+                  </Box>
+                </Stack>
               </Grid>
               <Grid size={8}>
                 {(tileDrainage)
@@ -340,7 +340,7 @@ const SiteConditionForm = ({
         }}
       />
       <Grid
-        p="10px"
+        sx={{ p: '10px' }}
         size={{
           xs: 12,
           md: 6,
@@ -370,7 +370,7 @@ const SiteConditionForm = ({
         }}
       />
       <Grid
-        p="10px"
+        sx={{ p: '10px' }}
         size={{
           xs: 12,
           md: 6,
@@ -404,9 +404,7 @@ const SiteConditionForm = ({
       />
       {state === 'Indiana' && (
         <Grid
-          p="10px"
-          display="flex"
-          justifyContent="center"
+          sx={{ p: '10px', display: 'flex', justifyContent: 'center' }}
           size={{
             xs: 12,
             md: 6,
@@ -426,7 +424,7 @@ const SiteConditionForm = ({
       {/* Soil Fertility */}
       {council === 'NECCC' && (
         <Grid
-          p="10px"
+          sx={{ p: '10px' }}
           size={{
             xs: 12,
             md: 6,
@@ -457,7 +455,7 @@ const SiteConditionForm = ({
         }}
       />
 
-      <Grid margin="1rem" size={12}>
+      <Grid sx={{ margin: '1rem' }} size={12}>
         <PSAButton buttonType="" variant="contained" onClick={() => setStep(1)} data-test="site_condition_back_button" title="Back" />
       </Grid>
 

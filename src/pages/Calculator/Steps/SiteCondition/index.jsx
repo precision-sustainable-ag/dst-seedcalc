@@ -166,7 +166,7 @@ const SiteCondition = ({
   }, [siteCondition]);
 
   return (
-    <Grid container justifyContent="center">
+    <Grid container sx={{ justifyContent: 'center' }}>
       {isMobile && (
         <Grid size={12}>
           <Typography variant="stepCaption">Tell us about your planting site</Typography>
@@ -176,9 +176,8 @@ const SiteCondition = ({
         {siteCondition.loading === 'getLocality' ? (
           <Grid
             container
+            size={12}
             spacing={1}
-            justifyContent="center"
-            alignItems="center"
             sx={{
               display: 'flex',
               justifyContent: 'center',
@@ -203,7 +202,7 @@ const SiteCondition = ({
                 mapboxToken={mapboxToken}
               />
 
-              <Grid container pt="1rem">
+              <Grid container size={12} sx={{ pt: '1rem' }}>
                 <Grid
                   size={{
                     xs: 0,
@@ -243,7 +242,7 @@ const SiteCondition = ({
               {
                 Object.keys(selectedState).length > 0
                   ? (
-                    <Grid pt="1rem" size={12}>
+                    <Grid sx={{ pt: '1rem' }} size={12}>
                       <Typography>
                         Would you like to manually enter your site conditions
                         or use your location to prepopulate them?
@@ -267,7 +266,7 @@ const SiteCondition = ({
                     </Grid>
                   )
                   : (
-                    <Grid p="1rem" size={12}>
+                    <Grid sx={{ p: '1rem' }} size={12}>
                       <Typography fontWeight="bold">
                         Please select your state from the dropdown or using the map.
                       </Typography>
