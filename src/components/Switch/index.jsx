@@ -11,12 +11,11 @@ import { Switch } from '@mui/material';
 }
 */
 
-const label = { inputProps: { 'aria-label': 'Switch' } };
 const DSTSwitch = ({
   checked, handleChange, disabled = false, testId,
 }) => (
   <Switch
-    {...label}
+    slotProps={{ input: { 'aria-label': 'Switch' } }}
     checked={checked}
     onChange={handleChange}
     color="default"

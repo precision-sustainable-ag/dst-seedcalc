@@ -140,11 +140,12 @@ const DSTBarChart = ({ seed, calculatorResult }) => {
         />
       </Grid>
 
-      <Grid container data-test="list_container">
+      <Grid container size={12} data-test="list_container">
         {/* list under barchart */}
         {labels.map((l, i) => (
           <Grid
             container
+            size={12}
             sx={{
               backgroundColor: !(i % 2) && 'main.background1',
               color: 'text.primary',

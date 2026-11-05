@@ -103,7 +103,7 @@ const DSTImport = () => {
           <Box sx={modalStyle}>
             <Grid container spacing={5}>
               {isAuthenticated && (
-                <Grid container spacing={1}>
+                <Grid container size={12} spacing={1}>
                   <Grid
                     size={12}
                     sx={{
@@ -134,7 +134,7 @@ const DSTImport = () => {
 
               )}
 
-              <Grid container spacing={1}>
+              <Grid container size={12} spacing={1}>
                 <Grid
                   size={12}
                   sx={{
