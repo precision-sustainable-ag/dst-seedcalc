@@ -23,7 +23,7 @@ const ConfirmPlanForm = ({
 
   const renderStepsForm = (label1, label2, label3) => (
     isMobile && (
-    <Grid container>
+    <Grid container size={12}>
       <Grid size={3}>
         <Typography sx={{ fontSize: '0.75rem', pb: '1rem' }}>
           {label1}
@@ -49,7 +49,7 @@ const ConfirmPlanForm = ({
     const result = calculatorResult[seed.label];
     return (
       <Grid container>
-        <Grid container sx={{ p: '0.625rem' }}>
+        <Grid container size={12} sx={{ p: '0.625rem' }}>
           {renderStepsForm('Bulk Lbs per Acre', 'Acres', 'Total Pounds')}
           <Grid size={3}>
             <NumberTextField
@@ -95,7 +95,7 @@ const ConfirmPlanForm = ({
           <Grid size={1} />
         </Grid>
 
-        <Grid container sx={{ p: '0.625rem' }}>
+        <Grid container size={12} sx={{ p: '0.625rem' }}>
           <Grid size={3} />
           <Grid size={1} />
           <Grid size={3}>
@@ -114,7 +114,7 @@ const ConfirmPlanForm = ({
           <Grid size={3} />
         </Grid>
 
-        <Grid container sx={{ p: '0.625rem' }}>
+        <Grid container size={12} sx={{ p: '0.625rem' }}>
           {renderStepsForm('Cost per Pound', 'Total Pounds', 'Total Cost')}
           <Grid size={3}>
             <NumberTextField
