@@ -18,40 +18,34 @@ import pirschAnalytics from '../../../../shared/utils/analytics';
 
 // styles for left grid
 const FullGrid = styled(Grid)(() => ({
-  '&.MuiGrid-item': {
-    boxShadow: '1px 1px 10px 1px lightgrey',
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
+  boxShadow: '1px 1px 10px 1px lightgrey',
+  display: 'flex',
+  justifyContent: 'flex-start',
+  alignItems: 'center',
 }));
 // styles for left grid
 const LeftGrid = styled(Grid)(() => ({
-  '&.MuiGrid-item': {
-    display: 'flex',
-  },
+  display: 'flex',
 }));
 
 // styles for right grid
 const RightGrid = styled(Grid)(() => ({
-  '&.MuiGrid-item': {
-    padding: '1rem',
+  padding: '1rem',
+  display: 'flex',
+  flexDirection: 'column',
+  '& .MuiBox-root': {
+    width: '50px',
+    height: '50px',
+    margin: '0 auto',
+    backgroundColor: '#E5E7D5',
+    border: 'solid 2px',
+    borderRadius: '50%',
     display: 'flex',
-    flexDirection: 'column',
-    '& .MuiBox-root': {
-      width: '50px',
-      height: '50px',
-      margin: '0 auto',
-      backgroundColor: '#E5E7D5',
-      border: 'solid 2px',
-      borderRadius: '50%',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    '& p': {
-      fontWeight: 'bold',
-    },
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  '& p': {
+    fontWeight: 'bold',
   },
 }));
 
@@ -203,14 +197,15 @@ const SeedingMethod = ({ alertState, isMobile }) => {
     return (
       <Grid
         container
+        size={12}
         data-test={`method-${method}`}
         sx={{
           margin: 1,
           border: selectedMethod === method ? '2px solid #4f5f30' : '',
         }}
       >
-        <FullGrid item xs={14}>
-          <LeftGrid item xs={6}>
+        <FullGrid size={12}>
+          <LeftGrid size={6}>
             <Box
               sx={{
                 textAlign: 'left',
@@ -231,7 +226,7 @@ const SeedingMethod = ({ alertState, isMobile }) => {
               </Typography>
             </Box>
           </LeftGrid>
-          <RightGrid item xs={6}>
+          <RightGrid size={6}>
             {!value ? (
               <Typography sx={{
                 color: '#D84727',
