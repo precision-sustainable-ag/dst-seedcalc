@@ -19,14 +19,12 @@ import { setAlertStateRedux, setHistoryStateRedux } from '../../../../features/u
 import pirschAnalytics from '../../../../shared/utils/analytics';
 
 const LeftGrid = styled(Grid)({
-  '&.MuiGrid-item': {
-    height: '50px',
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    '& p': {
-      fontWeight: 'bold',
-    },
+  height: '50px',
+  display: 'flex',
+  justifyContent: 'flex-start',
+  alignItems: 'center',
+  '& p': {
+    fontWeight: 'bold',
   },
 });
 
@@ -135,7 +133,7 @@ const SeedTagInfo = ({
       </Grid>
       {seedTagInfoSelected === false
         && (
-        <Grid container sx={{ padding: '1rem' }}>
+        <Grid container size={12} sx={{ padding: '1rem' }}>
           <Grid
             size={12}
             sx={{
@@ -180,7 +178,7 @@ const SeedTagInfo = ({
               summaryContent={<Typography>{seed.label}</Typography>}
               detailsContent={(
                 <Grid container>
-                  <LeftGrid item xs={6} sm={2}>
+                  <LeftGrid size={{ xs: 6, sm: 2 }}>
                     <Typography>% Germination: </Typography>
                   </LeftGrid>
                   <Grid
@@ -198,7 +196,7 @@ const SeedTagInfo = ({
                     />
                   </Grid>
 
-                  <LeftGrid item xs={6} sm={2}>
+                  <LeftGrid size={{ xs: 6, sm: 2 }}>
                     <Typography>% Purity: </Typography>
                   </LeftGrid>
                   <Grid
@@ -216,7 +214,7 @@ const SeedTagInfo = ({
                     />
                   </Grid>
 
-                  <LeftGrid item xs={6} sm={2}>
+                  <LeftGrid size={{ xs: 6, sm: 2 }}>
                     <Typography>Seeds per Pound </Typography>
                   </LeftGrid>
                   <Grid
