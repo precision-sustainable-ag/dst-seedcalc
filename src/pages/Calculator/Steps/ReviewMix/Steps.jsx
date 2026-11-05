@@ -32,6 +32,7 @@ const ReviewMixSteps = ({
     isMobile && (
       <Grid
         container
+        size={12}
         sx={{
           justifyContent: 'space-evenly',
         }}
@@ -74,7 +75,7 @@ const ReviewMixSteps = ({
     }, [val]);
 
     return (
-      <Grid container>
+      <Grid container size={12}>
         <Grid
           size={{
             xs: 2,
@@ -184,6 +185,7 @@ const ReviewMixSteps = ({
           )}
           <Grid
             container
+            size={12}
             sx={{
               justifyContent: 'space-evenly',
             }}
@@ -222,6 +224,7 @@ const ReviewMixSteps = ({
           </Grid>
           <Grid
             container
+            size={12}
             sx={{
               justifyContent: 'space-evenly',
               marginTop: isMobile ? '20px' : 0,
@@ -269,6 +272,7 @@ const ReviewMixSteps = ({
           )}
           <Grid
             container
+            size={12}
             sx={{
               justifyContent: 'space-evenly',
             }}
@@ -358,6 +362,7 @@ const ReviewMixSteps = ({
           )}
           <Grid
             container
+            size={12}
             sx={{
               justifyContent: 'space-evenly',
               pb: '1rem',
@@ -405,6 +410,7 @@ const ReviewMixSteps = ({
 
           <Grid
             container
+            size={12}
             sx={{
               justifyContent: 'space-evenly',
             }}
@@ -484,6 +490,7 @@ const ReviewMixSteps = ({
         )}
         <Grid
           container
+          size={12}
           sx={{
             justifyContent: 'space-evenly',
           }}
@@ -534,6 +541,7 @@ const ReviewMixSteps = ({
         )}
         <Grid
           container
+          size={12}
           sx={{
             justifyContent: 'space-evenly',
           }}
@@ -609,6 +617,7 @@ const ReviewMixSteps = ({
         {renderStepsForm('Seeding Rate in Mix (Lbs per Acre)', '% Germination', '% Purity')}
         <Grid
           container
+          size={12}
           sx={{
             justifyContent: 'space-evenly',
           }}
@@ -650,6 +659,7 @@ const ReviewMixSteps = ({
         </Grid>
         <Grid
           container
+          size={12}
           sx={{
             justifyContent: 'space-evenly',
             marginTop: isMobile ? '20px' : 0,
@@ -682,6 +692,7 @@ const ReviewMixSteps = ({
         {renderStepsForm('Bulk Seeding Rate (Lbs per Acre)', 'Acres', 'Pounds for Purchase')}
         <Grid
           container
+          size={12}
           sx={{
             justifyContent: 'space-evenly',
           }}
