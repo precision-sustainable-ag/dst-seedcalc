@@ -206,6 +206,7 @@ const SpeciesSelection = ({
           ))) : (
             <Grid
               container
+              size={12}
               spacing={1}
               sx={{
                 display: 'flex',

@@ -16,7 +16,7 @@ const Diversity = () => {
   );
 
   return (
-    <Grid container sx={{ height: '80px' }} data-test="diversity_bar">
+    <Grid container sx={{ height: '80px', width: '100%' }} data-test="diversity_bar">
       <Typography
         sx={{
           pt: '1rem',
