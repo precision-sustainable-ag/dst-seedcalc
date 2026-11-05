@@ -20,6 +20,7 @@ const MixRatioSteps = ({
     isMobile && (
       <Grid
         container
+        size={12}
         sx={{
           justifyContent: 'space-evenly',
         }}
@@ -72,6 +73,7 @@ const MixRatioSteps = ({
           )}
           <Grid
             container
+            size={12}
             sx={{
               justifyContent: 'space-evenly',
             }}
@@ -111,6 +113,7 @@ const MixRatioSteps = ({
 
           <Grid
             container
+            size={12}
             sx={{
               justifyContent: 'space-evenly',
               marginTop: isMobile ? '20px' : 0,
@@ -148,6 +151,7 @@ const MixRatioSteps = ({
           )}
           <Grid
             container
+            size={12}
             sx={{
               justifyContent: 'space-evenly',
             }}
@@ -200,6 +204,7 @@ const MixRatioSteps = ({
           )}
           <Grid
             container
+            size={12}
             sx={{
               justifyContent: 'space-evenly',
               pb: '1rem',
@@ -246,6 +251,7 @@ const MixRatioSteps = ({
 
           <Grid
             container
+            size={12}
             sx={{
               justifyContent: 'space-evenly',
             }}
@@ -291,6 +297,7 @@ const MixRatioSteps = ({
         )}
         <Grid
           container
+          size={12}
           sx={{
             justifyContent: 'space-evenly',
           }}
@@ -338,6 +345,7 @@ const MixRatioSteps = ({
           {renderFormLabel('Seeds per Acre', 'SqFt per Acre', 'Seeds per SqFt')}
           <Grid
             container
+            size={12}
             sx={{
               justifyContent: 'space-evenly',
             }}
@@ -386,6 +394,7 @@ const MixRatioSteps = ({
 
           <Grid
             container
+            size={12}
             sx={{
               justifyContent: 'center',
               pb: '1rem',
@@ -410,6 +419,7 @@ const MixRatioSteps = ({
           {renderFormLabel('Seeds per Acre', '% Survival', 'Plants per Acre')}
           <Grid
             container
+            size={12}
             sx={{
               justifyContent: 'space-evenly',
             }}
@@ -457,6 +467,7 @@ const MixRatioSteps = ({
           )}
           <Grid
             container
+            size={12}
             sx={{
               justifyContent: 'space-evenly',
             }}
