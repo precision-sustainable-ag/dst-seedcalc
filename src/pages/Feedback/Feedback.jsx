@@ -51,7 +51,7 @@ const Feedback = () => (
           {
             label: 'About the Website',
             props: {
-              name: 'About the Websit',
+              name: 'About the Website',
               'data-test': 'feedback_website',
             },
           },

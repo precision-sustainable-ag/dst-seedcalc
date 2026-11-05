@@ -46,6 +46,13 @@ const CheckBoxIcon = ({ style }) => (
   </Box>
 );
 
+// Support both MM/DD/YYYY and MM/DD type of date string
+const parseDate = (dateStr) => {
+  const [m, d] = dateStr.split('/');
+  // Use 2000 as temp year for parsing (the year does not matters for comparison)
+  return dayjs(`${m}/${d}/2000`);
+};
+
 const PlantList = ({
   seedType,
   filteredSeeds,
@@ -68,17 +75,18 @@ const PlantList = ({
     if (!seed['Planting and Growth Windows']['Reliable Establishment']) return '';
     const [firstPeriod, secondPeriod] = seed['Planting and Growth Windows']['Reliable Establishment'];
     let secondStart; let secondEnd;
-    const firstStart = dayjs(dayjs(firstPeriod.split(' - ')[0]).format('MM/DD'));
-    const firstEnd = dayjs(dayjs(firstPeriod.split(' - ')[1]).format('MM/DD'));
+    const firstStart = parseDate(firstPeriod.split(' - ')[0]);
+    const firstEnd = parseDate(firstPeriod.split(' - ')[1]);
     if (secondPeriod) {
-      secondStart = dayjs(dayjs(secondPeriod.split(' - ')[0]).format('MM/DD'));
-      secondEnd = dayjs(dayjs(secondPeriod.split(' - ')[1]).format('MM/DD'));
+      secondStart = parseDate(secondPeriod.split(' - ')[0]);
+      secondEnd = parseDate(secondPeriod.split(' - ')[1]);
     }
-    const plannedDate = dayjs(dayjs(plantingDate).format('MM/DD'));
+    const plannedDate = parseDate(plantingDate);
 
     const inFirstPeriod = plannedDate.isBetween(firstStart, firstEnd, 'day', []);
     const inSecondPeriod = secondStart && plannedDate.isBetween(secondStart, secondEnd, 'day', []);
 
+    console.log(seed.label, inFirstPeriod || inSecondPeriod);
     if (inFirstPeriod || inSecondPeriod) return '';
     if (secondStart) {
       return `Seeding date outside of recommended window:
