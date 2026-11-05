@@ -9,7 +9,7 @@ import {
   Typography, Stack, SliderThumb,
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import { MenuRounded } from '@mui/icons-material';
 import { PSASlider } from 'shared-react-components/src';
 import {
@@ -105,7 +105,6 @@ const MixSeedingTypography = styled(Typography)(({ theme }) => ({
 }));
 
 const MixSeedingRate = ({ calculator, isMobile }) => {
-  const theme = useTheme();
   const dispatch = useDispatch();
 
   const [min, setMin] = useState(0);
@@ -184,7 +183,7 @@ const MixSeedingRate = ({ calculator, isMobile }) => {
       <Grid size={12}>
         {isMobile && (<Typography variant="stepCaption">Adjust Seeding Rate of Mix</Typography>)}
       </Grid>
-      <Grid container sx={{ padding: '3% 3% 5% 5%' }}>
+      <Grid container size={12} sx={{ padding: '3% 3% 5% 5%' }}>
         <Grid
           container
           size={{
@@ -259,7 +258,6 @@ const MixSeedingRate = ({ calculator, isMobile }) => {
               onChange={(e) => setAdjustedMixSeedingRate(e.target.value)}
               onChangeCommitted={updateManagementImpactOnMix}
               marks={marks}
-              theme={theme}
               slots={{ thumb: CustomThumb }}
               data-test="seeding_rate_slider"
             />
