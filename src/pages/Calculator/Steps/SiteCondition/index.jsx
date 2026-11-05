@@ -267,7 +267,10 @@ const SiteCondition = ({
                   )
                   : (
                     <Grid sx={{ p: '1rem' }} size={12}>
-                      <Typography fontWeight="bold">
+                      <Typography sx={{
+                        fontWeight: 'bold',
+                      }}
+                      >
                         Please select your state from the dropdown or using the map.
                       </Typography>
                     </Grid>

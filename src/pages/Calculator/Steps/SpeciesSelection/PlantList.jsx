@@ -170,12 +170,23 @@ const PlantList = ({
   };
 
   return (
-    <Grid container spacing="1rem" pl="1rem">
+    <Grid
+      container
+      spacing="1rem"
+      sx={{
+        pl: '1rem',
+      }}
+    >
       {seedsList.length === 0 ? (
         <Typography variant="h6">No available seeds in this type!</Typography>
       ) : (
         seedsList.map((seed, i) => (
-          <Grid key={i} position="relative">
+          <Grid
+            key={i}
+            sx={{
+              position: 'relative',
+            }}
+          >
             {seedsSelected.filter((s) => s.label === seed.label).length > 0 && (
               <CheckBoxIcon />
             )}

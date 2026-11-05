@@ -232,7 +232,12 @@ const ReviewMix = ({ calculator, isMobile }) => {
             detailsContent={(
               <Grid container>
                 <DSTBarChart seed={seed} calculatorResult={calculatorResult} />
-                <Grid pt="1rem" size={6}>
+                <Grid
+                  size={6}
+                  sx={{
+                    pt: '1rem',
+                  }}
+                >
                   <SeedingRateCard
                     seedingRateLabel={seedDataUnits.pureLiveSeed}
                     seedingRateValue={calculatorResult[seed.label].step2.seedingRate}
@@ -241,7 +246,12 @@ const ReviewMix = ({ calculator, isMobile }) => {
                   />
                 </Grid>
 
-                <Grid pt="1rem" size={6}>
+                <Grid
+                  size={6}
+                  sx={{
+                    pt: '1rem',
+                  }}
+                >
                   <SeedingRateCard
                     seedingRateLabel={seedDataUnits.bulkSeed}
                     seedingRateValue={calculatorResult[seed.label].step4.bulkSeedingRate}
@@ -253,7 +263,12 @@ const ReviewMix = ({ calculator, isMobile }) => {
                   <UnitSelection />
                 </Grid>
 
-                <Grid pt="1rem" size={12}>
+                <Grid
+                  size={12}
+                  sx={{
+                    pt: '1rem',
+                  }}
+                >
                   <PSAButton
                     buttonType=""
                     onClick={() => {

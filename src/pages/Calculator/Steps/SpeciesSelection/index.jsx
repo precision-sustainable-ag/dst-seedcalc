@@ -128,7 +128,12 @@ const SpeciesSelection = ({
   /// ///////////////////////////////////////////////////////
 
   return (
-    <Grid container justifyContent="center">
+    <Grid
+      container
+      sx={{
+        justifyContent: 'center',
+      }}
+    >
       <Grid size={12}>
         {isMobile && (
           <Typography variant="stepCaption">
@@ -144,11 +149,13 @@ const SpeciesSelection = ({
       </Grid>
       <Grid size={11}>
         <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          flexDirection="column"
-          p="1rem"
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'column',
+            p: '1rem',
+          }}
         >
           <PSATextField
             placeholder="Search Filter list"
@@ -200,8 +207,6 @@ const SpeciesSelection = ({
             <Grid
               container
               spacing={1}
-              justifyContent="center"
-              alignItems="center"
               sx={{
                 display: 'flex',
                 justifyContent: 'center',

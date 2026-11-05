@@ -136,7 +136,14 @@ const SeedTagInfo = ({
       {seedTagInfoSelected === false
         && (
         <Grid container sx={{ padding: '1rem' }}>
-          <Grid display="flex" justifyContent="center" gap="1rem" size={12}>
+          <Grid
+            size={12}
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              gap: '1rem',
+            }}
+          >
             <PSAButton
               buttonType=""
               variant="outlined"

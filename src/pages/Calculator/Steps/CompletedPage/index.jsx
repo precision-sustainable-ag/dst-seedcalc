@@ -13,13 +13,25 @@ const CompletedPage = () => {
   return (
     <>
       <Grid container>
-        <Grid sx={{ pt: '50px' }} justifyContent="center" size={12}>
+        <Grid
+          size={12}
+          sx={{
+            justifyContent: 'center',
+            pt: '50px',
+          }}
+        >
           <Typography>
             Thank you for trying out the Seeding Rate Calculator!
           </Typography>
         </Grid>
 
-        <Grid sx={{ pt: '50px' }} justifyContent="center" size={12}>
+        <Grid
+          size={12}
+          sx={{
+            justifyContent: 'center',
+            pt: '50px',
+          }}
+        >
           <Typography sx={{ fontWeight: 600 }}>
             Questions or Comments?
           </Typography>

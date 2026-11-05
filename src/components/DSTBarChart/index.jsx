@@ -65,9 +65,21 @@ const DSTBarChart = ({ seed, calculatorResult }) => {
   return (
     <Grid container>
       <Grid size={12}>
-        <Typography fontWeight="bold">Seeding Rate Impact From Your Decisions (Lbs per Acre)</Typography>
+        <Typography sx={{
+          fontWeight: 'bold',
+        }}
+        >
+          Seeding Rate Impact From Your Decisions (Lbs per Acre)
+        </Typography>
       </Grid>
-      <Grid display="flex" justifyContent="center" aria-hidden size={12}>
+      <Grid
+        aria-hidden
+        size={12}
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
         <ResponsiveContainer width="100%" height={200}>
           <BarChart
             data={isMobile ? [labels[index]] : labels}
@@ -106,7 +118,12 @@ const DSTBarChart = ({ seed, calculatorResult }) => {
             </>
 )}
         />
-        <Typography display="inline-block" padding="0 1rem">
+        <Typography
+          sx={{
+            display: 'inline-block',
+            padding: '0 1rem',
+          }}
+        >
           {`${index + 1} / 5`}
         </Typography>
         <PSAButton
@@ -135,7 +152,13 @@ const DSTBarChart = ({ seed, calculatorResult }) => {
             key={i}
           >
             <Grid size={1} />
-            <Grid sx={{ textAlign: 'justify' }} pl={1} size={9}>
+            <Grid
+              size={9}
+              sx={{
+                pl: 1,
+                textAlign: 'justify',
+              }}
+            >
               {l.caption}
             </Grid>
             <Grid size={2}>

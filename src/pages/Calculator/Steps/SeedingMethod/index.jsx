@@ -201,19 +201,44 @@ const SeedingMethod = ({ alertState, isMobile }) => {
   const renderMethod = (type, comment, seedingMethods, method) => {
     const value = seedingMethods?.[method];
     return (
-      <Grid container margin={1} border={selectedMethod === method ? '2px solid #4f5f30' : ''} data-test={`method-${method}`}>
+      <Grid
+        container
+        data-test={`method-${method}`}
+        sx={{
+          margin: 1,
+          border: selectedMethod === method ? '2px solid #4f5f30' : '',
+        }}
+      >
         <FullGrid item xs={14}>
           <LeftGrid item xs={6}>
-            <Box textAlign="left" pl="25%">
-              <Typography fontWeight="bold">
+            <Box
+              sx={{
+                textAlign: 'left',
+                pl: '25%',
+              }}
+            >
+              <Typography sx={{
+                fontWeight: 'bold',
+              }}
+              >
                 {type}
               </Typography>
-              <Typography fontSize="0.75rem">{comment}</Typography>
+              <Typography sx={{
+                fontSize: '0.75rem',
+              }}
+              >
+                {comment}
+              </Typography>
             </Box>
           </LeftGrid>
           <RightGrid item xs={6}>
             {!value ? (
-              <Typography color="#D84727">Not Recommended</Typography>
+              <Typography sx={{
+                color: '#D84727',
+              }}
+              >
+                Not Recommended
+              </Typography>
             ) : (
               <>
                 {/*  <Typography sx={{ width: '50px' }}>{value}</Typography> */}
@@ -242,10 +267,12 @@ const SeedingMethod = ({ alertState, isMobile }) => {
         }}
       />
       <Grid
-        padding="15px"
         size={{
           xs: 12,
           md: 6,
+        }}
+        sx={{
+          padding: '15px',
         }}
       >
         <PSADropdown

@@ -17,7 +17,12 @@ const Diversity = () => {
 
   return (
     <Grid container sx={{ height: '80px' }} data-test="diversity_bar">
-      <Typography pt="1rem" fontWeight={600}>
+      <Typography
+        sx={{
+          pt: '1rem',
+          fontWeight: 600,
+        }}
+      >
         Mix Diversity
       </Typography>
       <Box sx={{ width: '100%', p: '5px 0' }}>
@@ -32,10 +37,13 @@ const Diversity = () => {
           {diversitySelected.length > 0
             && diversitySelected.map((d, i) => (
               <Box
-                sx={{ bgcolor: `${COLORS[i]}`, flex: `${diversityGroupLength[i]}` }}
-                borderRadius="0.6875rem"
                 key={i}
                 data-test={`diversity-${d}`}
+                sx={{
+                  borderRadius: '0.6875rem',
+                  bgcolor: `${COLORS[i]}`,
+                  flex: `${diversityGroupLength[i]}`,
+                }}
               />
             ))}
         </Box>
@@ -43,7 +51,12 @@ const Diversity = () => {
 
       {diversitySelected.length === 0 && (
         <Grid size={12}>
-          <Typography fontSize="0.75rem">Select a species</Typography>
+          <Typography sx={{
+            fontSize: '0.75rem',
+          }}
+          >
+            Select a species
+          </Typography>
         </Grid>
       )}
 
@@ -53,7 +66,12 @@ const Diversity = () => {
             sx={{ flex: `${diversityGroupLength[i]}` }}
             key={i}
           >
-            <Typography fontSize="0.75rem">{seedsLabel[d]}</Typography>
+            <Typography sx={{
+              fontSize: '0.75rem',
+            }}
+            >
+              {seedsLabel[d]}
+            </Typography>
           </Box>
         ))}
     </Grid>

@@ -187,13 +187,15 @@ const MixSeedingRate = ({ calculator, isMobile }) => {
       <Grid container sx={{ padding: '3% 3% 5% 5%' }}>
         <Grid
           container
-          flexDirection="column"
-          justifyContent="space-between"
-          alignSelf="center"
-          minWidth="20rem"
           size={{
             xs: 4,
             sm: 5,
+          }}
+          sx={{
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            alignSelf: 'center',
+            minWidth: '20rem',
           }}
         >
           <MixSeedingTypography role="article">
@@ -225,22 +227,26 @@ const MixSeedingRate = ({ calculator, isMobile }) => {
         </Grid>
         <Grid
           container
-          justifyContent="flex-start"
-          alignItems="center"
-          minHeight="28rem"
-          pl="10rem"
           size={{
             xs: 8,
             sm: 7,
           }}
+          sx={{
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            minHeight: '28rem',
+            pl: '10rem',
+          }}
         >
           <Stack sx={{ height: '100%' }}>
             <Typography
-              width="30px"
-              fontWeight="bold"
-              fontSize="1.25rem"
               data-test="max_value"
               aria-label={`High Limit: ${max}`}
+              sx={{
+                width: '30px',
+                fontWeight: 'bold',
+                fontSize: '1.25rem',
+              }}
             >
               {max}
             </Typography>
@@ -258,11 +264,13 @@ const MixSeedingRate = ({ calculator, isMobile }) => {
               data-test="seeding_rate_slider"
             />
             <Typography
-              width="30px"
-              fontWeight="bold"
-              fontSize="1.25rem"
               data-test="min_value"
               aria-label={`Low Limit: ${min}`}
+              sx={{
+                width: '30px',
+                fontWeight: 'bold',
+                fontSize: '1.25rem',
+              }}
             >
               {min}
             </Typography>

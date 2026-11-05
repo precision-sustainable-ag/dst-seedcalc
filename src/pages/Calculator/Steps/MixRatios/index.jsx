@@ -304,7 +304,12 @@ const MixRatio = ({
                   <UnitSelection />
                 </Grid>
 
-                <Grid pt="1rem" size={12}>
+                <Grid
+                  size={12}
+                  sx={{
+                    pt: '1rem',
+                  }}
+                >
                   <PSAButton
                     buttonType=""
                     sx={{

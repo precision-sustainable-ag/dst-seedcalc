@@ -70,12 +70,24 @@ const ExportModal = () => {
         modalContent={(
           <Box sx={modalStyle}>
             <Grid container spacing={2}>
-              <Grid display="flex" justifyContent="center" size={12}>
+              <Grid
+                size={12}
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                }}
+              >
                 <Typography variant="h6">
                   How would you like to save your calculation?
                 </Typography>
               </Grid>
-              <Grid display="flex" justifyContent="center" size={12}>
+              <Grid
+                size={12}
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                }}
+              >
                 <PSAButton buttonType="" variant="contained" onClick={handleExportcsv} data-test="export_csv" title="Export to csv" />
               </Grid>
             </Grid>

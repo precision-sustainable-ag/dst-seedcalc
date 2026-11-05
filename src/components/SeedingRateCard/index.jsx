@@ -140,13 +140,20 @@ const SeedInfo = ({
   }, [seedData, calculatorResult, unit]);
 
   return (
-    <Grid container p="0 5%">
+    <Grid
+      container
+      sx={{
+        p: '0 5%',
+      }}
+    >
       <Grid
-        justifyContent="center"
-        display="flex"
         size={{
           xs: 12,
           md: 4,
+        }}
+        sx={{
+          justifyContent: 'center',
+          display: 'flex',
         }}
       >
         <Card
@@ -172,10 +179,12 @@ const SeedInfo = ({
         </Card>
       </Grid>
       <Grid
-        pt="1rem"
         size={{
           xs: 12,
           md: 8,
+        }}
+        sx={{
+          pt: '1rem',
         }}
       >
         <Grid container>
@@ -270,7 +279,12 @@ const SeedInfo = ({
           </Grid>
         )}
 
-        <Grid pt="1rem" size={12}>
+        <Grid
+          size={12}
+          sx={{
+            pt: '1rem',
+          }}
+        >
           <Typography>
             {`% of Single Species Rate: ${percentOfRate}%`}
           </Typography>
@@ -325,11 +339,13 @@ const SeedingRateChip = ({ value, testId, ariaLabel }) => (
 
 const SeedLabel = ({ label, unit, testId }) => (
   <Typography
-    lineHeight="1rem"
-    fontSize="0.8rem"
-    padding="0.5rem 0"
     data-test={testId}
     aria-hidden="true"
+    sx={{
+      lineHeight: '1rem',
+      fontSize: '0.8rem',
+      padding: '0.5rem 0',
+    }}
   >
     {label}
     <span style={{ fontWeight: 'bold' }}>{unit}</span>
@@ -366,11 +382,13 @@ const SeedingRateCard = ({
   return (
     <>
       <Typography
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        pb="0.5rem"
-        fontWeight="bold"
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          pb: '0.5rem',
+          fontWeight: 'bold',
+        }}
       >
         {seedingRateLabel}
       </Typography>

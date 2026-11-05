@@ -68,7 +68,14 @@ const ConfirmPlan = ({ calculator, isMobile }) => {
         {isMobile && (<Typography variant="stepCaption">Confirm Plan and Enter Costs Below</Typography>)}
 
         {/* Export Button */}
-        <Grid display="flex" justifyContent="flex-end" pt="5px" size={12}>
+        <Grid
+          size={12}
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            pt: '5px',
+          }}
+        >
           <ExportModal />
         </Grid>
 

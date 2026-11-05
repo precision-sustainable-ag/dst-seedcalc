@@ -277,7 +277,10 @@ const SiteConditionForm = ({
                       <PSATooltip
                         type="text"
                         title={(
-                          <Typography color="primary.light">
+                          <Typography sx={{
+                            color: 'primary.light',
+                          }}
+                          >
                             Indicate if the field of interest has tile installed.
                             If you have selected very poorly to somewhat poorly drained soils,
                             selecting “yes” will increase your drainage class.
@@ -297,7 +300,10 @@ const SiteConditionForm = ({
                     </Typography>
                   </Box>
                   <Box>
-                    <Typography display="inline">
+                    <Typography sx={{
+                      display: 'inline',
+                    }}
+                    >
                       No
                     </Typography>
                     <DSTSwitch
@@ -306,7 +312,10 @@ const SiteConditionForm = ({
                       disabled={!tileDrainage && (needTileDrainage.indexOf(soilDrainage) === -1 || council === '')}
                       testId="site_condition_tile_drainage"
                     />
-                    <Typography display="inline">
+                    <Typography sx={{
+                      display: 'inline',
+                    }}
+                    >
                       Yes
                     </Typography>
                   </Box>
@@ -317,7 +326,14 @@ const SiteConditionForm = ({
                   && (
                     <>
                       <Typography>Your improved drainage class is: </Typography>
-                      <Typography fontWeight="bold" data-test="tile_drainage_class">{soilDrainage}</Typography>
+                      <Typography
+                        data-test="tile_drainage_class"
+                        sx={{
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        {soilDrainage}
+                      </Typography>
                     </>
                   )}
 
@@ -410,7 +426,12 @@ const SiteConditionForm = ({
             md: 6,
           }}
         >
-          <Typography fontSize="1.25rem">Check NRCS Standards: </Typography>
+          <Typography sx={{
+            fontSize: '1.25rem',
+          }}
+          >
+            Check NRCS Standards:
+          </Typography>
           <DSTSwitch
             checked={checkNRCSStandards}
             handleChange={() => {

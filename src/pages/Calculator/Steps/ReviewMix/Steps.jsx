@@ -30,7 +30,12 @@ const ReviewMixSteps = ({
   const renderStepsForm = (label1, label2, label3) => (
 
     isMobile && (
-      <Grid container justifyContent="space-evenly">
+      <Grid
+        container
+        sx={{
+          justifyContent: 'space-evenly',
+        }}
+      >
         <Grid size={3}>
           <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
             {label1}
@@ -165,14 +170,24 @@ const ReviewMixSteps = ({
             unit="%"
             testId="percent_slider"
           />
-          <Grid p="0.5rem" size={12} />
+          <Grid
+            size={12}
+            sx={{
+              p: '0.5rem',
+            }}
+          />
 
           {renderStepsForm(
             'Single Species Seeding Rate PLS (Lbs per Acre)',
             'Soil Fertility Modifier',
             '% of Single Species Rate',
           )}
-          <Grid container justifyContent="space-evenly">
+          <Grid
+            container
+            sx={{
+              justifyContent: 'space-evenly',
+            }}
+          >
             <Grid size={3}>
               <NumberTextField
                 label={isMobile ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
@@ -205,7 +220,13 @@ const ReviewMixSteps = ({
               />
             </Grid>
           </Grid>
-          <Grid container justifyContent="space-evenly" marginTop={isMobile ? '20px' : 0}>
+          <Grid
+            container
+            sx={{
+              justifyContent: 'space-evenly',
+              marginTop: isMobile ? '20px' : 0,
+            }}
+          >
             <Grid size={3}>
               <Typography variant="mathIcon">=</Typography>
             </Grid>
@@ -246,7 +267,12 @@ const ReviewMixSteps = ({
             '% of Single Species Rate',
             'Seeding Rate in Mix (Lbs per Acre)',
           )}
-          <Grid container justifyContent="space-evenly">
+          <Grid
+            container
+            sx={{
+              justifyContent: 'space-evenly',
+            }}
+          >
             <Grid size={3}>
               <NumberTextField
                 disabled
@@ -318,14 +344,25 @@ const ReviewMixSteps = ({
             unit="%"
             testId="percent_slider"
           />
-          <Grid p="0.5rem" size={12} />
+          <Grid
+            size={12}
+            sx={{
+              p: '0.5rem',
+            }}
+          />
 
           {renderStepsForm(
             'Single Species Seeding Rate PLS (Lbs per Acre)',
             'Percent Of Rate',
             'Planting Time Modifier',
           )}
-          <Grid container justifyContent="space-evenly" pb="1rem">
+          <Grid
+            container
+            sx={{
+              justifyContent: 'space-evenly',
+              pb: '1rem',
+            }}
+          >
             <Grid size={3}>
               <NumberTextField
                 disabled
@@ -366,7 +403,12 @@ const ReviewMixSteps = ({
             'Seeding Rate In Mix (Lbs per Acre)',
           )}
 
-          <Grid container justifyContent="space-evenly">
+          <Grid
+            container
+            sx={{
+              justifyContent: 'space-evenly',
+            }}
+          >
             <Grid size={3} />
             <Grid size={1}>
               <Typography variant="mathIcon">&#215;</Typography>
@@ -402,7 +444,13 @@ const ReviewMixSteps = ({
           <Typography variant="stepHeader" data-test="adjustment_from_seeding_method">Adjustment from Seeding Method</Typography>
         </Grid>
         <Grid size={3} />
-        <Grid paddingLeft="1rem" paddingBottom="1rem" size={6}>
+        <Grid
+          size={6}
+          sx={{
+            paddingLeft: '1rem',
+            paddingBottom: '1rem',
+          }}
+        >
           <PSADropdown
             label="Seeding Method: "
             items={getSeedingMethods().map((method) => ({ label: method.label, value: method.label }))}
@@ -434,7 +482,12 @@ const ReviewMixSteps = ({
           'Planting Method',
           'Seeding Rate in Mix (Lbs per Acre)',
         )}
-        <Grid container justifyContent="space-evenly">
+        <Grid
+          container
+          sx={{
+            justifyContent: 'space-evenly',
+          }}
+        >
           <Grid size={3}>
             <NumberTextField
               disabled
@@ -479,7 +532,12 @@ const ReviewMixSteps = ({
           'Management impact on Mix',
           'Seeding Rate in Mix (Lbs per Acre)',
         )}
-        <Grid container justifyContent="space-evenly">
+        <Grid
+          container
+          sx={{
+            justifyContent: 'space-evenly',
+          }}
+        >
           <Grid size={3}>
             <NumberTextField
               label={isMobile ? '' : 'Seeding Rate in Mix (Lbs per Acre)'}
@@ -541,10 +599,20 @@ const ReviewMixSteps = ({
           unit="%"
           testId="purity_slider"
         />
-        <Grid p="0.5rem" size={12} />
+        <Grid
+          size={12}
+          sx={{
+            p: '0.5rem',
+          }}
+        />
 
         {renderStepsForm('Seeding Rate in Mix (Lbs per Acre)', '% Germination', '% Purity')}
-        <Grid container justifyContent="space-evenly">
+        <Grid
+          container
+          sx={{
+            justifyContent: 'space-evenly',
+          }}
+        >
           <Grid size={3}>
             <NumberTextField
               label={isMobile ? '' : 'Seeding Rate in Mix (Lbs per Acre)'}
@@ -580,7 +648,13 @@ const ReviewMixSteps = ({
             />
           </Grid>
         </Grid>
-        <Grid container justifyContent="space-evenly" marginTop={isMobile ? '20px' : 0}>
+        <Grid
+          container
+          sx={{
+            justifyContent: 'space-evenly',
+            marginTop: isMobile ? '20px' : 0,
+          }}
+        >
           <Grid size={3}>
             <Typography variant="mathIcon">=</Typography>
           </Grid>
@@ -606,7 +680,12 @@ const ReviewMixSteps = ({
           <Typography variant="stepHeader">Pounds for Purchase</Typography>
         </Grid>
         {renderStepsForm('Bulk Seeding Rate (Lbs per Acre)', 'Acres', 'Pounds for Purchase')}
-        <Grid container justifyContent="space-evenly">
+        <Grid
+          container
+          sx={{
+            justifyContent: 'space-evenly',
+          }}
+        >
           <Grid size={3}>
             <NumberTextField
               label={isMobile ? '' : 'Bulk Seeding Rate (Lbs per Acre)'}

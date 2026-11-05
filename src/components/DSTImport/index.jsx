@@ -104,12 +104,24 @@ const DSTImport = () => {
             <Grid container spacing={5}>
               {isAuthenticated && (
                 <Grid container spacing={1}>
-                  <Grid display="flex" justifyContent="center" size={12}>
+                  <Grid
+                    size={12}
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                    }}
+                  >
                     <Typography variant="h6">
                       Create New Calculation
                     </Typography>
                   </Grid>
-                  <Grid display="flex" justifyContent="center" size={12}>
+                  <Grid
+                    size={12}
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                    }}
+                  >
                     <PSAButton
                       buttonType=""
                       variant="contained"
@@ -123,13 +135,26 @@ const DSTImport = () => {
               )}
 
               <Grid container spacing={1}>
-                <Grid display="flex" justifyContent="center" size={12}>
+                <Grid
+                  size={12}
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                  }}
+                >
                   <Typography variant="h6">
                     Import from CSV
                   </Typography>
                 </Grid>
 
-                <Grid display="flex" justifyContent="center" alignItems="center" size={12}>
+                <Grid
+                  size={12}
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
                   <input
                     id="contained-button-file"
                     type="file"
@@ -153,13 +178,26 @@ const DSTImport = () => {
 
               {isAuthenticated && (
                 <Grid container spacing={1} size={12}>
-                  <Grid display="flex" justifyContent="center" size={12}>
+                  <Grid
+                    size={12}
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                    }}
+                  >
                     <Typography variant="h6">
                       Import from User History
                     </Typography>
                   </Grid>
                   <Grid container spacing={2} size={12}>
-                    <Grid display="flex" justifyContent="center" alignItems="center" size={12}>
+                    <Grid
+                      size={12}
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
                       <PSADropdown
                         label="Select your calculation"
                         items={histories.map((history) => ({ label: history.label, value: history.label }))}
@@ -175,7 +213,14 @@ const DSTImport = () => {
                         }}
                       />
                     </Grid>
-                    <Grid display="flex" justifyContent="center" alignItems="center" size={12}>
+                    <Grid
+                      size={12}
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
                       <PSAButton
                         buttonType=""
                         variant="contained"
