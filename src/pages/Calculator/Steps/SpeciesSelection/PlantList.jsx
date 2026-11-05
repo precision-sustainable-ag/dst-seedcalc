@@ -86,7 +86,6 @@ const PlantList = ({
     const inFirstPeriod = plannedDate.isBetween(firstStart, firstEnd, 'day', []);
     const inSecondPeriod = secondStart && plannedDate.isBetween(secondStart, secondEnd, 'day', []);
 
-    console.log(seed.label, inFirstPeriod || inSecondPeriod);
     if (inFirstPeriod || inSecondPeriod) return '';
     if (secondStart) {
       return `Seeding date outside of recommended window:
