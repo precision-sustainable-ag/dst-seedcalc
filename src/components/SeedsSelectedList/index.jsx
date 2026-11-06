@@ -67,28 +67,32 @@ const SeedsSelectedList = ({ activeStep }) => {
 
   return (
     <Box
-      sx={
-        isMobile
-          ? {
-            minHeight: '100px',
-            whiteSpace: 'normal',
-            overflowX: 'auto',
-            border: 'solid 1px',
-            borderColor: 'primary.main',
-          }
-          : {
-            height: '100%',
-            borderLeft: 'solid 1px',
-            borderRight: 'solid 1px',
-            borderColor: 'primary.main',
-          }
-      }
-      bgcolor="white"
-      display="flex"
-      flexDirection={isMobile ? 'row' : 'column'}
+      sx={[{
+        bgcolor: 'white',
+        display: 'flex',
+        flexDirection: isMobile ? 'row' : 'column',
+      }, isMobile
+        ? {
+          minHeight: '100px',
+          whiteSpace: 'normal',
+          overflowX: 'auto',
+          border: 'solid 1px',
+          borderColor: 'primary.main',
+        }
+        : {
+          height: '100%',
+          borderLeft: 'solid 1px',
+          borderRight: 'solid 1px',
+          borderColor: 'primary.main',
+        }]}
     >
       {[...seedsSelected].reverse().map((s, i) => (
-        <Box minWidth={isMobile ? '120px' : ''} key={i}>
+        <Box
+          key={i}
+          sx={{
+            minWidth: isMobile ? '120px' : '',
+          }}
+        >
           <Card
             sx={{
               backgroundColor: 'transparent',
@@ -103,7 +107,13 @@ const SeedsSelectedList = ({ activeStep }) => {
               }}
               aria-label={`click to ${activeStep === 1 ? 'remove' : 'open'} selected crop: ${s.label}`}
             >
-              <Box position="relative" width="90px" margin="auto">
+              <Box
+                sx={{
+                  position: 'relative',
+                  width: '90px',
+                  margin: 'auto',
+                }}
+              >
                 {activeStep === 1 && (
                   <ExitIcon
                     style={{
@@ -131,7 +141,12 @@ const SeedsSelectedList = ({ activeStep }) => {
                 />
               </Box>
 
-              <Typography fontSize="12px" lineHeight={1.25}>
+              <Typography
+                sx={{
+                  fontSize: '12px',
+                  lineHeight: 1.25,
+                }}
+              >
                 {s.label}
               </Typography>
             </CardActionArea>

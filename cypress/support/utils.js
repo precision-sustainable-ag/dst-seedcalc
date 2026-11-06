@@ -63,7 +63,7 @@ export const mockSpeciesSelection = () => {
       .and('have.css', 'border-style', 'solid')
       .and('have.css', 'border-color', 'rgb(89, 146, 230)');
     cy.getByTestId(`species-card-${species}`).parent().children()
-      .get('[data-testid="CheckRoundedIcon"]')
+      .get('[data-test="species_selected_check"]')
       .should('be.visible');
   });
   cy.getByTestId('next_button').first().click();

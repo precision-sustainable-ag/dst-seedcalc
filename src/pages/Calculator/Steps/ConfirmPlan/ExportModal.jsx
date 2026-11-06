@@ -8,17 +8,8 @@ import { handleDownload } from '../../../../shared/utils/exportExcel';
 import pirschAnalytics from '../../../../shared/utils/analytics';
 
 const modalStyle = {
-  position: 'absolute',
-  top: ' 50%',
-  left: ' 50%',
-  transform: ' translate(-50%, -50%)',
-  width: '80%',
-  backgroundColor: ' #fff',
-  border: ' 2px solid #000',
-  boxShadow:
-    ' 0px 11px 15px -7px rgb(0 0 0 / 20%), 0px 24px 38px 3px rgb(0 0 0 / 14%), 0px 9px 46px 8px rgb(0 0 0 / 12%)',
-  padding: ' 32px',
-  maxWidth: '500px',
+  padding: '32px',
+  maxWidth: 'min(500px, calc(100vw - 80px))',
 };
 
 const buttonStyles = {
@@ -70,12 +61,24 @@ const ExportModal = () => {
         modalContent={(
           <Box sx={modalStyle}>
             <Grid container spacing={2}>
-              <Grid item xs={12} display="flex" justifyContent="center">
+              <Grid
+                size={12}
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                }}
+              >
                 <Typography variant="h6">
                   How would you like to save your calculation?
                 </Typography>
               </Grid>
-              <Grid item xs={12} display="flex" justifyContent="center">
+              <Grid
+                size={12}
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                }}
+              >
                 <PSAButton buttonType="" variant="contained" onClick={handleExportcsv} data-test="export_csv" title="Export to csv" />
               </Grid>
             </Grid>
