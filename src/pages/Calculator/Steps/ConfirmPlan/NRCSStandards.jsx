@@ -65,7 +65,7 @@ const NRCSItem = ({ title, result }) => {
   const pass = result.filter((res) => !res.pass).length === 0;
 
   return (
-    <Grid container>
+    <Grid container size={12}>
       <Grid
         size={{
           xs: 0,

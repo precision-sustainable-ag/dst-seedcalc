@@ -25,16 +25,18 @@ import pirschAnalytics from '../../../../shared/utils/analytics';
 import apiBaseURL from '../../../../shared/utils/apiBaseURL';
 
 const CheckBoxIcon = ({ style }) => (
-  <Box sx={{
-    ...style,
-    position: 'absolute',
-    right: '0.2rem',
-    top: '1.1rem',
-    zIndex: 1,
-    backgroundColor: '#5992E6',
-    borderTopRightRadius: '1rem',
-    borderBottomLeftRadius: '0.5rem',
-  }}
+  <Box
+    sx={{
+      ...style,
+      position: 'absolute',
+      right: '0.2rem',
+      top: '0.1rem',
+      zIndex: 1,
+      backgroundColor: '#5992E6',
+      borderTopRightRadius: '1rem',
+      borderBottomLeftRadius: '0.5rem',
+    }}
+    data-test="species_selected_check"
   >
     <CheckRounded style={{
       color: '#FFFFFF',
