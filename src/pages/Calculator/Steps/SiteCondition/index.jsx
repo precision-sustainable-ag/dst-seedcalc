@@ -43,12 +43,8 @@ const SiteCondition = ({
 
   // function to get all regions(counties/zones) of a state
   const getRegions = async (state) => {
-    const council = state.parents[0].shorthand;
     const res = await dispatch(getRegion({ stateId: state.id }));
-    const { kids } = res.payload.data;
-    if (council === 'NECCC' || council === 'SCCC') return kids.Zones;
-    if (council === 'MCCC') return kids.Counties;
-    return [];
+    return res.payload?.subregions ?? [];
   };
 
   // update redux based on state change
