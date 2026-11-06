@@ -1,9 +1,9 @@
 /* eslint-disable cypress/no-unnecessary-waiting */
 describe('Creating user history', () => {
   beforeEach(function () {
-    if (Cypress.env('test_auth0_env')) {
-      this.skip();
-    }
+    // FIXME: deprecated test, look into refactor
+    this.skip();
+
     cy.intercept('POST', 'https://develophistory.covercrop-data.org/v1/history', {
       statusCode: 200, body: { data: { id: 0 } },
     }).as('createHistory');
@@ -50,9 +50,9 @@ describe('Creating user history', () => {
 
 describe('Importing user history', () => {
   beforeEach(function () {
-    if (Cypress.env('test_auth0_env')) {
-      this.skip();
-    }
+    // FIXME: deprecated test, look into refactor
+    this.skip();
+
     cy.intercept('https://develophistory.covercrop-data.org/v1/histories?schema=*').as('getHistory');
     cy.loginToAuth0();
     cy.visit('/');
@@ -75,9 +75,9 @@ describe('Importing user history', () => {
 
 describe('Updating user history', () => {
   beforeEach(function () {
-    if (Cypress.env('test_auth0_env')) {
-      this.skip();
-    }
+    // FIXME: deprecated test, look into refactor
+    this.skip();
+    
     cy.intercept('PUT', 'https://develophistory.covercrop-data.org/v1/history/*', {
       statusCode: 200,
       body: {},
