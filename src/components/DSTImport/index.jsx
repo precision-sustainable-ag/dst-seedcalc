@@ -9,7 +9,11 @@ import { PSAButton, PSADropdown, PSAModal } from 'shared-react-components/src';
 import { importFromCSVCalculator } from '../../features/calculatorSlice/actions';
 import { setSiteConditionRedux } from '../../features/siteConditionSlice/actions';
 import useUserHistory from '../../shared/hooks/useUserHistory';
-import { setHistoryDialogStateRedux } from '../../features/userSlice/actions';
+import {
+  setHistoryDialogStateRedux,
+  setHistoryStateRedux,
+} from '../../features/userSlice/actions';
+import { historyStates } from '../../features/userSlice/state';
 import pirschAnalytics from '../../shared/utils/analytics';
 import { getAuthToken } from '../../shared/utils/authToken';
 
@@ -66,6 +70,7 @@ const DSTImport = () => {
 
         dispatch(setSiteConditionRedux(siteCondition));
         dispatch(importFromCSVCalculator(calculator));
+        dispatch(setHistoryStateRedux(historyStates.imported));
         setOpenModal(!openModal);
       },
     });
