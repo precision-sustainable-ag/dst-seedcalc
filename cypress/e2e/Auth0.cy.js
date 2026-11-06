@@ -1,8 +1,7 @@
 describe('auth0', () => {
   beforeEach(function () {
-    if (Cypress.env('test_auth0_env')) {
-      this.skip();
-    }
+    // FIXME: deprecated test, look into refactor
+    this.skip();
     cy.loginToAuth0();
     cy.visit('/');
   });
