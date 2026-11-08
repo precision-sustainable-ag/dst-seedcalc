@@ -243,7 +243,7 @@ const MixRatio = ({
 
   return (
     <Grid container>
-      <Grid item xs={12}>
+      <Grid size={12}>
 
         {isMobile && (<Typography variant="stepCaption">Review Proportions</Typography>)}
         {historyState === historyStates.imported && (
@@ -259,14 +259,14 @@ const MixRatio = ({
 
       {seedsSelected.length > 1 && (
         <>
-          <Grid item xs={6} sx={{ textAlign: 'justify' }}>
+          <Grid sx={{ textAlign: 'justify' }} size={6}>
             <PSAPiechart
               chartData={piechartData.seedingRateArray}
               label={pieChartUnits.poundsOfSeedPerAcre}
             />
           </Grid>
 
-          <Grid item xs={6} sx={{ textAlign: 'justify' }}>
+          <Grid sx={{ textAlign: 'justify' }} size={6}>
             {council === 'MCCC' && (
             <PSAPiechart
               chartData={piechartData.plantsPerSqftArray}
@@ -284,7 +284,7 @@ const MixRatio = ({
       )}
 
       {seedsSelected.map((seed, i) => (
-        <Grid item xs={12} key={i}>
+        <Grid key={i} size={12}>
           <PSAAccordion
             expanded={accordionState[seed.label]}
             onChange={() => handleExpandAccordion(seed.label)}
@@ -300,11 +300,16 @@ const MixRatio = ({
                   options={mixRatioOptions[seed.label]}
                 />
 
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <UnitSelection />
                 </Grid>
 
-                <Grid item xs={12} pt="1rem">
+                <Grid
+                  size={12}
+                  sx={{
+                    pt: '1rem',
+                  }}
+                >
                   <PSAButton
                     buttonType=""
                     sx={{
@@ -319,7 +324,7 @@ const MixRatio = ({
                   />
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid size={12}>
                   {showSteps[seed.label] && (
                   <MixRatioSteps
                     council={council}

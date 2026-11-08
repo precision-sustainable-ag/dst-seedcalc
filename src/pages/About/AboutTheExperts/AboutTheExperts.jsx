@@ -156,10 +156,24 @@ const AboutTheExperts = () => {
   };
 
   return (
-    <Box sx={{ border: 0.5, borderColor: 'grey.300' }} ml={2} mr={2} mt={5}>
+    <Box
+      sx={{
+        ml: 2,
+        mr: 2,
+        mt: 5,
+        border: 0.5,
+        borderColor: 'grey.300',
+      }}
+    >
       <Grid container>
         {expertGroups.map((group) => (
-          <Grid item xs={6} sm={4} md={2}>
+          <Grid
+            size={{
+              xs: 6,
+              sm: 4,
+              md: 2,
+            }}
+          >
             <PSAButton
               buttonType=""
               key={group.id}
@@ -179,7 +193,12 @@ const AboutTheExperts = () => {
           </Grid>
         ))}
       </Grid>
-      <Box style={{ paddingTop: '15px' }} textAlign="left">
+      <Box
+        style={{ paddingTop: '15px' }}
+        sx={{
+          textAlign: 'left',
+        }}
+      >
         {expertGroups[value].dataType === 'array'
           ? getExpertsData(value)
             .sort((a, b) => a.lastName.localeCompare(b.lastName))

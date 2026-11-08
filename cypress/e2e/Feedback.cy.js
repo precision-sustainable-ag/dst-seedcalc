@@ -5,17 +5,19 @@ describe('Feedback', () => {
     cy.visit('/feedback');
   });
 
-  it('should display different council logo in different councils', () => {
-    cy.getByTestId('header_logo_button').find('img').should('have.attr', 'src', 'images/PSA_logo.png');
+  // the nav links collapse into a menu at the default 1000px viewport
+  it('should display different council logo in different councils', { viewportWidth: 1440, viewportHeight: 900 }, () => {
+    // logos are imported assets, so the path and hash differ between dev and production builds
+    cy.getByTestId('header_logo_button').find('img').should('have.attr', 'src').and('include', 'PSA_logo');
     selectMapState();
     cy.getByTestId('navbar-Feedback').click();
-    cy.getByTestId('header_logo_button').find('img').should('have.attr', 'src', 'images/mwccc_logo.png');
+    cy.getByTestId('header_logo_button').find('img').should('have.attr', 'src').and('include', 'mwccc_logo');
     selectMapState('NECCC');
     cy.getByTestId('navbar-Feedback').click();
-    cy.getByTestId('header_logo_button').find('img').should('have.attr', 'src', 'images/neccc_logo.png');
+    cy.getByTestId('header_logo_button').find('img').should('have.attr', 'src').and('include', 'neccc_logo');
     selectMapState('SCCC');
     cy.getByTestId('navbar-Feedback').click();
-    cy.getByTestId('header_logo_button').find('img').should('have.attr', 'src', 'images/sccc_logo.png');
+    cy.getByTestId('header_logo_button').find('img').should('have.attr', 'src').and('include', 'sccc_logo');
   });
 
   it('should be return back to map if click back button', () => {
@@ -53,28 +55,24 @@ describe('Feedback api', () => {
     cy.intercept('POST', feedbackUrl, { statusCode: 201 }).as('success');
     cy.getByTestId('feedback_submit').click();
     cy.wait('@success');
-    cy.getByTestId('feedback_snackbar')
-      .find('.MuiSnackbarContent-message').invoke('text').should('contains', 'Feedback submitted successfully');
+    cy.get('.MuiDialog-root .MuiAlert-message').invoke('text').should('contains', 'Feedback submitted successfully');
   });
   it('should be able to show feedback api response with status code 400', () => {
     cy.intercept('POST', feedbackUrl, { statusCode: 400 }).as('badRequest');
     cy.getByTestId('feedback_submit').click();
     cy.wait('@badRequest');
-    cy.getByTestId('feedback_snackbar')
-      .find('.MuiSnackbarContent-message').invoke('text').should('contains', 'Bad Request');
+    cy.get('.MuiDialog-root .MuiAlert-message').invoke('text').should('contains', 'Bad Request');
   });
   it('should be able to show feedback api response with status code 422', () => {
     cy.intercept('POST', feedbackUrl, { statusCode: 422 }).as('unprocessableEntry');
     cy.getByTestId('feedback_submit').click();
     cy.wait('@unprocessableEntry');
-    cy.getByTestId('feedback_snackbar')
-      .find('.MuiSnackbarContent-message').invoke('text').should('contains', 'Unprocessable Entry');
+    cy.get('.MuiDialog-root .MuiAlert-message').invoke('text').should('contains', 'Unprocessable Entry');
   });
   it('should be able to show feedback api response with status code 500', () => {
     cy.intercept('POST', feedbackUrl, { statusCode: 500 }).as('serverError');
     cy.getByTestId('feedback_submit').click();
     cy.wait('@serverError');
-    cy.getByTestId('feedback_snackbar')
-      .find('.MuiSnackbarContent-message').invoke('text').should('contains', 'Internal Server Error');
+    cy.get('.MuiDialog-root .MuiAlert-message').invoke('text').should('contains', 'Internal Server Error');
   });
 });

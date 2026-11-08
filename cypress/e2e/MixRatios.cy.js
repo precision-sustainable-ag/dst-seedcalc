@@ -68,8 +68,7 @@ describe('Mix Ratios', () => {
     cy.getByTestId(`${selectSpecies}-${seedDataUnits.defaultSingelSpeciesSeedingRatePLS}-value`).find('p').invoke('text')
       .then((val1) => {
         cy.getByTestId(`${selectSpecies}-${seedDataUnits.seedingRateinMix}-value`).find('p').invoke('text')
-          .then((val2) => {
-            cy.log(val2, val1, Math.abs(val2 - val1 * 0.5));
+          .should((val2) => {
             expect(Math.abs(val2 - val1 * 0.5)).to.be.lessThan(0.1);
           });
       });
