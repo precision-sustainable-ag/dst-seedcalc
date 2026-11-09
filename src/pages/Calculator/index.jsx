@@ -199,8 +199,10 @@ const Calculator = ({ calculator, setCalculator }) => {
   }, [alertState.open]);
 
   return (
-    <Grid container justifyContent="center">
-      <Grid item style={{ position: 'fixed', bottom: isMobile ? '45px' : 0, zIndex: 1000 }}>
+    <Grid container sx={{ justifyContent: 'center' }}>
+      <Grid
+        style={{ position: 'fixed', bottom: isMobile ? '45px' : 0, zIndex: 1000 }}
+      >
         {alertState.open
           && (
           <FadeAlert
@@ -223,11 +225,7 @@ const Calculator = ({ calculator, setCalculator }) => {
       </Grid>
 
       {/* steps list */}
-      <Grid
-        item
-        xs={12}
-        ref={stepperRef}
-      >
+      <Grid ref={stepperRef} size={12}>
         <StepsList
           activeStep={activeStep}
           setActiveStep={setActiveStep}
@@ -236,14 +234,10 @@ const Calculator = ({ calculator, setCalculator }) => {
         />
       </Grid>
 
-      <Grid container>
+      <Grid container size={12}>
         {/* seeds selected list */}
         {activeStep > 0 && activeStep < 8 && (
           <Grid
-            item
-            xs={12}
-            md={1}
-            lg={2}
             sx={
             isMobile && !showHeaderLogo
               ? {
@@ -254,6 +248,11 @@ const Calculator = ({ calculator, setCalculator }) => {
               }
               : {}
           }
+            size={{
+              xs: 12,
+              md: 1,
+              lg: 2,
+            }}
           >
             <SeedsSelectedList activeStep={activeStep} />
           </Grid>
@@ -261,11 +260,12 @@ const Calculator = ({ calculator, setCalculator }) => {
 
         {/* main calculator */}
         <Grid
-          item
-          xs={12}
-          lg={(activeStep === 0 || activeStep === 8) ? 12 : 10}
-          md={(activeStep === 0 || activeStep === 8) ? 12 : 11}
           sx={{ paddingTop: isMobile && !showHeaderLogo && activeStep !== 0 ? '100px' : 0 }}
+          size={{
+            xs: 12,
+            lg: (activeStep === 0 || activeStep === 8) ? 12 : 10,
+            md: (activeStep === 0 || activeStep === 8) ? 12 : 11,
+          }}
         >
           {renderCalculator(
             activeStep === calculatorList.length

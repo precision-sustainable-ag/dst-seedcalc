@@ -18,14 +18,14 @@ describe('Species Selection', () => {
       .and('have.css', 'border-style', 'solid')
       .and('have.css', 'border-color', 'rgb(89, 146, 230)');
     cy.getByTestId(`species-card-${selectSpecies}`).parent().children()
-      .get('[data-testid="CheckRoundedIcon"]')
+      .get('[data-test="species_selected_check"]')
       .should('be.visible');
     cy.getByTestId(`species-card-${selectSpecies}`).find('button').click();
     cy.getByTestId(`species-card-${selectSpecies}`).find('img')
       .should('not.have.css', 'border-width', '6px')
       .and('not.have.css', 'border-color', 'rgb(89, 146, 230)');
     cy.getByTestId(`species-card-${selectSpecies}`).parent().children()
-      .get('[data-testid="CheckRoundedIcon"]')
+      .get('[data-test="species_selected_check"]')
       .should('not.exist');
   });
 
@@ -46,7 +46,7 @@ describe('Species Selection', () => {
       .should('not.have.css', 'border-width', '6px')
       .and('not.have.css', 'border-color', 'rgb(89, 146, 230)');
     cy.getByTestId(`species-card-${selectSpecies}`).parent().children()
-      .get('[data-testid="CheckRoundedIcon"]')
+      .get('[data-test="species_selected_check"]')
       .should('not.exist');
   });
 
@@ -95,7 +95,7 @@ describe('Species Selection NECCC', () => {
         .and('have.css', 'border-style', 'solid')
         .and('have.css', 'border-color', 'rgb(89, 146, 230)');
       cy.getByTestId(`species-card-${species}`).parent().children()
-        .get('[data-testid="CheckRoundedIcon"]')
+        .get('[data-test="species_selected_check"]')
         .should('be.visible');
     });
   });

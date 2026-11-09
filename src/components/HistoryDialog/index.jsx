@@ -96,6 +96,7 @@ const HistoryDialog = ({ setStep, setSiteConditionStep }) => {
             onChange={(e) => setHistoryName(e.target.value)}
             error={error}
             helperText={helperText}
+            sx={{ marginTop: '24px' }}
             data-test="input_calculation_name"
           />
           )}

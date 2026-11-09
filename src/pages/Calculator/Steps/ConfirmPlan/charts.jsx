@@ -56,12 +56,11 @@ const ConfirmPlanCharts = ({ council, calculator, calculatorResult }) => {
   return (
     <Grid container sx={{ padding: '0.5rem' }}>
       <Grid
-        item
-        xs={6}
         sx={{
           borderRight: '1px solid #CCCCCC',
           borderBottom: '1px solid #CCCCCC',
         }}
+        size={6}
       >
         <ConfirmPlanChip
           label={`Amount of Mix for ${acres} Acres`}
@@ -69,23 +68,23 @@ const ConfirmPlanCharts = ({ council, calculator, calculatorResult }) => {
         />
       </Grid>
       <Grid
-        item
-        xs={6}
         sx={{
           borderBottom: '1px solid #CCCCCC',
         }}
+        size={6}
       >
         <ConfirmPlanChip label="Price per Acre" value={`$${calculateTotalPricePerAcre()}`} />
       </Grid>
 
       <Grid
-        item
-        xs={6}
-        md={6}
         sx={{
           borderRight: '1px solid #CCCCCC',
           borderBottom: '1px solid #CCCCCC',
           textAlign: 'justify',
+        }}
+        size={{
+          xs: 6,
+          md: 6,
         }}
       >
         <PSAPiechart
@@ -94,12 +93,13 @@ const ConfirmPlanCharts = ({ council, calculator, calculatorResult }) => {
         />
       </Grid>
       <Grid
-        item
-        xs={6}
-        md={6}
         sx={{
           borderBottom: '1px solid #CCCCCC',
           textAlign: 'justify',
+        }}
+        size={{
+          xs: 6,
+          md: 6,
         }}
       >
         {council === 'MCCC' && (

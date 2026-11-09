@@ -13,7 +13,15 @@ import {
 import React from 'react';
 
 const FundingAndAcknowledgements = () => (
-  <Box sx={{ border: 0.5, borderColor: 'grey.300' }} ml={2} mr={2} mt={5}>
+  <Box
+    sx={{
+      ml: 2,
+      mr: 2,
+      mt: 5,
+      border: 0.5,
+      borderColor: 'grey.300',
+    }}
+  >
     <Typography variant="body1" align="left">
       This material is based upon work supported by the Northeast Sustainable Agriculture
       Research and Education program (subaward # ENE 16-144), a USDA NIFA postdoctoral

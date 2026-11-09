@@ -19,14 +19,12 @@ import { setAlertStateRedux, setHistoryStateRedux } from '../../../../features/u
 import pirschAnalytics from '../../../../shared/utils/analytics';
 
 const LeftGrid = styled(Grid)({
-  '&.MuiGrid-item': {
-    height: '50px',
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    '& p': {
-      fontWeight: 'bold',
-    },
+  height: '50px',
+  display: 'flex',
+  justifyContent: 'flex-start',
+  alignItems: 'center',
+  '& p': {
+    fontWeight: 'bold',
   },
 });
 
@@ -125,7 +123,7 @@ const SeedTagInfo = ({
 
   return (
     <Grid container>
-      <Grid item xs={12}>
+      <Grid size={12}>
         {isMobile
           && (
           <Typography variant="stepCaption">
@@ -135,8 +133,15 @@ const SeedTagInfo = ({
       </Grid>
       {seedTagInfoSelected === false
         && (
-        <Grid container sx={{ padding: '1rem' }}>
-          <Grid item xs={12} display="flex" justifyContent="center" gap="1rem">
+        <Grid container size={12} sx={{ padding: '1rem' }}>
+          <Grid
+            size={12}
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              gap: '1rem',
+            }}
+          >
             <PSAButton
               buttonType=""
               variant="outlined"
@@ -166,17 +171,22 @@ const SeedTagInfo = ({
         )}
       {seedTagInfoSelected === true
         && (seedsSelected.map((seed, i) => (
-          <Grid item xs={12} key={i}>
+          <Grid key={i} size={12}>
             <PSAAccordion
               expanded={accordionState[seed.label]}
               onChange={() => handleExpandAccordion(seed.label)}
               summaryContent={<Typography>{seed.label}</Typography>}
               detailsContent={(
                 <Grid container>
-                  <LeftGrid item xs={6} sm={2}>
+                  <LeftGrid size={{ xs: 6, sm: 2 }}>
                     <Typography>% Germination: </Typography>
                   </LeftGrid>
-                  <Grid item xs={6} sm={2}>
+                  <Grid
+                    size={{
+                      xs: 6,
+                      sm: 2,
+                    }}
+                  >
                     <SeedTagNumField
                       value={(options[seed.label].germination ?? 0.85) * 100}
                       onChange={(val) => {
@@ -186,10 +196,15 @@ const SeedTagInfo = ({
                     />
                   </Grid>
 
-                  <LeftGrid item xs={6} sm={2}>
+                  <LeftGrid size={{ xs: 6, sm: 2 }}>
                     <Typography>% Purity: </Typography>
                   </LeftGrid>
-                  <Grid item xs={6} sm={2}>
+                  <Grid
+                    size={{
+                      xs: 6,
+                      sm: 2,
+                    }}
+                  >
                     <SeedTagNumField
                       value={(options[seed.label].purity ?? 0.9) * 100}
                       onChange={(val) => {
@@ -199,10 +214,15 @@ const SeedTagInfo = ({
                     />
                   </Grid>
 
-                  <LeftGrid item xs={6} sm={2}>
+                  <LeftGrid size={{ xs: 6, sm: 2 }}>
                     <Typography>Seeds per Pound </Typography>
                   </LeftGrid>
-                  <Grid item xs={6} sm={2}>
+                  <Grid
+                    size={{
+                      xs: 6,
+                      sm: 2,
+                    }}
+                  >
                     <SeedTagNumField
                       value={parseFloat(seedsPerPound(seed))}
                       onChange={(val) => {

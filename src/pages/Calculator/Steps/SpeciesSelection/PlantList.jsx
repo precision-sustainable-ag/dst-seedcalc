@@ -25,16 +25,18 @@ import pirschAnalytics from '../../../../shared/utils/analytics';
 import apiBaseURL from '../../../../shared/utils/apiBaseURL';
 
 const CheckBoxIcon = ({ style }) => (
-  <Box sx={{
-    ...style,
-    position: 'absolute',
-    right: '0.2rem',
-    top: '1.1rem',
-    zIndex: 1,
-    backgroundColor: '#5992E6',
-    borderTopRightRadius: '1rem',
-    borderBottomLeftRadius: '0.5rem',
-  }}
+  <Box
+    sx={{
+      ...style,
+      position: 'absolute',
+      right: '0.2rem',
+      top: '0.1rem',
+      zIndex: 1,
+      backgroundColor: '#5992E6',
+      borderTopRightRadius: '1rem',
+      borderBottomLeftRadius: '0.5rem',
+    }}
+    data-test="species_selected_check"
   >
     <CheckRounded style={{
       color: '#FFFFFF',
@@ -177,12 +179,23 @@ const PlantList = ({
   };
 
   return (
-    <Grid container spacing="1rem" pl="1rem">
+    <Grid
+      container
+      spacing="1rem"
+      sx={{
+        pl: '1rem',
+      }}
+    >
       {seedsList.length === 0 ? (
         <Typography variant="h6">No available seeds in this type!</Typography>
       ) : (
         seedsList.map((seed, i) => (
-          <Grid item key={i} position="relative">
+          <Grid
+            key={i}
+            sx={{
+              position: 'relative',
+            }}
+          >
             {seedsSelected.filter((s) => s.label === seed.label).length > 0 && (
               <CheckBoxIcon />
             )}
@@ -266,7 +279,7 @@ const PlantList = ({
                         placement="bottom-end"
                         enterTouchDelay={200}
                         leaveTouchDelay={200}
-                        componentsProps={{
+                        slotProps={{
                           tooltip: {
                             sx: {
                               width: '150px',

@@ -4,7 +4,7 @@
 
 import React from 'react';
 import {
-  Typography,
+  Box, Stack, Typography,
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import InfoIcon from '@mui/icons-material/Info';
@@ -139,8 +139,19 @@ const SiteConditionForm = ({
     <Grid container>
 
       {/* State */}
-      <Grid item xs={0} md={3} />
-      <Grid item xs={12} md={6} p="10px">
+      <Grid
+        size={{
+          xs: 0,
+          md: 3,
+        }}
+      />
+      <Grid
+        sx={{ p: '10px' }}
+        size={{
+          xs: 12,
+          md: 6,
+        }}
+      >
         <PSADropdown
           label="State: "
           items={stateList.map((s) => ({ label: s.label, value: s.label }))}
@@ -156,11 +167,27 @@ const SiteConditionForm = ({
           }}
         />
       </Grid>
-      <Grid item xs={0} md={3} />
+      <Grid
+        size={{
+          xs: 0,
+          md: 3,
+        }}
+      />
 
       {/* County / Zone */}
-      <Grid item xs={0} md={3} />
-      <Grid item xs={12} md={6} p="10px">
+      <Grid
+        size={{
+          xs: 0,
+          md: 3,
+        }}
+      />
+      <Grid
+        sx={{ p: '10px' }}
+        size={{
+          xs: 12,
+          md: 6,
+        }}
+      >
         <PSADropdown
           label={council === 'MCCC' ? 'County: ' : 'USDA Plant Hardiness Zone: '}
           items={regions.map((region) => ({ label: region.label, value: region.label }))}
@@ -179,11 +206,27 @@ const SiteConditionForm = ({
           formSx={{ minWidth: '100%' }}
         />
       </Grid>
-      <Grid item xs={0} md={3} />
+      <Grid
+        size={{
+          xs: 0,
+          md: 3,
+        }}
+      />
 
       {/* Soil Drainage */}
-      <Grid item xs={0} md={3} />
-      <Grid item xs={12} md={6} p="10px">
+      <Grid
+        size={{
+          xs: 0,
+          md: 3,
+        }}
+      />
+      <Grid
+        sx={{ p: '10px' }}
+        size={{
+          xs: 12,
+          md: 6,
+        }}
+      >
         <PSADropdown
           label="Soil Drainage: "
           items={getSoilDrainages(council).map((drainage) => ({ label: drainage.label, value: drainage.label }))}
@@ -202,23 +245,42 @@ const SiteConditionForm = ({
           formSx={{ minWidth: '100%' }}
         />
       </Grid>
-      <Grid item xs={0} md={3} />
+      <Grid
+        size={{
+          xs: 0,
+          md: 3,
+        }}
+      />
 
       {/* Tile Drainage */}
-      <Grid item xs={0} md={3} />
-      <Grid item xs={12} md={6} p="10px">
+      <Grid
+        size={{
+          xs: 0,
+          md: 3,
+        }}
+      />
+      <Grid
+        sx={{ p: '10px' }}
+        size={{
+          xs: 12,
+          md: 6,
+        }}
+      >
         {(tileDrainage ? improvedNeedTileDrainage.includes(soilDrainage) : needTileDrainage.includes(soilDrainage))
           && (
-            <Grid container alignItems="center">
-              <Grid item xs={4}>
-                <Grid container direction="column">
-                  <Grid item>
+            <Grid container size={12} sx={{ alignItems: 'center' }}>
+              <Grid size={4}>
+                <Stack>
+                  <Box>
                     <Typography>
                       Tile drainage
                       <PSATooltip
                         type="text"
                         title={(
-                          <Typography color="primary.light">
+                          <Typography sx={{
+                            color: 'primary.light',
+                          }}
+                          >
                             Indicate if the field of interest has tile installed.
                             If you have selected very poorly to somewhat poorly drained soils,
                             selecting “yes” will increase your drainage class.
@@ -236,9 +298,12 @@ const SiteConditionForm = ({
                         )}
                       />
                     </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Typography display="inline">
+                  </Box>
+                  <Box>
+                    <Typography sx={{
+                      display: 'inline',
+                    }}
+                    >
                       No
                     </Typography>
                     <DSTSwitch
@@ -247,18 +312,28 @@ const SiteConditionForm = ({
                       disabled={!tileDrainage && (needTileDrainage.indexOf(soilDrainage) === -1 || council === '')}
                       testId="site_condition_tile_drainage"
                     />
-                    <Typography display="inline">
+                    <Typography sx={{
+                      display: 'inline',
+                    }}
+                    >
                       Yes
                     </Typography>
-                  </Grid>
-                </Grid>
+                  </Box>
+                </Stack>
               </Grid>
-              <Grid item xs={8}>
+              <Grid size={8}>
                 {(tileDrainage)
                   && (
                     <>
                       <Typography>Your improved drainage class is: </Typography>
-                      <Typography fontWeight="bold" data-test="tile_drainage_class">{soilDrainage}</Typography>
+                      <Typography
+                        data-test="tile_drainage_class"
+                        sx={{
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        {soilDrainage}
+                      </Typography>
                     </>
                   )}
 
@@ -266,11 +341,27 @@ const SiteConditionForm = ({
             </Grid>
           )}
       </Grid>
-      <Grid item xs={0} md={3} />
+      <Grid
+        size={{
+          xs: 0,
+          md: 3,
+        }}
+      />
 
       {/* Planting Date */}
-      <Grid item xs={0} md={3} />
-      <Grid item xs={12} md={6} p="10px">
+      <Grid
+        size={{
+          xs: 0,
+          md: 3,
+        }}
+      />
+      <Grid
+        sx={{ p: '10px' }}
+        size={{
+          xs: 12,
+          md: 6,
+        }}
+      >
         <DatePicker
           label="Planned Planting Date: "
           value={plantingDate}
@@ -280,11 +371,27 @@ const SiteConditionForm = ({
           }}
         />
       </Grid>
-      <Grid item xs={0} md={3} />
+      <Grid
+        size={{
+          xs: 0,
+          md: 3,
+        }}
+      />
 
       {/* Acres */}
-      <Grid item xs={0} md={3} />
-      <Grid item xs={12} md={6} p="10px">
+      <Grid
+        size={{
+          xs: 0,
+          md: 3,
+        }}
+      />
+      <Grid
+        sx={{ p: '10px' }}
+        size={{
+          xs: 12,
+          md: 6,
+        }}
+      >
         <NumberTextField
           emptyWarning={acres <= 0}
           value={acres}
@@ -297,20 +404,34 @@ const SiteConditionForm = ({
           testId="site_condition_acres"
         />
       </Grid>
-      <Grid item xs={0} md={3} />
+      <Grid
+        size={{
+          xs: 0,
+          md: 3,
+        }}
+      />
 
       {/* NRCS Standards */}
-      <Grid item xs={0} md={3} />
+      <Grid
+        size={{
+          xs: 0,
+          md: 3,
+        }}
+      />
       {state === 'Indiana' && (
         <Grid
-          item
-          xs={12}
-          md={6}
-          p="10px"
-          display="flex"
-          justifyContent="center"
+          sx={{ p: '10px', display: 'flex', justifyContent: 'center' }}
+          size={{
+            xs: 12,
+            md: 6,
+          }}
         >
-          <Typography fontSize="1.25rem">Check NRCS Standards: </Typography>
+          <Typography sx={{
+            fontSize: '1.25rem',
+          }}
+          >
+            Check NRCS Standards:
+          </Typography>
           <DSTSwitch
             checked={checkNRCSStandards}
             handleChange={() => {
@@ -324,10 +445,11 @@ const SiteConditionForm = ({
       {/* Soil Fertility */}
       {council === 'NECCC' && (
         <Grid
-          item
-          xs={12}
-          md={6}
-          p="10px"
+          sx={{ p: '10px' }}
+          size={{
+            xs: 12,
+            md: 6,
+          }}
         >
           <PSADropdown
             label="Soil Fertility: "
@@ -347,9 +469,14 @@ const SiteConditionForm = ({
           />
         </Grid>
       )}
-      <Grid item xs={0} md={3} />
+      <Grid
+        size={{
+          xs: 0,
+          md: 3,
+        }}
+      />
 
-      <Grid item xs={12} margin="1rem">
+      <Grid sx={{ margin: '1rem' }} size={12}>
         <PSAButton buttonType="" variant="contained" onClick={() => setStep(1)} data-test="site_condition_back_button" title="Back" />
       </Grid>
 

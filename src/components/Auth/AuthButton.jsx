@@ -67,7 +67,7 @@ const AuthButton = ({
       onClick={handleClick}
       data-test="auth_button"
       title={(
-        <Typography sx={{ fontSize: '0.875rem', fontWeight: 'bold' }} color={getColor()}>
+        <Typography sx={{ fontSize: '0.875rem', fontWeight: 'bold', color: getColor() }}>
           {type}
         </Typography>
 )}
