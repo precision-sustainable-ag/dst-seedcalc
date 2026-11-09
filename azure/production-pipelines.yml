@@ -15,7 +15,7 @@ pr:
 variables:
 
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: 'b97cdcac-b166-4fb5-8be1-37c3c7364c11'
+  dockerRegistryServiceConnection: '1fd2c843-bbc9-4cf8-8eba-73a05a54c84e'
   imageRepository: 'dstseedcalc'
   containerRegistry: 'containerregistry4pd7i.azurecr.io'
   dockerfilePath: '**/Dockerfile'
