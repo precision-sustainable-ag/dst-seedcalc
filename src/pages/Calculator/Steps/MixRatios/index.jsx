@@ -132,12 +132,20 @@ const MixRatio = ({
       seedsSelected.forEach((seed) => {
         // if percentOfRate is not null, skip this step(this happens when add new crop for a imported history)
         if (mixRatioOptions[seed.label].percentOfRate === null) {
-          // FIXME: updated percentOfRate here, this is a temporary workaround for MCCC
+          // NOTE: updated percentOfRate here, this is a workaround for calculation errors in SDK
+          let percentOfRate = null;
+          if (council === 'MCCC' || (council === 'SCCC' && seedingRateCalculator.isFreezingZone())) {
+            // MCCC and SCCC Zone 6-8: total sum of species selected
+            percentOfRate = 1 / seedsSelected.length;
+          } else if (council === 'SCCC' && !seedingRateCalculator.isFreezingZone()) {
+            // SCCC Zone 9-11: 1 / (mixDiversity * speciesInGroup)
+            const crop = seedingRateCalculator.getCrop(seed);
+            const speciesInGroup = seedingRateCalculator.speciesInMix[crop.group];
+            percentOfRate = 1 / (seedingRateCalculator.mixDiversity * speciesInGroup);
+          }
           const newOption = {
             ...mixRatioOptions[seed.label],
-            percentOfRate: (council === 'MCCC'
-            || (council === 'SCCC' && !seedingRateCalculator.isFreezingZone()))
-              ? 1 / seedsSelected.length : null,
+            percentOfRate,
           };
           dispatch(setMixRatioOptionRedux(seed.label, newOption));
         }

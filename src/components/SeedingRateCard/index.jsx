@@ -64,7 +64,7 @@ const SeedInfo = ({
     ? seed.attributes.Planting['Base Seeding Rate'].values[0]
     : 0;
   const [singleSpeciesSeedingRate, setSingleSpeciesSeedingRate] = useState(
-    parseFloat(baseSeedingRate),
+    parseFloat(options.singleSpeciesSeedingRate ?? baseSeedingRate),
   );
   const [percentOfRate, setPercentOfRate] = useState(0);
   const [singleData, setSingleData] = useState({
@@ -144,6 +144,7 @@ const SeedInfo = ({
       container
       sx={{
         p: '0 5%',
+        width: '100%',
       }}
     >
       <Grid
