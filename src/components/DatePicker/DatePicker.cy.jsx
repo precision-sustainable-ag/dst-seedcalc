@@ -16,9 +16,11 @@ describe('<DatePicker />', () => {
 
   it('should be able to select a date and trigger onChange function', () => {
     const onChangeStub = cy.stub();
+    const today = dayjs().date();
+    const targetDay = today === 10 ? '11' : '10';
     cy.mount(<DatePicker handleChange={onChangeStub} />);
     cy.get('[aria-label^="Choose date"]').click();
-    cy.get('.MuiPickerDay-root').contains('10').click();
+    cy.get('.MuiPickerDay-root').contains(targetDay).click();
     cy.wrap(onChangeStub).should('have.been.calledOnce');
   });
 });
