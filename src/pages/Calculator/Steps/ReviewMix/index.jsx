@@ -15,7 +15,7 @@ import {
 import ReviewMixSteps from './Steps';
 import DSTBarChart from '../../../../components/DSTBarChart';
 import SeedingRateCard, { UnitSelection } from '../../../../components/SeedingRateCard';
-import { setBulkSeedingRateRedux, setOptionRedux } from '../../../../features/calculatorSlice/actions';
+import { setBulkSeedingRateRedux, setOptionRedux, setMixRatioOptionRedux } from '../../../../features/calculatorSlice/actions';
 import { pieChartUnits, seedDataUnits } from '../../../../shared/data/units';
 import { historyStates } from '../../../../features/userSlice/state';
 import { setHistoryStateRedux } from '../../../../features/userSlice/actions';
@@ -74,7 +74,7 @@ const ReviewMix = ({ calculator, isMobile }) => {
   const dispatch = useDispatch();
   const { council } = useSelector((state) => state.siteCondition);
   const {
-    seedsSelected, sideBarSelection, options,
+    seedsSelected, sideBarSelection, options, mixRatioOptions,
   } = useSelector((state) => state.calculator);
   const { historyState } = useSelector((state) => state.user);
 
@@ -116,6 +116,7 @@ const ReviewMix = ({ calculator, isMobile }) => {
   // function to handle form value change, update options
   const handleFormValueChange = (seed, option, value) => {
     dispatch(setOptionRedux(seed.label, { ...options[seed.label], [option]: value }));
+    dispatch(setMixRatioOptionRedux(seed.label, { ...mixRatioOptions[seed.label], [option]: value }));
     if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
   };
 

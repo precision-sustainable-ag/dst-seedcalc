@@ -1,4 +1,4 @@
-import * as XLSX from 'xlsx/xlsx';
+import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
 export const jsonToCSV = (data) => {

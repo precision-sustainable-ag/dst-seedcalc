@@ -154,8 +154,11 @@ const Calculator = ({ calculator, setCalculator }) => {
   useEffect(() => {
     dispatch(setAlertStateRedux({ ...alertState, open: false }));
     if (historyState === historyStates.new || historyState === historyStates.updated) {
-      const { label, id } = selectedHistory;
-      saveHistory(id, label);
+      // only save history when selectedHistory is available (do not save if imported from CSV)
+      if (selectedHistory) {
+        const { label, id } = selectedHistory;
+        saveHistory(id, label);
+      }
     }
     if (activeStep !== calculatorList.length) {
       pirschAnalytics('visit step', {

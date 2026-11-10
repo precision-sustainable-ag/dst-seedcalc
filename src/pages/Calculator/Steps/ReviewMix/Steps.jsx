@@ -341,7 +341,7 @@ const ReviewMixSteps = ({
           <FormSlider
             range={[0, 100]}
             label="% of Single Species Rate"
-            val={convertToPercent(options.percentOfRate)}
+            val={convertToPercent(options.percentOfRate ?? step1.percentOfRate)}
             onChangeCommitted={(val) => {
               handleFormValueChange(seed, 'percentOfRate', parseFloat(val) / 100);
             }}
