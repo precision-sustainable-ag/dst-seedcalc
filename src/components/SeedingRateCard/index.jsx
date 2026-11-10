@@ -144,6 +144,7 @@ const SeedInfo = ({
       container
       sx={{
         p: '0 5%',
+        width: '100%',
       }}
     >
       <Grid
