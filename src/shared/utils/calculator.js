@@ -4,6 +4,7 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-unused-vars */
 import dayjs from 'dayjs';
+import SeedRateCalculator from '../../sdk';
 
 const convertToPercent = (num) => Number((parseFloat(num) * 100).toFixed(1));
 
