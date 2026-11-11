@@ -1,6 +1,6 @@
 import React from 'react';
 import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
+import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
@@ -24,18 +24,17 @@ const DatePicker = ({
     <Stack spacing={3}>
       <DesktopDatePicker
         label={label}
-        inputFormat="MM/DD/YYYY"
-        value={value}
+        format="MM/DD/YYYY"
+        value={dayjs(value)}
         onChange={handleChange}
-        renderInput={(params) => (
-          <TextField
-            sx={{
-              '.MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(0, 0, 0, .45)' },
+        slotProps={{
+          textField: {
+            sx: {
+              '.MuiPickersOutlinedInput-notchedOutline': { borderColor: 'rgba(0, 0, 0, .45)' },
               color: 'red',
-            }}
-            {...params}
-          />
-        )}
+            },
+          },
+        }}
       />
     </Stack>
   </LocalizationProvider>

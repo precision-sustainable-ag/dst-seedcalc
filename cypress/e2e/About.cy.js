@@ -9,7 +9,8 @@ describe('Feedback', () => {
     cy.getByTestId('section-License and Copyright').should('be.visible');
   });
 
-  it('should show different attribution text based on selected council', () => {
+  // the nav links collapse into a menu at the default 1000px viewport
+  it('should show different attribution text based on selected council', { viewportWidth: 1440, viewportHeight: 900 }, () => {
     cy.getByTestId('about_attribution').should('include.text', 'We, MCCC, NECCC, SCCC, ');
     selectMapState();
     cy.getByTestId('navbar-About').click();

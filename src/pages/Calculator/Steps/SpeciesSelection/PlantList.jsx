@@ -25,16 +25,18 @@ import pirschAnalytics from '../../../../shared/utils/analytics';
 import apiBaseURL from '../../../../shared/utils/apiBaseURL';
 
 const CheckBoxIcon = ({ style }) => (
-  <Box sx={{
-    ...style,
-    position: 'absolute',
-    right: '0.2rem',
-    top: '1.1rem',
-    zIndex: 1,
-    backgroundColor: '#5992E6',
-    borderTopRightRadius: '1rem',
-    borderBottomLeftRadius: '0.5rem',
-  }}
+  <Box
+    sx={{
+      ...style,
+      position: 'absolute',
+      right: '0.2rem',
+      top: '0.1rem',
+      zIndex: 1,
+      backgroundColor: '#5992E6',
+      borderTopRightRadius: '1rem',
+      borderBottomLeftRadius: '0.5rem',
+    }}
+    data-test="species_selected_check"
   >
     <CheckRounded style={{
       color: '#FFFFFF',
@@ -45,6 +47,13 @@ const CheckBoxIcon = ({ style }) => (
 
   </Box>
 );
+
+// Support both MM/DD/YYYY and MM/DD type of date string
+const parseDate = (dateStr) => {
+  const [m, d] = dateStr.split('/');
+  // Use 2000 as temp year for parsing (the year does not matters for comparison)
+  return dayjs(`${m}/${d}/2000`);
+};
 
 const PlantList = ({
   seedType,
@@ -68,13 +77,13 @@ const PlantList = ({
     if (!seed['Planting and Growth Windows']['Reliable Establishment']) return '';
     const [firstPeriod, secondPeriod] = seed['Planting and Growth Windows']['Reliable Establishment'];
     let secondStart; let secondEnd;
-    const firstStart = dayjs(dayjs(firstPeriod.split(' - ')[0]).format('MM/DD'));
-    const firstEnd = dayjs(dayjs(firstPeriod.split(' - ')[1]).format('MM/DD'));
+    const firstStart = parseDate(firstPeriod.split(' - ')[0]);
+    const firstEnd = parseDate(firstPeriod.split(' - ')[1]);
     if (secondPeriod) {
-      secondStart = dayjs(dayjs(secondPeriod.split(' - ')[0]).format('MM/DD'));
-      secondEnd = dayjs(dayjs(secondPeriod.split(' - ')[1]).format('MM/DD'));
+      secondStart = parseDate(secondPeriod.split(' - ')[0]);
+      secondEnd = parseDate(secondPeriod.split(' - ')[1]);
     }
-    const plannedDate = dayjs(dayjs(plantingDate).format('MM/DD'));
+    const plannedDate = parseDate(plantingDate);
 
     const inFirstPeriod = plannedDate.isBetween(firstStart, firstEnd, 'day', []);
     const inSecondPeriod = secondStart && plannedDate.isBetween(secondStart, secondEnd, 'day', []);
@@ -170,12 +179,23 @@ const PlantList = ({
   };
 
   return (
-    <Grid container spacing="1rem" pl="1rem">
+    <Grid
+      container
+      spacing="1rem"
+      sx={{
+        pl: '1rem',
+      }}
+    >
       {seedsList.length === 0 ? (
         <Typography variant="h6">No available seeds in this type!</Typography>
       ) : (
         seedsList.map((seed, i) => (
-          <Grid item key={i} position="relative">
+          <Grid
+            key={i}
+            sx={{
+              position: 'relative',
+            }}
+          >
             {seedsSelected.filter((s) => s.label === seed.label).length > 0 && (
               <CheckBoxIcon />
             )}
@@ -259,7 +279,7 @@ const PlantList = ({
                         placement="bottom-end"
                         enterTouchDelay={200}
                         leaveTouchDelay={200}
-                        componentsProps={{
+                        slotProps={{
                           tooltip: {
                             sx: {
                               width: '150px',

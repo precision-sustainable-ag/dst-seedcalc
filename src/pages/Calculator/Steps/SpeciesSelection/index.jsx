@@ -128,8 +128,13 @@ const SpeciesSelection = ({
   /// ///////////////////////////////////////////////////////
 
   return (
-    <Grid container justifyContent="center">
-      <Grid item xs={12}>
+    <Grid
+      container
+      sx={{
+        justifyContent: 'center',
+      }}
+    >
+      <Grid size={12}>
         {isMobile && (
           <Typography variant="stepCaption">
             Select one or more species for your mix.
@@ -142,13 +147,15 @@ const SpeciesSelection = ({
           </Typography>
         )}
       </Grid>
-      <Grid item xs={11}>
+      <Grid size={11}>
         <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          flexDirection="column"
-          p="1rem"
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'column',
+            p: '1rem',
+          }}
         >
           <PSATextField
             placeholder="Search Filter list"
@@ -178,7 +185,7 @@ const SpeciesSelection = ({
       {
         seedsType.length > 0 ? (
           seedsType.map((seedType, i) => (
-            <Grid item xs={12} key={i}>
+            <Grid key={i} size={12}>
               <PSAAccordion
                 expanded={accordionState[seedType]}
                 onChange={() => handleExpandAccordion(seedType)}
@@ -198,11 +205,9 @@ const SpeciesSelection = ({
 
           ))) : (
             <Grid
-              item
               container
+              size={12}
               spacing={1}
-              justifyContent="center"
-              alignItems="center"
               sx={{
                 display: 'flex',
                 justifyContent: 'center',

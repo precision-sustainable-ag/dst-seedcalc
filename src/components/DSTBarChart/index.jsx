@@ -64,10 +64,22 @@ const DSTBarChart = ({ seed, calculatorResult }) => {
 
   return (
     <Grid container>
-      <Grid item xs={12}>
-        <Typography fontWeight="bold">Seeding Rate Impact From Your Decisions (Lbs per Acre)</Typography>
+      <Grid size={12}>
+        <Typography sx={{
+          fontWeight: 'bold',
+        }}
+        >
+          Seeding Rate Impact From Your Decisions (Lbs per Acre)
+        </Typography>
       </Grid>
-      <Grid item xs={12} display="flex" justifyContent="center" aria-hidden>
+      <Grid
+        aria-hidden
+        size={12}
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
         <ResponsiveContainer width="100%" height={200}>
           <BarChart
             data={isMobile ? [labels[index]] : labels}
@@ -93,7 +105,7 @@ const DSTBarChart = ({ seed, calculatorResult }) => {
           </BarChart>
         </ResponsiveContainer>
       </Grid>
-      <Grid item xs={12} aria-hidden>
+      <Grid aria-hidden size={12}>
         <PSAButton
           buttonType=""
           onClick={() => setIndex(index - 1)}
@@ -106,7 +118,12 @@ const DSTBarChart = ({ seed, calculatorResult }) => {
             </>
 )}
         />
-        <Typography display="inline-block" padding="0 1rem">
+        <Typography
+          sx={{
+            display: 'inline-block',
+            padding: '0 1rem',
+          }}
+        >
           {`${index + 1} / 5`}
         </Typography>
         <PSAButton
@@ -123,22 +140,29 @@ const DSTBarChart = ({ seed, calculatorResult }) => {
         />
       </Grid>
 
-      <Grid container data-test="list_container">
+      <Grid container size={12} data-test="list_container">
         {/* list under barchart */}
         {labels.map((l, i) => (
           <Grid
             container
+            size={12}
             sx={{
               backgroundColor: !(i % 2) && 'main.background1',
               color: 'text.primary',
             }}
             key={i}
           >
-            <Grid item xs={1} />
-            <Grid item sx={{ textAlign: 'justify' }} xs={9} pl={1}>
+            <Grid size={1} />
+            <Grid
+              size={9}
+              sx={{
+                pl: 1,
+                textAlign: 'justify',
+              }}
+            >
               {l.caption}
             </Grid>
-            <Grid item xs={2}>
+            <Grid size={2}>
               {twoDigit(l.val)}
             </Grid>
           </Grid>

@@ -18,20 +18,26 @@ const MixRatioSteps = ({
 
   const renderFormLabel = (label1, label2, label3) => (
     isMobile && (
-      <Grid container justifyContent="space-evenly">
-        <Grid item xs={3}>
+      <Grid
+        container
+        size={12}
+        sx={{
+          justifyContent: 'space-evenly',
+        }}
+      >
+        <Grid size={3}>
           <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
             {label1}
           </Typography>
         </Grid>
-        <Grid item xs={1} />
-        <Grid item xs={3}>
+        <Grid size={1} />
+        <Grid size={3}>
           <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
             {label2}
           </Typography>
         </Grid>
-        <Grid item xs={1} />
-        <Grid item xs={3}>
+        <Grid size={1} />
+        <Grid size={3}>
           <Typography sx={{ fontSize: '0.75rem', pb: '0.5rem' }}>
             {label3}
           </Typography>
@@ -57,7 +63,7 @@ const MixRatioSteps = ({
       {/* NECCC Step 1:  */}
       {council === 'NECCC' && (
         <>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography variant="stepHeader">Seeding Rate in Mix</Typography>
           </Grid>
           {renderFormLabel(
@@ -65,8 +71,14 @@ const MixRatioSteps = ({
             'Soil Fertility Modifier',
             '% of Single Species Rate',
           )}
-          <Grid container justifyContent="space-evenly">
-            <Grid item xs={3}>
+          <Grid
+            container
+            size={12}
+            sx={{
+              justifyContent: 'space-evenly',
+            }}
+          >
+            <Grid size={3}>
               <NumberTextField
                 label={isMobile ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
                 disabled
@@ -74,11 +86,11 @@ const MixRatioSteps = ({
               />
             </Grid>
 
-            <Grid item xs={1}>
+            <Grid size={1}>
               <Typography variant="mathIcon">&#215;</Typography>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid size={3}>
               <NumberTextField
                 label={isMobile ? '' : 'Soil Fertility Modifier'}
                 disabled
@@ -86,11 +98,11 @@ const MixRatioSteps = ({
               />
             </Grid>
 
-            <Grid item xs={1}>
+            <Grid size={1}>
               <Typography variant="mathIcon">&#215;</Typography>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid size={3}>
               <NumberTextField
                 disabled
                 label={isMobile ? '' : '% of Single Species Rate'}
@@ -99,13 +111,20 @@ const MixRatioSteps = ({
             </Grid>
           </Grid>
 
-          <Grid container justifyContent="space-evenly" marginTop={isMobile ? '20px' : 0}>
-            <Grid item xs={3}>
+          <Grid
+            container
+            size={12}
+            sx={{
+              justifyContent: 'space-evenly',
+              marginTop: isMobile ? '20px' : 0,
+            }}
+          >
+            <Grid size={3}>
               <Typography variant="mathIcon">=</Typography>
             </Grid>
-            <Grid item xs={1} />
+            <Grid size={1} />
 
-            <Grid item xs={3}>
+            <Grid size={3}>
               <NumberTextField
                 label="Seeding Rate In Mix (Lbs per Acre)"
                 disabled
@@ -113,8 +132,8 @@ const MixRatioSteps = ({
               />
             </Grid>
 
-            <Grid item xs={1} />
-            <Grid item xs={3} />
+            <Grid size={1} />
+            <Grid size={3} />
           </Grid>
         </>
       )}
@@ -122,7 +141,7 @@ const MixRatioSteps = ({
       {/* MCCC Step 1:  */}
       {council === 'MCCC' && (
         <>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography variant="stepHeader">Seeding Rate in Mix</Typography>
           </Grid>
           {renderFormLabel(
@@ -130,8 +149,14 @@ const MixRatioSteps = ({
             '% of Single Species Rate',
             'Seeding Rate In Mix (Lbs per Acre)',
           )}
-          <Grid container justifyContent="space-evenly">
-            <Grid item xs={3}>
+          <Grid
+            container
+            size={12}
+            sx={{
+              justifyContent: 'space-evenly',
+            }}
+          >
+            <Grid size={3}>
               <NumberTextField
                 label={isMobile ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
                 disabled
@@ -139,11 +164,11 @@ const MixRatioSteps = ({
               />
             </Grid>
 
-            <Grid item xs={1}>
+            <Grid size={1}>
               <Typography variant="mathIcon">&#215;</Typography>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid size={3}>
               <NumberTextField
                 label={isMobile ? '' : '% of Single Species Rate'}
                 disabled
@@ -151,11 +176,11 @@ const MixRatioSteps = ({
               />
             </Grid>
 
-            <Grid item xs={1}>
+            <Grid size={1}>
               <Typography variant="mathIcon">=</Typography>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid size={3}>
               <NumberTextField
                 label={isMobile ? '' : 'Seeding Rate In Mix (Lbs per Acre)'}
                 disabled
@@ -169,7 +194,7 @@ const MixRatioSteps = ({
       {/* SCCC Step 1:  */}
       {council === 'SCCC' && (
         <>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography variant="stepHeader">Seeding Rate in Mix</Typography>
           </Grid>
           {renderFormLabel(
@@ -177,8 +202,15 @@ const MixRatioSteps = ({
             '% of Single Species Rate',
             'Planting Time Modifier',
           )}
-          <Grid container justifyContent="space-evenly" pb="1rem">
-            <Grid item xs={3}>
+          <Grid
+            container
+            size={12}
+            sx={{
+              justifyContent: 'space-evenly',
+              pb: '1rem',
+            }}
+          >
+            <Grid size={3}>
               <NumberTextField
                 label={isMobile ? '' : 'Single Species Seeding Rate PLS (Lbs per Acre)'}
                 disabled
@@ -186,11 +218,11 @@ const MixRatioSteps = ({
               />
             </Grid>
 
-            <Grid item xs={1}>
+            <Grid size={1}>
               <Typography variant="mathIcon">&#215;</Typography>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid size={3}>
               <NumberTextField
                 label={isMobile ? '' : '% of Single Species Rate'}
                 disabled
@@ -198,11 +230,11 @@ const MixRatioSteps = ({
               />
             </Grid>
 
-            <Grid item xs={1}>
+            <Grid size={1}>
               <Typography variant="mathIcon">&#215;</Typography>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid size={3}>
               <NumberTextField
                 disabled
                 label={isMobile ? '' : 'Planting Time Modifier'}
@@ -217,13 +249,19 @@ const MixRatioSteps = ({
             'Seeding Rate In Mix (Lbs per Acre)',
           )}
 
-          <Grid container justifyContent="space-evenly">
-            <Grid item xs={3} />
-            <Grid item xs={1}>
+          <Grid
+            container
+            size={12}
+            sx={{
+              justifyContent: 'space-evenly',
+            }}
+          >
+            <Grid size={3} />
+            <Grid size={1}>
               <Typography variant="mathIcon">&#215;</Typography>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid size={3}>
               <NumberTextField
                 disabled
                 label={isMobile ? '' : 'Mix Competition Coefficient'}
@@ -231,11 +269,11 @@ const MixRatioSteps = ({
               />
             </Grid>
 
-            <Grid item xs={1}>
+            <Grid size={1}>
               <Typography variant="mathIcon">=</Typography>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid size={3}>
               <NumberTextField
                 label={isMobile ? '' : 'Seeding Rate In Mix (Lbs per Acre)'}
                 disabled
@@ -249,7 +287,7 @@ const MixRatioSteps = ({
 
       {/* Step 2: */}
       <>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Typography variant="stepHeader" data-test="seeds_per_acre">Seeds per Acre</Typography>
         </Grid>
         {renderFormLabel(
@@ -257,8 +295,14 @@ const MixRatioSteps = ({
           'Seeding Rate In Mix (Lbs per Acre)',
           'Seeds per Acre',
         )}
-        <Grid container justifyContent="space-evenly">
-          <Grid item xs={3}>
+        <Grid
+          container
+          size={12}
+          sx={{
+            justifyContent: 'space-evenly',
+          }}
+        >
+          <Grid size={3}>
             <NumberTextField
               disabled
               label={isMobile ? '' : 'Seeds per Pound'}
@@ -266,11 +310,11 @@ const MixRatioSteps = ({
             />
           </Grid>
 
-          <Grid item xs={1}>
+          <Grid size={1}>
             <Typography variant="mathIcon">&#215;</Typography>
           </Grid>
 
-          <Grid item xs={3}>
+          <Grid size={3}>
             <NumberTextField
               disabled
               label={isMobile ? '' : 'Seeding Rate In Mix (Lbs per Acre)'}
@@ -278,11 +322,11 @@ const MixRatioSteps = ({
             />
           </Grid>
 
-          <Grid item xs={1}>
+          <Grid size={1}>
             <Typography variant="mathIcon">=</Typography>
           </Grid>
 
-          <Grid item xs={3}>
+          <Grid size={3}>
             <NumberTextField
               label={isMobile ? '' : 'Seeds per Acre'}
               disabled
@@ -295,12 +339,18 @@ const MixRatioSteps = ({
       {/* NECCC Step 3: */}
       {(council === 'SCCC' || council === 'NECCC') && (
         <>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography variant="stepHeader">Seeds per SqFt</Typography>
           </Grid>
           {renderFormLabel('Seeds per Acre', 'SqFt per Acre', 'Seeds per SqFt')}
-          <Grid container justifyContent="space-evenly">
-            <Grid item xs={3}>
+          <Grid
+            container
+            size={12}
+            sx={{
+              justifyContent: 'space-evenly',
+            }}
+          >
+            <Grid size={3}>
               <NumberTextField
                 label={isMobile ? '' : 'Seeds per Acre'}
                 disabled
@@ -308,11 +358,11 @@ const MixRatioSteps = ({
               />
             </Grid>
 
-            <Grid item xs={1}>
+            <Grid size={1}>
               <Typography variant="mathIcon">÷</Typography>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid size={3}>
               <NumberTextField
                 label={isMobile ? '' : 'SqFt per Acre'}
                 disabled
@@ -320,11 +370,11 @@ const MixRatioSteps = ({
               />
             </Grid>
 
-            <Grid item xs={1}>
+            <Grid size={1}>
               <Typography variant="mathIcon">=</Typography>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid size={3}>
               <NumberTextField
                 label={isMobile ? '' : 'Seeds per SqFt'}
                 disabled
@@ -338,12 +388,19 @@ const MixRatioSteps = ({
       {/* MCCC Step 3 & Step 4: */}
       {council === 'MCCC' && (
         <>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography variant="stepHeader">Plants per Acre</Typography>
           </Grid>
 
-          <Grid container justifyContent="center" pb="1rem">
-            <Grid item xs={8}>
+          <Grid
+            container
+            size={12}
+            sx={{
+              justifyContent: 'center',
+              pb: '1rem',
+            }}
+          >
+            <Grid size={8}>
               <Typography>
                 {`% Survival: ${survival}%`}
               </Typography>
@@ -360,8 +417,14 @@ const MixRatioSteps = ({
           </Grid>
 
           {renderFormLabel('Seeds per Acre', '% Survival', 'Plants per Acre')}
-          <Grid container justifyContent="space-evenly">
-            <Grid item xs={3}>
+          <Grid
+            container
+            size={12}
+            sx={{
+              justifyContent: 'space-evenly',
+            }}
+          >
+            <Grid size={3}>
               <NumberTextField
                 label={isMobile ? '' : 'Seeds per Acre'}
                 disabled
@@ -369,11 +432,11 @@ const MixRatioSteps = ({
               />
             </Grid>
 
-            <Grid item xs={1}>
+            <Grid size={1}>
               <Typography variant="mathIcon">&#215;</Typography>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid size={3}>
               <NumberTextField
                 label={isMobile ? '' : '% Survival'}
                 disabled
@@ -381,11 +444,11 @@ const MixRatioSteps = ({
               />
             </Grid>
 
-            <Grid item xs={1}>
+            <Grid size={1}>
               <Typography variant="mathIcon">=</Typography>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid size={3}>
               <NumberTextField
                 label={isMobile ? '' : 'Plants per Acre'}
                 disabled
@@ -394,7 +457,7 @@ const MixRatioSteps = ({
             </Grid>
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography variant="stepHeader">Approximate Plants per SqFt</Typography>
           </Grid>
           {renderFormLabel(
@@ -402,8 +465,14 @@ const MixRatioSteps = ({
             'SqFt per Acre',
             'Aproximate Plants per SqFt',
           )}
-          <Grid container justifyContent="space-evenly">
-            <Grid item xs={3}>
+          <Grid
+            container
+            size={12}
+            sx={{
+              justifyContent: 'space-evenly',
+            }}
+          >
+            <Grid size={3}>
               <NumberTextField
                 label={isMobile ? '' : 'Plants per Acre'}
                 disabled
@@ -411,11 +480,11 @@ const MixRatioSteps = ({
               />
             </Grid>
 
-            <Grid item xs={1}>
+            <Grid size={1}>
               <Typography variant="mathIcon">÷</Typography>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid size={3}>
               <NumberTextField
                 label={isMobile ? '' : 'SqFt per Acre'}
                 disabled
@@ -423,11 +492,11 @@ const MixRatioSteps = ({
               />
             </Grid>
 
-            <Grid item xs={1}>
+            <Grid size={1}>
               <Typography variant="mathIcon">=</Typography>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid size={3}>
               <NumberTextField
                 label={isMobile ? '' : 'Aproximate Plants per SqFt'}
                 disabled

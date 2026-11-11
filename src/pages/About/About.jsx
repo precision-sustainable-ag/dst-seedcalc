@@ -76,9 +76,33 @@ const About = () => {
   }, [council]);
 
   return (
-    <Box sx={{ border: 0.5, borderColor: 'grey.300' }} ml={2} mr={2} mt={5}>
-      <Grid container spacing={0} justifyContent="center" mt={isMobile ? 0 : 5} mb={isMobile ? 0 : 5}>
-        <Grid item xs={12} sm={12} md={3.4} lg={3.4} xl={3.4}>
+    <Box
+      sx={{
+        ml: 2,
+        mr: 2,
+        mt: 5,
+        border: 0.5,
+        borderColor: 'grey.300',
+      }}
+    >
+      <Grid
+        container
+        spacing={0}
+        sx={{
+          justifyContent: 'center',
+          mt: isMobile ? 0 : 5,
+          mb: isMobile ? 0 : 5,
+        }}
+      >
+        <Grid
+          size={{
+            xs: 12,
+            sm: 12,
+            md: 3.4,
+            lg: 3.4,
+            xl: 3.4,
+          }}
+        >
           <div
             style={{
               border: '1px solid #4F5F30',
@@ -106,18 +130,27 @@ const About = () => {
         </Grid>
 
         <Grid
-          item
-          xs={12}
-          sm={12}
-          md={8}
-          lg={8}
-          xl={8}
-          mt={{
-            xs: 3, sm: 3, md: 0, lg: 0, xl: 0,
+          size={{
+            xs: 12,
+            sm: 12,
+            md: 8,
+            lg: 8,
+            xl: 8,
+          }}
+          sx={{
+            mt: {
+              xs: 3, sm: 3, md: 0, lg: 0, xl: 0,
+            },
           }}
         >
           <div style={{ border: '1px solid #4F5F30', minHeight: '320px' }}>
-            <Stack pl={isMobile ? 0 : 3} pr={isMobile ? 0 : 3} pb={4}>
+            <Stack
+              sx={{
+                pl: isMobile ? 0 : 3,
+                pr: isMobile ? 0 : 3,
+                pb: 4,
+              }}
+            >
               <center>
                 <Typography variant="h4" gutterBottom>
                   {pageSections.filter((section) => section.id === value)[0].title}
@@ -126,7 +159,14 @@ const About = () => {
               {getContent()}
               <br />
               <br />
-              <Typography fontSize="12px" data-test="about_attribution">{attribution}</Typography>
+              <Typography
+                data-test="about_attribution"
+                sx={{
+                  fontSize: '12px',
+                }}
+              >
+                {attribution}
+              </Typography>
             </Stack>
           </div>
         </Grid>

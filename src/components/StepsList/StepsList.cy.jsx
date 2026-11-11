@@ -15,7 +15,7 @@ describe('<StepsList />', () => {
 
   it('should show current step', () => {
     cy.mount(<StepsList activeStep={3} availableSteps={completedList} />);
-    cy.getByTestId(`step-${3}`).should('have.attr', 'aria-current', 'step');
+    cy.getByTestId(`step-${3}`).find('.MuiStepLabel-label').should('have.class', 'Mui-active');
   });
 
   it('should be able to navigate to a step by clicking on that step', () => {

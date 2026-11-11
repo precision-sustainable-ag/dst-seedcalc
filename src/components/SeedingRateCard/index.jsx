@@ -64,7 +64,7 @@ const SeedInfo = ({
     ? seed.attributes.Planting['Base Seeding Rate'].values[0]
     : 0;
   const [singleSpeciesSeedingRate, setSingleSpeciesSeedingRate] = useState(
-    parseFloat(baseSeedingRate),
+    parseFloat(options.singleSpeciesSeedingRate ?? baseSeedingRate),
   );
   const [percentOfRate, setPercentOfRate] = useState(0);
   const [singleData, setSingleData] = useState({
@@ -140,8 +140,23 @@ const SeedInfo = ({
   }, [seedData, calculatorResult, unit]);
 
   return (
-    <Grid container p="0 5%">
-      <Grid item xs={12} md={4} justifyContent="center" display="flex">
+    <Grid
+      container
+      sx={{
+        p: '0 5%',
+        width: '100%',
+      }}
+    >
+      <Grid
+        size={{
+          xs: 12,
+          md: 4,
+        }}
+        sx={{
+          justifyContent: 'center',
+          display: 'flex',
+        }}
+      >
         <Card
           sx={{
             backgroundColor: 'transparent',
@@ -164,79 +179,87 @@ const SeedInfo = ({
           />
         </Card>
       </Grid>
-      <Grid item xs={12} md={8} pt="1rem">
+      <Grid
+        size={{
+          xs: 12,
+          md: 8,
+        }}
+        sx={{
+          pt: '1rem',
+        }}
+      >
         <Grid container>
-          <Grid item xs={4}>
+          <Grid size={4}>
             <SeedingRateChip
               value={singleData.seedingRate}
               testId={`${seed.label}-${seedDataUnits.defaultSingelSpeciesSeedingRatePLS}-value`}
               ariaLabel={`${seedDataUnits.defaultSingelSpeciesSeedingRatePLS} per ${unitText} value: ${singleData.seedingRate}`}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid size={4}>
             <SeedingRateChip
               value={formatToHundredth(singleData.plantValue)}
               testId={`${seed.label}-${seedDataUnits.approxPlantsper}-value`}
               ariaLabel={`${seedDataUnits.approxPlantsper} ${unitText} value: ${singleData.seedingRate}`}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid size={4}>
             <SeedingRateChip
               value={formatToHundredth(singleData.seedValue)}
               ariaLabel={`${seedDataUnits.seedsper} ${unitText} value: ${singleData.seedValue}`}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid size={4}>
             <SeedLabel
               label={`${seedDataUnits.defaultSingelSpeciesSeedingRatePLS} per `}
               unit={unit === 'sqft' ? seedDataUnits.tsqft : unitText}
               testId={`${seed.label}-${seedDataUnits.defaultSingelSpeciesSeedingRatePLS}-label`}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid size={4}>
             <SeedLabel label={seedDataUnits.approxPlantsper} unit={unitText} />
           </Grid>
-          <Grid item xs={4}>
+          <Grid size={4}>
             <SeedLabel label={seedDataUnits.seedsper} unit={unitText} />
           </Grid>
         </Grid>
 
         <Grid container>
-          <Grid item xs={4}>
+          <Grid size={4}>
             <SeedingRateChip
               value={mixData.seedingRate}
               testId={`${seed.label}-${seedDataUnits.seedingRateinMix}-value`}
               ariaLabel={`${seedDataUnits.seedingRateinMix} per ${unitText} value: ${mixData.seedingRate}`}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid size={4}>
             <SeedingRateChip
               value={formatToHundredth(mixData.plantValue)}
               ariaLabel={`${seedDataUnits.approxPlantsper} ${unitText} value: ${mixData.seedingRate}`}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid size={4}>
             <SeedingRateChip
               value={formatToHundredth(mixData.seedValue)}
               ariaLabel={`${seedDataUnits.seedsper} ${unitText} value: ${mixData.seedValue}`}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid size={4}>
             <SeedLabel
               label={`${seedDataUnits.seedingRateinMix} per `}
               unit={unit === 'sqft' ? seedDataUnits.tsqft : unitText}
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid size={4}>
             <SeedLabel label={seedDataUnits.approxPlantsper} unit={unitText} />
           </Grid>
-          <Grid item xs={4}>
+          <Grid size={4}>
             <SeedLabel label={seedDataUnits.seedsper} unit={unitText} />
           </Grid>
         </Grid>
 
         {council === 'SCCC' && (
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography>
               {`Single Species Seeding Rate PLS: ${singleSpeciesSeedingRate} Lbs per Acre`}
             </Typography>
@@ -257,7 +280,12 @@ const SeedInfo = ({
           </Grid>
         )}
 
-        <Grid item xs={12} pt="1rem">
+        <Grid
+          size={12}
+          sx={{
+            pt: '1rem',
+          }}
+        >
           <Typography>
             {`% of Single Species Rate: ${percentOfRate}%`}
           </Typography>
@@ -312,11 +340,13 @@ const SeedingRateChip = ({ value, testId, ariaLabel }) => (
 
 const SeedLabel = ({ label, unit, testId }) => (
   <Typography
-    lineHeight="1rem"
-    fontSize="0.8rem"
-    padding="0.5rem 0"
     data-test={testId}
     aria-hidden="true"
+    sx={{
+      lineHeight: '1rem',
+      fontSize: '0.8rem',
+      padding: '0.5rem 0',
+    }}
   >
     {label}
     <span style={{ fontWeight: 'bold' }}>{unit}</span>
@@ -353,11 +383,13 @@ const SeedingRateCard = ({
   return (
     <>
       <Typography
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        pb="0.5rem"
-        fontWeight="bold"
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          pb: '0.5rem',
+          fontWeight: 'bold',
+        }}
       >
         {seedingRateLabel}
       </Typography>

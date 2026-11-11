@@ -43,12 +43,8 @@ const SiteCondition = ({
 
   // function to get all regions(counties/zones) of a state
   const getRegions = async (state) => {
-    const council = state.parents[0].shorthand;
     const res = await dispatch(getRegion({ stateId: state.id }));
-    const { kids } = res.payload.data;
-    if (council === 'NECCC' || council === 'SCCC') return kids.Zones;
-    if (council === 'MCCC') return kids.Counties;
-    return [];
+    return res.payload?.subregions ?? [];
   };
 
   // update redux based on state change
@@ -166,20 +162,18 @@ const SiteCondition = ({
   }, [siteCondition]);
 
   return (
-    <Grid container justifyContent="center">
+    <Grid container sx={{ justifyContent: 'center' }}>
       {isMobile && (
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Typography variant="stepCaption">Tell us about your planting site</Typography>
         </Grid>
       )}
-      <Grid xs={12} item>
+      <Grid size={12}>
         {siteCondition.loading === 'getLocality' ? (
           <Grid
-            item
             container
+            size={12}
             spacing={1}
-            justifyContent="center"
-            alignItems="center"
             sx={{
               display: 'flex',
               justifyContent: 'center',
@@ -204,9 +198,20 @@ const SiteCondition = ({
                 mapboxToken={mapboxToken}
               />
 
-              <Grid container pt="1rem">
-                <Grid item xs={0} md={3} />
-                <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'center' }}>
+              <Grid container size={12} sx={{ pt: '1rem' }}>
+                <Grid
+                  size={{
+                    xs: 0,
+                    md: 3,
+                  }}
+                />
+                <Grid
+                  sx={{ display: 'flex', justifyContent: 'center' }}
+                  size={{
+                    xs: 12,
+                    md: 6,
+                  }}
+                >
                   <PSADropdown
                     label="State: "
                     items={states.map((s) => ({ label: s.label, value: s.label }))}
@@ -222,13 +227,18 @@ const SiteCondition = ({
                     }}
                   />
                 </Grid>
-                <Grid item xs={0} md={3} />
+                <Grid
+                  size={{
+                    xs: 0,
+                    md: 3,
+                  }}
+                />
               </Grid>
 
               {
                 Object.keys(selectedState).length > 0
                   ? (
-                    <Grid item xs={12} pt="1rem">
+                    <Grid sx={{ pt: '1rem' }} size={12}>
                       <Typography>
                         Would you like to manually enter your site conditions
                         or use your location to prepopulate them?
@@ -252,8 +262,11 @@ const SiteCondition = ({
                     </Grid>
                   )
                   : (
-                    <Grid item xs={12} p="1rem">
-                      <Typography fontWeight="bold">
+                    <Grid sx={{ p: '1rem' }} size={12}>
+                      <Typography sx={{
+                        fontWeight: 'bold',
+                      }}
+                      >
                         Please select your state from the dropdown or using the map.
                       </Typography>
                     </Grid>

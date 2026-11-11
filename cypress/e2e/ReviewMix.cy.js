@@ -21,16 +21,16 @@ describe('Review Mix', () => {
   });
 
   it('should be able to navigate the bar chart using next and back buttons', () => {
-    cy.getByTestId('barchart_next').eq(0).click();
-    cy.get('.recharts-responsive-container').eq(0).find('path').eq(0)
-      .should('have.css', 'fill', 'rgb(79, 95, 48)');
-    cy.get('.recharts-responsive-container').eq(0).find('path').eq(1)
-      .should('have.css', 'fill', 'rgb(152, 251, 152)');
-    cy.getByTestId('barchart_back').eq(0).click();
-    cy.get('.recharts-responsive-container').eq(0).find('path').eq(0)
-      .should('have.css', 'fill', 'rgb(152, 251, 152)');
-    cy.get('.recharts-responsive-container').eq(0).find('path').eq(1)
-      .should('have.css', 'fill', 'rgb(79, 95, 48)');
+    // the pie charts also use recharts, so target the bars of the open species' chart
+    const bar = (index) => cy.getByTestId(`accordion-${selectSpecies}`)
+      .find('.recharts-bar-rectangle path').eq(index);
+
+    cy.getByTestId(`accordion-${selectSpecies}`).find('[data-test="barchart_next"]').click();
+    bar(0).should('have.css', 'fill', 'rgb(79, 95, 48)');
+    bar(1).should('have.css', 'fill', 'rgb(152, 251, 152)');
+    cy.getByTestId(`accordion-${selectSpecies}`).find('[data-test="barchart_back"]').click();
+    bar(0).should('have.css', 'fill', 'rgb(152, 251, 152)');
+    bar(1).should('have.css', 'fill', 'rgb(79, 95, 48)');
   });
 
   it('should be able to switch the unit while update value', () => {
@@ -72,8 +72,7 @@ describe('Review Mix', () => {
     cy.getByTestId('single_rate').find('input').invoke('val')
       .then((val1) => {
         cy.getByTestId('mix_rate').find('input').invoke('val')
-          .then((val2) => {
-            cy.log(val2, val1, Math.abs(val2 - val1 * 0.5));
+          .should((val2) => {
             expect(Math.abs(val2 - val1 * 0.5)).to.be.lessThan(0.1);
           });
       });
@@ -85,8 +84,7 @@ describe('Review Mix', () => {
     cy.getByTestId('seeding_rate_in_mix').find('input').invoke('val')
       .then((val1) => {
         cy.getByTestId('bulk_seeding_rate').find('input').invoke('val')
-          .then((val2) => {
-            cy.log(val2, val1, Math.abs(val2 - val1 / 0.5));
+          .should((val2) => {
             expect(Math.abs(val2 - val1 / 0.5)).to.be.lessThan(0.1);
           });
       });
@@ -98,8 +96,7 @@ describe('Review Mix', () => {
     cy.getByTestId('seeding_rate_in_mix').find('input').invoke('val')
       .then((val1) => {
         cy.getByTestId('bulk_seeding_rate').find('input').invoke('val')
-          .then((val2) => {
-            cy.log(val2, val1, Math.abs(val2 - val1 / 0.5));
+          .should((val2) => {
             expect(Math.abs(val2 - val1 / 0.5)).to.be.lessThan(0.1);
           });
       });

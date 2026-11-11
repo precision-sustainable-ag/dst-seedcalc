@@ -15,7 +15,7 @@ export const getLocality = createAsyncThunk(
 export const getRegion = createAsyncThunk(
   'siteCondition/getRegion',
   async ({ stateId }) => {
-    const url = `${apiBaseURL}/v2/regions/${stateId}`;
+    const url = `${apiBaseURL}/v3/regions/${stateId}`;
     const res = await fetch(url).then((data) => data.json());
     return res;
   },

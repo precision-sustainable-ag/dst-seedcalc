@@ -18,40 +18,34 @@ import pirschAnalytics from '../../../../shared/utils/analytics';
 
 // styles for left grid
 const FullGrid = styled(Grid)(() => ({
-  '&.MuiGrid-item': {
-    boxShadow: '1px 1px 10px 1px lightgrey',
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
+  boxShadow: '1px 1px 10px 1px lightgrey',
+  display: 'flex',
+  justifyContent: 'flex-start',
+  alignItems: 'center',
 }));
 // styles for left grid
 const LeftGrid = styled(Grid)(() => ({
-  '&.MuiGrid-item': {
-    display: 'flex',
-  },
+  display: 'flex',
 }));
 
 // styles for right grid
 const RightGrid = styled(Grid)(() => ({
-  '&.MuiGrid-item': {
-    padding: '1rem',
+  padding: '1rem',
+  display: 'flex',
+  flexDirection: 'column',
+  '& .MuiBox-root': {
+    width: '50px',
+    height: '50px',
+    margin: '0 auto',
+    backgroundColor: '#E5E7D5',
+    border: 'solid 2px',
+    borderRadius: '50%',
     display: 'flex',
-    flexDirection: 'column',
-    '& .MuiBox-root': {
-      width: '50px',
-      height: '50px',
-      margin: '0 auto',
-      backgroundColor: '#E5E7D5',
-      border: 'solid 2px',
-      borderRadius: '50%',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    '& p': {
-      fontWeight: 'bold',
-    },
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  '& p': {
+    fontWeight: 'bold',
   },
 }));
 
@@ -201,19 +195,45 @@ const SeedingMethod = ({ alertState, isMobile }) => {
   const renderMethod = (type, comment, seedingMethods, method) => {
     const value = seedingMethods?.[method];
     return (
-      <Grid container margin={1} border={selectedMethod === method ? '2px solid #4f5f30' : ''} data-test={`method-${method}`}>
-        <FullGrid item xs={14}>
-          <LeftGrid item xs={6}>
-            <Box textAlign="left" pl="25%">
-              <Typography fontWeight="bold">
+      <Grid
+        container
+        size={12}
+        data-test={`method-${method}`}
+        sx={{
+          margin: 1,
+          border: selectedMethod === method ? '2px solid #4f5f30' : '',
+        }}
+      >
+        <FullGrid size={12}>
+          <LeftGrid size={6}>
+            <Box
+              sx={{
+                textAlign: 'left',
+                pl: '25%',
+              }}
+            >
+              <Typography sx={{
+                fontWeight: 'bold',
+              }}
+              >
                 {type}
               </Typography>
-              <Typography fontSize="0.75rem">{comment}</Typography>
+              <Typography sx={{
+                fontSize: '0.75rem',
+              }}
+              >
+                {comment}
+              </Typography>
             </Box>
           </LeftGrid>
-          <RightGrid item xs={6}>
+          <RightGrid size={6}>
             {!value ? (
-              <Typography color="#D84727">Not Recommended</Typography>
+              <Typography sx={{
+                color: '#D84727',
+              }}
+              >
+                Not Recommended
+              </Typography>
             ) : (
               <>
                 {/*  <Typography sx={{ width: '50px' }}>{value}</Typography> */}
@@ -232,11 +252,24 @@ const SeedingMethod = ({ alertState, isMobile }) => {
 
   return (
     <Grid container>
-      <Grid item xs={12}>
+      <Grid size={12}>
         {isMobile && (<Typography variant="stepCaption">Select Seeding Method</Typography>)}
       </Grid>
-      <Grid item xs={0} md={3} />
-      <Grid item xs={12} md={6} padding="15px">
+      <Grid
+        size={{
+          xs: 0,
+          md: 3,
+        }}
+      />
+      <Grid
+        size={{
+          xs: 12,
+          md: 6,
+        }}
+        sx={{
+          padding: '15px',
+        }}
+      >
         <PSADropdown
           label="Seeding Method:"
           items={getSeedingMethods().map((method) => ({ label: method.label, value: method.label }))}
@@ -252,9 +285,14 @@ const SeedingMethod = ({ alertState, isMobile }) => {
           }}
         />
       </Grid>
-      <Grid item xs={0} md={3} />
+      <Grid
+        size={{
+          xs: 0,
+          md: 3,
+        }}
+      />
       {seedsSelected.map((seed, i) => (
-        <Grid item xs={12} key={i}>
+        <Grid key={i} size={12}>
           <PSAAccordion
             expanded={accordionState[seed.label]}
             onChange={() => handleExpandAccordion(seed.label)}

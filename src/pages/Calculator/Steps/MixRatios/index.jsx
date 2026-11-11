@@ -132,12 +132,20 @@ const MixRatio = ({
       seedsSelected.forEach((seed) => {
         // if percentOfRate is not null, skip this step(this happens when add new crop for a imported history)
         if (mixRatioOptions[seed.label].percentOfRate === null) {
-          // FIXME: updated percentOfRate here, this is a temporary workaround for MCCC
+          // NOTE: updated percentOfRate here, this is a workaround for calculation errors in SDK
+          let percentOfRate = null;
+          if (council === 'MCCC' || (council === 'SCCC' && seedingRateCalculator.isFreezingZone())) {
+            // MCCC and SCCC Zone 6-8: total sum of species selected
+            percentOfRate = 1 / seedsSelected.length;
+          } else if (council === 'SCCC' && !seedingRateCalculator.isFreezingZone()) {
+            // SCCC Zone 9-11: 1 / (mixDiversity * speciesInGroup)
+            const crop = seedingRateCalculator.getCrop(seed);
+            const speciesInGroup = seedingRateCalculator.speciesInMix[crop.group];
+            percentOfRate = 1 / (seedingRateCalculator.mixDiversity * speciesInGroup);
+          }
           const newOption = {
             ...mixRatioOptions[seed.label],
-            percentOfRate: (council === 'MCCC'
-            || (council === 'SCCC' && !seedingRateCalculator.isFreezingZone()))
-              ? 1 / seedsSelected.length : null,
+            percentOfRate,
           };
           dispatch(setMixRatioOptionRedux(seed.label, newOption));
         }
@@ -243,7 +251,7 @@ const MixRatio = ({
 
   return (
     <Grid container>
-      <Grid item xs={12}>
+      <Grid size={12}>
 
         {isMobile && (<Typography variant="stepCaption">Review Proportions</Typography>)}
         {historyState === historyStates.imported && (
@@ -259,14 +267,14 @@ const MixRatio = ({
 
       {seedsSelected.length > 1 && (
         <>
-          <Grid item xs={6} sx={{ textAlign: 'justify' }}>
+          <Grid sx={{ textAlign: 'justify' }} size={6}>
             <PSAPiechart
               chartData={piechartData.seedingRateArray}
               label={pieChartUnits.poundsOfSeedPerAcre}
             />
           </Grid>
 
-          <Grid item xs={6} sx={{ textAlign: 'justify' }}>
+          <Grid sx={{ textAlign: 'justify' }} size={6}>
             {council === 'MCCC' && (
             <PSAPiechart
               chartData={piechartData.plantsPerSqftArray}
@@ -284,7 +292,7 @@ const MixRatio = ({
       )}
 
       {seedsSelected.map((seed, i) => (
-        <Grid item xs={12} key={i}>
+        <Grid key={i} size={12}>
           <PSAAccordion
             expanded={accordionState[seed.label]}
             onChange={() => handleExpandAccordion(seed.label)}
@@ -300,11 +308,16 @@ const MixRatio = ({
                   options={mixRatioOptions[seed.label]}
                 />
 
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <UnitSelection />
                 </Grid>
 
-                <Grid item xs={12} pt="1rem">
+                <Grid
+                  size={12}
+                  sx={{
+                    pt: '1rem',
+                  }}
+                >
                   <PSAButton
                     buttonType=""
                     sx={{
@@ -319,7 +332,7 @@ const MixRatio = ({
                   />
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid size={12}>
                   {showSteps[seed.label] && (
                   <MixRatioSteps
                     council={council}

@@ -15,7 +15,7 @@ import {
 import ReviewMixSteps from './Steps';
 import DSTBarChart from '../../../../components/DSTBarChart';
 import SeedingRateCard, { UnitSelection } from '../../../../components/SeedingRateCard';
-import { setBulkSeedingRateRedux, setOptionRedux } from '../../../../features/calculatorSlice/actions';
+import { setBulkSeedingRateRedux, setOptionRedux, setMixRatioOptionRedux } from '../../../../features/calculatorSlice/actions';
 import { pieChartUnits, seedDataUnits } from '../../../../shared/data/units';
 import { historyStates } from '../../../../features/userSlice/state';
 import { setHistoryStateRedux } from '../../../../features/userSlice/actions';
@@ -74,7 +74,7 @@ const ReviewMix = ({ calculator, isMobile }) => {
   const dispatch = useDispatch();
   const { council } = useSelector((state) => state.siteCondition);
   const {
-    seedsSelected, sideBarSelection, options,
+    seedsSelected, sideBarSelection, options, mixRatioOptions,
   } = useSelector((state) => state.calculator);
   const { historyState } = useSelector((state) => state.user);
 
@@ -116,6 +116,7 @@ const ReviewMix = ({ calculator, isMobile }) => {
   // function to handle form value change, update options
   const handleFormValueChange = (seed, option, value) => {
     dispatch(setOptionRedux(seed.label, { ...options[seed.label], [option]: value }));
+    dispatch(setMixRatioOptionRedux(seed.label, { ...mixRatioOptions[seed.label], [option]: value }));
     if (historyState === historyStates.imported) dispatch(setHistoryStateRedux(historyStates.updated));
   };
 
@@ -193,20 +194,20 @@ const ReviewMix = ({ calculator, isMobile }) => {
 
   return (
     <Grid container>
-      <Grid item xs={12}>
+      <Grid size={12}>
         {isMobile && (<Typography variant="stepCaption">Review your mix</Typography>)}
       </Grid>
 
       {seedsSelected.length > 1 && (
         <>
-          <Grid item xs={6} sx={{ textAlign: 'justify' }}>
+          <Grid sx={{ textAlign: 'justify' }} size={6}>
             <PSAPiechart
               chartData={piechartData.seedingRateArray}
               label={pieChartUnits.poundsOfSeedPerAcre}
             />
           </Grid>
 
-          <Grid item xs={6} sx={{ textAlign: 'justify' }}>
+          <Grid sx={{ textAlign: 'justify' }} size={6}>
             {council === 'MCCC' && (
             <PSAPiechart
               chartData={piechartData.plantsPerSqftArray}
@@ -224,7 +225,7 @@ const ReviewMix = ({ calculator, isMobile }) => {
       )}
 
       {seedsSelected.map((seed, i) => (
-        <Grid item xs={12} key={i}>
+        <Grid key={i} size={12}>
           <PSAAccordion
             expanded={accordionState[seed.label]}
             onChange={() => handleExpandAccordion(seed.label)}
@@ -232,7 +233,12 @@ const ReviewMix = ({ calculator, isMobile }) => {
             detailsContent={(
               <Grid container>
                 <DSTBarChart seed={seed} calculatorResult={calculatorResult} />
-                <Grid item xs={6} pt="1rem">
+                <Grid
+                  size={6}
+                  sx={{
+                    pt: '1rem',
+                  }}
+                >
                   <SeedingRateCard
                     seedingRateLabel={seedDataUnits.pureLiveSeed}
                     seedingRateValue={calculatorResult[seed.label].step2.seedingRate}
@@ -241,7 +247,12 @@ const ReviewMix = ({ calculator, isMobile }) => {
                   />
                 </Grid>
 
-                <Grid item xs={6} pt="1rem">
+                <Grid
+                  size={6}
+                  sx={{
+                    pt: '1rem',
+                  }}
+                >
                   <SeedingRateCard
                     seedingRateLabel={seedDataUnits.bulkSeed}
                     seedingRateValue={calculatorResult[seed.label].step4.bulkSeedingRate}
@@ -249,11 +260,16 @@ const ReviewMix = ({ calculator, isMobile }) => {
                     seedValue={seedData[seed.label].adjustedSeed}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <UnitSelection />
                 </Grid>
 
-                <Grid item xs={12} pt="1rem">
+                <Grid
+                  size={12}
+                  sx={{
+                    pt: '1rem',
+                  }}
+                >
                   <PSAButton
                     buttonType=""
                     onClick={() => {
@@ -265,7 +281,7 @@ const ReviewMix = ({ calculator, isMobile }) => {
                   />
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid size={12}>
                   {showSteps[seed.label] && (
                   <ReviewMixSteps
                     council={council}
