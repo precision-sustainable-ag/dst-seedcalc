@@ -44,7 +44,7 @@ const SiteCondition = ({
   // function to get all regions(counties/zones) of a state
   const getRegions = async (state) => {
     const res = await dispatch(getRegion({ stateId: state.id }));
-    return res.payload?.subregions ?? [];
+    return res.payload?.data ?? [];
   };
 
   // update redux based on state change
