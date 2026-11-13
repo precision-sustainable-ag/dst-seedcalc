@@ -68,7 +68,7 @@ const Map = ({
   // update county/zone, latlon, soil drainage based on address
   useEffect(() => {
     const {
-      latitude, longitude, zipCode, county,
+      latitude, longitude, county,
     } = selectedToEditSite;
 
     if (Object.keys(selectedToEditSite).length > 0) {
@@ -88,19 +88,13 @@ const Map = ({
           dispatch(setCountyIdRedux(filteredCounty[0].id));
         }
       } else if (council === 'NECCC' || council === 'SCCC') {
-        dispatch(getZoneData({ zip: zipCode })).then((res) => {
+        dispatch(getZoneData({ latitude, longitude })).then((res) => {
           const countyName = `Zone ${res.payload.replace(/[^0-9]/g, '')}`;
-          // FIXME: temporary workaround for NECCC areas in zone 8(MD, DE and NJ), will update in the future
-          if (council === 'NECCC' && countyName === 'Zone 8') {
-            dispatch(setCountyRedux('Zone 7'));
-            dispatch(setCountyIdRedux(4));
-          } else {
-            dispatch(setCountyRedux(countyName));
-            const countyId = regions.filter(
-              (c) => c.label === countyName,
-            )[0].id;
-            dispatch(setCountyIdRedux(countyId));
-          }
+          dispatch(setCountyRedux(countyName));
+          const countyId = regions.filter(
+            (c) => c.label === countyName,
+          )[0].id;
+          dispatch(setCountyIdRedux(countyId));
         });
       }
       // update latlon
