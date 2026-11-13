@@ -54,8 +54,8 @@ export const getSSURGOData = createAsyncThunk(
 
 export const getZoneData = createAsyncThunk(
   'siteCondition/getZoneData',
-  async ({ zip }) => {
-    const url = `https://phzmapi.org/${zip}.json`;
+  async ({ latitude, longitude }) => {
+    const url = `https://weather.covercrop-data.org/hardinesszone?lat=${latitude}&lon=${longitude}`;
     const res = await fetch(url).then((data) => data.json());
     return res.zone;
   },
