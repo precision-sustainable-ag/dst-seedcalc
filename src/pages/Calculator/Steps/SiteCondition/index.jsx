@@ -65,7 +65,7 @@ const SiteCondition = ({
 
     dispatch(updateLatlonRedux(statesLatLongDict[label]));
     dispatch(setStateRedux(label, state.id));
-    dispatch(setCouncilRedux(state.parents[0].shorthand));
+    dispatch(setCouncilRedux(state.council.shorthand));
   };
 
   const mapStateChange = (state) => {
