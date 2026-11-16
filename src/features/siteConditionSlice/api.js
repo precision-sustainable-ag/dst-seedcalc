@@ -5,7 +5,7 @@ import apiBaseURL from '../../shared/utils/apiBaseURL';
 export const getLocality = createAsyncThunk(
   'siteCondition/getLocality',
   async () => {
-    const url = `${apiBaseURL}/v2/regions?locality=state&context=seed_calc`;
+    const url = `${apiBaseURL}/v3/states?context=seed_calc`;
     const res = await fetch(url).then((data) => data.json());
     return res.data;
   },
@@ -54,8 +54,8 @@ export const getSSURGOData = createAsyncThunk(
 
 export const getZoneData = createAsyncThunk(
   'siteCondition/getZoneData',
-  async ({ zip }) => {
-    const url = `https://phzmapi.org/${zip}.json`;
+  async ({ latitude, longitude }) => {
+    const url = `https://weather.covercrop-data.org/hardinesszone?lat=${latitude}&lon=${longitude}`;
     const res = await fetch(url).then((data) => data.json());
     return res.zone;
   },

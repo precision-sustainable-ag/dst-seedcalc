@@ -44,7 +44,7 @@ const SiteCondition = ({
   // function to get all regions(counties/zones) of a state
   const getRegions = async (state) => {
     const res = await dispatch(getRegion({ stateId: state.id }));
-    return res.payload?.subregions ?? [];
+    return res.payload?.data ?? [];
   };
 
   // update redux based on state change
@@ -65,7 +65,7 @@ const SiteCondition = ({
 
     dispatch(updateLatlonRedux(statesLatLongDict[label]));
     dispatch(setStateRedux(label, state.id));
-    dispatch(setCouncilRedux(state.parents[0].shorthand));
+    dispatch(setCouncilRedux(state.council.shorthand));
   };
 
   const mapStateChange = (state) => {

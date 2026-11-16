@@ -65,13 +65,13 @@ const About = () => {
   };
 
   useEffect(() => {
-    const url = `${apiBaseURL}/v2/regions?locality=state&context=seed_calc`;
+    const url = `${apiBaseURL}/v3/attributions`;
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
         setAttribution(council === ''
-          ? data.attributions.generalStatement
-          : data.attributions[council].withoutModifications);
+          ? data.generalStatement
+          : data[council].withoutModifications);
       });
   }, [council]);
 
