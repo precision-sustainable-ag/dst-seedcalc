@@ -89,12 +89,14 @@ const Map = ({
         }
       } else if (council === 'NECCC' || council === 'SCCC') {
         dispatch(getZoneData({ latitude, longitude })).then((res) => {
-          const countyName = `Zone ${res.payload.replace(/[^0-9]/g, '')}`;
-          dispatch(setCountyRedux(countyName));
-          const countyId = regions.filter(
-            (c) => c.label === countyName,
-          )[0].id;
-          dispatch(setCountyIdRedux(countyId));
+          const zoneNum = parseInt(res.payload.replace(/[^0-9]/g, ''), 10);
+          let selectedZone = regions.filter((r) => r.label === `Zone ${zoneNum}`)[0];
+          // if zone is not found, use closest zone (+1 or -1) instead
+          if (!selectedZone) {
+            selectedZone = regions.find((r) => r.label === `Zone ${zoneNum - 1}` || r.label === `Zone ${zoneNum + 1}`);
+          }
+          dispatch(setCountyRedux(selectedZone.label));
+          dispatch(setCountyIdRedux(selectedZone.id));
         });
       }
       // update latlon
