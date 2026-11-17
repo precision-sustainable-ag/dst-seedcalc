@@ -108,7 +108,12 @@ const SiteCondition = ({
   useEffect(() => {
     const getStates = async () => {
       const res = await dispatch(getLocality());
-      setStates([...states, ...res.payload]);
+      const fetchedStates = [...res.payload];
+      // For DC, use Maryland data
+      const md = fetchedStates.find((s) => s.shorthand === 'MD');
+      fetchedStates.push({ ...md, label: 'District of Columbia', shorthand: 'DC' });
+      fetchedStates.sort((a, b) => a.label.localeCompare(b.label));
+      setStates(fetchedStates);
     };
     if (states.length === 0) getStates();
   }, []);
