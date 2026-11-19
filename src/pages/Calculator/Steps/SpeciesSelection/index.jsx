@@ -8,7 +8,7 @@ import Grid from '@mui/material/Grid';
 import { useSelector, useDispatch } from 'react-redux';
 import { Typography, Box } from '@mui/material';
 import {
-  Spinner, PSAAccordion, PSALoadingSpinner, PSATextField,
+  PSAAccordion, PSALoadingSpinner, PSATextField,
 } from 'shared-react-components/src';
 import { seedsType, seedsLabel } from '../../../../shared/data/species';
 import { validateForms } from '../../../../shared/utils/format';
@@ -192,7 +192,7 @@ const SpeciesSelection = ({
                 summaryContent={<Typography>{seedsLabel[seedType]}</Typography>}
                 detailsContent={(
                   <>
-                    {loading && <Spinner />}
+                    {loading && <PSALoadingSpinner />}
                     <PlantList
                       seedType={seedType}
                       filteredSeeds={filteredSeeds}
