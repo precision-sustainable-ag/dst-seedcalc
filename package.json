@@ -80,10 +80,6 @@
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-istanbul": "^6.0.2"
   },
-  "overrides": {
-    "glob": "^14.0.6",
-    "minimatch": "^11.0.9"
-  },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "4.9.5"
   }
