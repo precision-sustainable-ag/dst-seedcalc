@@ -10,7 +10,7 @@ import {
   updateFieldsRedux,
 } from '../../../../features/siteConditionSlice/actions';
 import { setHistoryDialogStateRedux, setMaxAvailableStepRedux } from '../../../../features/userSlice/actions';
-import { getZoneData, getSSURGOData } from '../../../../features/siteConditionSlice/api';
+import { getZoneData, getDrainageClass } from '../../../../features/siteConditionSlice/api';
 import { historyStates } from '../../../../features/userSlice/state';
 import pirschAnalytics from '../../../../shared/utils/analytics';
 import { mapboxToken } from '../../../../shared/data/keys';
@@ -103,13 +103,13 @@ const Map = ({
       dispatch(updateLatlonRedux([latitude, longitude]));
       // update soil drainage
       dispatch(
-        getSSURGOData({
+        getDrainageClass({
           lat: latitude,
           lon: longitude,
         }),
       ).then((res) => {
         // update soil drainage redux
-        const value = res.payload.Table[1][2] ?? '';
+        const value = res.payload || '';
         const soilDrainageValue = soilDrainageValues.filter(
           (slice) => slice.label.toLowerCase() === value.toLowerCase(),
         )[0]?.label ?? '';
