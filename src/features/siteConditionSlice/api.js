@@ -21,34 +21,13 @@ export const getRegion = createAsyncThunk(
   },
 );
 
-export const getSSURGOData = createAsyncThunk(
-  'siteCondition/getSSURGOData',
+export const getDrainageClass = createAsyncThunk(
+  'siteCondition/getDrainageClass',
   async ({ lat, lon }) => {
-    // eslint-disable-next-line max-len
-    const soilDataQuery = `SELECT mu.mukey AS MUKEY, mu.muname AS mapUnitName, muag.drclassdcd AS drainageClass, muag.flodfreqdcd AS floodingFrequency, mp.mupolygonkey as MPKEY
-    FROM mapunit AS mu 
-    INNER JOIN muaggatt AS muag ON muag.mukey = mu.mukey
-    INNER JOIN mupolygon AS mp ON mp.mukey = mu.mukey
-    WHERE mu.mukey IN (SELECT * from SDA_Get_Mukey_from_intersection_with_WktWgs84('point (${lon} ${lat})'))
-    AND
-    mp.mupolygonkey IN  (SELECT * from SDA_Get_Mupolygonkey_from_intersection_with_WktWgs84('point (${lon} ${lat})'))`;
-
-    const myHeaders = new Headers();
-    myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
-
-    const urlencoded = new URLSearchParams();
-    urlencoded.append('query', soilDataQuery);
-    urlencoded.append('format', 'json+columnname');
-    const requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: urlencoded,
-      redirect: 'follow',
-    };
-    const url = 'https://sdmdataaccess.sc.egov.usda.gov/Tabular/post.rest';
-    const res = await fetch(url, requestOptions).then((data) => data.json());
-
-    return res;
+    const url = `https://ssurgo.covercrop-data.org/?lat=${lat}&lon=${lon}&categories=clear,+muaggatt&output=json`;
+    const res = await fetch(url).then((data) => data.json());
+    const row = Array.isArray(res) ? res[0] : res;
+    return row?.drclassdcd ?? '';
   },
 );
 
