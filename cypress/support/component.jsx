@@ -17,12 +17,13 @@
 import React from 'react';
 import { ThemeProvider } from '@emotion/react';
 import './commands';
+// eslint-disable-next-line import/no-unresolved
 import '@cypress/code-coverage/support';
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
-import { mount } from 'cypress/react18';
+import { mount } from 'cypress/react';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import Auth0ProviderWithNavigate from '../../src/components/Auth/Auth0ProviderWithNavigate';

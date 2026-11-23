@@ -1,5 +1,6 @@
 import { defineConfig } from 'cypress';
-import coverageTask from '@cypress/code-coverage/task.js';
+// eslint-disable-next-line import/no-unresolved
+import coverageTask from '@cypress/code-coverage/task';
 import dotenv from 'dotenv';
 
 dotenv.config();
