@@ -5,7 +5,7 @@ import {
   updateFields,
 } from './index';
 
-export const setStateRedux = (state, stateId) => updateState({ state, stateId });
+export const setStateRedux = (state, stateId, stateShorthand) => updateState({ state, stateId, stateShorthand });
 
 export const setCountyRedux = (county) => updateCounty({ county });
 
