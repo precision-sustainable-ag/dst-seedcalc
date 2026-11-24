@@ -7,8 +7,13 @@ const siteConditionSlice = createSlice({
   initialState,
   reducers: {
     updateState: (state, { payload }) => {
-      const { state: stateName, stateId } = payload;
-      return { ...state, state: stateName, stateId };
+      const { state: stateName, stateId, stateShorthand } = payload;
+      return {
+        ...state,
+        state: stateName,
+        stateId,
+        stateShorthand,
+      };
     },
     updateCounty: (state, { payload }) => {
       const { county } = payload;

@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 const initialState = {
   state: '',
   stateId: '',
+  stateShorthand: '',
   county: '',
   countyId: '',
   soilDrainage: '',

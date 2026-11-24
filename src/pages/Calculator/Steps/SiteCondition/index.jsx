@@ -64,7 +64,7 @@ const SiteCondition = ({
     dispatch(setCalculatorRedux(initialCalculatorState));
 
     dispatch(updateLatlonRedux(statesLatLongDict[label]));
-    dispatch(setStateRedux(label, state.id));
+    dispatch(setStateRedux(label, state.id, state.shorthand));
     dispatch(setCouncilRedux(state.council.shorthand));
   };
 

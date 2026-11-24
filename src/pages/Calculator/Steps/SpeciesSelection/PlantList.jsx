@@ -10,6 +10,7 @@ import {
   Box,
 } from '@mui/material';
 import HelpIcon from '@mui/icons-material/Help';
+import InfoIcon from '@mui/icons-material/Info';
 import '../steps.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { PSATooltip } from 'shared-react-components/src';
@@ -62,7 +63,7 @@ const PlantList = ({
   const dispatch = useDispatch();
 
   const {
-    acres, stateId, countyId, soilDrainage, plantingDate, soilFertility, council,
+    acres, stateShorthand, stateId, countyId, soilDrainage, plantingDate, soilFertility, council,
   } = useSelector((state) => state.siteCondition);
   const { mixRatioOptions } = useSelector((state) => state.calculator);
   const { historyState, maxAvailableStep } = useSelector((state) => state.user);
@@ -109,6 +110,11 @@ const PlantList = ({
   const checkCrop = (seed) => {
     if (council === 'MCCC') return checkSoilDrainage(seed);
     return checkPlantingDate(seed);
+  };
+
+  const checkNoxious = (seed) => {
+    if (!stateShorthand || !Array.isArray(seed.noxious)) return false;
+    return seed.noxious.some((s) => s === stateShorthand);
   };
 
   seedsList.sort((a, b) => {
@@ -301,8 +307,37 @@ const PlantList = ({
                   )}
 
                 <CardContent>
-                  <Typography sx={{ fontWeight: 'bold' }}>
+                  <Typography
+                    sx={{
+                      fontWeight: 'bold',
+                      ...(checkNoxious(seed) && { color: 'error.main' }),
+                    }}
+                  >
                     {seed.label}
+                    {checkNoxious(seed) && (
+                      <PSATooltip
+                        title="This species is on some State Noxious Weed lists in this region."
+                        arrow
+                        enterTouchDelay={200}
+                        leaveTouchDelay={200}
+                        tooltipContent={(
+                          <Box
+                            component="span"
+                            onClick={(e) => e.stopPropagation()}
+                            sx={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              verticalAlign: 'middle',
+                              ml: 0.5,
+                            }}
+                          >
+                            <InfoIcon
+                              sx={{ color: 'error.main' }}
+                            />
+                          </Box>
+                        )}
+                      />
+                    )}
                   </Typography>
                 </CardContent>
               </CardActionArea>
